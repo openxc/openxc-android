@@ -1,0 +1,72 @@
+OpenXC Android Library
+=========================
+
+The OpenXC vehicle measurements are exposed as an AIDL interface to Android
+applications. You can get updates either synchronously or asynchronously much
+like other Android services.
+
+sync:
+
+    // unit is defined as a part of the VehicleSpeed class and determined
+    // through docs, or should it be in the class name? value returned is
+    // actually of type Unit::MPerS.
+    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
+
+sync but no more than 1 per second:
+
+    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class,
+        1, 0);
+
+sync as fast as possible but only if change is >= 10:
+
+    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class,
+        0, 10);
+
+async:
+
+    public void receive(VehicleSpeed measurement) {
+        // do stuff
+    }
+
+
+check if it supports a signal:
+
+    if(vehicleService.supports(VehicleSpeed.class) {
+        // it supports it
+    } else {
+        // if we try to get it and it doesn't support it, we throw and
+        // exception
+        vehicleService.get(VehicleSpeed.class);
+        /* explodes */
+    }
+
+supports it, but hasn't been received:
+
+    if(vehicleService.supports(VehicleSpeed.class) {
+        VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
+        if(measurement.hasValue()) {
+            // do stuff with it
+        }
+    }
+
+check how old a signal is:
+
+    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
+    if(measurement.getAge() < 10) {
+        // only if age is less than 10 seconds
+    }
+
+check how accurate a signal is:
+
+    if(measurement.getAccuracy() < 10) {
+        // only if speed's variance is less than 10 m/s (variance is same unit
+        // as the measurement itself)
+    }
+
+check where we are in the range of the signal:
+
+    // might need to multiply by -1 here to get positives
+    int range = measurement.getMax() + measuremen.getMin();
+    int range = measurement.getRange();
+
+    int percentage = measurement.getValue() / range;
