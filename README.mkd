@@ -12,21 +12,25 @@ sync:
     // actually of type Unit::MPerS.
     VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
 
-sync but no more than 1 per second:
-
-    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class,
-        1, 0);
-
-sync as fast as possible but only if change is >= 10:
-
-    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class,
-        0, 10);
 
 async:
 
-    public void receive(VehicleSpeed measurement) {
-        // do stuff
+    vehicleService.addListener(VehicleSpeed.class, listener);
+    VehicleMeasurementListener listener = new
+            VehicleMeasurementListener<VehicleSpeed> {
+        @Override
+        public void receive(VehicleSpeed measurement) {
+            // do stuff
+        }
     }
+
+async but no more than 1 per second:
+
+    vehicleService.addListener(VehicleSpeed.class, listener, 1, 0);
+
+async as fast as possible but only if change is >= 10:
+
+    vehicleService.addListener(VehicleSpeed.class, listener, 0, 10);
 
 
 check if it supports a signal:
