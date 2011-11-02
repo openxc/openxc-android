@@ -1,7 +1,7 @@
-package com.ford.openxc.measurements;
+package com.openxc.measurements;
 
-import com.ford.openxc.units.Unit;
-import com.ford.openxc.util.Range;
+import com.openxc.units.Unit;
+import com.openxc.util.Range;
 
 public class Measurement<TheUnit extends Unit> {
 

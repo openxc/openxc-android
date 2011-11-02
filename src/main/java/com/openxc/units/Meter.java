@@ -1,4 +1,4 @@
-package com.ford.openxc.units;
+package com.openxc.units;
 
 public class Meter extends Quantity implements Unit {
 

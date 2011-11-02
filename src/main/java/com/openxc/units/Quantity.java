@@ -1,4 +1,4 @@
-package com.ford.openxc.units;
+package com.openxc.units;
 
 public abstract class Quantity {
 }

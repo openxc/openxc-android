@@ -1,3 +1,3 @@
-package com.ford.openxc.measurements;
+package com.openxc.measurements;
 
 public class NoValueException extends Exception {}

@@ -1,4 +1,4 @@
-package com.ford.openxc;
+package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -8,10 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-import com.ford.openxc.units.Meter;
-import com.ford.openxc.measurements.Measurement;
-import com.ford.openxc.measurements.NoValueException;
-import com.ford.openxc.measurements.NoRangeException;
+import com.openxc.units.Meter;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.NoValueException;
+import com.openxc.measurements.NoRangeException;
 
 public class EmptyMeasurementTest {
     Measurement<Meter> measurement;
