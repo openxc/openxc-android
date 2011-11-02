@@ -36,7 +36,7 @@ public class EmptyMeasurementTest {
     }
 
     public void testVariance() {
-        assertThat(measurement.getVariance(), equalTo(0.0));
+        assertThat(measurement.getVariance().doubleValue(), equalTo(0.0));
     }
 
     @Test
@@ -47,5 +47,10 @@ public class EmptyMeasurementTest {
     @Test(expected=NoRangeException.class)
     public void testEmptyRange() {
         measurement.getRange();
+    }
+
+    @Test(expected=NoValueException.class)
+    public void testGet() throws NoValueException {
+        measurement.getValue();
     }
 }
