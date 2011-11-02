@@ -1,15 +1,8 @@
 package com.openxc.units;
 
-public class Meter extends Quantity implements Unit {
+public class Meter extends Quantity<Double> implements Unit {
 
     public Meter(double value) {
-    }
-
-    public boolean equalTo(double otherValue) {
-        return false;
-    }
-
-    public double doubleValue() {
-        return 0;
+        super(value);
     }
 }
