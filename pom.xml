@@ -4,7 +4,7 @@
     <groupId>com.ford</groupId>
     <artifactId>openxc</artifactId>
     <version>1.0.0</version>
-    <packaging>apk</packaging>
+    <packaging>apklib</packaging>
     <name>OpenXC</name>
 
     <dependencies>
@@ -13,6 +13,24 @@
             <artifactId>android</artifactId>
             <version>3.1_r3</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.0-rc1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -36,6 +54,14 @@
                     <sdk>
                         <platform>12</platform>
                     </sdk>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <useFile>false</useFile>
                 </configuration>
             </plugin>
         </plugins>
