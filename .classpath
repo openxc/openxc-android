@@ -1,6 +1,6 @@
 <classpath>
   <classpathentry kind="src" path="src/test/java" output="target/test-classes" including="**/*.java"/>
-  <classpathentry kind="src" path="src" including="**/*.java"/>
+  <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
   <classpathentry kind="src" path="target/generated-sources/r" including="**/*.java"/>
   <classpathentry kind="src" path="target/generated-sources/aidl" including="**/*.java"/>
   <classpathentry kind="output" path="target/classes"/>
