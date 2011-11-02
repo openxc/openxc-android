@@ -1,6 +1,7 @@
 package com.ford.openxc.measurements;
 
 import com.ford.openxc.units.Unit;
+import com.ford.openxc.util.Range;
 
 public class Measurement<TheUnit extends Unit> {
 
@@ -9,6 +10,18 @@ public class Measurement<TheUnit extends Unit> {
     }
 
     public int getAge() {
+        return 0;
+    }
+
+    public boolean hasRange() {
+        return true;
+    }
+
+    public Range<Double> getRange() {
+        return new Range<Double>(0.0, 0.0);
+    }
+
+    public double getVariance() {
         return 0;
     }
 }

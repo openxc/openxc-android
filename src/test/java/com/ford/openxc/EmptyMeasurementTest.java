@@ -1,18 +1,19 @@
 package com.ford.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import com.ford.openxc.units.Meter;
 import com.ford.openxc.measurements.Measurement;
+import com.ford.openxc.measurements.NoValueException;
+import com.ford.openxc.measurements.NoRangeException;
 
-public class MeasurementTest {
+public class EmptyMeasurementTest {
     Measurement<Meter> measurement;
 
     @Before
@@ -29,9 +30,22 @@ public class MeasurementTest {
         assertThat(measurement.hasValue(), equalTo(true));
     }
 
-    @Test
+    @Test(expected=NoValueException.class)
     public void testEmptyAge() {
-        assertThat(measurement.getAge(), equalTo(0));
+        measurement.getAge();
     }
 
+    public void testVariance() {
+        assertThat(measurement.getVariance(), equalTo(0.0));
+    }
+
+    @Test
+    public void testEmptyRangeCheck() {
+        assertTrue(measurement.hasRange());
+    }
+
+    @Test(expected=NoRangeException.class)
+    public void testEmptyRange() {
+        measurement.getRange();
+    }
 }
