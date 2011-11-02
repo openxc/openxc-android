@@ -119,11 +119,12 @@ actually reflected in the physical vehicle:
         // only if age is less than 10 seconds
     }
 
-For some measurements, an accuracy may help you determine how much the value
-should be trusted. Most measurements from the vehicle are quite accurate,
-however.
+For some measurements, an accuracy measurement may help you determine how much
+the value should be trusted. Most measurements from the vehicle are quite
+accurate, however. The units of the variance are the same as the measurement
+itself.
 
-    if(measurement.getAccuracy() < 10) {
+    if(measurement.getVariance() < 10) {
         // only if speed's variance is less than 10 m/s (variance is same unit
         // as the measurement itself)
     }
@@ -132,13 +133,7 @@ The range of every measurement is defined in the class, and can be queried
 programmatically if you need to figure out your the current value's relative
 position:
 
-    // might need to multiply by -1 here to get positives,
-    // i.e. min: -100, max: 100
-    int range = measurement.getMax() + measuremen.getMin();
-
-    // alternatively...
     range = measurement.getRange();
-
     int percentage = measurement.getValue() / range;
 
 ## Architecture
