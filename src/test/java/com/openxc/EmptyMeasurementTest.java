@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import com.openxc.units.Meter;
 import com.openxc.measurements.Measurement;
@@ -41,7 +42,7 @@ public class EmptyMeasurementTest {
 
     @Test
     public void testEmptyRangeCheck() {
-        assertTrue(measurement.hasRange());
+        assertFalse(measurement.hasRange());
     }
 
     @Test(expected=NoRangeException.class)

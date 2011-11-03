@@ -5,6 +5,20 @@ import com.openxc.util.Range;
 
 public class Measurement<TheUnit extends Unit> {
     private TheUnit mValue;
+    private Range<TheUnit> mRange;
+
+    public Measurement() {
+    }
+
+    public Measurement(TheUnit value) {
+        this();
+        mValue = value;
+    }
+
+    public Measurement(TheUnit value, Range<TheUnit> range) {
+        this(value);
+        mRange = range;
+    }
 
     public boolean hasValue() {
         return mValue != null;
@@ -18,11 +32,14 @@ public class Measurement<TheUnit extends Unit> {
     }
 
     public boolean hasRange() {
-        return true;
+        return mRange != null;
     }
 
-    public Range<Double> getRange() {
-        return new Range<Double>(0.0, 0.0);
+    public Range<TheUnit> getRange() throws NoRangeException {
+        if(!hasRange()) {
+            throw new NoRangeException();
+        }
+        return mRange;
     }
 
     public TheUnit getVariance() {
