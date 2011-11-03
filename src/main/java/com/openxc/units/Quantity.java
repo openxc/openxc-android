@@ -1,6 +1,6 @@
 package com.openxc.units;
 
-public abstract class Quantity<T> {
+public abstract class Quantity<T extends Number> {
     private T mValue;
 
     public Quantity(T value) {
@@ -12,10 +12,10 @@ public abstract class Quantity<T> {
     }
 
     public double doubleValue() {
-        return 0.0;
+        return mValue.doubleValue();
     }
 
     public int intValue() {
-        return 0;
+        return mValue.intValue();
     }
 }
