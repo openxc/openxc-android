@@ -1,7 +1,7 @@
 OpenXC Android Library
 =========================
 
-This library is a part of the [OpenXC]() project.
+This library is a part of the [OpenXC][] project.
 
 ## Description
 
@@ -13,13 +13,13 @@ application..
 
 ## Usage
 
-Vehicle measurements are accessed through an [Android service](services). Your
+Vehicle measurements are accessed through an [Android service][services]. Your
 application connects to the service using the Android Interface Definition
-Language ([AIDL]()) - check out the Architecture section for more details.
+Language ([AIDL][]) - check out the Architecture section for more details.
 
 ### Service Binding
 
-You must first [bind with the VehicleService](binding) before you can receive
+You must first [bind with the VehicleService][binding] before you can receive
 any vehicle data.
 
 Request to bind with the service in the normal fashion:
@@ -160,7 +160,7 @@ position:
 ## License
 
 Copyright (c) 2011 Ford Motor Company
-Licensed under the [Apache License, Version 2.0](apache)
+Licensed under the [Apache License, Version 2.0][apache]
 
 [apache]: http://www.apache.org/licenses/LICENSE-2.0.html
 [binding]: http://developer.android.com/guide/topics/fundamentals/bound-services.html#Binding)
