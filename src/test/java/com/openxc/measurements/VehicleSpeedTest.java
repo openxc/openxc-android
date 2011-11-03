@@ -27,4 +27,10 @@ public class VehicleSpeedTest {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
+
+    @Test
+    public void testHasId() {
+        assertThat(measurement.getId(), equalTo("vehicle_speed"));
+    }
+
 }
