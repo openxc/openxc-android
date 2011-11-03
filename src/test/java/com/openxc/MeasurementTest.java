@@ -15,11 +15,12 @@ import com.openxc.measurements.NoRangeException;
 
 public class MeasurementTest {
     Measurement<Meter> measurement;
+    Range<Meter> range;
 
     @Before
     public void setUp() {
-        measurement = new Measurement<Meter>(new Meter(10.0),
-                new Range<Meter>(new Meter(0.0), new Meter(101.2)));
+        range = new Range<Meter>(new Meter(0.0), new Meter(101.2));
+        measurement = new Measurement<Meter>(new Meter(10.0), range);
     }
 
     @Test
@@ -39,7 +40,6 @@ public class MeasurementTest {
 
     @Test
     public void testGetRange() throws NoRangeException {
-        assertThat(measurement.getRange().getMin().doubleValue(), equalTo(0.0));
-        assertThat(measurement.getRange().getMax().doubleValue(), equalTo(101.2));
+        assertThat(measurement.getRange(), equalTo(range));
     }
 }
