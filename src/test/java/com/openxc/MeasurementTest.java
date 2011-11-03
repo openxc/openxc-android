@@ -2,6 +2,7 @@ package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,5 +42,10 @@ public class MeasurementTest {
     @Test
     public void testGetRange() throws NoRangeException {
         assertThat(measurement.getRange(), equalTo(range));
+    }
+
+    @Test
+    public void testAgeIsPositive() throws NoValueException {
+        assertThat(measurement.getAge(), greaterThan(0.0));
     }
 }

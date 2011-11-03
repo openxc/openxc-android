@@ -6,8 +6,10 @@ import com.openxc.util.Range;
 public class Measurement<TheUnit extends Unit> {
     private TheUnit mValue;
     private Range<TheUnit> mRange;
+    private double mBornTime;
 
     public Measurement() {
+        mBornTime = System.nanoTime();
     }
 
     public Measurement(TheUnit value) {
@@ -24,11 +26,11 @@ public class Measurement<TheUnit extends Unit> {
         return mValue != null;
     }
 
-    public int getAge() throws NoValueException {
+    public double getAge() throws NoValueException {
         if(!hasValue()) {
             throw new NoValueException();
         }
-        return 0;
+        return System.nanoTime() - mBornTime;
     }
 
     public boolean hasRange() {
