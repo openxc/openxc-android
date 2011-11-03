@@ -10,7 +10,10 @@ public class Measurement<TheUnit extends Unit> {
         return mValue != null;
     }
 
-    public int getAge() {
+    public int getAge() throws NoValueException {
+        if(!hasValue()) {
+            throw new NoValueException();
+        }
         return 0;
     }
 

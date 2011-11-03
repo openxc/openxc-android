@@ -26,12 +26,12 @@ public class EmptyMeasurementTest {
     }
 
     @Test
-    public void testEmpty() {
-        assertThat(measurement.hasValue(), equalTo(true));
+    public void testNoValue() {
+        assertThat(measurement.hasValue(), equalTo(false));
     }
 
     @Test(expected=NoValueException.class)
-    public void testEmptyAge() {
+    public void testEmptyAge() throws NoValueException {
         measurement.getAge();
     }
 
@@ -45,7 +45,7 @@ public class EmptyMeasurementTest {
     }
 
     @Test(expected=NoRangeException.class)
-    public void testEmptyRange() {
+    public void testEmptyRange() throws NoRangeException {
         measurement.getRange();
     }
 
