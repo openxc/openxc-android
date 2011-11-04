@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 
-import com.openxc.units.GearPosition;
+import com.openxc.units.State;
 import com.openxc.measurements.NoValueException;
 
 public class TransmissionGearPositionTest {
@@ -16,13 +16,14 @@ public class TransmissionGearPositionTest {
     @Before
     public void setUp() {
         measurement = new TransmissionGearPosition(
-                new GearPosition(GearPosition.GearPositions.FIRST));
+                new State<TransmissionGearPosition.GearPosition>(
+                    TransmissionGearPosition.GearPosition.FIRST));
     }
 
     @Test
     public void testGet() throws NoValueException {
         assertThat(measurement.getValue().toString(), equalTo(
-                    GearPosition.GearPositions.FIRST.toString()));
+                    TransmissionGearPosition.GearPosition.FIRST.toString()));
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.openxc.units;
 
-public abstract class State<T extends Enum<?>> {
+public class State<T extends Enum<?>> implements Unit {
     private T mValue;
 
     public State(T value) {
