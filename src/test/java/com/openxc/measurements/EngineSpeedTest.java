@@ -25,7 +25,7 @@ public class EngineSpeedTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.getId(), equalTo("EngineSpeed"));
+        assertThat(measurement.ID, equalTo("EngineSpeed"));
     }
 
 }

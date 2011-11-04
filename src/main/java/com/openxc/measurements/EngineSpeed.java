@@ -8,13 +8,9 @@ public class EngineSpeed extends Measurement<RotationsPerMinute>
     private final static Range<RotationsPerMinute> RANGE =
         new Range<RotationsPerMinute>(new RotationsPerMinute(0),
                 new RotationsPerMinute(8000));
-    private final static String ID = "EngineSpeed";
+    public final static String ID = "EngineSpeed";
 
     public EngineSpeed(RotationsPerMinute value) {
         super(value, RANGE);
-    }
-
-    public String getId() {
-        return ID;
     }
 }
