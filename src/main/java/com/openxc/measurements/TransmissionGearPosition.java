@@ -10,7 +10,7 @@ import com.openxc.units.State;
 public class TransmissionGearPosition
         extends Measurement<State<TransmissionGearPosition.GearPosition>>
         implements VehicleMeasurement {
-    private final static String VEHICLE_SPEED_ID = "transmission_gear";
+    private final static String VEHICLE_SPEED_ID = "TransmissionGearPosition";
 
     public enum GearPosition {
         FIRST,
