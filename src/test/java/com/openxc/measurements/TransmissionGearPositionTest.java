@@ -33,7 +33,7 @@ public class TransmissionGearPositionTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.getId(), equalTo("transmission_gear"));
+        assertThat(measurement.getId(), equalTo("TransmissionGearPosition"));
     }
 
 }

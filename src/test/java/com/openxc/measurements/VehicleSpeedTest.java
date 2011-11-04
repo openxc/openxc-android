@@ -30,7 +30,7 @@ public class VehicleSpeedTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.getId(), equalTo("vehicle_speed"));
+        assertThat(measurement.getId(), equalTo("VehicleSpeed"));
     }
 
 }
