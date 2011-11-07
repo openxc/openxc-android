@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.foo.bar.android.test" android:versionCode="1" android:versionName="1.0-SNAPSHOT">
+
+  <application android:label="@string/app_name">
+    <uses-library android:name="android.test.runner" />
+  </application>
+
+  <instrumentation android:targetPackage="com.openxc"
+    android:name="android.test.InstrumentationTestRunner" />
+
+</manifest>
+
