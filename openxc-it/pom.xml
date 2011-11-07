@@ -34,8 +34,7 @@
             <groupId>com.openxc</groupId>
             <artifactId>openxc</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
-            <type>jar</type>
+            <type>apklib</type>
         </dependency>
     </dependencies>
 </project>
