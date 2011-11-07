@@ -1,5 +1,8 @@
 package com.openxc;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.VehicleMeasurement;
 
@@ -17,6 +20,7 @@ import android.content.ServiceConnection;
 
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 public class VehicleService extends Service {
     private IBinder mBinder = new VehicleServiceBinder();
@@ -56,9 +60,40 @@ public class VehicleService extends Service {
         return mBinder;
     }
 
-    public Measurement<Unit> get(Class<VehicleMeasurement> measurementType) {
-        return new Measurement<Unit>(mRemoteService.getNumericalMeasurement((String)(
-                    measurementType.getField("ID").get(measurementType))));
+    public VehicleMeasurement get(Class<VehicleMeasurement> measurementType)
+            throws RemoteException {
+        String measurementId;
+        try {
+            measurementId = (String)(
+                    measurementType.getField("ID").get(measurementType));
+        } catch(NoSuchFieldException e) {
+            return null;
+        } catch(IllegalAccessException e) {
+            return null;
+        }
+
+        Constructor<VehicleMeasurement> constructor;
+        try {
+            constructor = measurementType.getConstructor(Double.class);
+            return constructor.newInstance(
+                    mRemoteService.getNumericalMeasurement(measurementId));
+        } catch(NoSuchMethodException e) {
+        } catch(InstantiationException e) {
+        } catch(IllegalAccessException e) {
+        } catch(InvocationTargetException e) {
+        }
+
+        try {
+            constructor = measurementType.getConstructor(String.class);
+            return constructor.newInstance(mRemoteService.getStateMeasurement(
+                        measurementId));
+        } catch(NoSuchMethodException e) {
+        } catch(InstantiationException e) {
+        } catch(IllegalAccessException e) {
+        } catch(InvocationTargetException e) {
+        }
+        return null;
+
     }
 
     public void addListener(VehicleMeasurement.Listener listener) {
