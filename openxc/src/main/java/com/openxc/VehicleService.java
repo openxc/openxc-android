@@ -3,13 +3,10 @@ package com.openxc;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import com.openxc.measurements.Measurement;
 import com.openxc.measurements.VehicleMeasurement;
 
 import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceInterface;
-
-import com.openxc.units.Unit;
 
 import android.content.Context;
 import android.app.Service;
@@ -22,7 +19,11 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import android.util.Log;
+
 public class VehicleService extends Service {
+    private final static String TAG = "VehicleService";
+
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
 
@@ -45,6 +46,8 @@ public class VehicleService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i(TAG, "Service starting");
+        Log.i(TAG, "Binding to RemoteVehicleService");
         bindService(new Intent(RemoteVehicleService.class.getName()),
                 mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -52,11 +55,13 @@ public class VehicleService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "Service being destroyed");
         unbindService(mConnection);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i(TAG, "Service binding in response to " + intent);
         return mBinder;
     }
 
@@ -97,5 +102,6 @@ public class VehicleService extends Service {
     }
 
     public void addListener(VehicleMeasurement.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener);
     }
 }
