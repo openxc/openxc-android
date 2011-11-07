@@ -11,24 +11,28 @@
     <groupId>com.openxc</groupId>
     <artifactId>openxc-it</artifactId>
     <version>1.0.0</version>
-    <packaging>apklib</packaging>
+    <packaging>apk</packaging>
     <name>OpenXC - Integration Tests</name>
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android-test</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>android</groupId>
             <artifactId>android</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.openxc</groupId>

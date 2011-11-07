@@ -23,7 +23,6 @@
                 <groupId>android</groupId>
                 <artifactId>android</artifactId>
                 <version>3.1_r3</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
