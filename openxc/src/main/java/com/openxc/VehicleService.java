@@ -53,10 +53,12 @@ public class VehicleService extends Service {
 
     public RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receiveNumerical(double value) {
+            public void receiveNumerical(String measurementType, double value) {
+                // TODO will we look up the class by ID or by class name?
+                // will that be done by the remote service or by us?
             }
 
-            public void receiveState(String state) {
+            public void receiveState(String measurementType, String state) {
             }
         };
 

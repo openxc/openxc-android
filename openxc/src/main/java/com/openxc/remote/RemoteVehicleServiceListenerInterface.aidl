@@ -1,6 +1,6 @@
 package com.openxc.remote;
 
 oneway interface RemoteVehicleServiceListenerInterface {
-    void receiveNumerical(double value);
-    void receiveState(String state);
+    void receiveNumerical(String measurementType, double value);
+    void receiveState(String measurementType, String state);
 }
