@@ -34,7 +34,7 @@ public class VehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testBindable() {
-        IBinder service = bindService(startIntent);
+        bindService(startIntent);
     }
 }
 
