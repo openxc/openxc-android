@@ -51,14 +51,22 @@ public class VehicleService extends Service {
         }
     };
 
+    // TODO this needs to be an injected dependency so we can override it when
+    // testing and call these manually. make that change and instead of
+    // having this be public and initializing it here, do it in the constructor
     public RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
             public void receiveNumerical(String measurementType, double value) {
                 // TODO will we look up the class by ID or by class name?
                 // will that be done by the remote service or by us?
+                // at startup, the remote service could create an index of ID to
+                // class name, that would make it easier here. let's assume
+                // we're passed the type name
+                // TODO notify listeners of this type
             }
 
             public void receiveState(String measurementType, String state) {
+                // TODO
             }
         };
 
