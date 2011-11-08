@@ -1,5 +1,6 @@
 package com.openxc;
 
+import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -17,6 +18,25 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
+    VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            // TODO it would be great if this was given a VehicleSpeed
+            // directly, but I don't want to have to implement an interface
+            // for every measurement...
+            VehicleSpeed speedMeasurement = (VehicleSpeed) measurement;
+            assertTrue(false);
+        }
+    };
+    SteeringWheelAngle.Listener steeringWheelListener =
+            new SteeringWheelAngle.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            // TODO it would be great if this was given a VehicleSpeed
+            // directly, but I don't want to have to implement an interface
+            // for every measurement...
+            SteeringWheelAngle angelMeasurement = (SteeringWheelAngle) measurement;
+            assertTrue(false);
+        }
+    };
 
     public BoundVehicleServiceTest() {
         super(VehicleService.class);
@@ -57,37 +77,51 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testAddListener() {
-        assertTrue(false);
+        service.addListener(VehicleSpeed.class, speedListener);
+        // TODO trigger a callback make sure the listener is called
     }
 
     @MediumTest
     public void testAddListenerTwice() {
-        assertTrue(false);
+        service.addListener(VehicleSpeed.class, speedListener);
+        service.addListener(VehicleSpeed.class, speedListener);
+        // TODO trigger a callback make sure the listener is called only once
     }
 
     @MediumTest
     public void testAddListenersTwoMeasurements() {
-        assertTrue(false);
+        service.addListener(VehicleSpeed.class, speedListener);
+        service.addListener(SteeringWheelAngle.class, steeringWheelListener);
+        // TODO trigger callbacks for each, make sure they both get it once
     }
 
     @MediumTest
     public void testRemoveListener() {
-        assertTrue(false);
+        service.addListener(VehicleSpeed.class, speedListener);
+        service.removeListener(VehicleSpeed.class, speedListener);
+        // TODO test that we don't recive an update
     }
 
     @MediumTest
     public void testRemoveTwoListeners() {
-        assertTrue(false);
+        service.addListener(VehicleSpeed.class, speedListener);
+        service.addListener(SteeringWheelAngle.class, steeringWheelListener);
+        service.removeListener(VehicleSpeed.class, speedListener);
+        service.removeListener(SteeringWheelAngle.class, speedListener);
+        // TODO test that we don't recive an update in either
     }
 
     @MediumTest
     public void testRemoveWithoutListening() {
-        assertTrue(false);
+        service.removeListener(VehicleSpeed.class, speedListener);
     }
 
     @MediumTest
     public void testRemoveOneMeasurementListener() {
-        assertTrue(false);
+        service.addListener(VehicleSpeed.class, speedListener);
+        service.addListener(SteeringWheelAngle.class, steeringWheelListener);
+        service.removeListener(VehicleSpeed.class, speedListener);
+        // TODO test that only the steering wheel stil receives an update
     }
 }
 

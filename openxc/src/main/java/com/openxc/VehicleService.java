@@ -3,6 +3,10 @@ package com.openxc;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
@@ -29,6 +33,8 @@ public class VehicleService extends Service {
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
+    private Map<Class<? extends VehicleMeasurement>,
+            VehicleMeasurement.Listener> mListeners;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -55,6 +61,10 @@ public class VehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
         bindRemote();
+
+        mListeners = Collections.synchronizedMap(
+                new HashMap<Class<? extends VehicleMeasurement>,
+                VehicleMeasurement.Listener>());
     }
 
     @Override
@@ -175,7 +185,8 @@ public class VehicleService extends Service {
         return constructBlankMeasurement(measurementType);
     }
 
-    public void addListener(VehicleMeasurement.Listener listener) {
+    public void addListener(Class<? extends VehicleMeasurement> measurementType,
+            VehicleMeasurement.Listener listener) {
         Log.i(TAG, "Adding listener " + listener);
     }
 }
