@@ -3,7 +3,6 @@ package com.openxc.remote;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import android.app.Service;
@@ -55,14 +54,4 @@ public class RemoteVehicleService extends Service {
                     RemoteVehicleServiceListenerInterface listener) {
             }
         };
-
-    public void addListener(Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
-    }
-
-    public void removeListener(Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement.Listener listener) {
-        Log.i(TAG, "Removing listener " + listener + " from " + measurementType);
-    }
 }

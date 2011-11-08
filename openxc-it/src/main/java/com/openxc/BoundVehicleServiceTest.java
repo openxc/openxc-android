@@ -71,8 +71,10 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testGetMocked() {
-        assertTrue(false);
+    public void testGetMocked() throws UnrecognizedMeasurementTypeException {
+        VehicleMeasurement measurement = service.get(VehicleSpeed.class);
+        assertNotNull(measurement);
+        assertTrue(measurement.hasValue());
     }
 
     @MediumTest
