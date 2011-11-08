@@ -70,7 +70,7 @@ public class VehicleService extends Service {
     }
 
 
-    public VehicleMeasurement get(Class<VehicleMeasurement> measurementType)
+    public VehicleMeasurement get(Class<? extends VehicleMeasurement> measurementType)
             throws RemoteException {
         String measurementId;
         try {
@@ -82,7 +82,7 @@ public class VehicleService extends Service {
             return null;
         }
 
-        Constructor<VehicleMeasurement> constructor;
+        Constructor<? extends VehicleMeasurement> constructor;
         try {
             constructor = measurementType.getConstructor(Double.class);
             return constructor.newInstance(

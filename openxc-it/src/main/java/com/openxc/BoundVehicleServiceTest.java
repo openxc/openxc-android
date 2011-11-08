@@ -1,20 +1,25 @@
 package com.openxc;
 
+import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.VehicleSpeed;
+
 import com.openxc.VehicleService;
 
 import android.content.Intent;
 
-import android.os.IBinder;
+import android.os.RemoteException;
 
 import android.test.ServiceTestCase;
 
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
-public class VehicleServiceTest extends ServiceTestCase<VehicleService> {
-    IBinder service;
+import junit.framework.Assert;
 
-    public VehicleServiceTest() {
+public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
+    VehicleService service;
+
+    public BoundVehicleServiceTest() {
         super(VehicleService.class);
     }
 
@@ -23,21 +28,26 @@ public class VehicleServiceTest extends ServiceTestCase<VehicleService> {
         super.setUp();
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
-        service = bindService(startIntent);
+        service = ((VehicleService.VehicleServiceBinder)
+                bindService(startIntent)).getService();
     }
 
     @SmallTest
     public void testPreconditions() {
     }
 
-    @MediumTest(expected=RemoteException)
-    public void testGetUnbound() throws RemoteException {
+    @MediumTest
+    public void testGetUnbound() {
         service.unbindRemote();
-        VehicleMeasurement measurement = service.get(VehicleSpeed.class);
+        try {
+            service.get(VehicleSpeed.class);
+            Assert.fail("should have thrown a RemoteException");
+        } catch(RemoteException e) {
+        }
     }
 
     @MediumTest
-    public void testGetBound() {
+    public void testGetBound() throws RemoteException {
         VehicleMeasurement measurement = service.get(VehicleSpeed.class);
         assertFalse(measurement.hasValue());
     }

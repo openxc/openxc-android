@@ -3,7 +3,7 @@ package com.openxc.measurements;
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
 
-public class Measurement<TheUnit extends Unit> {
+public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     private TheUnit mValue;
     private Range<TheUnit> mRange;
     private double mBornTime;
