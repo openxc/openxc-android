@@ -12,6 +12,7 @@ import com.openxc.measurements.VehicleMeasurement;
 
 import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceInterface;
+import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import android.content.Context;
 import android.app.Service;
@@ -49,6 +50,15 @@ public class VehicleService extends Service {
             mRemoteService = null;
         }
     };
+
+    public RemoteVehicleServiceListenerInterface mRemoteListener =
+        new RemoteVehicleServiceListenerInterface.Stub() {
+            public void receiveNumerical(double value) {
+            }
+
+            public void receiveState(String state) {
+            }
+        };
 
     public class VehicleServiceBinder extends Binder {
         VehicleService getService() {
@@ -187,6 +197,11 @@ public class VehicleService extends Service {
 
     public void addListener(Class<? extends VehicleMeasurement> measurementType,
             VehicleMeasurement.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener);
+        Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
+    }
+
+    public void removeListener(Class<? extends VehicleMeasurement> measurementType,
+            VehicleMeasurement.Listener listener) {
+        Log.i(TAG, "Removing listener " + listener + " from " + measurementType);
     }
 }
