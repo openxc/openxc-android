@@ -17,7 +17,15 @@ public class VehicleSpeed extends Measurement<MetersPerSecond>
                 new MetersPerSecond(60.0));
     public final static String ID = "VehicleSpeed";
 
+    public VehicleSpeed() {
+        super();
+    }
+
     public VehicleSpeed(MetersPerSecond value) {
         super(value, RANGE);
+    }
+
+    public VehicleSpeed(Double value) {
+        super(new MetersPerSecond(value), RANGE);
     }
 }

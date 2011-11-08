@@ -19,6 +19,11 @@ public class VehicleSpeedTest {
     }
 
     @Test
+    public void testDefaultConstructor() {
+        assertThat(new VehicleSpeed().hasValue(), equalTo(false));
+    }
+
+    @Test
     public void testGet() throws NoValueException {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
     }
@@ -30,7 +35,7 @@ public class VehicleSpeedTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.ID, equalTo("VehicleSpeed"));
+        assertThat(VehicleSpeed.ID, equalTo("VehicleSpeed"));
     }
 
 }

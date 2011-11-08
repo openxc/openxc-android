@@ -2,6 +2,7 @@ package com.openxc;
 
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.VehicleService;
 
@@ -13,8 +14,6 @@ import android.test.ServiceTestCase;
 
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
-
-import junit.framework.Assert;
 
 public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
@@ -37,59 +36,58 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testGetUnbound() {
+    public void testGetUnbound() throws UnrecognizedMeasurementTypeException {
         service.unbindRemote();
-        try {
-            service.get(VehicleSpeed.class);
-            Assert.fail("should have thrown a RemoteException");
-        } catch(RemoteException e) {
-        }
+        VehicleMeasurement measurement = service.get(VehicleSpeed.class);
+        assertNotNull(measurement);
+        assertFalse(measurement.hasValue());
     }
 
     @MediumTest
-    public void testGetBound() throws RemoteException {
+    public void testGetBound() throws UnrecognizedMeasurementTypeException {
         VehicleMeasurement measurement = service.get(VehicleSpeed.class);
+        assertNotNull(measurement);
         assertFalse(measurement.hasValue());
     }
 
     @MediumTest
     public void testGetMocked() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testAddListener() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testAddListenerTwice() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testAddListenersTwoMeasurements() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testRemoveListener() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testRemoveTwoListeners() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testRemoveWithoutListening() {
-        assert(false);
+        assertTrue(false);
     }
 
     @MediumTest
     public void testRemoveOneMeasurementListener() {
-        assert(false);
+        assertTrue(false);
     }
 }
 
