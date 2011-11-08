@@ -56,7 +56,7 @@ public class VehicleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Service being destroyed");
-        unbindService(mConnection);
+        unbindRemote();
     }
 
     @Override
@@ -64,6 +64,11 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service binding in response to " + intent);
         return mBinder;
     }
+
+    public void unbindRemote() {
+        unbindService(mConnection);
+    }
+
 
     public VehicleMeasurement get(Class<VehicleMeasurement> measurementType)
             throws RemoteException {
