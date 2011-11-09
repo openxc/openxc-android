@@ -5,11 +5,11 @@ import java.lang.InterruptedException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import android.test.AndroidTestCase;
 
-public class TraceVehicleDataSourceTest {
+import android.test.suitebuilder.annotation.SmallTest;
+
+public class TraceVehicleDataSourceTest extends AndroidTestCase {
     final URL filename = this.getClass().getResource("/trace.json");
     final URL malformedFilename = this.getClass().getResource("/trace.txt");
     TraceVehicleDataSource source;
@@ -19,8 +19,8 @@ public class TraceVehicleDataSourceTest {
     double receivedNumber;
     String receivedState;
 
-    @Before
-    public void setUp() {
+    @Override
+    protected void setUp() {
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
                 receivedNumericalCallback = true;
@@ -34,14 +34,6 @@ public class TraceVehicleDataSourceTest {
         };
     }
 
-    @After
-    public void tearDown() {
-    }
-
-    @Test
-    public void testSetFile() {
-    }
-
     private void runSourceToCompletion(VehicleDataSourceInterface source)
             throws InterruptedException {
         Thread thread = new Thread(source);
@@ -49,7 +41,7 @@ public class TraceVehicleDataSourceTest {
         thread.join();
     }
 
-    @Test
+    @SmallTest
     public void testPlaybackFile() throws InterruptedException,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
@@ -62,7 +54,7 @@ public class TraceVehicleDataSourceTest {
         assertEquals(receivedState, "MyState");
     }
 
-    @Test
+    @SmallTest
     public void testMalformedJson() throws InterruptedException ,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
@@ -72,7 +64,7 @@ public class TraceVehicleDataSourceTest {
         assert(!receivedNumericalCallback);
     }
 
-    @Test
+    @SmallTest
     public void testMissingFile() throws MalformedURLException,
             InterruptedException, VehicleDataSourceException {
         receivedNumericalCallback = false;
@@ -82,7 +74,7 @@ public class TraceVehicleDataSourceTest {
         assert(!receivedNumericalCallback);
     }
 
-    @Test
+    @SmallTest
     public void testConstructWithCallbackAndFile()
             throws VehicleDataSourceException {
         source = new TraceVehicleDataSource(callback, filename);
