@@ -80,7 +80,6 @@ public class VehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        bindRemote();
 
         mListeners = Collections.synchronizedMap(
                 new HashMap<Class<? extends VehicleMeasurement>,
@@ -97,13 +96,15 @@ public class VehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
+        bindRemote(intent);
         return mBinder;
     }
 
-    private void bindRemote() {
+    private void bindRemote(Intent triggeringIntent) {
         Log.i(TAG, "Binding to RemoteVehicleService");
-        bindService(new Intent(RemoteVehicleService.class.getName()),
-                mConnection, Context.BIND_AUTO_CREATE);
+        Intent intent = new Intent(RemoteVehicleService.class.getName());
+        intent.putExtras(triggeringIntent);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 

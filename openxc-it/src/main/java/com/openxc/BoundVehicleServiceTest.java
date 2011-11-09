@@ -6,6 +6,8 @@ import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
+import com.openxc.remote.sources.ManualVehicleDataSource;
+
 import com.openxc.VehicleService;
 
 import android.content.Intent;
@@ -21,9 +23,6 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            // TODO it would be great if this was given a VehicleSpeed
-            // directly, but I don't want to have to implement an interface
-            // for every measurement...
             VehicleSpeed speedMeasurement = (VehicleSpeed) measurement;
             assertTrue(false);
         }
@@ -31,10 +30,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     SteeringWheelAngle.Listener steeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            // TODO it would be great if this was given a VehicleSpeed
-            // directly, but I don't want to have to implement an interface
-            // for every measurement...
-            SteeringWheelAngle angelMeasurement = (SteeringWheelAngle) measurement;
+            SteeringWheelAngle angelMeasurement =
+                (SteeringWheelAngle) measurement;
             assertTrue(false);
         }
     };
@@ -48,6 +45,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         super.setUp();
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
+        startIntent.putExtra("data_source",
+                ManualVehicleDataSource.class.getName());
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
     }

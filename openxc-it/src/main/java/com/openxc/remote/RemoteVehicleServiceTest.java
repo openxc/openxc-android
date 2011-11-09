@@ -2,6 +2,8 @@ package com.openxc.remote;
 
 import com.openxc.remote.RemoteVehicleService;
 
+import com.openxc.remote.sources.ManualVehicleDataSource;
+
 import android.content.Intent;
 
 import android.test.ServiceTestCase;
@@ -35,6 +37,13 @@ public class RemoteVehicleServiceTest
 
     @MediumTest
     public void testBindable() {
+        assertNotNull(bindService(startIntent));
+    }
+
+    @MediumTest
+    public void testUsingManualSource() {
+        startIntent.putExtra("data_source",
+                ManualVehicleDataSource.class.getName());
         assertNotNull(bindService(startIntent));
     }
 }
