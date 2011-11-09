@@ -8,7 +8,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.remote.RemoteVehicleService;
 
-import com.openxc.remote.sources.ManualVehicleDataSource;
+import com.openxc.remote.sources.TraceVehicleDataSource;;
 
 import com.openxc.VehicleService;
 
@@ -48,7 +48,9 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
         startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-                ManualVehicleDataSource.class.getName());
+                TraceVehicleDataSource.class.getName());
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_POINTER_EXTRA,
+                "
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
     }

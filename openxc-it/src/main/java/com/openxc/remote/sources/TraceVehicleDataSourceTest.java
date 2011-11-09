@@ -14,8 +14,8 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
-    InputStream filename;
-    InputStream malformedFilename;
+    InputStream file;
+    InputStream malformedFile;
     TraceVehicleDataSource source;
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
@@ -25,9 +25,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @Override
     protected void setUp() {
-        filename = getContext().getResources().openRawResource(
+        file = getContext().getResources().openRawResource(
                 R.raw.tracejson);
-        malformedFilename = getContext().getResources().openRawResource(
+        malformedFile = getContext().getResources().openRawResource(
                 R.raw.tracetxt);
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
@@ -47,7 +47,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, filename);
+        source = new TraceVehicleDataSource(callback, file);
         source.run();
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
@@ -60,7 +60,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, malformedFilename);
+        source = new TraceVehicleDataSource(callback, malformedFile);
         source.run();
         assertFalse(receivedNumericalCallback);
     }
@@ -78,6 +78,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @SmallTest
     public void testConstructWithCallbackAndFile()
             throws VehicleDataSourceException {
-        source = new TraceVehicleDataSource(callback, filename);
+        source = new TraceVehicleDataSource(callback, file);
     }
 }
