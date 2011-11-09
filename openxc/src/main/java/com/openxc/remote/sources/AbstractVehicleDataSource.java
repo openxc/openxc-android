@@ -16,10 +16,14 @@ public abstract class AbstractVehicleDataSource
     }
 
     protected void handleMessage(String name, double value) {
-        mCallback.receive(name, value);
+        if(mCallback != null) {
+            mCallback.receive(name, value);
+        }
     }
 
     protected void handleMessage(String name, String value) {
-        mCallback.receive(name, value);
+        if(mCallback != null) {
+            mCallback.receive(name, value);
+        }
     }
 }

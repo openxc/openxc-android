@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class ManualVehicleDataSourceTest {
     ManualVehicleDataSource source;
     VehicleDataSourceCallbackInterface callback;
