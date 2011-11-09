@@ -8,8 +8,6 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.remote.RemoteVehicleService;
 
-import com.openxc.remote.sources.TraceVehicleDataSource;;
-
 import com.openxc.VehicleService;
 
 import android.content.Intent;
@@ -49,8 +47,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         startIntent.setClass(getContext(), VehicleService.class);
         startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
                 TraceVehicleDataSource.class.getName());
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_POINTER_EXTRA,
-                "
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
+                "android.resource://com.example.myapp/raw/tracejson");
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
     }

@@ -15,7 +15,8 @@ import android.app.Service;
 
 import android.content.Intent;
 
-import android.os.Bundle;
+import android.net.Uri;
+
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -24,8 +25,8 @@ import android.util.Log;
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
     public final static String DATA_SOURCE_NAME_EXTRA = "data_source";
-    public final static String DATA_SOURCE_POINTER_EXTRA =
-            "data_source_pointer";
+    public final static String DATA_SOURCE_RESOURCE_EXTRA =
+            "data_source_resource";
 
     private Map<String, Double> mNumericalMeasurements;
     private Map<String, String> mStateMeasurements;
@@ -53,11 +54,13 @@ public class RemoteVehicleService extends Service {
         Log.i(TAG, "Service binding in response to " + intent);
         String dataSource = intent.getExtras().getString(
                 DATA_SOURCE_NAME_EXTRA);
-        initializeDataSource(dataSource, intent.getExtras());
+        String resource = intent.getExtras().getString(
+                DATA_SOURCE_RESOURCE_EXTRA);
+        initializeDataSource(dataSource, resource);
         return mBinder;
     }
 
-    private void initializeDataSource(String dataSourceName, Bundle extras) {
+    private void initializeDataSource(String dataSourceName, String resource) {
         Class<? extends VehicleDataSourceInterface> dataSourceType;
         try {
             dataSourceType = Class.forName(dataSourceName).asSubclass(
@@ -70,15 +73,15 @@ public class RemoteVehicleService extends Service {
         Constructor<? extends VehicleDataSourceInterface> constructor;
         try {
             constructor = dataSourceType.getConstructor(
-                    VehicleDataSourceCallbackInterface.class, Bundle.class);
+                    VehicleDataSourceCallbackInterface.class, Uri.class);
         } catch(NoSuchMethodException e) {
-            Log.d(TAG, dataSourceType +
-                    " doesn't have a constructor that accepts a Bundle");
+            Log.d(TAG, dataSourceType + " doesn't have a proper constructor");
             return;
         }
 
         try {
-            mDataSource = constructor.newInstance(mCallback, extras);
+            mDataSource = constructor.newInstance(mCallback,
+                    Uri.parse(resource));
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
         } catch(IllegalAccessException e) {
