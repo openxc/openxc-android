@@ -15,6 +15,11 @@ public abstract class AbstractVehicleDataSource
         mCallback = callback;
     }
 
-    protected abstract void handleMessage(String name, double value);
-    protected abstract void handleMessage(String name, String value);
+    protected void handleMessage(String name, double value) {
+        mCallback.receive(name, value);
+    }
+
+    protected void handleMessage(String name, String value) {
+        mCallback.receive(name, value);
+    }
 }

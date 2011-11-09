@@ -11,8 +11,10 @@ public class ManualVehicleDataSource extends AbstractVehicleDataSource {
     }
 
     public void trigger(String name, double value) {
+        handleMessage(name, value);
     }
 
     public void trigger(String name, String value) {
+        handleMessage(name, value);
     }
 }
