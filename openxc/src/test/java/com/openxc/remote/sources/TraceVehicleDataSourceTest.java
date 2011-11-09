@@ -10,22 +10,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TraceVehicleDataSourceTest {
+    final URL filename = this.getClass().getResource("/trace.json");
+    final URL malformedFilename = this.getClass().getResource("/trace.txt");
     TraceVehicleDataSource source;
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
     boolean receivedStateCallback;
-    final URL filename = this.getClass().getResource("/trace.json");
-    final URL malformedFilename = this.getClass().getResource("/trace.txt");
+    double receivedNumber;
+    String receivedState;
 
     @Before
     public void setUp() {
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
                 receivedNumericalCallback = true;
+                receivedNumber = value;
             }
 
             public void receive(String name, String value) {
                 receivedStateCallback = true;
+                receivedState = value;
             }
         };
     }
@@ -54,6 +58,8 @@ public class TraceVehicleDataSourceTest {
         runSourceToCompletion(source);
         assert(receivedNumericalCallback);
         assert(receivedStateCallback);
+        assertEquals(receivedNumber, 42);
+        assertEquals(receivedState, "MyState");
     }
 
     @Test
