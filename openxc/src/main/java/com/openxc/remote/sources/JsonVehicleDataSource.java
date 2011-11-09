@@ -33,7 +33,6 @@ public abstract class JsonVehicleDataSource
                     message.getDouble("value"));
             return;
         } catch(JSONException e) {
-            // might be a string value
             Log.d(TAG, "Couldn't parse a double from JSON " + message +
                     " -- trying String next");
         }
