@@ -9,8 +9,6 @@ import java.net.URL;
 
 import com.openxc.R;
 
-import android.content.res.Resources;
-
 import android.test.AndroidTestCase;
 
 import android.test.suitebuilder.annotation.SmallTest;
@@ -44,20 +42,13 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         };
     }
 
-    private void runSourceToCompletion(VehicleDataSourceInterface source)
-            throws InterruptedException {
-        Thread thread = new Thread(source);
-        thread.run();
-        thread.join();
-    }
-
     @SmallTest
     public void testPlaybackFile() throws InterruptedException,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, filename);
-        runSourceToCompletion(source);
+        source.run();
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
         assertEquals(receivedNumber, 42.0);
@@ -70,7 +61,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, malformedFilename);
-        runSourceToCompletion(source);
+        source.run();
         assertFalse(receivedNumericalCallback);
     }
 
@@ -80,7 +71,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, new URL("file://foo"));
-        runSourceToCompletion(source);
+        source.run();
         assertFalse(receivedNumericalCallback);
     }
 

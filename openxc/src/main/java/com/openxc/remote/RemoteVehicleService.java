@@ -57,8 +57,12 @@ public class RemoteVehicleService extends Service {
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
         } catch(IllegalAccessException e) {
-            Log.w(TAG, "Default constructo is not accessible on " +
+            Log.w(TAG, "Default constructor is not accessible on " +
                     dataSourceType, e);
+        }
+
+        if(mDataSource != null) {
+            new Thread(mDataSource).run();
         }
     }
 

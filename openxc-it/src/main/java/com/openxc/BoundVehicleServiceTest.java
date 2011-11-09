@@ -45,7 +45,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         super.setUp();
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
-        startIntent.putExtra("data_source",
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
                 ManualVehicleDataSource.class.getName());
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
