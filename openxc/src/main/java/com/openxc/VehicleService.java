@@ -151,7 +151,7 @@ public class VehicleService extends Service {
             Class<? extends VehicleMeasurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
         String measurementId = getMeasurementId(measurementType);
-        Constructor<? extends VehicleMeasurement> constructor = null;
+        Constructor<? extends VehicleMeasurement> constructor;
 
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
