@@ -27,6 +27,7 @@ public abstract class JsonVehicleDataSource
             return;
         }
 
+        Log.d(TAG, "Parsed JSON object " + message);
         try {
             handleMessage(message.getString("name"),
                     message.getDouble("value"));
