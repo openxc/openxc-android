@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
     private URL mFilename;
+    private InputStream mStream;
 
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback,
@@ -25,6 +27,18 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         if(mFilename == null) {
             throw new VehicleDataSourceException(
                     "No filename specified for the trace source");
+        }
+    }
+
+    public TraceVehicleDataSource(
+            VehicleDataSourceCallbackInterface callback,
+            InputStream stream) throws VehicleDataSourceException {
+        super(callback);
+        mStream = stream;
+
+        if(mStream == null) {
+            throw new VehicleDataSourceException(
+                    "No input stream specified for the trace source");
         }
     }
 
@@ -39,11 +53,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     public void run() {
         BufferedReader reader;
 
-        try {
-            reader = openFile(mFilename);
-        } catch(FileNotFoundException e) {
-            Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-            return;
+        if(mFilename != null) {
+            try {
+                reader = openFile(mFilename);
+            } catch(FileNotFoundException e) {
+                Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                return;
+            }
+        } else {
+                reader = openFile(mStream);
         }
 
         String line;
@@ -60,6 +78,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static BufferedReader openFile(URL filename)
             throws FileNotFoundException {
         FileInputStream stream = new FileInputStream(filename.getFile());
+        return openFile(stream);
+    }
+
+    private static BufferedReader openFile(InputStream stream) {
         DataInputStream dataStream = new DataInputStream(stream);
         return new BufferedReader(new InputStreamReader(dataStream));
     }

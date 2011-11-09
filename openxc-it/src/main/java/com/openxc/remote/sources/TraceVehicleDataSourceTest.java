@@ -1,17 +1,23 @@
 package com.openxc.remote.sources;
 
+import java.io.InputStream;
+
 import java.lang.InterruptedException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import com.openxc.R;
+
+import android.content.res.Resources;
 
 import android.test.AndroidTestCase;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
-    final URL filename = this.getClass().getResource("/trace.json");
-    final URL malformedFilename = this.getClass().getResource("/trace.txt");
+    InputStream filename;
+    InputStream malformedFilename;
     TraceVehicleDataSource source;
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
@@ -21,6 +27,10 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @Override
     protected void setUp() {
+        filename = getContext().getResources().openRawResource(
+                R.raw.tracejson);
+        malformedFilename = getContext().getResources().openRawResource(
+                R.raw.tracetxt);
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
                 receivedNumericalCallback = true;
@@ -50,7 +60,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         runSourceToCompletion(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
-        assertEquals(receivedNumber, 42);
+        assertEquals(receivedNumber, 42.0);
         assertEquals(receivedState, "MyState");
     }
 
