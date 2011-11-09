@@ -16,24 +16,16 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
 
     private URL mFilename;
 
-    public TraceVehicleDataSource() {
-        super();
-    }
-
-    public TraceVehicleDataSource(
-            VehicleDataSourceCallbackInterface callback) {
-        super(callback);
-    }
-
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback,
-            URL filename) {
+            URL filename) throws VehicleDataSourceException {
         super(callback);
-        setFilename(filename);
-    }
-
-    public void setFilename(URL filename) {
         mFilename = filename;
+
+        if(mFilename == null) {
+            throw new VehicleDataSourceException(
+                    "No filename specified for the trace source");
+        }
     }
 
     public void trigger(String name, double value) {
@@ -46,6 +38,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
 
     public void run() {
         BufferedReader reader;
+
         try {
             reader = openFile(mFilename);
         } catch(FileNotFoundException e) {

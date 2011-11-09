@@ -19,7 +19,6 @@ public class TraceVehicleDataSourceTest {
 
     @Before
     public void setUp() {
-        source = new TraceVehicleDataSource();
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
                 receivedNumericalCallback = true;
@@ -36,11 +35,6 @@ public class TraceVehicleDataSourceTest {
     }
 
     @Test
-    public void testSetCallback() {
-        source.setCallback(callback);
-    }
-
-    @Test
     public void testSetFile() {
     }
 
@@ -52,7 +46,8 @@ public class TraceVehicleDataSourceTest {
     }
 
     @Test
-    public void testPlaybackFile() throws InterruptedException {
+    public void testPlaybackFile() throws InterruptedException,
+            VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, filename);
@@ -62,7 +57,8 @@ public class TraceVehicleDataSourceTest {
     }
 
     @Test
-    public void testMalformedJson() throws InterruptedException {
+    public void testMalformedJson() throws InterruptedException ,
+            VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, malformedFilename);
@@ -72,21 +68,17 @@ public class TraceVehicleDataSourceTest {
 
     @Test
     public void testMissingFile() throws MalformedURLException,
-            InterruptedException {
+            InterruptedException, VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, new URL("/foo"));
+        source = new TraceVehicleDataSource(callback, new URL("file://foo"));
         runSourceToCompletion(source);
         assert(!receivedNumericalCallback);
     }
 
     @Test
-    public void testConstructWithCallback() {
-        source = new TraceVehicleDataSource(callback);
-    }
-
-    @Test
-    public void testConstructWithCallbackAndFile() {
+    public void testConstructWithCallbackAndFile()
+            throws VehicleDataSourceException {
         source = new TraceVehicleDataSource(callback, filename);
     }
 }
