@@ -81,7 +81,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             URISyntaxException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, new URL("file://foo").toURI());
+        source = new TraceVehicleDataSource(callback, new URL("file:///foo").toURI());
         Thread thread = new Thread(source);
         thread.start();
         assertFalse(receivedNumericalCallback);
