@@ -88,9 +88,13 @@ public class RemoteVehicleService extends Service {
             return;
         }
 
+        Uri resourceUri = null;
+        if(resource != null) {
+            resourceUri = Uri.parse(resource);
+        }
+
         try {
-            mDataSource = constructor.newInstance(mCallback,
-                    Uri.parse(resource));
+            mDataSource = constructor.newInstance(mCallback, resourceUri);
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
         } catch(IllegalAccessException e) {
