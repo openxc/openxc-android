@@ -63,27 +63,26 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     }
 
     public void run() {
+        BufferedReader reader;
+
         if(mCallback != null) {
             mRunning = true;
         }
 
-        InputStream stream = null;
-        if(mFilename != null) {
-            try {
-                stream = new FileInputStream(mFilename.toURL().getFile());
-            } catch(FileNotFoundException e) {
-                Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                return;
-            } catch(MalformedURLException e) {
-                Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                return;
-            }
-        } else {
-            stream = mStream;
-        }
-
         while(mRunning) {
-            BufferedReader reader = openFile(stream);
+            if(mFilename != null) {
+                try {
+                    reader = openFile(mFilename);
+                } catch(FileNotFoundException e) {
+                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                    return;
+                } catch(MalformedURLException e) {
+                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                    return;
+                }
+            } else {
+                    reader = openFile(mStream);
+            }
 
             String line;
             try {
@@ -93,22 +92,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace file " +
                         mFilename, e);
-                try {
-                    stream.close();
-                } catch(IOException ee) {
-                    Log.w(TAG, "Couldn't even close the trace file", ee);
-                }
                 return;
             }
         }
+    }
 
-        try {
-            if(stream != null) {
-                stream.close();
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Couldn't even close the trace file", e);
-        }
+    private static BufferedReader openFile(URI filename)
+            throws FileNotFoundException, MalformedURLException {
+        FileInputStream stream = new FileInputStream(filename.toURL().getFile());
+        return openFile(stream);
     }
 
     private static BufferedReader openFile(InputStream stream) {
