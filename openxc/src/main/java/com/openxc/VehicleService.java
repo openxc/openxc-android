@@ -180,6 +180,7 @@ public class VehicleService extends Service {
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + "'s constructor threw an exception", e);
         } catch(RemoteException e) {
+            Log.w(TAG, "Unable to get value from remote vehicle service", e);
         }
 
         try {
@@ -202,6 +203,7 @@ public class VehicleService extends Service {
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + "'s constructor threw an exception", e);
         } catch(RemoteException e) {
+            Log.w(TAG, "Unable to get value from remote vehicle service", e);
         }
 
         return constructBlankMeasurement(measurementType);

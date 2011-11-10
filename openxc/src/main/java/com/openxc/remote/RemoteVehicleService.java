@@ -122,11 +122,22 @@ public class RemoteVehicleService extends Service {
         new RemoteVehicleServiceInterface.Stub() {
             public double getNumericalMeasurement(String measurementId)
                     throws RemoteException {
-                return mNumericalMeasurements.get(measurementId).doubleValue();
+                if(mNumericalMeasurements.containsKey(measurementId)) {
+                    return mNumericalMeasurements.get(
+                            measurementId).doubleValue();
+                }
+                // this is kind of an ugly way to indicate that we don't have a
+                // value, but the AIDL doesn't support exceptions besides this
+                // one.
+                throw new RemoteException();
             }
 
-            public String getStateMeasurement(String measurementId) {
-                return mStateMeasurements.get(measurementId);
+            public String getStateMeasurement(String measurementId)
+                throws RemoteException {
+                if(mStateMeasurements.containsKey(measurementId)) {
+                    return mStateMeasurements.get(measurementId);
+                }
+                throw new RemoteException();
             }
 
             public void addListener(
