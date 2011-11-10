@@ -57,6 +57,13 @@ public class RemoteVehicleService extends Service {
     }
 
     @Override
+    public void onDestroy() {
+        if(mDataSource != null) {
+            mDataSource.stop();
+        }
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
         Bundle extras = intent.getExtras();

@@ -26,4 +26,6 @@ public class ManualVehicleDataSource extends AbstractVehicleDataSource {
     }
 
     public void run() { }
+
+    public void stop() { }
 }

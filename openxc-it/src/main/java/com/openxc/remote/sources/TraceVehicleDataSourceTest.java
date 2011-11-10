@@ -43,6 +43,11 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         };
     }
 
+    @Override
+    protected void tearDown() {
+        source.stop();
+    }
+
     @SmallTest
     public void testPlaybackFile() throws InterruptedException,
             VehicleDataSourceException {

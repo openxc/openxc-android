@@ -16,13 +16,20 @@ import android.util.Log;
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
+    private boolean mRunning;
     private URI mFilename;
     private InputStream mStream;
 
     public TraceVehicleDataSource(
+            VehicleDataSourceCallbackInterface callback) {
+        super(callback);
+        mRunning = false;
+    }
+
+    public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback,
             URI filename) throws VehicleDataSourceException {
-        super(callback);
+        this(callback);
         mFilename = filename;
 
         if(mFilename == null) {
@@ -34,7 +41,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback,
             InputStream stream) throws VehicleDataSourceException {
-        super(callback);
+        this(callback);
         mStream = stream;
 
         if(mStream == null) {
@@ -51,10 +58,18 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         handleMessage(name, value);
     }
 
+    public void stop() {
+        mRunning = false;
+    }
+
     public void run() {
         BufferedReader reader;
 
-        while(true) {
+        if(mCallback != null) {
+            mRunning = true;
+        }
+
+        while(mRunning) {
             if(mFilename != null) {
                 try {
                     reader = openFile(mFilename);
