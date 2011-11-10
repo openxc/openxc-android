@@ -121,7 +121,7 @@ public class RemoteVehicleService extends Service {
 
         if(mDataSource != null) {
             Log.i(TAG, "Initializing vehicle data source " + mDataSource);
-            new Thread(mDataSource).run();
+            new Thread(mDataSource).start();
         }
     }
 

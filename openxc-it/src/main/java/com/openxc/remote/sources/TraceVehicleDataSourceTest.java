@@ -56,7 +56,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, file);
-        source.run();
+        Thread thread = new Thread(source);
+        thread.start();
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
         assertEquals(receivedNumber, 42.0);
@@ -69,7 +70,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, malformedFile);
-        source.run();
+        Thread thread = new Thread(source);
+        thread.start();
         assertFalse(receivedNumericalCallback);
     }
 
@@ -80,7 +82,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, new URL("file://foo").toURI());
-        source.run();
+        Thread thread = new Thread(source);
+        thread.start();
         assertFalse(receivedNumericalCallback);
     }
 
