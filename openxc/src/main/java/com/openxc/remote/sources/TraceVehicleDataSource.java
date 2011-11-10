@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -17,8 +16,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
     private boolean mRunning;
-    private URI mFilename;
-    private InputStream mStream;
+    private FileInputStream mStream;
 
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback) {
@@ -30,23 +28,18 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             VehicleDataSourceCallbackInterface callback,
             URI filename) throws VehicleDataSourceException {
         this(callback);
-        mFilename = filename;
-
-        if(mFilename == null) {
+        if(filename == null) {
             throw new VehicleDataSourceException(
                     "No filename specified for the trace source");
         }
-    }
-
-    public TraceVehicleDataSource(
-            VehicleDataSourceCallbackInterface callback,
-            InputStream stream) throws VehicleDataSourceException {
-        this(callback);
-        mStream = stream;
-
-        if(mStream == null) {
+        try {
+            mStream = new FileInputStream(filename.toURL().getFile());
+        } catch(FileNotFoundException e) {
             throw new VehicleDataSourceException(
-                    "No input stream specified for the trace source");
+                "Couldn't open the trace file " + filename, e);
+        } catch(MalformedURLException e) {
+            throw new VehicleDataSourceException(
+                "Couldn't open the trace file " + filename, e);
         }
     }
 
@@ -70,19 +63,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         }
 
         while(mRunning) {
-            if(mFilename != null) {
-                try {
-                    reader = openFile(mFilename);
-                } catch(FileNotFoundException e) {
-                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                    return;
-                } catch(MalformedURLException e) {
-                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                    return;
-                }
-            } else {
-                    reader = openFile(mStream);
-            }
+            DataInputStream dataStream = new DataInputStream(mStream);
+            reader = new BufferedReader(new InputStreamReader(dataStream));
 
             String line;
             try {
@@ -90,21 +72,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                     parseJson(line);
                 }
             } catch(IOException e) {
-                Log.w(TAG, "An exception occured when reading the trace file " +
-                        mFilename, e);
-                return;
+                Log.w(TAG, "An exception occured when reading the trace " +
+                        mStream, e);
+            } finally {
+                try {
+                    reader.close();
+                } catch(IOException e) {
+                    Log.w(TAG, "Couldn't even close the trace file", e);
+                }
             }
         }
-    }
-
-    private static BufferedReader openFile(URI filename)
-            throws FileNotFoundException, MalformedURLException {
-        FileInputStream stream = new FileInputStream(filename.toURL().getFile());
-        return openFile(stream);
-    }
-
-    private static BufferedReader openFile(InputStream stream) {
-        DataInputStream dataStream = new DataInputStream(stream);
-        return new BufferedReader(new InputStreamReader(dataStream));
     }
 }

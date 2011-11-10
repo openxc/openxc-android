@@ -1,12 +1,16 @@
 package com.openxc.remote.sources;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
 
 import java.lang.InterruptedException;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+
+import org.apache.commons.io.FileUtils;
 
 import com.openxc.R;
 
@@ -15,9 +19,10 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
-    InputStream file;
-    InputStream malformedFile;
+    URI traceUri;
+    URI malformedTraceUri;
     TraceVehicleDataSource source;
+    Thread thread;
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
     boolean receivedStateCallback;
@@ -26,10 +31,18 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @Override
     protected void setUp() {
-        file = getContext().getResources().openRawResource(
-                R.raw.tracejson);
-        malformedFile = getContext().getResources().openRawResource(
-                R.raw.tracetxt);
+        try {
+            traceUri = new URI("file:///data/data/com.openxc/malformed-trace.json");
+            malformedTraceUri = new URI("file:///data/data/com.openxc/trace.json");
+        } catch(URISyntaxException e) { }
+
+        try {
+            FileUtils.copyInputStreamToFile(getContext().getResources().openRawResource(
+                        R.raw.tracejson), new File(traceUri));
+            FileUtils.copyInputStreamToFile(getContext().getResources().openRawResource(
+                        R.raw.tracetxt), new File(malformedTraceUri));
+        } catch(IOException e) {}
+
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
                 receivedNumericalCallback = true;
@@ -48,6 +61,11 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         if(source != null) {
             source.stop();
         }
+        if(thread != null) {
+            try {
+                thread.join();
+            } catch(InterruptedException e) {}
+        }
     }
 
     @SmallTest
@@ -55,8 +73,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, file);
-        Thread thread = new Thread(source);
+        source = new TraceVehicleDataSource(callback, traceUri);
+        thread = new Thread(source);
         thread.start();
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
@@ -69,8 +87,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, malformedFile);
-        Thread thread = new Thread(source);
+        source = new TraceVehicleDataSource(callback, malformedTraceUri);
+        thread = new Thread(source);
         thread.start();
         assertFalse(receivedNumericalCallback);
     }
@@ -81,8 +99,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             URISyntaxException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, new URL("file:///foo").toURI());
-        Thread thread = new Thread(source);
+        source = new TraceVehicleDataSource(callback,
+                new URL("file:///foo").toURI());
+        thread = new Thread(source);
         thread.start();
         assertFalse(receivedNumericalCallback);
     }
@@ -90,6 +109,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @SmallTest
     public void testConstructWithCallbackAndFile()
             throws VehicleDataSourceException {
-        source = new TraceVehicleDataSource(callback, file);
+        source = new TraceVehicleDataSource(callback, traceUri);
     }
 }

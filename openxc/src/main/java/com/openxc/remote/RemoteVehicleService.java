@@ -103,6 +103,7 @@ public class RemoteVehicleService extends Service {
         URI resourceUri = null;
         if(resource != null) {
             try {
+                // TODO we don't need to use Uri here anymore
                 resourceUri = new URI(Uri.parse(resource).toString());
             } catch(URISyntaxException e) {
                 Log.w(TAG, "Unable to parse resource as URI " + resource);
