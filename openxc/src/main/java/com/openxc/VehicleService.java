@@ -10,7 +10,6 @@ import java.util.Map;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
-import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
@@ -105,7 +104,7 @@ public class VehicleService extends Service {
 
     private void bindRemote(Intent triggeringIntent) {
         Log.i(TAG, "Binding to RemoteVehicleService");
-        Intent intent = new Intent(RemoteVehicleService.class.getName());
+        Intent intent = new Intent(RemoteVehicleServiceInterface.class.getName());
         intent.putExtras(triggeringIntent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }

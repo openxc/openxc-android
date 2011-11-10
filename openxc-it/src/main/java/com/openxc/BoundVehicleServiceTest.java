@@ -1,5 +1,7 @@
 package com.openxc;
 
+import java.lang.InterruptedException;
+
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.VehicleMeasurement;
@@ -53,6 +55,12 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
                 "android.resource://com.example.myapp/raw/tracejson");
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
+        // sleep for a moment to wait for the vehicle service to bind to the
+        // remote service
+        try  {
+        Thread.sleep(200);
+        } catch(InterruptedException e) {
+        }
     }
 
     @SmallTest
@@ -76,7 +84,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testGetMocked() throws UnrecognizedMeasurementTypeException,
-            NoValueException, RemoteException {
+            NoValueException, RemoteException, InterruptedException {
         VehicleMeasurement measurement = service.get(VehicleSpeed.class);
         assertNotNull(measurement);
         assertTrue(measurement.hasValue());

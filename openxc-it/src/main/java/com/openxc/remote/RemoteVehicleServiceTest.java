@@ -23,7 +23,7 @@ public class RemoteVehicleServiceTest
     protected void setUp() throws Exception {
         super.setUp();
         startIntent = new Intent();
-        startIntent.setClass(getContext(), RemoteVehicleService.class);
+        startIntent.setClass(getContext(), RemoteVehicleServiceInterface.class);
     }
 
     @SmallTest
