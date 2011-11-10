@@ -43,11 +43,13 @@ public class VehicleService extends Service {
             Log.i(TAG, "Bound to RemoteVehicleService");
             mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
                     service);
+            mIsBound = true;
         }
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "RemoteVehicleService disconnected unexpectedly");
             mRemoteService = null;
+            mIsBound = false;
         }
     };
 
@@ -106,7 +108,6 @@ public class VehicleService extends Service {
         Intent intent = new Intent(RemoteVehicleService.class.getName());
         intent.putExtras(triggeringIntent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        mIsBound = true;
     }
 
     public void unbindRemote() {
