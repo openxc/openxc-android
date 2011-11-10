@@ -1,5 +1,7 @@
 package com.openxc.remote.sources;
 
+import android.net.Uri;
+
 public class ManualVehicleDataSource extends AbstractVehicleDataSource {
     public ManualVehicleDataSource() {
         super();
@@ -7,6 +9,11 @@ public class ManualVehicleDataSource extends AbstractVehicleDataSource {
 
     public ManualVehicleDataSource(
             VehicleDataSourceCallbackInterface callback) {
+        super(callback);
+    }
+
+    public ManualVehicleDataSource(
+            VehicleDataSourceCallbackInterface callback, Uri uri) {
         super(callback);
     }
 
