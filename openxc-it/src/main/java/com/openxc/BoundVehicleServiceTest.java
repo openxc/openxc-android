@@ -74,9 +74,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testGetUnbound() throws UnrecognizedMeasurementTypeException {
-        service.unbindRemote();
-        VehicleMeasurement measurement = service.get(VehicleSpeed.class);
+    public void testGetNoData() throws UnrecognizedMeasurementTypeException {
+        VehicleMeasurement measurement = service.get(SteeringWheelAngle.class);
         assertNotNull(measurement);
         assertFalse(measurement.hasValue());
     }
