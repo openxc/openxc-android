@@ -64,7 +64,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         // sleep for a moment to wait for the vehicle service to bind to the
         // remote service
         try  {
-        Thread.sleep(50);
+            Thread.sleep(100);
         } catch(InterruptedException e) {
         }
     }
