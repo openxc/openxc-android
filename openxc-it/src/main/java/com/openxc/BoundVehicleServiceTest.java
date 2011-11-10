@@ -77,12 +77,6 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     @MediumTest
     public void testGetMocked() throws UnrecognizedMeasurementTypeException,
             NoValueException, RemoteException {
-        // TODO see the VehicleService for how this needs to change
-        // TODO ah, we actually need to send this value to the
-        // RemoteVehicleListener since that's the one that will be caching the
-        // last value received
-        service.mRemoteListener.receiveNumerical(VehicleSpeed.class.getName(),
-                42);
         VehicleMeasurement measurement = service.get(VehicleSpeed.class);
         assertNotNull(measurement);
         assertTrue(measurement.hasValue());

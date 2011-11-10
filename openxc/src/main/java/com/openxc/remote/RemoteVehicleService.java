@@ -84,7 +84,7 @@ public class RemoteVehicleService extends Service {
             constructor = dataSourceType.getConstructor(
                     VehicleDataSourceCallbackInterface.class, Uri.class);
         } catch(NoSuchMethodException e) {
-            Log.d(TAG, dataSourceType + " doesn't have a proper constructor");
+            Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
             return;
         }
 
