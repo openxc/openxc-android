@@ -30,7 +30,7 @@ public class SteeringWheelAngleTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.getId(), equalTo("SteeringWheelAngle"));
+        assertThat(measurement.ID, equalTo("SteeringWheelAngle"));
     }
 
 }
