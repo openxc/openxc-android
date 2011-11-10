@@ -53,25 +53,28 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     public void run() {
         BufferedReader reader;
 
-        if(mFilename != null) {
+        while(true) {
+            if(mFilename != null) {
+                try {
+                    reader = openFile(mFilename);
+                } catch(FileNotFoundException e) {
+                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                    return;
+                }
+            } else {
+                    reader = openFile(mStream);
+            }
+
+            String line;
             try {
-                reader = openFile(mFilename);
-            } catch(FileNotFoundException e) {
-                Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                while((line = reader.readLine()) != null) {
+                    parseJson(line);
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "An exception occured when reading the trace file " +
+                        mFilename, e);
                 return;
             }
-        } else {
-                reader = openFile(mStream);
-        }
-
-        String line;
-        try {
-            while((line = reader.readLine()) != null) {
-                parseJson(line);
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "An exception occured when reading the trace file " +
-                    mFilename, e);
         }
     }
 
