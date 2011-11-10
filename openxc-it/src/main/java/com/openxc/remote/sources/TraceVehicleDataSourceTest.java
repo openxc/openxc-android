@@ -45,7 +45,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @Override
     protected void tearDown() {
-        source.stop();
+        if(source != null) {
+            source.stop();
+        }
     }
 
     @SmallTest
