@@ -42,9 +42,11 @@ public class RemoteVehicleService extends Service {
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
+                mNumericalMeasurements.put(name, value);
             }
 
             public void receive(String name, String value) {
+                mStateMeasurements.put(name, value);
             }
         };
 
