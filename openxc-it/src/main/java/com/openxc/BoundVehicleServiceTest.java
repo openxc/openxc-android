@@ -8,6 +8,8 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.remote.RemoteVehicleService;
 
+import com.openxc.remote.sources.TraceVehicleDataSource;
+
 import com.openxc.VehicleService;
 
 import android.content.Intent;
