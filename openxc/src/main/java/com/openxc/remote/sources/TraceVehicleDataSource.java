@@ -8,19 +8,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
-import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URI;
 
 import android.util.Log;
 
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
-    private URL mFilename;
+    private URI mFilename;
     private InputStream mStream;
 
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback,
-            URL filename) throws VehicleDataSourceException {
+            URI filename) throws VehicleDataSourceException {
         super(callback);
         mFilename = filename;
 
@@ -60,6 +61,9 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 } catch(FileNotFoundException e) {
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
                     return;
+                } catch(MalformedURLException e) {
+                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                    return;
                 }
             } else {
                     reader = openFile(mStream);
@@ -78,9 +82,9 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         }
     }
 
-    private static BufferedReader openFile(URL filename)
-            throws FileNotFoundException {
-        FileInputStream stream = new FileInputStream(filename.getFile());
+    private static BufferedReader openFile(URI filename)
+            throws FileNotFoundException, MalformedURLException {
+        FileInputStream stream = new FileInputStream(filename.toURL().getFile());
         return openFile(stream);
     }
 

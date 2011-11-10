@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.InterruptedException;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import com.openxc.R;
@@ -67,10 +68,11 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @SmallTest
     public void testMissingFile() throws MalformedURLException,
-            InterruptedException, VehicleDataSourceException {
+            InterruptedException, VehicleDataSourceException,
+            URISyntaxException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, new URL("file://foo"));
+        source = new TraceVehicleDataSource(callback, new URL("file://foo").toURI());
         source.run();
         assertFalse(receivedNumericalCallback);
     }

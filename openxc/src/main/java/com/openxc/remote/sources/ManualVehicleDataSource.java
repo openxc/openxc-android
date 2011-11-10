@@ -1,6 +1,6 @@
 package com.openxc.remote.sources;
 
-import android.net.Uri;
+import java.net.URI;
 
 public class ManualVehicleDataSource extends AbstractVehicleDataSource {
     public ManualVehicleDataSource() {
@@ -13,7 +13,7 @@ public class ManualVehicleDataSource extends AbstractVehicleDataSource {
     }
 
     public ManualVehicleDataSource(
-            VehicleDataSourceCallbackInterface callback, Uri uri) {
+            VehicleDataSourceCallbackInterface callback, URI uri) {
         super(callback);
     }
 

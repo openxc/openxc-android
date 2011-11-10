@@ -3,6 +3,8 @@ package com.openxc.remote;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.net.URISyntaxException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import android.app.Service;
 import android.content.Intent;
 
 import android.net.Uri;
+import java.net.URI;
 
 import android.os.Bundle;
 import android.os.IBinder;
@@ -82,15 +85,19 @@ public class RemoteVehicleService extends Service {
         Constructor<? extends VehicleDataSourceInterface> constructor;
         try {
             constructor = dataSourceType.getConstructor(
-                    VehicleDataSourceCallbackInterface.class, Uri.class);
+                    VehicleDataSourceCallbackInterface.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
             return;
         }
 
-        Uri resourceUri = null;
+        URI resourceUri = null;
         if(resource != null) {
-            resourceUri = Uri.parse(resource);
+            try {
+                resourceUri = new URI(Uri.parse(resource).toString());
+            } catch(URISyntaxException e) {
+                Log.w(TAG, "Unable to parse resource as URI " + resource);
+            }
         }
 
         try {
