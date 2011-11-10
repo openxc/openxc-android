@@ -27,14 +27,11 @@ public abstract class JsonVehicleDataSource
             return;
         }
 
-        Log.d(TAG, "Parsed JSON object " + message);
         try {
             handleMessage(message.getString("name"),
                     message.getDouble("value"));
             return;
         } catch(JSONException e) {
-            Log.d(TAG, "Couldn't parse a double from JSON " + message +
-                    " -- trying String next");
         }
         try {
             handleMessage(message.getString("name"),
