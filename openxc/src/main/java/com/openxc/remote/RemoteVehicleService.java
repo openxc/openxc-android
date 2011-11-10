@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sources.ManualVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
@@ -17,6 +18,7 @@ import android.content.Intent;
 
 import android.net.Uri;
 
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -27,6 +29,8 @@ public class RemoteVehicleService extends Service {
     public final static String DATA_SOURCE_NAME_EXTRA = "data_source";
     public final static String DATA_SOURCE_RESOURCE_EXTRA =
             "data_source_resource";
+    private final static String DEFAULT_DATA_SOURCE =
+        ManualVehicleDataSource.class.getName();
 
     private Map<String, Double> mNumericalMeasurements;
     private Map<String, String> mStateMeasurements;
@@ -52,10 +56,15 @@ public class RemoteVehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        String dataSource = intent.getExtras().getString(
-                DATA_SOURCE_NAME_EXTRA);
-        String resource = intent.getExtras().getString(
-                DATA_SOURCE_RESOURCE_EXTRA);
+        Bundle extras = intent.getExtras();
+        String dataSource = DEFAULT_DATA_SOURCE;
+        String resource = null;
+        if(extras != null) {
+            dataSource = intent.getExtras().getString(
+                    DATA_SOURCE_NAME_EXTRA);
+            resource = intent.getExtras().getString(
+                    DATA_SOURCE_RESOURCE_EXTRA);
+        }
         initializeDataSource(dataSource, resource);
         return mBinder;
     }
