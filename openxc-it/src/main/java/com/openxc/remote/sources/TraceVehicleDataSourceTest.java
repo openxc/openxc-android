@@ -32,8 +32,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @Override
     protected void setUp() {
         try {
-            traceUri = new URI("file:///data/data/com.openxc/malformed-trace.json");
-            malformedTraceUri = new URI("file:///data/data/com.openxc/trace.json");
+            traceUri = new URI("file:///data/data/com.openxc/trace.json");
+            malformedTraceUri = new URI("file:///data/data/com.openxc/malformed-trace.json");
         } catch(URISyntaxException e) { }
 
         try {

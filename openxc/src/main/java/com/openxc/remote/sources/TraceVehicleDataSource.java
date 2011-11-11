@@ -16,7 +16,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
     private boolean mRunning;
-    private FileInputStream mStream;
+    private URI mFilename;
 
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback) {
@@ -32,15 +32,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             throw new VehicleDataSourceException(
                     "No filename specified for the trace source");
         }
-        try {
-            mStream = new FileInputStream(filename.toURL().getFile());
-        } catch(FileNotFoundException e) {
-            throw new VehicleDataSourceException(
-                "Couldn't open the trace file " + filename, e);
-        } catch(MalformedURLException e) {
-            throw new VehicleDataSourceException(
-                "Couldn't open the trace file " + filename, e);
-        }
+
+        mFilename = filename;
     }
 
     public void trigger(String name, double value) {
@@ -56,15 +49,18 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     }
 
     public void run() {
-        BufferedReader reader;
-
         if(mCallback != null) {
             mRunning = true;
         }
 
         while(mRunning) {
-            DataInputStream dataStream = new DataInputStream(mStream);
-            reader = new BufferedReader(new InputStreamReader(dataStream));
+            BufferedReader reader;
+            try {
+                reader = openFile(mFilename);
+            } catch(VehicleDataSourceException e) {
+                Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                break;
+            }
 
             String line;
             try {
@@ -73,7 +69,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +
-                        mStream, e);
+                        reader, e);
+                break;
             } finally {
                 try {
                     reader.close();
@@ -82,5 +79,22 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 }
             }
         }
+    }
+
+    private BufferedReader openFile(URI filename)
+            throws VehicleDataSourceException {
+        FileInputStream stream;
+        try {
+            stream = new FileInputStream(filename.toURL().getFile());
+        } catch(FileNotFoundException e) {
+            throw new VehicleDataSourceException(
+                "Couldn't open the trace file " + filename, e);
+        } catch(MalformedURLException e) {
+            throw new VehicleDataSourceException(
+                "Couldn't open the trace file " + filename, e);
+        }
+
+        DataInputStream dataStream = new DataInputStream(stream);
+        return new BufferedReader(new InputStreamReader(dataStream));
     }
 }
