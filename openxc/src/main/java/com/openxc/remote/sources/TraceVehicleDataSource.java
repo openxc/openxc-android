@@ -34,6 +34,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         }
 
         mFilename = filename;
+        Log.d(TAG, "Starting new trace data source with trace file " +
+                mFilename);
     }
 
     public void trigger(String name, double value) {
@@ -45,12 +47,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     }
 
     public void stop() {
+        Log.d(TAG, "Stopping trace playback");
         mRunning = false;
     }
 
     public void run() {
         if(mCallback != null) {
             mRunning = true;
+            Log.d(TAG, "Starting the trace playback because we have valid " +
+                    "callback " + mCallback);
         }
 
         while(mRunning) {
@@ -61,6 +66,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
                 break;
             }
+            Log.d(TAG, "Opening and playing back trace from " + reader);
 
             String line;
             try {
@@ -79,6 +85,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 }
             }
         }
+        Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
 
     private BufferedReader openFile(URI filename)

@@ -68,14 +68,21 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         }
     }
 
+    private void startTrace(TraceVehicleDataSource source) {
+        thread = new Thread(source);
+        thread.start();
+        try {
+            Thread.sleep(100);
+        } catch(InterruptedException e){ }
+    }
+
     @SmallTest
     public void testPlaybackFile() throws InterruptedException,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, traceUri);
-        thread = new Thread(source);
-        thread.start();
+        startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
         assertEquals(receivedNumber, 42.0);
@@ -88,9 +95,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback, malformedTraceUri);
-        thread = new Thread(source);
-        thread.start();
+        startTrace(source);
         assertFalse(receivedNumericalCallback);
+        source.stop();
     }
 
     @SmallTest
@@ -101,8 +108,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         receivedStateCallback = false;
         source = new TraceVehicleDataSource(callback,
                 new URL("file:///foo").toURI());
-        thread = new Thread(source);
-        thread.start();
+        startTrace(source);
         assertFalse(receivedNumericalCallback);
     }
 
