@@ -10,6 +10,8 @@ import java.util.Map;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
+import com.openxc.remote.RawNumericalMeasurement;
+import com.openxc.remote.RawStateMeasurement;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
@@ -165,8 +167,19 @@ public class VehicleService extends Service {
             constructor = measurementType.getConstructor(Double.class);
             Log.d(TAG, measurementType +  " has a numerical constructor " +
                     "-- using that");
-            return constructor.newInstance(
-                    mRemoteService.getNumericalMeasurement(measurementId));
+            RawNumericalMeasurement rawMeasurement =
+                mRemoteService.getNumericalMeasurement(measurementId);
+            // TODO there is a lot of duplicated code in here - be smarted about
+            // the use of an interface so we can only do this once
+            if(rawMeasurement.isValid()) {
+                Log.d(TAG, rawMeasurement +
+                        " is valid, constructing a measurement with it");
+                return constructor.newInstance(rawMeasurement.getValue());
+            } else {
+                Log.d(TAG, rawMeasurement +
+                        " isn't valid -- returning a blank measurement");
+                return constructBlankMeasurement(measurementType);
+            }
         } catch(NoSuchMethodException e) {
             Log.d(TAG, measurementType +
                     " doesn't have a numerical constructor");
@@ -187,8 +200,13 @@ public class VehicleService extends Service {
             constructor = measurementType.getConstructor(String.class);
             Log.d(TAG,
                     "Requested measurement type has a state-based constructor");
-            return constructor.newInstance(mRemoteService.getStateMeasurement(
-                        measurementId));
+            RawStateMeasurement rawMeasurement =
+                mRemoteService.getStateMeasurement(measurementId);
+            if(rawMeasurement.isValid()) {
+                return constructor.newInstance(rawMeasurement.getValue());
+            } else {
+                return constructBlankMeasurement(measurementType);
+            }
         } catch(NoSuchMethodException e) {
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + " must have a single argument " +

@@ -18,7 +18,6 @@ import android.app.Service;
 
 import android.content.Intent;
 
-import android.net.Uri;
 import java.net.URI;
 
 import android.os.Bundle;
@@ -103,8 +102,7 @@ public class RemoteVehicleService extends Service {
         URI resourceUri = null;
         if(resource != null) {
             try {
-                // TODO we don't need to use Uri here anymore
-                resourceUri = new URI(Uri.parse(resource).toString());
+                resourceUri = new URI(resource);
             } catch(URISyntaxException e) {
                 Log.w(TAG, "Unable to parse resource as URI " + resource);
             }
@@ -130,24 +128,16 @@ public class RemoteVehicleService extends Service {
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
-            public double getNumericalMeasurement(String measurementId)
-                    throws RemoteException {
-                if(mNumericalMeasurements.containsKey(measurementId)) {
-                    return mNumericalMeasurements.get(
-                            measurementId).doubleValue();
-                }
-                // this is kind of an ugly way to indicate that we don't have a
-                // value, but the AIDL doesn't support exceptions besides this
-                // one.
-                throw new RemoteException();
+            public RawNumericalMeasurement getNumericalMeasurement(
+                    String measurementId) throws RemoteException {
+                return new RawNumericalMeasurement(mNumericalMeasurements.get(
+                        measurementId));
             }
 
-            public String getStateMeasurement(String measurementId)
+            public RawStateMeasurement getStateMeasurement(String measurementId)
                 throws RemoteException {
-                if(mStateMeasurements.containsKey(measurementId)) {
-                    return mStateMeasurements.get(measurementId);
-                }
-                throw new RemoteException();
+                return new RawStateMeasurement(
+                        mStateMeasurements.get(measurementId));
             }
 
             public void addListener(
