@@ -66,7 +66,6 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
                 break;
             }
-            Log.d(TAG, "Opening and playing back trace from " + reader);
 
             String line;
             try {
