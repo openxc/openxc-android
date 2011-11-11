@@ -1,3 +1,5 @@
 target
 bin
 .project
+.settings
+gen
