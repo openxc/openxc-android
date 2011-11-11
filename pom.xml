@@ -73,6 +73,7 @@
                         <platform>12</platform>
                     </sdk>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                    <testDebug>true</testDebug>
                 </configuration>
             </plugin>
             <plugin>
