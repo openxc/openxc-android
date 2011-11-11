@@ -28,7 +28,6 @@ public abstract class JsonVehicleDataSource
         }
 
         try {
-            Log.d("FRING", message.toString());
             handleMessage(message.getString("name"),
                     message.getDouble("value"));
             return;
