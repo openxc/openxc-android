@@ -75,10 +75,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                     reader = openFile(mFilename);
                 } catch(FileNotFoundException e) {
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                    return;
+                    break;
                 } catch(MalformedURLException e) {
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                    return;
+                    break;
                 }
             } else {
                     reader = openFile(mStream);
@@ -92,7 +92,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace file " +
                         mFilename, e);
-                return;
+                break;
             }
         }
     }
