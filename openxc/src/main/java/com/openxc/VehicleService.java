@@ -120,23 +120,6 @@ public class VehicleService extends Service {
         }
     }
 
-    private String getMeasurementId(
-            Class<? extends VehicleMeasurement> measurementType)
-            throws UnrecognizedMeasurementTypeException{
-        try {
-            String measurementId = (String)(
-                    measurementType.getField("ID").get(measurementType));
-            Log.d(TAG, measurementType + "'s ID is " + measurementId);
-            return measurementId;
-        } catch(NoSuchFieldException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    "No ID field on given measurement type", e);
-        } catch(IllegalAccessException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    "ID field on given measurement type is not public", e);
-        }
-    }
-
     private VehicleMeasurement constructBlankMeasurement(
             Class<? extends VehicleMeasurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
@@ -154,7 +137,6 @@ public class VehicleService extends Service {
     public VehicleMeasurement get(
             Class<? extends VehicleMeasurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
-        String measurementId = getMeasurementId(measurementType);
         Constructor<? extends VehicleMeasurement> constructor;
 
         if(mRemoteService == null) {
@@ -163,13 +145,14 @@ public class VehicleService extends Service {
             return constructBlankMeasurement(measurementType);
         }
 
-        Log.d(TAG, "Looking up measurement for ID " + measurementId);
+        Log.d(TAG, "Looking up measurement for " + measurementType);
         try {
             constructor = measurementType.getConstructor(Double.class);
             Log.d(TAG, measurementType +  " has a numerical constructor " +
                     "-- using that");
             RawNumericalMeasurement rawMeasurement =
-                mRemoteService.getNumericalMeasurement(measurementId);
+                mRemoteService.getNumericalMeasurement(
+                        measurementType.toString());
             // TODO there is a lot of duplicated code in here - be smarted about
             // the use of an interface so we can only do this once
             if(rawMeasurement.isValid()) {
@@ -202,7 +185,8 @@ public class VehicleService extends Service {
             Log.d(TAG,
                     "Requested measurement type has a state-based constructor");
             RawStateMeasurement rawMeasurement =
-                mRemoteService.getStateMeasurement(measurementId);
+                mRemoteService.getStateMeasurement(
+                        measurementType.toString());
             if(rawMeasurement.isValid()) {
                 return constructor.newInstance(rawMeasurement.getValue());
             } else {
