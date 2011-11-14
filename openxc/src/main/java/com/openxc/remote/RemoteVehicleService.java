@@ -8,6 +8,10 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.Multimap;
+
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sources.ManualVehicleDataSource;
@@ -38,6 +42,8 @@ public class RemoteVehicleService extends Service {
     private Map<String, String> mStateMeasurements;
     private VehicleDataSourceInterface mDataSource;
 
+    private Multimap<String, RemoteVehicleServiceListenerInterface> mListeners;
+
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
@@ -55,6 +61,9 @@ public class RemoteVehicleService extends Service {
         Log.i(TAG, "Service starting");
         mNumericalMeasurements = new HashMap<String, Double>();
         mStateMeasurements = new HashMap<String, String>();
+
+        mListeners = HashMultimap.create();
+        mListeners = Multimaps.synchronizedMultimap(mListeners);
     }
 
     @Override
@@ -129,23 +138,29 @@ public class RemoteVehicleService extends Service {
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
             public RawNumericalMeasurement getNumericalMeasurement(
-                    String measurementId) throws RemoteException {
+                    String measurementType) throws RemoteException {
                 return new RawNumericalMeasurement(mNumericalMeasurements.get(
-                        measurementId));
+                        measurementType));
             }
 
-            public RawStateMeasurement getStateMeasurement(String measurementId)
-                throws RemoteException {
+            public RawStateMeasurement getStateMeasurement(
+                    String measurementType) throws RemoteException {
                 return new RawStateMeasurement(
-                        mStateMeasurements.get(measurementId));
+                        mStateMeasurements.get(measurementType));
             }
 
-            public void addListener(
+            public void addListener(String measurementType,
                     RemoteVehicleServiceListenerInterface listener) {
+                Log.i(TAG, "Adding listener " + listener + " to " +
+                        measurementType);
+                mListeners.put(measurementType, listener);
             }
 
-            public void removeListener(
+            public void removeListener(String measurementType,
                     RemoteVehicleServiceListenerInterface listener) {
+                Log.i(TAG, "Removing listener " + listener + " from " +
+                        measurementType);
+                mListeners.put(measurementType, listener);
             }
         };
 }

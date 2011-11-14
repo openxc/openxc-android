@@ -12,6 +12,7 @@ import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
+import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
 
 import com.openxc.remote.sources.TraceVehicleDataSource;
@@ -97,13 +98,14 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testAddListener() {
+    public void testAddListener() throws RemoteVehicleServiceException {
         service.addListener(VehicleSpeed.class, speedListener);
         checkReceivedMeasurement(speedReceived);
     }
 
     @MediumTest
-    public void testAddListenersTwoMeasurements() {
+    public void testAddListenersTwoMeasurements()
+            throws RemoteVehicleServiceException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         checkReceivedMeasurement(speedReceived);
@@ -111,7 +113,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testRemoveListener() {
+    public void testRemoveListener() throws RemoteVehicleServiceException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
@@ -120,13 +122,15 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testRemoveWithoutListening() {
+    public void testRemoveWithoutListening()
+            throws RemoteVehicleServiceException {
         service.removeListener(VehicleSpeed.class, speedListener);
         assertNull(speedReceived);
     }
 
     @MediumTest
-    public void testRemoveOneMeasurementListener() {
+    public void testRemoveOneMeasurementListener()
+            throws RemoteVehicleServiceException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         service.removeListener(VehicleSpeed.class, speedListener);

@@ -12,6 +12,7 @@ import com.openxc.measurements.VehicleMeasurement;
 
 import com.openxc.remote.RawNumericalMeasurement;
 import com.openxc.remote.RawStateMeasurement;
+import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
@@ -228,15 +229,33 @@ public class VehicleService extends Service {
     }
 
     public void addListener(Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement.Listener listener) {
+            VehicleMeasurement.Listener listener)
+            throws RemoteVehicleServiceException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         mListeners.put(measurementType, listener);
+        try {
+            mRemoteService.addListener(measurementType.toString(),
+                    mRemoteListener);
+        } catch(RemoteException e) {
+            throw new RemoteVehicleServiceException(
+                    "Unable to register listener with remote vehicle service",
+                    e);
+        }
     }
 
     public void removeListener(Class<? extends VehicleMeasurement>
-                measurementType, VehicleMeasurement.Listener listener) {
+            measurementType, VehicleMeasurement.Listener listener)
+            throws RemoteVehicleServiceException {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
         mListeners.remove(measurementType, listener);
+        try {
+            mRemoteService.removeListener(measurementType.toString(),
+                    mRemoteListener);
+        } catch(RemoteException e) {
+            throw new RemoteVehicleServiceException(
+                    "Unable to unregister listener from remote vehicle service",
+                    e);
+        }
     }
 }

@@ -5,9 +5,11 @@ import com.openxc.remote.RawStateMeasurement;
 import com.openxc.remote.RawNumericalMeasurement;
 
 interface RemoteVehicleServiceInterface {
-    RawNumericalMeasurement getNumericalMeasurement(String measurementId);
-    RawStateMeasurement getStateMeasurement(String measurementId);
+    RawNumericalMeasurement getNumericalMeasurement(String measurementType);
+    RawStateMeasurement getStateMeasurement(String measurementType);
 
-    void addListener(RemoteVehicleServiceListenerInterface listener);
-    void removeListener(RemoteVehicleServiceListenerInterface listener);
+    void addListener(String measurementType,
+            RemoteVehicleServiceListenerInterface listener);
+    void removeListener(String measurementType,
+            RemoteVehicleServiceListenerInterface listener);
 }
