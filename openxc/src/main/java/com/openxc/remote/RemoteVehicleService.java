@@ -9,10 +9,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Multimap;
-
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sources.ManualVehicleDataSource;
@@ -171,6 +167,18 @@ public class RemoteVehicleService extends Service {
         }
     }
 
+    private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+            getOrCreateCallbackList(String measurementType) {
+        RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+            callbackList = mListeners.get(measurementType);
+        if(callbackList == null) {
+            callbackList = new RemoteCallbackList<
+                RemoteVehicleServiceListenerInterface>();
+            mListeners.put(measurementType, callbackList);
+        }
+        return callbackList;
+    }
+
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
             public RawNumericalMeasurement getNumericalMeasurement(
@@ -189,14 +197,14 @@ public class RemoteVehicleService extends Service {
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener + " to " +
                         measurementType);
-                mListeners.get(measurementType).register(listener);
+                getOrCreateCallbackList(measurementType).register(listener);
             }
 
             public void removeListener(String measurementType,
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener + " from " +
                         measurementType);
-                mListeners.get(measurementType).unregister(listener);
+                getOrCreateCallbackList(measurementType).unregister(listener);
             }
         };
 }

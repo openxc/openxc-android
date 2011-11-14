@@ -56,7 +56,7 @@ public class VehicleService extends Service {
         }
     };
 
-    public RemoteVehicleServiceListenerInterface mRemoteListener =
+    private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
             public void receiveNumerical(String measurementType,
                     RawNumericalMeasurement value) {
