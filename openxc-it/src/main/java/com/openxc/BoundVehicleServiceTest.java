@@ -35,7 +35,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            speedReceived =(VehicleSpeed) measurement;
+            speedReceived = (VehicleSpeed) measurement;
         }
     };
     SteeringWheelAngle.Listener steeringWheelListener =
