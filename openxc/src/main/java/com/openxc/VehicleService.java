@@ -221,7 +221,7 @@ public class VehicleService extends Service {
         try {
             RawNumericalMeasurement rawMeasurement =
                 mRemoteService.getNumericalMeasurement(
-                        measurementType.toString());
+                        MEASUREMENT_CLASS_TO_ID.get(measurementType));
             return getNumericalMeasurementFromRaw(measurementType,
                     rawMeasurement);
         } catch(RemoteException e) {
@@ -253,7 +253,8 @@ public class VehicleService extends Service {
                 measurementType);
         mListeners.remove(measurementType, listener);
         try {
-            mRemoteService.removeListener(measurementType.toString(),
+            mRemoteService.removeListener(
+                    MEASUREMENT_CLASS_TO_ID.get(measurementType),
                     mRemoteListener);
         } catch(RemoteException e) {
             throw new RemoteVehicleServiceException(
