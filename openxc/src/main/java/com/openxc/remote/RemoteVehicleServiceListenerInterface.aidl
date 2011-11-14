@@ -5,6 +5,6 @@ import com.openxc.remote.RawNumericalMeasurement;
 
 oneway interface RemoteVehicleServiceListenerInterface {
     void receiveNumerical(String measurementType,
-            out RawNumericalMeasurement value);
-    void receiveState(String measurementType, out RawStateMeasurement state);
+            in RawNumericalMeasurement value);
+    void receiveState(String measurementType, in RawStateMeasurement state);
 }
