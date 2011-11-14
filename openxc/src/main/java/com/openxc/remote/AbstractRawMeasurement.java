@@ -2,7 +2,8 @@ package com.openxc.remote;
 
 import android.os.Parcel;
 
-public abstract class AbstractRawMeasurement<TheUnit> implements RawMeasurementInterface {
+public abstract class AbstractRawMeasurement<TheUnit>
+        implements RawMeasurementInterface {
     protected TheUnit mValue;
 
     public AbstractRawMeasurement() { }

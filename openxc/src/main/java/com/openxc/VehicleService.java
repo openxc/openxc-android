@@ -10,6 +10,7 @@ import com.google.common.collect.Multimap;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
+import com.openxc.remote.RawMeasurementInterface;
 import com.openxc.remote.RawNumericalMeasurement;
 import com.openxc.remote.RawStateMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
@@ -57,18 +58,31 @@ public class VehicleService extends Service {
 
     public RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receiveNumerical(String measurementType, double value) {
+            public void receiveNumerical(String measurementType,
+                    RawNumericalMeasurement value) {
                 Log.d(TAG, "Received numerical " + measurementType + ": " +
                         value + " from remote service");
-                // TODO will we look up the class by ID or by class name?
-                // will that be done by the remote service or by us?
-                // at startup, the remote service could create an index of ID to
-                // class name, that would make it easier here. let's assume
-                // we're passed the type name
+                Class<? extends VehicleMeasurement> measurementClass;
+                try {
+                    measurementClass = Class.forName(measurementType
+                            ).asSubclass(VehicleMeasurement.class);
+                } catch(ClassNotFoundException e) {
+                    Log.w(TAG, "Unable to find measurement type for name " +
+                            measurementType, e);
+                    return;
+                }
+
+                try {
+                    getNumericalMeasurementFromRaw(measurementClass, value);
+                } catch(UnrecognizedMeasurementTypeException e) {
+                    Log.w(TAG, "Received notification for an unrecognized " +
+                            "measurement type: " + measurementType, e);
+                }
                 // TODO notify listeners of this type
             }
 
-            public void receiveState(String measurementType, String state) {
+            public void receiveState(String measurementType,
+                    RawStateMeasurement state) {
                 Log.d(TAG, "Received state " + measurementType + ": " +
                         state + " from remote service");
                 // TODO
@@ -134,10 +148,46 @@ public class VehicleService extends Service {
         }
     }
 
+    private VehicleMeasurement getNumericalMeasurementFromRaw(
+            Class<? extends VehicleMeasurement> measurementType,
+            RawNumericalMeasurement rawMeasurement)
+            throws UnrecognizedMeasurementTypeException{
+        Constructor<? extends VehicleMeasurement> constructor;
+        try {
+            constructor = measurementType.getConstructor(
+                    Double.class);
+            Log.d(TAG, measurementType +  " has a numerical constructor " +
+                    "-- using that");
+        } catch(NoSuchMethodException e) {
+            throw new UnrecognizedMeasurementTypeException(measurementType +
+                    " doesn't have a numerical constructor", e);
+        }
+
+        if(rawMeasurement.isValid()) {
+            Log.d(TAG, rawMeasurement +
+                    " is valid, constructing a measurement with it");
+            try {
+                return constructor.newInstance(rawMeasurement.getValue());
+            } catch(InstantiationException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " is abstract", e);
+            } catch(IllegalAccessException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " has a private constructor", e);
+            } catch(InvocationTargetException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + "'s constructor threw an exception", e);
+            }
+        } else {
+            Log.d(TAG, rawMeasurement +
+                    " isn't valid -- returning a blank measurement");
+        }
+        return constructBlankMeasurement(measurementType);
+    }
+
     public VehicleMeasurement get(
             Class<? extends VehicleMeasurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
-        Constructor<? extends VehicleMeasurement> constructor;
 
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
@@ -147,69 +197,15 @@ public class VehicleService extends Service {
 
         Log.d(TAG, "Looking up measurement for " + measurementType);
         try {
-            constructor = measurementType.getConstructor(Double.class);
-            Log.d(TAG, measurementType +  " has a numerical constructor " +
-                    "-- using that");
             RawNumericalMeasurement rawMeasurement =
                 mRemoteService.getNumericalMeasurement(
                         measurementType.toString());
-            // TODO there is a lot of duplicated code in here - be smarted about
-            // the use of an interface so we can only do this once
-            if(rawMeasurement.isValid()) {
-                Log.d(TAG, rawMeasurement +
-                        " is valid, constructing a measurement with it");
-                return constructor.newInstance(rawMeasurement.getValue());
-            } else {
-                Log.d(TAG, rawMeasurement +
-                        " isn't valid -- returning a blank measurement");
-                return constructBlankMeasurement(measurementType);
-            }
-        } catch(NoSuchMethodException e) {
-            Log.d(TAG, measurementType +
-                    " doesn't have a numerical constructor");
-        } catch(InstantiationException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " is abstract", e);
-        } catch(IllegalAccessException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " has a private constructor", e);
-        } catch(InvocationTargetException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + "'s constructor threw an exception", e);
+            return getNumericalMeasurementFromRaw(measurementType,
+                    rawMeasurement);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
+            return constructBlankMeasurement(measurementType);
         }
-
-        try {
-            constructor = measurementType.getConstructor(String.class);
-            Log.d(TAG,
-                    "Requested measurement type has a state-based constructor");
-            RawStateMeasurement rawMeasurement =
-                mRemoteService.getStateMeasurement(
-                        measurementType.toString());
-            if(rawMeasurement.isValid()) {
-                return constructor.newInstance(rawMeasurement.getValue());
-            } else {
-                return constructBlankMeasurement(measurementType);
-            }
-        } catch(NoSuchMethodException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " must have a single argument " +
-                    "constructor that accepts either a String or Double", e);
-        } catch(InstantiationException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " is abstract", e);
-        } catch(IllegalAccessException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " has a private constructor", e);
-        } catch(InvocationTargetException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + "'s constructor threw an exception", e);
-        } catch(RemoteException e) {
-            Log.w(TAG, "Unable to get value from remote vehicle service", e);
-        }
-
-        return constructBlankMeasurement(measurementType);
     }
 
     public void addListener(Class<? extends VehicleMeasurement> measurementType,
