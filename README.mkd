@@ -106,7 +106,7 @@ for an infrequently updated measurement:
 
     if(vehicleService.supports(VehicleSpeed.class) {
         VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
-        if(measurement.hasValue()) {
+        if(measurement.isNone()) {
             // do stuff with it
         }
     }

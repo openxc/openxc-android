@@ -1,20 +1,19 @@
 package com.openxc.measurements;
 
 import com.openxc.units.Unit;
+import com.openxc.util.AgingData;
 import com.openxc.util.Range;
 
 public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
-    private TheUnit mValue;
+    private AgingData<TheUnit> mValue;
     private Range<TheUnit> mRange;
-    private double mBornTime;
 
     public Measurement() {
-        mBornTime = System.nanoTime();
+        mValue = new AgingData<TheUnit>();
     }
 
     public Measurement(TheUnit value) {
-        this();
-        mValue = value;
+        mValue = new AgingData<TheUnit>(value);
     }
 
     public Measurement(TheUnit value, Range<TheUnit> range) {
@@ -22,15 +21,8 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         mRange = range;
     }
 
-    public boolean hasValue() {
-        return mValue != null;
-    }
-
     public double getAge() throws NoValueException {
-        if(!hasValue()) {
-            throw new NoValueException();
-        }
-        return System.nanoTime() - mBornTime;
+        return mValue.getAge();
     }
 
     public boolean hasRange() {
@@ -49,9 +41,10 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     }
 
     public TheUnit getValue() throws NoValueException {
-        if(!hasValue()) {
-            throw new NoValueException();
-        }
-        return mValue;
+        return mValue.getValue();
+    }
+
+    public boolean isNone() {
+        return mValue.isNone();
     }
 }

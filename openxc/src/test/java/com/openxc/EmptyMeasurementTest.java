@@ -28,7 +28,7 @@ public class EmptyMeasurementTest {
 
     @Test
     public void testNoValue() {
-        assertThat(measurement.hasValue(), equalTo(false));
+        assertThat(measurement.isNone(), equalTo(false));
     }
 
     @Test(expected=NoValueException.class)
