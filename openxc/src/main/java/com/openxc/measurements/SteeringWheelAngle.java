@@ -7,7 +7,7 @@ public class SteeringWheelAngle extends Measurement<Degree>
         implements VehicleMeasurement {
     private final static Range<Degree> RANGE =
         new Range<Degree>(new Degree(-400), new Degree(400));
-    public final static String ID = "SteeringWheelAngle";
+    public final static String ID = "steering_wheel_angle";
 
     public SteeringWheelAngle() { }
 

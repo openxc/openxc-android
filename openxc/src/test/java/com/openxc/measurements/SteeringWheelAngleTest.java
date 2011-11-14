@@ -27,10 +27,4 @@ public class SteeringWheelAngleTest {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    @Test
-    public void testHasId() {
-        assertThat(measurement.ID, equalTo("SteeringWheelAngle"));
-    }
-
 }

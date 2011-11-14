@@ -15,7 +15,7 @@ public class VehicleSpeed extends Measurement<MetersPerSecond>
     private final static Range<MetersPerSecond> RANGE =
         new Range<MetersPerSecond>(new MetersPerSecond(0.0),
                 new MetersPerSecond(60.0));
-    public final static String ID = "VehicleSpeed";
+    public final static String ID = "vehicle_speed";
 
     public VehicleSpeed() { }
 

@@ -1,2 +1,3 @@
-{"name": "VehicleSpeed", "value": 42}
-{"name": "StateValue", "value": "MyState"}
+{"name": "vehicle_speed", "value": 42}
+{"name": "state_value", "value": "MyState"}
+{"name": "steering_wheel_angle", "value": 94.1}

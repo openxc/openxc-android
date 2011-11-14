@@ -32,10 +32,4 @@ public class VehicleSpeedTest {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    @Test
-    public void testHasId() {
-        assertThat(VehicleSpeed.ID, equalTo("VehicleSpeed"));
-    }
-
 }

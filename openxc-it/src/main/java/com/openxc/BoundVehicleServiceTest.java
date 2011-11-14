@@ -6,6 +6,7 @@ import java.lang.InterruptedException;
 
 import org.apache.commons.io.FileUtils;
 
+import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.VehicleMeasurement;
@@ -82,7 +83,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testGetNoData() throws UnrecognizedMeasurementTypeException {
-        VehicleMeasurement measurement = service.get(SteeringWheelAngle.class);
+        VehicleMeasurement measurement = service.get(EngineSpeed.class);
         assertNotNull(measurement);
         assertFalse(measurement.hasValue());
     }
