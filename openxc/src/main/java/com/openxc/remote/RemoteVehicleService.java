@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.net.URISyntaxException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import java.net.URI;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
 import android.util.Log;
@@ -42,16 +44,48 @@ public class RemoteVehicleService extends Service {
     private Map<String, String> mStateMeasurements;
     private VehicleDataSourceInterface mDataSource;
 
-    private Multimap<String, RemoteVehicleServiceListenerInterface> mListeners;
+    private Map<String, RemoteCallbackList<
+        RemoteVehicleServiceListenerInterface>> mListeners;
 
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
-            public void receive(String name, double value) {
-                mNumericalMeasurements.put(name, value);
+            public void receive(String measurementId, double value) {
+                // TODO look up the measurement TYPE here, not ID
+                mNumericalMeasurements.put(measurementId, value);
+                if(mListeners.containsKey(measurementId)) {
+                    RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+                        callbacks = mListeners.get(measurementId);
+                    int i = callbacks.beginBroadcast();
+                    while(i > 0) {
+                        try {
+                            callbacks.getBroadcastItem(i).receiveNumerical(
+                                    measurementId,
+                                    new RawNumericalMeasurement(value));
+                        } catch(RemoteException e) {
+                        }
+                    }
+                }
             }
 
-            public void receive(String name, String value) {
-                mStateMeasurements.put(name, value);
+            // TODO this is a bit of duplicated code from above, just changing
+            // the numerical vs. state - function points would be really nice
+            // here, but there is undoubtedly another way
+            public void receive(String measurementId, String value) {
+                // TODO look up the measurement TYPE here, not ID
+                mStateMeasurements.put(measurementId, value);
+                if(mListeners.containsKey(measurementId)) {
+                    RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+                        callbacks = mListeners.get(measurementId);
+                    int i = callbacks.beginBroadcast();
+                    while(i > 0) {
+                        try {
+                            callbacks.getBroadcastItem(i).receiveState(
+                                    measurementId,
+                                    new RawStateMeasurement(value));
+                        } catch(RemoteException e) {
+                        }
+                    }
+                }
             }
         };
 
@@ -62,8 +96,9 @@ public class RemoteVehicleService extends Service {
         mNumericalMeasurements = new HashMap<String, Double>();
         mStateMeasurements = new HashMap<String, String>();
 
-        mListeners = HashMultimap.create();
-        mListeners = Multimaps.synchronizedMultimap(mListeners);
+        mListeners = Collections.synchronizedMap(
+                new HashMap<String, RemoteCallbackList<
+                RemoteVehicleServiceListenerInterface>>());
     }
 
     @Override
@@ -71,6 +106,7 @@ public class RemoteVehicleService extends Service {
         if(mDataSource != null) {
             mDataSource.stop();
         }
+        // TODO loop over and kill all callbacks in remote callback list
     }
 
     @Override
@@ -153,14 +189,14 @@ public class RemoteVehicleService extends Service {
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener + " to " +
                         measurementType);
-                mListeners.put(measurementType, listener);
+                mListeners.get(measurementType).register(listener);
             }
 
             public void removeListener(String measurementType,
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener + " from " +
                         measurementType);
-                mListeners.put(measurementType, listener);
+                mListeners.get(measurementType).unregister(listener);
             }
         };
 }
