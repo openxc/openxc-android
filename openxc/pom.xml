@@ -15,6 +15,10 @@
     <name>OpenXC - Library</name>
     <dependencies>
         <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
             <groupId>android</groupId>
             <artifactId>android</artifactId>
             <scope>provided</scope>

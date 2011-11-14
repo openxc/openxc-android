@@ -3,9 +3,9 @@ package com.openxc;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.Multimap;
 
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
@@ -35,7 +35,7 @@ public class VehicleService extends Service {
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
-    private Map<Class<? extends VehicleMeasurement>,
+    private Multimap<Class<? extends VehicleMeasurement>,
             VehicleMeasurement.Listener> mListeners;
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -85,9 +85,8 @@ public class VehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
 
-        mListeners = Collections.synchronizedMap(
-                new HashMap<Class<? extends VehicleMeasurement>,
-                VehicleMeasurement.Listener>());
+        mListeners = HashMultimap.create();
+        mListeners = Multimaps.synchronizedMultimap(mListeners);
     }
 
     @Override
@@ -231,11 +230,13 @@ public class VehicleService extends Service {
     public void addListener(Class<? extends VehicleMeasurement> measurementType,
             VehicleMeasurement.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
+        mListeners.put(measurementType, listener);
     }
 
     public void removeListener(Class<? extends VehicleMeasurement>
                 measurementType, VehicleMeasurement.Listener listener) {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
+        mListeners.remove(measurementType, listener);
     }
 }
