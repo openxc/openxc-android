@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="Hello World, ACTIVITY_ENTRY_NAME"
-    />
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical" >
+    <TextView android:id="@+id/steering_wheel_angle_label"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/steering_wheel_angle_label" />
+    <TextView android:id="@+id/steering_wheel_angle"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
+    <TextView android:id="@+id/vehicle_speed_label"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/vehicle_speed_label" />
+    <TextView android:id="@+id/vehicle_speed"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
 </LinearLayout>
-

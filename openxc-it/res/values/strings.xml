@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ACTIVITY_ENTRY_NAME</string>
+    <string name="app_name">Vehicle Dashboard</string>
+    <string name="steering_wheel_angle_label">Steering Wheel Angle</string>
+    <string name="vehicle_speed_label">Vehicle Speed</string>
 </resources>

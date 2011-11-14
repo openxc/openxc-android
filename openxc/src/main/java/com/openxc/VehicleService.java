@@ -3,6 +3,8 @@ package com.openxc;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Set;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
@@ -63,6 +65,26 @@ public class VehicleService extends Service {
             mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
                     service);
             mIsBound = true;
+
+            // in case we had listeners registered before the remote service was
+            // connected, sync up here.
+            // TODO ideally we wouldn't call onServiceConnected in applications
+            // for this service until we're connected to the remote service as
+            // well - I can't figure out how to do that, however.
+            Set<Class<? extends VehicleMeasurement>> listenerKeys =
+                mListeners.keySet();
+            for(Class<? extends VehicleMeasurement> key : listenerKeys) {
+                try {
+                    mRemoteService.addListener(
+                            MEASUREMENT_CLASS_TO_ID.get(key),
+                            mRemoteListener);
+                    Log.i(TAG, "Added listener " + key +
+                            " to remote vehicle service after it started up");
+                } catch(RemoteException e) {
+                    Log.w(TAG, "Unable to register listener with remote " +
+                            "vehicle service", e);
+                }
+            }
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -235,14 +257,16 @@ public class VehicleService extends Service {
             throws RemoteVehicleServiceException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         mListeners.put(measurementType, listener);
-        try {
-            mRemoteService.addListener(
-                    MEASUREMENT_CLASS_TO_ID.get(measurementType),
-                    mRemoteListener);
-        } catch(RemoteException e) {
-            throw new RemoteVehicleServiceException(
-                    "Unable to register listener with remote vehicle service",
-                    e);
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.addListener(
+                        MEASUREMENT_CLASS_TO_ID.get(measurementType),
+                        mRemoteListener);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to register listener with remote vehicle service",
+                        e);
+            }
         }
     }
 
@@ -252,14 +276,16 @@ public class VehicleService extends Service {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
         mListeners.remove(measurementType, listener);
-        try {
-            mRemoteService.removeListener(
-                    MEASUREMENT_CLASS_TO_ID.get(measurementType),
-                    mRemoteListener);
-        } catch(RemoteException e) {
-            throw new RemoteVehicleServiceException(
-                    "Unable to unregister listener from remote vehicle service",
-                    e);
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.removeListener(
+                        MEASUREMENT_CLASS_TO_ID.get(measurementType),
+                        mRemoteListener);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to unregister listener from remote vehicle service",
+                        e);
+            }
         }
     }
 }

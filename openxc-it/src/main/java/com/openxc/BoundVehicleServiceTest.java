@@ -69,7 +69,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
                 bindService(startIntent)).getService();
         // sleep for a moment to wait for the vehicle service to bind to the
         // remote service
-        pause(100);
+        pause(150);
     }
 
     @SmallTest
@@ -101,7 +101,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     @MediumTest
     public void testAddListener() throws RemoteVehicleServiceException {
         service.addListener(VehicleSpeed.class, speedListener);
-        pause(100);
+        pause(150);
         checkReceivedMeasurement(speedReceived);
     }
 
@@ -110,7 +110,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             throws RemoteVehicleServiceException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        pause(100);
+        pause(150);
         checkReceivedMeasurement(speedReceived);
         checkReceivedMeasurement(steeringAngleReceived);
     }
@@ -120,7 +120,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         service.addListener(VehicleSpeed.class, speedListener);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        pause(100);
+        pause(150);
         assertNull(speedReceived);
     }
 
@@ -138,7 +138,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        pause(100);
+        pause(150);
         assertNull(speedReceived);
     }
 
