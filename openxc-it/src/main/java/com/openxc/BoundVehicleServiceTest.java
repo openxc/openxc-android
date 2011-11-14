@@ -29,18 +29,18 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
+    VehicleSpeed speedReceived;
+    SteeringWheelAngle steeringAngleReceived;
+
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            VehicleSpeed speedMeasurement = (VehicleSpeed) measurement;
-            assertTrue(false);
+            speedReceived =(VehicleSpeed) measurement;
         }
     };
     SteeringWheelAngle.Listener steeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            SteeringWheelAngle angelMeasurement =
-                (SteeringWheelAngle) measurement;
-            assertTrue(false);
+            steeringAngleReceived = (SteeringWheelAngle) measurement;
         }
     };
 
@@ -51,6 +51,10 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        speedReceived = null;
+        steeringAngleReceived = null;
+
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
         startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
@@ -63,14 +67,16 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
                 bindService(startIntent)).getService();
         // sleep for a moment to wait for the vehicle service to bind to the
         // remote service
-        try  {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-        }
+        pause(100);
     }
 
     @SmallTest
     public void testPreconditions() {
+    }
+
+    private void checkReceivedMeasurement(VehicleMeasurement measurement) {
+        assertNotNull(measurement);
+        assertTrue(measurement.hasValue());
     }
 
     @MediumTest
@@ -93,42 +99,30 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     @MediumTest
     public void testAddListener() {
         service.addListener(VehicleSpeed.class, speedListener);
-        // TODO trigger a callback make sure the listener is called
-    }
-
-    @MediumTest
-    public void testAddListenerTwice() {
-        service.addListener(VehicleSpeed.class, speedListener);
-        service.addListener(VehicleSpeed.class, speedListener);
-        // TODO trigger a callback make sure the listener is called only once
+        checkReceivedMeasurement(speedReceived);
     }
 
     @MediumTest
     public void testAddListenersTwoMeasurements() {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        // TODO trigger callbacks for each, make sure they both get it once
+        checkReceivedMeasurement(speedReceived);
+        checkReceivedMeasurement(steeringAngleReceived);
     }
 
     @MediumTest
     public void testRemoveListener() {
         service.addListener(VehicleSpeed.class, speedListener);
         service.removeListener(VehicleSpeed.class, speedListener);
-        // TODO test that we don't recive an update
-    }
-
-    @MediumTest
-    public void testRemoveTwoListeners() {
-        service.addListener(VehicleSpeed.class, speedListener);
-        service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        service.removeListener(VehicleSpeed.class, speedListener);
-        service.removeListener(SteeringWheelAngle.class, speedListener);
-        // TODO test that we don't recive an update in either
+        speedReceived = null;
+        pause(50);
+        assertNull(speedReceived);
     }
 
     @MediumTest
     public void testRemoveWithoutListening() {
         service.removeListener(VehicleSpeed.class, speedListener);
+        assertNull(speedReceived);
     }
 
     @MediumTest
@@ -136,7 +130,15 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         service.removeListener(VehicleSpeed.class, speedListener);
-        // TODO test that only the steering wheel stil receives an update
+        speedReceived = null;
+        pause(50);
+        assertNull(speedReceived);
+    }
+
+    private void pause(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch(InterruptedException e) {}
     }
 }
 
