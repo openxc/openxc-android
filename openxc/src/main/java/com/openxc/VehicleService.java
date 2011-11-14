@@ -3,14 +3,17 @@ package com.openxc;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multimap;
 
+import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.VehicleSpeed;
 
-import com.openxc.remote.RawMeasurementInterface;
 import com.openxc.remote.RawNumericalMeasurement;
 import com.openxc.remote.RawStateMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
@@ -39,6 +42,19 @@ public class VehicleService extends Service {
     private RemoteVehicleServiceInterface mRemoteService;
     private Multimap<Class<? extends VehicleMeasurement>,
             VehicleMeasurement.Listener> mListeners;
+    private static final BiMap<String, Class<? extends VehicleMeasurement>>
+            MEASUREMENT_ID_TO_CLASS;
+    private static final BiMap<Class<? extends VehicleMeasurement>, String>
+            MEASUREMENT_CLASS_TO_ID;
+
+    static {
+        MEASUREMENT_ID_TO_CLASS = HashBiMap.create();
+        MEASUREMENT_ID_TO_CLASS.put(VehicleSpeed.ID, VehicleSpeed.class);
+        MEASUREMENT_ID_TO_CLASS.put(SteeringWheelAngle.ID,
+                SteeringWheelAngle.class);
+
+        MEASUREMENT_CLASS_TO_ID = MEASUREMENT_ID_TO_CLASS.inverse();
+    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -58,27 +74,23 @@ public class VehicleService extends Service {
 
     private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receiveNumerical(String measurementType,
+            public void receiveNumerical(String measurementId,
                     RawNumericalMeasurement value) {
-                Log.d(TAG, "Received numerical " + measurementType + ": " +
+                Log.d(TAG, "Received numerical " + measurementId + ": " +
                         value + " from remote service");
-                Class<? extends VehicleMeasurement> measurementClass;
+
+                Class<? extends VehicleMeasurement> measurementClass =
+                    MEASUREMENT_ID_TO_CLASS.get(measurementId);
+                VehicleMeasurement measurement;
                 try {
-                    measurementClass = Class.forName(measurementType
-                            ).asSubclass(VehicleMeasurement.class);
-                } catch(ClassNotFoundException e) {
-                    Log.w(TAG, "Unable to find measurement type for name " +
-                            measurementType, e);
+                    measurement = getNumericalMeasurementFromRaw(
+                            measurementClass, value);
+                } catch(UnrecognizedMeasurementTypeException e) {
+                    Log.w(TAG, "Received notification for a malformed " +
+                            "measurement type: " + measurementClass, e);
                     return;
                 }
-
-                try {
-                    getNumericalMeasurementFromRaw(measurementClass, value);
-                } catch(UnrecognizedMeasurementTypeException e) {
-                    Log.w(TAG, "Received notification for an unrecognized " +
-                            "measurement type: " + measurementType, e);
-                }
-                // TODO notify listeners of this type
+                notifyListeners(measurementClass, measurement);
             }
 
             public void receiveState(String measurementType,
@@ -88,6 +100,16 @@ public class VehicleService extends Service {
                 // TODO
             }
         };
+
+    private void notifyListeners(
+            Class<? extends VehicleMeasurement> measurementType,
+            VehicleMeasurement measurement) {
+        // TODO probably want to do a coarse lock around this
+        for(VehicleMeasurement.Listener listener :
+                mListeners.get(measurementType)) {
+            listener.receive(measurement);
+        }
+    }
 
     public class VehicleServiceBinder extends Binder {
         VehicleService getService() {
@@ -214,7 +236,8 @@ public class VehicleService extends Service {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         mListeners.put(measurementType, listener);
         try {
-            mRemoteService.addListener(measurementType.toString(),
+            mRemoteService.addListener(
+                    MEASUREMENT_CLASS_TO_ID.get(measurementType),
                     mRemoteListener);
         } catch(RemoteException e) {
             throw new RemoteVehicleServiceException(

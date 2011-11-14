@@ -46,18 +46,20 @@ public class RemoteVehicleService extends Service {
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
             public void receive(String measurementId, double value) {
-                // TODO look up the measurement TYPE here, not ID
                 mNumericalMeasurements.put(measurementId, value);
                 if(mListeners.containsKey(measurementId)) {
                     RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                         callbacks = mListeners.get(measurementId);
                     int i = callbacks.beginBroadcast();
                     while(i > 0) {
+                        i--;
                         try {
                             callbacks.getBroadcastItem(i).receiveNumerical(
                                     measurementId,
                                     new RawNumericalMeasurement(value));
                         } catch(RemoteException e) {
+                            Log.w(TAG, "Couldn't notify application " +
+                                    "listener -- did it crash?", e);
                         }
                     }
                 }
@@ -67,18 +69,20 @@ public class RemoteVehicleService extends Service {
             // the numerical vs. state - function points would be really nice
             // here, but there is undoubtedly another way
             public void receive(String measurementId, String value) {
-                // TODO look up the measurement TYPE here, not ID
                 mStateMeasurements.put(measurementId, value);
                 if(mListeners.containsKey(measurementId)) {
                     RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                         callbacks = mListeners.get(measurementId);
                     int i = callbacks.beginBroadcast();
                     while(i > 0) {
+                        i--;
                         try {
                             callbacks.getBroadcastItem(i).receiveState(
                                     measurementId,
                                     new RawStateMeasurement(value));
                         } catch(RemoteException e) {
+                            Log.w(TAG, "Couldn't notify application " +
+                                    "listener -- did it crash?", e);
                         }
                     }
                 }
@@ -168,13 +172,13 @@ public class RemoteVehicleService extends Service {
     }
 
     private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-            getOrCreateCallbackList(String measurementType) {
+            getOrCreateCallbackList(String measurementId) {
         RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-            callbackList = mListeners.get(measurementType);
+            callbackList = mListeners.get(measurementId);
         if(callbackList == null) {
             callbackList = new RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>();
-            mListeners.put(measurementType, callbackList);
+            mListeners.put(measurementId, callbackList);
         }
         return callbackList;
     }
@@ -182,29 +186,29 @@ public class RemoteVehicleService extends Service {
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
             public RawNumericalMeasurement getNumericalMeasurement(
-                    String measurementType) throws RemoteException {
+                    String measurementId) throws RemoteException {
                 return new RawNumericalMeasurement(mNumericalMeasurements.get(
-                        measurementType));
+                        measurementId));
             }
 
             public RawStateMeasurement getStateMeasurement(
-                    String measurementType) throws RemoteException {
+                    String measurementId) throws RemoteException {
                 return new RawStateMeasurement(
-                        mStateMeasurements.get(measurementType));
+                        mStateMeasurements.get(measurementId));
             }
 
-            public void addListener(String measurementType,
+            public void addListener(String measurementId,
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener + " to " +
-                        measurementType);
-                getOrCreateCallbackList(measurementType).register(listener);
+                        measurementId);
+                getOrCreateCallbackList(measurementId).register(listener);
             }
 
-            public void removeListener(String measurementType,
+            public void removeListener(String measurementId,
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener + " from " +
-                        measurementType);
-                getOrCreateCallbackList(measurementType).unregister(listener);
+                        measurementId);
+                getOrCreateCallbackList(measurementId).unregister(listener);
             }
         };
 }
