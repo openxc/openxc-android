@@ -106,7 +106,8 @@ public class VehicleService extends Service {
 
     private void bindRemote(Intent triggeringIntent) {
         Log.i(TAG, "Binding to RemoteVehicleService");
-        Intent intent = new Intent(RemoteVehicleServiceInterface.class.getName());
+        Intent intent = new Intent(
+                RemoteVehicleServiceInterface.class.getName());
         intent.putExtras(triggeringIntent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -232,8 +233,9 @@ public class VehicleService extends Service {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
     }
 
-    public void removeListener(Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement.Listener listener) {
-        Log.i(TAG, "Removing listener " + listener + " from " + measurementType);
+    public void removeListener(Class<? extends VehicleMeasurement>
+                measurementType, VehicleMeasurement.Listener listener) {
+        Log.i(TAG, "Removing listener " + listener + " from " +
+                measurementType);
     }
 }
