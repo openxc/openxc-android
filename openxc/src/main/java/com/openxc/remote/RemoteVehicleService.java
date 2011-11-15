@@ -79,6 +79,9 @@ public class RemoteVehicleService extends Service {
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
+
+        mNotificationThread = new NotificationThread();
+        mNotificationThread.start();
     }
 
     @Override
@@ -88,7 +91,7 @@ public class RemoteVehicleService extends Service {
         }
 
         if(mNotificationThread != null) {
-            mNotificationThread.stop();
+            mNotificationThread.done();
         }
         // TODO loop over and kill all callbacks in remote callback list
     }
@@ -200,10 +203,10 @@ public class RemoteVehicleService extends Service {
             }
     };
 
-    private class NotificationThread implements Runnable {
+    private class NotificationThread extends Thread {
         private boolean mRunning = true;
 
-        public void stop() {
+        public void done() {
             mRunning = false;
         }
 
