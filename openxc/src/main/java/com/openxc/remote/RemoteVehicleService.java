@@ -7,8 +7,9 @@ import java.net.URISyntaxException;
 
 import java.util.Collections;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,63 +41,30 @@ public class RemoteVehicleService extends Service {
     private final static String DEFAULT_DATA_SOURCE =
         ManualVehicleDataSource.class.getName();
 
-    private Map<String, Double> mNumericalMeasurements;
-    private Map<String, String> mStateMeasurements;
+    private Map<String, RawNumericalMeasurement> mNumericalMeasurements;
+    private Map<String, RawStateMeasurement> mStateMeasurements;
     private VehicleDataSourceInterface mDataSource;
 
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
-    private Lock mNotificationLock;
+    private BlockingQueue<String> mNotificationQueue;
+    private NotificationThread mNotificationThread;
+
 
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
             public void receive(final String measurementId,
                     final double value) {
-                mNumericalMeasurements.put(measurementId, value);
-                new Thread() {
-                    public void run() {
-                        if(mListeners.containsKey(measurementId)) {
-                            RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-                                callbacks = mListeners.get(measurementId);
-                            mNotificationLock.lock();
-                            int i = callbacks.beginBroadcast();
-                            while(i > 0) {
-                                i--;
-                                try {
-                                    callbacks.getBroadcastItem(i).receiveNumerical(
-                                            measurementId,
-                                            new RawNumericalMeasurement(value));
-                                } catch(RemoteException e) {
-                                    Log.w(TAG, "Couldn't notify application " +
-                                            "listener -- did it crash?", e);
-                                }
-                            }
-                        }
-                    }}.start();
+                mNumericalMeasurements.put(measurementId, new RawNumericalMeasurement(value));
+                if(mListeners.containsKey(measurementId)) {
+                    try  {
+                        mNotificationQueue.put(measurementId);
+                    } catch(InterruptedException e) {}
+                }
             }
 
-            // TODO this is a bit of duplicated code from above, just changing
-            // the numerical vs. state - function points would be really nice
-            // here, but there is undoubtedly another way
-            // TODO this is also now out of sync with the above method. eek!
             public void receive(String measurementId, String value) {
-                mStateMeasurements.put(measurementId, value);
-                if(mListeners.containsKey(measurementId)) {
-                    RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-                        callbacks = mListeners.get(measurementId);
-                    int i = callbacks.beginBroadcast();
-                    while(i > 0) {
-                        i--;
-                        try {
-                            callbacks.getBroadcastItem(i).receiveState(
-                                    measurementId,
-                                    new RawStateMeasurement(value));
-                        } catch(RemoteException e) {
-                            Log.w(TAG, "Couldn't notify application " +
-                                    "listener -- did it crash?", e);
-                        }
-                    }
-                }
+                // TODO
             }
         };
 
@@ -104,9 +72,9 @@ public class RemoteVehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mNumericalMeasurements = new HashMap<String, Double>();
-        mStateMeasurements = new HashMap<String, String>();
-        mNotificationLock = new ReentrantLock();
+        mNumericalMeasurements = new HashMap<String, RawNumericalMeasurement>();
+        mStateMeasurements = new HashMap<String, RawStateMeasurement>();
+        mNotificationQueue = new LinkedBlockingQueue<String>();
 
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
@@ -117,6 +85,10 @@ public class RemoteVehicleService extends Service {
     public void onDestroy() {
         if(mDataSource != null) {
             mDataSource.stop();
+        }
+
+        if(mNotificationThread != null) {
+            mNotificationThread.stop();
         }
         // TODO loop over and kill all callbacks in remote callback list
     }
@@ -203,14 +175,12 @@ public class RemoteVehicleService extends Service {
         new RemoteVehicleServiceInterface.Stub() {
             public RawNumericalMeasurement getNumericalMeasurement(
                     String measurementId) throws RemoteException {
-                return new RawNumericalMeasurement(mNumericalMeasurements.get(
-                        measurementId));
+                return mNumericalMeasurements.get(measurementId);
             }
 
             public RawStateMeasurement getStateMeasurement(
                     String measurementId) throws RemoteException {
-                return new RawStateMeasurement(
-                        mStateMeasurements.get(measurementId));
+                return mStateMeasurements.get(measurementId);
             }
 
             public void addListener(String measurementId,
@@ -226,5 +196,37 @@ public class RemoteVehicleService extends Service {
                         measurementId);
                 getOrCreateCallbackList(measurementId).unregister(listener);
             }
-        };
+    };
+
+    private class NotificationThread implements Runnable {
+        private boolean mRunning = true;
+
+        public void stop() {
+            mRunning = false;
+        }
+
+        public void run() {
+            while(mRunning) {
+                String measurementId = null;
+                try {
+                    measurementId = mNotificationQueue.take();
+                } catch(InterruptedException e) {}
+                RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+                    callbacks = mListeners.get(measurementId);
+
+                int i = callbacks.beginBroadcast();
+                while(i > 0) {
+                    i--;
+                    try {
+                        callbacks.getBroadcastItem(i).receiveNumerical(
+                                measurementId,
+                                mNumericalMeasurements.get(measurementId));
+                    } catch(RemoteException e) {
+                        Log.w(TAG, "Couldn't notify application " +
+                                "listener -- did it crash?", e);
+                    }
+                }
+            }
+        }
+    };
 }
