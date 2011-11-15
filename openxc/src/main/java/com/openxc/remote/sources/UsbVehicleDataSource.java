@@ -31,7 +31,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                     "No USB device name specified for the data source");
         }
 
-        mRunning = false;
+        mRunning = true;
         mDeviceName = deviceName;
         setupDevice((UsbManager) context.getSystemService(Context.USB_SERVICE),
                 mDeviceName);
