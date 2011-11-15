@@ -6,6 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 
 import java.util.Collections;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,32 +46,39 @@ public class RemoteVehicleService extends Service {
 
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
+    private Lock mNotificationLock;
 
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
-            public void receive(String measurementId, double value) {
+            public void receive(final String measurementId,
+                    final double value) {
                 mNumericalMeasurements.put(measurementId, value);
-                if(mListeners.containsKey(measurementId)) {
-                    RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-                        callbacks = mListeners.get(measurementId);
-                    int i = callbacks.beginBroadcast();
-                    while(i > 0) {
-                        i--;
-                        try {
-                            callbacks.getBroadcastItem(i).receiveNumerical(
-                                    measurementId,
-                                    new RawNumericalMeasurement(value));
-                        } catch(RemoteException e) {
-                            Log.w(TAG, "Couldn't notify application " +
-                                    "listener -- did it crash?", e);
+                new Thread() {
+                    public void run() {
+                        if(mListeners.containsKey(measurementId)) {
+                            RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+                                callbacks = mListeners.get(measurementId);
+                            mNotificationLock.lock();
+                            int i = callbacks.beginBroadcast();
+                            while(i > 0) {
+                                i--;
+                                try {
+                                    callbacks.getBroadcastItem(i).receiveNumerical(
+                                            measurementId,
+                                            new RawNumericalMeasurement(value));
+                                } catch(RemoteException e) {
+                                    Log.w(TAG, "Couldn't notify application " +
+                                            "listener -- did it crash?", e);
+                                }
+                            }
                         }
-                    }
-                }
+                    }}.start();
             }
 
             // TODO this is a bit of duplicated code from above, just changing
             // the numerical vs. state - function points would be really nice
             // here, but there is undoubtedly another way
+            // TODO this is also now out of sync with the above method. eek!
             public void receive(String measurementId, String value) {
                 mStateMeasurements.put(measurementId, value);
                 if(mListeners.containsKey(measurementId)) {
@@ -96,6 +106,7 @@ public class RemoteVehicleService extends Service {
         Log.i(TAG, "Service starting");
         mNumericalMeasurements = new HashMap<String, Double>();
         mStateMeasurements = new HashMap<String, String>();
+        mNotificationLock = new ReentrantLock();
 
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
