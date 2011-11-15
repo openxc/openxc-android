@@ -38,14 +38,6 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 mFilename);
     }
 
-    public void trigger(String name, double value) {
-        handleMessage(name, value);
-    }
-
-    public void trigger(String name, String value) {
-        handleMessage(name, value);
-    }
-
     public void stop() {
         Log.d(TAG, "Stopping trace playback");
         mRunning = false;
