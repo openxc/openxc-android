@@ -125,14 +125,15 @@ public class RemoteVehicleService extends Service {
         return mBinder;
     }
 
-    private void initializeDataSource(String dataSourceName, String resource) {
+    private VehicleDataSourceInterface initializeDataSource(
+            String dataSourceName, String resource) {
         Class<? extends VehicleDataSourceInterface> dataSourceType;
         try {
             dataSourceType = Class.forName(dataSourceName).asSubclass(
                     VehicleDataSourceInterface.class);
         } catch(ClassNotFoundException e) {
             Log.w(TAG, "Couldn't find data source type " + dataSourceName, e);
-            return;
+            return null;
         }
 
         Constructor<? extends VehicleDataSourceInterface> constructor;
@@ -141,7 +142,7 @@ public class RemoteVehicleService extends Service {
                     VehicleDataSourceCallbackInterface.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
-            return;
+            return null;
         }
 
         URI resourceUri = null;
@@ -153,8 +154,9 @@ public class RemoteVehicleService extends Service {
             }
         }
 
+        VehicleDataSourceInterface dataSource;
         try {
-            mDataSource = constructor.newInstance(mCallback, resourceUri);
+            dataSource = constructor.newInstance(mCallback, resourceUri);
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
         } catch(IllegalAccessException e) {
@@ -165,10 +167,12 @@ public class RemoteVehicleService extends Service {
                     e);
         }
 
-        if(mDataSource != null) {
-            Log.i(TAG, "Initializing vehicle data source " + mDataSource);
-            new Thread(mDataSource).start();
+        if(dataSource != null) {
+            Log.i(TAG, "Initializing vehicle data source " + dataSource);
+            new Thread(dataSource).start();
         }
+
+        return dataSource;
     }
 
     private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
