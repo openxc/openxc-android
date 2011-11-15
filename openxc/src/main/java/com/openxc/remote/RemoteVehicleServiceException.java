@@ -1,7 +1,9 @@
 package com.openxc.remote;
 
 public class RemoteVehicleServiceException extends Exception {
-    public RemoteVehicleServiceException(String message, Throwable cause) {
+	private static final long serialVersionUID = -1889788234635180274L;
+
+	public RemoteVehicleServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 }

@@ -1,7 +1,9 @@
 package com.openxc.measurements;
 
 public class UnrecognizedMeasurementTypeException extends Exception {
-    public UnrecognizedMeasurementTypeException(String message,
+	private static final long serialVersionUID = 7166246234739984353L;
+
+	public UnrecognizedMeasurementTypeException(String message,
             Throwable cause) {
         super(message, cause);
     }
