@@ -69,7 +69,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
                 bindService(startIntent)).getService();
         // sleep for a moment to wait for the vehicle service to bind to the
         // remote service
-        pause(150);
+        pause(200);
     }
 
     @SmallTest
