@@ -3,14 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.openxc</groupId>
-        <artifactId>openxc-parent</artifactId>
-        <version>1.0.0</version>
+        <groupId>${groupId}</groupId>
+        <artifactId>${artifactId}</artifactId>
+        <version>${version}</version>
     </parent>
 
-    <groupId>com.openxc</groupId>
     <artifactId>openxc-it</artifactId>
-    <version>1.0.0</version>
     <packaging>apk</packaging>
     <name>OpenXC - Integration Tests</name>
     <dependencies>
