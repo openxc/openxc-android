@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.MetersPerSecond;
 import com.openxc.measurements.NoValueException;
@@ -31,5 +32,10 @@ public class VehicleSpeedTest {
     @Test
     public void testHasRange() {
         assertTrue(measurement.hasRange());
+    }
+
+    @Test
+    public void testHasId() {
+        assertNotNull(VehicleSpeed.ID);
     }
 }

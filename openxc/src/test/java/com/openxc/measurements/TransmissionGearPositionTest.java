@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.State;
 import com.openxc.measurements.NoValueException;
@@ -33,6 +34,6 @@ public class TransmissionGearPositionTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.ID, equalTo("TransmissionGearPosition"));
+        assertNotNull(TransmissionGearPosition.ID);
     }
 }

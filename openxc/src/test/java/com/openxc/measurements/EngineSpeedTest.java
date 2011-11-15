@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+
 import com.openxc.units.RotationsPerMinute;
 import com.openxc.measurements.NoValueException;
 
@@ -23,7 +25,6 @@ public class EngineSpeedTest {
 
     @Test
     public void testHasId() {
-        assertThat(measurement.ID, equalTo("EngineSpeed"));
+        assertNotNull(EngineSpeed.ID);
     }
-
 }

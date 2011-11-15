@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.Degree;
 import com.openxc.measurements.NoValueException;
@@ -26,5 +27,10 @@ public class SteeringWheelAngleTest {
     @Test
     public void testHasRange() {
         assertTrue(measurement.hasRange());
+    }
+
+    @Test
+    public void testHasId() {
+        assertNotNull(SteeringWheelAngle.ID);
     }
 }
