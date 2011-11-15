@@ -3,8 +3,6 @@ package com.openxc.remote;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import android.util.Log;
-
 public class RawNumericalMeasurement extends AbstractRawMeasurement<Double>
         implements Parcelable {
     public static final Parcelable.Creator<RawNumericalMeasurement> CREATOR =

@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-
 import com.openxc.units.RotationsPerMinute;
 import com.openxc.measurements.NoValueException;
 
