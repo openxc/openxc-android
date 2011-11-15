@@ -18,19 +18,15 @@ public class Range<T> {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if(this == other) {
-            return true;
+    public boolean equals(Object object) {
+        if(object instanceof Range<?>)  {
+            @SuppressWarnings("unchecked")
+            final Range<T> that = (Range<T>) object;
+            return this == that || (
+                    that.getMin() == getMin() &&
+                    that.getMax() == getMax());
         }
-        if(other == null) {
-            return false;
-        }
-        if(getClass() != other.getClass()) {
-            return false;
-
-        }
-        final Range<T> otherRange = (Range<T>) other;
-        return otherRange.getMin() == getMin() && otherRange.getMax() == getMax();
+        return false;
     }
 
     @Override
