@@ -207,7 +207,7 @@ public class VehicleService extends Service {
                     " doesn't have a numerical constructor", e);
         }
 
-        if(rawMeasurement != null && rawMeasurement.isValid()) {
+        if(rawMeasurement.isValid()) {
             Log.d(TAG, rawMeasurement +
                     " is valid, constructing a measurement with it");
             try {
