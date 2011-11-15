@@ -17,6 +17,7 @@ import com.openxc.remote.sources.VehicleDataSourceInterface;
 
 import android.app.Service;
 
+import android.content.Context;
 import android.content.Intent;
 
 import java.net.URI;
@@ -138,7 +139,7 @@ public class RemoteVehicleService extends Service {
 
         Constructor<? extends VehicleDataSourceInterface> constructor;
         try {
-            constructor = dataSourceType.getConstructor(
+            constructor = dataSourceType.getConstructor(Context.class,
                     VehicleDataSourceCallbackInterface.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
@@ -154,9 +155,9 @@ public class RemoteVehicleService extends Service {
             }
         }
 
-        VehicleDataSourceInterface dataSource;
+        VehicleDataSourceInterface dataSource = null;
         try {
-            dataSource = constructor.newInstance(mCallback, resourceUri);
+            dataSource = constructor.newInstance(this, mCallback, resourceUri);
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
         } catch(IllegalAccessException e) {

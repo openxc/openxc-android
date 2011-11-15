@@ -18,8 +18,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private boolean mRunning;
     private URI mFilename;
 
-    public TraceVehicleDataSource(
-            VehicleDataSourceCallbackInterface callback) {
+    public TraceVehicleDataSource(VehicleDataSourceCallbackInterface callback) {
         super(callback);
         mRunning = false;
     }
@@ -62,7 +61,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             String line;
             try {
                 while((line = reader.readLine()) != null) {
-                    parseJson(line);
+                    handleJson(line);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +

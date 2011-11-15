@@ -3,6 +3,8 @@ package com.openxc.remote.sources;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 import android.util.Log;
 
 public abstract class JsonVehicleDataSource
@@ -13,11 +15,16 @@ public abstract class JsonVehicleDataSource
         super();
     }
 
-    public JsonVehicleDataSource(VehicleDataSourceCallbackInterface callback) {
-        super(callback);
+    public JsonVehicleDataSource(Context context,
+            VehicleDataSourceCallbackInterface callback) {
+        super(context, callback);
     }
 
-    protected void parseJson(String json) {
+    public JsonVehicleDataSource(VehicleDataSourceCallbackInterface callback) {
+        this(null, callback);
+    }
+
+    protected void handleJson(String json) {
         final JSONObject message;
 
         try {
