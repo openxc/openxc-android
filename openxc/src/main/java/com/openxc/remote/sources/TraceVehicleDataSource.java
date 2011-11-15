@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
+import android.content.Context;
+
 import android.util.Log;
 
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
@@ -26,6 +28,12 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     public TraceVehicleDataSource(
             VehicleDataSourceCallbackInterface callback,
             URI filename) throws VehicleDataSourceException {
+        this(null, callback, filename);
+    }
+
+    public TraceVehicleDataSource(Context context,
+            VehicleDataSourceCallbackInterface callback,
+            URI filename) throws VehicleDataSourceException {
         this(callback);
         if(filename == null) {
             throw new VehicleDataSourceException(
@@ -36,6 +44,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
     }
+
 
     public void stop() {
         Log.d(TAG, "Stopping trace playback");

@@ -1,5 +1,8 @@
 package com.openxc.remote.sources;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import java.util.Map;
 
 import android.content.Context;
@@ -14,7 +17,12 @@ import android.util.Log;
 
 public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "UsbVehicleDataSource";
-    private static final String DEFAULT_USB_DEVICE_NAME = "XXX";
+    private static URI DEFAULT_USB_DEVICE_NAME = null;
+    static {
+        try {
+            DEFAULT_USB_DEVICE_NAME = new URI("usb://TODO");
+        } catch(URISyntaxException e) { }
+    }
 
     private boolean mRunning;
     private String mDeviceName;
@@ -23,7 +31,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private UsbEndpoint mEndpoint;
 
     public UsbVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback, String deviceName)
+            VehicleDataSourceCallbackInterface callback, URI deviceName)
             throws VehicleDataSourceException {
         super(callback);
         if(deviceName == null) {
@@ -32,7 +40,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
 
         mRunning = true;
-        mDeviceName = deviceName;
+        mDeviceName = deviceName.toString();
         setupDevice((UsbManager) context.getSystemService(Context.USB_SERVICE),
                 mDeviceName);
 
