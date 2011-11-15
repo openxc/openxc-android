@@ -232,6 +232,7 @@ public class RemoteVehicleService extends Service {
                                 "listener -- did it crash?", e);
                     }
                 }
+                callbacks.finishBroadcast();
             }
         }
     };
