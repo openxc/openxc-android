@@ -12,6 +12,8 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
+import junit.framework.Assert;
+
 import com.openxc.R;
 
 import android.test.AndroidTestCase;
@@ -32,16 +34,11 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @Override
     protected void setUp() {
         try {
-            traceUri = new URI("file:///data/data/com.openxc/trace.json");
-            malformedTraceUri = new URI("file:///data/data/com.openxc/malformed-trace.json");
-        } catch(URISyntaxException e) { }
-
-        try {
-            FileUtils.copyInputStreamToFile(getContext().getResources().openRawResource(
-                        R.raw.tracejson), new File(traceUri));
-            FileUtils.copyInputStreamToFile(getContext().getResources().openRawResource(
-                        R.raw.tracetxt), new File(malformedTraceUri));
-        } catch(IOException e) {}
+            traceUri = new URI("resource://" + R.raw.tracejson);
+            malformedTraceUri = new URI("resource://" + R.raw.tracetxt);
+        } catch(URISyntaxException e) {
+            Assert.fail("Couldn't construct resource URIs: " + e);
+        }
 
         callback = new VehicleDataSourceCallbackInterface() {
             public void receive(String name, double value) {
@@ -81,7 +78,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, traceUri);
+        source = new TraceVehicleDataSource(getContext(), callback, traceUri);
         startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedStateCallback);
@@ -90,11 +87,32 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     }
 
     @SmallTest
+    public void testPlaybackFromRegularFile() throws InterruptedException,
+           VehicleDataSourceException {
+        try {
+            traceUri = new URI("file:///data/data/com.openxc/trace.json");
+            malformedTraceUri = new URI("file:///data/data/com.openxc/malformed-trace.json");
+        } catch(URISyntaxException e) {
+            Assert.fail("Couldn't construct resource URIs: " + e);
+        }
+
+        try {
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracejson), new File(traceUri));
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracetxt), new File(malformedTraceUri));
+        } catch(IOException e) {}
+    }
+
+    @SmallTest
     public void testMalformedJson() throws InterruptedException ,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback, malformedTraceUri);
+        source = new TraceVehicleDataSource(getContext(), callback,
+                malformedTraceUri);
         startTrace(source);
         assertFalse(receivedNumericalCallback);
         source.stop();
@@ -106,7 +124,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             URISyntaxException {
         receivedNumericalCallback = false;
         receivedStateCallback = false;
-        source = new TraceVehicleDataSource(callback,
+        source = new TraceVehicleDataSource(getContext(), callback,
                 new URL("file:///foo").toURI());
         startTrace(source);
         assertFalse(receivedNumericalCallback);
@@ -115,6 +133,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @SmallTest
     public void testConstructWithCallbackAndFile()
             throws VehicleDataSourceException {
-        source = new TraceVehicleDataSource(callback, traceUri);
+        source = new TraceVehicleDataSource(getContext(), callback, traceUri);
     }
 }

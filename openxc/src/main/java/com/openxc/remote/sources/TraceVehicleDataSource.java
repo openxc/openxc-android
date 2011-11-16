@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
 
     private boolean mRunning;
     private URI mFilename;
+    private Context mContext;
 
     public TraceVehicleDataSource(VehicleDataSourceCallbackInterface callback) {
         super(callback);
@@ -40,6 +42,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                     "No filename specified for the trace source");
         }
 
+        mContext = context;
         mFilename = filename;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
@@ -87,7 +90,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
 
-    private BufferedReader openFile(URI filename)
+    private BufferedReader openResourceFile(URI filename)
+            throws VehicleDataSourceException {
+        InputStream stream;
+        stream = mContext.getResources().openRawResource(
+                new Integer(filename.getAuthority()));
+        return readerForStream(stream);
+    }
+
+    private BufferedReader openRegularFile(URI filename)
             throws VehicleDataSourceException {
         FileInputStream stream;
         try {
@@ -100,7 +111,20 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 "Couldn't open the trace file " + filename, e);
         }
 
+        return readerForStream(stream);
+    }
+
+    private BufferedReader readerForStream(InputStream stream) {
         DataInputStream dataStream = new DataInputStream(stream);
         return new BufferedReader(new InputStreamReader(dataStream));
+    }
+
+    private BufferedReader openFile(URI filename)
+            throws VehicleDataSourceException {
+        if(filename.getScheme().equals("resource")) {
+            return openResourceFile(filename);
+        } else {
+            return openRegularFile(filename);
+        }
     }
 }

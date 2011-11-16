@@ -1,10 +1,6 @@
 package com.openxc;
 
-import java.io.File;
-
 import java.lang.InterruptedException;
-
-import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.NoValueException;
@@ -61,10 +57,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         startIntent.setClass(getContext(), VehicleService.class);
         startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
                 TraceVehicleDataSource.class.getName());
-        FileUtils.copyInputStreamToFile(getContext().getResources().openRawResource(
-                    R.raw.tracejson), new File("/data/data/com.openxc/trace.json"));
         startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
-                "file:///data/data/com.openxc/trace.json");
+                "resource://" + R.raw.tracejson);
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         // sleep for a moment to wait for the vehicle service to bind to the
