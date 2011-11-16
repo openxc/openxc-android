@@ -18,7 +18,7 @@ public class AgingData<TheUnit extends Unit> extends NoneData<TheUnit> {
     }
 
     public double getAge() throws NoValueException {
-        if(!isNone()) {
+        if(isNone()) {
             throw new NoValueException();
         }
         return (System.nanoTime() - mBornTime) / 1000000000.0;

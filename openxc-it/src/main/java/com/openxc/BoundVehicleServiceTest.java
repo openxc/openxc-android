@@ -72,14 +72,14 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {
         assertNotNull(measurement);
-        assertTrue(measurement.isNone());
+        assertFalse(measurement.isNone());
     }
 
     @MediumTest
     public void testGetNoData() throws UnrecognizedMeasurementTypeException {
         VehicleMeasurement measurement = service.get(EngineSpeed.class);
         assertNotNull(measurement);
-        assertFalse(measurement.isNone());
+        assertTrue(measurement.isNone());
     }
 
     @MediumTest
@@ -88,7 +88,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         VehicleSpeed measurement = (VehicleSpeed)
                 service.get(VehicleSpeed.class);
         assertNotNull(measurement);
-        assertTrue(measurement.isNone());
+        assertFalse(measurement.isNone());
         assertEquals(measurement.getValue().doubleValue(), 42.0);
     }
 

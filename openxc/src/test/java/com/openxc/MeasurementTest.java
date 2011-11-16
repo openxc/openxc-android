@@ -26,7 +26,7 @@ public class MeasurementTest {
 
     @Test
     public void testHasValue() {
-        assertThat(measurement.isNone(), equalTo(true));
+        assertThat(measurement.isNone(), equalTo(false));
     }
 
     @Test

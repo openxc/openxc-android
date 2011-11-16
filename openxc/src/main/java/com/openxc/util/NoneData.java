@@ -14,11 +14,11 @@ public class NoneData<TheUnit extends Unit> {
     }
 
     public boolean isNone() {
-        return mValue != null;
+        return mValue == null;
     }
 
     public TheUnit getValue() throws NoValueException {
-        if(!isNone()) {
+        if(isNone()) {
             throw new NoValueException();
         }
         return mValue;

@@ -21,7 +21,7 @@ public class VehicleSpeedTest {
 
     @Test
     public void testDefaultConstructor() {
-        assertThat(new VehicleSpeed().isNone(), equalTo(false));
+        assertThat(new VehicleSpeed().isNone(), equalTo(true));
     }
 
     @Test
