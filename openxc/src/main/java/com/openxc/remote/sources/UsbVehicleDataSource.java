@@ -3,8 +3,6 @@ package com.openxc.remote.sources;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.Map;
-
 import android.content.Context;
 
 import android.hardware.usb.UsbDevice;
@@ -17,15 +15,14 @@ import android.util.Log;
 
 public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "UsbVehicleDataSource";
-    private static URI DEFAULT_USB_DEVICE_NAME = null;
+    private static URI DEFAULT_USB_DEVICE_URI = null;
     static {
         try {
-            DEFAULT_USB_DEVICE_NAME = new URI("usb://TODO");
+            DEFAULT_USB_DEVICE_URI = new URI("usb://04d8/0053");
         } catch(URISyntaxException e) { }
     }
 
     private boolean mRunning;
-    private String mDeviceName;
 
     private UsbDeviceConnection mConnection;
     private UsbEndpoint mEndpoint;
@@ -40,18 +37,24 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
 
         mRunning = true;
-        mDeviceName = deviceName.toString();
-        setupDevice((UsbManager) context.getSystemService(Context.USB_SERVICE),
-                mDeviceName);
 
-        Log.d(TAG, "Starting new USB data source with device" +
-                mDeviceName);
+        try {
+        mConnection = setupDevice(
+                (UsbManager) context.getSystemService(Context.USB_SERVICE),
+                Integer.parseInt(deviceName.getAuthority(), 16),
+                Integer.parseInt(deviceName.getPath(), 16));
+        } catch(UsbDeviceException e) {
+            throw new VehicleDataSourceException("Couldn't open USB device", e);
+        }
+
+        Log.d(TAG, "Starting new USB data source with connection " +
+                mConnection);
     }
 
     public UsbVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback)
             throws VehicleDataSourceException{
-        this(context, callback, DEFAULT_USB_DEVICE_NAME);
+        this(context, callback, DEFAULT_USB_DEVICE_URI);
     }
 
     public void stop() {
@@ -62,8 +65,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     public void run() {
         byte[] bytes = new byte[128];
 
-        StringBuffer buffer = new StringBuffer();;
-        while(mRunning) {
+        StringBuffer buffer = new StringBuffer();
+        while(mRunning && mConnection != null) {
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             byte[] receivedBytes = new byte[received];
@@ -83,15 +86,33 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
     }
 
-    private void setupDevice(UsbManager manager, String deviceName) {
-        Log.i(TAG, "Initializing USB device " + deviceName);
-
-        Map<String, UsbDevice> devices = manager.getDeviceList();
-        UsbDevice device = devices.get(deviceName);
+    private UsbDeviceConnection setupDevice(UsbManager manager, int vendorId,
+            int productId) throws UsbDeviceException {
+        UsbDevice device = findDevice(manager, vendorId, productId);
         UsbInterface iface = device.getInterface(0);
         Log.d(TAG, "Connecting to endpoint 1 on interface " + iface);
         mEndpoint = iface.getEndpoint(1);
-        mConnection = manager.openDevice(device);
-        mConnection.claimInterface(iface, true);
+        return connectToDevice(manager, device, iface);
+    }
+
+    private UsbDevice findDevice(UsbManager manager, int vendorId,
+            int productId) throws UsbDeviceException {
+        Log.d(TAG, "Looking for USB device with vendor ID " + vendorId +
+                " and product ID " + productId);
+        for(UsbDevice candidateDevice : manager.getDeviceList().values()) {
+            if(candidateDevice.getVendorId() == vendorId
+                    && candidateDevice.getProductId() == productId) {
+                return candidateDevice;
+            }
+        }
+        throw new UsbDeviceException("USB device with vendor ID " + vendorId +
+                    " and product ID " + productId + " not found");
+    }
+
+    private UsbDeviceConnection connectToDevice(UsbManager manager,
+            UsbDevice device, UsbInterface iface) {
+        UsbDeviceConnection connection = manager.openDevice(device);
+        connection.claimInterface(iface, true);
+        return connection;
     }
 }
