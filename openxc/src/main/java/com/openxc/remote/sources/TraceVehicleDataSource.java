@@ -20,10 +20,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
 
     private boolean mRunning;
     private URI mFilename;
-    private Context mContext;
 
-    public TraceVehicleDataSource(VehicleDataSourceCallbackInterface callback) {
-        super(callback);
+    public TraceVehicleDataSource(Context context,
+            VehicleDataSourceCallbackInterface callback) {
+        super(context, callback);
         mRunning = false;
     }
 
@@ -36,13 +36,12 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     public TraceVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback,
             URI filename) throws VehicleDataSourceException {
-        this(callback);
+        this(context, callback);
         if(filename == null) {
             throw new VehicleDataSourceException(
                     "No filename specified for the trace source");
         }
 
-        mContext = context;
         mFilename = filename;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
@@ -55,10 +54,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     }
 
     public void run() {
-        if(mCallback != null) {
+        if(getCallback() != null) {
             mRunning = true;
             Log.d(TAG, "Starting the trace playback because we have valid " +
-                    "callback " + mCallback);
+                    "callback " + getCallback());
         }
 
         while(mRunning) {
@@ -93,7 +92,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private BufferedReader openResourceFile(URI filename)
             throws VehicleDataSourceException {
         InputStream stream;
-        stream = mContext.getResources().openRawResource(
+        stream = getContext().getResources().openRawResource(
                 new Integer(filename.getAuthority()));
         return readerForStream(stream);
     }

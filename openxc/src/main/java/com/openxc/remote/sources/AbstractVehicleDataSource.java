@@ -4,12 +4,14 @@ import android.content.Context;
 
 public abstract class AbstractVehicleDataSource
         implements VehicleDataSourceInterface {
-    VehicleDataSourceCallbackInterface mCallback;
+    private VehicleDataSourceCallbackInterface mCallback;
+    private Context mContext;
 
     public AbstractVehicleDataSource() { }
 
     public AbstractVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback) {
+        mContext = context;
         setCallback(callback);
     }
 
@@ -32,5 +34,13 @@ public abstract class AbstractVehicleDataSource
         if(mCallback != null) {
             mCallback.receive(name, value);
         }
+    }
+
+    protected Context getContext() {
+        return mContext;
+    }
+
+    protected VehicleDataSourceCallbackInterface getCallback() {
+        return mCallback;
     }
 }
