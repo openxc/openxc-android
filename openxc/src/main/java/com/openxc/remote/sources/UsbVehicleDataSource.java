@@ -112,6 +112,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     public void stop() {
         Log.d(TAG, "Stopping USB listener");
         mRunning = false;
+        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     public void run() {
