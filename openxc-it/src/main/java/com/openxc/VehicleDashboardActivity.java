@@ -2,6 +2,7 @@ package com.openxc;
 
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 
@@ -79,6 +80,8 @@ public class VehicleDashboardActivity extends Activity {
                 mVehicleService.addListener(VehicleSpeed.class,
                         mSpeedListener);
             } catch(RemoteVehicleServiceException e) {
+                Log.w(TAG, "Couldn't add listeners for measurements", e);
+            } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             }
             mIsBound = true;

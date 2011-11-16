@@ -11,10 +11,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multimap;
 
-import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
-import com.openxc.measurements.VehicleSpeed;
 
 import com.openxc.remote.RawNumericalMeasurement;
 import com.openxc.remote.RawStateMeasurement;
@@ -44,19 +42,10 @@ public class VehicleService extends Service {
     private RemoteVehicleServiceInterface mRemoteService;
     private Multimap<Class<? extends VehicleMeasurement>,
             VehicleMeasurement.Listener> mListeners;
-    private static final BiMap<String, Class<? extends VehicleMeasurement>>
-            MEASUREMENT_ID_TO_CLASS;
-    private static final BiMap<Class<? extends VehicleMeasurement>, String>
-            MEASUREMENT_CLASS_TO_ID;
-
-    static {
-        MEASUREMENT_ID_TO_CLASS = HashBiMap.create();
-        MEASUREMENT_ID_TO_CLASS.put(VehicleSpeed.ID, VehicleSpeed.class);
-        MEASUREMENT_ID_TO_CLASS.put(SteeringWheelAngle.ID,
-                SteeringWheelAngle.class);
-
-        MEASUREMENT_CLASS_TO_ID = MEASUREMENT_ID_TO_CLASS.inverse();
-    }
+    private BiMap<String, Class<? extends VehicleMeasurement>>
+            mMeasurementIdToClass;
+    private BiMap<Class<? extends VehicleMeasurement>, String>
+            mMeasurementClassToId;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -76,7 +65,7 @@ public class VehicleService extends Service {
             for(Class<? extends VehicleMeasurement> key : listenerKeys) {
                 try {
                     mRemoteService.addListener(
-                            MEASUREMENT_CLASS_TO_ID.get(key),
+                            mMeasurementClassToId.get(key),
                             mRemoteListener);
                     Log.i(TAG, "Added listener " + key +
                             " to remote vehicle service after it started up");
@@ -94,6 +83,24 @@ public class VehicleService extends Service {
         }
     };
 
+    private void cacheMeasurementId(
+            Class<? extends VehicleMeasurement> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        String measurementId;
+        try {
+            measurementId = (String) measurementType.getField("ID").get(
+                    measurementType);
+            mMeasurementIdToClass.put(measurementId, measurementType);
+        } catch(NoSuchFieldException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " doesn't have an ID field", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has an inaccessible ID", e);
+        }
+        mMeasurementClassToId = mMeasurementIdToClass.inverse();
+    }
+
     private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
             public void receiveNumerical(String measurementId,
@@ -102,7 +109,7 @@ public class VehicleService extends Service {
                         value + " from remote service");
 
                 Class<? extends VehicleMeasurement> measurementClass =
-                    MEASUREMENT_ID_TO_CLASS.get(measurementId);
+                    mMeasurementIdToClass.get(measurementId);
                 VehicleMeasurement measurement;
                 try {
                     measurement = getNumericalMeasurementFromRaw(
@@ -146,6 +153,8 @@ public class VehicleService extends Service {
 
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
+        mMeasurementIdToClass = HashBiMap.create();
+        mMeasurementClassToId = HashBiMap.create();
     }
 
     @Override
@@ -233,6 +242,8 @@ public class VehicleService extends Service {
             Class<? extends VehicleMeasurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
 
+        cacheMeasurementId(measurementType);
+
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
                     "returning an empty measurement");
@@ -243,7 +254,7 @@ public class VehicleService extends Service {
         try {
             RawNumericalMeasurement rawMeasurement =
                 mRemoteService.getNumericalMeasurement(
-                        MEASUREMENT_CLASS_TO_ID.get(measurementType));
+                        mMeasurementClassToId.get(measurementType));
             return getNumericalMeasurementFromRaw(measurementType,
                     rawMeasurement);
         } catch(RemoteException e) {
@@ -252,15 +263,19 @@ public class VehicleService extends Service {
         }
     }
 
-    public void addListener(Class<? extends VehicleMeasurement> measurementType,
+    public void addListener(
+            Class<? extends VehicleMeasurement> measurementType,
             VehicleMeasurement.Listener listener)
-            throws RemoteVehicleServiceException {
+            throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
+        cacheMeasurementId(measurementType);
         mListeners.put(measurementType, listener);
+
         if(mRemoteService != null) {
             try {
                 mRemoteService.addListener(
-                        MEASUREMENT_CLASS_TO_ID.get(measurementType),
+                        mMeasurementClassToId.get(measurementType),
                         mRemoteListener);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(
@@ -279,7 +294,7 @@ public class VehicleService extends Service {
         if(mRemoteService != null) {
             try {
                 mRemoteService.removeListener(
-                        MEASUREMENT_CLASS_TO_ID.get(measurementType),
+                        mMeasurementClassToId.get(measurementType),
                         mRemoteListener);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(

@@ -99,7 +99,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testAddListener() throws RemoteVehicleServiceException {
+    public void testAddListener() throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         pause(150);
         checkReceivedMeasurement(speedReceived);
@@ -107,7 +108,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testAddListenersTwoMeasurements()
-            throws RemoteVehicleServiceException {
+            throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         pause(150);
@@ -116,7 +118,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testRemoveListener() throws RemoteVehicleServiceException {
+    public void testRemoveListener() throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
@@ -133,7 +136,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testRemoveOneMeasurementListener()
-            throws RemoteVehicleServiceException {
+            throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         service.removeListener(VehicleSpeed.class, speedListener);
