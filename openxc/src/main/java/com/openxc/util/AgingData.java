@@ -9,6 +9,7 @@ public class AgingData<TheUnit extends Unit> extends NoneData<TheUnit> {
 
     public AgingData(TheUnit unit) {
         super(unit);
+        mBornTime = System.nanoTime();
     }
 
     public AgingData() {
