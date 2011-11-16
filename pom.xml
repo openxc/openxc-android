@@ -80,6 +80,12 @@
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <configuration>
+                    <dex>
+                        <jvmArguments>
+                            <argument>-Xms256m</argument>
+                            <argument>-Xmx1024m</argument>
+                        </jvmArguments>
+                    </dex>
                     <sdk>
                         <platform>12</platform>
                     </sdk>
