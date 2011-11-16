@@ -28,21 +28,22 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private UsbEndpoint mEndpoint;
 
     public UsbVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback, URI deviceName)
+            VehicleDataSourceCallbackInterface callback, URI device)
             throws VehicleDataSourceException {
         super(callback);
-        if(deviceName == null) {
-            throw new VehicleDataSourceException(
-                    "No USB device name specified for the data source");
+        if(device == null) {
+            device = DEFAULT_USB_DEVICE_URI;
+            Log.i(TAG, "No USB device specified -- using default " +
+                    device);
         }
 
         mRunning = true;
 
         try {
-        mConnection = setupDevice(
-                (UsbManager) context.getSystemService(Context.USB_SERVICE),
-                Integer.parseInt(deviceName.getAuthority(), 16),
-                Integer.parseInt(deviceName.getPath(), 16));
+            mConnection = setupDevice(
+                    (UsbManager) context.getSystemService(Context.USB_SERVICE),
+                    Integer.parseInt(device.getAuthority(), 16),
+                    Integer.parseInt(device.getPath().substring(1), 16));
         } catch(UsbDeviceException e) {
             throw new VehicleDataSourceException("Couldn't open USB device", e);
         }
@@ -54,7 +55,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     public UsbVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback)
             throws VehicleDataSourceException{
-        this(context, callback, DEFAULT_USB_DEVICE_URI);
+        this(context, callback, null);
     }
 
     public void stop() {
@@ -110,8 +111,13 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     private UsbDeviceConnection connectToDevice(UsbManager manager,
-            UsbDevice device, UsbInterface iface) {
+            UsbDevice device, UsbInterface iface)
+            throws UsbDeviceException {
         UsbDeviceConnection connection = manager.openDevice(device);
+        if(connection == null) {
+            throw new UsbDeviceException("Couldn't open a connection to " +
+                    "device -- user may not have given permission");
+        }
         connection.claimInterface(iface, true);
         return connection;
     }
