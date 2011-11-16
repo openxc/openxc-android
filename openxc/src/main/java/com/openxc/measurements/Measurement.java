@@ -37,7 +37,7 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     }
 
     public TheUnit getVariance() {
-        return null;
+        return 0.0;
     }
 
     public TheUnit getValue() throws NoValueException {
