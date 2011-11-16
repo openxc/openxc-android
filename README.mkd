@@ -24,17 +24,18 @@ any vehicle data.
 
 Request to bind with the service in the normal fashion:
 
-    Intent intent = new Intent(this, VehicleMeasurementService.class);
-    bindService(intent, mCOnnection, Context.BIND_AUTO_CREATE);
+    Intent intent = new Intent(this, VehicleService.class);
+    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
 Then, in your `onServiceConnected()` grab the service handle and cast it to the
 correct type:
 
-    VehicleServiceInterface vehicleService;
+    VehcileService vehicleService;
     private ServiceConnection mConnection = new ServiceConnection() {
         // Called when the connection with the service is established
         public void onServiceConnected(ComponentName className, IBinder service) {
-            vehicleService = VehicleServiceInterface.Stub.asInterface(service);
+            vehicleService = ((VehicleService.VehicleServiceBinder)
+                    service).getService();
         }
 
         // Called when the connection with the service disconnects unexpectedly
@@ -55,60 +56,34 @@ can receive measurements on demand (i.e. synchronously).
 If you need to be kept up-to-date on any vehicle measurement, you can also
 register with the service to be notified of updates.
 
-    VehicleMeasurementListener listener = new
-            VehicleMeasurementListener<VehicleSpeed> {
-        @Override
-        public void receive(VehicleSpeed measurement) {
-            // do stuff with the measurement
+    VehicleSpeed.Listener listener = new VehicleSpeed.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final VehicleSpeed speed = (VehicleSpeed) measurement;
+            if(!speed.isNone()) {
+                // do stuff with the measurement
+            }
         }
     };
     vehicleService.addListener(VehicleSpeed.class, listener);
 
-The service can optionally notify you at a frequency less than the maximum (the
-maximum depends on the measurement and can vary from 1Hz to 100Hz).
-
-    // Update me at most once per second
-    vehicleService.addListener(VehicleSpeed.class, listener, 1);
-
-It can also wait for a certain amount of variance in the measurement before you
-are notified.
-
-    // Update me as fast as possible (the 0 argument) but only if the speed has
-    // changed at least 10 m/s
-    vehicleService.addListener(VehicleSpeed.class, listener, 0, 10);
-
 ### Measurements
-
-    // unit is defined as a part of the VehicleSpeed class and determined
-    // through docs, or should it be in the class name? value returned is
-    // actually of type Unit::MPerS.
 
 You've probably noticed that vehicle data is returned encapsulated in an object.
 In the examples above, we used the `VehicleSpeed` measurement. All of the data
 types supported by OpenXC are provided as children of the `Measurement` class.
 
 The parent class provides a standard interface for all measurements, starting
-with a way to determine if a specific data type is supported by the vehicle
-you're running on:
+with a way to retrieve its value:
 
-    if(vehicleService.supports(VehicleSpeed.class) {
-        // it supports it
-    } else {
-        // if we try to get it and it doesn't support it, we throw an
-        // UnsupportedMeasurementException
-        vehicleService.get(VehicleSpeed.class);
-        /* boom */
-    }
+    vehicleService.get(VehicleSpeed.class);
 
-Some measurements may be supported, but may not have been received from the CAN
-translator yet - it could be a malfunction, or you're just checking too early
-for an infrequently updated measurement:
+Occasionally a measurement will not have been received from the CAN translator
+yet - it could be a malfunction, or you're just checking too early for an
+infrequently updated measurement:
 
-    if(vehicleService.supports(VehicleSpeed.class) {
-        VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
-        if(measurement.isNone()) {
-            // do stuff with it
-        }
+    VehicleSpeed measurement = vehicleService.get(VehicleSpeed.class);
+    if(measurement.isNone()) {
+        // do stuff with it
     }
 
 You can check the age of a measurement to determine how long ago the state was
@@ -135,27 +110,6 @@ position:
 
     range = measurement.getRange();
     int percentage = measurement.getValue() / range;
-
-## Architecture
-
-
-* Pass parecelable measurement objects (at both receivers or just one?)
-* Keep callback register in local binder or in the central registry?
-    * does local binder need to register for a callback with the other service
-      over AIDL?
-* Measurement class, unit class
-* One extra way to get location: through standard LocationManager API
-
-* Must be able to switch the source of translated CAN messages from USB to a
-  file easily
-* Nothing vehicle specific in this layer
-* Local in-process service provides VehicleService, binds over AIDL to the
-  actual service that connects to CAN
-* For now, trace dump is played back line by line at an even clip
-    * In the next version, add timestamps to each line and play back as it came
-      in
-* Button events are just like key events - unit is a state, values are an enum
-  on the measurement class
 
 ## License
 
