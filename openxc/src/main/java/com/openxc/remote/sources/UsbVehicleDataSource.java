@@ -51,14 +51,19 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                     UsbDevice device = (UsbDevice) intent.getParcelableExtra(
                             UsbManager.EXTRA_DEVICE);
 
+                    mDeviceConnectionLock.lock();
                     if (device != null && intent.getBooleanExtra(
                                 UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                         try {
                             mConnection = setupDevice(mManager, device);
+                            Log.i(TAG, "Conneceted to USB device with " +
+                                    mConnection);
                         } catch(UsbDeviceException e) {
                             Log.w("Couldn't open USB device", e);
                             stop();
+                        } finally {
                             mDevicePermissionChanged.signal();
+                            mDeviceConnectionLock.unlock();
                         }
                     } else {
                         Log.d(TAG, "Permission denied for device " + device);
@@ -113,19 +118,23 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         byte[] bytes = new byte[128];
 
         mDeviceConnectionLock.lock();
-        try {
-            mDevicePermissionChanged.await();
-        } catch(InterruptedException e) {}
+        while(mConnection == null) {
+            try {
+                mDevicePermissionChanged.await();
+            } catch(InterruptedException e) {}
+        }
 
         StringBuffer buffer = new StringBuffer();
         while(mRunning && mConnection != null) {
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
-            byte[] receivedBytes = new byte[received];
-            System.arraycopy(bytes, 0, receivedBytes, 0, received);
-            buffer.append(new String(receivedBytes));
+            if(received > 0) {
+                byte[] receivedBytes = new byte[received];
+                System.arraycopy(bytes, 0, receivedBytes, 0, received);
+                buffer.append(new String(receivedBytes));
 
-            parseStringBuffer(buffer);
+                parseStringBuffer(buffer);
+            }
         }
     }
 
