@@ -23,6 +23,8 @@ public class RemoteVehicleServiceTest
     protected void setUp() throws Exception {
         super.setUp();
         startIntent = new Intent();
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
+                ManualVehicleDataSource.class.getName());
         startIntent.setClass(getContext(), RemoteVehicleServiceInterface.class);
     }
 

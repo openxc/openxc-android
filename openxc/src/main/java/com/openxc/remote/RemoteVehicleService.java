@@ -15,7 +15,7 @@ import java.util.Map;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import com.openxc.remote.sources.ManualVehicleDataSource;
+import com.openxc.remote.sources.UsbVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
@@ -39,7 +39,7 @@ public class RemoteVehicleService extends Service {
     public final static String DATA_SOURCE_RESOURCE_EXTRA =
             "data_source_resource";
     private final static String DEFAULT_DATA_SOURCE =
-        ManualVehicleDataSource.class.getName();
+        UsbVehicleDataSource.class.getName();
 
     private Map<String, Double> mNumericalMeasurements;
     private Map<String, String> mStateMeasurements;
