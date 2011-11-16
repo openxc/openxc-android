@@ -86,6 +86,7 @@ public class RemoteVehicleService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "Service being destroyed");
         if(mDataSource != null) {
             mDataSource.stop();
         }
