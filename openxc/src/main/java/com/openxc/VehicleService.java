@@ -209,16 +209,12 @@ public class VehicleService extends Service {
         try {
             constructor = measurementType.getConstructor(
                     Double.class);
-            Log.d(TAG, measurementType +  " has a numerical constructor " +
-                    "-- using that");
         } catch(NoSuchMethodException e) {
             throw new UnrecognizedMeasurementTypeException(measurementType +
                     " doesn't have a numerical constructor", e);
         }
 
         if(rawMeasurement.isValid()) {
-            Log.d(TAG, rawMeasurement +
-                    " is valid, constructing a measurement with it");
             try {
                 return constructor.newInstance(rawMeasurement.getValue());
             } catch(InstantiationException e) {
