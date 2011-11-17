@@ -1,9 +1,16 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sources.usb;
 
 import java.lang.InterruptedException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+
+import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sources.VehicleDataSourceException;
+import com.openxc.remote.sources.VehicleDataSourceInterface;
+import com.openxc.remote.sources.VehicleDataSourceResourceException;
 
 import junit.framework.Assert;
 

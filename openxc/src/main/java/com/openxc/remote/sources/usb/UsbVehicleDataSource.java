@@ -1,4 +1,4 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sources.usb;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -6,6 +6,14 @@ import java.net.URISyntaxException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import com.openxc.remote.sources.JsonVehicleDataSource;
+
+import com.openxc.remote.sources.usb.UsbDeviceException;
+
+import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sources.VehicleDataSourceException;
+import com.openxc.remote.sources.VehicleDataSourceResourceException;
 
 import android.app.PendingIntent;
 

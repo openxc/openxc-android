@@ -1,4 +1,4 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sources.trace;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+
+import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sources.VehicleDataSourceException;
 
 import junit.framework.Assert;
 

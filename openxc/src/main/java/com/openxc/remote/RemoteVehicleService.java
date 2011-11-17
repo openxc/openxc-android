@@ -15,7 +15,7 @@ import java.util.Map;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import com.openxc.remote.sources.UsbVehicleDataSource;
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 

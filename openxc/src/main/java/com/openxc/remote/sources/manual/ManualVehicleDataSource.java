@@ -1,6 +1,9 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sources.manual;
 
 import java.net.URI;
+
+import com.openxc.remote.sources.AbstractVehicleDataSource;
+import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 
 import android.content.Context;
 

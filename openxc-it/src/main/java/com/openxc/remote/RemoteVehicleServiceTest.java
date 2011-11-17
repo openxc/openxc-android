@@ -2,7 +2,7 @@ package com.openxc.remote;
 
 import com.openxc.remote.RemoteVehicleService;
 
-import com.openxc.remote.sources.ManualVehicleDataSource;
+import com.openxc.remote.sources.manual.ManualVehicleDataSource;
 
 import android.content.Intent;
 

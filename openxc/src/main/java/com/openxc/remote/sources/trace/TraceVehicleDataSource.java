@@ -1,4 +1,4 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sources.trace;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -10,6 +10,10 @@ import java.io.IOException;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+
+import com.openxc.remote.sources.JsonVehicleDataSource;
+import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sources.VehicleDataSourceException;
 
 import android.content.Context;
 

@@ -1,8 +1,10 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sources.manual;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 
 public class ManualVehicleDataSourceTest {
     ManualVehicleDataSource source;
