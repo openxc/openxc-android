@@ -23,8 +23,6 @@ public class RemoteVehicleServiceTest
     protected void setUp() throws Exception {
         super.setUp();
         startIntent = new Intent();
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-                ManualVehicleDataSource.class.getName());
         startIntent.setClass(getContext(), RemoteVehicleServiceInterface.class);
     }
 
@@ -38,13 +36,13 @@ public class RemoteVehicleServiceTest
     }
 
     @MediumTest
-    public void testBindable() {
+    public void testUsingUsbSource() {
         assertNotNull(bindService(startIntent));
     }
 
     @MediumTest
     public void testUsingManualSource() {
-        startIntent.putExtra("data_source",
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
                 ManualVehicleDataSource.class.getName());
         assertNotNull(bindService(startIntent));
     }
