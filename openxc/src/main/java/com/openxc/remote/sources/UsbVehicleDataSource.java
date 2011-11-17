@@ -83,8 +83,12 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                     device);
         }
 
-        mRunning = true;
+        if(!device.getScheme().equals("usb")) {
+            throw new VehicleDataSourceResourceException(
+                    "USB device URI must have the usb:// scheme");
+        }
 
+        mRunning = true;
         mDeviceConnectionLock = new ReentrantLock();
         mDevicePermissionChanged = mDeviceConnectionLock.newCondition();
 
@@ -94,19 +98,39 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
-        try {
-            setupDevice(mManager,
-                Integer.parseInt(device.getAuthority(), 16),
-                Integer.parseInt(device.getPath().substring(1), 16));
-        } catch(UsbDeviceException e) {
-            throw new VehicleDataSourceException("Couldn't open USB device", e);
-        }
+        setupDevice(mManager, vendorFromUri(device), productFromUri(device));
     }
 
     public UsbVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback)
             throws VehicleDataSourceException{
         this(context, callback, null);
+    }
+
+    private static int vendorFromUri(URI uri)
+            throws VehicleDataSourceResourceException {
+        try {
+            return Integer.parseInt(uri.getAuthority(), 16);
+        } catch(NumberFormatException e) {
+            throw new VehicleDataSourceResourceException(
+                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
+                " -- the given " + uri + " has a bad vendor ID");
+        }
+    }
+
+    private static int productFromUri(URI uri)
+            throws VehicleDataSourceResourceException {
+        try {
+            return Integer.parseInt(uri.getPath().substring(1), 16);
+        } catch(NumberFormatException e) {
+            throw new VehicleDataSourceResourceException(
+                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
+                " -- the given " + uri + " has a bad product ID");
+        } catch(StringIndexOutOfBoundsException e) {
+            throw new VehicleDataSourceResourceException(
+                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
+                " -- the given " + uri + " has a bad product ID");
+        }
     }
 
     public void stop() {
@@ -149,7 +173,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     private void setupDevice(UsbManager manager, int vendorId,
-            int productId) throws UsbDeviceException {
+            int productId) throws VehicleDataSourceResourceException {
         UsbDevice device = findDevice(manager, vendorId, productId);
         manager.requestPermission(device, mPermissionIntent);
     }
@@ -163,17 +187,21 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     private UsbDevice findDevice(UsbManager manager, int vendorId,
-            int productId) throws UsbDeviceException {
+            int productId) throws VehicleDataSourceResourceException {
         Log.d(TAG, "Looking for USB device with vendor ID " + vendorId +
                 " and product ID " + productId);
+
         for(UsbDevice candidateDevice : manager.getDeviceList().values()) {
             if(candidateDevice.getVendorId() == vendorId
                     && candidateDevice.getProductId() == productId) {
+                Log.d(TAG, "Found USB device " + candidateDevice);
                 return candidateDevice;
             }
         }
-        throw new UsbDeviceException("USB device with vendor ID " + vendorId +
-                    " and product ID " + productId + " not found");
+
+        throw new VehicleDataSourceResourceException("USB device with vendor " +
+                "ID " + vendorId + " and product ID " + productId +
+                " not found");
     }
 
     private UsbDeviceConnection connectToDevice(UsbManager manager,
