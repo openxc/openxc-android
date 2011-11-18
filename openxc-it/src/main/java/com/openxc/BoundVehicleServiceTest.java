@@ -3,12 +3,10 @@ package com.openxc;
 import java.lang.InterruptedException;
 
 import com.openxc.measurements.EngineSpeed;
-import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
@@ -18,8 +16,6 @@ import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 import com.openxc.VehicleService;
 
 import android.content.Intent;
-
-import android.os.RemoteException;
 
 import android.test.ServiceTestCase;
 
@@ -82,28 +78,6 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         assertNotNull(measurement);
         assertTrue(measurement.isNone());
     }
-
-    @MediumTest
-    public void testGetMocked() throws UnrecognizedMeasurementTypeException,
-            NoValueException, RemoteException, InterruptedException {
-        VehicleSpeed measurement = (VehicleSpeed)
-                service.get(VehicleSpeed.class);
-        assertNotNull(measurement);
-        assertFalse(measurement.isNone());
-        assertEquals(measurement.getValue().doubleValue(), 42.0);
-    }
-
-    @MediumTest
-    public void testGetBoolean() throws UnrecognizedMeasurementTypeException,
-            NoValueException, RemoteException, InterruptedException {
-        pause(300);
-        WindshieldWiperStatus measurement = (WindshieldWiperStatus)
-                service.get(WindshieldWiperStatus.class);
-        assertNotNull(measurement);
-        assertFalse(measurement.isNone());
-        assertEquals(measurement.getValue().booleanValue(), false);
-    }
-
 
     @MediumTest
     public void testAddListener() throws RemoteVehicleServiceException,
