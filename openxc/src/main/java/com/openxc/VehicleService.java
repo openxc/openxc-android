@@ -217,7 +217,8 @@ public class VehicleService extends Service {
                         measurementType + " has a private constructor", e);
             } catch(InvocationTargetException e) {
                 throw new UnrecognizedMeasurementTypeException(
-                        measurementType + "'s constructor threw an exception", e);
+                        measurementType + "'s constructor threw an exception",
+                        e);
             }
         } else {
             Log.d(TAG, rawMeasurement +

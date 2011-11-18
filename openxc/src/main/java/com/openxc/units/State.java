@@ -8,6 +8,7 @@ public class State<T extends Enum<?>> implements Unit {
     }
 
     public boolean equalTo(T otherValue) {
+        // TODO  this is incorrect - need to check cast and look at mValue
         return mValue.equals(otherValue);
     }
 

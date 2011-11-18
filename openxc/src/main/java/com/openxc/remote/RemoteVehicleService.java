@@ -52,9 +52,7 @@ public class RemoteVehicleService extends Service {
 
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
-            public void receive(final String measurementId,
-                    final Double value) {
-                mMeasurements.put(measurementId, value);
+            private void queueNotification(String measurementId) {
                 if(mListeners.containsKey(measurementId)) {
                     try  {
                         mNotificationQueue.put(measurementId);
@@ -62,8 +60,15 @@ public class RemoteVehicleService extends Service {
                 }
             }
 
+            public void receive(final String measurementId,
+                    final Double value) {
+                mMeasurements.put(measurementId, value);
+                queueNotification(measurementId);
+            }
+
             public void receive(String measurementId, Boolean value) {
-                // TODO
+                receive(measurementId, new Double(
+                            value.booleanValue() ? 1 : 0));
             }
         };
 

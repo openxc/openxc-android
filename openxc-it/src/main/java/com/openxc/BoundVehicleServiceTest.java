@@ -8,6 +8,7 @@ import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
@@ -91,6 +92,18 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         assertFalse(measurement.isNone());
         assertEquals(measurement.getValue().doubleValue(), 42.0);
     }
+
+    @MediumTest
+    public void testGetBoolean() throws UnrecognizedMeasurementTypeException,
+            NoValueException, RemoteException, InterruptedException {
+        pause(300);
+        WindshieldWiperStatus measurement = (WindshieldWiperStatus)
+                service.get(WindshieldWiperStatus.class);
+        assertNotNull(measurement);
+        assertFalse(measurement.isNone());
+        assertEquals(measurement.getValue().booleanValue(), false);
+    }
+
 
     @MediumTest
     public void testAddListener() throws RemoteVehicleServiceException,
