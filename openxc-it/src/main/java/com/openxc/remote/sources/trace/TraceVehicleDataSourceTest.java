@@ -72,7 +72,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         thread = new Thread(source);
         thread.start();
         try {
-            Thread.sleep(100);
+            Thread.sleep(300);
         } catch(InterruptedException e){ }
     }
 
