@@ -12,14 +12,15 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
+import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceException;
+
+import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
 
 import com.openxc.R;
-
-import android.test.AndroidTestCase;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -43,7 +44,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             Assert.fail("Couldn't construct resource URIs: " + e);
         }
 
-        callback = new VehicleDataSourceCallbackInterface() {
+        callback = new AbstractVehicleDataSourceCallback() {
             public void receive(String name, Double value) {
                 receivedNumericalCallback = true;
                 receivedNumber = value;

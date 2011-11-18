@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 
 public class ManualVehicleDataSourceTest {
@@ -15,7 +16,7 @@ public class ManualVehicleDataSourceTest {
     public void setUp() {
         receivedCallback = false;
         source = new ManualVehicleDataSource();
-        callback = new VehicleDataSourceCallbackInterface() {
+        callback = new AbstractVehicleDataSourceCallback() {
             public void receive(String name, Double value) {
                 receivedCallback = true;
             }

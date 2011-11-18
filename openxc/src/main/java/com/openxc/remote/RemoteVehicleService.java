@@ -15,6 +15,8 @@ import java.util.Map;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
+
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
@@ -51,7 +53,7 @@ public class RemoteVehicleService extends Service {
 
 
     VehicleDataSourceCallbackInterface mCallback =
-        new VehicleDataSourceCallbackInterface() {
+        new AbstractVehicleDataSourceCallback () {
             private void queueNotification(String measurementId) {
                 if(mListeners.containsKey(measurementId)) {
                     try  {
@@ -64,15 +66,6 @@ public class RemoteVehicleService extends Service {
                     final Double value) {
                 mMeasurements.put(measurementId, value);
                 queueNotification(measurementId);
-            }
-
-            public void receive(String measurementId, Boolean value) {
-                receive(measurementId, new Double(
-                            value.booleanValue() ? 1 : 0));
-            }
-
-            public void receive(String measurementId, String value) {
-                receive(measurementId, new Double(value.hashCode()));
             }
         };
 

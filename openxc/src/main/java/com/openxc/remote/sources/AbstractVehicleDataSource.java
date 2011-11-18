@@ -1,5 +1,10 @@
 package com.openxc.remote.sources;
 
+import java.io.IOException;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import android.content.Context;
 
 import android.util.Log;
@@ -31,17 +36,24 @@ public abstract class AbstractVehicleDataSource
 
     protected void handleMessage(String name, Object value) {
         if(mCallback != null) {
-            if(value instanceof Double) {
-                mCallback.receive(name, (Double) value);
-            } else if(value instanceof Integer) {
-                mCallback.receive(name, new Double((Integer) value));
-            } else if(value instanceof Boolean) {
-                mCallback.receive(name, (Boolean) value);
-            } else {
+            Method method;
+            try {
+                method = VehicleDataSourceCallbackInterface.class.getMethod(
+                        "receive", String.class, value.getClass());
+            } catch(NoSuchMethodException e) {
                 Log.w(TAG, "Received data of an unsupported type from the " +
-                        "data source: " + value + " a " + value.getClass());
+                        "data source: " + value + ", a " + value.getClass());
+                return;
             }
 
+            try {
+                // TODO does these cast value properly to the right type?
+                method.invoke(mCallback, name, value);
+            } catch(IllegalAccessException e) {
+                Log.w(TAG, "Data receiver method is private", e);
+            } catch(InvocationTargetException e) {
+                Log.w(TAG, "Unable to call data receive method", e);
+            }
         }
     }
 

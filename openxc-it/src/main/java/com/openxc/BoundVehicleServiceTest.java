@@ -32,6 +32,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             speedReceived = (VehicleSpeed) measurement;
         }
     };
+
     SteeringWheelAngle.Listener steeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -83,7 +84,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     public void testAddListener() throws RemoteVehicleServiceException,
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
-        pause(300);
+        pause(400);
         checkReceivedMeasurement(speedReceived);
     }
 

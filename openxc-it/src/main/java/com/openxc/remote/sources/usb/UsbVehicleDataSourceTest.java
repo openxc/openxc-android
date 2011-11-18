@@ -5,6 +5,8 @@ import java.lang.InterruptedException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
+
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
@@ -36,14 +38,8 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
             Assert.fail("Couldn't construct resource URIs: " + e);
         }
 
-        callback = new VehicleDataSourceCallbackInterface() {
+        callback = new AbstractVehicleDataSourceCallback() {
             public void receive(String name, Double value) {
-            }
-
-            public void receive(String name, Boolean value) {
-            }
-
-            public void receive(String name, String value) {
             }
         };
     }
