@@ -5,25 +5,19 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 public class RawMeasurementTest {
-    RawNumericalMeasurement numericalMeasurement;
-    RawStateMeasurement stateMeasurement;
+    RawMeasurement measurement;
 
     @Test
-    public void testNumericalValue() {
-        numericalMeasurement = new RawNumericalMeasurement(new Double(42.0));
-    }
-
-    @Test
-    public void testStateValue() {
-        stateMeasurement = new RawStateMeasurement("MyState");
+    public void testValue() {
+        measurement = new RawMeasurement(new Double(42.0));
     }
 
     @Test
     public void testValidity() {
-        numericalMeasurement = new RawNumericalMeasurement(new Double(42));
-        assertTrue(numericalMeasurement.isValid());
+        measurement = new RawMeasurement(new Double(42));
+        assertTrue(measurement.isValid());
 
-        numericalMeasurement = new RawNumericalMeasurement();
-        assertFalse(numericalMeasurement.isValid());
+        measurement = new RawMeasurement();
+        assertFalse(measurement.isValid());
    }
 }

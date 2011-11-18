@@ -30,9 +30,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     Thread thread;
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
-    boolean receivedStateCallback;
+    boolean receivedBooleanCallback;;
     double receivedNumber;
-    String receivedState;
+    boolean receivedBoolean;
 
     @Override
     protected void setUp() {
@@ -44,14 +44,14 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         }
 
         callback = new VehicleDataSourceCallbackInterface() {
-            public void receive(String name, double value) {
+            public void receive(String name, Double value) {
                 receivedNumericalCallback = true;
                 receivedNumber = value;
             }
 
-            public void receive(String name, String value) {
-                receivedStateCallback = true;
-                receivedState = value;
+            public void receive(String name, Boolean value) {
+                receivedBooleanCallback = true;
+                receivedBoolean = value;
             }
         };
     }
@@ -80,13 +80,13 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     public void testPlaybackFile() throws InterruptedException,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
-        receivedStateCallback = false;
+        receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback, traceUri);
         startTrace(source);
         assertTrue(receivedNumericalCallback);
-        assertTrue(receivedStateCallback);
+        assertTrue(receivedBooleanCallback);
         assertTrue(receivedNumber == 42.0 || receivedNumber == 94.1);
-        assertEquals(receivedState, "MyState");
+        assertEquals(receivedBoolean, false);
     }
 
     @SmallTest
@@ -113,7 +113,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     public void testMalformedJson() throws InterruptedException ,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
-        receivedStateCallback = false;
+        receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback,
                 malformedTraceUri);
         startTrace(source);
@@ -126,7 +126,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             InterruptedException, VehicleDataSourceException,
             URISyntaxException {
         receivedNumericalCallback = false;
-        receivedStateCallback = false;
+        receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback,
                 new URL("file:///foo").toURI());
         startTrace(source);

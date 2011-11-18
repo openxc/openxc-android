@@ -36,16 +36,8 @@ public abstract class JsonVehicleDataSource
 
         try {
             handleMessage(message.getString("name"),
-                    message.getDouble("value"));
+                    message.get("value"));
             return;
-        } catch(JSONException e) {
-        }
-        try {
-            handleMessage(message.getString("name"),
-                    message.getString("value"));
-        } catch(JSONException e) {
-            Log.w(TAG, "JSON value wasn't a double or string -- couldn't parse",
-                    e);
-        }
+        } catch(JSONException e) { }
     }
 }

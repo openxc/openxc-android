@@ -41,8 +41,7 @@ public class RemoteVehicleService extends Service {
     private final static String DEFAULT_DATA_SOURCE =
         UsbVehicleDataSource.class.getName();
 
-    private Map<String, Double> mNumericalMeasurements;
-    private Map<String, String> mStateMeasurements;
+    private Map<String, Double> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
 
     private Map<String, RemoteCallbackList<
@@ -54,8 +53,8 @@ public class RemoteVehicleService extends Service {
     VehicleDataSourceCallbackInterface mCallback =
         new VehicleDataSourceCallbackInterface() {
             public void receive(final String measurementId,
-                    final double value) {
-                mNumericalMeasurements.put(measurementId, value);
+                    final Double value) {
+                mMeasurements.put(measurementId, value);
                 if(mListeners.containsKey(measurementId)) {
                     try  {
                         mNotificationQueue.put(measurementId);
@@ -63,7 +62,7 @@ public class RemoteVehicleService extends Service {
                 }
             }
 
-            public void receive(String measurementId, String value) {
+            public void receive(String measurementId, Boolean value) {
                 // TODO
             }
         };
@@ -72,8 +71,7 @@ public class RemoteVehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mNumericalMeasurements = new HashMap<String, Double>();
-        mStateMeasurements = new HashMap<String, String>();
+        mMeasurements = new HashMap<String, Double>();
         mNotificationQueue = new LinkedBlockingQueue<String>();
 
         mListeners = Collections.synchronizedMap(
@@ -177,16 +175,9 @@ public class RemoteVehicleService extends Service {
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
-            public RawNumericalMeasurement getNumericalMeasurement(
-                    String measurementId) throws RemoteException {
-                return new RawNumericalMeasurement(
-                        mNumericalMeasurements.get(measurementId));
-            }
-
-            public RawStateMeasurement getStateMeasurement(
-                    String measurementId) throws RemoteException {
-                return new RawStateMeasurement(
-                        mStateMeasurements.get(measurementId));
+            public RawMeasurement get(String measurementId)
+                    throws RemoteException {
+                return new RawMeasurement(mMeasurements.get(measurementId));
             }
 
             public void addListener(String measurementId,
@@ -224,10 +215,9 @@ public class RemoteVehicleService extends Service {
                 while(i > 0) {
                     i--;
                     try {
-                        callbacks.getBroadcastItem(i).receiveNumerical(
-                                measurementId,
-                                new RawNumericalMeasurement(
-                                    mNumericalMeasurements.get(measurementId)));
+                        callbacks.getBroadcastItem(i).receive(measurementId,
+                                new RawMeasurement(
+                                    mMeasurements.get(measurementId)));
                     } catch(RemoteException e) {
                         Log.w(TAG, "Couldn't notify application " +
                                 "listener -- did it crash?", e);

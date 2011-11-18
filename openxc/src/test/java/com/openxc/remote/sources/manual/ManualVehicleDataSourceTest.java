@@ -16,11 +16,11 @@ public class ManualVehicleDataSourceTest {
         receivedCallback = false;
         source = new ManualVehicleDataSource();
         callback = new VehicleDataSourceCallbackInterface() {
-            public void receive(String name, double value) {
+            public void receive(String name, Double value) {
                 receivedCallback = true;
             }
 
-            public void receive(String name, String value) {
+            public void receive(String name, Boolean value) {
                 receivedCallback = true;
             }
         };

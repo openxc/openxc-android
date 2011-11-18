@@ -24,15 +24,13 @@ public abstract class AbstractVehicleDataSource
         mCallback = callback;
     }
 
-    protected void handleMessage(String name, double value) {
+    protected void handleMessage(String name, Object value) {
         if(mCallback != null) {
-            mCallback.receive(name, value);
-        }
-    }
-
-    protected void handleMessage(String name, String value) {
-        if(mCallback != null) {
-            mCallback.receive(name, value);
+            if(value instanceof Double) {
+                mCallback.receive(name, (Double) value);
+            } else if(value instanceof Boolean) {
+                mCallback.receive(name, (Boolean) value);
+            }
         }
     }
 

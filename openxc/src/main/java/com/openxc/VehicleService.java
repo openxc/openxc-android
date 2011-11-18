@@ -14,8 +14,7 @@ import com.google.common.collect.Multimap;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
-import com.openxc.remote.RawNumericalMeasurement;
-import com.openxc.remote.RawStateMeasurement;
+import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
@@ -103,30 +102,23 @@ public class VehicleService extends Service {
 
     private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receiveNumerical(String measurementId,
-                    RawNumericalMeasurement value) {
-                Log.d(TAG, "Received numerical " + measurementId + ": " +
+            public void receive(String measurementId,
+                    RawMeasurement value) {
+                Log.d(TAG, "Received " + measurementId + ": " +
                         value + " from remote service");
 
                 Class<? extends VehicleMeasurement> measurementClass =
                     mMeasurementIdToClass.get(measurementId);
                 VehicleMeasurement measurement;
                 try {
-                    measurement = getNumericalMeasurementFromRaw(
-                            measurementClass, value);
+                    measurement = getMeasurementFromRaw(measurementClass,
+                            value);
                 } catch(UnrecognizedMeasurementTypeException e) {
                     Log.w(TAG, "Received notification for a malformed " +
                             "measurement type: " + measurementClass, e);
                     return;
                 }
                 notifyListeners(measurementClass, measurement);
-            }
-
-            public void receiveState(String measurementType,
-                    RawStateMeasurement state) {
-                Log.d(TAG, "Received state " + measurementType + ": " +
-                        state + " from remote service");
-                // TODO
             }
         };
 
@@ -201,9 +193,9 @@ public class VehicleService extends Service {
         }
     }
 
-    private VehicleMeasurement getNumericalMeasurementFromRaw(
+    private VehicleMeasurement getMeasurementFromRaw(
             Class<? extends VehicleMeasurement> measurementType,
-            RawNumericalMeasurement rawMeasurement)
+            RawMeasurement rawMeasurement)
             throws UnrecognizedMeasurementTypeException{
         Constructor<? extends VehicleMeasurement> constructor;
         try {
@@ -248,11 +240,9 @@ public class VehicleService extends Service {
 
         Log.d(TAG, "Looking up measurement for " + measurementType);
         try {
-            RawNumericalMeasurement rawMeasurement =
-                mRemoteService.getNumericalMeasurement(
-                        mMeasurementClassToId.get(measurementType));
-            return getNumericalMeasurementFromRaw(measurementType,
-                    rawMeasurement);
+            RawMeasurement rawMeasurement =
+                mRemoteService.get(mMeasurementClassToId.get(measurementType));
+            return getMeasurementFromRaw(measurementType, rawMeasurement);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             return constructBlankMeasurement(measurementType);
