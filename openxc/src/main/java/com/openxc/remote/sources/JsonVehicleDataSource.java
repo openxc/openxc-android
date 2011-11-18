@@ -38,6 +38,9 @@ public abstract class JsonVehicleDataSource
             handleMessage(message.getString("name"),
                     message.get("value"));
             return;
-        } catch(JSONException e) { }
+        } catch(JSONException e) {
+            Log.w(TAG, "JSON message didn't have the expected format: "
+                    + message, e);
+        }
     }
 }
