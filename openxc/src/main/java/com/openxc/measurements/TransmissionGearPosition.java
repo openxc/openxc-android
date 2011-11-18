@@ -12,35 +12,36 @@ public class TransmissionGearPosition
         // but that is less explicit and requires that these be in the same
         // order as defined in the specification. it would allow us to delete
         // all of this code though...
-        FIRST(1),
-        SECOND(2),
-        THIRD(3),
-        FOURTH(4),
-        FIFTH(5),
-        SIXTH(6),
-        SEVENTH(7),
-        EIGHTH(8),
-        NEUTRAL(9),
-        REVERSE(10);
+        FIRST,
+        SECOND,
+        THIRD,
+        FOURTH,
+        FIFTH,
+        SIXTH,
+        SEVENTH,
+        EIGHTH,
+        NEUTRAL,
+        REVERSE;
 
-        private final int mNumericalValue;
+        // TODO can we contain all of this in a HashedEnum parent class?
+        private final int mHashCode;
 
-        private GearPosition(int value) {
-            mNumericalValue = value;
+        private GearPosition() {
+            mHashCode = toString().hashCode();
         }
 
-        public int getInt() {
-            return mNumericalValue;
+        public int getHashCode() {
+            return mHashCode;
         }
 
-        public static GearPosition fromInt(int value) {
+        public static GearPosition fromHashCode(int hashCode) {
             for(GearPosition position : GearPosition.values()) {
-                if(value == position.getInt()) {
+                if(hashCode == position.getHashCode()) {
                     return position;
                 }
             }
             throw new IllegalArgumentException(
-                    "No valid gear position for int " + value);
+                    "No valid gear position for hash code " + hashCode);
         }
     }
 
@@ -55,6 +56,6 @@ public class TransmissionGearPosition
     }
 
     public TransmissionGearPosition(Double value) {
-        this(GearPosition.fromInt(value.intValue()));
+        this(GearPosition.fromHashCode(value.intValue()));
     }
 }
