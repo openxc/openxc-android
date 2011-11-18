@@ -16,4 +16,8 @@ public class State<T extends Enum<?>> implements Unit {
     public String toString() {
         return mValue.toString();
     }
+
+    public T enumValue() {
+        return mValue;
+    }
 }

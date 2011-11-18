@@ -29,7 +29,7 @@ public class WindshieldWiperStatusTest {
     }
 
     @Test
-    public void testHasRange() {
+    public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
 

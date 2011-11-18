@@ -42,6 +42,9 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
 
             public void receive(String name, Boolean value) {
             }
+
+            public void receive(String name, String value) {
+            }
         };
     }
 

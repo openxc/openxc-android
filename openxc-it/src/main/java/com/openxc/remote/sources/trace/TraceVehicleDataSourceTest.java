@@ -53,6 +53,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
                 receivedBooleanCallback = true;
                 receivedBoolean = value;
             }
+
+            public void receive(String name, String value) { }
         };
     }
 

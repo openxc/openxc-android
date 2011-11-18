@@ -3,6 +3,7 @@ package com.openxc;
 import java.lang.InterruptedException;
 
 import com.openxc.measurements.NoValueException;
+import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -69,6 +70,18 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
                 service.get(WindshieldWiperStatus.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().booleanValue(), false);
+    }
+
+    @MediumTest
+    public void testGetTransmissionGearPosition()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        TransmissionGearPosition measurement = (TransmissionGearPosition)
+                service.get(TransmissionGearPosition.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().enumValue(),
+                TransmissionGearPosition.GearPosition.FIRST);
     }
 
     private void pause(int millis) {

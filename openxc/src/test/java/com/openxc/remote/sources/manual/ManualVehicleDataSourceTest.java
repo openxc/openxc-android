@@ -23,6 +23,9 @@ public class ManualVehicleDataSourceTest {
             public void receive(String name, Boolean value) {
                 receivedCallback = true;
             }
+
+            public void receive(String name, String value) {
+            }
         };
     }
 

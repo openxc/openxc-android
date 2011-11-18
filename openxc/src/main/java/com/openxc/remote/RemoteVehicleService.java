@@ -70,6 +70,10 @@ public class RemoteVehicleService extends Service {
                 receive(measurementId, new Double(
                             value.booleanValue() ? 1 : 0));
             }
+
+            public void receive(String measurementId, String value) {
+                receive(measurementId, new Double(value.hashCode()));
+            }
         };
 
     @Override

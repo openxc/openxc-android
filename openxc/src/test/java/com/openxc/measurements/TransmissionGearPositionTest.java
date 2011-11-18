@@ -23,8 +23,8 @@ public class TransmissionGearPositionTest {
 
     @Test
     public void testGet() throws NoValueException {
-        assertThat(measurement.getValue().toString(), equalTo(
-                    TransmissionGearPosition.GearPosition.FIRST.toString()));
+        assertThat(measurement.getValue().enumValue(), equalTo(
+                    TransmissionGearPosition.GearPosition.FIRST));
     }
 
     @Test

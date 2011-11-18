@@ -1,3 +1,4 @@
 {"name": "vehicle_speed", "value": 42}
 {"name": "windshield_wiper_status", "value": false}
 {"name": "steering_wheel_angle", "value": 94.1}
+{"name": "transmission_gear_position", "value": "FIRST"}
