@@ -5,6 +5,7 @@ import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.remote.RemoteVehicleServiceException;
 
@@ -31,8 +32,30 @@ public class VehicleDashboardActivity extends Activity {
     private boolean mIsBound;
     private final Handler mHandler = new Handler();
     private TextView mSteeringWheelAngleView;
-    private TextView mVehicleSpeedView;;
+    private TextView mVehicleSpeedView;
+    private TextView mWiperStatusView;
     StringBuffer mBuffer;
+
+    WindshieldWiperStatus.Listener mWiperListener =
+            new WindshieldWiperStatus.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final WindshieldWiperStatus wiperStatus =
+                (WindshieldWiperStatus) measurement;
+            if(!wiperStatus.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            if(wiperStatus.getValue().booleanValue()) {
+                                mWiperStatusView.setText("On");
+                            } else {
+                                mWiperStatusView.setText("Off");
+                            }
+                        } catch(NoValueException e) { }
+                    }
+                });
+            }
+        }
+    };
 
     VehicleSpeed.Listener mSpeedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -79,6 +102,8 @@ public class VehicleDashboardActivity extends Activity {
                         mSteeringWheelListener);
                 mVehicleService.addListener(VehicleSpeed.class,
                         mSpeedListener);
+                mVehicleService.addListener(WindshieldWiperStatus.class,
+                        mWiperListener);
             } catch(RemoteVehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
@@ -105,6 +130,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.steering_wheel_angle);
         mVehicleSpeedView = (TextView) findViewById(
                 R.id.vehicle_speed);
+        mWiperStatusView = (TextView) findViewById(
+                R.id.wiper_status);
         mBuffer = new StringBuffer();
     }
 

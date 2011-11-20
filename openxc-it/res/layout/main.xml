@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical" >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
     <TextView android:id="@+id/steering_wheel_angle_label"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/steering_wheel_angle_label" />
+            style="@style/DefaultFont"
+            android:text="@string/steering_wheel_angle_label" />
     <TextView android:id="@+id/steering_wheel_angle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
+            style="@style/DefaultFont" />
     <TextView android:id="@+id/vehicle_speed_label"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/vehicle_speed_label" />
+            style="@style/DefaultFont"
+            android:text="@string/vehicle_speed_label" />
     <TextView android:id="@+id/vehicle_speed"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
+            style="@style/DefaultFont" />
+    <TextView android:id="@+id/wiper_status_label"
+            style="@style/DefaultFont"
+            android:text="@string/wiper_status_label" />
+    <TextView android:id="@+id/wiper_status"
+            style="@style/DefaultFont" />
 </LinearLayout>
