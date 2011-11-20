@@ -24,5 +24,8 @@
   <instrumentation android:targetPackage="com.openxc"
     android:name="android.test.InstrumentationTestRunner" />
 
+  <supports-screens android:largeScreens="true" android:xlargeScreens="true"
+          android:anyDensity="true" />
+
 </manifest>
 
