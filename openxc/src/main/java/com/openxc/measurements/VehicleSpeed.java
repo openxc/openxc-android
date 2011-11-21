@@ -24,6 +24,6 @@ public class VehicleSpeed extends Measurement<MetersPerSecond>
     }
 
     public VehicleSpeed(Double value) {
-        super(new MetersPerSecond(value), RANGE);
+        this(new MetersPerSecond(value));
     }
 }
