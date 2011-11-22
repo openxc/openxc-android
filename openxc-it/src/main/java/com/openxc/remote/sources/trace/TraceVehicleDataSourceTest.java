@@ -31,7 +31,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     Thread thread;
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
+    boolean receivedBooleanCallback;;
     double receivedNumber;
+    boolean receivedBoolean;
 
     @Override
     protected void setUp() {
@@ -46,6 +48,11 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             public void receive(String name, Double value) {
                 receivedNumericalCallback = true;
                 receivedNumber = value;
+            }
+
+            public void receive(String name, Boolean value) {
+                receivedBooleanCallback = true;
+                receivedBoolean = value;
             }
 
             public void receive(String name, String value) { }
@@ -76,10 +83,13 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     public void testPlaybackFile() throws InterruptedException,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
+        receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback, traceUri);
         startTrace(source);
         assertTrue(receivedNumericalCallback);
+        assertTrue(receivedBooleanCallback);
         assertTrue(receivedNumber == 42.0 || receivedNumber == 94.1);
+        assertEquals(receivedBoolean, false);
     }
 
     @SmallTest
@@ -106,6 +116,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     public void testMalformedJson() throws InterruptedException ,
             VehicleDataSourceException {
         receivedNumericalCallback = false;
+        receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback,
                 malformedTraceUri);
         startTrace(source);
@@ -118,6 +129,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             InterruptedException, VehicleDataSourceException,
             URISyntaxException {
         receivedNumericalCallback = false;
+        receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback,
                 new URL("file:///foo").toURI());
         startTrace(source);
