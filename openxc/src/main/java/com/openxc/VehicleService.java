@@ -68,9 +68,6 @@ public class VehicleService extends Service {
 
             // in case we had listeners registered before the remote service was
             // connected, sync up here.
-            // TODO ideally we wouldn't call onServiceConnected in applications
-            // for this service until we're connected to the remote service as
-            // well - I can't figure out how to do that, however.
             Set<Class<? extends VehicleMeasurement>> listenerKeys =
                 mListeners.keySet();
             for(Class<? extends VehicleMeasurement> key : listenerKeys) {
