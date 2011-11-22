@@ -36,6 +36,10 @@ tests for this Eclipse session.
 If you don't wish the tests to wait for a debugger, change the `testDebug`
 setting in `openxc-android/pom.xml` to `false`.
 
+To deploy the examples to a device:
+
+    $ mvn android:deploy -Dandroid.file=examples/target/openxc-examples.apk
+
 ## Usage
 
 Vehicle measurements are accessed through an [Android service][services]. Your
