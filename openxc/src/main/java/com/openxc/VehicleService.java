@@ -127,6 +127,22 @@ public class VehicleService extends Service {
                             "measurement type: " + measurementClass, e);
                     return;
                 }
+                // TODO we may want to dump these in a queue handled by another
+                // thread or post runnables to the main handler, sort of like we
+                // do in the RemoteVehicleService. If the listener's receive
+                // blocks...actually it might be OK.
+                //
+                // we do this in RVS because the data source would block waiting
+                // for the receive to return before handling another.
+                //
+                // in this case we're being called from the handler thread in
+                // RVS...so yeah, we don't want to block.
+                //
+                // AppLink posts runnables, but that might create a ton of
+                // objects and be a lot of overhead. the queue method might be
+                // fine, and if we use that we should see if the queue+notifying
+                // thread setup can be abstracted and shared by the two
+                // services.
                 notifyListeners(measurementClass, measurement);
             }
         };
