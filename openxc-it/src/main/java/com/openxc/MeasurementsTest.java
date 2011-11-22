@@ -2,6 +2,7 @@ package com.openxc;
 
 import java.lang.InterruptedException;
 
+import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleMeasurement;
@@ -70,6 +71,17 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
                 service.get(WindshieldWiperSpeed.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 11.0);
+    }
+
+    @MediumTest
+    public void testGetBrakePedalStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        BrakePedalStatus measurement = (BrakePedalStatus)
+            service.get(BrakePedalStatus.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().booleanValue(), false);
     }
 
     @MediumTest
