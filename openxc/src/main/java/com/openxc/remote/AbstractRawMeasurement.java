@@ -1,5 +1,7 @@
 package com.openxc.remote;
 
+import com.google.common.base.Objects;
+
 import android.os.Parcel;
 
 public abstract class AbstractRawMeasurement<TheUnit> {
@@ -28,4 +30,12 @@ public abstract class AbstractRawMeasurement<TheUnit> {
     }
 
     public abstract void writeToParcel(Parcel out, int flags);
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("value", getValue())
+            .add("valid", isValid())
+            .toString();
+    }
 }

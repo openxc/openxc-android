@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.util.Set;
 
+import com.google.common.base.Objects;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
@@ -266,8 +268,8 @@ public class VehicleService extends Service {
                         mRemoteListener);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(
-                        "Unable to register listener with remote vehicle service",
-                        e);
+                        "Unable to register listener with remote vehicle " +
+                        "service", e);
             }
         }
     }
@@ -285,9 +287,17 @@ public class VehicleService extends Service {
                         mRemoteListener);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(
-                        "Unable to unregister listener from remote vehicle service",
-                        e);
+                        "Unable to unregister listener from remote " +
+                        "vehicle service", e);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("bound", mIsBound)
+            .add("numListeners", mListeners.size())
+            .toString();
     }
 }

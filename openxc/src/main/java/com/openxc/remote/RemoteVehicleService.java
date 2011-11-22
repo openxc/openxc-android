@@ -13,6 +13,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Objects;
+
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
@@ -229,4 +231,14 @@ public class RemoteVehicleService extends Service {
             }
         }
     };
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("dataSource", mDataSource)
+            .add("numListeners", mListeners.size())
+            .add("numMeasurementTypes", mMeasurements.size())
+            .add("callbackBacklog", mNotificationQueue.size())
+            .toString();
+    }
 }

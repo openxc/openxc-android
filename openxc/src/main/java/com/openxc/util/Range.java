@@ -1,5 +1,7 @@
 package com.openxc.util;
 
+import com.google.common.base.Objects;
+
 public class Range<T> {
     private T mMin;
     private T mMax;
@@ -32,5 +34,13 @@ public class Range<T> {
     @Override
     public int hashCode() {
         return mMin.hashCode() + mMax.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("min", getMin())
+            .add("max", getMax())
+            .toString();
     }
 }

@@ -7,6 +7,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.google.common.base.Objects;
+
 import com.openxc.remote.sources.JsonVehicleDataSource;
 
 import com.openxc.remote.sources.usb.UsbDeviceException;
@@ -47,6 +49,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private UsbDeviceConnection mConnection;
     private UsbEndpoint mEndpoint;
     private PendingIntent mPermissionIntent;
+    private final URI mDeviceUri;
     private final Lock mDeviceConnectionLock;
     private final Condition mDevicePermissionChanged;
 
@@ -97,6 +100,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
 
         mRunning = true;
+        mDeviceUri = device;
         mDeviceConnectionLock = new ReentrantLock();
         mDevicePermissionChanged = mDeviceConnectionLock.newCondition();
 
@@ -222,5 +226,15 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
         connection.claimInterface(iface, true);
         return connection;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("device", mDeviceUri)
+            .add("connection", mConnection)
+            .add("endpoint", mEndpoint)
+            .add("callback", getCallback())
+            .toString();
     }
 }

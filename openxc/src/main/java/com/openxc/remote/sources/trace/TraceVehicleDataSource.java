@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
+import com.google.common.base.Objects;
+
 import com.openxc.remote.sources.JsonVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceException;
@@ -50,7 +52,6 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
     }
-
 
     public void stop() {
         Log.d(TAG, "Stopping trace playback");
@@ -129,5 +130,13 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         } else {
             return openRegularFile(filename);
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("filename", mFilename)
+            .add("callback", getCallback())
+            .toString();
     }
 }

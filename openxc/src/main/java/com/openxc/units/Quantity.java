@@ -1,5 +1,7 @@
 package com.openxc.units;
 
+import com.google.common.base.Objects;
+
 public abstract class Quantity<T extends Number> {
     private T mValue;
 
@@ -17,5 +19,12 @@ public abstract class Quantity<T extends Number> {
 
     public int intValue() {
         return mValue.intValue();
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("value", mValue)
+            .toString();
     }
 }

@@ -1,5 +1,7 @@
 package com.openxc.units;
 
+import com.google.common.base.Objects;
+
 public class State<T extends Enum<?>> implements Unit {
     private T mValue;
 
@@ -12,12 +14,14 @@ public class State<T extends Enum<?>> implements Unit {
         return mValue.equals(otherValue);
     }
 
-    @Override
-    public String toString() {
-        return mValue.toString();
-    }
-
     public T enumValue() {
         return mValue;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("value", mValue)
+            .toString();
     }
 }

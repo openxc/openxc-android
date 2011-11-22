@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import com.google.common.base.Objects;
+
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
@@ -46,5 +48,13 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
 
     public boolean isNone() {
         return mValue.isNone();
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("value", mValue)
+            .add("range", mRange)
+            .toString();
     }
 }
