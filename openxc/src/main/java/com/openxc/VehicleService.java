@@ -134,10 +134,11 @@ public class VehicleService extends Service {
     private void notifyListeners(
             Class<? extends VehicleMeasurement> measurementType,
             VehicleMeasurement measurement) {
-        // TODO probably want to do a coarse lock around this
-        for(VehicleMeasurement.Listener listener :
-                mListeners.get(measurementType)) {
-            listener.receive(measurement);
+        synchronized(mListeners) {
+            for(VehicleMeasurement.Listener listener :
+                    mListeners.get(measurementType)) {
+                listener.receive(measurement);
+            }
         }
     }
 
