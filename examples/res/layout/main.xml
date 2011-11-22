@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+    <TextView android:id="@+id/steering_wheel_angle_label"
+            style="@style/DefaultFont"
+            android:text="@string/steering_wheel_angle_label" />
+    <TextView android:id="@+id/steering_wheel_angle"
+            style="@style/DefaultFont" />
+    <TextView android:id="@+id/vehicle_speed_label"
+            style="@style/DefaultFont"
+            android:text="@string/vehicle_speed_label" />
+    <TextView android:id="@+id/vehicle_speed"
+            style="@style/DefaultFont" />
+    <TextView android:id="@+id/wiper_speed_label"
+            style="@style/DefaultFont"
+            android:text="@string/wiper_speed_label" />
+    <TextView android:id="@+id/wiper_speed"
+            style="@style/DefaultFont" />
+</LinearLayout>

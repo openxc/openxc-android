@@ -133,7 +133,7 @@ public class VehicleService extends Service {
     }
 
     public class VehicleServiceBinder extends Binder {
-        VehicleService getService() {
+        public VehicleService getService() {
             return VehicleService.this;
         }
     }

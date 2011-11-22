@@ -11,6 +11,7 @@
     <modules>
         <module>openxc</module>
         <module>openxc-it</module>
+        <module>examples</module>
     </modules>
 
     <properties>
@@ -90,7 +91,7 @@
                         <platform>12</platform>
                     </sdk>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                    <testDebug>true</testDebug>
+                    <testDebug>false</testDebug>
                 </configuration>
             </plugin>
             <plugin>

@@ -1,4 +1,4 @@
-package com.openxc;
+package com.openxc.examples.dashboard;
 
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
@@ -7,7 +7,11 @@ import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperSpeed;
 
+import com.openxc.examples.R;
+
 import com.openxc.remote.RemoteVehicleServiceException;
+
+import com.openxc.VehicleService;
 
 import android.app.Activity;
 
