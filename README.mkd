@@ -140,6 +140,30 @@ position:
     range = measurement.getRange();
     int percentage = measurement.getValue() / range;
 
+## Contributing
+
+We'd love your input - the project is organized as a Maven project, but also
+works fine if you're an Eclipse user. The recommended steps to set up the
+openxc-android project in Eclipse are:
+
+* Install [Eclipse](http://www.eclipse.org/downloads/) Indigo or later
+* Install the [ADT plugin](http://developer.android.com/sdk/eclipse-adt.html)
+  from Google
+* Clone the [openxc-android](https://github.com/openxc/openxc-android] repo
+    (this repo)
+* Open Eclipse and go to `File -> Import -> Maven -> Existing Maven Projects`.
+  Navigate to where you cloned the repository and import the `openxc`,
+  `openxc-it` and `openxc-examples` projects.
+* You will be prompted to install the m2e-android connector - do that, then
+  restart Eclipse.
+* Right click on the `openxc` project, go to Maven -> Update Project
+  Configuration. Select all of the openxc projects in the dialog.
+* Right click on the openxc-it project, go to Build Path -> Configure Build
+  Path. Click the projects tab and add a reference to the `openxc` project.
+    * Repeat for the openxc-examples project.
+* There should be no changes in the repository at this point (`git status`
+  should report nothing) and there should be no errors in Eclipse.
+
 ## License
 
 Copyright (c) 2011 Ford Motor Company
