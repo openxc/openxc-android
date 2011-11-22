@@ -3,6 +3,10 @@ package com.openxc;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import java.util.Set;
 
 import com.google.common.base.Objects;
@@ -38,6 +42,8 @@ public class VehicleService extends Service {
     private final static String TAG = "VehicleService";
 
     private boolean mIsBound;
+    private Lock mRemoteBoundLock;
+    private Condition mRemoteBoundCondition;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
@@ -54,7 +60,11 @@ public class VehicleService extends Service {
             Log.i(TAG, "Bound to RemoteVehicleService");
             mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
                     service);
+
+            mRemoteBoundLock.lock();
             mIsBound = true;
+            mRemoteBoundCondition.signal();
+            mRemoteBoundLock.unlock();
 
             // in case we had listeners registered before the remote service was
             // connected, sync up here.
@@ -140,10 +150,25 @@ public class VehicleService extends Service {
         }
     }
 
+    public void waitUntilBound() {
+        mRemoteBoundLock.lock();
+        Log.i(TAG, "Waiting for the RemoteVehicleService to bind to " + this);
+        while(!mIsBound) {
+            try {
+                mRemoteBoundCondition.await();
+            } catch(InterruptedException e) {}
+        }
+        Log.i(TAG, mRemoteService + " is now bound");
+        mRemoteBoundLock.unlock();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
+
+        mRemoteBoundLock = new ReentrantLock();
+        mRemoteBoundCondition = mRemoteBoundLock.newCondition();
 
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
