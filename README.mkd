@@ -9,37 +9,6 @@ This Android library contains the tools required to read vehicle data from the
 vehicle's CAN bus through the OpenXC CAN translation module in any Android
 application..
 
-## Installation
-
-To compile and run the test suite on a connected Android device:
-
-    openxc-android/ $ mvn clean install
-
-This will:
-
-* Clean up any existing compiled files
-* Compile, test and package the openxc apklib, and install it to your local
-  Maven repository (usually `~/.m2/repository`)
-* Compile and package the openxc-it integration test apk using the version
-  of the openxc library that you just built.
-* Re-install the openxc-it package to the connected Android device (either
-  an emulator or tablet).
-* Run the instrumentation tests in the openxc-it package on the device
-
-At the moment, the instrumentation tests block waiting for a debugger to attach.
-Fire up Eclipse and the DDMS perspective (a part of the Eclipse ADT from
-Google), find the openxc process in the list (it should have a red bug next to
-it) and click the green bug icon to start debugging the process. Once you've
-enabled debugging once, it should do so automatically each time you run the
-tests for this Eclipse session.
-
-If you don't wish the tests to wait for a debugger, change the `testDebug`
-setting in `openxc-android/pom.xml` to `false`.
-
-To deploy the examples to a device:
-
-    $ mvn android:deploy -Dandroid.file=examples/target/openxc-examples.apk
-
 ## Usage
 
 Vehicle measurements are accessed through an [Android service][services]. Your
@@ -163,6 +132,37 @@ openxc-android project in Eclipse are:
     * Repeat for the openxc-examples project.
 * There should be no changes in the repository at this point (`git status`
   should report nothing) and there should be no errors in Eclipse.
+
+### Installation
+
+To compile and run the test suite on a connected Android device:
+
+    openxc-android/ $ mvn clean install
+
+This will:
+
+* Clean up any existing compiled files
+* Compile, test and package the openxc apklib, and install it to your local
+  Maven repository (usually `~/.m2/repository`)
+* Compile and package the openxc-it integration test apk using the version
+  of the openxc library that you just built.
+* Re-install the openxc-it package to the connected Android device (either
+  an emulator or tablet).
+* Run the instrumentation tests in the openxc-it package on the device
+
+At the moment, the instrumentation tests block waiting for a debugger to attach.
+Fire up Eclipse and the DDMS perspective (a part of the Eclipse ADT from
+Google), find the openxc process in the list (it should have a red bug next to
+it) and click the green bug icon to start debugging the process. Once you've
+enabled debugging once, it should do so automatically each time you run the
+tests for this Eclipse session.
+
+If you don't wish the tests to wait for a debugger, change the `testDebug`
+setting in `openxc-android/pom.xml` to `false`.
+
+To deploy the examples to a device:
+
+    $ mvn android:deploy -Dandroid.file=examples/target/openxc-examples.apk
 
 ## License
 
