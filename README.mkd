@@ -133,6 +133,23 @@ openxc-android project in Eclipse are:
 * There should be no changes in the repository at this point (`git status`
   should report nothing) and there should be no errors in Eclipse.
 
+### Android SDK and Maven
+
+The most recent version of the Android SDK currently available in the central
+Maven repository is 2.3. You'll need to install a more recent version in your
+own local repository.
+
+The recommended method is using the
+[maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer).
+All you should need is to set the `ANDROID_HOME` environment variable (see the
+project's README for more details) and run:
+
+    $ mvn install -P 3.1
+
+If you have a remote Maven repository you share with others, I'm sure they would
+thank you if you uploaded the resulting files - that way, nobody needs to do
+this part.
+
 ### Installation
 
 To compile and run the test suite on a connected Android device:
