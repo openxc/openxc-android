@@ -88,8 +88,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedBooleanCallback);
-        assertTrue(receivedNumber == 42.0 || receivedNumber == 94.1 ||
-                receivedNumber == 11.0);
         assertEquals(receivedBoolean, false);
     }
 

@@ -1,0 +1,21 @@
+package com.openxc.measurements;
+
+import com.openxc.units.Degree;
+import com.openxc.util.Range;
+
+public class Latitude extends Measurement<Degree>
+        implements VehicleMeasurement {
+    private final static Range<Degree> RANGE = new Range<Degree>(
+            new Degree(-89.0), new Degree(89.0));
+    public final static String ID = "latitude";
+
+    public Latitude() { }
+
+    public Latitude(Degree value) {
+        super(value, RANGE);
+    }
+
+    public Latitude(Double value) {
+        this(new Degree(value));
+    }
+}
