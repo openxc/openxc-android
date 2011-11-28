@@ -3,3 +3,5 @@
 {"name": "steering_wheel_angle", "value": 94.1}
 {"name": "transmission_gear_position", "value": "FIRST"}
 {"name": "brake_pedal_status", "value": false}
+{"name": "latitude", "value": 45.123}
+{"name": "longitude", "value": 120.442}
