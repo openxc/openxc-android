@@ -30,7 +30,7 @@ public abstract class JsonVehicleDataSource
         try {
             message = new JSONObject(json);
         } catch(JSONException e) {
-            Log.i(TAG, "Couldn't decode JSON from: " + json);
+            Log.w(TAG, "Couldn't decode JSON from: " + json);
             return;
         }
 
