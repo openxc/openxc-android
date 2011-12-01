@@ -116,6 +116,9 @@ works fine if you're an Eclipse user. The recommended steps to set up the
 openxc-android project in Eclipse are:
 
 * Install [Eclipse](http://www.eclipse.org/downloads/) Indigo or later
+    * The Java Developer version is the best choice to start - other editions
+      don't include Maven integration, so you will have to install that
+      manually.
 * Install the [ADT plugin](http://developer.android.com/sdk/eclipse-adt.html)
   from Google
 * Clone the [openxc-android](https://github.com/openxc/openxc-android] repo
