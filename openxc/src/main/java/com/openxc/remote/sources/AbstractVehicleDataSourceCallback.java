@@ -14,6 +14,6 @@ public abstract class AbstractVehicleDataSourceCallback implements
     }
 
     public void receive(String name, String value) {
-        receive(name, new Double(value.hashCode()));
+        receive(name, new Double(value.toUpperCase().hashCode()));
     }
 }
