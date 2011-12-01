@@ -111,7 +111,7 @@ public class RemoteVehicleService extends Service {
             resource = intent.getExtras().getString(
                     DATA_SOURCE_RESOURCE_EXTRA);
         }
-        initializeDataSource(dataSource, resource);
+        mDataSource = initializeDataSource(dataSource, resource);
         return mBinder;
     }
 
