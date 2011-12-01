@@ -152,6 +152,10 @@ this part.
 
 ### Installation
 
+NOTE: This is also possible from Eclipse directly, I just haven't done it
+myself. If you want to do it and add to this documentation, you're more than
+welcome.
+
 To compile and run the test suite on a connected Android device:
 
     openxc-android/ $ mvn clean install
