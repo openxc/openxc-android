@@ -213,10 +213,18 @@ public class VehicleService extends Service {
     }
 
     public void unbindRemote() {
+        if(mRemoteBoundLock != null) {
+            mRemoteBoundLock.lock();
+        }
+
         if(mIsBound) {
             Log.i(TAG, "Unbinding from RemoteVehicleService");
             unbindService(mConnection);
             mIsBound = false;
+        }
+
+        if(mRemoteBoundLock != null) {
+            mRemoteBoundLock.unlock();
         }
     }
 
