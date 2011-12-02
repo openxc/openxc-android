@@ -75,7 +75,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                                     mConnection);
                         } catch(UsbDeviceException e) {
                             Log.w("Couldn't open USB device", e);
-                            stop();
                         } finally {
                             mDevicePermissionChanged.signal();
                             mDeviceConnectionLock.unlock();
