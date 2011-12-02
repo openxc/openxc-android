@@ -115,7 +115,14 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
-        setupDevice(mManager, vendorFromUri(device), productFromUri(device));
+        int vendor = vendorFromUri(device);
+        int product = productFromUri(device);
+        try {
+            setupDevice(mManager, vendor, product);
+        } catch(VehicleDataSourceException e) {
+            Log.i(TAG, "Unable to load USB device -- waiting for it to appear",
+                    e);
+        }
     }
 
     public UsbVehicleDataSource(Context context,
@@ -153,6 +160,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     public void stop() {
         Log.d(TAG, "Stopping USB listener");
         mRunning = false;
+        mDeviceConnectionLock.lock();
+        mDevicePermissionChanged.signal();
+        mDeviceConnectionLock.unlock();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -163,6 +173,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         StringBuffer buffer = new StringBuffer();
         while(mRunning && mConnection != null) {
             waitForDeviceConnection();
+            if(!mRunning) {
+                break;
+            }
+
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
@@ -176,13 +190,16 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     private void waitForDeviceConnection() {
+        Log.d(TAG, "Waiting for a new device connection");
         mDeviceConnectionLock.lock();
-        while(mConnection == null) {
+        while(mRunning && mConnection == null) {
+            Log.d(TAG, "Still no device available");
             try {
                 mDevicePermissionChanged.await();
             } catch(InterruptedException e) {}
         }
         mDeviceConnectionLock.unlock();
+        Log.d(TAG, "Found a new device or we're shutting down");
     }
 
     private void parseStringBuffer(StringBuffer buffer) {

@@ -66,27 +66,16 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
 
 
     @SmallTest
-    public void testDefaultDevice() {
-        try {
-            source = new UsbVehicleDataSource(getContext(), callback);
-            startSource(source);
-            startSource(source);
-        } catch(VehicleDataSourceException e) {
-            return;
-        }
-        Assert.fail("Expected a VehicleDataSourceException");
+    public void testDefaultDevice() throws VehicleDataSourceException {
+        source = new UsbVehicleDataSource(getContext(), callback);
+        startSource(source);
     }
 
     @SmallTest
-    public void testCustomDevice() {
-        try {
-            source = new UsbVehicleDataSource(getContext(), callback,
-                    deviceUri);
-            startSource(source);
-        } catch(VehicleDataSourceException e) {
-            return;
-        }
-        Assert.fail("Expected a VehicleDataSourceException");
+    public void testCustomDevice() throws VehicleDataSourceException {
+        source = new UsbVehicleDataSource(getContext(), callback,
+                deviceUri);
+        startSource(source);
     }
 
     @SmallTest
