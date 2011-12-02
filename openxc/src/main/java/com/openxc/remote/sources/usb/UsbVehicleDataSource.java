@@ -36,6 +36,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "UsbVehicleDataSource";
     private static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
+    private static final String USB_DEVICE_ATTACHED =
+        "android.hardware.usb.action.USB_DEVICE_ATTACHED";
+    private static final String USB_DEVICE_DETACHED =
+        "android.hardware.usb.action.USB_DEVICE_DETACHED";
 
     private static URI DEFAULT_USB_DEVICE_URI = null;
     static {
@@ -80,6 +84,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                         Log.d(TAG, "Permission denied for device " + device);
                     }
                 }
+            } else if(USB_DEVICE_ATTACHED.equals(action)) {
+            } else if(USB_DEVICE_DETACHED.equals(action)) {
             }
         }
     };
@@ -152,17 +158,12 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     public void run() {
+        waitForDeviceConnection();
+
         byte[] bytes = new byte[128];
-
-        mDeviceConnectionLock.lock();
-        while(mConnection == null) {
-            try {
-                mDevicePermissionChanged.await();
-            } catch(InterruptedException e) {}
-        }
-
         StringBuffer buffer = new StringBuffer();
         while(mRunning && mConnection != null) {
+            waitForDeviceConnection();
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
@@ -173,6 +174,16 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                 parseStringBuffer(buffer);
             }
         }
+    }
+
+    private void waitForDeviceConnection() {
+        mDeviceConnectionLock.lock();
+        while(mConnection == null) {
+            try {
+                mDevicePermissionChanged.await();
+            } catch(InterruptedException e) {}
+        }
+        mDeviceConnectionLock.unlock();
     }
 
     private void parseStringBuffer(StringBuffer buffer) {
