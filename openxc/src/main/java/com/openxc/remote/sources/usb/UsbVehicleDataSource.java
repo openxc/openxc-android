@@ -76,7 +76,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                 mConnection = null;
                 mDeviceConnectionLock.unlock();
             }
-            Log.d(TAG, "action: " + action);
         }
     };
 
@@ -87,7 +86,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             try {
                 connection = setupDevice(mManager, device);
                 Log.i(TAG, "Connected to USB device with " +
-                        mConnection);
+                        connection);
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
