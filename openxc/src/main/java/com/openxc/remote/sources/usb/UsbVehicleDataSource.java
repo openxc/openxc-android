@@ -71,7 +71,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                                 UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                         try {
                             mConnection = setupDevice(mManager, device);
-                            Log.i(TAG, "Conneceted to USB device with " +
+                            Log.i(TAG, "Connected to USB device with " +
                                     mConnection);
                         } catch(UsbDeviceException e) {
                             Log.w("Couldn't open USB device", e);
@@ -84,8 +84,14 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                     }
                 }
             } else if(USB_DEVICE_ATTACHED.equals(action)) {
+                Log.d(TAG, "Device attached");
             } else if(USB_DEVICE_DETACHED.equals(action)) {
+                Log.d(TAG, "Device detached");
+                mDeviceConnectionLock.lock();
+                mConnection = null;
+                mDeviceConnectionLock.unlock();
             }
+            Log.d(TAG, "action: " + action);
         }
     };
 
@@ -113,6 +119,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
+
+        filter = new IntentFilter();
+        filter.addAction("android.hardware.usb.action.USB_DEVICE_ATTACHED");
+        filter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         int vendor = vendorFromUri(device);
@@ -190,7 +201,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     private void waitForDeviceConnection() {
-        Log.d(TAG, "Waiting for a new device connection");
         mDeviceConnectionLock.lock();
         while(mRunning && mConnection == null) {
             Log.d(TAG, "Still no device available");
@@ -199,7 +209,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             } catch(InterruptedException e) {}
         }
         mDeviceConnectionLock.unlock();
-        Log.d(TAG, "Found a new device or we're shutting down");
     }
 
     private void parseStringBuffer(StringBuffer buffer) {

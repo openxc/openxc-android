@@ -102,6 +102,7 @@ public class RemoteVehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
+        Log.i(TAG, "Service binding in response to " + intent.getAction());
         Bundle extras = intent.getExtras();
         String dataSource = DEFAULT_DATA_SOURCE;
         String resource = null;
