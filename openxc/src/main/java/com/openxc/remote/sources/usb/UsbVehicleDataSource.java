@@ -36,10 +36,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "UsbVehicleDataSource";
     private static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
-    private static final String USB_DEVICE_ATTACHED =
-        "android.hardware.usb.action.USB_DEVICE_ATTACHED";
-    private static final String USB_DEVICE_DETACHED =
-        "android.hardware.usb.action.USB_DEVICE_DETACHED";
 
     private static URI DEFAULT_USB_DEVICE_URI = null;
     static {
@@ -83,9 +79,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                         Log.d(TAG, "Permission denied for device " + device);
                     }
                 }
-            } else if(USB_DEVICE_ATTACHED.equals(action)) {
+            } else if(UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
                 Log.d(TAG, "Device attached");
-            } else if(USB_DEVICE_DETACHED.equals(action)) {
+            } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
                 Log.d(TAG, "Device detached");
                 mDeviceConnectionLock.lock();
                 mConnection = null;
@@ -122,8 +118,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         filter = new IntentFilter();
-        filter.addAction("android.hardware.usb.action.USB_DEVICE_ATTACHED");
-        filter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         int vendor = vendorFromUri(device);
