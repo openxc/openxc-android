@@ -119,8 +119,9 @@ openxc-android project in Eclipse are:
     * The Java Developer version is the best choice to start - other editions
       don't include Maven integration, so you will have to install that
       manually.
-* Install the [ADT plugin](http://developer.android.com/sdk/eclipse-adt.html)
-  from Google
+* Install the [Android SDK](http://developer.android.com/sdk/index.html) and
+  then the [ADT plugin](http://developer.android.com/sdk/eclipse-adt.html)
+  from Google.
 * Clone the [openxc-android](https://github.com/openxc/openxc-android] repo
     (this repo)
 * Open Eclipse and go to `File -> Import -> Maven -> Existing Maven Projects`.
