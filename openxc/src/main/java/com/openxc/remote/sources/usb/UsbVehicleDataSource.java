@@ -190,16 +190,18 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     }
 
     private void waitForDeviceConnection() {
-        Log.d(TAG, "Waiting for a new device connection");
-        mDeviceConnectionLock.lock();
-        while(mRunning && mConnection == null) {
-            Log.d(TAG, "Still no device available");
-            try {
-                mDevicePermissionChanged.await();
-            } catch(InterruptedException e) {}
+        if(mConnection == null) {
+            Log.d(TAG, "Waiting for a new device connection");
+            mDeviceConnectionLock.lock();
+            while(mRunning && mConnection == null) {
+                Log.d(TAG, "Still no device available");
+                try {
+                    mDevicePermissionChanged.await();
+                } catch(InterruptedException e) {}
+            }
+            mDeviceConnectionLock.unlock();
+            Log.d(TAG, "Found a new device or we're shutting down");
         }
-        mDeviceConnectionLock.unlock();
-        Log.d(TAG, "Found a new device or we're shutting down");
     }
 
     private void parseStringBuffer(StringBuffer buffer) {
