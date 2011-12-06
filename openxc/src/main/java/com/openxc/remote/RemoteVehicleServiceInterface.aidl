@@ -1,10 +1,10 @@
 package com.openxc.remote;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
-import com.openxc.remote.RawEventMeasurement;
+import com.openxc.remote.RawMeasurement;
 
 interface RemoteVehicleServiceInterface {
-    RawEventMeasurement get(String measurementType);
+    RawMeasurement get(String measurementType);
 
     void addListener(String measurementType,
             RemoteVehicleServiceListenerInterface listener);

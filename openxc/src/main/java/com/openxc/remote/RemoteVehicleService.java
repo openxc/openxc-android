@@ -45,7 +45,7 @@ public class RemoteVehicleService extends Service {
     private final static String DEFAULT_DATA_SOURCE =
         UsbVehicleDataSource.class.getName();
 
-    private Map<String, RawEventMeasurement> mMeasurements;
+    private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
 
     private Map<String, RemoteCallbackList<
@@ -67,14 +67,14 @@ public class RemoteVehicleService extends Service {
             public void receive(final String measurementId,
                     final Double value) {
                 mMeasurements.put(measurementId,
-                        new RawEventMeasurement(value));
+                        new RawMeasurement(value));
                 queueNotification(measurementId);
             }
 
             public void receive(final String measurementId,
                     final Double value, final Double event) {
                 mMeasurements.put(measurementId,
-                        new RawEventMeasurement(value, event));
+                        new RawMeasurement(value, event));
                 queueNotification(measurementId);
             }
         };
@@ -83,7 +83,7 @@ public class RemoteVehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mMeasurements = new HashMap<String, RawEventMeasurement>();
+        mMeasurements = new HashMap<String, RawMeasurement>();
         mNotificationQueue = new LinkedBlockingQueue<String>();
 
         mListeners = Collections.synchronizedMap(
@@ -187,7 +187,7 @@ public class RemoteVehicleService extends Service {
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
-            public RawEventMeasurement get(String measurementId)
+            public RawMeasurement get(String measurementId)
                     throws RemoteException {
                 return getMeasurement(measurementId);
             }
@@ -223,7 +223,7 @@ public class RemoteVehicleService extends Service {
 
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
-                RawEventMeasurement rawMeasurement =
+                RawMeasurement rawMeasurement =
                     getMeasurement(measurementId);
 
                 int i = callbacks.beginBroadcast();
@@ -242,10 +242,10 @@ public class RemoteVehicleService extends Service {
         }
     };
 
-    private RawEventMeasurement getMeasurement(String measurementId) {
-        RawEventMeasurement rawMeasurement = mMeasurements.get(measurementId);
+    private RawMeasurement getMeasurement(String measurementId) {
+        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
         if(rawMeasurement == null) {
-            rawMeasurement = new RawEventMeasurement();
+            rawMeasurement = new RawMeasurement();
         }
         return rawMeasurement;
     }
