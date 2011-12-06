@@ -187,7 +187,7 @@ public class RemoteVehicleService extends Service {
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
-            public RawMeasurement get(String measurementId)
+            public RawEventMeasurement get(String measurementId)
                     throws RemoteException {
                 return getMeasurement(measurementId);
             }

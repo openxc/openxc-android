@@ -44,19 +44,20 @@ public class RawEventMeasurement extends RawMeasurement {
         mEvent = event;
     }
 
+    public boolean hasEvent() {
+        return mEvent != null && !getEvent().isNaN();
+    }
 
     public boolean isValid() {
-        boolean valid = super.isValid() && !getValue().isNaN();
-        if(mEvent != null) {
-            valid = valid && !getEvent().isNaN();
-        }
-        return valid;
+        return super.isValid() && !getValue().isNaN();
     }
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeDouble(getValue().doubleValue());
         if(getEvent() != null) {
             out.writeDouble(getEvent().doubleValue());
+        } else {
+            out.writeDouble(Double.NaN);
         }
     }
 

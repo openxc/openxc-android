@@ -7,6 +7,7 @@ import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.TransmissionGearPosition;
+import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -112,6 +113,20 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().enumValue(),
                 TransmissionGearPosition.GearPosition.FIRST);
+    }
+
+    @MediumTest
+    public void testGetVehicleButtonEvent()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        VehicleButtonEvent event = (VehicleButtonEvent)
+                service.get(VehicleButtonEvent.class);
+        checkReceivedMeasurement(event);
+        assertEquals(event.getValue().enumValue(),
+                VehicleButtonEvent.ButtonId.OK);
+        assertEquals(event.getAction().enumValue(),
+                VehicleButtonEvent.ButtonAction.PRESSED);
     }
 
     private void pause(int millis) {

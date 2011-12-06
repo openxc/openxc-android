@@ -4,5 +4,5 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RawEventMeasurement;
 
 oneway interface RemoteVehicleServiceListenerInterface {
-    void receive(String measurementType, in RawMeasurement value);
+    void receive(String measurementId, in RawEventMeasurement value);
 }
