@@ -189,7 +189,7 @@ public class RemoteVehicleService extends Service {
         new RemoteVehicleServiceInterface.Stub() {
             public RawMeasurement get(String measurementId)
                     throws RemoteException {
-                return mMeasurements.get(measurementId);
+                return getMeasurement(measurementId);
             }
 
             public void addListener(String measurementId,
@@ -224,7 +224,7 @@ public class RemoteVehicleService extends Service {
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
                 RawEventMeasurement rawMeasurement =
-                    mMeasurements.get(measurementId);
+                    getMeasurement(measurementId);
 
                 int i = callbacks.beginBroadcast();
                 while(i > 0) {
@@ -241,6 +241,14 @@ public class RemoteVehicleService extends Service {
             }
         }
     };
+
+    private RawEventMeasurement getMeasurement(String measurementId) {
+        RawEventMeasurement rawMeasurement = mMeasurements.get(measurementId);
+        if(rawMeasurement == null) {
+            rawMeasurement = new RawEventMeasurement();
+        }
+        return rawMeasurement;
+    }
 
     @Override
     public String toString() {

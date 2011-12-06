@@ -55,7 +55,9 @@ public class RawEventMeasurement extends RawMeasurement {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeDouble(getValue().doubleValue());
-        out.writeDouble(getEvent().doubleValue());
+        if(getEvent() != null) {
+            out.writeDouble(getEvent().doubleValue());
+        }
     }
 
     public void readFromParcel(Parcel in) {
