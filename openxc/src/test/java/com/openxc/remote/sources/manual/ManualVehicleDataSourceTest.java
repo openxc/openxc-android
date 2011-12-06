@@ -17,6 +17,9 @@ public class ManualVehicleDataSourceTest {
         receivedCallback = false;
         source = new ManualVehicleDataSource();
         callback = new AbstractVehicleDataSourceCallback() {
+            public void receive(String name, Double value, Double event) {
+            }
+
             public void receive(String name, Double value) {
                 receivedCallback = true;
             }

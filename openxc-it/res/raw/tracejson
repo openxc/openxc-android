@@ -5,3 +5,4 @@
 {"name": "brake_pedal_status", "value": false}
 {"name": "latitude", "value": 45.123}
 {"name": "longitude", "value": 120.442}
+{"name": "button_event", "value": "ok", "event": "pressed"}
