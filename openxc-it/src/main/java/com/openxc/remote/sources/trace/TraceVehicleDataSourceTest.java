@@ -45,6 +45,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         }
 
         callback = new AbstractVehicleDataSourceCallback() {
+            public void receive(String name, Double value, Double event) {
+            }
+
             public void receive(String name, Double value) {
                 receivedNumericalCallback = true;
                 receivedNumber = value;

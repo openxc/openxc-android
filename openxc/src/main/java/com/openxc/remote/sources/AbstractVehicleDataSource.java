@@ -1,7 +1,5 @@
 package com.openxc.remote.sources;
 
-import java.io.IOException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -13,6 +11,7 @@ public abstract class AbstractVehicleDataSource
         implements VehicleDataSourceInterface {
 
     private static final String TAG = "AbstractVehicleDataSource";
+    private static final String RECEIVE_METHOD_NAME = "receive";
 
     private VehicleDataSourceCallbackInterface mCallback;
     private Context mContext;
@@ -35,20 +34,40 @@ public abstract class AbstractVehicleDataSource
     }
 
     protected void handleMessage(String name, Object value) {
+        handleMessage(name, value, null);
+    }
+
+    protected void handleMessage(String name, Object value, Object event) {
         if(mCallback != null) {
             Method method;
             try {
-                method = VehicleDataSourceCallbackInterface.class.getMethod(
-                        "receive", String.class, value.getClass());
+                if(event != null) {
+                    method = VehicleDataSourceCallbackInterface.class.getMethod(
+                            RECEIVE_METHOD_NAME, String.class,
+                            value.getClass(), event.getClass());
+                } else {
+                    method = VehicleDataSourceCallbackInterface.class.getMethod(
+                            RECEIVE_METHOD_NAME, String.class,
+                            value.getClass());
+                }
             } catch(NoSuchMethodException e) {
-                Log.w(TAG, "Received data of an unsupported type from the " +
-                        "data source: " + value + ", a " + value.getClass());
+                String logMessage = "Received data of an unsupported type " +
+                    "from the data source: " + value + ", a " +
+                    value.getClass();
+                if(event != null) {
+                    logMessage += " and event " + event + ", a " +
+                        event.getClass();
+                }
+                Log.w(TAG, logMessage);
                 return;
             }
 
             try {
-                // TODO does these cast value properly to the right type?
-                method.invoke(mCallback, name, value);
+                if(event != null) {
+                    method.invoke(mCallback, name, value, event);
+                } else {
+                    method.invoke(mCallback, name, value);
+                }
             } catch(IllegalAccessException e) {
                 Log.w(TAG, "Data receiver method is private", e);
             } catch(InvocationTargetException e) {

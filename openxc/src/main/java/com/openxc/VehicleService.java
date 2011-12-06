@@ -20,6 +20,7 @@ import com.google.common.collect.Multimap;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
+import com.openxc.remote.RawEventMeasurement;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
@@ -111,6 +112,9 @@ public class VehicleService extends Service {
 
     private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
+            public void receive(String measurementId,
+                    RawEventMeasurement value) {
+            }
             public void receive(String measurementId,
                     RawMeasurement value) {
                 Log.d(TAG, "Received " + measurementId + ": " +
