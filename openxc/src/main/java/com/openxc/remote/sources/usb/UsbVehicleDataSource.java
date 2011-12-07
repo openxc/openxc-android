@@ -63,7 +63,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
                 if(intent.getBooleanExtra(
                             UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                    mConnection = openDeviceConnection(device);
+                    openDeviceConnection(device);
                 } else {
                     Log.i(TAG, "User declined permission for device " +
                             device);
@@ -76,14 +76,13 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
     };
 
-    private UsbDeviceConnection openDeviceConnection(UsbDevice device) {
-        UsbDeviceConnection connection = null;
+    private void openDeviceConnection(UsbDevice device) {
         mDeviceConnectionLock.lock();
         if (device != null) {
             try {
-                connection = setupDevice(mManager, device);
+                mConnection = setupDevice(mManager, device);
                 Log.i(TAG, "Connected to USB device with " +
-                        connection);
+                        mConnection);
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
@@ -93,7 +92,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         } else {
             Log.d(TAG, "Permission denied for device " + device);
         }
-        return connection;
     }
 
     public UsbVehicleDataSource(Context context,
@@ -237,8 +235,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             int productId) throws VehicleDataSourceResourceException {
         UsbDevice device = findDevice(manager, vendorId, productId);
         if(manager.hasPermission(device)) {
+            Log.d(TAG, "Already have permission to use " + device);
             openDeviceConnection(device);
         } else {
+            Log.d(TAG, "Requesting permission for " + device);
             manager.requestPermission(device, mPermissionIntent);
         }
     }
