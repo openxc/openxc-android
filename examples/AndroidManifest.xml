@@ -18,6 +18,14 @@
               <action android:name="com.openxc.remote.RemoteVehicleServiceInterface" />
           </intent-filter>
       </service>
+      <activity android:name="com.openxc.remote.sources.usb.UsbDeviceAttachmentActivity">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                    android:resource="@xml/device_filter" />
+      </activity>
   </application>
 
   <supports-screens android:largeScreens="true" android:xlargeScreens="true"

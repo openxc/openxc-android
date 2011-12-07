@@ -34,8 +34,10 @@ import android.util.Log;
 
 public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "UsbVehicleDataSource";
-    private static final String ACTION_USB_PERMISSION =
+    public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
+    public static final String ACTION_USB_DEVICE_ATTACHED =
+            "com.ford.openxc.USB_DEVICE_ATTACHED";
 
     private static URI DEFAULT_USB_DEVICE_URI = null;
     static {
@@ -57,6 +59,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.d(TAG, "FOO Intent received with action " + action);
             if (ACTION_USB_PERMISSION.equals(action)) {
                 UsbDevice device = (UsbDevice) intent.getParcelableExtra(
                         UsbManager.EXTRA_DEVICE);
@@ -68,7 +71,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                     Log.i(TAG, "User declined permission for device " +
                             device);
                 }
-            } else if(UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+            } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+                Log.d(TAG, "Device attached");
             } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
                 Log.d(TAG, "Device detached");
                 disconnectDevice();
@@ -121,7 +125,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         filter = new IntentFilter();
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(ACTION_USB_DEVICE_ATTACHED);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
+
+        filter = new IntentFilter();
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
@@ -169,7 +176,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
     private void disconnectDevice() {
         if(mConnection != null) {
-            Log.d(TAG, "Closing connection " + mConnection + " with USB device");
+            Log.d(TAG, "Closing connection " + mConnection +
+                    " with USB device");
             mDeviceConnectionLock.lock();
             mConnection.close();
             mConnection = null;
