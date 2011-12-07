@@ -85,6 +85,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                 }
             } else if(USB_DEVICE_ATTACHED.equals(action)) {
             } else if(USB_DEVICE_DETACHED.equals(action)) {
+                disconnectDevice();
             }
         }
     };
@@ -113,6 +114,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        filter.addAction(USB_DEVICE_ATTACHED);
+        filter.addAction(USB_DEVICE_DETACHED);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         int vendor = vendorFromUri(device);
@@ -157,6 +160,16 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
     }
 
+    private void disconnectDevice() {
+        if(mConnection != null) {
+            Log.d(TAG, "Closing connection " + mConnection + " with USB device");
+            mDeviceConnectionLock.lock();
+            mConnection.close();
+            mConnection = null;
+            mDeviceConnectionLock.unlock();
+        }
+    }
+
     public void stop() {
         Log.d(TAG, "Stopping USB listener");
         mRunning = false;
@@ -173,10 +186,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         StringBuffer buffer = new StringBuffer();
         while(mRunning && mConnection != null) {
             waitForDeviceConnection();
-            if(!mRunning) {
+
+            mDeviceConnectionLock.lock();
+            if(!mRunning || mConnection == null) {
                 break;
             }
-
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
@@ -186,6 +200,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
                 parseStringBuffer(buffer);
             }
+            mDeviceConnectionLock.unlock();
         }
     }
 
