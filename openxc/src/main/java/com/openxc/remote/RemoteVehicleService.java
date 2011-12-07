@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import java.util.concurrent.TimeUnit;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,9 +91,6 @@ public class RemoteVehicleService extends Service {
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
-
-        mNotificationThread = new NotificationThread();
-        mNotificationThread.start();
     }
 
     @Override
@@ -102,7 +101,7 @@ public class RemoteVehicleService extends Service {
         }
 
         if(mNotificationThread != null) {
-            mNotificationThread.done();
+            Log.d(TAG, "Interrupting notification thread");
             mNotificationThread.interrupt();
         }
         // TODO loop over and kill all callbacks in remote callback list
@@ -121,6 +120,9 @@ public class RemoteVehicleService extends Service {
             resource = intent.getExtras().getString(
                     DATA_SOURCE_RESOURCE_EXTRA);
         }
+
+        mNotificationThread = new NotificationThread();
+        mNotificationThread.start();
         mDataSource = initializeDataSource(dataSource, resource);
         return mBinder;
     }
@@ -210,21 +212,24 @@ public class RemoteVehicleService extends Service {
     };
 
     private class NotificationThread extends Thread {
-        private boolean mRunning = true;
-
-        public void done() {
-            mRunning = false;
-        }
-
         public void run() {
-            while(mRunning) {
+            while(!isInterrupted()) {
                 String measurementId = null;
                 try {
-                    measurementId = mNotificationQueue.take();
+                    // A context switch right can cause a race condition if we
+                    // used take() instead of poll(), when mRunning is set to
+                    // false and interrupt is called but we haven't called
+                    // take() yet, so nobody is waiting.
+                    measurementId = mNotificationQueue.poll(1,
+                            TimeUnit.SECONDS);
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +
                             "item for notification -- likely shutting down");
                     return;
+                }
+
+                if(measurementId == null) {
+                    continue;
                 }
 
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
@@ -245,6 +250,7 @@ public class RemoteVehicleService extends Service {
                 }
                 callbacks.finishBroadcast();
             }
+            Log.d(TAG, "Stopped USB listener");
         }
     };
 
