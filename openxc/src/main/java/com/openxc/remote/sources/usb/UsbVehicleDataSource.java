@@ -54,12 +54,13 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private final URI mDeviceUri;
     private final Lock mDeviceConnectionLock;
     private final Condition mDevicePermissionChanged;
+    private int mVendorId;
+    private int mProductId;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d(TAG, "FOO Intent received with action " + action);
             if (ACTION_USB_PERMISSION.equals(action)) {
                 UsbDevice device = (UsbDevice) intent.getParcelableExtra(
                         UsbManager.EXTRA_DEVICE);
@@ -73,6 +74,12 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                 }
             } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
                 Log.d(TAG, "Device attached");
+                try {
+                    setupDevice(mManager, mVendorId, mProductId);
+                } catch(VehicleDataSourceException e) {
+                    Log.i(TAG, "Unable to load USB device -- waiting for it " +
+                            "to appear", e);
+                }
             } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
                 Log.d(TAG, "Device detached");
                 disconnectDevice();
@@ -81,8 +88,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     };
 
     private void openDeviceConnection(UsbDevice device) {
-        mDeviceConnectionLock.lock();
         if (device != null) {
+            mDeviceConnectionLock.lock();
             try {
                 mConnection = setupDevice(mManager, device);
                 Log.i(TAG, "Connected to USB device with " +
@@ -132,10 +139,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
-        int vendor = vendorFromUri(device);
-        int product = productFromUri(device);
+        mVendorId = vendorFromUri(device);
+        mProductId = productFromUri(device);
         try {
-            setupDevice(mManager, vendor, product);
+            setupDevice(mManager, mVendorId, mProductId);
         } catch(VehicleDataSourceException e) {
             Log.i(TAG, "Unable to load USB device -- waiting for it to appear",
                     e);
