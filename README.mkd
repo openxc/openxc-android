@@ -109,6 +109,17 @@ position:
     range = measurement.getRange();
     int percentage = measurement.getValue() / range;
 
+## Testing
+
+### Button Events
+
+Unfortunately the Android emulator does not allow us to send arbitrary events
+from button presses without editing the source. In order to test your button
+event handlers, the recommended method it to write them in such a way that they
+can accept either VehicleButtonEvents or regular Android key events as input.
+You may want a flag to disable the Android key events when running in
+production.
+
 ## Contributing
 
 We'd love your input - the project is organized as a Maven project, but also
