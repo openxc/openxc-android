@@ -114,9 +114,6 @@ public class VehicleService extends Service {
         new RemoteVehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId,
                     RawMeasurement value) {
-                Log.d(TAG, "Received " + measurementId + ": " +
-                        value + " from remote service");
-
                 Class<? extends VehicleMeasurement> measurementClass =
                     mMeasurementIdToClass.get(measurementId);
                 VehicleMeasurement measurement;
