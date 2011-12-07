@@ -103,6 +103,7 @@ public class RemoteVehicleService extends Service {
 
         if(mNotificationThread != null) {
             mNotificationThread.done();
+            mNotificationThread.interrupt();
         }
         // TODO loop over and kill all callbacks in remote callback list
     }
@@ -219,7 +220,11 @@ public class RemoteVehicleService extends Service {
                 String measurementId = null;
                 try {
                     measurementId = mNotificationQueue.take();
-                } catch(InterruptedException e) {}
+                } catch(InterruptedException e) {
+                    Log.d(TAG, "Interrupted while waiting for a new " +
+                            "item for notification -- likely shutting down");
+                    return;
+                }
 
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
