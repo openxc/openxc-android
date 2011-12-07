@@ -30,13 +30,14 @@ public abstract class JsonVehicleDataSource
         try {
             message = new JSONObject(json);
         } catch(JSONException e) {
-            Log.i(TAG, "Couldn't decode JSON from: " + json);
+            Log.w(TAG, "Couldn't decode JSON from: " + json);
             return;
         }
 
         try {
             handleMessage(message.getString("name"),
-                    message.get("value"));
+                    message.get("value"),
+                    message.opt("event"));
             return;
         } catch(JSONException e) {
             Log.w(TAG, "JSON message didn't have the expected format: "

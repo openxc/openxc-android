@@ -45,7 +45,7 @@ public class RemoteVehicleService extends Service {
     private final static String DEFAULT_DATA_SOURCE =
         UsbVehicleDataSource.class.getName();
 
-    private Map<String, Double> mMeasurements;
+    private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
 
     private Map<String, RemoteCallbackList<
@@ -66,7 +66,15 @@ public class RemoteVehicleService extends Service {
 
             public void receive(final String measurementId,
                     final Double value) {
-                mMeasurements.put(measurementId, value);
+                mMeasurements.put(measurementId,
+                        new RawMeasurement(value));
+                queueNotification(measurementId);
+            }
+
+            public void receive(final String measurementId,
+                    final Double value, final Double event) {
+                mMeasurements.put(measurementId,
+                        new RawMeasurement(value, event));
                 queueNotification(measurementId);
             }
         };
@@ -75,7 +83,7 @@ public class RemoteVehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mMeasurements = new HashMap<String, Double>();
+        mMeasurements = new HashMap<String, RawMeasurement>();
         mNotificationQueue = new LinkedBlockingQueue<String>();
 
         mListeners = Collections.synchronizedMap(
@@ -95,6 +103,7 @@ public class RemoteVehicleService extends Service {
 
         if(mNotificationThread != null) {
             mNotificationThread.done();
+            mNotificationThread.interrupt();
         }
         // TODO loop over and kill all callbacks in remote callback list
     }
@@ -182,7 +191,7 @@ public class RemoteVehicleService extends Service {
         new RemoteVehicleServiceInterface.Stub() {
             public RawMeasurement get(String measurementId)
                     throws RemoteException {
-                return new RawMeasurement(mMeasurements.get(measurementId));
+                return getMeasurement(measurementId);
             }
 
             public void addListener(String measurementId,
@@ -212,17 +221,23 @@ public class RemoteVehicleService extends Service {
                 String measurementId = null;
                 try {
                     measurementId = mNotificationQueue.take();
-                } catch(InterruptedException e) {}
+                } catch(InterruptedException e) {
+                    Log.d(TAG, "Interrupted while waiting for a new " +
+                            "item for notification -- likely shutting down");
+                    return;
+                }
+
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
+                RawMeasurement rawMeasurement =
+                    getMeasurement(measurementId);
 
                 int i = callbacks.beginBroadcast();
                 while(i > 0) {
                     i--;
                     try {
                         callbacks.getBroadcastItem(i).receive(measurementId,
-                                new RawMeasurement(
-                                    mMeasurements.get(measurementId)));
+                                rawMeasurement);
                     } catch(RemoteException e) {
                         Log.w(TAG, "Couldn't notify application " +
                                 "listener -- did it crash?", e);
@@ -232,6 +247,14 @@ public class RemoteVehicleService extends Service {
             }
         }
     };
+
+    private RawMeasurement getMeasurement(String measurementId) {
+        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
+        if(rawMeasurement == null) {
+            rawMeasurement = new RawMeasurement();
+        }
+        return rawMeasurement;
+    }
 
     @Override
     public String toString() {

@@ -69,12 +69,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                             device);
                 }
             } else if(UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
-                Log.d(TAG, "Device attached");
             } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
                 Log.d(TAG, "Device detached");
-                mDeviceConnectionLock.lock();
-                mConnection = null;
-                mDeviceConnectionLock.unlock();
+                disconnectDevice();
             }
         }
     };
@@ -172,6 +169,16 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
     }
 
+    private void disconnectDevice() {
+        if(mConnection != null) {
+            Log.d(TAG, "Closing connection " + mConnection + " with USB device");
+            mDeviceConnectionLock.lock();
+            mConnection.close();
+            mConnection = null;
+            mDeviceConnectionLock.unlock();
+        }
+    }
+
     public void stop() {
         Log.d(TAG, "Stopping USB listener");
         mRunning = false;
@@ -188,10 +195,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         StringBuffer buffer = new StringBuffer();
         while(mRunning && mConnection != null) {
             waitForDeviceConnection();
-            if(!mRunning) {
+
+            mDeviceConnectionLock.lock();
+            if(!mRunning || mConnection == null) {
                 break;
             }
-
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
@@ -201,6 +209,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
                 parseStringBuffer(buffer);
             }
+            mDeviceConnectionLock.unlock();
         }
     }
 
