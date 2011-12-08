@@ -101,8 +101,8 @@ public class RemoteVehicleService extends Service {
         }
 
         if(mNotificationThread != null) {
-            Log.d(TAG, "Interrupting notification thread");
-            mNotificationThread.interrupt();
+            mNotificationThread.done();
+            mNotificationThread = null;
         }
         // TODO loop over and kill all callbacks in remote callback list
     }
@@ -121,6 +121,9 @@ public class RemoteVehicleService extends Service {
                     DATA_SOURCE_RESOURCE_EXTRA);
         }
 
+        if(mNotificationThread != null) {
+            mNotificationThread.done();
+        }
         mNotificationThread = new NotificationThread();
         mNotificationThread.start();
         mDataSource = initializeDataSource(dataSource, resource);
@@ -212,14 +215,27 @@ public class RemoteVehicleService extends Service {
     };
 
     private class NotificationThread extends Thread {
+        private boolean mRunning = true;
+
+        private synchronized boolean isRunning() {
+            return mRunning;
+        }
+
+        public synchronized void done() {
+            Log.d(TAG, "Stopping notification thread");
+            mRunning = false;
+            // A context switch right can cause a race condition if we
+            // used take() instead of poll(): when mRunning is set to
+            // false and interrupt is called but we haven't called
+            // take() yet, so nobody is waiting. By using poll we can not be
+            // locked for more than 1s.
+            interrupt();
+        }
+
         public void run() {
-            while(!isInterrupted()) {
+            while(isRunning()) {
                 String measurementId = null;
                 try {
-                    // A context switch right can cause a race condition if we
-                    // used take() instead of poll(), when mRunning is set to
-                    // false and interrupt is called but we haven't called
-                    // take() yet, so nobody is waiting.
                     measurementId = mNotificationQueue.poll(1,
                             TimeUnit.SECONDS);
                 } catch(InterruptedException e) {

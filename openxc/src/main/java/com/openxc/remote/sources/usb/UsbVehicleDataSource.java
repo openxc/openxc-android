@@ -169,7 +169,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
     private void disconnectDevice() {
         if(mConnection != null) {
-            Log.d(TAG, "Closing connection " + mConnection + " with USB device");
+            Log.d(TAG, "Closing connection " + mConnection +
+                    " with USB device");
             mDeviceConnectionLock.lock();
             mConnection.close();
             mConnection = null;
@@ -191,12 +192,12 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
         byte[] bytes = new byte[128];
         StringBuffer buffer = new StringBuffer();
-        while(mRunning && mConnection != null) {
+        while(mRunning) {
             waitForDeviceConnection();
 
             mDeviceConnectionLock.lock();
-            if(!mRunning || mConnection == null) {
-                break;
+            if(mConnection == null) {
+                continue;
             }
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
@@ -209,6 +210,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             }
             mDeviceConnectionLock.unlock();
         }
+        Log.d(TAG, "Stopped USB listener");
     }
 
     private void waitForDeviceConnection() {
