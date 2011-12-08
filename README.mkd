@@ -109,6 +109,52 @@ position:
     range = measurement.getRange();
     int percentage = measurement.getValue() / range;
 
+## Testing
+
+### Button Events
+
+Unfortunately the Android emulator does not allow us to send arbitrary events
+from button presses without editing the source. In order to test your button
+event handlers, the recommended method it to write them in such a way that they
+can accept either VehicleButtonEvents or regular Android key events as input.
+You may want a flag to disable the Android key events when running in
+production.
+
+### Emulated Vehicle Measurements
+
+The library ships with a method for playing back previously recorded vehicle
+measurement trace files for testing. The `VehicleMeasurement` objects received
+by your application are identical to those received from a live vehicle.
+
+The trace file format is simply a plain text file of OpenXC JSON messages
+separated by newlines, e.g.:
+
+    {"name": "vehicle_speed", "value": 42}
+    {"name": "windshield_wiper_speed", "value": 11}
+    {"name": "steering_wheel_angle", "value": 94.1}
+    {"name": "transmission_gear_position", "value": "FIRST"}
+
+In fact, this is the same method used by some of the instrumentation tests. Once
+you've created a file either by recording the output of the CAN translator
+module or building one by hand, add it to your testing application's raw
+resources (`yourapp/res/raw/yourtrace`). When binding with the
+`VehicleService`, specify the type of data source and your trace file:
+
+        Intent startIntent = new Intent();
+        startIntent.setClass(getContext(), VehicleService.class);
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
+                TraceVehicleDataSource.class.getName());
+        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
+                "resource://" + R.raw.yourtrace);
+        service = ((VehicleService.VehicleServiceBinder)
+                bindService(startIntent)).getService();
+        service.waitUntilBound();
+
+The final `service.waitUntilBound()` line is optional - it causes the thread to
+block until the service is ready to start playing back the trace - but can be
+useful for testing when you need to make sure you will get a measurement back
+from the system.
+
 ## Contributing
 
 We'd love your input - the project is organized as a Maven project, but also

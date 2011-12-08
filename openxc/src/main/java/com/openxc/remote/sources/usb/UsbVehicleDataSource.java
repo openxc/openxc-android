@@ -206,12 +206,12 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
         byte[] bytes = new byte[128];
         StringBuffer buffer = new StringBuffer();
-        while(mRunning && mConnection != null) {
+        while(mRunning) {
             waitForDeviceConnection();
 
             mDeviceConnectionLock.lock();
-            if(!mRunning || mConnection == null) {
-                break;
+            if(mConnection == null) {
+                continue;
             }
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
@@ -224,6 +224,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             }
             mDeviceConnectionLock.unlock();
         }
+        Log.d(TAG, "Stopped USB listener");
     }
 
     private void waitForDeviceConnection() {
