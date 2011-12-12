@@ -39,6 +39,21 @@ import android.os.RemoteException;
 
 import android.util.Log;
 
+/**
+ * The VehicleService is an in-process Android service and the primary entry
+ * point into the OpenXC library.
+ *
+ * An OpenXC application should bind to this service and request vehicle
+ * measurements through it either synchronously or asynchronously. The service
+ * will shut down when no more clients are bound to it.
+ *
+ * Synchronous measurements are obtained by passing the type of the desired
+ * measurement to the get method.
+ *
+ * Asynchronous measurements are obtained by defining a
+ * VehicleMeasurement.Listener object and passing it to the service via the
+ * addListener method.
+ */
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";
 
@@ -54,6 +69,177 @@ public class VehicleService extends Service {
             mMeasurementIdToClass;
     private BiMap<Class<? extends VehicleMeasurement>, String>
             mMeasurementClassToId;
+
+    /**
+     * Binder to connect IBinder in a ServiceConnection with the VehicleService.
+     *
+     * This class is used in the onServiceConnected method of a
+     * ServiceConnection in a client of this service - the IBinder given to the
+     * application can be cast to the VehicleServiceBinder to retrieve the
+     * actual service instance. This is required to actaully call any of its
+     * methods.
+     */
+    public class VehicleServiceBinder extends Binder {
+        /*
+         * Return this Binder's parent VehicleService instance.
+         *
+         * @return an instance of VehicleService.
+         */
+        public VehicleService getService() {
+            return VehicleService.this;
+        }
+    }
+
+    /**
+     * Block until the VehicleService is alive and can return measurements.
+     *
+     * Most applications don't need this and don't wait this method, but it can
+     * be useful for testing when you need to make sure you will get a
+     * measurement back from the system.
+     */
+    public void waitUntilBound() {
+        mRemoteBoundLock.lock();
+        Log.i(TAG, "Waiting for the RemoteVehicleService to bind to " + this);
+        while(!mIsBound) {
+            try {
+                mRemoteBoundCondition.await();
+            } catch(InterruptedException e) {}
+        }
+        Log.i(TAG, mRemoteService + " is now bound");
+        mRemoteBoundLock.unlock();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "Service starting");
+
+        mRemoteBoundLock = new ReentrantLock();
+        mRemoteBoundCondition = mRemoteBoundLock.newCondition();
+
+        mListeners = HashMultimap.create();
+        mListeners = Multimaps.synchronizedMultimap(mListeners);
+        mMeasurementIdToClass = HashBiMap.create();
+        mMeasurementClassToId = HashBiMap.create();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "Service being destroyed");
+        unbindRemote();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.i(TAG, "Service binding in response to " + intent);
+        bindRemote(intent);
+        return mBinder;
+    }
+
+    /**
+     * Retrieve a VehicleMeasurement from the current data source.
+     *
+     * Regardless of if a measurement is available or not, return a
+     * VehicleMeasurement instance of the specified type. The measurement can be
+     * checked to see if it has a value.
+     *
+     * @param measurementType The class of the requested VehicleMeasurement
+     *      (e.g. VehicleSpeed.class)
+     * @return An instance of the requested VehicleMeasurement which may or may
+     *      not have a value.
+     * @throws UnrecognizedMeasurementTypeException if passed a class that does
+     *      not extend VehicleMeasurement
+     * @see VehicleMeasurement
+     */
+    public VehicleMeasurement get(
+            Class<? extends VehicleMeasurement> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+
+        cacheMeasurementId(measurementType);
+
+        if(mRemoteService == null) {
+            Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
+                    "returning an empty measurement");
+            return constructBlankMeasurement(measurementType);
+        }
+
+        Log.d(TAG, "Looking up measurement for " + measurementType);
+        try {
+            RawMeasurement rawMeasurement = mRemoteService.get(
+                    mMeasurementClassToId.get(measurementType));
+            return getMeasurementFromRaw(measurementType, rawMeasurement);
+        } catch(RemoteException e) {
+            Log.w(TAG, "Unable to get value from remote vehicle service", e);
+            return constructBlankMeasurement(measurementType);
+        }
+    }
+
+    /**
+     * Register to receive async updates for a specific VehicleMeasurement type.
+     *
+     * Use this method to register an object implementing the
+     * VehicleMeasurement.Listener interface to receive real-time updates
+     * whenever a new value is received for the specified measurementType.
+     *
+     * @param measurementType The class of the requested VehicleMeasurement
+     *      (e.g. VehicleSpeed.class)
+     * @param listener An object implementing the VehicleMeasurement.Listener
+     *      interface that should be called with any new measurements.
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      registered with the library internals - an exceptional situation that
+     *      shouldn't occur.
+     * @throws UnrecognizedMeasurementTypeException if passed a class that does
+     *      not extend VehicleMeasurement
+     */
+    public void addListener(
+            Class<? extends VehicleMeasurement> measurementType,
+            VehicleMeasurement.Listener listener)
+            throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
+        Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
+        cacheMeasurementId(measurementType);
+        mListeners.put(measurementType, listener);
+
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.addListener(
+                        mMeasurementClassToId.get(measurementType),
+                        mRemoteListener);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to register listener with remote vehicle " +
+                        "service", e);
+            }
+        }
+    }
+
+    public void removeListener(Class<? extends VehicleMeasurement>
+            measurementType, VehicleMeasurement.Listener listener)
+            throws RemoteVehicleServiceException {
+        Log.i(TAG, "Removing listener " + listener + " from " +
+                measurementType);
+        mListeners.remove(measurementType, listener);
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.removeListener(
+                        mMeasurementClassToId.get(measurementType),
+                        mRemoteListener);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to unregister listener from remote " +
+                        "vehicle service", e);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("bound", mIsBound)
+            .add("numListeners", mListeners.size())
+            .toString();
+    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -156,52 +342,6 @@ public class VehicleService extends Service {
         }
     }
 
-    public class VehicleServiceBinder extends Binder {
-        public VehicleService getService() {
-            return VehicleService.this;
-        }
-    }
-
-    public void waitUntilBound() {
-        mRemoteBoundLock.lock();
-        Log.i(TAG, "Waiting for the RemoteVehicleService to bind to " + this);
-        while(!mIsBound) {
-            try {
-                mRemoteBoundCondition.await();
-            } catch(InterruptedException e) {}
-        }
-        Log.i(TAG, mRemoteService + " is now bound");
-        mRemoteBoundLock.unlock();
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.i(TAG, "Service starting");
-
-        mRemoteBoundLock = new ReentrantLock();
-        mRemoteBoundCondition = mRemoteBoundLock.newCondition();
-
-        mListeners = HashMultimap.create();
-        mListeners = Multimaps.synchronizedMultimap(mListeners);
-        mMeasurementIdToClass = HashBiMap.create();
-        mMeasurementClassToId = HashBiMap.create();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "Service being destroyed");
-        unbindRemote();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.i(TAG, "Service binding in response to " + intent);
-        bindRemote(intent);
-        return mBinder;
-    }
-
     private void bindRemote(Intent triggeringIntent) {
         Log.i(TAG, "Binding to RemoteVehicleService");
         Intent intent = new Intent(
@@ -210,7 +350,7 @@ public class VehicleService extends Service {
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void unbindRemote() {
+    private void unbindRemote() {
         if(mRemoteBoundLock != null) {
             mRemoteBoundLock.lock();
         }
@@ -285,77 +425,5 @@ public class VehicleService extends Service {
                     " isn't valid -- returning a blank measurement");
         }
         return constructBlankMeasurement(measurementType);
-    }
-
-    public VehicleMeasurement get(
-            Class<? extends VehicleMeasurement> measurementType)
-            throws UnrecognizedMeasurementTypeException {
-
-        cacheMeasurementId(measurementType);
-
-        if(mRemoteService == null) {
-            Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
-                    "returning an empty measurement");
-            return constructBlankMeasurement(measurementType);
-        }
-
-        Log.d(TAG, "Looking up measurement for " + measurementType);
-        try {
-            RawMeasurement rawMeasurement = mRemoteService.get(
-                    mMeasurementClassToId.get(measurementType));
-            return getMeasurementFromRaw(measurementType, rawMeasurement);
-        } catch(RemoteException e) {
-            Log.w(TAG, "Unable to get value from remote vehicle service", e);
-            return constructBlankMeasurement(measurementType);
-        }
-    }
-
-    public void addListener(
-            Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement.Listener listener)
-            throws RemoteVehicleServiceException,
-            UnrecognizedMeasurementTypeException {
-        Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
-        cacheMeasurementId(measurementType);
-        mListeners.put(measurementType, listener);
-
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.addListener(
-                        mMeasurementClassToId.get(measurementType),
-                        mRemoteListener);
-            } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
-                        "Unable to register listener with remote vehicle " +
-                        "service", e);
-            }
-        }
-    }
-
-    public void removeListener(Class<? extends VehicleMeasurement>
-            measurementType, VehicleMeasurement.Listener listener)
-            throws RemoteVehicleServiceException {
-        Log.i(TAG, "Removing listener " + listener + " from " +
-                measurementType);
-        mListeners.remove(measurementType, listener);
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.removeListener(
-                        mMeasurementClassToId.get(measurementType),
-                        mRemoteListener);
-            } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
-                        "Unable to unregister listener from remote " +
-                        "vehicle service", e);
-            }
-        }
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("bound", mIsBound)
-            .add("numListeners", mListeners.size())
-            .toString();
     }
 }
