@@ -11,9 +11,8 @@
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
       </activity>
-      <service android:name="com.openxc.VehicleService" android:exported="true" />
-      <service android:name="com.openxc.remote.RemoteVehicleService" android:process=":remote"
-              android:exported="true">
+      <service android:name="com.openxc.VehicleService"/>
+          <service android:name="com.openxc.remote.RemoteVehicleService" android:process=":remote">
           <intent-filter>
               <action android:name="com.openxc.remote.RemoteVehicleServiceInterface" />
           </intent-filter>
