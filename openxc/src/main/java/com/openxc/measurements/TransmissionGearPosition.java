@@ -2,6 +2,12 @@ package com.openxc.measurements;
 
 import com.openxc.units.State;
 
+/**
+ * The TransmissionGearPosition is the actual current gear of the transmission.
+ *
+ * This measurement is the current actual gear, not the selected or desired gear
+ * by the driver or computer.
+ */
 public class TransmissionGearPosition
         extends Measurement<State<TransmissionGearPosition.GearPosition>>
         implements VehicleMeasurement {

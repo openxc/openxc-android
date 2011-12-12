@@ -2,6 +2,9 @@ package com.openxc.measurements;
 
 import com.openxc.units.Boolean;
 
+/**
+ * The BrakePedalStatus measurement knows if the brake pedal is pressed.
+ */
 public class BrakePedalStatus extends Measurement<Boolean>
         implements VehicleMeasurement {
     public final static String ID = "brake_pedal_status";
