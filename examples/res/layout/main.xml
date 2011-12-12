@@ -18,4 +18,9 @@
             android:text="@string/wiper_speed_label" />
     <TextView android:id="@+id/wiper_speed"
             style="@style/DefaultFont" />
+    <TextView android:id="@+id/brake_pedal_status_label"
+        	style="@style/DefaultFont" 
+    		android:text="@string/brake_pedal_status_label" />
+    <TextView android:id="@+id/brake_pedal_status"
+        	style="@style/DefaultFont"/>
 </LinearLayout>

@@ -37,6 +37,7 @@ public class VehicleDashboardActivity extends Activity {
     private final Handler mHandler = new Handler();
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
+    private TextView mVehicleBrakeStatusView;
     private TextView mWiperSpeedView;
     StringBuffer mBuffer;
 
@@ -77,6 +78,22 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
+    BrakePedalStatus.Listener mBrPedalStatus = new BrakePedalStatus.Listener() {
+    	public void receive(VehicleMeasurement measurement) {
+    		final BrakePedalStatus status = (BrakePedalStatus) measurement;
+    		if(!status.isNone()) {
+    			mHandler.post(new Runnable() {
+    				public void run() {
+    					try{
+    						mVehicleBrakeStatusView.setText(
+    							"" + status.getValue().booleanValue());
+    					} catch(NoValueException e) {}
+    				}
+    			});
+    		}	
+    	}
+    };
+    
     SteeringWheelAngle.Listener mSteeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -108,6 +125,7 @@ public class VehicleDashboardActivity extends Activity {
                         mSpeedListener);
                 mVehicleService.addListener(WindshieldWiperSpeed.class,
                         mWiperListener);
+                mVehicleService.addListener(BrakePedalStatus.class,mBrPedalStatus);
             } catch(RemoteVehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
@@ -136,6 +154,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.vehicle_speed);
         mWiperSpeedView = (TextView) findViewById(
                 R.id.wiper_speed);
+        mVehicleBrakeStatusView = (TextView) findViewById(
+        		R.id.brake_pedal_status);
         mBuffer = new StringBuffer();
     }
 
