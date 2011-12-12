@@ -2,10 +2,19 @@ package com.openxc.util;
 
 import com.google.common.base.Objects;
 
+/**
+ * A Range is a pair of T values that represent a range of values.
+ */
 public class Range<T> {
     private T mMin;
     private T mMax;
 
+    /**
+     * Construct an instance of Range with a min and max value.
+     *
+     * @param min The minimum value for the range.
+     * @param max The maximum value for the range.
+     */
     public Range(T min, T max) {
         mMin = min;
         mMax = max;
