@@ -216,9 +216,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
-                byte[] receivedBytes = new byte[received];
-                System.arraycopy(bytes, 0, receivedBytes, 0, received);
-                buffer.append(new String(receivedBytes));
+                // Creating a new String object for each message causes the
+                // GC to go a little crazy, but I don't see another obvious way
+                // of converting the byte[] to something the StringBuffer can
+                // accept (either char[] or String). See #151.
+                buffer.append(new String(bytes, 0, received));
 
                 parseStringBuffer(buffer);
             }
