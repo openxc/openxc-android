@@ -3,10 +3,8 @@ package com.openxc.measurements;
 import com.openxc.units.MetersPerSecond;
 import com.openxc.util.Range;
 
-/* This may seem like a "psuedo-typedef" class but we're using it it to enforce
- * the binding between the measurement and its unit type. This unfortunately
- * means we have to add constructors because they aren't inherited from
- * Measurement. If you know of a better way, please speak up.
+/**
+ * The VehicleSpeed is the current forward speed of the vehicle.
  */
 public class VehicleSpeed extends Measurement<MetersPerSecond>
         implements VehicleMeasurement {

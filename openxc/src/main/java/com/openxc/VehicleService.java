@@ -148,8 +148,8 @@ public class VehicleService extends Service {
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested VehicleMeasurement which may or may
      *      not have a value.
-     * @throws UnrecognizedMeasurementTypeException if passed a class that does
-     *      not extend VehicleMeasurement
+     * @throws UnrecognizedMeasurementTypeException if passed a measurementType
+     *      that does not extend VehicleMeasurement
      * @see VehicleMeasurement
      */
     public VehicleMeasurement get(
@@ -182,14 +182,14 @@ public class VehicleService extends Service {
      * VehicleMeasurement.Listener interface to receive real-time updates
      * whenever a new value is received for the specified measurementType.
      *
-     * @param measurementType The class of the requested VehicleMeasurement
-     *      (e.g. VehicleSpeed.class)
-     * @param listener An object implementing the VehicleMeasurement.Listener
-     *      interface that should be called with any new measurements.
+     * @param measurementType The class of the VehicleMeasurement
+     *      (e.g. VehicleSpeed.class) the listener was listening for
+     * @param listener An VehicleMeasurement.Listener instance that was
+     *      previously registered with addListener
      * @throws RemoteVehicleServiceException if the listener is unable to be
-     *      registered with the library internals - an exceptional situation that
-     *      shouldn't occur.
-     * @throws UnrecognizedMeasurementTypeException if passed a class that does
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     * @throws UnrecognizedMeasurementTypeException if passed a measurementType
      *      not extend VehicleMeasurement
      */
     public void addListener(
@@ -214,6 +214,22 @@ public class VehicleService extends Service {
         }
     }
 
+    /**
+     * Unregister a previously reigstered VehicleMeasurement.Listener instance.
+     *
+     * When an application is no longer interested in received measurement updates (e.g. when it's pausing or exiting)
+     * it should unregister all previously registered listeners to save on CPU.
+     *
+     * @param measurementType The class of the requested VehicleMeasurement
+     *      (e.g. VehicleSpeed.class)
+     * @param listener An object implementing the VehicleMeasurement.Listener
+     *      interface that should be called with any new measurements.
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      registered with the library internals - an exceptional situation that
+     *      shouldn't occur.
+     * @throws UnrecognizedMeasurementTypeException if passed a class that does
+     *      not extend VehicleMeasurement
+     */
     public void removeListener(Class<? extends VehicleMeasurement>
             measurementType, VehicleMeasurement.Listener listener)
             throws RemoteVehicleServiceException {

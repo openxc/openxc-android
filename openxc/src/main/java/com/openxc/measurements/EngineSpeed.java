@@ -3,6 +3,11 @@ package com.openxc.measurements;
 import com.openxc.units.RotationsPerMinute;
 import com.openxc.util.Range;
 
+/**
+ * The EngineSpeed measurement represents the speed of the engine.
+ *
+ * The valid range for this measurement is from 0 to 8000 RotationsPerMinute.
+ */
 public class EngineSpeed extends Measurement<RotationsPerMinute>
         implements VehicleMeasurement {
     private final static Range<RotationsPerMinute> RANGE =
