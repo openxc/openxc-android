@@ -35,10 +35,6 @@ public class EmptyMeasurementTest {
         measurement.getAge();
     }
 
-    public void testVariance() {
-        assertThat(measurement.getVariance().doubleValue(), equalTo(0.0));
-    }
-
     @Test
     public void testEmptyRangeCheck() {
         assertFalse(measurement.hasRange());
