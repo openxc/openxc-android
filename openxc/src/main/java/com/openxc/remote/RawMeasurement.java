@@ -3,6 +3,18 @@ package com.openxc.remote;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * An untyped measurement used only for the AIDL RemoteVehicleService interface.
+ *
+ * All OpenXC measurements need to be representable by a double so they can be
+ * easily fit through the AIDL interface to RemoteVehicleService. This class
+ * shouldn't be used anywhere else becuase hey, types are important.
+ *
+ * This class implements the Parcelable interface, so it can be used directly as
+ * a return value or function parameter in an AIDL interface.
+ *
+ * @see Measurement
+ */
 public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
         implements Parcelable {
     public static final Parcelable.Creator<RawMeasurement> CREATOR =
