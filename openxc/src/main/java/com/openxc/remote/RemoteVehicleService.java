@@ -4,12 +4,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import java.net.URISyntaxException;
+import java.net.URI;
 
 import java.util.Collections;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import java.util.concurrent.TimeUnit;
 
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
 
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
@@ -29,8 +30,6 @@ import android.app.Service;
 
 import android.content.Context;
 import android.content.Intent;
-
-import java.net.URI;
 
 import android.os.Bundle;
 import android.os.IBinder;
