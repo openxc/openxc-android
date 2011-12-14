@@ -43,7 +43,8 @@ import android.util.Log;
  * a vehicle.
  *
  * Playback will not begin until a callback is set, either via a constructor or
- * the {@link setCallback} function.
+ * the {@link com.openxc.remote.sources.AbstractVehicleDataSource#setCallback(VehicleDataSourceCallbackInterface)}
+ * function.
  */
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";

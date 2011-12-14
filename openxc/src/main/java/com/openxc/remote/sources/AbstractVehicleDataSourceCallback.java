@@ -5,8 +5,8 @@ package com.openxc.remote.sources;
  *
  * Vehicle data sources provide updates via a callback for each individual
  * measurement received. Those wishing to receive the updates must register an
- * object extending this class and implemetning the {@link receive(String,
- * Double)} and {@link receive(String, Double, Double)} methods.
+ * object extending this class and implemetning the {@link #receive(String,
+ * Double)} and {@link #receive(String, Double, Double)} methods.
  *
  * Measurements received with String or Boolean values instead of Double are
  * coered to Double by the other receive() methods in this class - those can
@@ -83,10 +83,10 @@ public abstract class AbstractVehicleDataSourceCallback implements
     /**
      * Receive a data point with a name, double value and double event value.
      *
-     * This method is similar to {@link receive(String, Double)} but also
+     * This method is similar to {@link #receive(String, Double)} but also
      * accepts the optional event parameter for an OpenXC message.
      *
-     * Identical to {@link receive(String, Double)}, the implementation of this
+     * Identical to {@link #receive(String, Double)}, the implementation of this
      * method should not block, lest the vehicle data source get behind in
      * processing data from a source potentially external to the system.
      *

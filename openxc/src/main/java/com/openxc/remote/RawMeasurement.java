@@ -13,7 +13,7 @@ import android.os.Parcelable;
  * This class implements the Parcelable interface, so it can be used directly as
  * a return value or function parameter in an AIDL interface.
  *
- * @see Measurement
+ * @see com.openxc.measurements.Measurement
  */
 public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
         implements Parcelable {

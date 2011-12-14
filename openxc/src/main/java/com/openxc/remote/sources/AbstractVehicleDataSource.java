@@ -37,9 +37,8 @@ public abstract class AbstractVehicleDataSource
     }
 
     /**
-     * Construct a new instance with the given context and set the callback.
+     * Construct a new instance with no context and set the callback.
      *
-     * @param context Current Android content (i.e. an Activity or Service)
      * @param callback An object implementing the
      *      VehicleDataSourceCallbackInterface that should receive data from this
      *      source.

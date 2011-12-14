@@ -46,14 +46,14 @@ import android.util.Log;
  * application requests are eventually propagated back to this service.
  *
  * Applications should not use this service directly, but should bind to the
- * in-process {@link VehicleService} instead - that has an interface that
- * respects Measurement types. The interface used for the RemoteVehicleService
- * is purposefully primative as there are a small set of objects that can be
- * natively marshalled through an AIDL interface.
+ * in-process {@link com.openxc.VehicleService} instead - that has an interface
+ * that respects Measurement types. The interface used for the
+ * RemoteVehicleService is purposefully primative as there are a small set of
+ * objects that can be natively marshalled through an AIDL interface.
  *
  * The service initializes and connects to the vehicle data source when bound.
  * The data source is selected by the application by passing extra data along
- * with the bind Intent - see the {@link onBind(Intent)} method for details.
+ * with the bind Intent - see the {@link #onBind(Intent)} method for details.
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";

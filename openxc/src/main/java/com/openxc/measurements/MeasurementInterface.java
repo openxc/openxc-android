@@ -8,8 +8,8 @@ import com.openxc.util.Range;
  *
  * A Measurement has at least a value and an age, and optionally a range of
  * valid values. It is not required to have a value - users of this class must
- * either catch the NoValueException returned by {@link getValue} or check for
- * validity first with {@link isNone}.
+ * either catch the NoValueException returned by {@link #getValue()} or check for
+ * validity first with {@link #isNone()}.
  */
 public interface MeasurementInterface {
     public boolean isNone();
