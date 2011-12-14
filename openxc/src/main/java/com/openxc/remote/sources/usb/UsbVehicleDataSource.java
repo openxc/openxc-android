@@ -1,7 +1,6 @@
 package com.openxc.remote.sources.usb;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -32,19 +31,27 @@ import android.hardware.usb.UsbManager;
 
 import android.util.Log;
 
+/**
+ * A vehicle data source reading measurements from an OpenXC USB device.
+ *
+ * This class looks for a USB device and expects to read OpenXC-compatible,
+ * newline separated JSON messages in USB bulk transfer packets.
+ *
+ * The device used (if different from the default) can be specified by passing
+ * an custom URI to the constructor. The expected format of this URI is defined
+ * in {@link UsbDeviceUtilities}.
+ *
+ * According to Android's USB device usage requirements, this class requests
+ * permission for the USB device from the user before accessing it. This may
+ * cause a pop-up dialog that the user must dismiss before the data source will
+ * become active.
+ */
 public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "UsbVehicleDataSource";
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
     public static final String ACTION_USB_DEVICE_ATTACHED =
             "com.ford.openxc.USB_DEVICE_ATTACHED";
-
-    private static URI DEFAULT_USB_DEVICE_URI = null;
-    static {
-        try {
-            DEFAULT_USB_DEVICE_URI = new URI("usb://04d8/0053");
-        } catch(URISyntaxException e) { }
-    }
 
     private boolean mRunning;
     private UsbManager mManager;
@@ -57,60 +64,33 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private int mVendorId;
     private int mProductId;
 
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (ACTION_USB_PERMISSION.equals(action)) {
-                UsbDevice device = (UsbDevice) intent.getParcelableExtra(
-                        UsbManager.EXTRA_DEVICE);
-
-                if(intent.getBooleanExtra(
-                            UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                    openDeviceConnection(device);
-                } else {
-                    Log.i(TAG, "User declined permission for device " +
-                            device);
-                }
-            } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
-                Log.d(TAG, "Device attached");
-                try {
-                    setupDevice(mManager, mVendorId, mProductId);
-                } catch(VehicleDataSourceException e) {
-                    Log.i(TAG, "Unable to load USB device -- waiting for it " +
-                            "to appear", e);
-                }
-            } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
-                Log.d(TAG, "Device detached");
-                disconnectDevice();
-            }
-        }
-    };
-
-    private void openDeviceConnection(UsbDevice device) {
-        if (device != null) {
-            mDeviceConnectionLock.lock();
-            try {
-                mConnection = setupDevice(mManager, device);
-                Log.i(TAG, "Connected to USB device with " +
-                        mConnection);
-            } catch(UsbDeviceException e) {
-                Log.w("Couldn't open USB device", e);
-            } finally {
-                mDevicePermissionChanged.signal();
-                mDeviceConnectionLock.unlock();
-            }
-        } else {
-            Log.d(TAG, "Permission denied for device " + device);
-        }
-    }
-
+    /**
+     * Construct an instance of UsbVehicleDataSource with a receiver callback
+     * and custom device URI.
+     *
+     * If the device cannot be found at initialization, the object will block
+     * waiting for a signal to check again.
+     *
+     * TODO Do we ever send such a signal? Or did I delete that because in order
+     * to have that signal sent, we have to shut down the RemoteVehicleService
+     * (and thus this UsbVehicleDataSource) anyway?
+     *
+     * @param context The Activity or Service context, used to get access to the
+     *      Android UsbManager.
+     * @param callback An object implementing the
+     *      VehicleDataSourceCallbackInterface that should receive data as it is
+     *      received and parsed.
+     * @param device a USB device URI (see {@link UsbDeviceUtilities} for the
+     *      format) to look for.
+     * @throws VehicleDataSourceException  If the URI doesn't have the correct
+     *          format
+     */
     public UsbVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback, URI device)
             throws VehicleDataSourceException {
         super(context, callback);
         if(device == null) {
-            device = DEFAULT_USB_DEVICE_URI;
+            device = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
             Log.i(TAG, "No USB device specified -- using default " +
                     device);
         }
@@ -139,8 +119,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
-        mVendorId = vendorFromUri(device);
-        mProductId = productFromUri(device);
+        mVendorId = UsbDeviceUtilities.vendorFromUri(device);
+        mProductId = UsbDeviceUtilities.productFromUri(device);
         try {
             setupDevice(mManager, mVendorId, mProductId);
         } catch(VehicleDataSourceException e) {
@@ -149,49 +129,33 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         }
     }
 
+    /**
+     * Construct an instance of UsbVehicleDataSource with a receiver callback
+     * and the default device URI.
+     *
+     * The default device URI is specified in {@link UsbDeviceUtilities}.
+     *
+     * @param context The Activity or Service context, used to get access to the
+     *      Android UsbManager.
+     * @param callback An object implementing the
+     *      VehicleDataSourceCallbackInterface that should receive data as it is
+     *      received and parsed.
+     * @throws VehicleDataSourceException  in exceptional circumstances, i.e.
+     *      only if the default device URI is malformed.
+     */
     public UsbVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback)
-            throws VehicleDataSourceException{
+            throws VehicleDataSourceException {
         this(context, callback, null);
     }
 
-    private static int vendorFromUri(URI uri)
-            throws VehicleDataSourceResourceException {
-        try {
-            return Integer.parseInt(uri.getAuthority(), 16);
-        } catch(NumberFormatException e) {
-            throw new VehicleDataSourceResourceException(
-                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
-                " -- the given " + uri + " has a bad vendor ID");
-        }
-    }
-
-    private static int productFromUri(URI uri)
-            throws VehicleDataSourceResourceException {
-        try {
-            return Integer.parseInt(uri.getPath().substring(1), 16);
-        } catch(NumberFormatException e) {
-            throw new VehicleDataSourceResourceException(
-                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
-                " -- the given " + uri + " has a bad product ID");
-        } catch(StringIndexOutOfBoundsException e) {
-            throw new VehicleDataSourceResourceException(
-                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
-                " -- the given " + uri + " has a bad product ID");
-        }
-    }
-
-    private void disconnectDevice() {
-        if(mConnection != null) {
-            Log.d(TAG, "Closing connection " + mConnection +
-                    " with USB device");
-            mDeviceConnectionLock.lock();
-            mConnection.close();
-            mConnection = null;
-            mDeviceConnectionLock.unlock();
-        }
-    }
-
+    /**
+     * Unregister USB device intent broadcast receivers and stop waiting for a
+     * connection.
+     *
+     * This should be called before the object is given up to the garbage
+     * collector to aviod leaking a receiver in the Android framework.
+     */
     public void stop() {
         Log.d(TAG, "Stopping USB listener");
         mRunning = false;
@@ -201,6 +165,13 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
+    /**
+     * Continuously read JSON messages from an attached USB device, or wait for
+     * a connection.
+     *
+     * This loop will only exit if {@link stop()} is called - otherwise it
+     * either waits for a new device connection or reads USB packets.
+     */
     public void run() {
         waitForDeviceConnection();
 
@@ -227,6 +198,16 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             mDeviceConnectionLock.unlock();
         }
         Log.d(TAG, "Stopped USB listener");
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("device", mDeviceUri)
+            .add("connection", mConnection)
+            .add("endpoint", mEndpoint)
+            .add("callback", getCallback())
+            .toString();
     }
 
     private void waitForDeviceConnection() {
@@ -299,13 +280,62 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         return connection;
     }
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("device", mDeviceUri)
-            .add("connection", mConnection)
-            .add("endpoint", mEndpoint)
-            .add("callback", getCallback())
-            .toString();
+    private void openDeviceConnection(UsbDevice device) {
+        if (device != null) {
+            mDeviceConnectionLock.lock();
+            try {
+                mConnection = setupDevice(mManager, device);
+                Log.i(TAG, "Connected to USB device with " +
+                        mConnection);
+            } catch(UsbDeviceException e) {
+                Log.w("Couldn't open USB device", e);
+            } finally {
+                mDevicePermissionChanged.signal();
+                mDeviceConnectionLock.unlock();
+            }
+        } else {
+            Log.d(TAG, "Permission denied for device " + device);
+        }
     }
+
+    private void disconnectDevice() {
+        if(mConnection != null) {
+            Log.d(TAG, "Closing connection " + mConnection +
+                    " with USB device");
+            mDeviceConnectionLock.lock();
+            mConnection.close();
+            mConnection = null;
+            mDeviceConnectionLock.unlock();
+        }
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                UsbDevice device = (UsbDevice) intent.getParcelableExtra(
+                        UsbManager.EXTRA_DEVICE);
+
+                if(intent.getBooleanExtra(
+                            UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                    openDeviceConnection(device);
+                } else {
+                    Log.i(TAG, "User declined permission for device " +
+                            device);
+                }
+            } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+                Log.d(TAG, "Device attached");
+                try {
+                    setupDevice(mManager, mVendorId, mProductId);
+                } catch(VehicleDataSourceException e) {
+                    Log.i(TAG, "Unable to load USB device -- waiting for it " +
+                            "to appear", e);
+                }
+            } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
+                Log.d(TAG, "Device detached");
+                disconnectDevice();
+            }
+        }
+    };
 }

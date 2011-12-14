@@ -53,6 +53,11 @@ import android.util.Log;
  * Asynchronous measurements are obtained by defining a
  * VehicleMeasurement.Listener object and passing it to the service via the
  * addListener method.
+ *
+ * The source of vehicle data can be optionally selected by adding extra
+ * parameters to the bind Intent. The parameters are passed wholesale on to the
+ * {@link RemoteVehicleService} - see that class's documentation for details on
+ * the parameters.
  */
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";

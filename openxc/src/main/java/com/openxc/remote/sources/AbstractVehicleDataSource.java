@@ -7,6 +7,10 @@ import android.content.Context;
 
 import android.util.Log;
 
+/**
+ * The AbstractVehicleDataSource contains functions common to all vehicle data
+ * sources.
+ */
 public abstract class AbstractVehicleDataSource
         implements VehicleDataSourceInterface {
 
@@ -18,12 +22,28 @@ public abstract class AbstractVehicleDataSource
 
     public AbstractVehicleDataSource() { }
 
+    /**
+     * Construct a new instance with the given context and set the callback.
+     *
+     * @param context Current Android content (i.e. an Activity or Service)
+     * @param callback An object implementing the
+     *      VehicleDataSourceCallbackInterface that should receive data from this
+     *      source.
+     */
     public AbstractVehicleDataSource(Context context,
             VehicleDataSourceCallbackInterface callback) {
         mContext = context;
         setCallback(callback);
     }
 
+    /**
+     * Construct a new instance with the given context and set the callback.
+     *
+     * @param context Current Android content (i.e. an Activity or Service)
+     * @param callback An object implementing the
+     *      VehicleDataSourceCallbackInterface that should receive data from this
+     *      source.
+     */
     public AbstractVehicleDataSource(
             VehicleDataSourceCallbackInterface callback) {
         this(null, callback);

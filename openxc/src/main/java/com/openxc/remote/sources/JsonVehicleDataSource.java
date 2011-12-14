@@ -7,6 +7,19 @@ import android.content.Context;
 
 import android.util.Log;
 
+/**
+ * A vehicle data source expecting JSON messages as raw input.
+ *
+ * Whether coming from a trace file or over a network, this class can parse a
+ * JSON string and pass its measurement values to the handleMessage method of
+ * the data source.
+ *
+ * The class is abstract as it does not describe the source of the data, only
+ * the expected format.
+ *
+ * TODO Is it weird that this is data source class, but isn't a data source? It
+ * feels more like a mixin, but that doesn't fit well with Java.
+ */
 public abstract class JsonVehicleDataSource
         extends AbstractVehicleDataSource {
     private static final String TAG = "JsonVehicleDataSource";
@@ -24,6 +37,13 @@ public abstract class JsonVehicleDataSource
         this(null, callback);
     }
 
+    /**
+     * Parses a JSON string and calls handleMessage with the values.
+     *
+     * TODO It would be perhaps better if this didn't have the implicit
+     * dependency on handleMessage, but we can't return multiple values from
+     * this function without having yet another wrapper object.
+     */
     protected void handleJson(String json) {
         final JSONObject message;
 

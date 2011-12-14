@@ -4,12 +4,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import java.net.URISyntaxException;
+import java.net.URI;
 
 import java.util.Collections;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import java.util.concurrent.TimeUnit;
 
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
 
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
@@ -30,8 +31,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 
-import java.net.URI;
-
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
@@ -39,13 +38,30 @@ import android.os.RemoteException;
 
 import android.util.Log;
 
+/**
+ * The RemoteVehicleService is the centralized source of all vehicle data.
+ *
+ * To minimize overhead, only one object connects to the current vehicle data
+ * source (e.g. a CAN translator or trace file being played back) and all
+ * application requests are eventually propagated back to this service.
+ *
+ * Applications should not use this service directly, but should bind to the
+ * in-process {@link VehicleService} instead - that has an interface that
+ * respects Measurement types. The interface used for the RemoteVehicleService
+ * is purposefully primative as there are a small set of objects that can be
+ * natively marshalled through an AIDL interface.
+ *
+ * The service initializes and connects to the vehicle data source when bound.
+ * The data source is selected by the application by passing extra data along
+ * with the bind Intent - see the {@link onBind(Intent)} method for details.
+ */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
+    private final static String DEFAULT_DATA_SOURCE =
+        UsbVehicleDataSource.class.getName();
     public final static String DATA_SOURCE_NAME_EXTRA = "data_source";
     public final static String DATA_SOURCE_RESOURCE_EXTRA =
             "data_source_resource";
-    private final static String DEFAULT_DATA_SOURCE =
-        UsbVehicleDataSource.class.getName();
 
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
@@ -55,7 +71,14 @@ public class RemoteVehicleService extends Service {
     private BlockingQueue<String> mNotificationQueue;
     private NotificationThread mNotificationThread;
 
-
+    /**
+     * A callback receiver for the vehicle data source.
+     *
+     * The selected vehicle data source is initialized with this callback object
+     * and calls its receive() methods with new values as they come in - it's
+     * important that receive() not block in order to get out of the way of new
+     * meausrements coming in on a physical vehcile interface.
+     */
     VehicleDataSourceCallbackInterface mCallback =
         new AbstractVehicleDataSourceCallback () {
             private void queueNotification(String measurementId) {
@@ -93,6 +116,12 @@ public class RemoteVehicleService extends Service {
                 RemoteVehicleServiceListenerInterface>>());
     }
 
+    /**
+     * Shut down any associated services when this service is about to die.
+     *
+     * This stops the data source (e.g. stops trace playback) and kills the
+     * thread used for notifying measurement listeners.
+     */
     @Override
     public void onDestroy() {
         Log.i(TAG, "Service being destroyed");
@@ -107,6 +136,36 @@ public class RemoteVehicleService extends Service {
         // TODO loop over and kill all callbacks in remote callback list
     }
 
+    /**
+     * Initialize the service and data source when a client binds to us.
+     *
+     * An application can select a vehicle data source by passing extra data
+     * with the bind Intent. The two parameters are:
+     *
+     *  RemoteVehicleService.DATA_SOURCE_NAME_EXTRA
+     *
+     *      The name of a class implementing the VehicleDataSourceInterface.
+     *
+     *  RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA
+     *
+     *      An optional initializer for the data source - this will be passed to
+     *      its constructor as a String. An example is a path to a file if the
+     *      data source is a trace file playback.
+     *
+     * For example, to use the trace to playback a trace file, bind to the
+     * RemoteVehicleService with an Intent like this:
+     *
+     *      Intent intent = new Intent();
+     *      intent.setClass(getContext(), RemoteVehicleService.class);
+     *      intent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
+     *              TraceVehicleDataSource.class.getName());
+     *      intent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
+     *              "resource://" + R.raw.tracejson);
+     *      bindService(intent, connection, Context.BIND_AUTO_CREATE);
+     *
+     * If no data source is specified, the {@link UsbVehicleDataSource} will be
+     * used by default with the a default USB device ID.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
@@ -128,6 +187,16 @@ public class RemoteVehicleService extends Service {
         mNotificationThread.start();
         mDataSource = initializeDataSource(dataSource, resource);
         return mBinder;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("dataSource", mDataSource)
+            .add("numListeners", mListeners.size())
+            .add("numMeasurementTypes", mMeasurements.size())
+            .add("callbackBacklog", mNotificationQueue.size())
+            .toString();
     }
 
     private VehicleDataSourceInterface initializeDataSource(
@@ -276,15 +345,5 @@ public class RemoteVehicleService extends Service {
             rawMeasurement = new RawMeasurement();
         }
         return rawMeasurement;
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("dataSource", mDataSource)
-            .add("numListeners", mListeners.size())
-            .add("numMeasurementTypes", mMeasurements.size())
-            .add("callbackBacklog", mNotificationQueue.size())
-            .toString();
     }
 }
