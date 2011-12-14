@@ -1,5 +1,6 @@
 package com.openxc.examples.dashboard;
 
+import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
