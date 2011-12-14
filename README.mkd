@@ -15,6 +15,48 @@ Vehicle measurements are accessed through an [Android service][services]. Your
 application connects to the service using the Android Interface Definition
 Language ([AIDL][]) - check out the Architecture section for more details.
 
+
+## Android Manifest
+
+The OpenXC services must be defined in your application's `AndroidManifest.xml`
+before using them. Add this inside the `<application>` tag:
+
+      <service android:name="com.openxc.VehicleService"/>
+      <service android:name="com.openxc.remote.RemoteVehicleService" android:process=":remote">
+          <intent-filter>
+              <action android:name="com.openxc.remote.RemoteVehicleServiceInterface" />
+          </intent-filter>
+      </service>
+
+You must also specify that your application uses the USB host feature (inside
+the `<application>` tag):
+
+      <uses-feature android:name="android.hardware.usb.host"
+              android:required="true" />
+
+## USB Device Filter
+
+If you want your application to refresh the vehicle interface when the USB CAN
+translator is plugged in, you must include an XML file defining a USB device
+filter. Save this XML to `res/xml/device_filter.xml`:
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <usb-device vendor-id="1240" />
+    </resources>
+
+and in the `AndroidManifest.xml`:
+
+      <activity android:name="com.openxc.remote.sources.usb.UsbDeviceAttachmentActivity">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                    android:resource="@xml/device_filter" />
+      </activity>
+
+
 ### Service Binding
 
 You must first [bind with the VehicleService][binding] before you can receive
