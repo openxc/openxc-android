@@ -1,0 +1,9 @@
+com.openxc
+com.openxc.measurements
+com.openxc.remote
+com.openxc.remote.sources
+com.openxc.remote.sources.manual
+com.openxc.remote.sources.trace
+com.openxc.remote.sources.usb
+com.openxc.units
+com.openxc.util
