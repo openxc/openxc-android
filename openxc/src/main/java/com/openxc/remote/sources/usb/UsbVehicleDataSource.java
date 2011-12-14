@@ -169,7 +169,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      * Continuously read JSON messages from an attached USB device, or wait for
      * a connection.
      *
-     * This loop will only exit if {@link stop()} is called - otherwise it
+     * This loop will only exit if {@link #stop()} is called - otherwise it
      * either waits for a new device connection or reads USB packets.
      */
     public void run() {

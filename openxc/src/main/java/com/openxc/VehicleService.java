@@ -56,8 +56,8 @@ import android.util.Log;
  *
  * The source of vehicle data can be optionally selected by adding extra
  * parameters to the bind Intent. The parameters are passed wholesale on to the
- * {@link RemoteVehicleService} - see that class's documentation for details on
- * the parameters.
+ * {@link com.openxc.remote.RemoteVehicleService} - see that class's
+ * documentation for details on the parameters.
  */
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";

@@ -14,8 +14,8 @@ import android.content.Context;
  * great for testing. Unfortunately, you can't use it that way with the full
  * VehicleService stack, since there is no way to inject this dependency through
  * an Intent. The RemoteVehicleService has to initialize its own instance of
- * this object, and at that point we can no longer call the {@link trigger}
- * method.
+ * this object, and at that point we can no longer call the
+ * {@link #trigger(String, double)} method.
  *
  * TODO This can probably be removed.
  */

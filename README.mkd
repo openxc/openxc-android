@@ -9,6 +9,100 @@ This Android library contains the tools required to read vehicle data from the
 vehicle's CAN bus through the OpenXC CAN translation module in any Android
 application..
 
+## Installation
+
+This project declares dependencies with Maven - you can choose to use the
+project via Eclipse, via the command line, or both ways simultaneously.
+
+### Using Eclipse
+
+* Install [Eclipse](http://www.eclipse.org/downloads/) Indigo or later for Java
+  Developers. Other versions do not install Maven, which is required.
+* Install the [Android SDK](http://developer.android.com/sdk/index.html) and
+  then the [ADT plugin](http://developer.android.com/sdk/eclipse-adt.html)
+  from Google.
+* Clone the [openxc-android][] repo (this repo).
+* Open Eclipse and go to `File -> Import -> Maven -> Existing Maven Projects`.
+  Browse to where you cloned the repository and import the `openxc` project.
+* You will be prompted to install the m2e-android connector - do that, then
+  restart Eclipse.
+* Right click on the `openxc` project, go to Maven -> Update Project
+  Configuration. Select the `openxc` project in the dialog and click OK.
+* Start a new Android project for your application if you haven't already.
+* Right click on your project and go to `Build Path -> Configure Build Path`.
+    Click the `Projects` tab and add a reference to the `openxc` project.
+* There should be no changes in the repository at this point (`git status`
+  should report nothing) and there should be no errors in Eclipse.
+
+
+### Using the Command Line
+
+If you prefer to compile and deploy from the command line, you can use Maven
+without Eclipse.
+
+* Install [Maven](http://maven.apache.org/) - it's just a Java application, so
+  "installation" can be as simple as extracting the download and making sure the
+  `mvn` executable is somewhere on your shell's `PATH`.
+* Follow the instructions in the "Android SDK and Maven" section of this
+  document to install the latest version of the Android SDK for Maven
+* Clone the [openxc-android][] repo (this repo).
+* Run `mvn install -p openxc` from the `openxc` directory to package and install
+  the `openxc` library to your local Maven repository.
+* Start a new Android project if you haven't already (check out the
+  `example/pom.xml` if you're unfamiliar with setting up a Maven project) and
+  make sure the `openxc` dependency is declared like so:
+
+    <dependencies>
+        <dependency>
+            <groupId>com.openxc</groupId>
+            <artifactId>openxc</artifactId>
+            <version>1.0.0</version>
+            <type>apklib</type>
+        </dependency>
+    </dependencies>
+
+[openxc-android]: https://github.com/openxc/openxc-android
+
+### Android Manifest
+
+The OpenXC services must be defined in your application's `AndroidManifest.xml`
+before using them. Add this inside the `<application>` tag:
+
+      <service android:name="com.openxc.VehicleService"/>
+      <service android:name="com.openxc.remote.RemoteVehicleService" android:process=":remote">
+          <intent-filter>
+              <action android:name="com.openxc.remote.RemoteVehicleServiceInterface" />
+          </intent-filter>
+      </service>
+
+You must also specify that your application uses the USB host feature (inside
+the `<application>` tag):
+
+      <uses-feature android:name="android.hardware.usb.host"
+              android:required="true" />
+
+### USB Device Filter
+
+If you want your application to refresh the vehicle interface when the USB CAN
+translator is plugged in, you must include an XML file defining a USB device
+filter. Save this XML to `res/xml/device_filter.xml`:
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <usb-device vendor-id="1240" />
+    </resources>
+
+and in the `AndroidManifest.xml`:
+
+      <activity android:name="com.openxc.remote.sources.usb.UsbDeviceAttachmentActivity">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                    android:resource="@xml/device_filter" />
+      </activity>
+
 ## Usage
 
 Vehicle measurements are accessed through an [Android service][services]. Your
@@ -145,35 +239,7 @@ block until the service is ready to start playing back the trace - but can be
 useful for testing when you need to make sure you will get a measurement back
 from the system.
 
-## Contributing
-
-We'd love your input - the project is organized as a Maven project, but also
-works fine if you're an Eclipse user. The recommended steps to set up the
-openxc-android project in Eclipse are:
-
-* Install [Eclipse](http://www.eclipse.org/downloads/) Indigo or later
-    * The Java Developer version is the best choice to start - other editions
-      don't include Maven integration, so you will have to install that
-      manually.
-* Install the [Android SDK](http://developer.android.com/sdk/index.html) and
-  then the [ADT plugin](http://developer.android.com/sdk/eclipse-adt.html)
-  from Google.
-* Clone the [openxc-android](https://github.com/openxc/openxc-android] repo
-    (this repo)
-* Open Eclipse and go to `File -> Import -> Maven -> Existing Maven Projects`.
-  Navigate to where you cloned the repository and import the `openxc`,
-  `openxc-it` and `openxc-examples` projects.
-* You will be prompted to install the m2e-android connector - do that, then
-  restart Eclipse.
-* Right click on the `openxc` project, go to Maven -> Update Project
-  Configuration. Select all of the openxc projects in the dialog.
-* Right click on the openxc-it project, go to Build Path -> Configure Build
-  Path. Click the projects tab and add a reference to the `openxc` project.
-    * Repeat for the openxc-examples project.
-* There should be no changes in the repository at this point (`git status`
-  should report nothing) and there should be no errors in Eclipse.
-
-### Android SDK and Maven
+## Android SDK and Maven
 
 The most recent version of the Android SDK currently available in the central
 Maven repository is 2.3. You'll need to install a more recent version in your
@@ -190,15 +256,19 @@ If you have a remote Maven repository you share with others, I'm sure they would
 thank you if you uploaded the resulting files - that way, nobody needs to do
 this part.
 
-### Installation
+## Contributing
 
-NOTE: This is also possible from Eclipse directly, I just haven't done it
-myself. If you want to do it and add to this documentation, you're more than
-welcome.
+Contributions are welcome - please file issues if you find any bugs. If you're
+working on a bug fix, there is a test suite you can use to confirm your fix
+doesn't break anything else.
 
 To compile and run the test suite on a connected Android device:
 
     openxc-android/ $ mvn clean install
+
+NOTE: This is also possible from Eclipse directly, I just haven't done it
+myself. If you want to do it and add to this documentation, you're more than
+welcome.
 
 This will:
 
@@ -211,14 +281,13 @@ This will:
   an emulator or tablet).
 * Run the instrumentation tests in the openxc-it package on the device
 
-At the moment, the instrumentation tests block waiting for a debugger to attach.
 Fire up Eclipse and the DDMS perspective (a part of the Eclipse ADT from
 Google), find the openxc process in the list (it should have a red bug next to
 it) and click the green bug icon to start debugging the process. Once you've
 enabled debugging once, it should do so automatically each time you run the
 tests for this Eclipse session.
 
-If you don't wish the tests to wait for a debugger, change the `testDebug`
+If you want the tests to wait for a debugger to attach, change the `testDebug`
 setting in `openxc-android/pom.xml` to `false`.
 
 To deploy the examples to a device:
