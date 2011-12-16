@@ -1,33 +1,31 @@
 package com.openxc.examples.dashboard;
 
-import com.openxc.measurements.BrakePedalStatus;
-import com.openxc.measurements.NoValueException;
-import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.VehicleMeasurement;
-import com.openxc.measurements.VehicleSpeed;
-import com.openxc.measurements.WindshieldWiperSpeed;
-
-import com.openxc.examples.R;
-
-import com.openxc.remote.RemoteVehicleServiceException;
-
-import com.openxc.VehicleService;
-
 import android.app.Activity;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-
 import android.util.Log;
-
 import android.widget.TextView;
+
+import com.openxc.VehicleService;
+import com.openxc.examples.R;
+import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.EngineSpeed;
+import com.openxc.measurements.Latitude;
+import com.openxc.measurements.Longitude;
+import com.openxc.measurements.NoValueException;
+import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.TransmissionGearPosition;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleButtonEvent;
+import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.WindshieldWiperSpeed;
+import com.openxc.remote.RemoteVehicleServiceException;
 
 public class VehicleDashboardActivity extends Activity {
 
@@ -39,6 +37,11 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
     private TextView mVehicleBrakeStatusView;
+    private TextView mVehicleEngineSpeedView;
+    private TextView mTransmissionGearPosView;
+    private TextView mLatitudeView;
+    private TextView mLongitudeView;
+    private TextView mVehButtonEventView;
     private TextView mWiperSpeedView;
     StringBuffer mBuffer;
 
@@ -94,7 +97,90 @@ public class VehicleDashboardActivity extends Activity {
     		}	
     	}
     };
+   
+    EngineSpeed.Listener mEngineSpeed = new EngineSpeed.Listener() {
+    	public void receive(VehicleMeasurement measurement) {
+    		final EngineSpeed status = (EngineSpeed) measurement;
+    		if(!status.isNone()) {
+    			mHandler.post(new Runnable() {
+    				public void run() {
+    					try{
+    						mVehicleEngineSpeedView.setText(
+    							"" + status.getValue().doubleValue());
+    					} catch(NoValueException e) {}
+    				}
+    			});
+    		}	
+    	}
+    };
     
+    TransmissionGearPosition.Listener mTransmissionGearPos = new TransmissionGearPosition.Listener() {
+    	public void receive(VehicleMeasurement measurement) {
+    		final TransmissionGearPosition status = (TransmissionGearPosition) measurement;
+    		if(!status.isNone()) {
+    			mHandler.post(new Runnable() {
+    				public void run() {
+    					try{
+    						mTransmissionGearPosView.setText(
+    							"" + status.getValue().enumValue());
+    					} catch(NoValueException e) {}
+    				}
+    			});
+    		}	
+    	}
+    };
+    
+    VehicleButtonEvent.Listener mVehButtonEvent = new VehicleButtonEvent.Listener() {
+    	public void receive(VehicleMeasurement measurement) {
+    		final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
+    		if(!event.isNone()) {
+    			mHandler.post(new Runnable() {
+    				public void run() {
+    					try{
+    						mVehButtonEventView.setText(
+    							"" + event.getValue().enumValue());
+    					} catch(NoValueException e) {}
+    				}
+    			});
+    		}	
+    	}
+    };
+  
+  
+    Latitude.Listener mLatitude =
+            new Latitude.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final Latitude lat = (Latitude) measurement;
+            if(!lat.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mLatitudeView.setText(
+                                "" + lat.getValue().doubleValue());
+                        } catch(NoValueException e) { }
+                    }
+                });
+            }
+        }
+    };
+    
+    Longitude.Listener mLongitude =
+            new Longitude.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final Longitude lng = (Longitude) measurement;
+            if(!lng.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mLongitudeView.setText(
+                                "" + lng.getValue().doubleValue());
+                        } catch(NoValueException e) { }
+                    }
+                });
+            }
+        }
+    };
+
     SteeringWheelAngle.Listener mSteeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -126,7 +212,18 @@ public class VehicleDashboardActivity extends Activity {
                         mSpeedListener);
                 mVehicleService.addListener(WindshieldWiperSpeed.class,
                         mWiperListener);
-                mVehicleService.addListener(BrakePedalStatus.class,mBrPedalStatus);
+                mVehicleService.addListener(BrakePedalStatus.class,
+                		mBrPedalStatus);
+                mVehicleService.addListener(EngineSpeed.class,
+                		mEngineSpeed);
+                mVehicleService.addListener(TransmissionGearPosition.class,
+                		mTransmissionGearPos);
+                mVehicleService.addListener(Latitude.class,
+                		mLatitude);
+                mVehicleService.addListener(Longitude.class,
+                		mLongitude);
+                mVehicleService.addListener(VehicleButtonEvent.class, 
+                		mVehButtonEvent);
             } catch(RemoteVehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
@@ -157,6 +254,16 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.wiper_speed);
         mVehicleBrakeStatusView = (TextView) findViewById(
         		R.id.brake_pedal_status);
+        mVehicleEngineSpeedView = (TextView) findViewById(
+        		R.id.engine_speed);
+        mTransmissionGearPosView = (TextView) findViewById(
+        		R.id.transmission_gear_pos);
+        mLatitudeView = (TextView) findViewById(
+        		R.id.latitude);
+        mLongitudeView = (TextView) findViewById(
+        		R.id.longitude);
+        mVehButtonEventView = (TextView) findViewById(
+        		R.id.vehButtonEvent);
         mBuffer = new StringBuffer();
     }
 

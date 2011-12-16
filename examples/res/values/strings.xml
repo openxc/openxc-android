@@ -5,4 +5,9 @@
     <string name="vehicle_speed_label">Vehicle Speed</string>
     <string name="wiper_speed_label">Windshield Wiper Speed</string>
     <string name="brake_pedal_status_label">Brake_Pedal_Status</string>
+    <string name="engine_speed_label">Engine_Speed</string>
+    <string name="transmission_gear_pos_label">Transmission_Gear_Position</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="veh_button_event_label">Vehicle_Button_Event</string>
 </resources>
