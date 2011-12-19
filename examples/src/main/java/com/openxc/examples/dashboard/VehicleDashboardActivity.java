@@ -102,18 +102,18 @@ public class VehicleDashboardActivity extends Activity {
  
     ParkingBrakeStatus.Listener mParkingBrakeStatus = new ParkingBrakeStatus.Listener() {
     	public void receive(VehicleMeasurement measurement) {
-    		final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
-    		if(!status.isNone()) {
-    			mHandler.post(new Runnable() {
-    				public void run() {
-    					try{
-    						mParkingBrakeStatusView.setText(
-    							"" + status.getValue().booleanValue());
-    					} catch(NoValueException e) {}
-    				}
-    			});
-    		}	
-    	}
+	    final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mParkingBrakeStatusView.setText(
+                                "" + status.getValue().booleanValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+             }	
+        }
     };
     
     EngineSpeed.Listener mEngineSpeed = new EngineSpeed.Listener() {
