@@ -22,7 +22,12 @@
             style="@style/DefaultFont"
             android:text="@string/brake_pedal_status_label" />
     <TextView android:id="@+id/brake_pedal_status"
-            style="@style/DefaultFont"/>
+        	style="@style/DefaultFont"/>
+    <TextView android:id="@+id/parking_brake_status_label"
+        	style="@style/DefaultFont" 
+    		android:text="@string/parking_brake_status_label" />
+    <TextView android:id="@+id/parking_brake_status"
+        	style="@style/DefaultFont"/>
     <TextView android:id="@+id/engine_speed_label"
             style="@style/DefaultFont"
             android:text="@string/engine_speed_label" />

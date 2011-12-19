@@ -18,6 +18,7 @@ import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
+import com.openxc.measurements.ParkingBrakeStatus;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -37,6 +38,7 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
     private TextView mVehicleBrakeStatusView;
+    private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
     private TextView mTransmissionGearPosView;
     private TextView mLatitudeView;
@@ -97,7 +99,23 @@ public class VehicleDashboardActivity extends Activity {
             }
         }
     };
-
+ 
+    ParkingBrakeStatus.Listener mParkingBrakeStatus = new ParkingBrakeStatus.Listener() {
+    	public void receive(VehicleMeasurement measurement) {
+    		final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
+    		if(!status.isNone()) {
+    			mHandler.post(new Runnable() {
+    				public void run() {
+    					try{
+    						mParkingBrakeStatusView.setText(
+    							"" + status.getValue().booleanValue());
+    					} catch(NoValueException e) {}
+    				}
+    			});
+    		}	
+    	}
+    };
+    
     EngineSpeed.Listener mEngineSpeed = new EngineSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final EngineSpeed status = (EngineSpeed) measurement;
@@ -254,7 +272,9 @@ public class VehicleDashboardActivity extends Activity {
         mWiperSpeedView = (TextView) findViewById(
                 R.id.wiper_speed);
         mVehicleBrakeStatusView = (TextView) findViewById(
-                R.id.brake_pedal_status);
+        		R.id.brake_pedal_status);
+        mParkingBrakeStatusView = (TextView) findViewById(
+        		R.id.parking_brake_status);
         mVehicleEngineSpeedView = (TextView) findViewById(
                 R.id.engine_speed);
         mTransmissionGearPosView = (TextView) findViewById(
