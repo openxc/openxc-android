@@ -272,9 +272,9 @@ public class VehicleDashboardActivity extends Activity {
         mWiperSpeedView = (TextView) findViewById(
                 R.id.wiper_speed);
         mVehicleBrakeStatusView = (TextView) findViewById(
-        		R.id.brake_pedal_status);
+                R.id.brake_pedal_status);
         mParkingBrakeStatusView = (TextView) findViewById(
-        		R.id.parking_brake_status);
+                R.id.parking_brake_status);
         mVehicleEngineSpeedView = (TextView) findViewById(
                 R.id.engine_speed);
         mTransmissionGearPosView = (TextView) findViewById(
