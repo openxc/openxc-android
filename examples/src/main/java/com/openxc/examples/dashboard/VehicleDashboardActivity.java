@@ -138,7 +138,8 @@ public class VehicleDashboardActivity extends Activity {
                     public void run() {
                         try{
                             mVehButtonEventView.setText(
-                                "" + event.getValue().enumValue());
+                                event.getValue().enumValue() + " is " +
+                                event.getEvent().enumValue());
                         } catch(NoValueException e) {}
                     }
                 });
