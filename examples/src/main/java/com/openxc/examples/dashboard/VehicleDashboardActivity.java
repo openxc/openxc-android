@@ -83,70 +83,70 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     BrakePedalStatus.Listener mBrPedalStatus = new BrakePedalStatus.Listener() {
-    	public void receive(VehicleMeasurement measurement) {
-    		final BrakePedalStatus status = (BrakePedalStatus) measurement;
-    		if(!status.isNone()) {
-    			mHandler.post(new Runnable() {
-    				public void run() {
-    					try{
-    						mVehicleBrakeStatusView.setText(
-    							"" + status.getValue().booleanValue());
-    					} catch(NoValueException e) {}
-    				}
-    			});
-    		}	
-    	}
+        public void receive(VehicleMeasurement measurement) {
+            final BrakePedalStatus status = (BrakePedalStatus) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mVehicleBrakeStatusView.setText(
+                                "" + status.getValue().booleanValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
     };
-   
+
     EngineSpeed.Listener mEngineSpeed = new EngineSpeed.Listener() {
-    	public void receive(VehicleMeasurement measurement) {
-    		final EngineSpeed status = (EngineSpeed) measurement;
-    		if(!status.isNone()) {
-    			mHandler.post(new Runnable() {
-    				public void run() {
-    					try{
-    						mVehicleEngineSpeedView.setText(
-    							"" + status.getValue().doubleValue());
-    					} catch(NoValueException e) {}
-    				}
-    			});
-    		}	
-    	}
+        public void receive(VehicleMeasurement measurement) {
+            final EngineSpeed status = (EngineSpeed) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mVehicleEngineSpeedView.setText(
+                                "" + status.getValue().doubleValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
     };
-    
+
     TransmissionGearPosition.Listener mTransmissionGearPos = new TransmissionGearPosition.Listener() {
-    	public void receive(VehicleMeasurement measurement) {
-    		final TransmissionGearPosition status = (TransmissionGearPosition) measurement;
-    		if(!status.isNone()) {
-    			mHandler.post(new Runnable() {
-    				public void run() {
-    					try{
-    						mTransmissionGearPosView.setText(
-    							"" + status.getValue().enumValue());
-    					} catch(NoValueException e) {}
-    				}
-    			});
-    		}	
-    	}
+        public void receive(VehicleMeasurement measurement) {
+            final TransmissionGearPosition status = (TransmissionGearPosition) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mTransmissionGearPosView.setText(
+                                "" + status.getValue().enumValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
     };
-    
+
     VehicleButtonEvent.Listener mVehButtonEvent = new VehicleButtonEvent.Listener() {
-    	public void receive(VehicleMeasurement measurement) {
-    		final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
-    		if(!event.isNone()) {
-    			mHandler.post(new Runnable() {
-    				public void run() {
-    					try{
-    						mVehButtonEventView.setText(
-    							"" + event.getValue().enumValue());
-    					} catch(NoValueException e) {}
-    				}
-    			});
-    		}	
-    	}
+        public void receive(VehicleMeasurement measurement) {
+            final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
+            if(!event.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mVehButtonEventView.setText(
+                                "" + event.getValue().enumValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
     };
-  
-  
+
+
     Latitude.Listener mLatitude =
             new Latitude.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -163,7 +163,7 @@ public class VehicleDashboardActivity extends Activity {
             }
         }
     };
-    
+
     Longitude.Listener mLongitude =
             new Longitude.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -213,17 +213,17 @@ public class VehicleDashboardActivity extends Activity {
                 mVehicleService.addListener(WindshieldWiperSpeed.class,
                         mWiperListener);
                 mVehicleService.addListener(BrakePedalStatus.class,
-                		mBrPedalStatus);
+                        mBrPedalStatus);
                 mVehicleService.addListener(EngineSpeed.class,
-                		mEngineSpeed);
+                        mEngineSpeed);
                 mVehicleService.addListener(TransmissionGearPosition.class,
-                		mTransmissionGearPos);
+                        mTransmissionGearPos);
                 mVehicleService.addListener(Latitude.class,
-                		mLatitude);
+                        mLatitude);
                 mVehicleService.addListener(Longitude.class,
-                		mLongitude);
-                mVehicleService.addListener(VehicleButtonEvent.class, 
-                		mVehButtonEvent);
+                        mLongitude);
+                mVehicleService.addListener(VehicleButtonEvent.class,
+                        mVehButtonEvent);
             } catch(RemoteVehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
@@ -244,7 +244,7 @@ public class VehicleDashboardActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-		Log.i(TAG, "Vehicle dashboard created");
+        Log.i(TAG, "Vehicle dashboard created");
 
         mSteeringWheelAngleView = (TextView) findViewById(
                 R.id.steering_wheel_angle);
@@ -253,17 +253,17 @@ public class VehicleDashboardActivity extends Activity {
         mWiperSpeedView = (TextView) findViewById(
                 R.id.wiper_speed);
         mVehicleBrakeStatusView = (TextView) findViewById(
-        		R.id.brake_pedal_status);
+                R.id.brake_pedal_status);
         mVehicleEngineSpeedView = (TextView) findViewById(
-        		R.id.engine_speed);
+                R.id.engine_speed);
         mTransmissionGearPosView = (TextView) findViewById(
-        		R.id.transmission_gear_pos);
+                R.id.transmission_gear_pos);
         mLatitudeView = (TextView) findViewById(
-        		R.id.latitude);
+                R.id.latitude);
         mLongitudeView = (TextView) findViewById(
-        		R.id.longitude);
+                R.id.longitude);
         mVehButtonEventView = (TextView) findViewById(
-        		R.id.vehButtonEvent);
+                R.id.vehButtonEvent);
         mBuffer = new StringBuffer();
     }
 
