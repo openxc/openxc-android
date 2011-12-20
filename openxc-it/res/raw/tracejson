@@ -6,3 +6,5 @@
 {"name": "latitude", "value": 45.123}
 {"name": "longitude", "value": 120.442}
 {"name": "button_event", "value": "ok", "event": "pressed"}
+{"name": "headlamp_status", "value": true}
+{"name": "high_beam_status", "value": false}

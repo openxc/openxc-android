@@ -14,10 +14,13 @@ import android.widget.TextView;
 import com.openxc.VehicleService;
 import com.openxc.examples.R;
 import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.HeadlampStatus;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
+import com.openxc.measurements.ParkingBrakeStatus;
+import com.openxc.measurements.IgnitionStatus;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -37,12 +40,15 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
     private TextView mVehicleBrakeStatusView;
+    private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
     private TextView mTransmissionGearPosView;
+    private TextView mIgnitionStatusView;
     private TextView mLatitudeView;
     private TextView mLongitudeView;
-    private TextView mVehButtonEventView;
+    private TextView mButtonEventView;
     private TextView mWiperSpeedView;
+    private TextView mHeadlampStatusView;
     StringBuffer mBuffer;
 
     WindshieldWiperSpeed.Listener mWiperListener =
@@ -82,7 +88,8 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    BrakePedalStatus.Listener mBrPedalStatus = new BrakePedalStatus.Listener() {
+    BrakePedalStatus.Listener mBrakePedalStatus =
+            new BrakePedalStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final BrakePedalStatus status = (BrakePedalStatus) measurement;
             if(!status.isNone()) {
@@ -90,6 +97,39 @@ public class VehicleDashboardActivity extends Activity {
                     public void run() {
                         try{
                             mVehicleBrakeStatusView.setText(
+                                "" + status.getValue().booleanValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
+    };
+
+    ParkingBrakeStatus.Listener mParkingBrakeStatus =
+            new ParkingBrakeStatus.Listener() {
+    	public void receive(VehicleMeasurement measurement) {
+	    final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mParkingBrakeStatusView.setText(
+                                "" + status.getValue().booleanValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+             }
+        }
+    };
+
+    HeadlampStatus.Listener mHeadlampStatus = new HeadlampStatus.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final HeadlampStatus status = (HeadlampStatus) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mHeadlampStatusView.setText(
                                 "" + status.getValue().booleanValue());
                         } catch(NoValueException e) {}
                     }
@@ -114,9 +154,11 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    TransmissionGearPosition.Listener mTransmissionGearPos = new TransmissionGearPosition.Listener() {
+    TransmissionGearPosition.Listener mTransmissionGearPos =
+            new TransmissionGearPosition.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            final TransmissionGearPosition status = (TransmissionGearPosition) measurement;
+            final TransmissionGearPosition status =
+                    (TransmissionGearPosition) measurement;
             if(!status.isNone()) {
                 mHandler.post(new Runnable() {
                     public void run() {
@@ -130,16 +172,35 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    VehicleButtonEvent.Listener mVehButtonEvent = new VehicleButtonEvent.Listener() {
+    IgnitionStatus.Listener mIgnitionStatus =
+            new IgnitionStatus.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final IgnitionStatus status = (IgnitionStatus) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mIgnitionStatusView.setText(
+                                "" + status.getValue().enumValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
+    };
+
+
+    VehicleButtonEvent.Listener mButtonEvent =
+            new VehicleButtonEvent.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
             if(!event.isNone()) {
                 mHandler.post(new Runnable() {
                     public void run() {
                         try{
-                            mVehButtonEventView.setText(
+                            mButtonEventView.setText(
                                 event.getValue().enumValue() + " is " +
-                                event.getEvent().enumValue());
+                                event.getAction().enumValue());
                         } catch(NoValueException e) {}
                     }
                 });
@@ -214,17 +275,21 @@ public class VehicleDashboardActivity extends Activity {
                 mVehicleService.addListener(WindshieldWiperSpeed.class,
                         mWiperListener);
                 mVehicleService.addListener(BrakePedalStatus.class,
-                        mBrPedalStatus);
+                        mBrakePedalStatus);
+                mVehicleService.addListener(HeadlampStatus.class,
+                        mHeadlampStatus);
                 mVehicleService.addListener(EngineSpeed.class,
                         mEngineSpeed);
                 mVehicleService.addListener(TransmissionGearPosition.class,
                         mTransmissionGearPos);
+                mVehicleService.addListener(IgnitionStatus.class,
+                        mIgnitionStatus);
                 mVehicleService.addListener(Latitude.class,
                         mLatitude);
                 mVehicleService.addListener(Longitude.class,
                         mLongitude);
                 mVehicleService.addListener(VehicleButtonEvent.class,
-                        mVehButtonEvent);
+                        mButtonEvent);
             } catch(RemoteVehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
@@ -255,16 +320,22 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.wiper_speed);
         mVehicleBrakeStatusView = (TextView) findViewById(
                 R.id.brake_pedal_status);
+        mParkingBrakeStatusView = (TextView) findViewById(
+                R.id.parking_brake_status);
+        mHeadlampStatusView = (TextView) findViewById(
+                R.id.headlamp_status);
         mVehicleEngineSpeedView = (TextView) findViewById(
                 R.id.engine_speed);
         mTransmissionGearPosView = (TextView) findViewById(
                 R.id.transmission_gear_pos);
+        mIgnitionStatusView = (TextView) findViewById(
+                R.id.ignition);
         mLatitudeView = (TextView) findViewById(
                 R.id.latitude);
         mLongitudeView = (TextView) findViewById(
                 R.id.longitude);
-        mVehButtonEventView = (TextView) findViewById(
-                R.id.vehButtonEvent);
+        mButtonEventView = (TextView) findViewById(
+                R.id.buttonEvent);
         mBuffer = new StringBuffer();
     }
 

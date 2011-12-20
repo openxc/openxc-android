@@ -113,6 +113,6 @@ public class VehicleButtonEvent
     }
 
     public boolean isNone() {
-        return super.isNone() && mAction.isNone();
+        return super.isNone() && mAction != null && mAction.isNone();
     }
 }
