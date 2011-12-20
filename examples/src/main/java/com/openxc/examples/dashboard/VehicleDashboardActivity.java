@@ -24,6 +24,7 @@ import com.openxc.measurements.IgnitionStatus;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
@@ -47,6 +48,7 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mLatitudeView;
     private TextView mLongitudeView;
     private TextView mButtonEventView;
+    private TextView mDoorStatusView;
     private TextView mWiperSpeedView;
     private TextView mHeadlampStatusView;
     StringBuffer mBuffer;
@@ -60,11 +62,8 @@ public class VehicleDashboardActivity extends Activity {
                 mHandler.post(new Runnable() {
                     public void run() {
                         try {
-                            if(wiperSpeed.getValue().doubleValue() > 0) {
-                                mWiperSpeedView.setText("On");
-                            } else {
-                                mWiperSpeedView.setText("Off");
-                            }
+                            mWiperSpeedView.setText("" +
+                                wiperSpeed.getValue().doubleValue());
                         } catch(NoValueException e) { }
                     }
                 });
@@ -189,7 +188,6 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-
     VehicleButtonEvent.Listener mButtonEvent =
             new VehicleButtonEvent.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -208,6 +206,23 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
+    VehicleDoorStatus.Listener mDoorStatus =
+            new VehicleDoorStatus.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final VehicleDoorStatus event = (VehicleDoorStatus) measurement;
+            if(!event.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mDoorStatusView.setText(
+                                event.getValue().enumValue() + " is ajar: " +
+                                event.getAction().booleanValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
+    };
 
     Latitude.Listener mLatitude =
             new Latitude.Listener() {
@@ -290,6 +305,8 @@ public class VehicleDashboardActivity extends Activity {
                         mLongitude);
                 mVehicleService.addListener(VehicleButtonEvent.class,
                         mButtonEvent);
+                mVehicleService.addListener(VehicleDoorStatus.class,
+                        mDoorStatus);
             } catch(RemoteVehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
@@ -335,7 +352,9 @@ public class VehicleDashboardActivity extends Activity {
         mLongitudeView = (TextView) findViewById(
                 R.id.longitude);
         mButtonEventView = (TextView) findViewById(
-                R.id.buttonEvent);
+                R.id.button_event);
+        mDoorStatusView = (TextView) findViewById(
+                R.id.door_status);
         mBuffer = new StringBuffer();
     }
 
