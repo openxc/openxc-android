@@ -23,6 +23,16 @@
             android:text="@string/brake_pedal_status_label" />
     <TextView android:id="@+id/brake_pedal_status"
             style="@style/DefaultFont"/>
+    <TextView android:id="@+id/parking_brake_status_label"
+            style="@style/DefaultFont"
+            android:text="@string/parking_brake_status_label" />
+    <TextView android:id="@+id/parking_brake_status"
+            style="@style/DefaultFont"/>
+    <TextView android:id="@+id/headlamp_status_label"
+            style="@style/DefaultFont"
+            android:text="@string/headlamp_status_label" />
+    <TextView android:id="@+id/headlamp_status"
+            style="@style/DefaultFont"/>
     <TextView android:id="@+id/engine_speed_label"
             style="@style/DefaultFont"
             android:text="@string/engine_speed_label" />
@@ -43,9 +53,9 @@
             android:text="@string/longitude_label" />
     <TextView android:id="@+id/longitude"
             style="@style/DefaultFont"/>
-    <TextView android:id="@+id/veh_button_event_label"
+    <TextView android:id="@+id/button_event_label"
             style="@style/DefaultFont"
-            android:text="@string/veh_button_event_label" />
-    <TextView android:id="@+id/vehButtonEvent"
+            android:text="@string/button_event_label" />
+    <TextView android:id="@+id/buttonEvent"
             style="@style/DefaultFont"/>
 </LinearLayout>

@@ -3,6 +3,8 @@ package com.openxc;
 import java.lang.InterruptedException;
 
 import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.HeadlampStatus;
+import com.openxc.measurements.HighBeamStatus;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
@@ -99,6 +101,28 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         pause(300);
         BrakePedalStatus measurement = (BrakePedalStatus)
             service.get(BrakePedalStatus.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().booleanValue(), false);
+    }
+
+    @MediumTest
+    public void testGetHeadlampStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        HeadlampStatus measurement = (HeadlampStatus)
+            service.get(HeadlampStatus.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().booleanValue(), true);
+    }
+
+    @MediumTest
+    public void testGetHighBeamStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        HighBeamStatus measurement = (HighBeamStatus)
+            service.get(HighBeamStatus.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().booleanValue(), false);
     }
