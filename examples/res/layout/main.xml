@@ -43,6 +43,11 @@
             android:text="@string/transmission_gear_pos_label" />
     <TextView android:id="@+id/transmission_gear_pos"
             style="@style/DefaultFont"/>
+    <TextView android:id="@+id/ignition_label"
+            style="@style/DefaultFont"
+            android:text="@string/ignition_label" />
+    <TextView android:id="@+id/ignition"
+            style="@style/DefaultFont"/>
     <TextView android:id="@+id/latitude_label"
             style="@style/DefaultFont"
             android:text="@string/latitude_label" />

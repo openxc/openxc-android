@@ -20,6 +20,7 @@ import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.ParkingBrakeStatus;
+import com.openxc.measurements.IgnitionStatus;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -42,6 +43,7 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
     private TextView mTransmissionGearPosView;
+    private TextView mIgnitionStatusView;
     private TextView mLatitudeView;
     private TextView mLongitudeView;
     private TextView mButtonEventView;
@@ -86,7 +88,8 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    BrakePedalStatus.Listener mBrakePedalStatus = new BrakePedalStatus.Listener() {
+    BrakePedalStatus.Listener mBrakePedalStatus =
+            new BrakePedalStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final BrakePedalStatus status = (BrakePedalStatus) measurement;
             if(!status.isNone()) {
@@ -102,7 +105,8 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    ParkingBrakeStatus.Listener mParkingBrakeStatus = new ParkingBrakeStatus.Listener() {
+    ParkingBrakeStatus.Listener mParkingBrakeStatus =
+            new ParkingBrakeStatus.Listener() {
     	public void receive(VehicleMeasurement measurement) {
 	    final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
             if(!status.isNone()) {
@@ -150,9 +154,11 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    TransmissionGearPosition.Listener mTransmissionGearPos = new TransmissionGearPosition.Listener() {
+    TransmissionGearPosition.Listener mTransmissionGearPos =
+            new TransmissionGearPosition.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            final TransmissionGearPosition status = (TransmissionGearPosition) measurement;
+            final TransmissionGearPosition status =
+                    (TransmissionGearPosition) measurement;
             if(!status.isNone()) {
                 mHandler.post(new Runnable() {
                     public void run() {
@@ -166,7 +172,26 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    VehicleButtonEvent.Listener mButtonEvent = new VehicleButtonEvent.Listener() {
+    IgnitionStatus.Listener mIgnitionStatus =
+            new IgnitionStatus.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final IgnitionStatus status = (IgnitionStatus) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mIgnitionStatusView.setText(
+                                "" + status.getValue().enumValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
+    };
+
+
+    VehicleButtonEvent.Listener mButtonEvent =
+            new VehicleButtonEvent.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
             if(!event.isNone()) {
@@ -257,6 +282,8 @@ public class VehicleDashboardActivity extends Activity {
                         mEngineSpeed);
                 mVehicleService.addListener(TransmissionGearPosition.class,
                         mTransmissionGearPos);
+                mVehicleService.addListener(IgnitionStatus.class,
+                        mIgnitionStatus);
                 mVehicleService.addListener(Latitude.class,
                         mLatitude);
                 mVehicleService.addListener(Longitude.class,
@@ -301,6 +328,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.engine_speed);
         mTransmissionGearPosView = (TextView) findViewById(
                 R.id.transmission_gear_pos);
+        mIgnitionStatusView = (TextView) findViewById(
+                R.id.ignition);
         mLatitudeView = (TextView) findViewById(
                 R.id.latitude);
         mLongitudeView = (TextView) findViewById(
