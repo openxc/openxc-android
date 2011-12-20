@@ -6,3 +6,4 @@
 {"name": "latitude", "value": 45.123}
 {"name": "longitude", "value": 120.442}
 {"name": "button_event", "value": "ok", "event": "pressed"}
+{"name": "powertrain_torque", "value": 232.122}
