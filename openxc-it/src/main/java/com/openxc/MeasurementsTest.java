@@ -2,6 +2,7 @@ package com.openxc;
 
 import java.lang.InterruptedException;
 
+import com.openxc.measurements.AcceleratorPedalPosition;
 import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
@@ -74,6 +75,16 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
                 service.get(SteeringWheelAngle.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 94.1);
+    }
+
+    @MediumTest
+    public void testGetAcceleratorPedalPosition()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        AcceleratorPedalPosition measurement = (AcceleratorPedalPosition)
+                service.get(AcceleratorPedalPosition.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().doubleValue(), 14.0);
     }
 
     @MediumTest
