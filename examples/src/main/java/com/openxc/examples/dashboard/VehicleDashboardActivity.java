@@ -28,7 +28,7 @@ import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.measurements.WindshieldWiperSpeed;
+import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.RemoteVehicleServiceException;
 
 public class VehicleDashboardActivity extends Activity {
@@ -49,21 +49,21 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mLongitudeView;
     private TextView mButtonEventView;
     private TextView mDoorStatusView;
-    private TextView mWiperSpeedView;
+    private TextView mWiperStatusView;
     private TextView mHeadlampStatusView;
     StringBuffer mBuffer;
 
-    WindshieldWiperSpeed.Listener mWiperListener =
-            new WindshieldWiperSpeed.Listener() {
+    WindshieldWiperStatus.Listener mWiperListener =
+            new WindshieldWiperStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
-            final WindshieldWiperSpeed wiperSpeed =
-                (WindshieldWiperSpeed) measurement;
-            if(!wiperSpeed.isNone()) {
+            final WindshieldWiperStatus wiperStatus =
+                (WindshieldWiperStatus) measurement;
+            if(!wiperStatus.isNone()) {
                 mHandler.post(new Runnable() {
                     public void run() {
                         try {
-                            mWiperSpeedView.setText("" +
-                                wiperSpeed.getValue().doubleValue());
+                            mWiperStatusView.setText("" +
+                                wiperStatus.getValue().booleanValue());
                         } catch(NoValueException e) { }
                     }
                 });
@@ -287,7 +287,7 @@ public class VehicleDashboardActivity extends Activity {
                         mSteeringWheelListener);
                 mVehicleService.addListener(VehicleSpeed.class,
                         mSpeedListener);
-                mVehicleService.addListener(WindshieldWiperSpeed.class,
+                mVehicleService.addListener(WindshieldWiperStatus.class,
                         mWiperListener);
                 mVehicleService.addListener(BrakePedalStatus.class,
                         mBrakePedalStatus);
@@ -333,8 +333,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.steering_wheel_angle);
         mVehicleSpeedView = (TextView) findViewById(
                 R.id.vehicle_speed);
-        mWiperSpeedView = (TextView) findViewById(
-                R.id.wiper_speed);
+        mWiperStatusView = (TextView) findViewById(
+                R.id.wiper_status);
         mVehicleBrakeStatusView = (TextView) findViewById(
                 R.id.brake_pedal_status);
         mParkingBrakeStatusView = (TextView) findViewById(

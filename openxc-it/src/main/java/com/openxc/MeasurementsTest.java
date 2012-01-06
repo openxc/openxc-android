@@ -14,7 +14,7 @@ import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.WindshieldWiperSpeed;
+import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.remote.RemoteVehicleService;
 
@@ -95,14 +95,14 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testGetWindshieldWiperSpeed()
+    public void testGetWindshieldWiperStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
         pause(300);
-        WindshieldWiperSpeed measurement = (WindshieldWiperSpeed)
-                service.get(WindshieldWiperSpeed.class);
+        WindshieldWiperStatus measurement = (WindshieldWiperStatus)
+                service.get(WindshieldWiperStatus.class);
         checkReceivedMeasurement(measurement);
-        assertEquals(measurement.getValue().doubleValue(), 11.0);
+        assertEquals(measurement.getValue().booleanValue(), true);
     }
 
     @MediumTest

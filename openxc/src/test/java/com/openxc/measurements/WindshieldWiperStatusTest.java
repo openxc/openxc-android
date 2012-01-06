@@ -5,36 +5,36 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.measurements.NoValueException;
 
-public class WindshieldWiperSpeedTest {
-    WindshieldWiperSpeed measurement;
+public class WindshieldWiperStatusTest {
+    WindshieldWiperStatus measurement;
 
     @Before
     public void setUp() {
-        measurement = new WindshieldWiperSpeed(new Double(42.0));
+        measurement = new WindshieldWiperStatus(new Boolean(true));
     }
 
     @Test
     public void testDefaultConstructor() {
-        assertThat(new WindshieldWiperSpeed().isNone(), equalTo(true));
+        assertThat(new WindshieldWiperStatus().isNone(), equalTo(true));
     }
 
     @Test
     public void testGet() throws NoValueException {
-        assertThat(measurement.getValue().doubleValue(), equalTo(42.0));
+        assertThat(measurement.getValue().booleanValue(), equalTo(true));
     }
 
     @Test
-    public void testHasRange() {
-        assertTrue(measurement.hasRange());
+    public void testHasNoRange() {
+        assertFalse(measurement.hasRange());
     }
 
     @Test
     public void testHasId() {
-        assertNotNull(WindshieldWiperSpeed.ID);
+        assertNotNull(WindshieldWiperStatus.ID);
     }
 }
