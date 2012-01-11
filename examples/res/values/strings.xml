@@ -5,10 +5,15 @@
     <string name="vehicle_speed_label">Vehicle Speed</string>
     <string name="wiper_speed_label">Windshield Wiper Speed</string>
     <string name="brake_pedal_status_label">Brake Pedal Status</string>
+    <string name="headlamp_status_label">Headlamp Status</string>
     <string name="engine_speed_label">Engine Speed</string>
-    <string name="transmission_gear_pos_label">Transmission Gear Position</string>
+    <string name="transmission_gear_pos_label">
+        Transmission Gear Position
+    </string>
+    <string name="ignition_label">Ignition Status</string>
     <string name="latitude_label">Latitude</string>
     <string name="longitude_label">Longitude</string>
-    <string name="veh_button_event_label">Button Event</string>
     <string name="parking_brake_status_label">Parking Brake Status</string>
+    <string name="button_event_label">Button Event</string>
+    <string name="door_status_label">Door Status</string>
 </resources>

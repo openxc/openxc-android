@@ -3,11 +3,13 @@ package com.openxc;
 import java.lang.InterruptedException;
 
 import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.HeadlampStatus;
+import com.openxc.measurements.HighBeamStatus;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
-import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
@@ -68,16 +70,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testGetPowertrainTorque()
-            throws UnrecognizedMeasurementTypeException, NoValueException,
-            RemoteException, InterruptedException {
-        PowertrainTorque measurement = (PowertrainTorque)
-                service.get(PowertrainTorque.class);
-        checkReceivedMeasurement(measurement);
-        assertEquals(measurement.getValue().doubleValue(), 232.122);
-    }
-
-    @MediumTest
     public void testGetSteeringWheelAngle()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
@@ -85,6 +77,16 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
                 service.get(SteeringWheelAngle.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 94.1);
+    }
+
+    @MediumTest
+    public void testGetPowertrainTorque()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        PowertrainTorque measurement = (PowertrainTorque)
+                service.get(PowertrainTorque.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().doubleValue(), 232.1);
     }
 
     @MediumTest
@@ -121,6 +123,28 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         pause(300);
         BrakePedalStatus measurement = (BrakePedalStatus)
             service.get(BrakePedalStatus.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().booleanValue(), false);
+    }
+
+    @MediumTest
+    public void testGetHeadlampStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        HeadlampStatus measurement = (HeadlampStatus)
+            service.get(HeadlampStatus.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().booleanValue(), true);
+    }
+
+    @MediumTest
+    public void testGetHighBeamStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        pause(300);
+        HighBeamStatus measurement = (HighBeamStatus)
+            service.get(HighBeamStatus.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().booleanValue(), false);
     }

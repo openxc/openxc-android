@@ -5,37 +5,37 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.units.KilometersPerHour;
 import com.openxc.measurements.NoValueException;
+import com.openxc.measurements.HighBeamStatus;
 
-public class VehicleSpeedTest {
-    VehicleSpeed measurement;
+public class HighBeamStatusTest {
+    HighBeamStatus measurement;
 
     @Before
     public void setUp() {
-        measurement = new VehicleSpeed(new KilometersPerHour(1.0));
+        measurement = new HighBeamStatus(new Boolean(false));
     }
 
     @Test
     public void testDefaultConstructor() {
-        assertThat(new VehicleSpeed().isNone(), equalTo(true));
+        assertThat(new HighBeamStatus().isNone(), equalTo(true));
     }
 
     @Test
     public void testGet() throws NoValueException {
-        assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
+        assertThat(measurement.getValue().booleanValue(), equalTo(false));
     }
 
     @Test
-    public void testHasRange() {
-        assertTrue(measurement.hasRange());
+    public void testHasNoRange() {
+        assertFalse(measurement.hasRange());
     }
 
     @Test
     public void testHasId() {
-        assertNotNull(VehicleSpeed.ID);
+        assertNotNull(HighBeamStatus.ID);
     }
 }

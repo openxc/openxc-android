@@ -20,7 +20,7 @@ public abstract class AbstractVehicleDataSourceCallback implements
     }
 
     public void receive(String name, Boolean value) {
-        receive(name, new Double(value.booleanValue() ? 1 : 0));
+        receive(name, booleanToDouble(value));
     }
 
 
@@ -31,6 +31,15 @@ public abstract class AbstractVehicleDataSourceCallback implements
     public void receive(String name, String value, String event) {
         receive(name, new Double(value.toUpperCase().hashCode()),
                new Double(event.toUpperCase().hashCode()));
+    }
+
+    public void receive(String name, String value, Boolean event) {
+        receive(name, new Double(value.toUpperCase().hashCode()),
+                booleanToDouble(event));
+    }
+
+    private Double booleanToDouble(Boolean value) {
+        return new Double(value.booleanValue() ? 1 : 0);
     }
 
     abstract public void receive(String name, Double value);
