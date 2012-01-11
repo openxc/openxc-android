@@ -9,6 +9,7 @@ import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
@@ -77,6 +78,17 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 94.1);
     }
+
+    @MediumTest
+    public void testGetPowertrainTorque()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        PowertrainTorque measurement = (PowertrainTorque)
+                service.get(PowertrainTorque.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().doubleValue(), 232.1);
+    }
+
 
     @MediumTest
     public void testGetLatitude() throws UnrecognizedMeasurementTypeException,

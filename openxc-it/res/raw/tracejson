@@ -8,3 +8,4 @@
 {"name": "button_event", "value": "ok", "event": "pressed"}
 {"name": "headlamp_status", "value": true}
 {"name": "high_beam_status", "value": false}
+{"name": "powertrain_torque", "value": 232.1}
