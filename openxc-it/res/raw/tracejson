@@ -10,3 +10,4 @@
 {"name": "high_beam_status", "value": false}
 {"name": "powertrain_torque", "value": 232.1}
 {"name": "fuel_level", "value": 71.2}
+{"name": "accelerator_pedal_position", "value": 14.0}
