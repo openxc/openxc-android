@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.units.Liter;
+import com.openxc.units.Percentage;
 import com.openxc.measurements.NoValueException;
 
 public class FuelLevelTest {
@@ -16,7 +16,7 @@ public class FuelLevelTest {
 
     @Before
     public void setUp() {
-        measurement = new FuelLevel(new Liter(1.0));
+        measurement = new FuelLevel(new Percentage(1.0));
     }
 
     @Test
