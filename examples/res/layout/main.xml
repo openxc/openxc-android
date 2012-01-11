@@ -43,6 +43,11 @@
             android:text="@string/powertrain_torque_label" />
     <TextView android:id="@+id/powertrain_torque"
             style="@style/DefaultFont"/>
+    <TextView android:id="@+id/accelerator_pedal_position_label"
+            style="@style/DefaultFont"
+            android:text="@string/accelerator_pedal_position_label" />
+    <TextView android:id="@+id/accelerator_pedal_position"
+            style="@style/DefaultFont"/>
     <TextView android:id="@+id/transmission_gear_pos_label"
             style="@style/DefaultFont"
             android:text="@string/transmission_gear_pos_label" />
