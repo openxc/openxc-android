@@ -12,7 +12,7 @@ public class EngineSpeed extends Measurement<RotationsPerMinute>
         implements VehicleMeasurement {
     private final static Range<RotationsPerMinute> RANGE =
         new Range<RotationsPerMinute>(new RotationsPerMinute(0),
-                new RotationsPerMinute(8000));
+                new RotationsPerMinute(16382));
     public final static String ID = "engine_speed";
 
     public EngineSpeed() {}
