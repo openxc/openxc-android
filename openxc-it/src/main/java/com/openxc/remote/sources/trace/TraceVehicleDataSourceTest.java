@@ -91,7 +91,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedBooleanCallback);
-        assertEquals(receivedBoolean, false);
+        assertEquals(receivedBoolean, true);
     }
 
     @SmallTest
