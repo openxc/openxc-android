@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.units.MetersPerSecond;
+import com.openxc.units.KilometersPerHour;
 import com.openxc.measurements.NoValueException;
 
 public class VehicleSpeedTest {
@@ -16,7 +16,7 @@ public class VehicleSpeedTest {
 
     @Before
     public void setUp() {
-        measurement = new VehicleSpeed(new MetersPerSecond(1.0));
+        measurement = new VehicleSpeed(new KilometersPerHour(1.0));
     }
 
     @Test
