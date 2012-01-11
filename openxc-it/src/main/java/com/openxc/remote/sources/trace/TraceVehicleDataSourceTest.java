@@ -33,7 +33,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     boolean receivedNumericalCallback;
     boolean receivedBooleanCallback;;
     double receivedNumber;
-    boolean receivedBoolean;
 
     @Override
     protected void setUp() {
@@ -55,7 +54,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
             public void receive(String name, Boolean value) {
                 receivedBooleanCallback = true;
-                receivedBoolean = value;
             }
 
             public void receive(String name, String value) { }
@@ -91,7 +89,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedBooleanCallback);
-        assertEquals(receivedBoolean, true);
     }
 
     @SmallTest
