@@ -331,6 +331,8 @@ public class VehicleDashboardActivity extends Activity {
                         mWiperListener);
                 mVehicleService.addListener(BrakePedalStatus.class,
                         mBrakePedalStatus);
+                mVehicleService.addListener(ParkingBrakeStatus.class,
+                        mParkingBrakeStatus);
                 mVehicleService.addListener(HeadlampStatus.class,
                         mHeadlampStatus);
                 mVehicleService.addListener(EngineSpeed.class,
