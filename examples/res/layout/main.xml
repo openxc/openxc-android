@@ -13,10 +13,10 @@
             android:text="@string/vehicle_speed_label" />
     <TextView android:id="@+id/vehicle_speed"
             style="@style/DefaultFont" />
-    <TextView android:id="@+id/wiper_speed_label"
+    <TextView android:id="@+id/wiper_status_label"
             style="@style/DefaultFont"
-            android:text="@string/wiper_speed_label" />
-    <TextView android:id="@+id/wiper_speed"
+            android:text="@string/wiper_status_label" />
+    <TextView android:id="@+id/wiper_status"
             style="@style/DefaultFont" />
     <TextView android:id="@+id/brake_pedal_status_label"
             style="@style/DefaultFont"

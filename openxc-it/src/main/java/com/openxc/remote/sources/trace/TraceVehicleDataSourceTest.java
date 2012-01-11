@@ -32,7 +32,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     VehicleDataSourceCallbackInterface callback;
     boolean receivedNumericalCallback;
     boolean receivedBooleanCallback;;
-    double receivedNumber;
 
     @Override
     protected void setUp() {
@@ -49,7 +48,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
             public void receive(String name, Double value) {
                 receivedNumericalCallback = true;
-                receivedNumber = value;
             }
 
             public void receive(String name, Boolean value) {
