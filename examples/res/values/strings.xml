@@ -7,6 +7,7 @@
     <string name="brake_pedal_status_label">Brake Pedal Status</string>
     <string name="headlamp_status_label">Headlamp Status</string>
     <string name="engine_speed_label">Engine Speed</string>
+    <string name="powertrain_torque_label">Powertrain Torque</string>
     <string name="transmission_gear_pos_label">
         Transmission Gear Position
     </string>

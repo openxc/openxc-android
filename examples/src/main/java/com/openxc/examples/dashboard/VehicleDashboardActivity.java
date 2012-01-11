@@ -16,6 +16,7 @@ import com.openxc.examples.R;
 import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.HeadlampStatus;
 import com.openxc.measurements.EngineSpeed;
+import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
@@ -43,6 +44,7 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mVehicleBrakeStatusView;
     private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
+    private TextView mPowertrainTorqueView;
     private TextView mTransmissionGearPosView;
     private TextView mIgnitionStatusView;
     private TextView mLatitudeView;
@@ -145,6 +147,22 @@ public class VehicleDashboardActivity extends Activity {
                     public void run() {
                         try{
                             mVehicleEngineSpeedView.setText(
+                                "" + status.getValue().doubleValue());
+                        } catch(NoValueException e) {}
+                    }
+                });
+            }
+        }
+    };
+
+    PowertrainTorque.Listener mPowertrainTorque = new PowertrainTorque.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final PowertrainTorque status = (PowertrainTorque) measurement;
+            if(!status.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try{
+                            mPowertrainTorqueView.setText(
                                 "" + status.getValue().doubleValue());
                         } catch(NoValueException e) {}
                     }
@@ -295,6 +313,8 @@ public class VehicleDashboardActivity extends Activity {
                         mHeadlampStatus);
                 mVehicleService.addListener(EngineSpeed.class,
                         mEngineSpeed);
+                mVehicleService.addListener(PowertrainTorque.class,
+                        mPowertrainTorque);
                 mVehicleService.addListener(TransmissionGearPosition.class,
                         mTransmissionGearPos);
                 mVehicleService.addListener(IgnitionStatus.class,
@@ -343,6 +363,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.headlamp_status);
         mVehicleEngineSpeedView = (TextView) findViewById(
                 R.id.engine_speed);
+        mPowertrainTorqueView = (TextView) findViewById(
+                R.id.powertrain_torque);
         mTransmissionGearPosView = (TextView) findViewById(
                 R.id.transmission_gear_pos);
         mIgnitionStatusView = (TextView) findViewById(

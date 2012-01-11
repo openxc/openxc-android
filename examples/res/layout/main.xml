@@ -38,6 +38,11 @@
             android:text="@string/engine_speed_label" />
     <TextView android:id="@+id/engine_speed"
             style="@style/DefaultFont"/>
+    <TextView android:id="@+id/powertrain_torque_label"
+            style="@style/DefaultFont"
+            android:text="@string/powertrain_torque_label" />
+    <TextView android:id="@+id/powertrain_torque"
+            style="@style/DefaultFont"/>
     <TextView android:id="@+id/transmission_gear_pos_label"
             style="@style/DefaultFont"
             android:text="@string/transmission_gear_pos_label" />
