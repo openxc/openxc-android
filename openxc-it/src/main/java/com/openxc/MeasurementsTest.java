@@ -8,6 +8,7 @@ import com.openxc.measurements.HeadlampStatus;
 import com.openxc.measurements.HighBeamStatus;
 import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.FuelConsumed;
+import com.openxc.measurements.Odometer;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.NoValueException;
@@ -90,6 +91,15 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
                 service.get(PowertrainTorque.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 232.1);
+    }
+
+    @MediumTest
+    public void testGetOdometer()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        Odometer measurement = (Odometer) service.get(Odometer.class);
+        checkReceivedMeasurement(measurement);
+        assertEquals(measurement.getValue().doubleValue(), 124141.4);
     }
 
     @MediumTest

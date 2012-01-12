@@ -12,3 +12,4 @@
 {"name": "fuel_level", "value": 71.2}
 {"name": "fuel_consumed_since_restart", "value": 81.2}
 {"name": "accelerator_pedal_position", "value": 14.0}
+{"name": "odometer", "value": 124141.4}
