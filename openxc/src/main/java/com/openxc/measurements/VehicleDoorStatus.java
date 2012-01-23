@@ -27,8 +27,8 @@ public class VehicleDoorStatus
      * The DoorId is the specific door of the vehicle.
      */
     public enum DoorId {
-        FRONT_LEFT,
-        FRONT_RIGHT,
+        DRIVER,
+        PASSENGER,
         REAR_LEFT,
         REAR_RIGHT,
         BOOT;
