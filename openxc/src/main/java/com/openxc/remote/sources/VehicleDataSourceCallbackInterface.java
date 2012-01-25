@@ -71,4 +71,16 @@ public interface VehicleDataSourceCallbackInterface {
      * @param event The String event of the element.
      */
     public void receive(String name, String value, String event);
+
+    /**
+     * Receive a data point with a name, string value and boolean event.
+     *
+     * The value and event are converted to Doubles equal to the hash of the
+     * strings.
+     *
+     * @param name The name of the element.
+     * @param value The String value of the element.
+     * @param event The Boolean event of the element.
+     */
+    public void receive(String name, String value, Boolean event);
 }
