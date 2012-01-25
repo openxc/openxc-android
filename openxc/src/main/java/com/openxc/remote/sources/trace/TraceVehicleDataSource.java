@@ -1,6 +1,7 @@
 package com.openxc.remote.sources.trace;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -178,8 +179,9 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             stream = getContext().getResources().openRawResource(
                     new Integer(filename.getAuthority()));
         } catch(Resources.NotFoundException e) {
-            Log.w(TAG, "Unable to find a trace resource with URI " + filename);
-            stream = new InputStream();
+            Log.w(TAG, "Unable to find a trace resource with URI " + filename
+                    + " -- returning an empty buffer");
+            stream = new ByteArrayInputStream(new byte[0]);
         }
         return readerForStream(stream);
     }
