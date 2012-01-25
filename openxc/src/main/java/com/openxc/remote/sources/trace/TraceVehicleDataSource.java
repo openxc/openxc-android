@@ -18,6 +18,7 @@ import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceException;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import android.util.Log;
 
@@ -171,11 +172,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             .toString();
     }
 
-    private BufferedReader openResourceFile(URI filename)
-            throws VehicleDataSourceException {
+    private BufferedReader openResourceFile(URI filename) {
         InputStream stream;
-        stream = getContext().getResources().openRawResource(
-                new Integer(filename.getAuthority()));
+        try {
+            stream = getContext().getResources().openRawResource(
+                    new Integer(filename.getAuthority()));
+        } catch(Resources.NotFoundException e) {
+            Log.w(TAG, "Unable to find a trace resource with URI " + filename);
+            stream = new InputStream();
+        }
         return readerForStream(stream);
     }
 
