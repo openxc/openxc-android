@@ -30,5 +30,7 @@
   <supports-screens android:largeScreens="true" android:xlargeScreens="true"
           android:anyDensity="true" />
 
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
 </manifest>
 

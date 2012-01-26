@@ -17,6 +17,8 @@
     <string name="ignition_label">Ignition Status</string>
     <string name="latitude_label">Latitude</string>
     <string name="longitude_label">Longitude</string>
+    <string name="android_latitude_label">Android Latitude</string>
+    <string name="android_longitude_label">Android Longitude</string>
     <string name="parking_brake_status_label">Parking Brake Status</string>
     <string name="button_event_label">Button Event</string>
     <string name="door_status_label">Door Status</string>

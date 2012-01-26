@@ -68,6 +68,16 @@
             android:text="@string/longitude_label" />
     <TextView android:id="@+id/longitude"
             style="@style/DefaultFont"/>
+    <TextView android:id="@+id/android_latitude_label"
+            style="@style/DefaultFont"
+            android:text="@string/android_latitude_label" />
+    <TextView android:id="@+id/android_latitude"
+            style="@style/DefaultFont"/>
+    <TextView android:id="@+id/android_longitude_label"
+            style="@style/DefaultFont"
+            android:text="@string/android_longitude_label" />
+    <TextView android:id="@+id/android_longitude"
+            style="@style/DefaultFont"/>
     <TextView android:id="@+id/button_event_label"
             style="@style/DefaultFont"
             android:text="@string/button_event_label" />

@@ -5,6 +5,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,6 +55,8 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mIgnitionStatusView;
     private TextView mLatitudeView;
     private TextView mLongitudeView;
+    private TextView mAndroidLatitudeView;
+    private TextView mAndroidLongitudeView;
     private TextView mButtonEventView;
     private TextView mDoorStatusView;
     private TextView mWiperStatusView;
@@ -298,6 +304,23 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
+    LocationListener mAndroidLocationListener = new LocationListener() {
+        public void onLocationChanged(final Location location) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        mAndroidLatitudeView.setText("" +
+                            location.getLatitude());
+                        mAndroidLongitudeView.setText("" +
+                            location.getLongitude());
+                    }
+                });
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onProviderEnabled(String provider) {}
+        public void onProviderDisabled(String provider) {}
+    };
+
     SteeringWheelAngle.Listener mSteeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -401,6 +424,10 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.latitude);
         mLongitudeView = (TextView) findViewById(
                 R.id.longitude);
+        mAndroidLatitudeView = (TextView) findViewById(
+                R.id.android_latitude);
+        mAndroidLongitudeView = (TextView) findViewById(
+                R.id.android_longitude);
         mButtonEventView = (TextView) findViewById(
                 R.id.button_event);
         mDoorStatusView = (TextView) findViewById(
@@ -413,6 +440,11 @@ public class VehicleDashboardActivity extends Activity {
         super.onResume();
         bindService(new Intent(this, VehicleService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
+
+        LocationManager locationManager = (LocationManager)
+            getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                0, 0, mAndroidLocationListener);
     }
 
     @Override

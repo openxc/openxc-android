@@ -17,6 +17,10 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
+import com.openxc.measurements.Latitude;
+import com.openxc.measurements.Longitude;
+import com.openxc.measurements.VehicleSpeed;
+
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
@@ -30,6 +34,9 @@ import android.app.Service;
 
 import android.content.Context;
 import android.content.Intent;
+
+import android.location.Location;
+import android.location.LocationManager;
 
 import android.os.Bundle;
 import android.os.IBinder;
@@ -70,6 +77,7 @@ public class RemoteVehicleService extends Service {
         RemoteVehicleServiceListenerInterface>> mListeners;
     private BlockingQueue<String> mNotificationQueue;
     private NotificationThread mNotificationThread;
+    private LocationManager mLocationManager;
 
     /**
      * A callback receiver for the vehicle data source.
@@ -89,11 +97,35 @@ public class RemoteVehicleService extends Service {
                 }
             }
 
+            private void updateLocation() {
+                if(!mMeasurements.containsKey(Latitude.ID) ||
+                        !mMeasurements.containsKey(Longitude.ID) ||
+                        !mMeasurements.containsKey(VehicleSpeed.ID)) {
+                    return;
+                }
+
+                Location location = new Location(LocationManager.GPS_PROVIDER);
+                location.setLatitude(mMeasurements.get("latitude")
+                        .getValue().doubleValue());
+                location.setLongitude(mMeasurements.get("longitude")
+                        .getValue().doubleValue());
+                location.setSpeed(mMeasurements.get("vehicle_speed")
+                        .getValue().floatValue());
+                location.setTime(System.currentTimeMillis());
+
+                mLocationManager.setTestProviderLocation(
+                        LocationManager.GPS_PROVIDER, location);
+            }
+
             public void receive(final String measurementId,
                     final Double value) {
-                mMeasurements.put(measurementId,
-                        new RawMeasurement(value));
+                mMeasurements.put(measurementId, new RawMeasurement(value));
                 queueNotification(measurementId);
+
+                if(measurementId.equals("latitude") ||
+                        measurementId.equals("longitude")) {
+                    updateLocation();
+                }
             }
 
             public void receive(final String measurementId,
@@ -114,6 +146,17 @@ public class RemoteVehicleService extends Service {
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
+
+        setupMockLocations();
+    }
+
+    private void setupMockLocations() {
+        mLocationManager = (LocationManager) getSystemService(
+                Context.LOCATION_SERVICE);
+        mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
+                false, false, false, false, false, true, false, 0, 5);
+        mLocationManager.setTestProviderEnabled(
+                LocationManager.GPS_PROVIDER, true);
     }
 
     /**
