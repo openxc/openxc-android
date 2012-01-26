@@ -4,6 +4,7 @@
     <string name="steering_wheel_angle_label">Steering Wheel Angle</string>
     <string name="vehicle_speed_label">Vehicle Speed</string>
     <string name="fuel_consumed_label">Fuel Consumed</string>
+    <string name="fuel_level_label">Fuel Level</string>
     <string name="wiper_status_label">Windshield Wiper Status</string>
     <string name="brake_pedal_status_label">Brake Pedal Status</string>
     <string name="headlamp_status_label">Headlamp Status</string>

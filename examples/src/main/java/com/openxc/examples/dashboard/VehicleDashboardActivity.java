@@ -35,6 +35,7 @@ import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.FuelConsumed;
+import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.RemoteVehicleServiceException;
 
@@ -48,6 +49,7 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
     private TextView mFuelConsumedView;
+    private TextView mFuelLevelView;
     private TextView mVehicleBrakeStatusView;
     private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
@@ -114,6 +116,23 @@ public class VehicleDashboardActivity extends Activity {
             }
         }
     };
+
+    FuelLevel.Listener mFuelLevelListener = new FuelLevel.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final FuelLevel level = (FuelLevel) measurement;
+            if(!level.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mFuelLevelView.setText(
+                                "" + level.getValue().doubleValue());
+                        } catch(NoValueException e) { }
+                    }
+                });
+            }
+        }
+    };
+
 
     BrakePedalStatus.Listener mBrakePedalStatus =
             new BrakePedalStatus.Listener() {
@@ -370,6 +389,8 @@ public class VehicleDashboardActivity extends Activity {
                         mSpeedListener);
                 mVehicleService.addListener(FuelConsumed.class,
                         mFuelConsumedListener);
+                mVehicleService.addListener(FuelLevel.class,
+                        mFuelLevelListener);
                 mVehicleService.addListener(WindshieldWiperStatus.class,
                         mWiperListener);
                 mVehicleService.addListener(BrakePedalStatus.class,
@@ -424,6 +445,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.vehicle_speed);
         mFuelConsumedView = (TextView) findViewById(
                 R.id.fuel_consumed);
+        mFuelLevelView = (TextView) findViewById(
+                R.id.fuel_level);
         mWiperStatusView = (TextView) findViewById(
                 R.id.wiper_status);
         mVehicleBrakeStatusView = (TextView) findViewById(

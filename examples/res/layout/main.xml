@@ -18,6 +18,11 @@
             android:text="@string/fuel_consumed_label" />
     <TextView android:id="@+id/fuel_consumed"
             style="@style/DefaultFont" />
+    <TextView android:id="@+id/fuel_level_label"
+            style="@style/DefaultFont"
+            android:text="@string/fuel_level_label" />
+    <TextView android:id="@+id/fuel_level"
+            style="@style/DefaultFont" />
     <TextView android:id="@+id/wiper_status_label"
             style="@style/DefaultFont"
             android:text="@string/wiper_status_label" />
