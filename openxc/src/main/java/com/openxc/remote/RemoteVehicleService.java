@@ -105,11 +105,11 @@ public class RemoteVehicleService extends Service {
                 }
 
                 Location location = new Location(LocationManager.GPS_PROVIDER);
-                location.setLatitude(mMeasurements.get("latitude")
+                location.setLatitude(mMeasurements.get(Latitude.ID)
                         .getValue().doubleValue());
-                location.setLongitude(mMeasurements.get("longitude")
+                location.setLongitude(mMeasurements.get(Longitude.ID)
                         .getValue().doubleValue());
-                location.setSpeed(mMeasurements.get("vehicle_speed")
+                location.setSpeed(mMeasurements.get(VehicleSpeed.ID)
                         .getValue().floatValue());
                 location.setTime(System.currentTimeMillis());
 
@@ -122,8 +122,8 @@ public class RemoteVehicleService extends Service {
                 mMeasurements.put(measurementId, new RawMeasurement(value));
                 queueNotification(measurementId);
 
-                if(measurementId.equals("latitude") ||
-                        measurementId.equals("longitude")) {
+                if(measurementId.equals(Latitude.ID) ||
+                        measurementId.equals(Longitude.ID)) {
                     updateLocation();
                 }
             }
