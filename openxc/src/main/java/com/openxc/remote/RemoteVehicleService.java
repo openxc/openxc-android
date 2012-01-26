@@ -98,7 +98,8 @@ public class RemoteVehicleService extends Service {
             }
 
             private void updateLocation() {
-                if(!mMeasurements.containsKey(Latitude.ID) ||
+                if(mLocationManager == null ||
+                        !mMeasurements.containsKey(Latitude.ID) ||
                         !mMeasurements.containsKey(Longitude.ID) ||
                         !mMeasurements.containsKey(VehicleSpeed.ID)) {
                     return;
@@ -113,8 +114,13 @@ public class RemoteVehicleService extends Service {
                         .getValue().floatValue());
                 location.setTime(System.currentTimeMillis());
 
-                mLocationManager.setTestProviderLocation(
-                        LocationManager.GPS_PROVIDER, location);
+                try {
+                    mLocationManager.setTestProviderLocation(
+                            LocationManager.GPS_PROVIDER, location);
+                } catch(SecurityException e) {
+                    Log.w(TAG, "Unable to use mocked locations, " +
+                            "insufficient privileges", e);
+                }
             }
 
             public void receive(final String measurementId,
@@ -148,15 +154,6 @@ public class RemoteVehicleService extends Service {
                 RemoteVehicleServiceListenerInterface>>());
 
         setupMockLocations();
-    }
-
-    private void setupMockLocations() {
-        mLocationManager = (LocationManager) getSystemService(
-                Context.LOCATION_SERVICE);
-        mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
-                false, false, false, false, false, true, false, 0, 5);
-        mLocationManager.setTestProviderEnabled(
-                LocationManager.GPS_PROVIDER, true);
     }
 
     /**
@@ -240,6 +237,21 @@ public class RemoteVehicleService extends Service {
             .add("numMeasurementTypes", mMeasurements.size())
             .add("callbackBacklog", mNotificationQueue.size())
             .toString();
+    }
+
+    private void setupMockLocations() {
+        mLocationManager = (LocationManager) getSystemService(
+                Context.LOCATION_SERVICE);
+        try {
+            mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
+                    false, false, false, false, false, true, false, 0, 5);
+            mLocationManager.setTestProviderEnabled(
+                    LocationManager.GPS_PROVIDER, true);
+        } catch(SecurityException e) {
+            Log.w(TAG, "Unable to use mocked locations, " +
+                    "insufficient privileges", e);
+            mLocationManager = null;
+        }
     }
 
     private VehicleDataSourceInterface initializeDataSource(
