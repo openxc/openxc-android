@@ -23,6 +23,16 @@
             android:text="@string/fuel_level_label" />
     <TextView android:id="@+id/fuel_level"
             style="@style/DefaultFont" />
+    <TextView android:id="@+id/odometer_label"
+            style="@style/DefaultFont"
+            android:text="@string/odometer_label" />
+    <TextView android:id="@+id/odometer"
+            style="@style/DefaultFont" />
+    <TextView android:id="@+id/fine_odometer_label"
+            style="@style/DefaultFont"
+            android:text="@string/fine_odometer_label" />
+    <TextView android:id="@+id/fine_odometer"
+            style="@style/DefaultFont" />
     <TextView android:id="@+id/wiper_status_label"
             style="@style/DefaultFont"
             android:text="@string/wiper_status_label" />

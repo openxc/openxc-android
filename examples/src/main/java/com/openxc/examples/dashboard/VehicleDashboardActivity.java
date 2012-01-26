@@ -36,6 +36,8 @@ import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.FuelConsumed;
 import com.openxc.measurements.FuelLevel;
+import com.openxc.measurements.Odometer;
+import com.openxc.measurements.FineOdometer;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.RemoteVehicleServiceException;
 
@@ -50,6 +52,8 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mVehicleSpeedView;
     private TextView mFuelConsumedView;
     private TextView mFuelLevelView;
+    private TextView mOdometerView;
+    private TextView mFineOdometerView;
     private TextView mVehicleBrakeStatusView;
     private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
@@ -133,6 +137,37 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
+    Odometer.Listener mOdometerListener = new Odometer.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final Odometer odometer = (Odometer) measurement;
+            if(!odometer.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mOdometerView.setText(
+                                "" + odometer.getValue().doubleValue());
+                        } catch(NoValueException e) { }
+                    }
+                });
+            }
+        }
+    };
+
+    FineOdometer.Listener mFineOdometerListener = new FineOdometer.Listener() {
+        public void receive(VehicleMeasurement measurement) {
+            final FineOdometer odometer = (FineOdometer) measurement;
+            if(!odometer.isNone()) {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            mFineOdometerView.setText(
+                                "" + odometer.getValue().doubleValue());
+                        } catch(NoValueException e) { }
+                    }
+                });
+            }
+        }
+    };
 
     BrakePedalStatus.Listener mBrakePedalStatus =
             new BrakePedalStatus.Listener() {
@@ -391,6 +426,10 @@ public class VehicleDashboardActivity extends Activity {
                         mFuelConsumedListener);
                 mVehicleService.addListener(FuelLevel.class,
                         mFuelLevelListener);
+                mVehicleService.addListener(Odometer.class,
+                        mOdometerListener);
+                mVehicleService.addListener(FineOdometer.class,
+                        mFineOdometerListener);
                 mVehicleService.addListener(WindshieldWiperStatus.class,
                         mWiperListener);
                 mVehicleService.addListener(BrakePedalStatus.class,
@@ -447,6 +486,10 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.fuel_consumed);
         mFuelLevelView = (TextView) findViewById(
                 R.id.fuel_level);
+        mOdometerView = (TextView) findViewById(
+                R.id.odometer);
+        mFineOdometerView = (TextView) findViewById(
+                R.id.fine_odometer);
         mWiperStatusView = (TextView) findViewById(
                 R.id.wiper_status);
         mVehicleBrakeStatusView = (TextView) findViewById(
