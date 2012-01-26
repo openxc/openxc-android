@@ -443,8 +443,9 @@ public class VehicleDashboardActivity extends Activity {
 
         LocationManager locationManager = (LocationManager)
             getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                0, 0, mAndroidLocationListener);
+        locationManager.requestLocationUpdates(
+                VehicleService.VEHICLE_LOCATION_PROVIDER, 0, 0,
+                mAndroidLocationListener);
     }
 
     @Override

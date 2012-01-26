@@ -69,6 +69,7 @@ public class RemoteVehicleService extends Service {
     public final static String DATA_SOURCE_NAME_EXTRA = "data_source";
     public final static String DATA_SOURCE_RESOURCE_EXTRA =
             "data_source_resource";
+    public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
@@ -117,6 +118,9 @@ public class RemoteVehicleService extends Service {
                 try {
                     mLocationManager.setTestProviderLocation(
                             LocationManager.GPS_PROVIDER, location);
+                    location.setProvider(VEHICLE_LOCATION_PROVIDER);
+                    mLocationManager.setTestProviderLocation(
+                            VEHICLE_LOCATION_PROVIDER, location);
                 } catch(SecurityException e) {
                     Log.w(TAG, "Unable to use mocked locations, " +
                             "insufficient privileges", e);
@@ -239,6 +243,18 @@ public class RemoteVehicleService extends Service {
             .toString();
     }
 
+    /**
+     * Setup Android location framework to accept vehicle GPS.
+     *
+     * If we have at least latitude, longitude and vehicle speed from
+     * the vehicle, we send out a mocked location for the
+     * LocationManager.GPS_PROVIDER and VEHICLE_LOCATION_PROVIDER
+     * providers.
+     *
+     * Developers can either use the standard Android location framework
+     * with mocked locations enabled, or the specific OpenXC
+     * Latitude/Longitude measurements.
+     */
     private void setupMockLocations() {
         mLocationManager = (LocationManager) getSystemService(
                 Context.LOCATION_SERVICE);
@@ -247,6 +263,14 @@ public class RemoteVehicleService extends Service {
                     false, false, false, false, false, true, false, 0, 5);
             mLocationManager.setTestProviderEnabled(
                     LocationManager.GPS_PROVIDER, true);
+
+            if(mLocationManager.getProvider(
+                        VEHICLE_LOCATION_PROVIDER) == null) {
+                mLocationManager.addTestProvider(VEHICLE_LOCATION_PROVIDER,
+                        false, false, false, false, false, true, false, 0, 5);
+            }
+            mLocationManager.setTestProviderEnabled(
+                    VEHICLE_LOCATION_PROVIDER, true);
         } catch(SecurityException e) {
             Log.w(TAG, "Unable to use mocked locations, " +
                     "insufficient privileges", e);

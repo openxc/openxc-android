@@ -22,6 +22,7 @@ import com.openxc.measurements.VehicleMeasurement;
 
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RawMeasurement;
+import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
@@ -60,6 +61,8 @@ import android.util.Log;
  * documentation for details on the parameters.
  */
 public class VehicleService extends Service {
+    public final static String VEHICLE_LOCATION_PROVIDER =
+            RemoteVehicleService.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleService";
 
     private boolean mIsBound;
