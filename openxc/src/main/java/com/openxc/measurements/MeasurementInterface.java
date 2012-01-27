@@ -7,24 +7,15 @@ import com.openxc.util.Range;
  * The MeasurementInterface is the base for all OpenXC measurements.
  *
  * A Measurement has at least a value and an age, and optionally a range of
- * valid values. It is not required to have a value - users of this class must
- * either catch the NoValueException returned by {@link #getValue()} or check for
- * validity first with {@link #isNone()}.
+ * valid values.
  */
 public interface MeasurementInterface {
-    /**
-     * Check the validity of this measurement.
-     *
-     * @return true if this measurement has no value.
-     */
-    public boolean isNone();
-
     /**
      * Retreive the age of this measurement.
      *
      * @return the age of the data in seconds.
      */
-    public double getAge() throws NoValueException;
+    public double getAge();
 
     /**
      * Determine if this measurement has a valid range.
@@ -45,7 +36,6 @@ public interface MeasurementInterface {
      * Return the value of this measurement.
      *
      * @return The wrapped value (an instance of TheUnit)
-     * @throws NoValueException if this measurement has no value
      */
-    public Unit getValue() throws NoValueException;
+    public Unit getValue();
 }

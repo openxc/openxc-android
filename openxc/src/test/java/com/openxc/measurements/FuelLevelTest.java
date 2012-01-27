@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.Percentage;
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 
 public class FuelLevelTest {
     FuelLevel measurement;

@@ -9,8 +9,6 @@ public class HeadlampStatus extends Measurement<Boolean>
         implements VehicleMeasurement {
     public final static String ID = "headlamp_status";
 
-    public HeadlampStatus() { }
-
     public HeadlampStatus(Boolean value) {
         super(value);
     }

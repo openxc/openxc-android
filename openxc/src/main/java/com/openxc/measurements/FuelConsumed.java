@@ -12,8 +12,6 @@ public class FuelConsumed extends Measurement<Liter>
         new Range<Liter>(new Liter(0), new Liter(4294967295.0));
     public final static String ID = "fuel_consumed_since_restart";
 
-    public FuelConsumed() { }
-
     public FuelConsumed(Double value) {
         super(new Liter(value), RANGE);
     }

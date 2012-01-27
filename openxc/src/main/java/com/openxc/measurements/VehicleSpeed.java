@@ -15,8 +15,6 @@ public class VehicleSpeed extends Measurement<KilometersPerHour>
                 new KilometersPerHour(655.0));
     public final static String ID = "vehicle_speed";
 
-    public VehicleSpeed() { }
-
     public VehicleSpeed(KilometersPerHour value) {
         super(value, RANGE);
     }

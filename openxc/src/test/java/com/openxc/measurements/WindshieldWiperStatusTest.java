@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 
 public class WindshieldWiperStatusTest {
     WindshieldWiperStatus measurement;
@@ -16,11 +16,6 @@ public class WindshieldWiperStatusTest {
     @Before
     public void setUp() {
         measurement = new WindshieldWiperStatus(new Boolean(true));
-    }
-
-    @Test
-    public void testDefaultConstructor() {
-        assertThat(new WindshieldWiperStatus().isNone(), equalTo(true));
     }
 
     @Test

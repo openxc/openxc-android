@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 import com.openxc.measurements.HighBeamStatus;
 
 public class HighBeamStatusTest {
@@ -17,11 +17,6 @@ public class HighBeamStatusTest {
     @Before
     public void setUp() {
         measurement = new HighBeamStatus(new Boolean(false));
-    }
-
-    @Test
-    public void testDefaultConstructor() {
-        assertThat(new HighBeamStatus().isNone(), equalTo(true));
     }
 
     @Test

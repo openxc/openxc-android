@@ -9,8 +9,6 @@ public class HighBeamStatus extends Measurement<Boolean>
         implements VehicleMeasurement {
     public final static String ID = "high_beam_status";
 
-    public HighBeamStatus() { }
-
     public HighBeamStatus(Boolean value) {
         super(value);
     }

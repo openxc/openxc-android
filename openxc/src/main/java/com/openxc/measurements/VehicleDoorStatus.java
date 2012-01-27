@@ -54,8 +54,6 @@ public class VehicleDoorStatus
         }
     }
 
-    public VehicleDoorStatus() {}
-
     public VehicleDoorStatus(State<DoorId> value, Boolean action) {
         super(value);
         mAction = new AgingData<Boolean>(action);
@@ -69,11 +67,7 @@ public class VehicleDoorStatus
         this(DoorId.fromHashCode(value.intValue()), new Boolean(action));
     }
 
-    public Boolean getAction() throws NoValueException {
+    public Boolean getAction() {
         return mAction.getValue();
-    }
-
-    public boolean isNone() {
-        return super.isNone() && mAction.isNone();
     }
 }

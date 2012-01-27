@@ -15,8 +15,6 @@ public class AcceleratorPedalPosition extends Measurement<Percentage>
         new Range<Percentage>(new Percentage(0), new Percentage(100));
     public final static String ID = "accelerator_pedal_position";
 
-    public AcceleratorPedalPosition() { }
-
     public AcceleratorPedalPosition(Double value) {
         super(new Percentage(value), RANGE);
     }

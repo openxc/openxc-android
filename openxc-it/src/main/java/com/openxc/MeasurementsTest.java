@@ -12,7 +12,7 @@ import com.openxc.measurements.Odometer;
 import com.openxc.measurements.FineOdometer;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.TransmissionGearPosition;
@@ -62,7 +62,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {
         assertNotNull(measurement);
-        assertFalse(measurement.isNone());
     }
 
     @MediumTest

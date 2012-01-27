@@ -9,7 +9,7 @@ import static org.junit.Assert.assertFalse;
 
 import com.openxc.units.Meter;
 import com.openxc.measurements.Measurement;
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 import com.openxc.measurements.NoRangeException;
 
 public class NoRangeMeasurementTest {
@@ -18,11 +18,6 @@ public class NoRangeMeasurementTest {
     @Before
     public void setUp() {
         measurement = new Measurement<Meter>(new Meter(10.0));
-    }
-
-    @Test
-    public void testHasValue() {
-        assertThat(measurement.isNone(), equalTo(false));
     }
 
     @Test

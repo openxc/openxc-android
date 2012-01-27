@@ -13,8 +13,6 @@ public class Longitude extends Measurement<Degree>
             new Degree(-179.0), new Degree(179.0));
     public final static String ID = "longitude";
 
-    public Longitude() { }
-
     public Longitude(Degree value) {
         super(value, RANGE);
     }

@@ -12,8 +12,6 @@ public class Odometer extends Measurement<Kilometer>
         new Range<Kilometer>(new Kilometer(0), new Kilometer(100));
     public final static String ID = "odometer";
 
-    public Odometer() { }
-
     public Odometer(Double value) {
         super(new Kilometer(value), RANGE);
     }

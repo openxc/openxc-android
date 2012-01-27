@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.NewtonMeter;
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 
 public class PowertrainTorqueTest {
     PowertrainTorque measurement;
@@ -17,11 +17,6 @@ public class PowertrainTorqueTest {
     @Before
     public void setUp() {
         measurement = new PowertrainTorque(new NewtonMeter(1.0));
-    }
-
-    @Test
-    public void testDefaultConstructor() {
-        assertThat(new PowertrainTorque().isNone(), equalTo(true));
     }
 
     @Test

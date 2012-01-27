@@ -91,8 +91,6 @@ public class VehicleButtonEvent
         }
     }
 
-    public VehicleButtonEvent() {}
-
     public VehicleButtonEvent(State<ButtonId> value,
             State<ButtonAction> action) {
         super(value);
@@ -108,11 +106,7 @@ public class VehicleButtonEvent
                 ButtonAction.fromHashCode(action.intValue()));
     }
 
-    public State<ButtonAction> getAction() throws NoValueException {
+    public State<ButtonAction> getAction() {
         return mAction.getValue();
-    }
-
-    public boolean isNone() {
-        return super.isNone() && mAction != null && mAction.isNone();
     }
 }

@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 
 public class ParkingBrakeStatusTest {
     ParkingBrakeStatus measurement;
@@ -16,11 +16,6 @@ public class ParkingBrakeStatusTest {
     @Before
     public void setUp() {
         measurement = new ParkingBrakeStatus(new Boolean(false));
-    }
-
-    @Test
-    public void testDefaultConstructor() {
-        assertThat(new ParkingBrakeStatus().isNone(), equalTo(true));
     }
 
     @Test

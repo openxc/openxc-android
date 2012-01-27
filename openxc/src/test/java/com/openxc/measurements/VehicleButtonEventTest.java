@@ -9,7 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.State;
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 
 public class VehicleButtonEventTest {
     VehicleButtonEvent measurement;

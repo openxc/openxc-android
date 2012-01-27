@@ -20,7 +20,7 @@ import com.google.common.collect.Multimap;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleMeasurement;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.remote.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceException;
@@ -158,18 +158,20 @@ public class VehicleService extends Service {
      *      not have a value.
      * @throws UnrecognizedMeasurementTypeException if passed a measurementType
      *      that does not extend VehicleMeasurement
+     * @throws NoValueException if no value has yet been received for this
+     *      measurementType
      * @see VehicleMeasurement
      */
     public VehicleMeasurement get(
             Class<? extends VehicleMeasurement> measurementType)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMeasurementTypeException, NoValueException {
 
         cacheMeasurementId(measurementType);
 
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
-                    "returning an empty measurement");
-            return constructBlankMeasurement(measurementType);
+                    "throwing a NoValueException");
+            throw new NoValueException();
         }
 
         Log.d(TAG, "Looking up measurement for " + measurementType);
@@ -179,7 +181,7 @@ public class VehicleService extends Service {
             return getMeasurementFromRaw(measurementType, rawMeasurement);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
-            return constructBlankMeasurement(measurementType);
+            throw new NoValueException();
         }
     }
 
@@ -334,6 +336,10 @@ public class VehicleService extends Service {
                     Log.w(TAG, "Received notification for a malformed " +
                             "measurement type: " + measurementClass, e);
                     return;
+                } catch(NoValueException e) {
+                    Log.w(TAG, "Received notification for a blank " +
+                            "measurement of type: " + measurementClass, e);
+                    return;
                 }
                 // TODO we may want to dump these in a queue handled by another
                 // thread or post runnables to the main handler, sort of like we
@@ -390,24 +396,10 @@ public class VehicleService extends Service {
         }
     }
 
-    private VehicleMeasurement constructBlankMeasurement(
-            Class<? extends VehicleMeasurement> measurementType)
-            throws UnrecognizedMeasurementTypeException {
-        try {
-            return measurementType.newInstance();
-        } catch(InstantiationException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    "No default constructor on given measurement type", e);
-        } catch(IllegalAccessException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    "Default constructor not public on measurement type", e);
-        }
-    }
-
     private VehicleMeasurement getMeasurementFromRaw(
             Class<? extends VehicleMeasurement> measurementType,
             RawMeasurement rawMeasurement)
-            throws UnrecognizedMeasurementTypeException{
+            throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends VehicleMeasurement> constructor;
         try {
             constructor = measurementType.getConstructor(Double.class,
@@ -448,6 +440,6 @@ public class VehicleService extends Service {
             Log.d(TAG, rawMeasurement +
                     " isn't valid -- returning a blank measurement");
         }
-        return constructBlankMeasurement(measurementType);
+        throw new NoValueException();
     }
 }

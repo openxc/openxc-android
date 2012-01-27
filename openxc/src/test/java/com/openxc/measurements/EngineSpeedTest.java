@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.RotationsPerMinute;
-import com.openxc.measurements.NoValueException;
+import com.openxc.remote.NoValueException;
 
 public class EngineSpeedTest {
     EngineSpeed measurement;
