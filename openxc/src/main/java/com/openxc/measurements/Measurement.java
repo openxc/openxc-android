@@ -81,10 +81,6 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         return mValue.getValue();
     }
 
-    public boolean isNone() {
-        return mValue.isNone();
-    }
-
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
