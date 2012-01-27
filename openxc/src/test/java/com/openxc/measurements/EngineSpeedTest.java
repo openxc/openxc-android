@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.RotationsPerMinute;
-import com.openxc.remote.NoValueException;
 
 public class EngineSpeedTest {
     EngineSpeed measurement;
@@ -19,7 +18,7 @@ public class EngineSpeedTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
     }
 

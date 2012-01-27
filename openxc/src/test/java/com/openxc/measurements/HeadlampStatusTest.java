@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.remote.NoValueException;
 
 public class HeadlampStatusTest {
     HeadlampStatus measurement;
@@ -19,7 +18,7 @@ public class HeadlampStatusTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().booleanValue(), equalTo(false));
     }
 

@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
 import com.openxc.measurements.Measurement;
-import com.openxc.remote.NoValueException;
 import com.openxc.measurements.NoRangeException;
 
 public class MeasurementTest {
@@ -25,7 +24,7 @@ public class MeasurementTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(10.0));
     }
 
@@ -40,7 +39,7 @@ public class MeasurementTest {
     }
 
     @Test
-    public void testAgeIsPositive() throws NoValueException {
+    public void testAgeIsPositive() {
         assertThat(measurement.getAge(), greaterThan(0.0));
     }
 }

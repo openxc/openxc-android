@@ -9,7 +9,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.State;
-import com.openxc.remote.NoValueException;
 
 public class VehicleButtonEventTest {
     VehicleButtonEvent measurement;
@@ -24,7 +23,7 @@ public class VehicleButtonEventTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().enumValue(), equalTo(
                     VehicleButtonEvent.ButtonId.OK));
         assertThat(measurement.getAction().enumValue(), equalTo(
