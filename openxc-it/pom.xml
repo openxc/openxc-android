@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.openxc</groupId>
         <artifactId>openxc-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1</version>
     </parent>
 
     <groupId>com.openxc</groupId>
     <artifactId>openxc-it</artifactId>
-    <version>1.0.0</version>
+    <version>1.1</version>
     <packaging>apk</packaging>
     <name>OpenXC - Integration Tests</name>
     <dependencies>
