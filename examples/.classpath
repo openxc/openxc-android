@@ -10,6 +10,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" output="bin/classes" path="src/main/java"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/openxc"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
