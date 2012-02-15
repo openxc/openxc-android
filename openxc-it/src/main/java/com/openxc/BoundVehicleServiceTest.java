@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.test.ServiceTestCase;
 
 import android.test.suitebuilder.annotation.MediumTest;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import junit.framework.Assert;
 

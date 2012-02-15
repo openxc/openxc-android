@@ -2,10 +2,6 @@ package com.openxc.remote.sources.usb;
 
 import android.app.Activity;
 
-import android.content.Intent;
-
-import android.hardware.usb.UsbManager;
-
 import android.util.Log;
 
 /**
