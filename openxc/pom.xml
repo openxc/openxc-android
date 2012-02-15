@@ -8,9 +8,7 @@
         <version>1.1</version>
     </parent>
 
-    <groupId>com.openxc</groupId>
     <artifactId>openxc</artifactId>
-    <version>1.1</version>
     <packaging>apklib</packaging>
     <name>OpenXC - Library</name>
     <dependencies>
