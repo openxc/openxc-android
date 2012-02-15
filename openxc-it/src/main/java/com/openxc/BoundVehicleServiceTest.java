@@ -71,7 +71,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     @MediumTest
     public void testGetNoData() throws UnrecognizedMeasurementTypeException {
         try {
-        VehicleMeasurement measurement = service.get(EngineSpeed.class);
+            service.get(EngineSpeed.class);
         } catch(NoValueException e) {
             return;
         }
