@@ -10,6 +10,13 @@
           </intent-filter>
       </service>
 
+      <activity android:name=".OpenXcEnablerActivity">
+          <intent-filter>
+              <action android:name="android.intent.action.MAIN" />
+              <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+      </activity>
+
       <activity android:name="com.openxc.remote.sources.usb.UsbDeviceAttachmentActivity">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
