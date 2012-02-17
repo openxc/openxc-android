@@ -454,9 +454,13 @@ public class VehicleDashboardActivity extends Activity {
 
         LocationManager locationManager = (LocationManager)
             getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(
-                VehicleService.VEHICLE_LOCATION_PROVIDER, 0, 0,
-                mAndroidLocationListener);
+        try {
+            locationManager.requestLocationUpdates(
+                    VehicleService.VEHICLE_LOCATION_PROVIDER, 0, 0,
+                    mAndroidLocationListener);
+        } catch(IllegalArgumentException e) {
+            Log.w(TAG, "Vehicle location provider is unavailable");
+        }
     }
 
     @Override
