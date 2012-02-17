@@ -25,16 +25,6 @@ public class AgingData<TheUnit extends Unit> {
     }
 
     /**
-     * Construct an instance of AgingData with no value.
-     *
-     * @see NoneData
-     */
-    public AgingData() {
-        super();
-        mBornTime = System.nanoTime();
-    }
-
-    /**
      * Return the value this instance wraps.
      *
      * @return The wrapped value (an instance of TheUnit)
