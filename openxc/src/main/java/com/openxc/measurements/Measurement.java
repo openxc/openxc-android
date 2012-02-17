@@ -33,13 +33,6 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     private Range<TheUnit> mRange;
 
     /**
-     * Construct a new Measurement with no value.
-     */
-    public Measurement() {
-        mValue = new AgingData<TheUnit>();
-    }
-
-    /**
      * Construct a new Measurement with the given value.
      *
      * @param value the TheUnit this measurement represents.
@@ -62,7 +55,7 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         mRange = range;
     }
 
-    public double getAge() throws NoValueException {
+    public double getAge() {
         return mValue.getAge();
     }
 
@@ -77,7 +70,7 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         return mRange;
     }
 
-    public TheUnit getValue() throws NoValueException {
+    public TheUnit getValue() {
         return mValue.getValue();
     }
 

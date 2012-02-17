@@ -12,8 +12,6 @@ public class PowertrainTorque extends Measurement<NewtonMeter>
             new NewtonMeter(-500), new NewtonMeter(1500));
     public final static String ID = "powertrain_torque";
 
-    public PowertrainTorque() { }
-
     public PowertrainTorque(NewtonMeter value) {
         super(value, RANGE);
     }

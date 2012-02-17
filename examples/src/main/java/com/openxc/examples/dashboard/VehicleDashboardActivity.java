@@ -24,7 +24,6 @@ import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.AcceleratorPedalPosition;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.measurements.NoValueException;
 import com.openxc.measurements.ParkingBrakeStatus;
 import com.openxc.measurements.IgnitionStatus;
 import com.openxc.measurements.SteeringWheelAngle;
@@ -76,96 +75,72 @@ public class VehicleDashboardActivity extends Activity {
         public void receive(VehicleMeasurement measurement) {
             final WindshieldWiperStatus wiperStatus =
                 (WindshieldWiperStatus) measurement;
-            if(!wiperStatus.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mWiperStatusView.setText("" +
-                                wiperStatus.getValue().booleanValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mWiperStatusView.setText("" +
+                        wiperStatus.getValue().booleanValue());
+                }
+            });
         }
     };
 
     VehicleSpeed.Listener mSpeedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final VehicleSpeed speed = (VehicleSpeed) measurement;
-            if(!speed.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mVehicleSpeedView.setText(
-                                "" + speed.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mVehicleSpeedView.setText(
+                        "" + speed.getValue().doubleValue());
+                }
+            });
         }
     };
 
     FuelConsumed.Listener mFuelConsumedListener = new FuelConsumed.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final FuelConsumed fuel = (FuelConsumed) measurement;
-            if(!fuel.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mFuelConsumedView.setText(
-                                "" + fuel.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mFuelConsumedView.setText(
+                        "" + fuel.getValue().doubleValue());
+                }
+            });
         }
     };
 
     FuelLevel.Listener mFuelLevelListener = new FuelLevel.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final FuelLevel level = (FuelLevel) measurement;
-            if(!level.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mFuelLevelView.setText(
-                                "" + level.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mFuelLevelView.setText(
+                        "" + level.getValue().doubleValue());
+                }
+            });
         }
     };
 
     Odometer.Listener mOdometerListener = new Odometer.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final Odometer odometer = (Odometer) measurement;
-            if(!odometer.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mOdometerView.setText(
-                                "" + odometer.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mOdometerView.setText(
+                        "" + odometer.getValue().doubleValue());
+                }
+            });
         }
     };
 
     FineOdometer.Listener mFineOdometerListener = new FineOdometer.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final FineOdometer odometer = (FineOdometer) measurement;
-            if(!odometer.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mFineOdometerView.setText(
-                                "" + odometer.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mFineOdometerView.setText(
+                        "" + odometer.getValue().doubleValue());
+                }
+            });
         }
     };
 
@@ -173,16 +148,12 @@ public class VehicleDashboardActivity extends Activity {
             new BrakePedalStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final BrakePedalStatus status = (BrakePedalStatus) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mVehicleBrakeStatusView.setText(
-                                "" + status.getValue().booleanValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mVehicleBrakeStatusView.setText(
+                        "" + status.getValue().booleanValue());
+                }
+            });
         }
     };
 
@@ -190,48 +161,36 @@ public class VehicleDashboardActivity extends Activity {
             new ParkingBrakeStatus.Listener() {
     	public void receive(VehicleMeasurement measurement) {
 	    final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mParkingBrakeStatusView.setText(
-                                "" + status.getValue().booleanValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-             }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mParkingBrakeStatusView.setText(
+                        "" + status.getValue().booleanValue());
+                }
+            });
         }
     };
 
     HeadlampStatus.Listener mHeadlampStatus = new HeadlampStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final HeadlampStatus status = (HeadlampStatus) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mHeadlampStatusView.setText(
-                                "" + status.getValue().booleanValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mHeadlampStatusView.setText(
+                        "" + status.getValue().booleanValue());
+                }
+            });
         }
     };
 
     EngineSpeed.Listener mEngineSpeed = new EngineSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final EngineSpeed status = (EngineSpeed) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mVehicleEngineSpeedView.setText(
-                                "" + status.getValue().doubleValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mVehicleEngineSpeedView.setText(
+                        "" + status.getValue().doubleValue());
+                }
+            });
         }
     };
 
@@ -239,16 +198,12 @@ public class VehicleDashboardActivity extends Activity {
             new PowertrainTorque.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final PowertrainTorque status = (PowertrainTorque) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mPowertrainTorqueView.setText(
-                                "" + status.getValue().doubleValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mPowertrainTorqueView.setText(
+                        "" + status.getValue().doubleValue());
+                }
+            });
         }
     };
 
@@ -257,16 +212,12 @@ public class VehicleDashboardActivity extends Activity {
         public void receive(VehicleMeasurement measurement) {
             final AcceleratorPedalPosition status =
                 (AcceleratorPedalPosition) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mAcceleratorPedalPositionView.setText(
-                                "" + status.getValue().doubleValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mAcceleratorPedalPositionView.setText(
+                        "" + status.getValue().doubleValue());
+                }
+            });
         }
     };
 
@@ -276,16 +227,12 @@ public class VehicleDashboardActivity extends Activity {
         public void receive(VehicleMeasurement measurement) {
             final TransmissionGearPosition status =
                     (TransmissionGearPosition) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mTransmissionGearPosView.setText(
-                                "" + status.getValue().enumValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mTransmissionGearPosView.setText(
+                        "" + status.getValue().enumValue());
+                }
+            });
         }
     };
 
@@ -293,16 +240,12 @@ public class VehicleDashboardActivity extends Activity {
             new IgnitionStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final IgnitionStatus status = (IgnitionStatus) measurement;
-            if(!status.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mIgnitionStatusView.setText(
-                                "" + status.getValue().enumValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mIgnitionStatusView.setText(
+                        "" + status.getValue().enumValue());
+                }
+            });
         }
     };
 
@@ -310,17 +253,13 @@ public class VehicleDashboardActivity extends Activity {
             new VehicleButtonEvent.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
-            if(!event.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mButtonEventView.setText(
-                                event.getValue().enumValue() + " is " +
-                                event.getAction().enumValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mButtonEventView.setText(
+                        event.getValue().enumValue() + " is " +
+                        event.getAction().enumValue());
+                }
+            });
         }
     };
 
@@ -328,17 +267,13 @@ public class VehicleDashboardActivity extends Activity {
             new VehicleDoorStatus.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final VehicleDoorStatus event = (VehicleDoorStatus) measurement;
-            if(!event.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try{
-                            mDoorStatusView.setText(
-                                event.getValue().enumValue() + " is ajar: " +
-                                event.getAction().booleanValue());
-                        } catch(NoValueException e) {}
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mDoorStatusView.setText(
+                        event.getValue().enumValue() + " is ajar: " +
+                        event.getAction().booleanValue());
+                }
+            });
         }
     };
 
@@ -346,16 +281,12 @@ public class VehicleDashboardActivity extends Activity {
             new Latitude.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final Latitude lat = (Latitude) measurement;
-            if(!lat.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mLatitudeView.setText(
-                                "" + lat.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mLatitudeView.setText(
+                        "" + lat.getValue().doubleValue());
+                }
+            });
         }
     };
 
@@ -363,16 +294,12 @@ public class VehicleDashboardActivity extends Activity {
             new Longitude.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final Longitude lng = (Longitude) measurement;
-            if(!lng.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mLongitudeView.setText(
-                                "" + lng.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mLongitudeView.setText(
+                        "" + lng.getValue().doubleValue());
+                }
+            });
         }
     };
 
@@ -397,16 +324,12 @@ public class VehicleDashboardActivity extends Activity {
             new SteeringWheelAngle.Listener() {
         public void receive(VehicleMeasurement measurement) {
             final SteeringWheelAngle angle = (SteeringWheelAngle) measurement;
-            if(!angle.isNone()) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            mSteeringWheelAngleView.setText(
-                                "" + angle.getValue().doubleValue());
-                        } catch(NoValueException e) { }
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mSteeringWheelAngleView.setText(
+                        "" + angle.getValue().doubleValue());
+                }
+            });
         }
     };
 

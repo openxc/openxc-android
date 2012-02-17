@@ -46,8 +46,6 @@ public class TransmissionGearPosition
         }
     }
 
-    public TransmissionGearPosition() {}
-
     public TransmissionGearPosition(State<GearPosition> value) {
         super(value);
     }

@@ -2,8 +2,6 @@ package com.openxc.util;
 
 import com.google.common.base.Objects;
 
-import com.openxc.measurements.NoValueException;
-
 import com.openxc.units.Unit;
 
 /**
@@ -50,10 +48,7 @@ public class AgingData<TheUnit extends Unit> {
      *
      * @return the age of the data in seconds.
      */
-    public double getAge() throws NoValueException {
-        if(isNone()) {
-            throw new NoValueException();
-        }
+    public double getAge() {
         return (System.nanoTime() - mBornTime) / 1000000000.0;
     }
 

@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.KilometersPerHour;
-import com.openxc.measurements.NoValueException;
 
 public class VehicleSpeedTest {
     VehicleSpeed measurement;
@@ -20,12 +19,7 @@ public class VehicleSpeedTest {
     }
 
     @Test
-    public void testDefaultConstructor() {
-        assertThat(new VehicleSpeed().isNone(), equalTo(true));
-    }
-
-    @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
     }
 

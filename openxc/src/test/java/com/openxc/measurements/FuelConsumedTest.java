@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.Liter;
-import com.openxc.measurements.NoValueException;
 
 public class FuelConsumedTest {
     FuelConsumed measurement;
@@ -20,7 +19,7 @@ public class FuelConsumedTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
     }
 

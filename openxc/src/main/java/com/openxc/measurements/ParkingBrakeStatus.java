@@ -9,8 +9,6 @@ public class ParkingBrakeStatus extends Measurement<Boolean>
         implements VehicleMeasurement {
     public final static String ID = "parking_brake_status";
 
-    public ParkingBrakeStatus() { }
-
     public ParkingBrakeStatus(Boolean value) {
         super(value);
     }

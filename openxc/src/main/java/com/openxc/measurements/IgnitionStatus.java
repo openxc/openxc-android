@@ -37,8 +37,6 @@ public class IgnitionStatus
         }
     }
 
-    public IgnitionStatus() {}
-
     public IgnitionStatus(State<IgnitionPosition> value) {
         super(value);
     }

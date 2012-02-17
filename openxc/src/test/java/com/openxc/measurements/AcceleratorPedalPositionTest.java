@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.Percentage;
-import com.openxc.measurements.NoValueException;
 
 public class AcceleratorPedalPositionTest {
     AcceleratorPedalPosition measurement;
@@ -20,7 +19,7 @@ public class AcceleratorPedalPositionTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(2.0));
     }
 

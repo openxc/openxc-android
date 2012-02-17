@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.measurements.NoValueException;
 
 public class BrakePedalStatusTest {
     BrakePedalStatus measurement;
@@ -19,12 +18,7 @@ public class BrakePedalStatusTest {
     }
 
     @Test
-    public void testDefaultConstructor() {
-        assertThat(new BrakePedalStatus().isNone(), equalTo(true));
-    }
-
-    @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().booleanValue(), equalTo(false));
     }
 

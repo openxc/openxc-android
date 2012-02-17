@@ -9,7 +9,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import com.openxc.units.State;
-import com.openxc.measurements.NoValueException;
 
 public class TransmissionGearPositionTest {
     TransmissionGearPosition measurement;
@@ -22,7 +21,7 @@ public class TransmissionGearPositionTest {
     }
 
     @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().enumValue(), equalTo(
                     TransmissionGearPosition.GearPosition.FIRST));
     }

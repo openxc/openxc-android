@@ -8,6 +8,7 @@ import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
+import com.openxc.remote.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
 
@@ -20,7 +21,8 @@ import android.content.Intent;
 import android.test.ServiceTestCase;
 
 import android.test.suitebuilder.annotation.MediumTest;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import junit.framework.Assert;
 
 public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
@@ -64,14 +66,16 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {
         assertNotNull(measurement);
-        assertFalse(measurement.isNone());
     }
 
     @MediumTest
     public void testGetNoData() throws UnrecognizedMeasurementTypeException {
-        VehicleMeasurement measurement = service.get(EngineSpeed.class);
-        assertNotNull(measurement);
-        assertTrue(measurement.isNone());
+        try {
+            service.get(EngineSpeed.class);
+        } catch(NoValueException e) {
+            return;
+        }
+        Assert.fail("Expected a NoValueException");
     }
 
     @MediumTest

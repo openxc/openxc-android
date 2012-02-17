@@ -3,6 +3,11 @@ package com.openxc.remote.sources.usb;
 import com.openxc.remote.sources.VehicleDataSourceException;
 
 public class UsbDeviceException extends VehicleDataSourceException {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7730917088324583224L;
+
 	public UsbDeviceException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -8,8 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
-import com.openxc.measurements.NoValueException;
-
 import com.openxc.units.Degree;
 
 public class LongitudeTest {
@@ -21,12 +19,7 @@ public class LongitudeTest {
     }
 
     @Test
-    public void testDefaultConstructor() {
-        assertThat(new Longitude().isNone(), equalTo(true));
-    }
-
-    @Test
-    public void testGet() throws NoValueException {
+    public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(42.0));
     }
 
