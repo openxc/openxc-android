@@ -377,6 +377,8 @@ public class VehicleService extends Service {
         Intent intent = new Intent(
                 RemoteVehicleServiceInterface.class.getName());
         intent.putExtras(triggeringIntent);
+        // TODO this is always going to pull up any existing service, which will
+        // ignore out intent
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenXC Enabler</string>
+    <string name="vehicle_service_status_label">Vehicle Service Status</string>
+</resources>

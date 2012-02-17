@@ -213,7 +213,8 @@ public class RemoteVehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        Log.i(TAG, "Service binding in response to " + intent.getAction());
+        // TODO if we're already started, what do we do if the data source is
+        // different? top the existing, start up the requested one
         Bundle extras = intent.getExtras();
         String dataSource = DEFAULT_DATA_SOURCE;
         String resource = null;

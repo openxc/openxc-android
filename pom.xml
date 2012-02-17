@@ -12,6 +12,7 @@
         <module>openxc</module>
         <module>openxc-it</module>
         <module>examples</module>
+        <module>enabler</module>
     </modules>
 
     <properties>
