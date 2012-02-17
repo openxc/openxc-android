@@ -6,6 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+
+import android.util.Log;
+
+import android.widget.TextView;
+
+import com.openxc.VehicleService;
 
 public class OpenXcEnablerActivity extends Activity {
 
@@ -54,6 +63,7 @@ public class OpenXcEnablerActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        // TODO only do this if we're not already bound
         bindService(new Intent(this, VehicleService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
     }
