@@ -2,7 +2,12 @@ package com.openxc.remote.sources.usb;
 
 import android.app.Activity;
 
+import android.content.Intent;
+
+import android.hardware.usb.UsbManager;
+
 import android.util.Log;
+
 
 /**
  *
@@ -30,18 +35,21 @@ import android.util.Log;
 public class UsbDeviceAttachmentActivity extends Activity {
     private final static String TAG = "UsbDeviceAttachmentActivity";
 
-    // TODO we need to bring back the rebroadcast of an openxc-internal intent
-    // for the data souce to pick up, because if the enabler has started the
-    // service in the background and no openxc app is in the foreground, this
-    // workaround isn't going to work.
-    //
-    // that seems like an OK solution to me - we should actually be able to
-    // specify it in the manifest if we use a broadcastreceiver that's not a
-    // nested class.
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "USB device proxy listener woke up");
+
+        Intent intent = getIntent();
+        Log.d(TAG, "Resumed with intent: " + intent);
+        String action = intent.getAction();
+
+        if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+            Intent refreshDeviceIntent = new Intent(
+                    UsbVehicleDataSource.ACTION_USB_DEVICE_ATTACHED);
+            sendBroadcast(refreshDeviceIntent);
+        }
+
         finish();
     }
 }
