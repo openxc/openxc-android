@@ -27,8 +27,8 @@ import android.util.Log;
  *
  * After the services restart, the USB devices is reconnected.
  */
-public class UsbDeviceAttachmentActivity extends Activity { private final static
-    String TAG = "UsbDeviceAttachmentActivity";
+public class UsbDeviceAttachmentActivity extends Activity {
+    private final static String TAG = "UsbDeviceAttachmentActivity";
 
     // TODO we need to bring back the rebroadcast of an openxc-internal intent
     // for the data souce to pick up, because if the enabler has started the
