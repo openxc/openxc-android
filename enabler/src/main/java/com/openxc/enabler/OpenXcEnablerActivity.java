@@ -49,7 +49,6 @@ public class OpenXcEnablerActivity extends Activity {
         }
     };
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +62,7 @@ public class OpenXcEnablerActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "OpenXC Enabler started");
         // TODO only do this if we're not already bound
         bindService(new Intent(this, VehicleService.class),
                 mConnection, Context.BIND_AUTO_CREATE);

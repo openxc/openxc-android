@@ -129,6 +129,7 @@ public class VehicleService extends Service {
         mListeners = Multimaps.synchronizedMultimap(mListeners);
         mMeasurementIdToClass = HashBiMap.create();
         mMeasurementClassToId = HashBiMap.create();
+        bindRemote();
     }
 
     @Override
@@ -370,6 +371,10 @@ public class VehicleService extends Service {
                 listener.receive(measurement);
             }
         }
+    }
+
+    private void bindRemote() {
+        bindRemote(new Intent());
     }
 
     private void bindRemote(Intent triggeringIntent) {
