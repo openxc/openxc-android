@@ -1,6 +1,14 @@
 package com.openxc;
 
+import java.io.File;
+import java.io.IOException;
+
 import java.lang.InterruptedException;
+
+import java.net.URISyntaxException;
+import java.net.URI;
+
+import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
@@ -26,6 +34,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
     VehicleSpeed speedReceived;
     SteeringWheelAngle steeringAngleReceived;
+    URI traceUri;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -44,9 +53,24 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         super(VehicleService.class);
     }
 
+    private void copyTraces() {
+        try {
+            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
+        } catch(URISyntaxException e) {
+            Assert.fail("Couldn't construct resource URIs: " + e);
+        }
+
+        try {
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracejson), new File(traceUri));
+        } catch(IOException e) {}
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        copyTraces();
 
         speedReceived = null;
         steeringAngleReceived = null;
@@ -57,7 +81,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
                 bindService(startIntent)).getService();
         service.waitUntilBound();
         service.setDataSource(TraceVehicleDataSource.class.getName(),
-                "resource://" + R.raw.tracejson);
+                traceUri.toString());
     }
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {

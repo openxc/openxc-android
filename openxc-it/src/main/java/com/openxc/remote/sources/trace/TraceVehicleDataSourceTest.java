@@ -33,15 +33,28 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     boolean receivedNumericalCallback;
     boolean receivedBooleanCallback;;
 
-    @Override
-    protected void setUp() {
+    private void copyTraces() {
         try {
-            traceUri = new URI("resource://" + R.raw.tracejson);
-            malformedTraceUri = new URI("resource://" + R.raw.tracetxt);
+            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
+            malformedTraceUri = new URI(
+                    "file:///sdcard/com.openxc/malformed-trace.json");
         } catch(URISyntaxException e) {
             Assert.fail("Couldn't construct resource URIs: " + e);
         }
 
+        try {
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracejson), new File(traceUri));
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracetxt), new File(malformedTraceUri));
+        } catch(IOException e) {}
+    }
+
+    @Override
+    protected void setUp() {
+        copyTraces();
         callback = new AbstractVehicleDataSourceCallback() {
             public void receive(String name, Double value, Double event) {
             }
@@ -87,26 +100,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedBooleanCallback);
-    }
-
-    @SmallTest
-    public void testPlaybackFromRegularFile() throws InterruptedException,
-           VehicleDataSourceException {
-        try {
-            traceUri = new URI("file:///data/data/com.openxc/trace.json");
-            malformedTraceUri = new URI("file:///data/data/com.openxc/malformed-trace.json");
-        } catch(URISyntaxException e) {
-            Assert.fail("Couldn't construct resource URIs: " + e);
-        }
-
-        try {
-            FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(
-                        R.raw.tracejson), new File(traceUri));
-            FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(
-                        R.raw.tracetxt), new File(malformedTraceUri));
-        } catch(IOException e) {}
     }
 
     @SmallTest
