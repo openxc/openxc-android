@@ -22,9 +22,14 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>android</groupId>
+                <groupId>com.google.android</groupId>
                 <artifactId>android</artifactId>
-                <version>3.1_r3</version>
+                <version>4.0.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android-test</artifactId>
+                <version>4.0.1.2</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
