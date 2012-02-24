@@ -6,6 +6,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.base.Objects;
 
 import com.openxc.remote.sources.JsonVehicleDataSource;
@@ -63,6 +65,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     private final Condition mDevicePermissionChanged;
     private int mVendorId;
     private int mProductId;
+    private double mBytesReceived;
 
     /**
      * Construct an instance of UsbVehicleDataSource with a receiver callback
@@ -175,8 +178,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
     public void run() {
         waitForDeviceConnection();
 
+        double lastLoggedTransferStatsAtByte = 0;
         byte[] bytes = new byte[128];
         StringBuffer buffer = new StringBuffer();
+        final long startTime = System.nanoTime();
+        long endTime;
         while(mRunning) {
             waitForDeviceConnection();
 
@@ -194,8 +200,16 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
                 buffer.append(new String(bytes, 0, received));
 
                 parseStringBuffer(buffer);
+                mBytesReceived += received;
             }
             mDeviceConnectionLock.unlock();
+
+            endTime = System.nanoTime();
+            // log the transfer stats roughly every 1MB
+            if(mBytesReceived > lastLoggedTransferStatsAtByte + 1024 * 1024) {
+                lastLoggedTransferStatsAtByte = mBytesReceived;
+                logTransferStats(startTime, endTime);
+            }
         }
         Log.d(TAG, "Stopped USB listener");
     }
@@ -208,6 +222,15 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             .add("endpoint", mEndpoint)
             .add("callback", getCallback())
             .toString();
+    }
+
+    private void logTransferStats(final long startTime, final long endTime) {
+        double kilobytesTransferred = mBytesReceived / 1000.0;
+        long elapsedTime = TimeUnit.SECONDS.convert(
+            System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
+        Log.i(TAG, "Transferred " + kilobytesTransferred + " KB in "
+            + elapsedTime + " seconds at an average of " +
+            kilobytesTransferred / elapsedTime + " KB/s");
     }
 
     private void waitForDeviceConnection() {
