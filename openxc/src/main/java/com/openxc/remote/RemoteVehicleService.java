@@ -65,6 +65,8 @@ import android.util.Log;
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
+    private final static String DEFAULT_DATA_SOURCE =
+            UsbVehicleDataSource.class.getName();
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private Map<String, RawMeasurement> mMeasurements;
@@ -185,6 +187,7 @@ public class RemoteVehicleService extends Service {
         }
         mNotificationThread = new NotificationThread();
         mNotificationThread.start();
+        initializeDataSource();
         return mBinder;
     }
 
@@ -231,6 +234,10 @@ public class RemoteVehicleService extends Service {
                     "insufficient privileges", e);
             mLocationManager = null;
         }
+    }
+
+    private void initializeDataSource() {
+        initializeDataSource(DEFAULT_DATA_SOURCE, null);
     }
 
     private void initializeDataSource(
