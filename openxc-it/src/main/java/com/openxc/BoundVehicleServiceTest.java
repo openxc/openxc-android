@@ -10,8 +10,6 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
-import com.openxc.remote.RemoteVehicleService;
-
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;

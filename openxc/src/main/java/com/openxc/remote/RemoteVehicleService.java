@@ -33,13 +33,11 @@ import com.openxc.remote.sources.VehicleDataSourceInterface;
 import android.app.Service;
 
 import android.content.Context;
-import android.content.IntentFilter;
 import android.content.Intent;
 
 import android.location.Location;
 import android.location.LocationManager;
 
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
