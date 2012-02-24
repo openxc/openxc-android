@@ -33,6 +33,7 @@ import com.openxc.remote.sources.VehicleDataSourceInterface;
 import android.app.Service;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.Intent;
 
 import android.location.Location;
@@ -64,11 +65,6 @@ import android.util.Log;
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
-    private final static String DEFAULT_DATA_SOURCE =
-        UsbVehicleDataSource.class.getName();
-    public final static String DATA_SOURCE_NAME_EXTRA = "data_source";
-    public final static String DATA_SOURCE_RESOURCE_EXTRA =
-            "data_source_resource";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private Map<String, RawMeasurement> mMeasurements;
@@ -152,11 +148,9 @@ public class RemoteVehicleService extends Service {
         Log.i(TAG, "Service starting");
         mMeasurements = new HashMap<String, RawMeasurement>();
         mNotificationQueue = new LinkedBlockingQueue<String>();
-
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
-
         setupMockLocations();
     }
 
@@ -182,55 +176,15 @@ public class RemoteVehicleService extends Service {
 
     /**
      * Initialize the service and data source when a client binds to us.
-     *
-     * An application can select a vehicle data source by passing extra data
-     * with the bind Intent. The two parameters are:
-     *
-     *  RemoteVehicleService.DATA_SOURCE_NAME_EXTRA
-     *
-     *      The name of a class implementing the VehicleDataSourceInterface.
-     *
-     *  RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA
-     *
-     *      An optional initializer for the data source - this will be passed to
-     *      its constructor as a String. An example is a path to a file if the
-     *      data source is a trace file playback.
-     *
-     * For example, to use the trace to playback a trace file, bind to the
-     * RemoteVehicleService with an Intent like this:
-     *
-     *      Intent intent = new Intent();
-     *      intent.setClass(getContext(), RemoteVehicleService.class);
-     *      intent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-     *              TraceVehicleDataSource.class.getName());
-     *      intent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
-     *              "resource://" + R.raw.tracejson);
-     *      bindService(intent, connection, Context.BIND_AUTO_CREATE);
-     *
-     * If no data source is specified, the {@link UsbVehicleDataSource} will be
-     * used by default with the a default USB device ID.
      */
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        // TODO if we're already started, what do we do if the data source is
-        // different? top the existing, start up the requested one
-        Bundle extras = intent.getExtras();
-        String dataSource = DEFAULT_DATA_SOURCE;
-        String resource = null;
-        if(extras != null) {
-            dataSource = intent.getExtras().getString(
-                    DATA_SOURCE_NAME_EXTRA);
-            resource = intent.getExtras().getString(
-                    DATA_SOURCE_RESOURCE_EXTRA);
-        }
-
         if(mNotificationThread != null) {
             mNotificationThread.done();
         }
         mNotificationThread = new NotificationThread();
         mNotificationThread.start();
-        mDataSource = initializeDataSource(dataSource, resource);
         return mBinder;
     }
 
@@ -279,7 +233,7 @@ public class RemoteVehicleService extends Service {
         }
     }
 
-    private VehicleDataSourceInterface initializeDataSource(
+    private void initializeDataSource(
             String dataSourceName, String resource) {
         Class<? extends VehicleDataSourceInterface> dataSourceType;
         try {
@@ -287,7 +241,7 @@ public class RemoteVehicleService extends Service {
                     VehicleDataSourceInterface.class);
         } catch(ClassNotFoundException e) {
             Log.w(TAG, "Couldn't find data source type " + dataSourceName, e);
-            return null;
+            return;
         }
 
         Constructor<? extends VehicleDataSourceInterface> constructor;
@@ -296,7 +250,7 @@ public class RemoteVehicleService extends Service {
                     VehicleDataSourceCallbackInterface.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
-            return null;
+            return;
         }
 
         URI resourceUri = null;
@@ -326,7 +280,7 @@ public class RemoteVehicleService extends Service {
             new Thread(dataSource).start();
         }
 
-        return dataSource;
+        mDataSource = dataSource;
     }
 
     private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
@@ -360,6 +314,12 @@ public class RemoteVehicleService extends Service {
                 Log.i(TAG, "Removing listener " + listener + " from " +
                         measurementId);
                 getOrCreateCallbackList(measurementId).unregister(listener);
+            }
+
+            public void setDataSource(String dataSource, String resource) {
+                Log.i(TAG, "Setting data source to " + dataSource +
+                        " with resource " + resource);
+                initializeDataSource(dataSource, resource);
             }
     };
 

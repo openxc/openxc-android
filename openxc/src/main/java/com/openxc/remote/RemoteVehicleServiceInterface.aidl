@@ -21,4 +21,6 @@ interface RemoteVehicleServiceInterface {
             RemoteVehicleServiceListenerInterface listener);
     void removeListener(String measurementType,
             RemoteVehicleServiceListenerInterface listener);
+
+    void setDataSource(String dataSource, String resource);
 }

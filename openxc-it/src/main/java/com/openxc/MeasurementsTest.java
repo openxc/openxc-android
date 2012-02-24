@@ -22,8 +22,6 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
 
-import com.openxc.remote.RemoteVehicleService;
-
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
@@ -49,14 +47,11 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
 
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-                TraceVehicleDataSource.class.getName());
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
-                "resource://" + R.raw.tracejson);
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
-        // sleep for a moment to wait for the vehicle service to bind to the
-        // remote service
+        service.waitUntilBound();
+        service.setDataSource(TraceVehicleDataSource.class.getName(),
+                "resource://" + R.raw.tracejson);
         pause(200);
     }
 

@@ -55,13 +55,11 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-                TraceVehicleDataSource.class.getName());
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
-                "resource://" + R.raw.tracejson);
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
+        service.setDataSource(TraceVehicleDataSource.class.getName(),
+                "resource://" + R.raw.tracejson);
     }
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {
