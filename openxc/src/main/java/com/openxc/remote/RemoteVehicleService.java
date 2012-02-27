@@ -189,6 +189,20 @@ public class RemoteVehicleService extends Service {
         return mBinder;
     }
 
+    /**
+     * Reset the data source to the default when all clients disconnect.
+     *
+     * Since normal service users that want the default (i.e. USB device) don't
+     * call setDataSource, they get stuck in a situation where a trace file
+     * is being used.
+     */
+    @Override
+    public boolean onUnbind(Intent intent) {
+        initializeDataSource();
+        return false;
+    }
+
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -240,6 +254,10 @@ public class RemoteVehicleService extends Service {
 
     private void initializeDataSource(
             String dataSourceName, String resource) {
+        if(mDataSource != null) {
+            mDataSource.stop();
+        }
+
         Class<? extends VehicleDataSourceInterface> dataSourceType;
         try {
             dataSourceType = Class.forName(dataSourceName).asSubclass(
