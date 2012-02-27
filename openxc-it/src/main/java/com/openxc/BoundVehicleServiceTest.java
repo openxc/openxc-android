@@ -18,6 +18,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
+import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
@@ -75,6 +76,11 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         speedReceived = null;
         steeringAngleReceived = null;
 
+        // if the service is already running (and thus may have old data
+        // cached), kill it.
+        getContext().stopService(new Intent(getContext(),
+                    RemoteVehicleService.class));
+        pause(200);
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
         service = ((VehicleService.VehicleServiceBinder)
