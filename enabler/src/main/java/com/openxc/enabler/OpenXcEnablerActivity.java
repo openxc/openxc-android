@@ -20,7 +20,6 @@ public class OpenXcEnablerActivity extends Activity {
 
     private static String TAG = "OpenXcEnablerActivity";
 
-    private VehicleService mVehicleService;
     private final Handler mHandler = new Handler();
     private TextView mVehicleServiceStatusView;;
 
@@ -28,9 +27,6 @@ public class OpenXcEnablerActivity extends Activity {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
-            mVehicleService = ((VehicleService.VehicleServiceBinder)service
-                    ).getService();
-
             mHandler.post(new Runnable() {
                 public void run() {
                     mVehicleServiceStatusView.setText("Running");
@@ -40,7 +36,6 @@ public class OpenXcEnablerActivity extends Activity {
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "RemoteVehicleService disconnected unexpectedly");
-            mVehicleService = null;
             mHandler.post(new Runnable() {
                 public void run() {
                     mVehicleServiceStatusView.setText("Not running");
@@ -63,7 +58,6 @@ public class OpenXcEnablerActivity extends Activity {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "OpenXC Enabler started");
-        // TODO only do this if we're not already bound
         bindService(new Intent(this, VehicleService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
     }

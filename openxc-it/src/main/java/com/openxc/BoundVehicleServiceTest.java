@@ -1,6 +1,14 @@
 package com.openxc;
 
+import java.io.File;
+import java.io.IOException;
+
 import java.lang.InterruptedException;
+
+import java.net.URISyntaxException;
+import java.net.URI;
+
+import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
@@ -11,7 +19,6 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
-
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
@@ -28,6 +35,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
     VehicleSpeed speedReceived;
     SteeringWheelAngle steeringAngleReceived;
+    URI traceUri;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(VehicleMeasurement measurement) {
@@ -46,22 +54,40 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         super(VehicleService.class);
     }
 
+    private void copyTraces() {
+        try {
+            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
+        } catch(URISyntaxException e) {
+            Assert.fail("Couldn't construct resource URIs: " + e);
+        }
+
+        try {
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracejson), new File(traceUri));
+        } catch(IOException e) {}
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        copyTraces();
 
         speedReceived = null;
         steeringAngleReceived = null;
 
+        // if the service is already running (and thus may have old data
+        // cached), kill it.
+        getContext().stopService(new Intent(getContext(),
+                    RemoteVehicleService.class));
+        pause(200);
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-                TraceVehicleDataSource.class.getName());
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
-                "resource://" + R.raw.tracejson);
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
+        service.setDataSource(TraceVehicleDataSource.class.getName(),
+                traceUri.toString());
     }
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {

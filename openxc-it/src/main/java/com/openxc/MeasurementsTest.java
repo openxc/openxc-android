@@ -1,6 +1,14 @@
 package com.openxc;
 
+import java.io.File;
+import java.io.IOException;
+
 import java.lang.InterruptedException;
+
+import java.net.URISyntaxException;
+import java.net.URI;
+
+import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.AcceleratorPedalPosition;
 import com.openxc.measurements.BrakePedalStatus;
@@ -22,8 +30,6 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
 
-import com.openxc.remote.RemoteVehicleService;
-
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
@@ -36,27 +42,43 @@ import android.test.ServiceTestCase;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
+import junit.framework.Assert;
+
 public class MeasurementsTest extends ServiceTestCase<VehicleService> {
     VehicleService service;
+    URI traceUri;
 
     public MeasurementsTest() {
         super(VehicleService.class);
+    }
+
+    private void copyTraces() {
+        try {
+            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
+        } catch(URISyntaxException e) {
+            Assert.fail("Couldn't construct resource URIs: " + e);
+        }
+
+        try {
+            FileUtils.copyInputStreamToFile(
+                    getContext().getResources().openRawResource(
+                        R.raw.tracejson), new File(traceUri));
+        } catch(IOException e) {}
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
+        copyTraces();
+
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleService.class);
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_NAME_EXTRA,
-                TraceVehicleDataSource.class.getName());
-        startIntent.putExtra(RemoteVehicleService.DATA_SOURCE_RESOURCE_EXTRA,
-                "resource://" + R.raw.tracejson);
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
-        // sleep for a moment to wait for the vehicle service to bind to the
-        // remote service
+        service.waitUntilBound();
+        service.setDataSource(TraceVehicleDataSource.class.getName(),
+                traceUri.toString());
         pause(200);
     }
 

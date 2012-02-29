@@ -22,8 +22,8 @@ import com.openxc.measurements.VehicleMeasurement;
 
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceException;
+import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
@@ -142,7 +142,7 @@ public class VehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        bindRemote(intent);
+        bindRemote();
         return mBinder;
     }
 
@@ -228,16 +228,17 @@ public class VehicleService extends Service {
     /**
      * Unregister a previously reigstered VehicleMeasurement.Listener instance.
      *
-     * When an application is no longer interested in received measurement updates (e.g. when it's pausing or exiting)
-     * it should unregister all previously registered listeners to save on CPU.
+     * When an application is no longer interested in received measurement
+     * updates (e.g. when it's pausing or exiting) it should unregister all
+     * previously registered listeners to save on CPU.
      *
      * @param measurementType The class of the requested VehicleMeasurement
      *      (e.g. VehicleSpeed.class)
      * @param listener An object implementing the VehicleMeasurement.Listener
      *      interface that should be called with any new measurements.
      * @throws RemoteVehicleServiceException if the listener is unable to be
-     *      registered with the library internals - an exceptional situation that
-     *      shouldn't occur.
+     *      registered with the library internals - an exceptional situation
+     *      that shouldn't occur.
      * @throws UnrecognizedMeasurementTypeException if passed a class that does
      *      not extend VehicleMeasurement
      */
@@ -256,6 +257,41 @@ public class VehicleService extends Service {
                 throw new RemoteVehicleServiceException(
                         "Unable to unregister listener from remote " +
                         "vehicle service", e);
+            }
+        }
+    }
+
+    /**
+     * Set and initialize the data source for the vehicle service.
+     *
+     * For example, to use the trace data source to playback a trace file, call
+     * the setDataSource method after binding with VehicleService:
+     *
+     *      service.setDataSource(
+     *              TraceVehicleDataSource.class.getName(),
+     *              "resource://" + R.raw.tracejson);
+     *
+     * If no data source is specified (i.e. this method is never called), the
+     * {@link UsbVehicleDataSource} will be used by default with the a default
+     * USB device ID.
+     *
+     * @param dataSource The name of a class implementing the
+     *      VehicleDataSourceInterface.
+     * @param resource An optional initializer for the data source - this will
+     *      be passed to its constructor as a String. An example is a path to a
+     *      file if the data source is a trace file playback.
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public void setDataSource(String dataSource, String resource)
+            throws RemoteVehicleServiceException{
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.setDataSource(dataSource, resource);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException("Unable to set data " +
+                        "source of remote vehicle service", e);
             }
         }
     }
@@ -374,16 +410,9 @@ public class VehicleService extends Service {
     }
 
     private void bindRemote() {
-        bindRemote(new Intent());
-    }
-
-    private void bindRemote(Intent triggeringIntent) {
         Log.i(TAG, "Binding to RemoteVehicleService");
         Intent intent = new Intent(
                 RemoteVehicleServiceInterface.class.getName());
-        intent.putExtras(triggeringIntent);
-        // TODO this is always going to pull up any existing service, which will
-        // ignore out intent
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 

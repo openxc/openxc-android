@@ -9,7 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Objects;
-
 import com.openxc.remote.sources.JsonVehicleDataSource;
 
 import com.openxc.remote.sources.usb.UsbDeviceException;
@@ -127,8 +126,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         try {
             setupDevice(mManager, mVendorId, mProductId);
         } catch(VehicleDataSourceException e) {
-            Log.i(TAG, "Unable to load USB device -- waiting for it to appear",
-                    e);
+            Log.i(TAG, "Unable to load USB device -- " +
+                    "waiting for it to appear", e);
         }
     }
 
