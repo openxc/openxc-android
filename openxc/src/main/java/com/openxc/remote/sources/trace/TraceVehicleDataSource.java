@@ -149,6 +149,9 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             try {
                 while((line = reader.readLine()) != null) {
                     handleJson(line);
+                    try {
+                        Thread.sleep(10);
+                    } catch(InterruptedException e) {}
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +
