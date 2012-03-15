@@ -222,6 +222,9 @@ public class VehicleService extends Service {
                         "Unable to register listener with remote vehicle " +
                         "service", e);
             }
+        } else {
+            Log.w(TAG, "Can't add listener -- " +
+                    "not connected to remote service yet");
         }
     }
 
@@ -258,6 +261,10 @@ public class VehicleService extends Service {
                         "Unable to unregister listener from remote " +
                         "vehicle service", e);
             }
+        } else {
+            Log.w(TAG, "Can't remove listener -- " +
+                    "not connected to remote vehicle service yet");
+
         }
     }
 
@@ -288,11 +295,15 @@ public class VehicleService extends Service {
             throws RemoteVehicleServiceException{
         if(mRemoteService != null) {
             try {
+                Log.i(TAG, "Setting data source to " + dataSource);
                 mRemoteService.setDataSource(dataSource, resource);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException("Unable to set data " +
                         "source of remote vehicle service", e);
             }
+        } else {
+            Log.w(TAG, "Can't set data source -- " +
+                    "not connected to remote service yet");
         }
     }
 
