@@ -68,6 +68,8 @@ public class VehicleService extends Service {
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
     private Condition mRemoteBoundCondition;
+    private String mDataSource;
+    private String mDataSourceResource;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
@@ -292,7 +294,10 @@ public class VehicleService extends Service {
      *      that shouldn't occur.
      */
     public void setDataSource(String dataSource, String resource)
-            throws RemoteVehicleServiceException{
+            throws RemoteVehicleServiceException {
+        mDataSource = dataSource;
+        mDataSourceResource = resource;
+
         if(mRemoteService != null) {
             try {
                 Log.i(TAG, "Setting data source to " + dataSource);
@@ -303,7 +308,8 @@ public class VehicleService extends Service {
             }
         } else {
             Log.w(TAG, "Can't set data source -- " +
-                    "not connected to remote service yet");
+                    "not connected to remote service yet, but will set when " +
+                    "connected");
         }
     }
 
@@ -341,6 +347,15 @@ public class VehicleService extends Service {
                 } catch(RemoteException e) {
                     Log.w(TAG, "Unable to register listener with remote " +
                             "vehicle service", e);
+                }
+            }
+
+            // in case the data source was set before being bound, set it again
+            if(mDataSource != null && mDataSourceResource != null) {
+                try {
+                    setDataSource(mDataSource, mDataSourceResource);
+                } catch(RemoteVehicleServiceException e) {
+                    Log.w(TAG, "Unable to set data source after binding", e);
                 }
             }
         }
