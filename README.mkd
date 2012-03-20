@@ -53,10 +53,9 @@ To deploy the examples to a device:
 
 ## License
 
-Copyright (c) 2011 Ford Motor Company
-Licensed under the [Apache License, Version 2.0][apache]
+Copyright (c) 2011-2012 Ford Motor Company
+Licensed under the BSD license.
 
-[apache]: http://www.apache.org/licenses/LICENSE-2.0.html
 [binding]: http://developer.android.com/guide/topics/fundamentals/bound-services.html#Binding)
 [services]: http://developer.android.com/guide/topics/fundamentals/services.html
 [AIDL]: http://developer.android.com/guide/developing/tools/aidl.html
