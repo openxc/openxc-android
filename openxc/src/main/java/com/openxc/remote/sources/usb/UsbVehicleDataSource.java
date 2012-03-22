@@ -164,7 +164,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
         mDeviceConnectionLock.lock();
         mDevicePermissionChanged.signal();
         mDeviceConnectionLock.unlock();
-        getContext().unregisterReceiver(mBroadcastReceiver);
+        try {
+            getContext().unregisterReceiver(mBroadcastReceiver);
+        } catch(IllegalArgumentException e) {
+            // may not have been registered, but that's OK
+        }
     }
 
     /**
