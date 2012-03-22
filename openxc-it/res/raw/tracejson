@@ -1,17 +1,17 @@
-{"name": "vehicle_speed", "value": 42}
-{"name": "windshield_wiper_status", "value": true}
-{"name": "steering_wheel_angle", "value": 94.1}
-{"name": "transmission_gear_position", "value": "FIRST"}
-{"name": "brake_pedal_status", "value": false}
-{"name": "latitude", "value": 45.123}
-{"name": "longitude", "value": 120.442}
-{"name": "button_event", "value": "ok", "event": "pressed"}
-{"name": "door_status", "value": "driver", "event": true}
-{"name": "headlamp_status", "value": true}
-{"name": "high_beam_status", "value": false}
-{"name": "powertrain_torque", "value": 232.1}
-{"name": "fuel_level", "value": 71.2}
-{"name": "fuel_consumed_since_restart", "value": 81.2}
-{"name": "accelerator_pedal_position", "value": 14.0}
-{"name": "odometer", "value": 124141}
-{"name": "fine_odometer_since_restart", "value": 142.312423}
+1332432977.831086: {"name": "vehicle_speed", "value": 42}
+1332432977.831732: {"name": "windshield_wiper_status", "value": true}
+1332432977.832471: {"name": "steering_wheel_angle", "value": 94.1}
+1332432977.833068: {"name": "transmission_gear_position", "value": "FIRST"}
+1332432977.833702: {"name": "brake_pedal_status", "value": false}
+1332432977.834334: {"name": "latitude", "value": 45.123}
+1332432977.834946: {"name": "longitude", "value": 120.442}
+1332432977.835642: {"name": "button_event", "value": "ok", "event": "pressed"}
+1332432977.836315: {"name": "door_status", "value": "driver", "event": true}
+1332432977.836977: {"name": "headlamp_status", "value": true}
+1332432977.837776: {"name": "high_beam_status", "value": false}
+1332432977.838441: {"name": "powertrain_torque", "value": 232.1}
+1332432977.839072: {"name": "fuel_level", "value": 71.2}
+1332432977.839698: {"name": "fuel_consumed_since_restart", "value": 81.2}
+1332432977.840451: {"name": "accelerator_pedal_position", "value": 14.0}
+1332432977.841059: {"name": "odometer", "value": 124141}
+1332432977.841651: {"name": "fine_odometer_since_restart", "value": 142.312423}

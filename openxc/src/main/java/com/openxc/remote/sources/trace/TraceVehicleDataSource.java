@@ -145,10 +145,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 break;
             }
 
-            String line;
+            String line = null;
             try {
                 while((line = reader.readLine()) != null) {
-                    handleJson(line);
+                    handleJson(line.split(":", 2)[1]);
                     try {
                         Thread.sleep(10);
                     } catch(InterruptedException e) {}
@@ -156,6 +156,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +
                         reader, e);
+                break;
+            } catch(ArrayIndexOutOfBoundsException e) {
+                Log.w(TAG, "A trace line was not in the expected format: " +
+                        line, e);
                 break;
             } finally {
                 try {
