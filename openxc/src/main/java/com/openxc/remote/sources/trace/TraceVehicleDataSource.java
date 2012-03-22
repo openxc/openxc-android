@@ -1,5 +1,7 @@
 package com.openxc.remote.sources.trace;
 
+import java.util.concurrent.TimeUnit;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -51,6 +53,8 @@ import android.util.Log;
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
+    private long mStartingTime;
+    private Long mFirstTimestamp;
     private boolean mRunning;
     private URI mFilename;
 
@@ -136,6 +140,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                     "callback " + getCallback());
         }
 
+
+        mStartingTime = System.nanoTime();
         while(mRunning) {
             BufferedReader reader;
             try {
@@ -148,18 +154,18 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             String line = null;
             try {
                 while((line = reader.readLine()) != null) {
-                    handleJson(line.split(":", 2)[1]);
-                    try {
-                        Thread.sleep(10);
-                    } catch(InterruptedException e) {}
+                    String[] record = line.split(":", 2);
+                    if(record.length != 2) {
+                        Log.w(TAG, "A trace line was not in the expected " +
+                                "format: " + line);
+                        continue;
+                    }
+                    waitForNextRecord(Double.parseDouble(record[0]));
+                    handleJson(record[1]);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +
                         reader, e);
-                break;
-            } catch(ArrayIndexOutOfBoundsException e) {
-                Log.w(TAG, "A trace line was not in the expected format: " +
-                        line, e);
                 break;
             } finally {
                 try {
@@ -178,6 +184,21 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             .add("filename", mFilename)
             .add("callback", getCallback())
             .toString();
+    }
+
+    private void waitForNextRecord(double timestampSeconds) {
+        long timestamp = TimeUnit.NANOSECONDS.convert(
+                (long)(timestampSeconds * 1000), TimeUnit.MILLISECONDS);
+        if(mFirstTimestamp == null) {
+            mFirstTimestamp = new Long(timestamp);
+        }
+        long targetTime = mStartingTime + (timestamp - mFirstTimestamp);
+        long sleepDuration = TimeUnit.MILLISECONDS.convert(
+                targetTime - System.nanoTime(), TimeUnit.NANOSECONDS);
+        sleepDuration = Math.max(sleepDuration, 1);
+        try {
+            Thread.sleep(sleepDuration);
+        } catch(InterruptedException e) {}
     }
 
     private BufferedReader openResourceFile(URI filename) {
