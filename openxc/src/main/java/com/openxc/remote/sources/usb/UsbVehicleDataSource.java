@@ -160,15 +160,15 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      */
     public void stop() {
         Log.d(TAG, "Stopping USB listener");
+        if(!mRunning) {
+            Log.d(TAG, "Already stopped.");
+            return;
+        }
         mRunning = false;
         mDeviceConnectionLock.lock();
         mDevicePermissionChanged.signal();
         mDeviceConnectionLock.unlock();
-        try {
-            getContext().unregisterReceiver(mBroadcastReceiver);
-        } catch(IllegalArgumentException e) {
-            // may not have been registered, but that's OK
-        }
+        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     /**

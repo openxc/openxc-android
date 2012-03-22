@@ -165,6 +165,7 @@ public class RemoteVehicleService extends Service {
         Log.i(TAG, "Service being destroyed");
         if(mDataSource != null) {
             mDataSource.stop();
+            mDataSource = null;
         }
 
         if(mNotificationThread != null) {
@@ -256,6 +257,7 @@ public class RemoteVehicleService extends Service {
             String dataSourceName, String resource) {
         if(mDataSource != null) {
             mDataSource.stop();
+            mDataSource = null;
         }
 
         Class<? extends VehicleDataSourceInterface> dataSourceType;
