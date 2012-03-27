@@ -439,7 +439,7 @@ public class RemoteVehicleService extends Service {
 
     private void enableRecording(boolean enabled) {
         if(enabled && mDataSink == null) {
-            mDataSink = new FileRecorderSink();
+            mDataSink = new FileRecorderSink(this);
             Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
         } else if(mDataSink != null) {
             mDataSink.stop();
