@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
 
+import java.text.DecimalFormat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +18,8 @@ import android.content.Context;
 public class FileRecorderSink implements VehicleDataSinkInterface {
     private final static String TAG = "FileRecorderSink";
     private final static String DEFAULT_FILENAME = "trace.json";
+    private static DecimalFormat sTimestampFormatter =
+            new DecimalFormat("##########.000000");
 
     private BufferedWriter mWriter;
 
@@ -45,9 +49,11 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
             return;
         }
 
+        double timestamp = System.currentTimeMillis() / 1000.0;
+        String timestampString = sTimestampFormatter.format(timestamp);
         if(mWriter != null) {
             try {
-                mWriter.write(object.toString());
+                mWriter.write(timestampString + ": " + object.toString());
                 mWriter.newLine();
             } catch(IOException e) {
                 Log.w(TAG, "Unable to write measurement to file", e);
