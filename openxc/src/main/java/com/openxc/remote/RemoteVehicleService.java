@@ -30,6 +30,9 @@ import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
+import com.openxc.remote.sinks.VehicleDataSinkInterface;
+import com.openxc.remote.sinks.FileRecorderSink;
+
 import android.app.Service;
 
 import android.content.Context;
@@ -69,7 +72,7 @@ public class RemoteVehicleService extends Service {
 
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
-    private boolean mRecordingEnabled;
+    private VehicleDataSinkInterface mDataSink;
 
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
@@ -87,14 +90,6 @@ public class RemoteVehicleService extends Service {
      */
     VehicleDataSourceCallbackInterface mCallback =
         new AbstractVehicleDataSourceCallback () {
-            private void queueNotification(String measurementId) {
-                if(mListeners.containsKey(measurementId)) {
-                    try  {
-                        mNotificationQueue.put(measurementId);
-                    } catch(InterruptedException e) {}
-                }
-            }
-
             private void updateLocation() {
                 if(mLocationManager == null ||
                         !mMeasurements.containsKey(Latitude.ID) ||
@@ -124,10 +119,23 @@ public class RemoteVehicleService extends Service {
                 }
             }
 
+            private void receive(final String measurementId,
+                    final RawMeasurement measurement) {
+                mMeasurements.put(measurementId, measurement);
+                if(mListeners.containsKey(measurementId)) {
+                    try  {
+                        mNotificationQueue.put(measurementId);
+                    } catch(InterruptedException e) {}
+                }
+                if(mDataSink != null) {
+                    mDataSink.receive(measurementId, measurement);
+                }
+            }
+
             public void receive(final String measurementId,
                     final Double value) {
-                mMeasurements.put(measurementId, new RawMeasurement(value));
-                queueNotification(measurementId);
+                RawMeasurement measurement = new RawMeasurement(value);
+                receive(measurementId, measurement);
 
                 if(measurementId.equals(Latitude.ID) ||
                         measurementId.equals(Longitude.ID)) {
@@ -137,9 +145,8 @@ public class RemoteVehicleService extends Service {
 
             public void receive(final String measurementId,
                     final Double value, final Double event) {
-                mMeasurements.put(measurementId,
-                        new RawMeasurement(value, event));
-                queueNotification(measurementId);
+                RawMeasurement measurement = new RawMeasurement(value, event);
+                receive(measurementId, measurement);
             }
         };
 
@@ -419,7 +426,12 @@ public class RemoteVehicleService extends Service {
     }
 
     private void enableRecording(boolean enabled) {
-        // TODO actually start/stop recording thread
-        mRecordingEnabled = enabled;
+        if(enabled && mDataSink == null) {
+            mDataSink = new FileRecorderSink();
+            Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
+        } else if(mDataSink != null) {
+            mDataSink.stop();
+            mDataSink = null;
+        }
     }
 }
