@@ -195,7 +195,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         long targetTime = mStartingTime + (timestamp - mFirstTimestamp);
         long sleepDuration = TimeUnit.MILLISECONDS.convert(
                 targetTime - System.nanoTime(), TimeUnit.NANOSECONDS);
-        sleepDuration = Math.max(sleepDuration, 1);
+        sleepDuration = Math.max(sleepDuration, 0);
         try {
             Thread.sleep(sleepDuration);
         } catch(InterruptedException e) {}
