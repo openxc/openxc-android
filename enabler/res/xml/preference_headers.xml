@@ -1,0 +1,8 @@
+<preference-headers
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header android:fragment="com.openxc.enabler.SettingsActivity$RecordingPreferences"
+            android:title="Recording" />
+    <header android:fragment="com.openxc.enabler.SettingsActivity$DataSourcePreferences"
+            android:title="Data Source" />
+</preference-headers>

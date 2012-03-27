@@ -17,6 +17,8 @@
           </intent-filter>
       </activity>
 
+      <activity android:name=".SettingsActivity" />
+
       <activity android:name="com.openxc.remote.sources.usb.UsbDeviceAttachmentActivity">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />

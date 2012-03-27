@@ -1,0 +1,16 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+            android:key="recording_enabled"
+            android:title="@string/recording_checkbox_title"
+            android:summary="@string/recording_checkbox_summary"
+            android:defaultValue="off" />
+
+    <EditTextPreference
+            android:key="recording_output"
+            android:title="@string/recording_path_title"
+            android:summary="@string/recording_path_summary"
+            android:defaultValue="/sdcard/openxc" />
+
+</PreferenceScreen>

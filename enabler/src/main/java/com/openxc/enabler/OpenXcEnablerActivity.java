@@ -10,6 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
+
 import android.util.Log;
 
 import android.widget.TextView;
@@ -60,5 +64,23 @@ public class OpenXcEnablerActivity extends Activity {
         Log.i(TAG, "OpenXC Enabler started");
         bindService(new Intent(this, VehicleService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.settings:
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
