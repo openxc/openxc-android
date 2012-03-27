@@ -81,6 +81,8 @@ public class OpenXcEnablerActivity extends Activity {
         setContentView(R.layout.main);
         Log.i(TAG, "OpenXC Enabler created");
 
+        startService(new Intent(this, VehicleService.class));
+
         mVehicleServiceStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
 
