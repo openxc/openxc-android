@@ -53,7 +53,6 @@ import android.util.Log;
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
-    private long mStartingTime;
     private Long mFirstTimestamp;
     private boolean mRunning;
     private URI mFilename;
@@ -141,7 +140,6 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
         }
 
 
-        mStartingTime = System.nanoTime();
         while(mRunning) {
             BufferedReader reader;
             try {
@@ -152,6 +150,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             }
 
             String line = null;
+            long startingTime = System.nanoTime();
             try {
                 while((line = reader.readLine()) != null) {
                     String[] record = line.split(":", 2);
@@ -162,7 +161,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                     }
 
                     try {
-                        waitForNextRecord(Double.parseDouble(record[0]));
+                        waitForNextRecord(startingTime,
+                                Double.parseDouble(record[0]));
                     } catch(NumberFormatException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
@@ -181,6 +181,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                     Log.w(TAG, "Couldn't even close the trace file", e);
                 }
             }
+            Log.d(TAG, "Restarting playback of trace " + mFilename);
         }
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
@@ -193,18 +194,19 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
             .toString();
     }
 
-    private void waitForNextRecord(double timestampSeconds) {
+    private void waitForNextRecord(long startingTime, double timestampSeconds) {
         long timestamp = TimeUnit.NANOSECONDS.convert(
                 (long)(timestampSeconds * 1000), TimeUnit.MILLISECONDS);
         if(mFirstTimestamp == null) {
             mFirstTimestamp = new Long(timestamp);
+            Log.d(TAG, "Storing " + mFirstTimestamp + " as the first " +
+                    "timestamp of the trace file");
         }
-        long targetTime = mStartingTime + (timestamp - mFirstTimestamp);
+        long targetTime = startingTime + (timestamp - mFirstTimestamp);
         long sleepDuration = TimeUnit.MILLISECONDS.convert(
                 targetTime - System.nanoTime(), TimeUnit.NANOSECONDS);
         sleepDuration = Math.max(sleepDuration, 0);
         try {
-            Log.d(TAG, "Sleeping for " + sleepDuration + "ms");
             Thread.sleep(sleepDuration);
         } catch(InterruptedException e) {}
     }
