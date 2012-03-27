@@ -22,7 +22,8 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
     public FileRecorderSink(Context context) {
         try {
             OutputStream outputStream = context.openFileOutput(
-                    DEFAULT_FILENAME, Context.MODE_WORLD_READABLE);
+                    DEFAULT_FILENAME,
+                    Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
             mWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
         } catch(IOException e) {
             Log.w(TAG, "Unable to open " + DEFAULT_FILENAME +
