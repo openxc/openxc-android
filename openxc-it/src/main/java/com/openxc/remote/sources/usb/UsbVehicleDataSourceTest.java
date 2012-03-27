@@ -39,10 +39,10 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
         }
 
         callback = new AbstractVehicleDataSourceCallback() {
-            public void receive(String name, Double value) {
+            public void receive(String name, Object value) {
             }
 
-            public void receive(String name, Double value, Double event) {
+            public void receive(String name, Object value, Object event) {
             }
         };
     }

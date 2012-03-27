@@ -62,12 +62,12 @@ public abstract class AbstractVehicleDataSource
             try {
                 if(event != null) {
                     method = VehicleDataSourceCallbackInterface.class.getMethod(
-                            RECEIVE_METHOD_NAME, String.class,
-                            value.getClass(), event.getClass());
+                            RECEIVE_METHOD_NAME, String.class, Object.class,
+                            Object.class);
                 } else {
                     method = VehicleDataSourceCallbackInterface.class.getMethod(
                             RECEIVE_METHOD_NAME, String.class,
-                            value.getClass());
+                            Object.class);
                 }
             } catch(NoSuchMethodException e) {
                 String logMessage = "Received data of an unsupported type " +

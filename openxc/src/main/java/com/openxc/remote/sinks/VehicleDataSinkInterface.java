@@ -11,7 +11,7 @@ public interface VehicleDataSinkInterface {
      *
      * Vehicle data sources only need to support a single callback.
      */
-    public void receive(String measurementId, RawMeasurement measurement);
+    public void receive(String measurementId, Object value, Object event);
 
     /**
      * Release any acquired resources in preparation for exiting.

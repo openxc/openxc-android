@@ -56,18 +56,17 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     protected void setUp() {
         copyTraces();
         callback = new AbstractVehicleDataSourceCallback() {
-            public void receive(String name, Double value, Double event) {
+            public void receive(String name, Object value, Object event) {
             }
 
-            public void receive(String name, Double value) {
-                receivedNumericalCallback = true;
-            }
+            public void receive(String name, Object value) {
+                if(value.getClass() == Boolean.class) {
+                    receivedBooleanCallback = true;
+                } else if(value.getClass() == Double.class)  {
+                    receivedNumericalCallback = true;
+                }
 
-            public void receive(String name, Boolean value) {
-                receivedBooleanCallback = true;
             }
-
-            public void receive(String name, String value) { }
         };
     }
 

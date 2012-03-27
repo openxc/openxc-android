@@ -31,11 +31,14 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
         }
     }
 
-    public void receive(String measurementId, RawMeasurement measurement){
+    public void receive(String measurementId, Object value, Object event) {
         JSONObject object = new JSONObject();
         try {
             object.put("name", measurementId);
-            object.put("value", measurement.getValue());
+            object.put("value", value);
+            if(event != null) {
+                object.put("event", event);
+            }
         } catch(JSONException e) {
             Log.w(TAG, "Unable to create JSON for trace file", e);
             return;

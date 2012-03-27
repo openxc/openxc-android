@@ -127,15 +127,25 @@ public class RemoteVehicleService extends Service {
                         mNotificationQueue.put(measurementId);
                     } catch(InterruptedException e) {}
                 }
+            }
+
+            private void receiveRaw(final String measurementId,
+                    Object value) {
+                receiveRaw(measurementId, value, null);
+            }
+
+            private void receiveRaw(final String measurementId,
+                    Object value, Object event) {
                 if(mDataSink != null) {
-                    mDataSink.receive(measurementId, measurement);
+                    mDataSink.receive(measurementId, value, event);
                 }
             }
 
-            public void receive(final String measurementId,
-                    final Double value) {
-                RawMeasurement measurement = new RawMeasurement(value);
+            public void receive(String measurementId, Object value) {
+                RawMeasurement measurement =
+                        RawMeasurement.measurementFromObjects(value);
                 receive(measurementId, measurement);
+                receiveRaw(measurementId, value);
 
                 if(measurementId.equals(Latitude.ID) ||
                         measurementId.equals(Longitude.ID)) {
@@ -143,10 +153,12 @@ public class RemoteVehicleService extends Service {
                 }
             }
 
-            public void receive(final String measurementId,
-                    final Double value, final Double event) {
-                RawMeasurement measurement = new RawMeasurement(value, event);
+            public void receive(String measurementId, Object value,
+                    Object event) {
+                RawMeasurement measurement =
+                    RawMeasurement.measurementFromObjects(value, event);
                 receive(measurementId, measurement);
+                receiveRaw(measurementId, value, event);
             }
         };
 

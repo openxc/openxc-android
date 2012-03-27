@@ -17,18 +17,11 @@ public class ManualVehicleDataSourceTest {
         receivedCallback = false;
         source = new ManualVehicleDataSource();
         callback = new AbstractVehicleDataSourceCallback() {
-            public void receive(String name, Double value, Double event) {
+            public void receive(String name, Object value, Object event) {
             }
 
-            public void receive(String name, Double value) {
+            public void receive(String name, Object value) {
                 receivedCallback = true;
-            }
-
-            public void receive(String name, Boolean value) {
-                receivedCallback = true;
-            }
-
-            public void receive(String name, String value) {
             }
         };
     }

@@ -2,7 +2,8 @@ package com.openxc.remote.sources;
 
 public interface VehicleDataSourceCallbackInterface {
     /**
-     * Receive a data point with a name and double value.
+     * Receive a data point with a name and a value (Double, Integer, Boolean or
+     * String).
      *
      * The implementation of this method should not block, lest the vehicle data
      * source get behind in processing data from a source potentially external
@@ -11,15 +12,15 @@ public interface VehicleDataSourceCallbackInterface {
      * @param name The name of the element.
      * @param value The String value of the element.
      */
-    public void receive(String name, Double value);
+    public void receive(String name, Object value);
 
     /**
-     * Receive a data point with a name, double value and double event value.
+     * Receive a data point with a name, a value and a event value.
      *
-     * This method is similar to {@link #receive(String, Double)} but also
+     * This method is similar to {@link #receive(String, Object)} but also
      * accepts the optional event parameter for an OpenXC message.
      *
-     * Identical to {@link #receive(String, Double)}, the implementation of this
+     * Just like in {@link #receive(String, Object)}, the implementation of this
      * method should not block, lest the vehicle data source get behind in
      * processing data from a source potentially external to the system.
      *
@@ -27,60 +28,5 @@ public interface VehicleDataSourceCallbackInterface {
      * @param value The String value of the element.
      * @param event The String event of the element.
      */
-    public void receive(String name, Double value, Double event);
-
-    /**
-     * Receive a data point with a name and integer value.
-     *
-     * The value is cast to a Double, with no loss of precision.
-     *
-     * @param name The name of the element.
-     * @param value The Integer value of the element.
-     */
-    public void receive(String name, Integer value);
-
-    /**
-     * Receive a data point with a name and boolean value.
-     *
-     * The boolean is cast to a double (1 for true, 0 for false with no loss of
-     * precision.
-     *
-     * @param name The name of the element.
-     * @param value The Boolean value of the element.
-     */
-    public void receive(String name, Boolean value);
-
-    /**
-     * Receive a data point with a name and string value.
-     *
-     * The value is converted to a Double equal to the hash of the string.
-     *
-     * @param name The name of the element.
-     * @param value The String value of the element.
-     */
-    public void receive(String name, String value);
-
-    /**
-     * Receive a data point with a name, string value and string event.
-     *
-     * The value and event are converted to Doubles equal to the hash of the
-     * strings.
-     *
-     * @param name The name of the element.
-     * @param value The String value of the element.
-     * @param event The String event of the element.
-     */
-    public void receive(String name, String value, String event);
-
-    /**
-     * Receive a data point with a name, string value and boolean event.
-     *
-     * The value and event are converted to Doubles equal to the hash of the
-     * strings.
-     *
-     * @param name The name of the element.
-     * @param value The String value of the element.
-     * @param event The Boolean event of the element.
-     */
-    public void receive(String name, String value, Boolean event);
+    public void receive(String name, Object value, Object event);
 }

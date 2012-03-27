@@ -5,7 +5,7 @@
             android:key="@string/recording_checkbox_key"
             android:title="@string/recording_checkbox_title"
             android:summary="@string/recording_checkbox_summary"
-            android:defaultValue="off" />
+            android:defaultValue="false" />
 
     <EditTextPreference
             android:key="@string/recording_path_key"
