@@ -160,7 +160,14 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                                 "format: " + line);
                         continue;
                     }
-                    waitForNextRecord(Double.parseDouble(record[0]));
+
+                    try {
+                        waitForNextRecord(Double.parseDouble(record[0]));
+                    } catch(NumberFormatException e) {
+                        Log.w(TAG, "A trace line was not in the expected " +
+                                "format: " + line);
+                        continue;
+                    }
                     handleJson(record[1]);
                 }
             } catch(IOException e) {
@@ -197,6 +204,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
                 targetTime - System.nanoTime(), TimeUnit.NANOSECONDS);
         sleepDuration = Math.max(sleepDuration, 0);
         try {
+            Log.d(TAG, "Sleeping for " + sleepDuration + "ms");
             Thread.sleep(sleepDuration);
         } catch(InterruptedException e) {}
     }
