@@ -324,12 +324,12 @@ public class VehicleService extends Service {
      */
     public void enableRecording(boolean enabled)
             throws RemoteVehicleServiceException {
-        mRecordingEnabled = true;
+        mRecordingEnabled = enabled;
 
         if(mRemoteService != null) {
             try {
-                Log.i(TAG, "Setting recording to " + enabled);
-                mRemoteService.enableRecording(enabled);
+                Log.i(TAG, "Setting recording to " + mRecordingEnabled);
+                mRemoteService.enableRecording(mRecordingEnabled);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException("Unable to set " +
                         "recording status of remote vehicle service", e);
