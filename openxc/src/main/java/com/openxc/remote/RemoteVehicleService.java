@@ -69,6 +69,7 @@ public class RemoteVehicleService extends Service {
 
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
+    private boolean mRecordingEnabled;
 
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
@@ -346,6 +347,11 @@ public class RemoteVehicleService extends Service {
                         " with resource " + resource);
                 initializeDataSource(dataSource, resource);
             }
+
+            public void enableRecording(boolean enabled) {
+                Log.i(TAG, "Setting trace recording status to " + enabled);
+                RemoteVehicleService.this.enableRecording(enabled);
+            }
     };
 
     private class NotificationThread extends Thread {
@@ -410,5 +416,10 @@ public class RemoteVehicleService extends Service {
             rawMeasurement = new RawMeasurement();
         }
         return rawMeasurement;
+    }
+
+    private void enableRecording(boolean enabled) {
+        // TODO actually start/stop recording thread
+        mRecordingEnabled = enabled;
     }
 }

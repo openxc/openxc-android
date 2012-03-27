@@ -23,4 +23,5 @@ interface RemoteVehicleServiceInterface {
             RemoteVehicleServiceListenerInterface listener);
 
     void setDataSource(String dataSource, String resource);
+    void enableRecording(boolean enabled);
 }

@@ -70,6 +70,7 @@ public class VehicleService extends Service {
     private Condition mRemoteBoundCondition;
     private String mDataSource;
     private String mDataSourceResource;
+    private Boolean mRecordingEnabled;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
@@ -313,6 +314,33 @@ public class VehicleService extends Service {
         }
     }
 
+    /**
+     * Enable or disable recording of a trace file.
+     *
+     * @param enabled true if recording should be enabled
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public void enableRecording(boolean enabled)
+            throws RemoteVehicleServiceException {
+        mRecordingEnabled = true;
+
+        if(mRemoteService != null) {
+            try {
+                Log.i(TAG, "Setting recording to " + enabled);
+                mRemoteService.enableRecording(enabled);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException("Unable to set " +
+                        "recording status of remote vehicle service", e);
+            }
+        } else {
+            Log.w(TAG, "Can't set recording status -- " +
+                    "not connected to remote service yet, but will set when " +
+                    "connected");
+        }
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -356,6 +384,15 @@ public class VehicleService extends Service {
                     setDataSource(mDataSource, mDataSourceResource);
                 } catch(RemoteVehicleServiceException e) {
                     Log.w(TAG, "Unable to set data source after binding", e);
+                }
+            }
+
+            if(mRecordingEnabled != null) {
+                try {
+                    enableRecording(mRecordingEnabled);
+                } catch(RemoteVehicleServiceException e) {
+                    Log.w(TAG, "Unable to set recording status after binding",
+                            e);
                 }
             }
         }
