@@ -33,6 +33,9 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+
+import android.preference.PreferenceManager;
 
 import android.os.Binder;
 import android.os.IBinder;
@@ -70,7 +73,7 @@ public class VehicleService extends Service {
     private Condition mRemoteBoundCondition;
     private String mDataSource;
     private String mDataSourceResource;
-    private Boolean mRecordingEnabled;
+    private RecordingEnabledPreferenceListener mRecordingPreferenceListener;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
@@ -128,6 +131,8 @@ public class VehicleService extends Service {
         mRemoteBoundLock = new ReentrantLock();
         mRemoteBoundCondition = mRemoteBoundLock.newCondition();
 
+        watchPreferences();
+
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
         mMeasurementIdToClass = HashBiMap.create();
@@ -139,6 +144,7 @@ public class VehicleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Service being destroyed");
+        unwatchPreferences();
         unbindRemote();
     }
 
@@ -324,12 +330,10 @@ public class VehicleService extends Service {
      */
     public void enableRecording(boolean enabled)
             throws RemoteVehicleServiceException {
-        mRecordingEnabled = enabled;
-
         if(mRemoteService != null) {
             try {
-                Log.i(TAG, "Setting recording to " + mRecordingEnabled);
-                mRemoteService.enableRecording(mRecordingEnabled);
+                Log.i(TAG, "Setting recording to " + enabled);
+                mRemoteService.enableRecording(enabled);
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException("Unable to set " +
                         "recording status of remote vehicle service", e);
@@ -347,6 +351,34 @@ public class VehicleService extends Service {
             .add("bound", mIsBound)
             .add("numListeners", mListeners.size())
             .toString();
+    }
+
+    private void setRecordingStatus() {
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        boolean recordingEnabled = preferences.getBoolean(
+                getString(R.string.recording_checkbox_key), false);
+        try {
+            enableRecording(recordingEnabled);
+        } catch(RemoteVehicleServiceException e) {
+            Log.w(TAG, "Unable to set recording status after binding", e);
+        }
+    }
+
+    private void unwatchPreferences() {
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.unregisterOnSharedPreferenceChangeListener(
+                mRecordingPreferenceListener);
+    }
+
+    private void watchPreferences() {
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        mRecordingPreferenceListener =
+                new RecordingEnabledPreferenceListener();
+        preferences.registerOnSharedPreferenceChangeListener(
+                mRecordingPreferenceListener);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -386,15 +418,7 @@ public class VehicleService extends Service {
                     Log.w(TAG, "Unable to set data source after binding", e);
                 }
             }
-
-            if(mRecordingEnabled != null) {
-                try {
-                    enableRecording(mRecordingEnabled);
-                } catch(RemoteVehicleServiceException e) {
-                    Log.w(TAG, "Unable to set recording status after binding",
-                            e);
-                }
-            }
+            setRecordingStatus();
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -540,5 +564,15 @@ public class VehicleService extends Service {
                     " isn't valid -- returning a blank measurement");
         }
         throw new NoValueException();
+    }
+
+    private class RecordingEnabledPreferenceListener
+            implements SharedPreferences.OnSharedPreferenceChangeListener {
+        public void onSharedPreferenceChanged(SharedPreferences preferences,
+                String key) {
+            if(key.equals(getString(R.string.recording_checkbox_key))) {
+                setRecordingStatus();
+            }
+        }
     }
 }

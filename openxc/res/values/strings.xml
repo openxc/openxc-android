@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">OpenXC</string>
+    <string name="recording_checkbox_key">recording_enabled</string>
+    <string name="recording_path_key">recording_output</string>
 </resources>

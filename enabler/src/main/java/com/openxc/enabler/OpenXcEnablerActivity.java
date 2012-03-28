@@ -32,7 +32,6 @@ public class OpenXcEnablerActivity extends Activity {
     private final Handler mHandler = new Handler();
     private TextView mVehicleServiceStatusView;;
     private VehicleService mVehicleService;
-    private RecordingEnabledPreferenceListener mRecordingPreferenceListener;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -40,7 +39,6 @@ public class OpenXcEnablerActivity extends Activity {
             Log.i(TAG, "Bound to VehicleService");
             mVehicleService = ((VehicleService.VehicleServiceBinder)service
                     ).getService();
-            setRecordingStatus();
 
             mHandler.post(new Runnable() {
                 public void run() {
@@ -60,21 +58,6 @@ public class OpenXcEnablerActivity extends Activity {
         }
     };
 
-    private void setRecordingStatus() {
-        if(mVehicleService == null) {
-            return;
-        }
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(
-                        OpenXcEnablerActivity.this);
-        try {
-            mVehicleService.enableRecording(preferences.getBoolean(
-                        getString(R.string.recording_checkbox_key), false));
-        } catch(RemoteVehicleServiceException e) {
-            Log.w(TAG, "Unable to set recording status", e);
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,24 +68,6 @@ public class OpenXcEnablerActivity extends Activity {
 
         mVehicleServiceStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
-
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(
-                        OpenXcEnablerActivity.this);
-        mRecordingPreferenceListener =
-                new RecordingEnabledPreferenceListener();
-        preferences.registerOnSharedPreferenceChangeListener(
-                mRecordingPreferenceListener);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(
-                        OpenXcEnablerActivity.this);
-        preferences.unregisterOnSharedPreferenceChangeListener(
-                mRecordingPreferenceListener);
     }
 
     @Override
@@ -139,13 +104,4 @@ public class OpenXcEnablerActivity extends Activity {
         }
     }
 
-    private class RecordingEnabledPreferenceListener
-            implements SharedPreferences.OnSharedPreferenceChangeListener {
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.recording_checkbox_key))) {
-                setRecordingStatus();
-            }
-        }
-    }
 }
