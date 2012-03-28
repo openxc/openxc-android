@@ -6,4 +6,8 @@ public class RemoteVehicleServiceException extends Exception {
 	public RemoteVehicleServiceException(String message, Throwable cause) {
         super(message, cause);
     }
+
+	public RemoteVehicleServiceException(String message) {
+        super(message);
+    }
 }

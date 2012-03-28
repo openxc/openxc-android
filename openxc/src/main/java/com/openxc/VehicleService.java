@@ -345,6 +345,27 @@ public class VehicleService extends Service {
         }
     }
 
+    /**
+     * Read the number of messages received by the vehicle service.
+     *
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public int getMessageCount() throws RemoteVehicleServiceException {
+        if(mRemoteService != null) {
+            try {
+                return mRemoteService.getMessageCount();
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to retrieve message count", e);
+            }
+        } else {
+            throw new RemoteVehicleServiceException(
+                    "Unable to retrieve message count");
+        }
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

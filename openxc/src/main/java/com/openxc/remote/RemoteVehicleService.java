@@ -70,6 +70,7 @@ public class RemoteVehicleService extends Service {
             UsbVehicleDataSource.class.getName();
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
+    private int mMessagesReceived = 0;
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
     private VehicleDataSinkInterface mDataSink;
@@ -139,6 +140,7 @@ public class RemoteVehicleService extends Service {
                 if(mDataSink != null) {
                     mDataSink.receive(measurementId, value, event);
                 }
+                mMessagesReceived++;
             }
 
             public void receive(String measurementId, Object value) {
@@ -371,6 +373,10 @@ public class RemoteVehicleService extends Service {
                 Log.i(TAG, "Setting trace recording status to " + enabled);
                 RemoteVehicleService.this.enableRecording(enabled);
             }
+
+            public int getMessageCount() {
+                return RemoteVehicleService.this.getMessageCount();
+            }
     };
 
     private class NotificationThread extends Thread {
@@ -445,5 +451,9 @@ public class RemoteVehicleService extends Service {
             mDataSink.stop();
             mDataSink = null;
         }
+    }
+
+    private int getMessageCount() {
+        return mMessagesReceived;
     }
 }

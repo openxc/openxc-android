@@ -13,4 +13,9 @@
             android:text="@string/recording_status_label" />
     <TextView android:id="@+id/recording_status"
             style="@style/DefaultFont" />
+    <TextView android:id="@+id/message_count_label"
+            style="@style/DefaultFont"
+            android:text="@string/message_count_label" />
+    <TextView android:id="@+id/message_count"
+            style="@style/DefaultFont" />
 </LinearLayout>

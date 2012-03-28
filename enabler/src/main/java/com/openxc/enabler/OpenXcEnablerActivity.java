@@ -1,5 +1,8 @@
 package com.openxc.enabler;
 
+import java.util.TimerTask;
+import java.util.Timer;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,6 +35,9 @@ public class OpenXcEnablerActivity extends Activity {
     private final Handler mHandler = new Handler();
     private TextView mVehicleServiceStatusView;;
     private TextView mRecordingStatusView;
+    private TextView mMessageCountView;
+    private TimerTask mUpdateMessageCountTask;
+    private Timer mTimer;
     private VehicleService mVehicleService;
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -46,6 +52,11 @@ public class OpenXcEnablerActivity extends Activity {
                     mVehicleServiceStatusView.setText("Running");
                 }
             });
+
+            mUpdateMessageCountTask = new MessageCountTask(mVehicleService,
+                    mHandler, mMessageCountView);
+            mTimer = new Timer();
+            mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -70,6 +81,7 @@ public class OpenXcEnablerActivity extends Activity {
         mVehicleServiceStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
         mRecordingStatusView = (TextView) findViewById(R.id.recording_status);
+        mMessageCountView = (TextView) findViewById(R.id.message_count);
     }
 
     @Override
