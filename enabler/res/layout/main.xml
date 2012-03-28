@@ -8,4 +8,9 @@
             android:text="@string/vehicle_service_status_label" />
     <TextView android:id="@+id/vehicle_service_status"
             style="@style/DefaultFont" />
+    <TextView android:id="@+id/recording_status_label"
+            style="@style/DefaultFont"
+            android:text="@string/recording_status_label" />
+    <TextView android:id="@+id/recording_status"
+            style="@style/DefaultFont" />
 </LinearLayout>
