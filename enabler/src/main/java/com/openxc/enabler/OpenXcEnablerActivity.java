@@ -114,6 +114,14 @@ public class OpenXcEnablerActivity extends Activity {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(mConnection != null) {
+            unbindService(mConnection);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
