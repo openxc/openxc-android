@@ -5,7 +5,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
 
+import java.util.Date;
+
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,22 +21,18 @@ import android.content.Context;
 public class FileRecorderSink implements VehicleDataSinkInterface {
     private final static String TAG = "FileRecorderSink";
     private final static String DEFAULT_FILENAME = "trace.json";
+    private static SimpleDateFormat sDateFormatter =
+            new SimpleDateFormat("yyyy-MM-dd-HH");
     private static DecimalFormat sTimestampFormatter =
             new DecimalFormat("##########.000000");
 
     private BufferedWriter mWriter;
+    private Date mLastFileCreated;
+    private Context mContext;
 
     public FileRecorderSink(Context context) {
-        try {
-            OutputStream outputStream = context.openFileOutput(
-                    DEFAULT_FILENAME,
-                    Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
-            mWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to open " + DEFAULT_FILENAME +
-                    " for writing", e);
-            mWriter = null;
-        }
+        mContext = context;
+        openTimestampedFile();
     }
 
     public void receive(String measurementId, Object value, Object event) {
@@ -52,6 +51,11 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
         double timestamp = System.currentTimeMillis() / 1000.0;
         String timestampString = sTimestampFormatter.format(timestamp);
         if(mWriter != null) {
+            if((new Date()).getHours() != mLastFileCreated.getHours()) {
+                // flip to a new file every hour
+                openTimestampedFile();
+            }
+
             try {
                 mWriter.write(timestampString + ": " + object.toString());
                 mWriter.newLine();
@@ -71,6 +75,21 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
             } catch(IOException e) {
                 Log.w(TAG, "Unable to close output file", e);
             }
+            mWriter = null;
+        }
+    }
+
+    private void openTimestampedFile() {
+        mLastFileCreated = new Date();
+        String filename = sDateFormatter.format(mLastFileCreated) + ".json";
+        Log.i(TAG, "Opening trace file " + filename + " for writing");
+        try {
+            OutputStream outputStream = mContext.openFileOutput(filename,
+                    Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
+            mWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to open " + DEFAULT_FILENAME +
+                    " for writing", e);
             mWriter = null;
         }
     }
