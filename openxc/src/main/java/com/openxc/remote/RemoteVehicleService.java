@@ -32,6 +32,7 @@ import com.openxc.remote.sources.VehicleDataSourceInterface;
 
 import com.openxc.remote.sinks.VehicleDataSinkInterface;
 import com.openxc.remote.sinks.FileRecorderSink;
+import com.openxc.remote.sinks.UploaderSink;
 
 import android.app.Service;
 
@@ -76,6 +77,7 @@ public class RemoteVehicleService extends Service {
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
     private VehicleDataSinkInterface mDataSink;
+    private VehicleDataSinkInterface mUploadingDataSink;
 
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
@@ -142,6 +144,10 @@ public class RemoteVehicleService extends Service {
                     Object value, Object event) {
                 if(mDataSink != null) {
                     mDataSink.receive(measurementId, value, event);
+                }
+
+                if(mUploadingDataSink != null) {
+                    mUploadingDataSink.receive(measurementId, value, event);
                 }
                 mMessagesReceived++;
             }
@@ -449,12 +455,16 @@ public class RemoteVehicleService extends Service {
     }
 
     private void enableRecording(boolean enabled) {
-        if(enabled && mDataSink == null) {
+        if(enabled && mDataSink == null && mUploadingDataSink == null) {
             mDataSink = new FileRecorderSink(this);
+            mUploadingDataSink = new UploaderSink(this);
             Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
+            Log.i(TAG, "Initialized uploading data sink " + mUploadingDataSink);
         } else if(mDataSink != null) {
             mDataSink.stop();
+            mUploadingDataSink.stop();
             mDataSink = null;
+            mUploadingDataSink = null;
         }
     }
 
