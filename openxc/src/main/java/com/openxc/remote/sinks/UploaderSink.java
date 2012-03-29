@@ -140,6 +140,12 @@ public class UploaderSink implements VehicleDataSinkInterface {
                 }
             } catch(IOException e) {
                 Log.w(TAG, "Problem uploading the record", e);
+                try {
+                    Thread.sleep(5000);
+                } catch(InterruptedException e2) {
+                    Log.w(TAG, "Uploader interrupted after an error", e2);
+                    break;
+                }
             }
         }
 
