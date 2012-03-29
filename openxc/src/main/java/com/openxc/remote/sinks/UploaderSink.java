@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -44,15 +47,22 @@ public class UploaderSink implements VehicleDataSinkInterface {
             new DecimalFormat("##########.000000");
 
     private BlockingQueue<JSONObject> mRecordQueue;
-    private HttpClient mClient;
+    private Lock mQueueLock;
+    private Condition mRecordsQueuedSignal;
+    private UploaderThread mUploader;
 
     public UploaderSink(Context context) {
         mRecordQueue = new LinkedBlockingQueue<JSONObject>(
                 MAXIMUM_QUEUED_RECORDS);
-        mClient = new DefaultHttpClient();
+        mQueueLock = new ReentrantLock();
+        mRecordsQueuedSignal = mQueueLock.newCondition();
+        mUploader = new UploaderThread();
+        mUploader.start();
     }
 
-    public void stop() { }
+    public void stop() {
+        mUploader.stop();
+    }
 
     public void receive(String measurementId, Object value, Object event) {
         double timestamp = System.currentTimeMillis() / 1000.0;
@@ -72,17 +82,23 @@ public class UploaderSink implements VehicleDataSinkInterface {
         }
         mRecordQueue.offer(object);
         if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
-            (new UploaderThread()).start();
+            mQueueLock.lock();
+            mRecordsQueuedSignal.signal();
+            mQueueLock.unlock();
         }
     }
+
+    private class UploaderException extends Exception { }
 
     private class UploaderThread extends Thread {
         private boolean mRunning = true;
 
-        public void run() {
-            ArrayList<JSONObject> records = new ArrayList();
-            mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
+        public void done() {
+            mRunning = false;
+        }
 
+        private JSONObject constructRequestData(ArrayList<JSONObject> records)
+                throws UploaderException {
             JSONArray recordArray = new JSONArray();
             for(JSONObject record : records) {
                 recordArray.put(record);
@@ -93,10 +109,13 @@ public class UploaderSink implements VehicleDataSinkInterface {
                 data.put("records", recordArray);
             } catch(JSONException e) {
                 Log.w(TAG, "Unable to create JSON for uploading records", e);
-                return;
+                throw new UploaderException();
             }
+            return data;
+        }
 
-            final HttpClient client = new DefaultHttpClient();
+        private HttpPost constructRequest(JSONObject data)
+                throws UploaderException {
             HttpPost request = new HttpPost(UPLOAD_URL);
             try {
                 ByteArrayEntity entity = new ByteArrayEntity(
@@ -106,19 +125,49 @@ public class UploaderSink implements VehicleDataSinkInterface {
                 request.setEntity(entity);
             } catch(UnsupportedEncodingException e) {
                 Log.w(TAG, "Couldn't encode records for uploading", e);
-                return;
+                throw new UploaderException();
             }
+            return request;
+        }
 
+        private void makeRequest(HttpPost request) {
+            final HttpClient client = new DefaultHttpClient();
             try {
                 HttpResponse response = client.execute(request);
                 final int statusCode = response.getStatusLine().getStatusCode();
-                if(statusCode == HttpStatus.SC_CREATED) {
-                    Log.d(TAG, "Uploaded " + records.size() + " records");
-                } else {
+                if(statusCode != HttpStatus.SC_CREATED) {
                     Log.w(TAG, "Got unxpected status code: " + statusCode);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "Problem uploading the record", e);
+            }
+        }
+
+        private ArrayList<JSONObject> waitForRecords()
+                throws InterruptedException {
+            mQueueLock.lock();
+            mRecordsQueuedSignal.await();
+
+            ArrayList<JSONObject> records = new ArrayList();
+            mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
+
+            mQueueLock.unlock();
+            return records;
+        }
+
+        public void run() {
+            while(mRunning) {
+                try {
+                    ArrayList<JSONObject> records = waitForRecords();
+                    JSONObject data = constructRequestData(records);
+                    HttpPost request = constructRequest(data);
+                    makeRequest(request);
+                } catch(UploaderException e) {
+                    Log.w(TAG, "Problem uploading the record", e);
+                } catch(InterruptedException e) {
+                    Log.w(TAG, "Uploader was interrupted", e);
+                    break;
+                }
             }
         }
     }
