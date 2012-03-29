@@ -20,7 +20,6 @@ import android.content.Context;
 
 public class FileRecorderSink implements VehicleDataSinkInterface {
     private final static String TAG = "FileRecorderSink";
-    private final static String DEFAULT_FILENAME = "trace.json";
     private static SimpleDateFormat sDateFormatter =
             new SimpleDateFormat("yyyy-MM-dd-HH");
     private static DecimalFormat sTimestampFormatter =
@@ -88,8 +87,7 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
                     Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
             mWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
         } catch(IOException e) {
-            Log.w(TAG, "Unable to open " + DEFAULT_FILENAME +
-                    " for writing", e);
+            Log.w(TAG, "Unable to open " + filename + " for writing", e);
             mWriter = null;
         }
     }
