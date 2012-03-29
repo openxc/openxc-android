@@ -26,6 +26,10 @@ import org.apache.http.entity.ByteArrayEntity;
 
 import org.apache.http.client.methods.HttpPost;
 
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.message.BasicHeader;
@@ -43,6 +47,7 @@ public class UploaderSink implements VehicleDataSinkInterface {
             "http://fiesta.eecs.umich.edu:5000/records";
     private final static int UPLOAD_BATCH_SIZE = 200;
     private final static int MAXIMUM_QUEUED_RECORDS = 2000;
+    private final static int HTTP_TIMEOUT = 5000;
     private static DecimalFormat sTimestampFormatter =
             new DecimalFormat("##########.000000");
 
@@ -130,8 +135,11 @@ public class UploaderSink implements VehicleDataSinkInterface {
             return request;
         }
 
-        private void makeRequest(HttpPost request) {
-            final HttpClient client = new DefaultHttpClient();
+        private void makeRequest(HttpPost request) throws InterruptedException {
+            HttpParams parameters = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(parameters, HTTP_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(parameters, HTTP_TIMEOUT);
+            final HttpClient client = new DefaultHttpClient(parameters);
             try {
                 HttpResponse response = client.execute(request);
                 final int statusCode = response.getStatusLine().getStatusCode();
@@ -144,7 +152,7 @@ public class UploaderSink implements VehicleDataSinkInterface {
                     Thread.sleep(5000);
                 } catch(InterruptedException e2) {
                     Log.w(TAG, "Uploader interrupted after an error", e2);
-                    break;
+                    throw e2;
                 }
             }
         }
