@@ -44,6 +44,8 @@ import android.location.LocationManager;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 
 import android.util.Log;
 
@@ -80,6 +82,7 @@ public class RemoteVehicleService extends Service {
     private BlockingQueue<String> mNotificationQueue;
     private NotificationThread mNotificationThread;
     private LocationManager mLocationManager;
+    private WakeLock mWakeLock;
 
     /**
      * A callback receiver for the vehicle data source.
@@ -174,6 +177,7 @@ public class RemoteVehicleService extends Service {
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
         setupMockLocations();
+        acquireWakeLock();
     }
 
     /**
@@ -194,6 +198,7 @@ public class RemoteVehicleService extends Service {
             mNotificationThread.done();
             mNotificationThread = null;
         }
+        releaseWakeLock();
         // TODO loop over and kill all callbacks in remote callback list
     }
 
@@ -455,5 +460,18 @@ public class RemoteVehicleService extends Service {
 
     private int getMessageCount() {
         return mMessagesReceived;
+    }
+
+    private void acquireWakeLock() {
+        PowerManager manager = (PowerManager) getSystemService(
+                Context.POWER_SERVICE);
+        mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+        mWakeLock.acquire();
+    }
+
+    private void releaseWakeLock() {
+        if(mWakeLock != null && mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
     }
 }
