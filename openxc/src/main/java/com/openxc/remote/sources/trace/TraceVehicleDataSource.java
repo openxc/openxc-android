@@ -29,22 +29,33 @@ import android.util.Log;
  * A vehicle data source that reads measurements from a pre-recorded trace file.
  *
  * This class is primarily for testing - a pre-recorded trace of the output from
- * an OpenXC CAN translator (i.e. a plain ASCII file of newline separated JSON
- * messages) is played back line by line into the library. Everything from the
- * RemoteVehicleService on up the chain is identical to when operating in a live
- * vehicle.
+ * an OpenXC CAN translator is played back line by line into the library.
+ * Everything from the RemoteVehicleService on up the chain is identical to when
+ * operating in a live vehicle.
  *
- * The trace file is specified via the constructor as an Android-style resource
- * URI, e.g. "resource://42". The ID for the resource is best accessed through
- * the generated "R.java" file. For example:
+ * The expected format of the trace file is UNIX timestamps followed by JSON
+ * objects, separated by newlines:
+ *
+ * 1332794184.319404: {"name":"fuel_consumed_since_restart","value":0.090000}
+ * 1332794184.502802: {"name":"steering_wheel_angle","value":-346.985229}
+ * 1332794184.559463: {"name":"powertrain_torque","value":1.000000}
+ *
+ * The trace file to use is specified via the constructor as an Android-style
+ * resource URI, e.g. "resource://42" or a plain file path
+ * (e.g. "file:///sdcard/com.openxc/trace.json" ). When using resources, the ID
+ * for the resource is accessed through the generated "R.java" file. For
+ * example:
  *
  *      URI resource = new URI("resource://" + R.raw.trace)
  *
  * where the trace file is located at res/raw/trace.
  *
- * The trace file is played back in a continuous loop at the fastest possible
- * speed it can muster - this is likely much faster that you would encounter in
- * a vehicle.
+ * Regular files are the preferred way to use trace files, and are required when
+ * using the OpenXC enabler app. Android apps don't have access to each others'
+ * raw resources, so the resource method will not work in that case.
+ *
+ * The trace file is played back in a continuous loop at roughly the same speed
+ * as the original recording (at least according to the timestamps in the file).
  *
  * Playback will not begin until a callback is set, either via a constructor or
  * the {@link com.openxc.remote.sources.AbstractVehicleDataSource#setCallback(VehicleDataSourceCallbackInterface)}
