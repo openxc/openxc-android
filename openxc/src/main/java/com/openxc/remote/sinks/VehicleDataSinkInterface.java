@@ -3,13 +3,19 @@ package com.openxc.remote.sinks;
 import com.openxc.remote.RawMeasurement;
 
 /**
- * The interface for all output of raw vehicle measurements.
+ * The interface for all output targets for raw vehicle measurements.
+ *
+ * Data sinks are registered with the
+ * {@link com.openxc.remote.RemoteVehicleService} and receive all raw messages
+ * from the vehicle data source as they arrive. Common applications of this
+ * class are trace file recording, web streaming or custom CAN message handling.
  */
 public interface VehicleDataSinkInterface {
     /**
-     * Set the callback for receiving measurements as they are received.
+     * Do something with a new, raw vehicle message.
      *
-     * Vehicle data sources only need to support a single callback.
+     * The implementation of this method must not block, as it is called in the
+     * same thread that processes incoming messages in RemoteVehicleService.
      */
     public void receive(String measurementId, Object value, Object event);
 

@@ -18,6 +18,13 @@ import com.openxc.remote.RawMeasurement;
 import android.util.Log;
 import android.content.Context;
 
+/**
+ * Record raw vehicle measurements to a file as JSON.
+ *
+ * This data sink is a simple passthrough that records every raw vehicle
+ * measurement as it arrives to a file on the device. It splits the stream to a
+ * different file every hour.
+ */
 public class FileRecorderSink implements VehicleDataSinkInterface {
     private final static String TAG = "FileRecorderSink";
     private static SimpleDateFormat sDateFormatter =
@@ -34,6 +41,9 @@ public class FileRecorderSink implements VehicleDataSinkInterface {
         openTimestampedFile();
     }
 
+    /**
+     * Record a message to a file, selected by the current time.
+     */
     public void receive(String measurementId, Object value, Object event) {
         JSONObject object = new JSONObject();
         try {
