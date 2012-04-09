@@ -193,6 +193,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             if(mConnection == null) {
                 continue;
             }
+            // TODO when there haven't been any USB transfers for a long time,
+            // we can get stuck here. do we need a timeout so it retries after
+            // USB wakes backup? Why does USB seem to go to sleep in the first
+            // place?
             int received = mConnection.bulkTransfer(
                     mEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
