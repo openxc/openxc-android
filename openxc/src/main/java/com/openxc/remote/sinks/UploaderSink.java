@@ -45,7 +45,7 @@ public class UploaderSink implements VehicleDataSinkInterface {
     private final static String TAG = "UploaderSink";
     private final static String UPLOAD_URL =
             "http://fiesta.eecs.umich.edu:5000/records";
-    private final static int UPLOAD_BATCH_SIZE = 200;
+    private final static int UPLOAD_BATCH_SIZE = 25;
     private final static int MAXIMUM_QUEUED_RECORDS = 2000;
     private final static int HTTP_TIMEOUT = 5000;
     private static DecimalFormat sTimestampFormatter =
