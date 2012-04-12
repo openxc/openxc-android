@@ -42,6 +42,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -82,6 +83,7 @@ public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
     private final static String DEFAULT_DATA_SOURCE =
             UsbVehicleDataSource.class.getName();
+    private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private int mMessagesReceived = 0;
@@ -459,9 +461,10 @@ public class RemoteVehicleService extends Service {
         }
     };
 
-    private class NativeLocationListener extends LocationListener {
+    private class NativeLocationListener implements LocationListener {
         public void onLocationChanged(final Location location) {
-            // TODO
+            mCallback.receive(Latitude.ID, location.getLatitude());
+            mCallback.receive(Longitude.ID, location.getLongitude());
         }
 
         public void onStatusChanged(String provider, int status,
@@ -496,7 +499,8 @@ public class RemoteVehicleService extends Service {
             mNativeLocationListener = new NativeLocationListener();
             try {
                 locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER, 0, 0,
+                        LocationManager.GPS_PROVIDER,
+                        NATIVE_GPS_UPDATE_INTERVAL, 0,
                         mNativeLocationListener);
             } catch(IllegalArgumentException e) {
                 Log.w(TAG, "GPS location provider is unavailable");
