@@ -2,5 +2,6 @@
 <resources>
     <string name="app_name">OpenXC</string>
     <string name="recording_checkbox_key">recording_enabled</string>
+    <string name="native_gps_checkbox_key">use_native_gps</string>
     <string name="recording_path_key">recording_output</string>
 </resources>
