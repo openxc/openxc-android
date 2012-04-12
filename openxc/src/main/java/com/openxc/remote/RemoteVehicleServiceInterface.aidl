@@ -24,5 +24,6 @@ interface RemoteVehicleServiceInterface {
 
     void setDataSource(String dataSource, String resource);
     void enableRecording(boolean enabled);
+    void enableNativeGpsPassthrough(boolean enabled);
     int getMessageCount();
 }
