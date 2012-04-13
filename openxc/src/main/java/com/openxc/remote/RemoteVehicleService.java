@@ -42,6 +42,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 
+import android.os.Looper;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
@@ -395,7 +396,7 @@ public class RemoteVehicleService extends Service {
             }
 
             public void enableNativeGpsPassthrough(boolean enabled) {
-                Log.i(TAG, "Setting native GPS passhtrough status to " +
+                Log.i(TAG, "Setting native GPS passtrough status to " +
                         enabled);
                 RemoteVehicleService.this.enableNativeGpsPassthrough(enabled);
             }
@@ -461,7 +462,32 @@ public class RemoteVehicleService extends Service {
         }
     };
 
-    private class NativeLocationListener implements LocationListener {
+    private class NativeLocationListener extends Thread implements LocationListener {
+        public void run() {
+            Looper.myLooper().prepare();
+            LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+
+            // try to grab a rough location from the network provider before
+            // registering for GPS, which may take a while to initialize
+            Location lastKnownLocation = locationManager.getLastKnownLocation(
+                        LocationManager.NETWORK_PROVIDER);
+            if(lastKnownLocation != null) {
+                onLocationChanged(lastKnownLocation);
+            }
+
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        NATIVE_GPS_UPDATE_INTERVAL, 0,
+                        this);
+                Log.d(TAG, "Requested GPS updates");
+            } catch(IllegalArgumentException e) {
+                Log.w(TAG, "GPS location provider is unavailable");
+            }
+            Looper.myLooper().loop();
+        }
+
         public void onLocationChanged(final Location location) {
             mCallback.receive(Latitude.ID, location.getLatitude());
             mCallback.receive(Longitude.ID, location.getLongitude());
@@ -492,20 +518,13 @@ public class RemoteVehicleService extends Service {
     }
 
     private void enableNativeGpsPassthrough(boolean enabled) {
-        LocationManager locationManager = (LocationManager)
-            getSystemService(Context.LOCATION_SERVICE);
         if(enabled) {
             Log.i(TAG, "Enabled native GPS passthrough");
             mNativeLocationListener = new NativeLocationListener();
-            try {
-                locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        NATIVE_GPS_UPDATE_INTERVAL, 0,
-                        mNativeLocationListener);
-            } catch(IllegalArgumentException e) {
-                Log.w(TAG, "GPS location provider is unavailable");
-            }
-        } else {
+            mNativeLocationListener.start();
+        } else if(mNativeLocationListener != null) {
+            LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
             Log.i(TAG, "Disabled native GPS passthrough");
             locationManager.removeUpdates(mNativeLocationListener);
             mNativeLocationListener = null;
