@@ -274,6 +274,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
 
     private UsbDeviceConnection setupDevice(UsbManager manager,
             UsbDevice device) throws UsbDeviceException {
+        if(device.getInterfaceCount() != 1) {
+            throw new UsbDeviceException("USB device didn't have an " +
+                    "interface for us to open");
+        }
         UsbInterface iface = device.getInterface(0);
         Log.d(TAG, "Connecting to endpoint 1 on interface " + iface);
         mEndpoint = iface.getEndpoint(1);

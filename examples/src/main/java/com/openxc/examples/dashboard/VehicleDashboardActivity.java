@@ -305,14 +305,14 @@ public class VehicleDashboardActivity extends Activity {
 
     LocationListener mAndroidLocationListener = new LocationListener() {
         public void onLocationChanged(final Location location) {
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        mAndroidLatitudeView.setText("" +
-                            location.getLatitude());
-                        mAndroidLongitudeView.setText("" +
-                            location.getLongitude());
-                    }
-                });
+            mHandler.post(new Runnable() {
+                public void run() {
+                    mAndroidLatitudeView.setText("" +
+                        location.getLatitude());
+                    mAndroidLongitudeView.setText("" +
+                        location.getLongitude());
+                }
+            });
         }
 
         public void onStatusChanged(String provider, int status, Bundle extras) {}

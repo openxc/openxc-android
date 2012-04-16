@@ -1,3 +1,8 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+            android:key="@string/native_gps_checkbox_key"
+            android:title="@string/native_gps_checkbox_title"
+            android:summary="@string/native_gps_checkbox_summary"
+            android:defaultValue="false" />
 </PreferenceScreen>

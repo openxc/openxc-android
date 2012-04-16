@@ -41,7 +41,10 @@ import android.content.Intent;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.location.LocationListener;
 
+import android.os.Looper;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -82,6 +85,7 @@ public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
     private final static String DEFAULT_DATA_SOURCE =
             UsbVehicleDataSource.class.getName();
+    private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private int mMessagesReceived = 0;
@@ -95,6 +99,7 @@ public class RemoteVehicleService extends Service {
     private BlockingQueue<String> mNotificationQueue;
     private NotificationThread mNotificationThread;
     private LocationManager mLocationManager;
+    private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
 
     /**
@@ -396,6 +401,12 @@ public class RemoteVehicleService extends Service {
                 RemoteVehicleService.this.enableRecording(enabled);
             }
 
+            public void enableNativeGpsPassthrough(boolean enabled) {
+                Log.i(TAG, "Setting native GPS passtrough status to " +
+                        enabled);
+                RemoteVehicleService.this.enableNativeGpsPassthrough(enabled);
+            }
+
             public int getMessageCount() {
                 return RemoteVehicleService.this.getMessageCount();
             }
@@ -457,6 +468,43 @@ public class RemoteVehicleService extends Service {
         }
     };
 
+    private class NativeLocationListener extends Thread implements LocationListener {
+        public void run() {
+            Looper.myLooper().prepare();
+            LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+
+            // try to grab a rough location from the network provider before
+            // registering for GPS, which may take a while to initialize
+            Location lastKnownLocation = locationManager.getLastKnownLocation(
+                        LocationManager.NETWORK_PROVIDER);
+            if(lastKnownLocation != null) {
+                onLocationChanged(lastKnownLocation);
+            }
+
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        NATIVE_GPS_UPDATE_INTERVAL, 0,
+                        this);
+                Log.d(TAG, "Requested GPS updates");
+            } catch(IllegalArgumentException e) {
+                Log.w(TAG, "GPS location provider is unavailable");
+            }
+            Looper.myLooper().loop();
+        }
+
+        public void onLocationChanged(final Location location) {
+            mCallback.receive(Latitude.ID, location.getLatitude());
+            mCallback.receive(Longitude.ID, location.getLongitude());
+        }
+
+        public void onStatusChanged(String provider, int status,
+                Bundle extras) {}
+        public void onProviderEnabled(String provider) {}
+        public void onProviderDisabled(String provider) {}
+    };
+
     private RawMeasurement getMeasurement(String measurementId) {
         RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
         if(rawMeasurement == null) {
@@ -476,6 +524,20 @@ public class RemoteVehicleService extends Service {
             mUploadingDataSink.stop();
             mDataSink = null;
             mUploadingDataSink = null;
+        }
+    }
+
+    private void enableNativeGpsPassthrough(boolean enabled) {
+        if(enabled) {
+            Log.i(TAG, "Enabled native GPS passthrough");
+            mNativeLocationListener = new NativeLocationListener();
+            mNativeLocationListener.start();
+        } else if(mNativeLocationListener != null) {
+            LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+            Log.i(TAG, "Disabled native GPS passthrough");
+            locationManager.removeUpdates(mNativeLocationListener);
+            mNativeLocationListener = null;
         }
     }
 

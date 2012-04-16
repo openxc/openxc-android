@@ -73,7 +73,7 @@ public class VehicleService extends Service {
     private Condition mRemoteBoundCondition;
     private String mDataSource;
     private String mDataSourceResource;
-    private RecordingEnabledPreferenceListener mRecordingPreferenceListener;
+    private PreferenceListener mPreferenceListener;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
@@ -346,6 +346,32 @@ public class VehicleService extends Service {
     }
 
     /**
+     * Enable or disable passing native host GPS through as vehicle
+     * measurements.
+     *
+     * @param enabled true if native GPS should be passed through
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public void enableNativeGpsPassthrough(boolean enabled)
+            throws RemoteVehicleServiceException {
+        if(mRemoteService != null) {
+            try {
+                Log.i(TAG, "Setting native GPS to " + enabled);
+                mRemoteService.enableNativeGpsPassthrough(enabled);
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException("Unable to set " +
+                        "native GPS status of remote vehicle service", e);
+            }
+        } else {
+            Log.w(TAG, "Can't set native GPS status -- " +
+                    "not connected to remote service yet, but will set when " +
+                    "connected");
+        }
+    }
+
+    /**
      * Read the number of messages received by the vehicle service.
      *
      * @throws RemoteVehicleServiceException if the listener is unable to be
@@ -386,20 +412,31 @@ public class VehicleService extends Service {
         }
     }
 
+    private void setNativeGpsStatus() {
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        boolean nativeGpsEnabled = preferences.getBoolean(
+                getString(R.string.native_gps_checkbox_key), false);
+        try {
+            enableNativeGpsPassthrough(nativeGpsEnabled);
+        } catch(RemoteVehicleServiceException e) {
+            Log.w(TAG, "Unable to set native GPS status after binding", e);
+        }
+    }
+
     private void unwatchPreferences() {
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         preferences.unregisterOnSharedPreferenceChangeListener(
-                mRecordingPreferenceListener);
+                mPreferenceListener);
     }
 
     private void watchPreferences() {
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
-        mRecordingPreferenceListener =
-                new RecordingEnabledPreferenceListener();
+        mPreferenceListener = new PreferenceListener();
         preferences.registerOnSharedPreferenceChangeListener(
-                mRecordingPreferenceListener);
+                mPreferenceListener);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -440,6 +477,7 @@ public class VehicleService extends Service {
                 }
             }
             setRecordingStatus();
+            setNativeGpsStatus();
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -587,12 +625,14 @@ public class VehicleService extends Service {
         throw new NoValueException();
     }
 
-    private class RecordingEnabledPreferenceListener
+    private class PreferenceListener
             implements SharedPreferences.OnSharedPreferenceChangeListener {
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
             if(key.equals(getString(R.string.recording_checkbox_key))) {
                 setRecordingStatus();
+            } else if(key.equals(getString(R.string.native_gps_checkbox_key))) {
+                setNativeGpsStatus();
             }
         }
     }
