@@ -111,6 +111,7 @@ public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
     }
 
     public void writeToParcel(Parcel out, int flags) {
+        out.writeDouble(getBornTime());
         out.writeDouble(getValue().doubleValue());
         if(getEvent() != null) {
             out.writeDouble(getEvent().doubleValue());
@@ -120,6 +121,7 @@ public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
     }
 
     public void readFromParcel(Parcel in) {
+        setBornTime(new Double(in.readDouble()));
         setValue(new Double(in.readDouble()));
         setEvent(new Double(in.readDouble()));
     }

@@ -24,6 +24,11 @@ public class AgingData<TheUnit extends Unit> {
         mBornTime = System.nanoTime();
     }
 
+    public AgingData(double bornTime, TheUnit value) {
+        mValue = value;
+        mBornTime = bornTime;
+    }
+
     /**
      * Return the value this instance wraps.
      *

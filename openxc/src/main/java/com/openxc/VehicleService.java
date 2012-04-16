@@ -602,10 +602,11 @@ public class VehicleService extends Service {
         if(rawMeasurement.isValid()) {
             try {
                 if(rawMeasurement.hasEvent()) {
-                    return constructor.newInstance(rawMeasurement.getValue(),
-                            rawMeasurement.getEvent());
+                    return constructor.newInstance(rawMeasurement.getBornTime(),
+                            rawMeasurement.getValue(), rawMeasurement.getEvent());
                 } else {
-                    return constructor.newInstance(rawMeasurement.getValue());
+                    return constructor.newInstance(rawMeasurement.getBornTime(),
+                            rawMeasurement.getValue());
                 }
             } catch(InstantiationException e) {
                 throw new UnrecognizedMeasurementTypeException(

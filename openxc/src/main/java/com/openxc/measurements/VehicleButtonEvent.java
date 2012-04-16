@@ -91,6 +91,21 @@ public class VehicleButtonEvent
         }
     }
 
+    public VehicleButtonEvent(double bornTime, State<ButtonId> value,
+            State<ButtonAction> action) {
+        super(bornTime, value);
+        mAction = new AgingData<State<ButtonAction>>(action);
+    }
+
+    public VehicleButtonEvent(double bornTime, ButtonId value, ButtonAction action) {
+        this(bornTime, new State<ButtonId>(value), new State<ButtonAction>(action));
+    }
+
+    public VehicleButtonEvent(double bornTime, Double value, Double action) {
+        this(bornTime, ButtonId.fromHashCode(value.intValue()),
+                ButtonAction.fromHashCode(action.intValue()));
+    }
+
     public VehicleButtonEvent(State<ButtonId> value,
             State<ButtonAction> action) {
         super(value);

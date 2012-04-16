@@ -41,8 +41,12 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         mValue = new AgingData<TheUnit>(value);
     }
 
+    public Measurement(double bornTime, TheUnit value) {
+        mValue = new AgingData<TheUnit>(bornTime, value);
+    }
+
     /**
-     * Construct an new Measurement with the gievn value and valid Range.
+     * Construct an new Measurement with the given value and valid Range.
      *
      * There is not currently any automated verification that the value is
      * within the range - this is up to the application programmer.
