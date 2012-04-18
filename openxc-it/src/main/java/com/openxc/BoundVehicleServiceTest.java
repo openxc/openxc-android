@@ -20,6 +20,7 @@ import com.openxc.remote.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.VehicleService;
 
@@ -102,6 +103,19 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             return;
         }
         Assert.fail("Expected a NoValueException");
+    }
+
+    @MediumTest
+    public void testListenerGetsLastKnownValue()
+            throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
+        // let some measurements flow in so we have some known values
+        pause(100);
+        // kill the incoming data stream
+        service.setDataSource(UsbVehicleDataSource.class.getName());
+        pause(50);
+        service.addListener(VehicleSpeed.class, speedListener);
+        checkReceivedMeasurement(speedReceived);
     }
 
     @MediumTest
