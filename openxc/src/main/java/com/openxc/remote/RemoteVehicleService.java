@@ -375,6 +375,18 @@ public class RemoteVehicleService extends Service {
                 Log.i(TAG, "Adding listener " + listener + " to " +
                         measurementId);
                 getOrCreateCallbackList(measurementId).register(listener);
+
+                if(mMeasurements.containsKey(measurementId)) {
+                    // send the last known value to the new listener
+                    RawMeasurement rawMeasurement =
+                        getMeasurement(measurementId);
+                    try {
+                        listener.receive(measurementId, rawMeasurement);
+                    } catch(RemoteException e) {
+                        Log.w(TAG, "Couldn't notify application " +
+                                "listener -- did it crash?", e);
+                    }
+                }
             }
 
             public void removeListener(String measurementId,
@@ -444,23 +456,29 @@ public class RemoteVehicleService extends Service {
                     callbacks = mListeners.get(measurementId);
                 RawMeasurement rawMeasurement =
                     getMeasurement(measurementId);
-
-                int i = callbacks.beginBroadcast();
-                while(i > 0) {
-                    i--;
-                    try {
-                        callbacks.getBroadcastItem(i).receive(measurementId,
-                                rawMeasurement);
-                    } catch(RemoteException e) {
-                        Log.w(TAG, "Couldn't notify application " +
-                                "listener -- did it crash?", e);
-                    }
-                }
-                callbacks.finishBroadcast();
+                propagateMeasurement(callbacks, measurementId, rawMeasurement);
             }
             Log.d(TAG, "Stopped USB listener");
         }
     };
+
+    private void propagateMeasurement(
+            RemoteCallbackList<RemoteVehicleServiceListenerInterface> callbacks,
+            String measurementId,
+            RawMeasurement measurement) {
+        int i = callbacks.beginBroadcast();
+        while(i > 0) {
+            i--;
+            try {
+                callbacks.getBroadcastItem(i).receive(measurementId,
+                        measurement);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Couldn't notify application " +
+                        "listener -- did it crash?", e);
+            }
+        }
+        callbacks.finishBroadcast();
+    }
 
     private class NativeLocationListener extends Thread implements LocationListener {
         public void run() {
