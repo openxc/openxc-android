@@ -277,6 +277,11 @@ public class VehicleService extends Service {
         }
     }
 
+    public void setDataSource(String dataSource)
+        throws RemoteVehicleServiceException {
+        setDataSource(dataSource, null);
+    }
+
     /**
      * Set and initialize the data source for the vehicle service.
      *
