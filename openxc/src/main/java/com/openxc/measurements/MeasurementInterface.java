@@ -18,6 +18,12 @@ public interface MeasurementInterface {
     public double getAge();
 
     /**
+     * Set the birth timestamp for this measurement.
+     *
+     */
+    public void setTimestamp(double timestamp);
+
+    /**
      * Determine if this measurement has a valid range.
      *
      * @return true if the measurement has a non-null range.

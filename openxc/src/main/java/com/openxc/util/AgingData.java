@@ -47,6 +47,10 @@ public class AgingData<TheUnit extends Unit> {
         return (System.nanoTime() - mBornTime) / 1000000000.0;
     }
 
+    public void setTimestamp(double timestamp) {
+        mBornTime = timestamp;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

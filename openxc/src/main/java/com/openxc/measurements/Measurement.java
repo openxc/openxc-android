@@ -41,10 +41,6 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         mValue = new AgingData<TheUnit>(value);
     }
 
-    public Measurement(double bornTime, TheUnit value) {
-        mValue = new AgingData<TheUnit>(bornTime, value);
-    }
-
     /**
      * Construct an new Measurement with the given value and valid Range.
      *
@@ -61,6 +57,10 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
 
     public double getAge() {
         return mValue.getAge();
+    }
+
+    public void setTimestamp(double timestamp) {
+        mValue.setTimestamp(timestamp);
     }
 
     public boolean hasRange() {

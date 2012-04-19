@@ -54,19 +54,6 @@ public class VehicleDoorStatus
         }
     }
 
-    public VehicleDoorStatus(double bornTime, State<DoorId> value, Boolean action) {
-        super(bornTime, value);
-        mAction = new AgingData<Boolean>(action);
-    }
-
-    public VehicleDoorStatus(double bornTime, DoorId value, Boolean action) {
-        this(bornTime, new State<DoorId>(value), action);
-    }
-
-    public VehicleDoorStatus(double bornTime, Double value, Double action) {
-        this(bornTime, DoorId.fromHashCode(value.intValue()), new Boolean(action));
-    }
-
     public VehicleDoorStatus(State<DoorId> value, Boolean action) {
         super(value);
         mAction = new AgingData<Boolean>(action);

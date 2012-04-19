@@ -27,6 +27,8 @@ import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sources.DefaultVehicleDataSourceCallback;
+
 import android.content.Context;
 import android.app.Service;
 
@@ -65,7 +67,7 @@ import android.util.Log;
  */
 public class VehicleService extends Service {
     public final static String VEHICLE_LOCATION_PROVIDER =
-            RemoteVehicleService.VEHICLE_LOCATION_PROVIDER;
+            DefaultVehicleDataSourceCallback.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleService";
 
     private boolean mIsBound;
@@ -584,8 +586,8 @@ public class VehicleService extends Service {
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends VehicleMeasurement> constructor;
         try {
-            constructor = measurementType.getConstructor(Double.class,
-                    Double.class);
+            constructor = measurementType.getConstructor(
+                    Double.class, Double.class);
         } catch(NoSuchMethodException e) {
             constructor = null;
         }
@@ -600,13 +602,14 @@ public class VehicleService extends Service {
         }
 
         if(rawMeasurement.isValid()) {
+            VehicleMeasurement measurement;
             try {
                 if(rawMeasurement.hasEvent()) {
-                    return constructor.newInstance(rawMeasurement.getBornTime(),
-                            rawMeasurement.getValue(), rawMeasurement.getEvent());
+                    measurement = constructor.newInstance(
+                            rawMeasurement.getValue(),
+                            rawMeasurement.getEvent());
                 } else {
-                    return constructor.newInstance(rawMeasurement.getBornTime(),
-                            rawMeasurement.getValue());
+                    measurement = constructor.newInstance(rawMeasurement.getValue());
                 }
             } catch(InstantiationException e) {
                 throw new UnrecognizedMeasurementTypeException(
@@ -619,6 +622,8 @@ public class VehicleService extends Service {
                         measurementType + "'s constructor threw an exception",
                         e);
             }
+            measurement.setTimestamp(rawMeasurement.getTimestamp());
+            return measurement;
         } else {
             Log.d(TAG, rawMeasurement +
                     " isn't valid -- returning a blank measurement");
