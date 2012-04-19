@@ -70,6 +70,7 @@ public class VehicleService extends Service {
     private String mDataSource;
     private String mDataSourceResource;
     private PreferenceListener mPreferenceListener;
+    private SharedPreferences mPreferences;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
@@ -127,7 +128,8 @@ public class VehicleService extends Service {
         mRemoteBoundLock = new ReentrantLock();
         mRemoteBoundCondition = mRemoteBoundLock.newCondition();
 
-        watchPreferences();
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mPreferenceListener = watchPreferences(mPreferences);
 
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
@@ -140,7 +142,7 @@ public class VehicleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Service being destroyed");
-        unwatchPreferences();
+        unwatchPreferences(mPreferences, mPreferenceListener);
         unbindRemote();
     }
 
@@ -425,19 +427,21 @@ public class VehicleService extends Service {
         }
     }
 
-    private void unwatchPreferences() {
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.unregisterOnSharedPreferenceChangeListener(
-                mPreferenceListener);
+    private void unwatchPreferences(SharedPreferences preferences,
+            PreferenceListener listener) {
+        if(preferences != null && listener != null) {
+            preferences.unregisterOnSharedPreferenceChangeListener(listener);
+        }
     }
 
-    private void watchPreferences() {
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        mPreferenceListener = new PreferenceListener();
-        preferences.registerOnSharedPreferenceChangeListener(
-                mPreferenceListener);
+    private PreferenceListener watchPreferences(SharedPreferences preferences) {
+        if(preferences != null) {
+            PreferenceListener listener = new PreferenceListener();
+            preferences.registerOnSharedPreferenceChangeListener(
+                    listener);
+            return listener;
+        }
+        return null;
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
