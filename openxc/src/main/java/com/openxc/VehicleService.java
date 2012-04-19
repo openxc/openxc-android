@@ -23,7 +23,6 @@ import com.openxc.measurements.VehicleMeasurement;
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
-import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
@@ -59,11 +58,6 @@ import android.util.Log;
  * Asynchronous measurements are obtained by defining a
  * VehicleMeasurement.Listener object and passing it to the service via the
  * addListener method.
- *
- * The source of vehicle data can be optionally selected by adding extra
- * parameters to the bind Intent. The parameters are passed wholesale on to the
- * {@link com.openxc.remote.RemoteVehicleService} - see that class's
- * documentation for details on the parameters.
  */
 public class VehicleService extends Service {
     public final static String VEHICLE_LOCATION_PROVIDER =
