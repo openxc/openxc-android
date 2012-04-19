@@ -22,6 +22,8 @@ import com.openxc.remote.RemoteVehicleService;
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+
 import com.openxc.VehicleService;
 
 import android.content.Intent;
@@ -171,6 +173,20 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         speedReceived = null;
         pause(100);
         assertNull(speedReceived);
+    }
+
+    @MediumTest
+    public void testConsistentAge()
+            throws UnrecognizedMeasurementTypeException,
+            NoValueException, RemoteVehicleServiceException {
+        pause(150);
+        service.setDataSource(UsbVehicleDataSource.class.getName(),
+                "nothing");
+        pause(150);
+        VehicleMeasurement measurement = service.get(VehicleSpeed.class);
+        double age = measurement.getAge();
+        assertTrue("Measurement age (" + age + ") should be > 0.05",
+                age > .05);
     }
 
     private void pause(int millis) {

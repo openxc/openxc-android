@@ -42,7 +42,7 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     }
 
     /**
-     * Construct an new Measurement with the gievn value and valid Range.
+     * Construct an new Measurement with the given value and valid Range.
      *
      * There is not currently any automated verification that the value is
      * within the range - this is up to the application programmer.
@@ -57,6 +57,10 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
 
     public double getAge() {
         return mValue.getAge();
+    }
+
+    public void setTimestamp(double timestamp) {
+        mValue.setTimestamp(timestamp);
     }
 
     public boolean hasRange() {

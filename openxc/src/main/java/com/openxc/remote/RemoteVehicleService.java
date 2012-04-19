@@ -19,14 +19,12 @@ import com.google.common.base.Objects;
 
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.measurements.VehicleSpeed;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
-
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
+import com.openxc.remote.sources.DefaultVehicleDataSourceCallback;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
@@ -85,103 +83,20 @@ public class RemoteVehicleService extends Service {
     private final static String DEFAULT_DATA_SOURCE =
             UsbVehicleDataSource.class.getName();
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
-    public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
-    private int mMessagesReceived = 0;
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSourceInterface mDataSource;
-    private VehicleDataSinkInterface mDataSink;
 
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
     private BlockingQueue<String> mNotificationQueue;
     private NotificationThread mNotificationThread;
-    private LocationManager mLocationManager;
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
 
-    /**
-     * A callback receiver for the vehicle data source.
-     *
-     * The selected vehicle data source is initialized with this callback object
-     * and calls its receive() methods with new values as they come in - it's
-     * important that receive() not block in order to get out of the way of new
-     * meausrements coming in on a physical vehcile interface.
-     */
-    VehicleDataSourceCallbackInterface mCallback =
-        new AbstractVehicleDataSourceCallback () {
-            private void updateLocation() {
-                if(mLocationManager == null ||
-                        !mMeasurements.containsKey(Latitude.ID) ||
-                        !mMeasurements.containsKey(Longitude.ID) ||
-                        !mMeasurements.containsKey(VehicleSpeed.ID)) {
-                    return;
-                }
-
-                Location location = new Location(LocationManager.GPS_PROVIDER);
-                location.setLatitude(mMeasurements.get(Latitude.ID)
-                        .getValue().doubleValue());
-                location.setLongitude(mMeasurements.get(Longitude.ID)
-                        .getValue().doubleValue());
-                location.setSpeed(mMeasurements.get(VehicleSpeed.ID)
-                        .getValue().floatValue());
-                location.setTime(System.currentTimeMillis());
-
-                try {
-                    mLocationManager.setTestProviderLocation(
-                            LocationManager.GPS_PROVIDER, location);
-                    location.setProvider(VEHICLE_LOCATION_PROVIDER);
-                    mLocationManager.setTestProviderLocation(
-                            VEHICLE_LOCATION_PROVIDER, location);
-                } catch(SecurityException e) {
-                    Log.w(TAG, "Unable to use mocked locations, " +
-                            "insufficient privileges", e);
-                }
-            }
-
-            private void receive(final String measurementId,
-                    final RawMeasurement measurement) {
-                mMeasurements.put(measurementId, measurement);
-                if(mListeners.containsKey(measurementId)) {
-                    try  {
-                        mNotificationQueue.put(measurementId);
-                    } catch(InterruptedException e) {}
-                }
-            }
-
-            private void receiveRaw(final String measurementId,
-                    Object value) {
-                receiveRaw(measurementId, value, null);
-            }
-
-            private void receiveRaw(final String measurementId,
-                    Object value, Object event) {
-                if(mDataSink != null) {
-                    mDataSink.receive(measurementId, value, event);
-                }
-                mMessagesReceived++;
-            }
-
-            public void receive(String measurementId, Object value) {
-                RawMeasurement measurement =
-                        RawMeasurement.measurementFromObjects(value);
-                receive(measurementId, measurement);
-                receiveRaw(measurementId, value);
-
-                if(measurementId.equals(Latitude.ID) ||
-                        measurementId.equals(Longitude.ID)) {
-                    updateLocation();
-                }
-            }
-
-            public void receive(String measurementId, Object value,
-                    Object event) {
-                RawMeasurement measurement =
-                    RawMeasurement.measurementFromObjects(value, event);
-                receive(measurementId, measurement);
-                receiveRaw(measurementId, value, event);
-            }
-        };
+    // TODO this is temporarily the actual class, but it needs to be changed
+    // back to the interface once the data sink thing is figured out
+    DefaultVehicleDataSourceCallback mCallback;
 
     @Override
     public void onCreate() {
@@ -192,7 +107,8 @@ public class RemoteVehicleService extends Service {
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
-        setupMockLocations();
+        mCallback = new DefaultVehicleDataSourceCallback(this, mMeasurements,
+                mListeners, mNotificationQueue);
         acquireWakeLock();
     }
 
@@ -255,41 +171,6 @@ public class RemoteVehicleService extends Service {
             .add("numMeasurementTypes", mMeasurements.size())
             .add("callbackBacklog", mNotificationQueue.size())
             .toString();
-    }
-
-    /**
-     * Setup Android location framework to accept vehicle GPS.
-     *
-     * If we have at least latitude, longitude and vehicle speed from
-     * the vehicle, we send out a mocked location for the
-     * LocationManager.GPS_PROVIDER and VEHICLE_LOCATION_PROVIDER
-     * providers.
-     *
-     * Developers can either use the standard Android location framework
-     * with mocked locations enabled, or the specific OpenXC
-     * Latitude/Longitude measurements.
-     */
-    private void setupMockLocations() {
-        mLocationManager = (LocationManager) getSystemService(
-                Context.LOCATION_SERVICE);
-        try {
-            mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
-                    false, false, false, false, false, true, false, 0, 5);
-            mLocationManager.setTestProviderEnabled(
-                    LocationManager.GPS_PROVIDER, true);
-
-            if(mLocationManager.getProvider(
-                        VEHICLE_LOCATION_PROVIDER) == null) {
-                mLocationManager.addTestProvider(VEHICLE_LOCATION_PROVIDER,
-                        false, false, false, false, false, true, false, 0, 5);
-            }
-            mLocationManager.setTestProviderEnabled(
-                    VEHICLE_LOCATION_PROVIDER, true);
-        } catch(SecurityException e) {
-            Log.w(TAG, "Unable to use mocked locations, " +
-                    "insufficient privileges", e);
-            mLocationManager = null;
-        }
     }
 
     private void initializeDataSource() {
@@ -526,13 +407,7 @@ public class RemoteVehicleService extends Service {
     }
 
     private void enableRecording(boolean enabled) {
-        if(enabled && mDataSink == null) {
-            mDataSink = new FileRecorderSink(this);
-            Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
-        } else if(mDataSink != null) {
-            mDataSink.stop();
-            mDataSink = null;
-        }
+        mCallback.enableRecording(enabled);
     }
 
     private void enableNativeGpsPassthrough(boolean enabled) {
@@ -550,7 +425,7 @@ public class RemoteVehicleService extends Service {
     }
 
     private int getMessageCount() {
-        return mMessagesReceived;
+        return mCallback.getMessageCount();
     }
 
     private void acquireWakeLock() {
