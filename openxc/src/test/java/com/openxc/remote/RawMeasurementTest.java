@@ -20,4 +20,10 @@ public class RawMeasurementTest {
         measurement = new RawMeasurement();
         assertFalse(measurement.isValid());
    }
+
+   @Test
+   public void testHasAge() {
+        measurement = new RawMeasurement(new Double(42));
+        assertTrue(measurement.getTimestamp() > 0);
+   }
 }
