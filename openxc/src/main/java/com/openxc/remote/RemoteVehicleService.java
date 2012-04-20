@@ -28,7 +28,8 @@ import com.openxc.remote.sources.DefaultVehicleDataSourceCallback;
 import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
-import com.openxc.remote.sinks.VehicleDataSinkInterface;
+import com.openxc.remote.sinks.AbstractVehicleDataSink;
+import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.FileRecorderSink;
 
 import android.app.Service;
@@ -94,9 +95,7 @@ public class RemoteVehicleService extends Service {
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
 
-    // TODO this is temporarily the actual class, but it needs to be changed
-    // back to the interface once the data sink thing is figured out
-    DefaultVehicleDataSourceCallback mCallback;
+    AbstractVehicleDataSink mCallback;
 
     @Override
     public void onCreate() {

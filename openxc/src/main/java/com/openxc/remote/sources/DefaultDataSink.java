@@ -31,10 +31,9 @@ import android.util.Log;
  * important that receive() not block in order to get out of the way of new
  * meausrements coming in on a physical vehcile interface.
  */
-public class DefaultVehicleDataSourceCallback
-    extends AbstractVehicleDataSourceCallback {
+public class DefaultDataSink extends AbstractVehicleDataSink {
 
-    public final static String TAG = "DefaultVehicleDataSourceCallback";
+    public final static String TAG = "DefaultDataSink";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private Context mContext;
@@ -46,7 +45,7 @@ public class DefaultVehicleDataSourceCallback
         RemoteVehicleServiceListenerInterface>> mListeners;
     private VehicleDataSinkInterface mDataSink;
 
-    public DefaultVehicleDataSourceCallback(Context context,
+    public DefaultDataSink(Context context,
             Map<String, RawMeasurement> measurements,
             Map<String, RemoteCallbackList<
             RemoteVehicleServiceListenerInterface>> listeners,
@@ -58,6 +57,36 @@ public class DefaultVehicleDataSourceCallback
         mLocationManager = (LocationManager) context.getSystemService(
                 Context.LOCATION_SERVICE);
         setupMockLocations();
+    }
+
+    @Override
+    public void receive(String measurementId, Object value, Object event) {
+        super.receive(measurementId, value, event);
+
+        if(mDataSink != null) {
+            mDataSink.receive(measurementId, value, event);
+        }
+        mMessagesReceived++;
+    }
+
+    public void enableRecording(boolean enabled) {
+        if(enabled && mDataSink == null) {
+            mDataSink = new FileRecorderSink(mContext);
+            Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
+        } else if(mDataSink != null) {
+            mDataSink.stop();
+            mDataSink = null;
+        }
+    }
+
+    public void stop() {
+        if(mDataSink != null) {
+            mDataSink.stop();
+        }
+    }
+
+    public int getMessageCount() {
+        return mMessagesReceived;
     }
 
     private void updateLocation() {
@@ -89,61 +118,18 @@ public class DefaultVehicleDataSourceCallback
         }
     }
 
-    private void receive(final String measurementId,
-            final RawMeasurement measurement) {
+    private void receive(String measurementId, RawMeasurement measurement) {
         mMeasurements.put(measurementId, measurement);
         if(mListeners.containsKey(measurementId)) {
             try  {
                 mNotificationQueue.put(measurementId);
             } catch(InterruptedException e) {}
         }
-    }
-
-    private void receiveRaw(final String measurementId,
-            Object value) {
-        receiveRaw(measurementId, value, null);
-    }
-
-    public void enableRecording(boolean enabled) {
-        if(enabled && mDataSink == null) {
-            mDataSink = new FileRecorderSink(mContext);
-            Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
-        } else if(mDataSink != null) {
-            mDataSink.stop();
-            mDataSink = null;
-        }
-    }
-
-    public int getMessageCount() {
-        return mMessagesReceived;
-    }
-
-    private void receiveRaw(final String measurementId,
-            Object value, Object event) {
-        if(mDataSink != null) {
-            mDataSink.receive(measurementId, value, event);
-        }
-        mMessagesReceived++;
-    }
-
-    public void receive(String measurementId, Object value) {
-        RawMeasurement measurement =
-            RawMeasurement.measurementFromObjects(value);
-        receive(measurementId, measurement);
-        receiveRaw(measurementId, value);
 
         if(measurementId.equals(Latitude.ID) ||
                 measurementId.equals(Longitude.ID)) {
             updateLocation();
-                }
-    }
-
-    public void receive(String measurementId, Object value,
-            Object event) {
-        RawMeasurement measurement =
-            RawMeasurement.measurementFromObjects(value, event);
-        receive(measurementId, measurement);
-        receiveRaw(measurementId, value, event);
+        }
     }
 
     /**
@@ -178,5 +164,4 @@ public class DefaultVehicleDataSourceCallback
             mLocationManager = null;
         }
     }
-
 }
