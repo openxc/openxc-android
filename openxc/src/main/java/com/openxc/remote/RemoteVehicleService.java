@@ -58,10 +58,13 @@ import android.util.Log;
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
-    private final static String DEFAULT_DATA_SOURCE =
-            UsbVehicleDataSource.class.getName();
-    private final static String DEFAULT_DATA_SINK =
-            DefaultDataSink.class.getName();
+    private final static String[] DEFAULT_DATA_SOURCES = {
+            UsbVehicleDataSource.class.getName(),
+    };
+    private final static String[] DEFAULT_DATA_SINKS = {
+            DefaultDataSink.class.getName(),
+            MeasurementNotifier.class.getName(),
+    };
 
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
@@ -73,7 +76,8 @@ public class RemoteVehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline(this);
-        mPipeline.addSink(DEFAULT_DATA_SINK);
+        initializeDefaultSinks();
+        initializeDefaultSources();
         acquireWakeLock();
     }
 
@@ -107,8 +111,7 @@ public class RemoteVehicleService extends Service {
             mNotifier.done();
         }
         mNotifier = new MeasurementNotifier(mPipeline);
-        mPipeline.clearSources();
-        mPipeline.addSource(DEFAULT_DATA_SOURCE);
+        initializeDefaultSources();
         return mBinder;
     }
 
@@ -121,9 +124,22 @@ public class RemoteVehicleService extends Service {
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        mPipeline.clearSources();
-        mPipeline.addSource(DEFAULT_DATA_SOURCE);
+        initializeDefaultSources();
         return false;
+    }
+
+    private void initializeDefaultSinks() {
+        mPipeline.clearSinks();
+        for(String sinkName : DEFAULT_DATA_SINKS) {
+            mPipeline.addSink(sinkName);
+        }
+    }
+
+    private void initializeDefaultSources() {
+        mPipeline.clearSources();
+        for(String sourceName : DEFAULT_DATA_SOURCES) {
+            mPipeline.addSource(sourceName);
+        }
     }
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
@@ -164,6 +180,7 @@ public class RemoteVehicleService extends Service {
             public void setDataSource(String dataSource, String resource) {
                 Log.i(TAG, "Setting data source to " + dataSource +
                         " with resource " + resource);
+                // TODO clearing everything when adding is a legacy feature
                 mPipeline.clearSources();
                 mPipeline.addSource(dataSource, resource);
             }
