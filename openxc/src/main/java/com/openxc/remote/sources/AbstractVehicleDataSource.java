@@ -7,6 +7,8 @@ import android.content.Context;
 
 import android.util.Log;
 
+import com.openxc.remote.sinks.VehicleDataSink;
+
 /**
  * The AbstractVehicleDataSource contains functions common to all vehicle data
  * sources.
@@ -17,7 +19,7 @@ public abstract class AbstractVehicleDataSource
     private static final String TAG = "AbstractVehicleDataSource";
     private static final String RECEIVE_METHOD_NAME = "receive";
 
-    private VehicleDataSourceCallbackInterface mCallback;
+    private VehicleDataSink mCallback;
     private Context mContext;
 
     public AbstractVehicleDataSource() { }
@@ -27,11 +29,11 @@ public abstract class AbstractVehicleDataSource
      *
      * @param context Current Android content (i.e. an Activity or Service)
      * @param callback An object implementing the
-     *      VehicleDataSourceCallbackInterface that should receive data from this
+     *      VehicleDataSink that should receive data from this
      *      source.
      */
     public AbstractVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback) {
+            VehicleDataSink callback) {
         mContext = context;
         setCallback(callback);
     }
@@ -40,15 +42,15 @@ public abstract class AbstractVehicleDataSource
      * Construct a new instance with no context and set the callback.
      *
      * @param callback An object implementing the
-     *      VehicleDataSourceCallbackInterface that should receive data from this
+     *      VehicleDataSink that should receive data from this
      *      source.
      */
     public AbstractVehicleDataSource(
-            VehicleDataSourceCallbackInterface callback) {
+            VehicleDataSink callback) {
         this(null, callback);
     }
 
-    public void setCallback(VehicleDataSourceCallbackInterface callback) {
+    public void setCallback(VehicleDataSink callback) {
         mCallback = callback;
     }
 
@@ -60,15 +62,9 @@ public abstract class AbstractVehicleDataSource
         if(mCallback != null) {
             Method method;
             try {
-                if(event != null) {
-                    method = VehicleDataSourceCallbackInterface.class.getMethod(
-                            RECEIVE_METHOD_NAME, String.class, Object.class,
-                            Object.class);
-                } else {
-                    method = VehicleDataSourceCallbackInterface.class.getMethod(
-                            RECEIVE_METHOD_NAME, String.class,
-                            Object.class);
-                }
+                method = VehicleDataSink.class.getMethod(
+                        RECEIVE_METHOD_NAME, String.class, Object.class,
+                        Object.class);
             } catch(NoSuchMethodException e) {
                 String logMessage = "Received data of an unsupported type " +
                     "from the data source: " + value + ", a " +
@@ -82,11 +78,7 @@ public abstract class AbstractVehicleDataSource
             }
 
             try {
-                if(event != null) {
-                    method.invoke(mCallback, name, value, event);
-                } else {
-                    method.invoke(mCallback, name, value);
-                }
+                method.invoke(mCallback, name, value, event);
             } catch(IllegalAccessException e) {
                 Log.w(TAG, "Data receiver method is private", e);
             } catch(InvocationTargetException e) {
@@ -99,7 +91,7 @@ public abstract class AbstractVehicleDataSource
         return mContext;
     }
 
-    protected VehicleDataSourceCallbackInterface getCallback() {
+    protected VehicleDataSink getCallback() {
         return mCallback;
     }
 }

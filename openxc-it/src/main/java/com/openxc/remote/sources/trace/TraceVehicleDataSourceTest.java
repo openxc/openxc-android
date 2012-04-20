@@ -12,8 +12,8 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
-import com.openxc.remote.sources.AbstractVehicleDataSourceCallback;
-import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sinks.AbstractVehicleDataSink;
+import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sources.VehicleDataSourceException;
 
 import android.test.AndroidTestCase;
@@ -29,7 +29,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     URI malformedTraceUri;
     TraceVehicleDataSource source;
     Thread thread;
-    VehicleDataSourceCallbackInterface callback;
+    VehicleDataSink callback;
     boolean receivedNumericalCallback;
     boolean receivedBooleanCallback;;
 
@@ -55,17 +55,13 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @Override
     protected void setUp() {
         copyTraces();
-        callback = new AbstractVehicleDataSourceCallback() {
+        callback = new AbstractVehicleDataSink() {
             public void receive(String name, Object value, Object event) {
-            }
-
-            public void receive(String name, Object value) {
                 if(value.getClass() == Boolean.class) {
                     receivedBooleanCallback = true;
                 } else if(value.getClass() == Double.class)  {
                     receivedNumericalCallback = true;
                 }
-
             }
         };
     }

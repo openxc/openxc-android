@@ -7,6 +7,8 @@ import android.content.Context;
 
 import android.util.Log;
 
+import com.openxc.remote.sinks.VehicleDataSink;
+
 /**
  * A vehicle data source expecting JSON messages as raw input.
  *
@@ -29,11 +31,11 @@ public abstract class JsonVehicleDataSource
     }
 
     public JsonVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback) {
+            VehicleDataSink callback) {
         super(context, callback);
     }
 
-    public JsonVehicleDataSource(VehicleDataSourceCallbackInterface callback) {
+    public JsonVehicleDataSource(VehicleDataSink callback) {
         this(null, callback);
     }
 

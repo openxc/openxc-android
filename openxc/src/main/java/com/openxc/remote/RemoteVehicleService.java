@@ -24,8 +24,7 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
-import com.openxc.remote.sources.DefaultVehicleDataSourceCallback;
-import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
 import com.openxc.remote.sinks.AbstractVehicleDataSink;
@@ -94,8 +93,7 @@ public class RemoteVehicleService extends Service {
     private NotificationThread mNotificationThread;
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
-
-    AbstractVehicleDataSink mCallback;
+    private AbstractVehicleDataSink mDataSink;
 
     @Override
     public void onCreate() {
@@ -106,8 +104,8 @@ public class RemoteVehicleService extends Service {
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
                 RemoteVehicleServiceListenerInterface>>());
-        mCallback = new DefaultVehicleDataSourceCallback(this, mMeasurements,
-                mListeners, mNotificationQueue);
+        mDataSink = new DefaultDataSink(this, mMeasurements, mListeners,
+                mNotificationQueue);
         acquireWakeLock();
     }
 
@@ -195,7 +193,7 @@ public class RemoteVehicleService extends Service {
         Constructor<? extends VehicleDataSourceInterface> constructor;
         try {
             constructor = dataSourceType.getConstructor(Context.class,
-                    VehicleDataSourceCallbackInterface.class, URI.class);
+                    VehicleDataSink.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
             return;
@@ -212,7 +210,7 @@ public class RemoteVehicleService extends Service {
 
         VehicleDataSourceInterface dataSource = null;
         try {
-            dataSource = constructor.newInstance(this, mCallback, resourceUri);
+            dataSource = constructor.newInstance(this, mDataSink, resourceUri);
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
         } catch(IllegalAccessException e) {
@@ -387,8 +385,8 @@ public class RemoteVehicleService extends Service {
         }
 
         public void onLocationChanged(final Location location) {
-            mCallback.receive(Latitude.ID, location.getLatitude());
-            mCallback.receive(Longitude.ID, location.getLongitude());
+            mDataSink.receive(Latitude.ID, location.getLatitude());
+            mDataSink.receive(Longitude.ID, location.getLongitude());
         }
 
         public void onStatusChanged(String provider, int status,
@@ -406,7 +404,8 @@ public class RemoteVehicleService extends Service {
     }
 
     private void enableRecording(boolean enabled) {
-        mCallback.enableRecording(enabled);
+        // TODO set up a file recording sink or kill an existing one
+        //mDataSink.enableRecording(enabled);
     }
 
     private void enableNativeGpsPassthrough(boolean enabled) {
@@ -424,7 +423,9 @@ public class RemoteVehicleService extends Service {
     }
 
     private int getMessageCount() {
-        return mCallback.getMessageCount();
+        // TODO get message count from the future pipeline class
+        // return mDataSink.getMessageCount();
+        return 0;
     }
 
     private void acquireWakeLock() {

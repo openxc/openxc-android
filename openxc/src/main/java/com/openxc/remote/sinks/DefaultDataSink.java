@@ -1,4 +1,4 @@
-package com.openxc.remote.sources;
+package com.openxc.remote.sinks;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -12,7 +12,6 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sinks.FileRecorderSink;
-import com.openxc.remote.sinks.VehicleDataSinkInterface;
 
 import android.content.Context;
 
@@ -43,7 +42,7 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
     private Map<String, RawMeasurement> mMeasurements;
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
-    private VehicleDataSinkInterface mDataSink;
+    private VehicleDataSink mDataSink;
 
     public DefaultDataSink(Context context,
             Map<String, RawMeasurement> measurements,
@@ -89,6 +88,20 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
         return mMessagesReceived;
     }
 
+    public void receive(String measurementId, RawMeasurement measurement) {
+        mMeasurements.put(measurementId, measurement);
+        if(mListeners.containsKey(measurementId)) {
+            try  {
+                mNotificationQueue.put(measurementId);
+            } catch(InterruptedException e) {}
+        }
+
+        if(measurementId.equals(Latitude.ID) ||
+                measurementId.equals(Longitude.ID)) {
+            updateLocation();
+        }
+    }
+
     private void updateLocation() {
         if(mLocationManager == null ||
                 !mMeasurements.containsKey(Latitude.ID) ||
@@ -115,20 +128,6 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
         } catch(SecurityException e) {
             Log.w(TAG, "Unable to use mocked locations, " +
                     "insufficient privileges", e);
-        }
-    }
-
-    private void receive(String measurementId, RawMeasurement measurement) {
-        mMeasurements.put(measurementId, measurement);
-        if(mListeners.containsKey(measurementId)) {
-            try  {
-                mNotificationQueue.put(measurementId);
-            } catch(InterruptedException e) {}
-        }
-
-        if(measurementId.equals(Latitude.ID) ||
-                measurementId.equals(Longitude.ID)) {
-            updateLocation();
         }
     }
 

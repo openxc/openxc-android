@@ -13,7 +13,7 @@ import com.openxc.remote.sources.JsonVehicleDataSource;
 
 import com.openxc.remote.sources.usb.UsbDeviceException;
 
-import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sources.VehicleDataSourceException;
 import com.openxc.remote.sources.VehicleDataSourceResourceException;
 
@@ -80,7 +80,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      * @param context The Activity or Service context, used to get access to the
      *      Android UsbManager.
      * @param callback An object implementing the
-     *      VehicleDataSourceCallbackInterface that should receive data as it is
+     *      VehicleDataSink that should receive data as it is
      *      received and parsed.
      * @param device a USB device URI (see {@link UsbDeviceUtilities} for the
      *      format) to look for.
@@ -88,7 +88,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      *          format
      */
     public UsbVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback, URI device)
+            VehicleDataSink callback, URI device)
             throws VehicleDataSourceException {
         super(context, callback);
         if(device == null) {
@@ -140,13 +140,13 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      * @param context The Activity or Service context, used to get access to the
      *      Android UsbManager.
      * @param callback An object implementing the
-     *      VehicleDataSourceCallbackInterface that should receive data as it is
+     *      VehicleDataSink that should receive data as it is
      *      received and parsed.
      * @throws VehicleDataSourceException  in exceptional circumstances, i.e.
      *      only if the default device URI is malformed.
      */
     public UsbVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback)
+            VehicleDataSink callback)
             throws VehicleDataSourceException {
         this(context, callback, null);
     }

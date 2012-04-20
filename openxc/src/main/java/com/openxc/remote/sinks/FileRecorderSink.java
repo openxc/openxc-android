@@ -25,7 +25,7 @@ import android.content.Context;
  * measurement as it arrives to a file on the device. It splits the stream to a
  * different file every hour.
  */
-public class FileRecorderSink extends VehicleDataSinkInterface {
+public class FileRecorderSink extends AbstractVehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private static SimpleDateFormat sDateFormatter =
             new SimpleDateFormat("yyyy-MM-dd-HH");
@@ -39,6 +39,9 @@ public class FileRecorderSink extends VehicleDataSinkInterface {
     public FileRecorderSink(Context context) {
         mContext = context;
         openTimestampedFile();
+    }
+
+    public void receive(String measurementId, RawMeasurement measurement) {
     }
 
     /**

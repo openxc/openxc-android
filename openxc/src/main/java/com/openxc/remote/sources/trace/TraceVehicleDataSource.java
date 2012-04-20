@@ -17,7 +17,7 @@ import java.net.URI;
 import com.google.common.base.Objects;
 
 import com.openxc.remote.sources.JsonVehicleDataSource;
-import com.openxc.remote.sources.VehicleDataSourceCallbackInterface;
+import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sources.VehicleDataSourceException;
 
 import android.content.Context;
@@ -58,7 +58,7 @@ import android.util.Log;
  * as the original recording (at least according to the timestamps in the file).
  *
  * Playback will not begin until a callback is set, either via a constructor or
- * the {@link com.openxc.remote.sources.AbstractVehicleDataSource#setCallback(VehicleDataSourceCallbackInterface)}
+ * the {@link com.openxc.remote.sources.AbstractVehicleDataSource#setCallback(VehicleDataSink)}
  * function.
  */
 public class TraceVehicleDataSource extends JsonVehicleDataSource {
@@ -79,11 +79,11 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
      * @param context the Activity or Service context, used to access the raw
      *      trace file resource via Android.
      * @param callback An object implementing the
-     *      VehicleDataSourceCallbackInterface that should receive data as it is
+     *      VehicleDataSink that should receive data as it is
      *      received and parsed.
      */
     public TraceVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback) {
+            VehicleDataSink callback) {
         super(context, callback);
         mRunning = false;
     }
@@ -96,7 +96,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
      * when we accepted absolute paths to files on the SD card, for example.
      */
     public TraceVehicleDataSource(
-            VehicleDataSourceCallbackInterface callback,
+            VehicleDataSink callback,
             URI filename) throws VehicleDataSourceException {
         this(null, callback, filename);
     }
@@ -107,14 +107,14 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
      * @param context the Activity or Service context, used to access the raw
      *      trace file resource via Android.
      * @param callback An object implementing the
-     *      VehicleDataSourceCallbackInterface that should receive data as it is
+     *      VehicleDataSink that should receive data as it is
      *      received and parsed.
      * @param filename a raw file resource URI of the format
      *          "resource://resource_id"
      * @throws VehicleDataSourceException  if no filename is specified
      */
     public TraceVehicleDataSource(Context context,
-            VehicleDataSourceCallbackInterface callback,
+            VehicleDataSink callback,
             URI filename) throws VehicleDataSourceException {
         this(context, callback);
         if(filename == null) {

@@ -1,5 +1,7 @@
 package com.openxc.remote.sinks;
 
+import com.openxc.remote.RawMeasurement;
+
 /**
  * The interface for all output targets for raw vehicle measurements.
  *
@@ -14,7 +16,7 @@ package com.openxc.remote.sinks;
  * {@link #receive(String, Object)} and {@link #receive(String, Object, Object)}
  * methods.
  */
-public abstract class AbstractVehicleDataSink {
+public abstract class AbstractVehicleDataSink implements VehicleDataSink {
     /**
      * Receive a data point with a name, a value and a event value.
      *
@@ -43,12 +45,27 @@ public abstract class AbstractVehicleDataSink {
         receive(measurementId, value, null);
     }
 
-    abstract private void receive(String measurementId,
-            RawMeasurement measurement);
+    /**
+     * TODO The reason some sinks will need the raw objects vs. the RawMeasurement is
+     * that once we construct the RawMeasurement, the actual object values are
+     * pseduo serialized to a Double in order to pass through the AIDL
+     * interface. Actually, why do we need to do that? Can we use a generic
+     * Object pointer in the raw measurement and smartly cast....ah no, because
+     * when we read from the Parcel we have to know in advance what the type is.
+     * This tells me that the subclasses of rawmeasurement would be really good,
+     * but I remember I struggled with that for a day or two. Perhaps worth
+     * revisiting because these double receive() methods are weird.
+     */
+    public void receive(String measurementId,
+            RawMeasurement measurement) {
+        // do nothing unless you override it
+    }
 
     /**
      * Release any acquired resources in preparation for exiting.
      */
-    abstract public void stop();
+    public void stop() {
+        // do nothing unless you need it
+    }
 
 }
