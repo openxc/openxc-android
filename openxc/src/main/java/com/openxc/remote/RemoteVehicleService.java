@@ -262,9 +262,7 @@ public class RemoteVehicleService extends Service {
     }
 
     private int getMessageCount() {
-        // TODO get message count from the future pipeline class
-        // return mDataSink.getMessageCount();
-        return 0;
+        return mPipeline.getMessageCount();
     }
 
     private void acquireWakeLock() {

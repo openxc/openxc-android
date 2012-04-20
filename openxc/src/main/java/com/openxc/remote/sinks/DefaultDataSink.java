@@ -36,7 +36,6 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private Context mContext;
-    private int mMessagesReceived = 0;
     private LocationManager mLocationManager;
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSink mDataSink;
@@ -57,7 +56,6 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
         if(mDataSink != null) {
             mDataSink.receive(measurementId, value, event);
         }
-        mMessagesReceived++;
     }
 
     public void enableRecording(boolean enabled) {
@@ -74,10 +72,6 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
         if(mDataSink != null) {
             mDataSink.stop();
         }
-    }
-
-    public int getMessageCount() {
-        return mMessagesReceived;
     }
 
     public void receive(String measurementId, RawMeasurement measurement) {

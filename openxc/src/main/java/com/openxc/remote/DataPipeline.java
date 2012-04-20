@@ -33,6 +33,7 @@ public class DataPipeline implements SourceCallback {
     private final static String TAG = "DataPipeline";
 
     private Context mContext;
+    private int mMessagesReceived = 0;
     private Map<String, RawMeasurement> mMeasurements;
     private CopyOnWriteArrayList<VehicleDataSink> mSinks;
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
@@ -48,6 +49,7 @@ public class DataPipeline implements SourceCallback {
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             (i.next()).receive(measurementId, value, event);
         }
+        mMessagesReceived++;
     }
 
     public void removeSink(VehicleDataSink sink) {
@@ -185,6 +187,10 @@ public class DataPipeline implements SourceCallback {
 
     public boolean containsMeasurement(String measurementId) {
         return mMeasurements.containsKey(measurementId);
+    }
+
+    public int getMessageCount() {
+        return mMessagesReceived;
     }
 
     protected Context getContext() {
