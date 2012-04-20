@@ -5,9 +5,8 @@ import java.lang.InterruptedException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.openxc.remote.DataPipeline;
-
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSourceException;
 import com.openxc.remote.sources.VehicleDataSourceResourceException;
 import com.openxc.remote.sources.VehicleDataSource;
@@ -23,7 +22,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
     URI malformedDeviceUri;
     URI incorrectSchemeUri;
     UsbVehicleDataSource source;
-    DataPipeline callback;
+    SourceCallback callback;
     Thread thread;
 
     @Override
@@ -36,7 +35,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
             Assert.fail("Couldn't construct resource URIs: " + e);
         }
 
-        callback = new DataPipeline() {
+        callback = new SourceCallback() {
             public void receive(String name, Object value, Object event) {
             }
         };

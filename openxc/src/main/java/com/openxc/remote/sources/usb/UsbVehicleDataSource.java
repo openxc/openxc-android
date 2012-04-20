@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Objects;
 
-import com.openxc.remote.DataPipeline;
+import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.JsonVehicleDataSource;
 
 import com.openxc.remote.sources.usb.UsbDeviceException;
@@ -81,14 +81,14 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      * @param context The Activity or Service context, used to get access to the
      *      Android UsbManager.
      * @param callback An object implementing the
-     *      DataPipeline that should receive data as it is
+     *      SourceCallback that should receive data as it is
      *      received and parsed.
      * @param device a USB device URI (see {@link UsbDeviceUtilities} for the
      *      format) to look for.
      * @throws VehicleDataSourceException  If the URI doesn't have the correct
      *          format
      */
-    public UsbVehicleDataSource(Context context, DataPipeline callback,
+    public UsbVehicleDataSource(Context context, SourceCallback callback,
             URI device) throws VehicleDataSourceException {
         super(context, callback);
         if(device == null) {
@@ -140,12 +140,12 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
      * @param context The Activity or Service context, used to get access to the
      *      Android UsbManager.
      * @param callback An object implementing the
-     *      DataPipeline that should receive data as it is
+     *      SourceCallback that should receive data as it is
      *      received and parsed.
      * @throws VehicleDataSourceException  in exceptional circumstances, i.e.
      *      only if the default device URI is malformed.
      */
-    public UsbVehicleDataSource(Context context, DataPipeline callback)
+    public UsbVehicleDataSource(Context context, SourceCallback callback)
             throws VehicleDataSourceException {
         this(context, callback, null);
     }

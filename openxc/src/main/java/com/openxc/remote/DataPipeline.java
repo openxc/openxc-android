@@ -14,6 +14,8 @@ import com.google.common.base.Objects;
 import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.VehicleDataSink;
 
+import com.openxc.remote.sources.SourceCallback;
+
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.remote.sources.VehicleDataSource;
@@ -26,7 +28,7 @@ import android.util.Log;
  * The DataPipeline ferries raw messages from VehicleDataSources to
  * VehicleDataSinks.
  */
-public class DataPipeline {
+public class DataPipeline implements SourceCallback {
     private final static String TAG = "DataPipeline";
     private final static String DEFAULT_DATA_SOURCE =
             UsbVehicleDataSource.class.getName();

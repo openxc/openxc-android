@@ -3,7 +3,7 @@ package com.openxc.remote.sources;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.openxc.remote.DataPipeline;
+import com.openxc.remote.sources.SourceCallback;
 
 import android.content.Context;
 
@@ -22,19 +22,18 @@ import android.util.Log;
  * TODO Is it weird that this is data source class, but isn't a data source? It
  * feels more like a mixin, but that doesn't fit well with Java.
  */
-public abstract class JsonVehicleDataSource
-        extends AbstractVehicleDataSource {
+public abstract class JsonVehicleDataSource extends AbstractVehicleDataSource {
     private static final String TAG = "JsonVehicleDataSource";
 
     public JsonVehicleDataSource() {
         super();
     }
 
-    public JsonVehicleDataSource(Context context, DataPipeline callback) {
+    public JsonVehicleDataSource(Context context, SourceCallback callback) {
         super(context, callback);
     }
 
-    public JsonVehicleDataSource(DataPipeline callback) {
+    public JsonVehicleDataSource(SourceCallback callback) {
         this(null, callback);
     }
 

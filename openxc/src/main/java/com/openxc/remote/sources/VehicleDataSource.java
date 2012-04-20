@@ -1,6 +1,6 @@
 package com.openxc.remote.sources;
 
-import com.openxc.remote.DataPipeline;
+import com.openxc.remote.sources.SourceCallback;
 
 /**
  * The interface for all sources of raw vehicle measurements.
@@ -17,7 +17,7 @@ public interface VehicleDataSource extends Runnable {
      * should not support more than one - all vehicle measurements should be
      * directed to a single, central collector.
      */
-    public void setCallback(DataPipeline callback);
+    public void setCallback(SourceCallback callback);
 
     /**
      * Release any acquired resources in preparation for exiting.

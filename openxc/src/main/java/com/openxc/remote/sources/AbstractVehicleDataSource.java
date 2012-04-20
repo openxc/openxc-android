@@ -7,7 +7,7 @@ import android.content.Context;
 
 import android.util.Log;
 
-import com.openxc.remote.DataPipeline;
+import com.openxc.remote.sources.SourceCallback;
 
 /**
  * The AbstractVehicleDataSource contains functions common to all vehicle data
@@ -18,7 +18,7 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
     private static final String TAG = "AbstractVehicleDataSource";
     private static final String RECEIVE_METHOD_NAME = "receive";
 
-    private DataPipeline mCallback;
+    private SourceCallback mCallback;
     private Context mContext;
 
     public AbstractVehicleDataSource() { }
@@ -28,10 +28,10 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
      *
      * @param context Current Android content (i.e. an Activity or Service)
      * @param callback An object implementing the
-     *      DataPipeline interface that should receive data from this
+     *      SourceCallback interface that should receive data from this
      *      source.
      */
-    public AbstractVehicleDataSource(Context context, DataPipeline callback) {
+    public AbstractVehicleDataSource(Context context, SourceCallback callback) {
         mContext = context;
         setCallback(callback);
     }
@@ -40,15 +40,14 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
      * Construct a new instance with no context and set the callback.
      *
      * @param callback An object implementing the
-     *      DataPipeline that should receive data from this
+     *      SourceCallback that should receive data from this
      *      source.
      */
-    public AbstractVehicleDataSource(
-            DataPipeline callback) {
+    public AbstractVehicleDataSource(SourceCallback callback) {
         this(null, callback);
     }
 
-    public void setCallback(DataPipeline callback) {
+    public void setCallback(SourceCallback callback) {
         mCallback = callback;
     }
 
@@ -60,7 +59,7 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
         if(mCallback != null) {
             Method method;
             try {
-                method = DataPipeline.class.getMethod(
+                method = SourceCallback.class.getMethod(
                         RECEIVE_METHOD_NAME, String.class, Object.class,
                         Object.class);
             } catch(NoSuchMethodException e) {
@@ -89,7 +88,7 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
         return mContext;
     }
 
-    protected DataPipeline getCallback() {
+    protected SourceCallback getCallback() {
         return mCallback;
     }
 }
