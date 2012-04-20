@@ -27,7 +27,7 @@ import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sources.VehicleDataSourceInterface;
 
-import com.openxc.remote.sinks.AbstractVehicleDataSink;
+import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.FileRecorderSink;
 
@@ -93,7 +93,7 @@ public class RemoteVehicleService extends Service {
     private NotificationThread mNotificationThread;
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
-    private AbstractVehicleDataSink mDataSink;
+    private VehicleDataSink mDataSink;
 
     @Override
     public void onCreate() {
@@ -385,8 +385,8 @@ public class RemoteVehicleService extends Service {
         }
 
         public void onLocationChanged(final Location location) {
-            mDataSink.receive(Latitude.ID, location.getLatitude());
-            mDataSink.receive(Longitude.ID, location.getLongitude());
+            mDataSink.receive(Latitude.ID, location.getLatitude(), null);
+            mDataSink.receive(Longitude.ID, location.getLongitude(), null);
         }
 
         public void onStatusChanged(String provider, int status,
