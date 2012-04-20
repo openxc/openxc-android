@@ -58,16 +58,6 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
         }
     }
 
-    public void enableRecording(boolean enabled) {
-        if(enabled && mDataSink == null) {
-            mDataSink = new FileRecorderSink(mContext);
-            Log.i(TAG, "Initialized vehicle data sink " + mDataSink);
-        } else if(mDataSink != null) {
-            mDataSink.stop();
-            mDataSink = null;
-        }
-    }
-
     public void stop() {
         if(mDataSink != null) {
             mDataSink.stop();

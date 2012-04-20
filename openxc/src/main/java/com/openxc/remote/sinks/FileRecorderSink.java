@@ -10,6 +10,8 @@ import java.util.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +37,11 @@ public class FileRecorderSink extends AbstractVehicleDataSink {
     private BufferedWriter mWriter;
     private Date mLastFileCreated;
     private Context mContext;
+
+    public FileRecorderSink(Context context,
+            Map<String, RawMeasurement> measurements) {
+        this(context);
+    }
 
     public FileRecorderSink(Context context) {
         mContext = context;

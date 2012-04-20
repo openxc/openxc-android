@@ -7,6 +7,7 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.DefaultDataSink;
+import com.openxc.remote.sinks.FileRecorderSink;
 
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
@@ -243,8 +244,18 @@ public class RemoteVehicleService extends Service {
     };
 
     private void enableRecording(boolean enabled) {
-        // TODO set up a file recording sink or kill an existing one
-        //mDataSink.enableRecording(enabled);
+        // TODO need a flag in this functio to say if it should be unique in its
+        // type as we want to stop other recorders. for now we'll just clear 'em
+        if(enabled) {
+            initializeDefaultSinks();
+            try {
+                mPipeline.addSink(FileRecorderSink.class.getName());
+            } catch(DataSinkException e) {
+                Log.w(TAG, "Unable to enable recording", e);
+            }
+        } else {
+             mPipeline.removeSink(FileRecorderSink.class.getName());
+        }
     }
 
     private void enableNativeGpsPassthrough(boolean enabled) {

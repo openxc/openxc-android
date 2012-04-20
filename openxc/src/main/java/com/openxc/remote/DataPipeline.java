@@ -64,6 +64,15 @@ public class DataPipeline implements SourceCallback {
         return sink;
     }
 
+    public void removeSink(String sinkName) {
+        for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
+            VehicleDataSink sink = i.next();
+            if(sink.getClass().getName().equals(sinkName)) {
+                mSinks.remove(sink);
+            }
+        }
+    }
+
     public VehicleDataSink addSink(String sinkName) throws DataSinkException {
         return addSink(sinkName, null);
     }
