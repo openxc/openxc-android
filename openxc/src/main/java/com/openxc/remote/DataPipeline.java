@@ -6,7 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URI;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.google.common.base.Objects;
@@ -30,30 +33,28 @@ public class DataPipeline implements SourceCallback {
 
     private Context mContext;
     private Map<String, RawMeasurement> mMeasurements;
-    private VehicleDataSink mSink;
-    private VehicleDataSource mSource;
+    private CopyOnWriteArrayList<VehicleDataSink> mSinks;
+    private CopyOnWriteArrayList<VehicleDataSource> mSources;
 
     public DataPipeline(Context context) {
         mContext = context;
         mMeasurements = new HashMap<String, RawMeasurement>();
+        mSinks = new CopyOnWriteArrayList<VehicleDataSink>();
+        mSources = new CopyOnWriteArrayList<VehicleDataSource>();
     }
 
     public void receive(String measurementId, Object value, Object event) {
-        if(mSink != null) {
-            mSink.receive(measurementId, value, event);
+        for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
+            (i.next()).receive(measurementId, value, event);
         }
     }
 
-    public void setSink(String sinkName) {
-        setSink(sinkName, null);
+    public void addSink(String sinkName) {
+        addSink(sinkName, null);
     }
 
-    public void setSink(String sinkName, String resource) {
-        if(mSink != null) {
-            mSink.stop();
-            mSink = null;
-        }
-
+    // TODO do we add duplicate types? yes for now
+    public void addSink(String sinkName, String resource) {
         Class<? extends VehicleDataSink> sinkType;
         try {
             sinkType = Class.forName(sinkName).asSubclass(
@@ -90,20 +91,16 @@ public class DataPipeline implements SourceCallback {
             Log.i(TAG, "Initializing vehicle data sink " + sink);
         }
 
-        mSink = sink;
+        mSinks.add(sink);
     }
 
-    public void setSource(String sourceName) {
-        setSource(sourceName, null);
+    public void addSource(String sourceName) {
+        addSource(sourceName, null);
     }
 
-    // TODO convert to addSource and support multiple
-    public void setSource(String sourceName, String resource) {
-        if(mSource != null) {
-            mSource.stop();
-            mSource = null;
-        }
-
+    // TODO do we add duplicate sources of the same type? yes for now, this will
+    // screw up some tests that rely on it stopping the previous source
+    public void addSource(String sourceName, String resource) {
         Class<? extends VehicleDataSource> sourceType;
         try {
             sourceType = Class.forName(sourceName).asSubclass(
@@ -143,13 +140,23 @@ public class DataPipeline implements SourceCallback {
             new Thread(source).start();
         }
 
-        mSource = source;
+        mSources.add(source);
     }
 
     public void stop() {
-        if(mSource != null) {
-            mSource.stop();
-            mSource = null;
+        clearSources();
+        clearSinks();
+    }
+
+    public void clearSources() {
+        for(Iterator<VehicleDataSource> i = mSources.iterator(); i.hasNext();) {
+            (i.next()).stop();
+        }
+    }
+
+    public void clearSinks() {
+        for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
+            (i.next()).stop();
         }
     }
 
@@ -172,7 +179,8 @@ public class DataPipeline implements SourceCallback {
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("source", mSource)
+            .add("sources", mSources)
+            .add("sinks", mSinks)
             .add("numMeasurementTypes", mMeasurements.size())
             .toString();
     }

@@ -73,7 +73,7 @@ public class RemoteVehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline(this);
-        mPipeline.setSink(DEFAULT_DATA_SINK);
+        mPipeline.addSink(DEFAULT_DATA_SINK);
         acquireWakeLock();
     }
 
@@ -107,7 +107,8 @@ public class RemoteVehicleService extends Service {
             mNotifier.done();
         }
         mNotifier = new MeasurementNotifier(mPipeline);
-        mPipeline.setSource(DEFAULT_DATA_SOURCE);
+        mPipeline.clearSources();
+        mPipeline.addSource(DEFAULT_DATA_SOURCE);
         return mBinder;
     }
 
@@ -120,7 +121,8 @@ public class RemoteVehicleService extends Service {
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        mPipeline.setSource(DEFAULT_DATA_SOURCE);
+        mPipeline.clearSources();
+        mPipeline.addSource(DEFAULT_DATA_SOURCE);
         return false;
     }
 
@@ -162,7 +164,8 @@ public class RemoteVehicleService extends Service {
             public void setDataSource(String dataSource, String resource) {
                 Log.i(TAG, "Setting data source to " + dataSource +
                         " with resource " + resource);
-                mPipeline.setSource(dataSource, resource);
+                mPipeline.clearSources();
+                mPipeline.addSource(dataSource, resource);
             }
 
             public void enableRecording(boolean enabled) {
