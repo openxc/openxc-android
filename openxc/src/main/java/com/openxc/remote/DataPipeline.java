@@ -11,12 +11,9 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
-import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.VehicleDataSink;
 
 import com.openxc.remote.sources.SourceCallback;
-
-import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.remote.sources.VehicleDataSource;
 
@@ -30,8 +27,6 @@ import android.util.Log;
  */
 public class DataPipeline implements SourceCallback {
     private final static String TAG = "DataPipeline";
-    private final static String DEFAULT_DATA_SOURCE =
-            UsbVehicleDataSource.class.getName();
 
     private Context mContext;
     private Map<String, RawMeasurement> mMeasurements;
@@ -41,76 +36,114 @@ public class DataPipeline implements SourceCallback {
     public DataPipeline(Context context) {
         mContext = context;
         mMeasurements = new HashMap<String, RawMeasurement>();
-        mSink = new DefaultDataSink(getContext(), mMeasurements);
     }
 
     public void receive(String measurementId, Object value, Object event) {
-        mSink.receive(measurementId, value, event);
+        if(mSink != null) {
+            mSink.receive(measurementId, value, event);
+        }
     }
 
-    public void setDefaultSource() {
-        setSource(DEFAULT_DATA_SOURCE, null);
+    public void setSink(String sinkName) {
+        setSink(sinkName, null);
+    }
+
+    public void setSink(String sinkName, String resource) {
+        if(mSink != null) {
+            mSink.stop();
+            mSink = null;
+        }
+
+        Class<? extends VehicleDataSink> sinkType;
+        try {
+            sinkType = Class.forName(sinkName).asSubclass(
+                    VehicleDataSink.class);
+        } catch(ClassNotFoundException e) {
+            Log.w(TAG, "Couldn't find data sink type " + sinkName, e);
+            return;
+        }
+
+        Constructor<? extends VehicleDataSink> constructor;
+        try {
+            constructor = sinkType.getConstructor(Context.class, Map.class);
+        } catch(NoSuchMethodException e) {
+            Log.w(TAG, sinkType + " doesn't have a proper constructor");
+            return;
+        }
+
+        URI resourceUri = uriFromResourceString(resource);
+
+        VehicleDataSink sink = null;
+        try {
+            sink = constructor.newInstance(getContext(), resourceUri);
+        } catch(InstantiationException e) {
+            Log.w(TAG, "Couldn't instantiate data sink " + sinkType, e);
+        } catch(IllegalAccessException e) {
+            Log.w(TAG, "Default constructor is not accessible on " +
+                    sinkType, e);
+        } catch(InvocationTargetException e) {
+            Log.w(TAG, sinkType + "'s constructor threw an exception",
+                    e);
+        }
+
+        if(sink != null) {
+            Log.i(TAG, "Initializing vehicle data sink " + sink);
+        }
+
+        mSink = sink;
+    }
+
+    public void setSource(String sourceName) {
+        setSource(sourceName, null);
     }
 
     // TODO convert to addSource and support multiple
-    public void setSource(String dataSourceName, String resource) {
+    public void setSource(String sourceName, String resource) {
         if(mSource != null) {
             mSource.stop();
             mSource = null;
         }
 
-        Class<? extends VehicleDataSource> dataSourceType;
+        Class<? extends VehicleDataSource> sourceType;
         try {
-            dataSourceType = Class.forName(dataSourceName).asSubclass(
+            sourceType = Class.forName(sourceName).asSubclass(
                     VehicleDataSource.class);
         } catch(ClassNotFoundException e) {
-            Log.w(TAG, "Couldn't find data source type " + dataSourceName, e);
+            Log.w(TAG, "Couldn't find data source type " + sourceName, e);
             return;
         }
 
         Constructor<? extends VehicleDataSource> constructor;
         try {
-            constructor = dataSourceType.getConstructor(Context.class,
+            constructor = sourceType.getConstructor(Context.class,
                     VehicleDataSink.class, URI.class);
         } catch(NoSuchMethodException e) {
-            Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
+            Log.w(TAG, sourceType + " doesn't have a proper constructor");
             return;
         }
 
-        URI resourceUri = null;
-        if(resource != null) {
-            try {
-                resourceUri = new URI(resource);
-            } catch(URISyntaxException e) {
-                Log.w(TAG, "Unable to parse resource as URI " + resource);
-            }
-        }
+        URI resourceUri = uriFromResourceString(resource);
 
-        VehicleDataSource dataSource = null;
+        VehicleDataSource source = null;
         try {
-            dataSource = constructor.newInstance(getContext(), this,
+            source = constructor.newInstance(getContext(), this,
                     resourceUri);
         } catch(InstantiationException e) {
-            Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
+            Log.w(TAG, "Couldn't instantiate data source " + sourceType, e);
         } catch(IllegalAccessException e) {
             Log.w(TAG, "Default constructor is not accessible on " +
-                    dataSourceType, e);
+                    sourceType, e);
         } catch(InvocationTargetException e) {
-            Log.w(TAG, dataSourceType + "'s constructor threw an exception",
+            Log.w(TAG, sourceType + "'s constructor threw an exception",
                     e);
         }
 
-        if(dataSource != null) {
-            Log.i(TAG, "Initializing vehicle data source " + dataSource);
-            new Thread(dataSource).start();
+        if(source != null) {
+            Log.i(TAG, "Initializing vehicle data source " + source);
+            new Thread(source).start();
         }
 
-        mSource = dataSource;
-    }
-
-    // TODO convert to addSink and support multiple
-    public void setSink(VehicleDataSink sink) {
-        mSink = sink;
+        mSource = source;
     }
 
     public void stop() {
@@ -142,5 +175,17 @@ public class DataPipeline implements SourceCallback {
             .add("source", mSource)
             .add("numMeasurementTypes", mMeasurements.size())
             .toString();
+    }
+
+    private URI uriFromResourceString(String resource) {
+        URI resourceUri = null;
+        if(resource != null) {
+            try {
+                resourceUri = new URI(resource);
+            } catch(URISyntaxException e) {
+                Log.w(TAG, "Unable to parse resource as URI " + resource);
+            }
+        }
+        return resourceUri;
     }
 }

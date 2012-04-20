@@ -5,6 +5,10 @@ import com.openxc.measurements.Longitude;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sinks.DefaultDataSink;
+
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+
 import android.app.Service;
 
 import android.content.Context;
@@ -54,6 +58,10 @@ import android.util.Log;
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
+    private final static String DEFAULT_DATA_SOURCE =
+            UsbVehicleDataSource.class.getName();
+    private final static String DEFAULT_DATA_SINK =
+            DefaultDataSink.class.getName();
 
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
@@ -65,6 +73,7 @@ public class RemoteVehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline(this);
+        mPipeline.setSink(DEFAULT_DATA_SINK);
         acquireWakeLock();
     }
 
@@ -98,7 +107,7 @@ public class RemoteVehicleService extends Service {
             mNotifier.done();
         }
         mNotifier = new MeasurementNotifier(mPipeline);
-        mPipeline.setDefaultSource();
+        mPipeline.setSource(DEFAULT_DATA_SOURCE);
         return mBinder;
     }
 
@@ -111,7 +120,7 @@ public class RemoteVehicleService extends Service {
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        mPipeline.setDefaultSource();
+        mPipeline.setSource(DEFAULT_DATA_SOURCE);
         return false;
     }
 
