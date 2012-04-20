@@ -14,6 +14,7 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
+import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.VehicleDataSink;
 
 import com.openxc.remote.sources.SourceCallback;
@@ -49,19 +50,32 @@ public class DataPipeline implements SourceCallback {
         }
     }
 
-    public void addSink(String sinkName) {
-        addSink(sinkName, null);
+    public void removeSink(VehicleDataSink sink) {
+        if(sink != null) {
+            mSinks.remove(sink);
+            sink.stop();
+        }
+    }
+
+    public VehicleDataSink addSink(VehicleDataSink sink) {
+        mSinks.add(sink);
+        return sink;
+    }
+
+    public VehicleDataSink addSink(String sinkName) throws DataSinkException {
+        return addSink(sinkName, null);
     }
 
     // TODO do we add duplicate types? yes for now
-    public void addSink(String sinkName, String resource) {
+    public VehicleDataSink addSink(String sinkName, String resource)
+            throws DataSinkException {
         Class<? extends VehicleDataSink> sinkType;
         try {
             sinkType = Class.forName(sinkName).asSubclass(
                     VehicleDataSink.class);
         } catch(ClassNotFoundException e) {
             Log.w(TAG, "Couldn't find data sink type " + sinkName, e);
-            return;
+            throw new DataSinkException();
         }
 
         Constructor<? extends VehicleDataSink> constructor;
@@ -69,7 +83,7 @@ public class DataPipeline implements SourceCallback {
             constructor = sinkType.getConstructor(Context.class, Map.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, sinkType + " doesn't have a proper constructor");
-            return;
+            throw new DataSinkException();
         }
 
         URI resourceUri = uriFromResourceString(resource);
@@ -92,6 +106,7 @@ public class DataPipeline implements SourceCallback {
         }
 
         mSinks.add(sink);
+        return sink;
     }
 
     public void addSource(String sourceName) {

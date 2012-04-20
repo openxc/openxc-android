@@ -20,12 +20,12 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
 
     private NotificationThread mNotificationThread;
     private BlockingQueue<String> mNotificationQueue;
-    private DataPipeline mPipeline;
+    private Map<String, RawMeasurement> mMeasurements;
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
 
-    public MeasurementNotifier(DataPipeline pipeline) {
-        mPipeline = pipeline;
+    public MeasurementNotifier(Map<String, RawMeasurement> measurements) {
+        mMeasurements = measurements;
         mNotificationQueue = new LinkedBlockingQueue<String>();
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
@@ -38,10 +38,19 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
         if(mNotificationThread != null) {
             mNotificationThread.done();
         }
-        // TODO loop over and kill all callbacks in remote callback list
     }
 
-    public RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+    public void register(String measurementId,
+            RemoteVehicleServiceListenerInterface listener) {
+        getOrCreateCallbackList(measurementId).register(listener);
+    }
+
+    public void unregister(String measurementId,
+            RemoteVehicleServiceListenerInterface listener) {
+        getOrCreateCallbackList(measurementId).unregister(listener);
+    }
+
+    private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
             getOrCreateCallbackList(String measurementId) {
         RemoteCallbackList<RemoteVehicleServiceListenerInterface>
             callbackList = mListeners.get(measurementId);
@@ -116,7 +125,7 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
 
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
-                RawMeasurement rawMeasurement = mPipeline.get(measurementId);
+                RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
                 propagateMeasurement(callbacks, measurementId, rawMeasurement);
             }
             Log.d(TAG, "Stopped USB listener");

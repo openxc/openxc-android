@@ -5,6 +5,7 @@ import com.openxc.measurements.Longitude;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.DefaultDataSink;
 
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
@@ -63,7 +64,6 @@ public class RemoteVehicleService extends Service {
     };
     private final static String[] DEFAULT_DATA_SINKS = {
             DefaultDataSink.class.getName(),
-            MeasurementNotifier.class.getName(),
     };
 
     private NativeLocationListener mNativeLocationListener;
@@ -93,11 +93,6 @@ public class RemoteVehicleService extends Service {
         if(mPipeline != null) {
             mPipeline.stop();
         }
-
-        if(mNotifier != null) {
-            mNotifier.done();
-            mNotifier = null;
-        }
         releaseWakeLock();
     }
 
@@ -107,10 +102,15 @@ public class RemoteVehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        if(mNotifier != null) {
-            mNotifier.done();
+
+        mPipeline.removeSink(mNotifier);
+        try {
+            mNotifier = (MeasurementNotifier) mPipeline.addSink(
+                    MeasurementNotifier.class.getName());
+        } catch(DataSinkException e) {
+            Log.w(TAG, "Unable to add notifier to pipeline sinks", e);
         }
-        mNotifier = new MeasurementNotifier(mPipeline);
+
         initializeDefaultSources();
         return mBinder;
     }
@@ -131,7 +131,11 @@ public class RemoteVehicleService extends Service {
     private void initializeDefaultSinks() {
         mPipeline.clearSinks();
         for(String sinkName : DEFAULT_DATA_SINKS) {
-            mPipeline.addSink(sinkName);
+            try {
+                mPipeline.addSink(sinkName);
+            } catch(DataSinkException e) {
+                Log.w(TAG, "Unable to add data sink " + sinkName, e);
+            }
         }
     }
 
@@ -153,8 +157,7 @@ public class RemoteVehicleService extends Service {
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener + " to " +
                         measurementId);
-                mNotifier.getOrCreateCallbackList(measurementId).register(
-                        listener);
+                mNotifier.register(measurementId, listener);
 
                 if(mPipeline.containsMeasurement(measurementId)) {
                     // send the last known value to the new listener
@@ -173,8 +176,7 @@ public class RemoteVehicleService extends Service {
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener + " from " +
                         measurementId);
-                mNotifier.getOrCreateCallbackList(measurementId).unregister(
-                        listener);
+                mNotifier.unregister(measurementId, listener);
             }
 
             public void setDataSource(String dataSource, String resource) {
