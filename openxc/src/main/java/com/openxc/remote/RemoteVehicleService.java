@@ -1,35 +1,9 @@
 package com.openxc.remote;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import java.net.URISyntaxException;
-import java.net.URI;
-
-import java.util.Collections;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.common.base.Objects;
-
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
-
-import com.openxc.remote.sources.usb.UsbVehicleDataSource;
-
-import com.openxc.remote.sinks.VehicleDataSink;
-import com.openxc.remote.sources.VehicleDataSourceInterface;
-
-import com.openxc.remote.sinks.VehicleDataSink;
-import com.openxc.remote.sinks.DefaultDataSink;
-import com.openxc.remote.sinks.FileRecorderSink;
 
 import android.app.Service;
 
@@ -43,7 +17,6 @@ import android.location.LocationListener;
 import android.os.Looper;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -80,32 +53,18 @@ import android.util.Log;
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
-    private final static String DEFAULT_DATA_SOURCE =
-            UsbVehicleDataSource.class.getName();
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
 
-    private Map<String, RawMeasurement> mMeasurements;
-    private VehicleDataSourceInterface mDataSource;
-
-    private Map<String, RemoteCallbackList<
-        RemoteVehicleServiceListenerInterface>> mListeners;
-    private BlockingQueue<String> mNotificationQueue;
-    private NotificationThread mNotificationThread;
     private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
-    private VehicleDataSink mDataSink;
+    private DataPipeline mPipeline;
+    private MeasurementNotifier mNotifier;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mMeasurements = new HashMap<String, RawMeasurement>();
-        mNotificationQueue = new LinkedBlockingQueue<String>();
-        mListeners = Collections.synchronizedMap(
-                new HashMap<String, RemoteCallbackList<
-                RemoteVehicleServiceListenerInterface>>());
-        mDataSink = new DefaultDataSink(this, mMeasurements, mListeners,
-                mNotificationQueue);
+        mPipeline = new DataPipeline(this);
         acquireWakeLock();
     }
 
@@ -118,17 +77,15 @@ public class RemoteVehicleService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG, "Service being destroyed");
-        if(mDataSource != null) {
-            mDataSource.stop();
-            mDataSource = null;
+        if(mPipeline != null) {
+            mPipeline.stop();
         }
 
-        if(mNotificationThread != null) {
-            mNotificationThread.done();
-            mNotificationThread = null;
+        if(mNotifier != null) {
+            mNotifier.done();
+            mNotifier = null;
         }
         releaseWakeLock();
-        // TODO loop over and kill all callbacks in remote callback list
     }
 
     /**
@@ -137,12 +94,11 @@ public class RemoteVehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        if(mNotificationThread != null) {
-            mNotificationThread.done();
+        if(mNotifier != null) {
+            mNotifier.done();
         }
-        mNotificationThread = new NotificationThread();
-        mNotificationThread.start();
-        initializeDataSource();
+        mNotifier = new MeasurementNotifier(mPipeline);
+        mPipeline.setDefaultSource();
         return mBinder;
     }
 
@@ -155,109 +111,28 @@ public class RemoteVehicleService extends Service {
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        initializeDataSource();
+        mPipeline.setDefaultSource();
         return false;
-    }
-
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("dataSource", mDataSource)
-            .add("numListeners", mListeners.size())
-            .add("numMeasurementTypes", mMeasurements.size())
-            .add("callbackBacklog", mNotificationQueue.size())
-            .toString();
-    }
-
-    private void initializeDataSource() {
-        initializeDataSource(DEFAULT_DATA_SOURCE, null);
-    }
-
-    private void initializeDataSource(
-            String dataSourceName, String resource) {
-        if(mDataSource != null) {
-            mDataSource.stop();
-            mDataSource = null;
-        }
-
-        Class<? extends VehicleDataSourceInterface> dataSourceType;
-        try {
-            dataSourceType = Class.forName(dataSourceName).asSubclass(
-                    VehicleDataSourceInterface.class);
-        } catch(ClassNotFoundException e) {
-            Log.w(TAG, "Couldn't find data source type " + dataSourceName, e);
-            return;
-        }
-
-        Constructor<? extends VehicleDataSourceInterface> constructor;
-        try {
-            constructor = dataSourceType.getConstructor(Context.class,
-                    VehicleDataSink.class, URI.class);
-        } catch(NoSuchMethodException e) {
-            Log.w(TAG, dataSourceType + " doesn't have a proper constructor");
-            return;
-        }
-
-        URI resourceUri = null;
-        if(resource != null) {
-            try {
-                resourceUri = new URI(resource);
-            } catch(URISyntaxException e) {
-                Log.w(TAG, "Unable to parse resource as URI " + resource);
-            }
-        }
-
-        VehicleDataSourceInterface dataSource = null;
-        try {
-            dataSource = constructor.newInstance(this, mDataSink, resourceUri);
-        } catch(InstantiationException e) {
-            Log.w(TAG, "Couldn't instantiate data source " + dataSourceType, e);
-        } catch(IllegalAccessException e) {
-            Log.w(TAG, "Default constructor is not accessible on " +
-                    dataSourceType, e);
-        } catch(InvocationTargetException e) {
-            Log.w(TAG, dataSourceType + "'s constructor threw an exception",
-                    e);
-        }
-
-        if(dataSource != null) {
-            Log.i(TAG, "Initializing vehicle data source " + dataSource);
-            new Thread(dataSource).start();
-        }
-
-        mDataSource = dataSource;
-    }
-
-    private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-            getOrCreateCallbackList(String measurementId) {
-        RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-            callbackList = mListeners.get(measurementId);
-        if(callbackList == null) {
-            callbackList = new RemoteCallbackList<
-                RemoteVehicleServiceListenerInterface>();
-            mListeners.put(measurementId, callbackList);
-        }
-        return callbackList;
     }
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
         new RemoteVehicleServiceInterface.Stub() {
             public RawMeasurement get(String measurementId)
                     throws RemoteException {
-                return getMeasurement(measurementId);
+                return mPipeline.get(measurementId);
             }
 
             public void addListener(String measurementId,
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener + " to " +
                         measurementId);
-                getOrCreateCallbackList(measurementId).register(listener);
+                mNotifier.getOrCreateCallbackList(measurementId).register(
+                        listener);
 
-                if(mMeasurements.containsKey(measurementId)) {
+                if(mPipeline.containsMeasurement(measurementId)) {
                     // send the last known value to the new listener
                     RawMeasurement rawMeasurement =
-                        getMeasurement(measurementId);
+                        mPipeline.get(measurementId);
                     try {
                         listener.receive(measurementId, rawMeasurement);
                     } catch(RemoteException e) {
@@ -271,13 +146,14 @@ public class RemoteVehicleService extends Service {
                     RemoteVehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener + " from " +
                         measurementId);
-                getOrCreateCallbackList(measurementId).unregister(listener);
+                mNotifier.getOrCreateCallbackList(measurementId).unregister(
+                        listener);
             }
 
             public void setDataSource(String dataSource, String resource) {
                 Log.i(TAG, "Setting data source to " + dataSource +
                         " with resource " + resource);
-                initializeDataSource(dataSource, resource);
+                mPipeline.setSource(dataSource, resource);
             }
 
             public void enableRecording(boolean enabled) {
@@ -296,69 +172,9 @@ public class RemoteVehicleService extends Service {
             }
     };
 
-    private class NotificationThread extends Thread {
-        private boolean mRunning = true;
-
-        private synchronized boolean isRunning() {
-            return mRunning;
-        }
-
-        public synchronized void done() {
-            Log.d(TAG, "Stopping notification thread");
-            mRunning = false;
-            // A context switch right can cause a race condition if we
-            // used take() instead of poll(): when mRunning is set to
-            // false and interrupt is called but we haven't called
-            // take() yet, so nobody is waiting. By using poll we can not be
-            // locked for more than 1s.
-            interrupt();
-        }
-
-        public void run() {
-            while(isRunning()) {
-                String measurementId = null;
-                try {
-                    measurementId = mNotificationQueue.poll(1,
-                            TimeUnit.SECONDS);
-                } catch(InterruptedException e) {
-                    Log.d(TAG, "Interrupted while waiting for a new " +
-                            "item for notification -- likely shutting down");
-                    return;
-                }
-
-                if(measurementId == null) {
-                    continue;
-                }
-
-                RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-                    callbacks = mListeners.get(measurementId);
-                RawMeasurement rawMeasurement =
-                    getMeasurement(measurementId);
-                propagateMeasurement(callbacks, measurementId, rawMeasurement);
-            }
-            Log.d(TAG, "Stopped USB listener");
-        }
-    };
-
-    private void propagateMeasurement(
-            RemoteCallbackList<RemoteVehicleServiceListenerInterface> callbacks,
-            String measurementId,
-            RawMeasurement measurement) {
-        int i = callbacks.beginBroadcast();
-        while(i > 0) {
-            i--;
-            try {
-                callbacks.getBroadcastItem(i).receive(measurementId,
-                        measurement);
-            } catch(RemoteException e) {
-                Log.w(TAG, "Couldn't notify application " +
-                        "listener -- did it crash?", e);
-            }
-        }
-        callbacks.finishBroadcast();
-    }
-
-    private class NativeLocationListener extends Thread implements LocationListener {
+    // TODO convert this to a data source
+    private class NativeLocationListener extends Thread
+            implements LocationListener {
         public void run() {
             Looper.myLooper().prepare();
             LocationManager locationManager = (LocationManager)
@@ -385,8 +201,8 @@ public class RemoteVehicleService extends Service {
         }
 
         public void onLocationChanged(final Location location) {
-            mDataSink.receive(Latitude.ID, location.getLatitude(), null);
-            mDataSink.receive(Longitude.ID, location.getLongitude(), null);
+            mPipeline.receive(Latitude.ID, location.getLatitude(), null);
+            mPipeline.receive(Longitude.ID, location.getLongitude(), null);
         }
 
         public void onStatusChanged(String provider, int status,
@@ -394,14 +210,6 @@ public class RemoteVehicleService extends Service {
         public void onProviderEnabled(String provider) {}
         public void onProviderDisabled(String provider) {}
     };
-
-    private RawMeasurement getMeasurement(String measurementId) {
-        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
-        if(rawMeasurement == null) {
-            rawMeasurement = new RawMeasurement();
-        }
-        return rawMeasurement;
-    }
 
     private void enableRecording(boolean enabled) {
         // TODO set up a file recording sink or kill an existing one

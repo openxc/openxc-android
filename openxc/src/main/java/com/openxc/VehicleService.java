@@ -295,7 +295,7 @@ public class VehicleService extends Service {
      * USB device ID.
      *
      * @param dataSource The name of a class implementing the
-     *      VehicleDataSourceInterface.
+     *      VehicleDataSource.
      * @param resource An optional initializer for the data source - this will
      *      be passed to its constructor as a String. An example is a path to a
      *      file if the data source is a trace file playback.

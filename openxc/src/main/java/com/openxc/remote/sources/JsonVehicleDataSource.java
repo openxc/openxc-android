@@ -3,11 +3,11 @@ package com.openxc.remote.sources;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.openxc.remote.DataPipeline;
+
 import android.content.Context;
 
 import android.util.Log;
-
-import com.openxc.remote.sinks.VehicleDataSink;
 
 /**
  * A vehicle data source expecting JSON messages as raw input.
@@ -30,12 +30,11 @@ public abstract class JsonVehicleDataSource
         super();
     }
 
-    public JsonVehicleDataSource(Context context,
-            VehicleDataSink callback) {
+    public JsonVehicleDataSource(Context context, DataPipeline callback) {
         super(context, callback);
     }
 
-    public JsonVehicleDataSource(VehicleDataSink callback) {
+    public JsonVehicleDataSource(DataPipeline callback) {
         this(null, callback);
     }
 

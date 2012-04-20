@@ -5,13 +5,12 @@ import java.lang.InterruptedException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+import com.openxc.remote.DataPipeline;
 
-import com.openxc.remote.sinks.VehicleDataSink;
-import com.openxc.remote.sinks.AbstractVehicleDataSink;
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSourceException;
-import com.openxc.remote.sources.VehicleDataSourceInterface;
 import com.openxc.remote.sources.VehicleDataSourceResourceException;
+import com.openxc.remote.sources.VehicleDataSource;
 
 import junit.framework.Assert;
 
@@ -24,7 +23,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
     URI malformedDeviceUri;
     URI incorrectSchemeUri;
     UsbVehicleDataSource source;
-    VehicleDataSink callback;
+    DataPipeline callback;
     Thread thread;
 
     @Override
@@ -37,7 +36,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
             Assert.fail("Couldn't construct resource URIs: " + e);
         }
 
-        callback = new AbstractVehicleDataSink() {
+        callback = new DataPipeline() {
             public void receive(String name, Object value, Object event) {
             }
         };
@@ -55,7 +54,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
         }
     }
 
-    private void startSource(VehicleDataSourceInterface source) {
+    private void startSource(VehicleDataSource source) {
         thread = new Thread(source);
         thread.start();
         try {

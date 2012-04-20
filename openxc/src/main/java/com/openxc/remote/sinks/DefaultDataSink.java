@@ -38,21 +38,13 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
     private Context mContext;
     private int mMessagesReceived = 0;
     private LocationManager mLocationManager;
-    private BlockingQueue<String> mNotificationQueue;
     private Map<String, RawMeasurement> mMeasurements;
-    private Map<String, RemoteCallbackList<
-        RemoteVehicleServiceListenerInterface>> mListeners;
     private VehicleDataSink mDataSink;
 
     public DefaultDataSink(Context context,
-            Map<String, RawMeasurement> measurements,
-            Map<String, RemoteCallbackList<
-            RemoteVehicleServiceListenerInterface>> listeners,
-            BlockingQueue<String> notificationQueue) {
+            Map<String, RawMeasurement> measurements) {
         mContext = context;
-        mListeners = listeners;
         mMeasurements = measurements;
-        mNotificationQueue = notificationQueue;
         mLocationManager = (LocationManager) context.getSystemService(
                 Context.LOCATION_SERVICE);
         setupMockLocations();
@@ -90,11 +82,6 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
 
     public void receive(String measurementId, RawMeasurement measurement) {
         mMeasurements.put(measurementId, measurement);
-        if(mListeners.containsKey(measurementId)) {
-            try  {
-                mNotificationQueue.put(measurementId);
-            } catch(InterruptedException e) {}
-        }
 
         if(measurementId.equals(Latitude.ID) ||
                 measurementId.equals(Longitude.ID)) {

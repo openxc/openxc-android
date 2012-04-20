@@ -7,19 +7,18 @@ import android.content.Context;
 
 import android.util.Log;
 
-import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.remote.DataPipeline;
 
 /**
  * The AbstractVehicleDataSource contains functions common to all vehicle data
  * sources.
  */
-public abstract class AbstractVehicleDataSource
-        implements VehicleDataSourceInterface {
+public abstract class AbstractVehicleDataSource implements VehicleDataSource {
 
     private static final String TAG = "AbstractVehicleDataSource";
     private static final String RECEIVE_METHOD_NAME = "receive";
 
-    private VehicleDataSink mCallback;
+    private DataPipeline mCallback;
     private Context mContext;
 
     public AbstractVehicleDataSource() { }
@@ -29,11 +28,10 @@ public abstract class AbstractVehicleDataSource
      *
      * @param context Current Android content (i.e. an Activity or Service)
      * @param callback An object implementing the
-     *      VehicleDataSink that should receive data from this
+     *      DataPipeline interface that should receive data from this
      *      source.
      */
-    public AbstractVehicleDataSource(Context context,
-            VehicleDataSink callback) {
+    public AbstractVehicleDataSource(Context context, DataPipeline callback) {
         mContext = context;
         setCallback(callback);
     }
@@ -42,15 +40,15 @@ public abstract class AbstractVehicleDataSource
      * Construct a new instance with no context and set the callback.
      *
      * @param callback An object implementing the
-     *      VehicleDataSink that should receive data from this
+     *      DataPipeline that should receive data from this
      *      source.
      */
     public AbstractVehicleDataSource(
-            VehicleDataSink callback) {
+            DataPipeline callback) {
         this(null, callback);
     }
 
-    public void setCallback(VehicleDataSink callback) {
+    public void setCallback(DataPipeline callback) {
         mCallback = callback;
     }
 
@@ -62,7 +60,7 @@ public abstract class AbstractVehicleDataSource
         if(mCallback != null) {
             Method method;
             try {
-                method = VehicleDataSink.class.getMethod(
+                method = DataPipeline.class.getMethod(
                         RECEIVE_METHOD_NAME, String.class, Object.class,
                         Object.class);
             } catch(NoSuchMethodException e) {
@@ -91,7 +89,7 @@ public abstract class AbstractVehicleDataSource
         return mContext;
     }
 
-    protected VehicleDataSink getCallback() {
+    protected DataPipeline getCallback() {
         return mCallback;
     }
 }

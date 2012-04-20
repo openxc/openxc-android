@@ -1,15 +1,15 @@
 package com.openxc.remote.sources;
 
-import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.remote.DataPipeline;
 
 /**
  * The interface for all sources of raw vehicle measurements.
  *
  * Data is retrieved from a vehicle source by registering a callback object that
- * implements the VehicleDataSink - its receive() methods are
+ * implements the DataPipeline - its receive() methods are
  * passed values from the data source.
  */
-public interface VehicleDataSourceInterface extends Runnable {
+public interface VehicleDataSource extends Runnable {
     /**
      * Set the callback for receiving raw measurements as they are received.
      *
@@ -17,7 +17,7 @@ public interface VehicleDataSourceInterface extends Runnable {
      * should not support more than one - all vehicle measurements should be
      * directed to a single, central collector.
      */
-    public void setCallback(VehicleDataSink callback);
+    public void setCallback(DataPipeline callback);
 
     /**
      * Release any acquired resources in preparation for exiting.
