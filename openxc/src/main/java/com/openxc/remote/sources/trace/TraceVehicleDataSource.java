@@ -66,7 +66,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
     private static final String TAG = "TraceVehicleDataSource";
 
     private Long mFirstTimestamp;
-    private boolean mRunning;
+    private boolean mRunning = true;
     private URI mFilename;
 
     /** Construct a trace data source with the given context and callback.
@@ -84,19 +84,6 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
      */
     public TraceVehicleDataSource(Context context, SourceCallback callback) {
         super(context, callback);
-        mRunning = false;
-    }
-
-    /** Construct a trace data source with the given callback and a custom
-     * filename.
-     *
-     * TODO I don't think we need this anymore, and I think it wouldn't work
-     * anyway - we require a context to open the files. This is a remnant of
-     * when we accepted absolute paths to files on the SD card, for example.
-     */
-    public TraceVehicleDataSource(SourceCallback callback, URI filename)
-            throws VehicleDataSourceException {
-        this(null, callback, filename);
     }
 
     /** Construct a trace data source with the given context, callback and
@@ -136,16 +123,20 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
      *
      * If the callback is not set, this function will exit immediately and the
      * thread will die a quick death.
-     *
-     * TODO why do we let you not set a callback anyway? can that be deprecated?
      */
     public void run() {
-        if(getCallback() != null) {
-            mRunning = true;
-            Log.d(TAG, "Starting the trace playback because we have valid " +
-                    "callback " + getCallback());
+        synchronized(getCallback()) {
+            while(getCallback() == null) {
+                try {
+                    getCallback().wait();
+                } catch(InterruptedException e) {
+                    Log.w(TAG, "Interrupted while waiting for a " +
+                            "callback to be created", e);
+                }
+            }
         }
-
+        Log.d(TAG, "Starting the trace playback because we have valid " +
+                "callback " + getCallback());
 
         while(mRunning) {
             BufferedReader reader;
