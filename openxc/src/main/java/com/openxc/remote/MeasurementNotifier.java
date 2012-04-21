@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.openxc.remote.sinks.AbstractVehicleDataSink;
 
+import android.content.Context;
+
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
@@ -24,7 +26,9 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
 
-    public MeasurementNotifier(Map<String, RawMeasurement> measurements) {
+    public MeasurementNotifier(Context context,
+            Map<String, RawMeasurement> measurements) {
+        super(context);
         mMeasurements = measurements;
         mNotificationQueue = new LinkedBlockingQueue<String>();
         mListeners = Collections.synchronizedMap(

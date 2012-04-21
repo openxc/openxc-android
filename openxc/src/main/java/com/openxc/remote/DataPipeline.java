@@ -17,8 +17,8 @@ import com.google.common.base.Objects;
 import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.VehicleDataSink;
 
+import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.SourceCallback;
-
 import com.openxc.remote.sources.VehicleDataSource;
 
 import android.content.Context;
@@ -59,18 +59,13 @@ public class DataPipeline implements SourceCallback {
         }
     }
 
+    public void removeSink(String sinkName) {
+        removeEndpoint(mSinks, sinkName);
+    }
+
     public VehicleDataSink addSink(VehicleDataSink sink) {
         mSinks.add(sink);
         return sink;
-    }
-
-    public void removeSink(String sinkName) {
-        for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
-            VehicleDataSink sink = i.next();
-            if(sink.getClass().getName().equals(sinkName)) {
-                mSinks.remove(sink);
-            }
-        }
     }
 
     public VehicleDataSink addSink(String sinkName) throws DataSinkException {
@@ -120,20 +115,21 @@ public class DataPipeline implements SourceCallback {
         return sink;
     }
 
-    public void addSource(String sourceName) {
+    public void addSource(String sourceName) throws DataSourceException {
         addSource(sourceName, null);
     }
 
     // TODO do we add duplicate sources of the same type? yes for now, this will
     // screw up some tests that rely on it stopping the previous source
-    public void addSource(String sourceName, String resource) {
+    public VehicleDataSource addSource(String sourceName, String resource)
+            throws DataSourceException {
         Class<? extends VehicleDataSource> sourceType;
         try {
             sourceType = Class.forName(sourceName).asSubclass(
                     VehicleDataSource.class);
         } catch(ClassNotFoundException e) {
             Log.w(TAG, "Couldn't find data source type " + sourceName, e);
-            return;
+            throw new DataSourceException();
         }
 
         Constructor<? extends VehicleDataSource> constructor;
@@ -142,7 +138,7 @@ public class DataPipeline implements SourceCallback {
                     VehicleDataSink.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, sourceType + " doesn't have a proper constructor");
-            return;
+            throw new DataSourceException();
         }
 
         URI resourceUri = uriFromResourceString(resource);
@@ -167,7 +163,31 @@ public class DataPipeline implements SourceCallback {
         }
 
         mSources.add(source);
+        return source;
     }
+
+    public void removeSource(VehicleDataSource source) {
+        if(source != null) {
+            mSources.remove(source);
+            source.stop();
+        }
+    }
+
+    public void removeSource(String sourceName) {
+        removeEndpoint(mSources, sourceName);
+    }
+
+    private void removeEndpoint(CopyOnWriteArrayList endpoints,
+            String endpointName) {
+        for(Iterator<VehicleDataEndpoint> i = endpoints.iterator();
+                i.hasNext();) {
+            VehicleDataEndpoint endpoint = i.next();
+            if(endpoint.getClass().getName().equals(endpointName)) {
+                endpoint.stop();
+                endpoints.remove(endpoint);
+            }
+        }
+    };
 
     public void stop() {
         clearSources();

@@ -9,6 +9,9 @@ import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.FileRecorderSink;
 
+import com.openxc.remote.sources.DataSourceException;
+import com.openxc.remote.sources.DataSourceException;
+import com.openxc.remote.sources.NativeLocationSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import android.app.Service;
@@ -59,7 +62,6 @@ import android.util.Log;
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
-    private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
     private final static String[] DEFAULT_DATA_SOURCES = {
             UsbVehicleDataSource.class.getName(),
     };
@@ -67,7 +69,6 @@ public class RemoteVehicleService extends Service {
             DefaultDataSink.class.getName(),
     };
 
-    private NativeLocationListener mNativeLocationListener;
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
     private MeasurementNotifier mNotifier;
@@ -143,7 +144,11 @@ public class RemoteVehicleService extends Service {
     private void initializeDefaultSources() {
         mPipeline.clearSources();
         for(String sourceName : DEFAULT_DATA_SOURCES) {
-            mPipeline.addSource(sourceName);
+            try {
+                mPipeline.addSource(sourceName);
+            } catch(DataSourceException e) {
+                Log.w(TAG, "Unable to add data source " + sourceName, e);
+            }
         }
     }
 
@@ -185,7 +190,11 @@ public class RemoteVehicleService extends Service {
                         " with resource " + resource);
                 // TODO clearing everything when adding is a legacy feature
                 mPipeline.clearSources();
-                mPipeline.addSource(dataSource, resource);
+                try {
+                    mPipeline.addSource(dataSource, resource);
+                } catch(DataSourceException e) {
+                    Log.w(TAG, "Unable to add data source", e);
+                }
             }
 
             public void enableRecording(boolean enabled) {
@@ -202,45 +211,6 @@ public class RemoteVehicleService extends Service {
             public int getMessageCount() {
                 return RemoteVehicleService.this.getMessageCount();
             }
-    };
-
-    // TODO convert this to a data source
-    private class NativeLocationListener extends Thread
-            implements LocationListener {
-        public void run() {
-            Looper.myLooper().prepare();
-            LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-
-            // try to grab a rough location from the network provider before
-            // registering for GPS, which may take a while to initialize
-            Location lastKnownLocation = locationManager.getLastKnownLocation(
-                        LocationManager.NETWORK_PROVIDER);
-            if(lastKnownLocation != null) {
-                onLocationChanged(lastKnownLocation);
-            }
-
-            try {
-                locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        NATIVE_GPS_UPDATE_INTERVAL, 0,
-                        this);
-                Log.d(TAG, "Requested GPS updates");
-            } catch(IllegalArgumentException e) {
-                Log.w(TAG, "GPS location provider is unavailable");
-            }
-            Looper.myLooper().loop();
-        }
-
-        public void onLocationChanged(final Location location) {
-            mPipeline.receive(Latitude.ID, location.getLatitude(), null);
-            mPipeline.receive(Longitude.ID, location.getLongitude(), null);
-        }
-
-        public void onStatusChanged(String provider, int status,
-                Bundle extras) {}
-        public void onProviderEnabled(String provider) {}
-        public void onProviderDisabled(String provider) {}
     };
 
     private void enableRecording(boolean enabled) {
@@ -260,15 +230,13 @@ public class RemoteVehicleService extends Service {
 
     private void enableNativeGpsPassthrough(boolean enabled) {
         if(enabled) {
-            Log.i(TAG, "Enabled native GPS passthrough");
-            mNativeLocationListener = new NativeLocationListener();
-            mNativeLocationListener.start();
-        } else if(mNativeLocationListener != null) {
-            LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-            Log.i(TAG, "Disabled native GPS passthrough");
-            locationManager.removeUpdates(mNativeLocationListener);
-            mNativeLocationListener = null;
+            try {
+                mPipeline.addSource(NativeLocationSource.class.getName());
+            } catch(DataSourceException e) {
+                Log.w(TAG, "Unable to enable native GPS passthrough", e);
+            }
+        } else {
+            mPipeline.removeSource(NativeLocationSource.class.getName());
         }
     }
 

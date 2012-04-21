@@ -2,6 +2,8 @@ package com.openxc.remote.sources;
 
 import com.openxc.remote.sources.SourceCallback;
 
+import com.openxc.remote.VehicleDataEndpoint;
+
 /**
  * The interface for all sources of raw vehicle measurements.
  *
@@ -9,7 +11,7 @@ import com.openxc.remote.sources.SourceCallback;
  * implements the DataPipeline - its receive() methods are
  * passed values from the data source.
  */
-public interface VehicleDataSource extends Runnable {
+public interface VehicleDataSource extends Runnable, VehicleDataEndpoint {
     /**
      * Set the callback for receiving raw measurements as they are received.
      *

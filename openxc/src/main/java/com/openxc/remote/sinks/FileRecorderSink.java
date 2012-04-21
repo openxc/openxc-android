@@ -44,6 +44,7 @@ public class FileRecorderSink extends AbstractVehicleDataSink {
     }
 
     public FileRecorderSink(Context context) {
+        super(context);
         mContext = context;
         openTimestampedFile();
     }

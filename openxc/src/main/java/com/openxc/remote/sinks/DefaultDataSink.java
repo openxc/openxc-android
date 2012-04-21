@@ -35,16 +35,15 @@ public class DefaultDataSink extends AbstractVehicleDataSink {
     public final static String TAG = "DefaultDataSink";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
-    private Context mContext;
     private LocationManager mLocationManager;
     private Map<String, RawMeasurement> mMeasurements;
     private VehicleDataSink mDataSink;
 
     public DefaultDataSink(Context context,
             Map<String, RawMeasurement> measurements) {
-        mContext = context;
+        super(context);
         mMeasurements = measurements;
-        mLocationManager = (LocationManager) context.getSystemService(
+        mLocationManager = (LocationManager) getContext().getSystemService(
                 Context.LOCATION_SERVICE);
         setupMockLocations();
     }
