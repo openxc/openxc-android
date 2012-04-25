@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 import com.openxc.remote.sinks.VehicleDataSink;
 
@@ -39,6 +40,7 @@ public class DataPipelineTest {
         pipeline.addSource(source);
         assertThat(pipeline.getSinks().size(), equalTo(1));
         assertThat((TestSource) pipeline.getSinks().get(0), equalTo(source));
+        assertThat(source.callback, notNullValue());
     }
 
     @Test
@@ -109,14 +111,15 @@ public class DataPipelineTest {
     }
 
     private class TestSource implements VehicleDataSource {
-        private SourceCallback mCallback;
+        private SourceCallback callback;
 
         public void sendTestMessage() {
-            mCallback.receive("message", "value", "event");
+            assertThat(source.callback, notNullValue());
+            callback.receive("message", "value", "event");
         }
 
-        public void setCallback(SourceCallback callback) {
-            mCallback = callback;
+        public void setCallback(SourceCallback theCallback) {
+            callback = theCallback;
         }
 
         public void stop() {

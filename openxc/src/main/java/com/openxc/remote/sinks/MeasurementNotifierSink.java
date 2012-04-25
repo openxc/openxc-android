@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.openxc.remote.RawMeasurement;
 
-import com.openxc.remote.sinks.AbstractVehicleDataSink;
+import com.openxc.remote.sinks.BaseVehicleDataSink;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import android.os.RemoteCallbackList;
@@ -18,7 +18,7 @@ import android.os.RemoteException;
 
 import android.util.Log;
 
-public class MeasurementNotifierSink extends AbstractVehicleDataSink {
+public class MeasurementNotifierSink extends BaseVehicleDataSink {
     private final static String TAG = "MeasurementNotifierSink";
 
     private NotificationThread mNotificationThread;

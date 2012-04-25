@@ -11,39 +11,36 @@ import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import static org.mockito.Mockito.*;
+
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import android.os.Parcelable;
+import android.os.RemoteException;
 
-public class MeasurementNotifierSinkTest {
+public class MeasurementNotifierSinkTest extends AndroidTestCase {
     Map<String, RawMeasurement> measurements;
     MeasurementNotifierSink notifier;
     RemoteVehicleServiceListenerInterface listener;
     String measurementId = "the_measurement";
-    String receivedId = null;
 
-    @Before
+    @Override
     public void setUp() {
         // TODO what are the contractual guarantees that this class says about
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
         notifier = new MeasurementNotifierSink(measurements);
-        listener = new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receive(String measurementId, RawMeasurement value) {
-                receivedId = measurementId;
-            }
-        };
+        listener = mock(RemoteVehicleServiceListenerInterface.class);
     }
 
-    @Test
+    @SmallTest
     public void testRegister() {
         assertThat(notifier.getListenerCount(), equalTo(0));
         notifier.register(measurementId, listener);
         assertThat(notifier.getListenerCount(), equalTo(1));
     }
 
-    @Test
+    @SmallTest
     public void testUnregisterInvalid() {
         // this just shouldn't explode, it should ignore it...or should it?
         // failing silently is usually a bad thing
@@ -52,7 +49,7 @@ public class MeasurementNotifierSinkTest {
         assertThat(notifier.getListenerCount(), equalTo(0));
     }
 
-    @Test
+    @SmallTest
     public void testUnregisterValid() {
         notifier.register(measurementId, listener);
         assertThat(notifier.getListenerCount(), equalTo(1));
@@ -60,19 +57,19 @@ public class MeasurementNotifierSinkTest {
         assertThat(notifier.getListenerCount(), equalTo(0));
     }
 
-    @Test
-    public void testReceiveCorrectId() {
+    @SmallTest
+    public void testReceiveCorrectId() throws RemoteException {
         notifier.register(measurementId, listener);
-        assertThat(receivedId, equalTo(null));
+        verify(listener, never()).receive(eq(measurementId), any(RawMeasurement.class));
         notifier.receive(measurementId, new RawMeasurement(1));
-        assertThat(receivedId, equalTo(measurementId));
+        verify(listener).receive(eq(measurementId), any(RawMeasurement.class));
     }
 
-    @Test
-    public void testNoReceiveAnotherId() {
+    @SmallTest
+    public void testNoReceiveAnotherId() throws RemoteException {
         notifier.register(measurementId, listener);
-        assertThat(receivedId, equalTo(null));
+        verify(listener, never()).receive(eq(measurementId), any(RawMeasurement.class));
         notifier.receive("another_measurement", new RawMeasurement(1));
-        assertThat(receivedId, equalTo(null));
+        verify(listener, never()).receive(eq(measurementId), any(RawMeasurement.class));
     }
 }

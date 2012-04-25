@@ -17,12 +17,11 @@ import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.FileRecorderSink;
 import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.remote.sinks.MeasurementNotifierSink;
 
-import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.NativeLocationSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
-
 import com.openxc.remote.sources.VehicleDataSource;
 
 import android.app.Service;
@@ -82,7 +81,7 @@ public class RemoteVehicleService extends Service {
 
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
-    private MeasurementNotifier mNotifier;
+    private MeasurementNotifierSink mNotifier;
 
     @Override
     public void onCreate() {
@@ -118,9 +117,9 @@ public class RemoteVehicleService extends Service {
 
         mPipeline.removeSink(mNotifier);
         try {
-            mNotifier = (MeasurementNotifier) mPipeline.addSink(
+            mNotifier = (MeasurementNotifierSink) mPipeline.addSink(
                     createSinkFromClassName(
-                        MeasurementNotifier.class.getName()));
+                        MeasurementNotifierSink.class.getName()));
         } catch(DataSinkException e) {
             Log.w(TAG, "Unable to add notifier to pipeline sinks", e);
         }
