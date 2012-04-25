@@ -90,6 +90,16 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         return mWriter != null;
     }
 
+    public void flush() {
+        if(isRunning()) {
+            try {
+                mWriter.flush();
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to flush writer", e);
+            }
+        }
+    }
+
     private void openTimestampedFile() {
         mLastFileCreated = new Date();
         String filename = sDateFormatter.format(mLastFileCreated) + ".json";

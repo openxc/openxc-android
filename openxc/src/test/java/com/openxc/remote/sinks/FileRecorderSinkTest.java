@@ -55,6 +55,7 @@ public class FileRecorderSinkTest {
     public void testReceiveValueOnly() {
         assertThat(outputString.toString(), not(containsString(measurementId)));
         sink.receive(measurementId, value);
+        sink.flush();
         assertThat(outputString.toString(), containsString(measurementId));
         assertThat(outputString.toString(), containsString(value));
     }
@@ -62,6 +63,7 @@ public class FileRecorderSinkTest {
     @Test
     public void testReceiveEvented() {
         sink.receive(measurementId, value, event);
+        sink.flush();
         assertThat(outputString.toString(), containsString(measurementId));
         assertThat(outputString.toString(), containsString(value));
         assertThat(outputString.toString(), containsString(event));
@@ -70,6 +72,7 @@ public class FileRecorderSinkTest {
     @Test
     public void testReceiveRawMeasurement() {
         sink.receive(measurementId, new RawMeasurement(value));
+        sink.flush();
         assertThat(outputString.toString(), containsString(measurementId));
         assertThat(outputString.toString(), containsString(value));
     }
