@@ -16,7 +16,7 @@ import com.openxc.remote.RawMeasurement;
  * {@link #receive(String, Object)} and {@link #receive(String, Object, Object)}
  * methods.
  */
-public abstract class AbstractVehicleDataSink implements VehicleDataSink {
+public class BaseVehicleDataSink implements VehicleDataSink {
     /**
      * Receive a data point with a name, a value and a event value.
      *
@@ -56,8 +56,7 @@ public abstract class AbstractVehicleDataSink implements VehicleDataSink {
      * but I remember I struggled with that for a day or two. Perhaps worth
      * revisiting because these double receive() methods are weird.
      */
-    public void receive(String measurementId,
-            RawMeasurement measurement) {
+    public void receive(String measurementId, RawMeasurement measurement) {
         // do nothing unless you override it
     }
 

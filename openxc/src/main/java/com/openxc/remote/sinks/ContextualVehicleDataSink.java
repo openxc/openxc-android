@@ -2,7 +2,7 @@ package com.openxc.remote.sinks;
 
 import android.content.Context;
 
-public abstract class ContextualVehicleDataSink extends AbstractVehicleDataSink {
+public class ContextualVehicleDataSink extends BaseVehicleDataSink {
     private Context mContext;
 
     public ContextualVehicleDataSink(Context context) {
