@@ -40,9 +40,6 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         openTimestampedFile();
     }
 
-    public void receive(String measurementId, RawMeasurement measurement) {
-    }
-
     /**
      * Record a message to a file, selected by the current time.
      */
@@ -76,7 +73,6 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         } else {
             Log.w(TAG, "No valid writer - not recording trace line");
         }
-
     }
 
     public void stop() {
@@ -88,6 +84,10 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             }
             mWriter = null;
         }
+    }
+
+    public boolean isRunning() {
+        return mWriter != null;
     }
 
     private void openTimestampedFile() {

@@ -225,7 +225,8 @@ public class RemoteVehicleService extends Service {
         return createSinkFromClassName(sinkName, null);
     }
 
-    // TODO move all of this to a helper class
+    // TODO move all of this to a helper class or kill it and just instantiate
+    // directly
     // TODO do we add duplicate types? yes for now
     public VehicleDataSink createSinkFromClassName(String sinkName, String resource)
             throws DataSinkException {
