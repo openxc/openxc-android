@@ -1,8 +1,6 @@
 package com.openxc.remote.sinks;
 
 import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 import java.util.Date;
@@ -15,8 +13,9 @@ import org.json.JSONObject;
 
 import com.openxc.remote.RawMeasurement;
 
+import com.openxc.util.FileOpener;
+
 import android.util.Log;
-import android.content.Context;
 
 /**
  * Record raw vehicle measurements to a file as JSON.
@@ -25,7 +24,7 @@ import android.content.Context;
  * measurement as it arrives to a file on the device. It splits the stream to a
  * different file every hour.
  */
-public class FileRecorderSink extends ContextualVehicleDataSink {
+public class FileRecorderSink extends BaseVehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private static SimpleDateFormat sDateFormatter =
             new SimpleDateFormat("yyyy-MM-dd-HH");
@@ -34,9 +33,10 @@ public class FileRecorderSink extends ContextualVehicleDataSink {
 
     private BufferedWriter mWriter;
     private Date mLastFileCreated;
+    private FileOpener mFileOpener;
 
-    public FileRecorderSink(Context context) {
-        super(context);
+    public FileRecorderSink(FileOpener fileOpener) {
+        mFileOpener = fileOpener;
         openTimestampedFile();
     }
 
@@ -95,9 +95,7 @@ public class FileRecorderSink extends ContextualVehicleDataSink {
         String filename = sDateFormatter.format(mLastFileCreated) + ".json";
         Log.i(TAG, "Opening trace file " + filename + " for writing");
         try {
-            OutputStream outputStream = getContext().openFileOutput(filename,
-                    Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
-            mWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+            mWriter = mFileOpener.openForWriting(filename);
         } catch(IOException e) {
             Log.w(TAG, "Unable to open " + filename + " for writing", e);
             mWriter = null;

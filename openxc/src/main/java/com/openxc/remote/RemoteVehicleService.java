@@ -24,6 +24,8 @@ import com.openxc.remote.sources.NativeLocationSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.VehicleDataSource;
 
+import com.openxc.util.AndroidFileOpener;
+
 import android.app.Service;
 
 import android.content.Context;
@@ -328,16 +330,13 @@ public class RemoteVehicleService extends Service {
     };
 
     private void enableRecording(boolean enabled) {
-        // TODO need a flag in this functio to say if it should be unique in its
-        // type as we want to stop other recorders. for now we'll just clear 'em
+        // TODO need a flag in this function to say if it should be unique in
+        // its type as we want to stop other recorders. for now we'll just clear
+        // 'em
         if(enabled) {
             initializeDefaultSinks();
-            try {
-                mPipeline.addSink(createSinkFromClassName(
-                            FileRecorderSink.class.getName()));
-            } catch(DataSinkException e) {
-                Log.w(TAG, "Unable to enable recording", e);
-            }
+            mPipeline.addSink(
+                    new FileRecorderSink(new AndroidFileOpener(this)));
         } else {
              mPipeline.removeSink(FileRecorderSink.class.getName());
         }
