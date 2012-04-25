@@ -1,4 +1,4 @@
-package com.openxc.remote;
+package com.openxc.remote.sinks;
 
 import java.util.Collections;
 
@@ -8,15 +8,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.remote.sinks.AbstractVehicleDataSink;
+import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
 import android.util.Log;
 
-public class MeasurementNotifier extends AbstractVehicleDataSink {
-    private final static String TAG = "MeasurementNotifier";
+public class MeasurementNotifierSink extends AbstractVehicleDataSink {
+    private final static String TAG = "MeasurementNotifierSink";
 
     private NotificationThread mNotificationThread;
     private BlockingQueue<String> mNotificationQueue;
@@ -24,7 +27,7 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
 
-    public MeasurementNotifier(Map<String, RawMeasurement> measurements) {
+    public MeasurementNotifierSink(Map<String, RawMeasurement> measurements) {
         mMeasurements = measurements;
         mNotificationQueue = new LinkedBlockingQueue<String>();
         mListeners = Collections.synchronizedMap(

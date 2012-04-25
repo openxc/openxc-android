@@ -1,4 +1,4 @@
-package com.openxc.remote;
+package com.openxc.remote.sinks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +11,14 @@ import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import com.openxc.remote.RawMeasurement;
+import com.openxc.remote.RemoteVehicleServiceListenerInterface;
+
 import android.os.Parcelable;
 
-public class MeasurementNotifierTest {
+public class MeasurementNotifierSinkTest {
     Map<String, RawMeasurement> measurements;
-    MeasurementNotifier notifier;
+    MeasurementNotifierSink notifier;
     RemoteVehicleServiceListenerInterface listener;
     String measurementId = "the_measurement";
     String receivedId = null;
@@ -25,7 +28,7 @@ public class MeasurementNotifierTest {
         // TODO what are the contractual guarantees that this class says about
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
-        notifier = new MeasurementNotifier(measurements);
+        notifier = new MeasurementNotifierSink(measurements);
         listener = new RemoteVehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId, RawMeasurement value) {
                 receivedId = measurementId;
