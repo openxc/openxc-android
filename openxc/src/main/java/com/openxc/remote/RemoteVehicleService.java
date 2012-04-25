@@ -1,5 +1,13 @@
 package com.openxc.remote;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import java.net.URISyntaxException;
+import java.net.URI;
+
+import java.util.Map;
+
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 
@@ -8,11 +16,14 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.FileRecorderSink;
+import com.openxc.remote.sinks.VehicleDataSink;
 
 import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.NativeLocationSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
+
+import com.openxc.remote.sources.VehicleDataSource;
 
 import android.app.Service;
 
@@ -77,7 +88,7 @@ public class RemoteVehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mPipeline = new DataPipeline(this);
+        mPipeline = new DataPipeline();
         initializeDefaultSinks();
         initializeDefaultSources();
         acquireWakeLock();
@@ -108,7 +119,8 @@ public class RemoteVehicleService extends Service {
         mPipeline.removeSink(mNotifier);
         try {
             mNotifier = (MeasurementNotifier) mPipeline.addSink(
-                    MeasurementNotifier.class.getName());
+                    createSinkFromClassName(
+                        MeasurementNotifier.class.getName()));
         } catch(DataSinkException e) {
             Log.w(TAG, "Unable to add notifier to pipeline sinks", e);
         }
@@ -134,7 +146,7 @@ public class RemoteVehicleService extends Service {
         mPipeline.clearSinks();
         for(String sinkName : DEFAULT_DATA_SINKS) {
             try {
-                mPipeline.addSink(sinkName);
+                mPipeline.addSink(createSinkFromClassName(sinkName));
             } catch(DataSinkException e) {
                 Log.w(TAG, "Unable to add data sink " + sinkName, e);
             }
@@ -145,11 +157,113 @@ public class RemoteVehicleService extends Service {
         mPipeline.clearSources();
         for(String sourceName : DEFAULT_DATA_SOURCES) {
             try {
-                mPipeline.addSource(sourceName);
+                mPipeline.addSource(createSourceFromClassName(sourceName));
             } catch(DataSourceException e) {
                 Log.w(TAG, "Unable to add data source " + sourceName, e);
             }
         }
+    }
+
+    public VehicleDataSource createSourceFromClassName(String sourceName)
+            throws DataSourceException {
+        return createSourceFromClassName(sourceName, null);
+    }
+
+    // TODO do we add duplicate sources of the same type? yes for now, this will
+    // screw up some tests that rely on it stopping the previous source
+    public VehicleDataSource createSourceFromClassName(String sourceName, String resource)
+            throws DataSourceException {
+        Class<? extends VehicleDataSource> sourceType;
+        try {
+            sourceType = Class.forName(sourceName).asSubclass(
+                    VehicleDataSource.class);
+        } catch(ClassNotFoundException e) {
+            Log.w(TAG, "Couldn't find data source type " + sourceName, e);
+            throw new DataSourceException();
+        }
+
+        Constructor<? extends VehicleDataSource> constructor;
+        try {
+            constructor = sourceType.getConstructor(Context.class,
+                    VehicleDataSink.class, URI.class);
+        } catch(NoSuchMethodException e) {
+            Log.w(TAG, sourceType + " doesn't have a proper constructor");
+            throw new DataSourceException();
+        }
+
+        URI resourceUri = uriFromResourceString(resource);
+
+        VehicleDataSource source = null;
+        try {
+            source = constructor.newInstance(this, this, resourceUri);
+        } catch(InstantiationException e) {
+            Log.w(TAG, "Couldn't instantiate data source " + sourceType, e);
+        } catch(IllegalAccessException e) {
+            Log.w(TAG, "Default constructor is not accessible on " +
+                    sourceType, e);
+        } catch(InvocationTargetException e) {
+            Log.w(TAG, sourceType + "'s constructor threw an exception",
+                    e);
+        }
+        return source;
+    }
+
+    private URI uriFromResourceString(String resource) {
+        URI resourceUri = null;
+        if(resource != null) {
+            try {
+                resourceUri = new URI(resource);
+            } catch(URISyntaxException e) {
+                Log.w(TAG, "Unable to parse resource as URI " + resource);
+            }
+        }
+        return resourceUri;
+    }
+
+    public VehicleDataSink createSinkFromClassName(String sinkName) throws DataSinkException {
+        return createSinkFromClassName(sinkName, null);
+    }
+
+    // TODO move all of this to a helper class
+    // TODO do we add duplicate types? yes for now
+    public VehicleDataSink createSinkFromClassName(String sinkName, String resource)
+            throws DataSinkException {
+        Class<? extends VehicleDataSink> sinkType;
+        try {
+            sinkType = Class.forName(sinkName).asSubclass(
+                    VehicleDataSink.class);
+        } catch(ClassNotFoundException e) {
+            Log.w(TAG, "Couldn't find data sink type " + sinkName, e);
+            throw new DataSinkException();
+        }
+
+        Constructor<? extends VehicleDataSink> constructor;
+        try {
+            constructor = sinkType.getConstructor(Context.class, Map.class);
+        } catch(NoSuchMethodException e) {
+            Log.w(TAG, sinkType + " doesn't have a proper constructor");
+            throw new DataSinkException();
+        }
+
+        URI resourceUri = uriFromResourceString(resource);
+
+        VehicleDataSink sink = null;
+        try {
+            sink = constructor.newInstance(this, resourceUri);
+        } catch(InstantiationException e) {
+            Log.w(TAG, "Couldn't instantiate data sink " + sinkType, e);
+        } catch(IllegalAccessException e) {
+            Log.w(TAG, "Default constructor is not accessible on " +
+                    sinkType, e);
+        } catch(InvocationTargetException e) {
+            Log.w(TAG, sinkType + "'s constructor threw an exception",
+                    e);
+        }
+
+        if(sink != null) {
+            Log.i(TAG, "Initializing vehicle data sink " + sink);
+        }
+        return sink;
     }
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
@@ -191,7 +305,8 @@ public class RemoteVehicleService extends Service {
                 // TODO clearing everything when adding is a legacy feature
                 mPipeline.clearSources();
                 try {
-                    mPipeline.addSource(dataSource, resource);
+                    mPipeline.addSource(createSourceFromClassName(
+                                dataSource, resource));
                 } catch(DataSourceException e) {
                     Log.w(TAG, "Unable to add data source", e);
                 }
@@ -219,7 +334,8 @@ public class RemoteVehicleService extends Service {
         if(enabled) {
             initializeDefaultSinks();
             try {
-                mPipeline.addSink(FileRecorderSink.class.getName());
+                mPipeline.addSink(createSinkFromClassName(
+                            FileRecorderSink.class.getName()));
             } catch(DataSinkException e) {
                 Log.w(TAG, "Unable to enable recording", e);
             }
@@ -231,7 +347,8 @@ public class RemoteVehicleService extends Service {
     private void enableNativeGpsPassthrough(boolean enabled) {
         if(enabled) {
             try {
-                mPipeline.addSource(NativeLocationSource.class.getName());
+                mPipeline.addSource(createSourceFromClassName(
+                            NativeLocationSource.class.getName()));
             } catch(DataSourceException e) {
                 Log.w(TAG, "Unable to enable native GPS passthrough", e);
             }
