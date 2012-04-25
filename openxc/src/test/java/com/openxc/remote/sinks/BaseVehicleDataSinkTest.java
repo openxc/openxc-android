@@ -12,7 +12,7 @@ public class BaseVehicleDataSinkTest {
 
     @Before
     public void setUp() {
-        sink = mock(BaseVehicleDataSink.class);
+        sink = spy(new BaseVehicleDataSink());
     }
 
     @Test
