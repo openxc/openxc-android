@@ -70,19 +70,16 @@ public class FileRecorderSinkTest {
     }
 
     @Test
-    public void testReceiveRawMeasurement() {
-        sink.receive(measurementId, new RawMeasurement(value));
+    public void testOutputFormat() throws JSONException {
+        sink.receive(measurementId, value);
         sink.flush();
-        assertThat(outputString.toString(), containsString(measurementId));
-        assertThat(outputString.toString(), containsString(value));
-    }
 
-    @Test
-    public void testValidJson() throws JSONException {
-        sink.receive(measurementId, new RawMeasurement(value));
+        System.out.println("FOO: " + outputString);
+        String[] record = outputString.toString().split(":", 2);
+        assertThat(record.length, equalTo(2));
 
         JSONObject message;
-        message = new JSONObject(outputString.toString());
+        message = new JSONObject(record[1]);
         assertThat(message.getString("name"), equalTo(measurementId));
         assertThat(message.getString("value"), equalTo(value));
     }
