@@ -38,8 +38,8 @@ public class DataPipelineTest {
     @Test
     public void testAddSource() {
         pipeline.addSource(source);
-        assertThat(pipeline.getSinks().size(), equalTo(1));
-        assertThat((TestSource) pipeline.getSinks().get(0), equalTo(source));
+        assertThat(pipeline.getSources().size(), equalTo(1));
+        assertThat((TestSource) pipeline.getSources().get(0), equalTo(source));
         assertThat(source.callback, notNullValue());
     }
 
@@ -98,7 +98,8 @@ public class DataPipelineTest {
         TestSink anotherSink = new TestSink();
         pipeline.addSink(anotherSink);
         pipeline.removeSink(sink);
-        assertThat((TestSink) pipeline.getSinks().get(0), equalTo(sink));
+        assertThat((TestSink) pipeline.getSinks().get(0),
+                equalTo(anotherSink));
     }
 
     @Test
@@ -107,7 +108,8 @@ public class DataPipelineTest {
         TestSource anotherSource = new TestSource();
         pipeline.addSource(anotherSource);
         pipeline.removeSource(source);
-        assertThat((TestSource) pipeline.getSources().get(0), equalTo(source));
+        assertThat((TestSource) pipeline.getSources().get(0),
+                equalTo(anotherSource));
     }
 
     private class TestSource implements VehicleDataSource {

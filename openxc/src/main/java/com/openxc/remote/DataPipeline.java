@@ -114,12 +114,14 @@ public class DataPipeline implements SourceCallback {
         for(Iterator<VehicleDataSource> i = mSources.iterator(); i.hasNext();) {
             (i.next()).stop();
         }
+        mSources.clear();
     }
 
     public void clearSinks() {
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             (i.next()).stop();
         }
+        mSinks.clear();
     }
 
     public RawMeasurement get(String measurementId) {
