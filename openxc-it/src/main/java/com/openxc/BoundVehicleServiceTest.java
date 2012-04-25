@@ -114,7 +114,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         // TODO I don't think this test case is actually working - switching
         // data sources seems really difficult to do in test case
         // let some measurements flow in so we have some known values
-        pause(100);
+        pause(300);
         // kill the incoming data stream
         service.setDataSource(UsbVehicleDataSource.class.getName());
         pause(500);
@@ -127,7 +127,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        pause(100);
+        pause(300);
         checkReceivedMeasurement(speedReceived);
     }
 
