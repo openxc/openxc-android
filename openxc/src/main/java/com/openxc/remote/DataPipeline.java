@@ -24,8 +24,6 @@ import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSource;
 
-import android.util.Log;
-
 /**
  * The DataPipeline ferries raw messages from VehicleDataSources to
  * VehicleDataSinks.
@@ -81,7 +79,6 @@ public class DataPipeline implements SourceCallback {
     // TODO we need to set ourselves as the callback for the source?
     public void addSource(VehicleDataSource source) {
         if(source != null) {
-            Log.i(TAG, "Initializing vehicle data source " + source);
             new Thread(source).start();
         }
 
