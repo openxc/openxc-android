@@ -53,26 +53,15 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
         }
     }
 
-    private void startSource(VehicleDataSource source) {
-        thread = new Thread(source);
-        thread.start();
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e){ }
-    }
-
-
     @SmallTest
     public void testDefaultDevice() throws VehicleDataSourceException {
         source = new UsbVehicleDataSource(getContext(), callback);
-        startSource(source);
     }
 
     @SmallTest
     public void testCustomDevice() throws VehicleDataSourceException {
         source = new UsbVehicleDataSource(getContext(), callback,
                 deviceUri);
-        startSource(source);
     }
 
     @SmallTest
