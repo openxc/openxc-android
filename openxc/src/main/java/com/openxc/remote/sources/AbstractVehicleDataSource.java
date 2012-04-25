@@ -19,6 +19,9 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
     private static final String RECEIVE_METHOD_NAME = "receive";
 
     private SourceCallback mCallback;
+    // TODO see if we can move context to another subclass just like we need to
+    // do with sinks - not all sources need it and otherwise this is a
+    // non-Android class
     private Context mContext;
 
     public AbstractVehicleDataSource() { }
@@ -58,6 +61,8 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
     protected void handleMessage(String name, Object value, Object event) {
         if(mCallback != null) {
             Method method;
+            // TODO since we now have an interace, I think all of this
+            // metaprogramming is unnecessary. yay!
             try {
                 method = SourceCallback.class.getMethod(
                         RECEIVE_METHOD_NAME, String.class, Object.class,

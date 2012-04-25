@@ -19,6 +19,8 @@ import android.content.Context;
  * methods.
  */
 public abstract class AbstractVehicleDataSink implements VehicleDataSink {
+    // TODO move context to some other subclass? not everybody needs it and
+    // otherwise this class could be non-Android
     private Context mContext;
 
     protected AbstractVehicleDataSink(Context context) {

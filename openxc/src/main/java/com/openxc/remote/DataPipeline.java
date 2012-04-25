@@ -34,10 +34,13 @@ public class DataPipeline implements SourceCallback {
 
     private Context mContext;
     private int mMessagesReceived = 0;
+    // TODO move all of the measurement stuff to a sink
+    // and have the RVS create and handle that sink itself
     private Map<String, RawMeasurement> mMeasurements;
     private CopyOnWriteArrayList<VehicleDataSink> mSinks;
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
 
+    // TODO drop context and require RVS to create all sinks and sources itself
     public DataPipeline(Context context) {
         mContext = context;
         mMeasurements = new HashMap<String, RawMeasurement>();
@@ -72,6 +75,7 @@ public class DataPipeline implements SourceCallback {
         return addSink(sinkName, null);
     }
 
+    // TODO move all of this magic logic to the RVS or some other helper class
     // TODO do we add duplicate types? yes for now
     public VehicleDataSink addSink(String sinkName, String resource)
             throws DataSinkException {
@@ -115,6 +119,7 @@ public class DataPipeline implements SourceCallback {
         return sink;
     }
 
+    // TODO we need to set ourselves as the callback for the source?
     public void addSource(String sourceName) throws DataSourceException {
         addSource(sourceName, null);
     }
