@@ -14,7 +14,7 @@ import android.os.Looper;
 
 import android.util.Log;
 
-public class NativeLocationSource extends AbstractVehicleDataSource
+public class NativeLocationSource extends BaseVehicleDataSource
         implements LocationListener, Runnable {
     private final static String TAG = "NativeLocationSource";
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;

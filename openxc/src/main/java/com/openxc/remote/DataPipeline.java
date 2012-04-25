@@ -76,12 +76,8 @@ public class DataPipeline implements SourceCallback {
         return mSources;
     }
 
-    // TODO we need to set ourselves as the callback for the source?
     public void addSource(VehicleDataSource source) {
-        if(source != null) {
-            new Thread(source).start();
-        }
-
+        source.setCallback(this);
         mSources.add(source);
     }
 

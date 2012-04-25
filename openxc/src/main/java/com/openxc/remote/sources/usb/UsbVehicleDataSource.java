@@ -48,7 +48,8 @@ import android.util.Log;
  * cause a pop-up dialog that the user must dismiss before the data source will
  * become active.
  */
-public class UsbVehicleDataSource extends JsonVehicleDataSource {
+public class UsbVehicleDataSource extends JsonVehicleDataSource
+        implements Runnable {
     private static final String TAG = "UsbVehicleDataSource";
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
@@ -129,6 +130,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource {
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
         }
+        new Thread(this).start();
     }
 
     /**

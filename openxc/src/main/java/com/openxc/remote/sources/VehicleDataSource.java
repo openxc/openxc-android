@@ -13,7 +13,7 @@ import com.openxc.remote.VehicleDataEndpoint;
  */
 // TODO source shouldn't have to implement run(), let them take care of that
 // themselves
-public interface VehicleDataSource extends Runnable, VehicleDataEndpoint {
+public interface VehicleDataSource extends VehicleDataEndpoint {
     /**
      * Set the callback for receiving raw measurements as they are received.
      *

@@ -10,12 +10,12 @@ import android.util.Log;
 import com.openxc.remote.sources.SourceCallback;
 
 /**
- * The AbstractVehicleDataSource contains functions common to all vehicle data
+ * The BaseVehicleDataSource contains functions common to all vehicle data
  * sources.
  */
-public abstract class AbstractVehicleDataSource implements VehicleDataSource {
+public class BaseVehicleDataSource implements VehicleDataSource {
 
-    private static final String TAG = "AbstractVehicleDataSource";
+    private static final String TAG = "BaseVehicleDataSource";
     private static final String RECEIVE_METHOD_NAME = "receive";
 
     private SourceCallback mCallback;
@@ -24,7 +24,7 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
     // non-Android class
     private Context mContext;
 
-    public AbstractVehicleDataSource() { }
+    public BaseVehicleDataSource() { }
 
     /**
      * Construct a new instance with the given context and set the callback.
@@ -34,7 +34,7 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
      *      SourceCallback interface that should receive data from this
      *      source.
      */
-    public AbstractVehicleDataSource(Context context, SourceCallback callback) {
+    public BaseVehicleDataSource(Context context, SourceCallback callback) {
         mContext = context;
         setCallback(callback);
     }
@@ -46,12 +46,16 @@ public abstract class AbstractVehicleDataSource implements VehicleDataSource {
      *      SourceCallback that should receive data from this
      *      source.
      */
-    public AbstractVehicleDataSource(SourceCallback callback) {
+    public BaseVehicleDataSource(SourceCallback callback) {
         this(null, callback);
     }
 
     public void setCallback(SourceCallback callback) {
         mCallback = callback;
+    }
+
+    public void stop() {
+        // do nothing by default
     }
 
     protected void handleMessage(String name, Object value) {

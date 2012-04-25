@@ -59,10 +59,10 @@ import android.util.Log;
  * as the original recording (at least according to the timestamps in the file).
  *
  * Playback will not begin until a callback is set, either via a constructor or
- * the {@link * com.openxc.remote.sources.AbstractVehicleDataSource#setCallback(SourceCallback)}
+ * the {@link * com.openxc.remote.sources.BaseVehicleDataSource#setCallback(SourceCallback)}
  * function.
  */
-public class TraceVehicleDataSource extends JsonVehicleDataSource {
+public class TraceVehicleDataSource extends JsonVehicleDataSource implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
     private Long mFirstTimestamp;
@@ -84,6 +84,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource {
      */
     public TraceVehicleDataSource(Context context, SourceCallback callback) {
         super(context, callback);
+        new Thread(this).start();
     }
 
     /** Construct a trace data source with the given context, callback and

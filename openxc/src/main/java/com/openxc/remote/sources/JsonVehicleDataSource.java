@@ -22,7 +22,7 @@ import android.util.Log;
  * TODO Is it weird that this is data source class, but isn't a data source? It
  * feels more like a mixin, but that doesn't fit well with Java.
  */
-public abstract class JsonVehicleDataSource extends AbstractVehicleDataSource {
+public abstract class JsonVehicleDataSource extends BaseVehicleDataSource {
     private static final String TAG = "JsonVehicleDataSource";
 
     public JsonVehicleDataSource() {
