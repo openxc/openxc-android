@@ -16,15 +16,15 @@ import static org.junit.Assert.assertFalse;
 import org.mockito.invocation.InvocationOnMock;
 
 import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import com.openxc.remote.RawMeasurement;
 
 import com.openxc.util.FileOpener;
 
