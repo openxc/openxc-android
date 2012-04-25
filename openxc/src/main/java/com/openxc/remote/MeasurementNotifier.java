@@ -50,6 +50,19 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
         getOrCreateCallbackList(measurementId).unregister(listener);
     }
 
+    public int getListenerCount() {
+        return mListeners.size();
+    }
+
+    public void receive(String measurementId,
+            RawMeasurement measurement) {
+        if(mListeners.containsKey(measurementId)) {
+            try  {
+                mNotificationQueue.put(measurementId);
+            } catch(InterruptedException e) {}
+        }
+    }
+
     private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
             getOrCreateCallbackList(String measurementId) {
         RemoteCallbackList<RemoteVehicleServiceListenerInterface>
@@ -60,15 +73,6 @@ public class MeasurementNotifier extends AbstractVehicleDataSink {
             mListeners.put(measurementId, callbackList);
         }
         return callbackList;
-    }
-
-    public void receive(String measurementId,
-            RawMeasurement measurement) {
-        if(mListeners.containsKey(measurementId)) {
-            try  {
-                mNotificationQueue.put(measurementId);
-            } catch(InterruptedException e) {}
-        }
     }
 
     private void propagateMeasurement(
