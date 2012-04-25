@@ -1,7 +1,5 @@
 package com.openxc.remote.sinks;
 
-import java.util.concurrent.BlockingQueue;
-
 import java.util.Map;
 
 import com.openxc.measurements.Latitude;
@@ -9,16 +7,11 @@ import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
 
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
-
-import com.openxc.remote.sinks.FileRecorderSink;
 
 import android.content.Context;
 
 import android.location.Location;
 import android.location.LocationManager;
-
-import android.os.RemoteCallbackList;
 
 import android.util.Log;
 
@@ -30,7 +23,7 @@ import android.util.Log;
  * important that receive() not block in order to get out of the way of new
  * meausrements coming in on a physical vehcile interface.
  */
-public class DefaultDataSink extends AbstractVehicleDataSink {
+public class DefaultDataSink extends ContextualVehicleDataSink {
 
     public final static String TAG = "DefaultDataSink";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";

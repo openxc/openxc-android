@@ -2,8 +2,6 @@ package com.openxc.remote.sinks;
 
 import com.openxc.remote.RawMeasurement;
 
-import android.content.Context;
-
 /**
  * The interface for all output targets for raw vehicle measurements.
  *
@@ -19,14 +17,6 @@ import android.content.Context;
  * methods.
  */
 public abstract class AbstractVehicleDataSink implements VehicleDataSink {
-    // TODO move context to some other subclass? not everybody needs it and
-    // otherwise this class could be non-Android
-    private Context mContext;
-
-    protected AbstractVehicleDataSink(Context context) {
-        mContext = context;
-    }
-
     /**
      * Receive a data point with a name, a value and a event value.
      *
@@ -76,9 +66,5 @@ public abstract class AbstractVehicleDataSink implements VehicleDataSink {
      */
     public void stop() {
         // do nothing unless you need it
-    }
-
-    protected Context getContext() {
-        return mContext;
     }
 }

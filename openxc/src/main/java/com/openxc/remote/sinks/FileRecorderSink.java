@@ -10,8 +10,6 @@ import java.util.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
-import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +25,7 @@ import android.content.Context;
  * measurement as it arrives to a file on the device. It splits the stream to a
  * different file every hour.
  */
-public class FileRecorderSink extends AbstractVehicleDataSink {
+public class FileRecorderSink extends ContextualVehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private static SimpleDateFormat sDateFormatter =
             new SimpleDateFormat("yyyy-MM-dd-HH");
@@ -36,16 +34,9 @@ public class FileRecorderSink extends AbstractVehicleDataSink {
 
     private BufferedWriter mWriter;
     private Date mLastFileCreated;
-    private Context mContext;
-
-    public FileRecorderSink(Context context,
-            Map<String, RawMeasurement> measurements) {
-        this(context);
-    }
 
     public FileRecorderSink(Context context) {
         super(context);
-        mContext = context;
         openTimestampedFile();
     }
 
@@ -104,7 +95,7 @@ public class FileRecorderSink extends AbstractVehicleDataSink {
         String filename = sDateFormatter.format(mLastFileCreated) + ".json";
         Log.i(TAG, "Opening trace file " + filename + " for writing");
         try {
-            OutputStream outputStream = mContext.openFileOutput(filename,
+            OutputStream outputStream = getContext().openFileOutput(filename,
                     Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
             mWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
         } catch(IOException e) {
