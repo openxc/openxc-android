@@ -31,6 +31,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
+import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.VehicleService;
 
@@ -80,6 +81,14 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         service.setDataSource(TraceVehicleDataSource.class.getName(),
                 traceUri.toString());
         pause(200);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        if(service != null)  {
+            service.setDataSource(UsbVehicleDataSource.class.getName());
+        }
     }
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {

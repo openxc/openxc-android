@@ -19,9 +19,8 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
-import com.openxc.remote.sources.trace.TraceVehicleDataSource;
-import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
+import com.openxc.remote.sources.trace.TraceVehicleDataSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.VehicleService;
@@ -91,6 +90,14 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         service.waitUntilBound();
         service.setDataSource(TraceVehicleDataSource.class.getName(),
                 traceUri.toString());
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        if(service != null)  {
+            service.setDataSource(UsbVehicleDataSource.class.getName());
+        }
     }
 
     private void checkReceivedMeasurement(VehicleMeasurement measurement) {
