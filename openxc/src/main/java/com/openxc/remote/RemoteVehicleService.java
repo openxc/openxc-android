@@ -19,6 +19,7 @@ import com.openxc.remote.sinks.FileRecorderSink;
 import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
 
+import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.NativeLocationSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
@@ -186,7 +187,7 @@ public class RemoteVehicleService extends Service {
         Constructor<? extends VehicleDataSource> constructor;
         try {
             constructor = sourceType.getConstructor(Context.class,
-                    VehicleDataSink.class, URI.class);
+                    SourceCallback.class, URI.class);
         } catch(NoSuchMethodException e) {
             Log.w(TAG, sourceType + " doesn't have a proper constructor");
             throw new DataSourceException();
@@ -281,6 +282,7 @@ public class RemoteVehicleService extends Service {
                         measurementId);
                 mNotifier.register(measurementId, listener);
 
+                // TODO move this to the notifier
                 if(mPipeline.containsMeasurement(measurementId)) {
                     // send the last known value to the new listener
                     RawMeasurement rawMeasurement =
@@ -301,7 +303,8 @@ public class RemoteVehicleService extends Service {
                 mNotifier.unregister(measurementId, listener);
             }
 
-            public void setDataSource(String dataSource, String resource) {
+            public void setDataSource(String dataSource, String resource)
+                    throws RemoteException {
                 Log.i(TAG, "Setting data source to " + dataSource +
                         " with resource " + resource);
                 // TODO clearing everything when adding is a legacy feature
@@ -311,6 +314,7 @@ public class RemoteVehicleService extends Service {
                                 dataSource, resource));
                 } catch(DataSourceException e) {
                     Log.w(TAG, "Unable to add data source", e);
+                    throw new RemoteException();
                 }
             }
 
