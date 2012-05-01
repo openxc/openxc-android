@@ -118,9 +118,6 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     public void testListenerGetsLastKnownValue()
             throws RemoteVehicleServiceException,
             UnrecognizedMeasurementTypeException {
-        // TODO I don't think this test case is actually working - switching
-        // data sources seems really difficult to do in test case
-        // let some measurements flow in so we have some known values
         pause(300);
         // kill the incoming data stream
         service.setDataSource(UsbVehicleDataSource.class.getName());

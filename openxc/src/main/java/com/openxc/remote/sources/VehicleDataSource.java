@@ -11,8 +11,6 @@ import com.openxc.remote.VehicleDataEndpoint;
  * implements the DataPipeline - its receive() methods are
  * passed values from the data source.
  */
-// TODO source shouldn't have to implement run(), let them take care of that
-// themselves
 public interface VehicleDataSource extends VehicleDataEndpoint {
     /**
      * Set the callback for receiving raw measurements as they are received.

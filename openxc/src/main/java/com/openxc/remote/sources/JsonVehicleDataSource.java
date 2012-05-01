@@ -18,9 +18,6 @@ import android.util.Log;
  *
  * The class is abstract as it does not describe the source of the data, only
  * the expected format.
- *
- * TODO Is it weird that this is data source class, but isn't a data source? It
- * feels more like a mixin, but that doesn't fit well with Java.
  */
 public abstract class JsonVehicleDataSource
         extends ContextualVehicleDataSource {
