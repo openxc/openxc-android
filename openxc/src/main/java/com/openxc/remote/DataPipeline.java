@@ -10,7 +10,6 @@ import java.util.Map;
 import com.google.common.base.Objects;
 
 import com.openxc.remote.sinks.VehicleDataSink;
-import com.openxc.remote.sinks.DefaultDataSink;
 
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSource;
@@ -31,8 +30,6 @@ public class DataPipeline implements SourceCallback {
         mMeasurements = new HashMap<String, RawMeasurement>();
         mSinks = new CopyOnWriteArrayList<VehicleDataSink>();
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
-
-        addSink(new DefaultDataSink());
     }
 
     public void receive(String measurementId, Object value, Object event) {

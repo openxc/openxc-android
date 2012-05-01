@@ -6,17 +6,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URI;
 
-import java.util.Map;
-
-import com.openxc.measurements.Latitude;
-import com.openxc.measurements.Longitude;
-
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.MockedLocationSink;
-import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.FileRecorderSink;
-import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
 
 import com.openxc.remote.sources.SourceCallback;
@@ -32,12 +26,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 
-import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationListener;
-
-import android.os.Looper;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.PowerManager;
@@ -138,6 +126,7 @@ public class RemoteVehicleService extends Service {
 
     private void initializeDefaultSinks() {
         mPipeline.addSink(new MockedLocationSink(this));
+        mPipeline.addSink(new DefaultDataSink());
     }
 
     private void initializeDefaultSources() {
