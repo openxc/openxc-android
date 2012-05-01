@@ -43,7 +43,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     /**
      * Record a message to a file, selected by the current time.
      */
-    public void receive(String measurementId, Object value, Object event) {
+    public synchronized void receive(String measurementId, Object value, Object event) {
         JSONObject object = new JSONObject();
         try {
             object.put("name", measurementId);
@@ -75,7 +75,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         }
     }
 
-    public void stop() {
+    public synchronized void stop() {
         if(mWriter != null) {
             try {
                 mWriter.close();
@@ -84,13 +84,14 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             }
             mWriter = null;
         }
+        Log.i(TAG, "Shutting down");
     }
 
-    public boolean isRunning() {
+    public synchronized boolean isRunning() {
         return mWriter != null;
     }
 
-    public void flush() {
+    public synchronized void flush() {
         if(isRunning()) {
             try {
                 mWriter.flush();
@@ -100,7 +101,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         }
     }
 
-    private void openTimestampedFile() {
+    private synchronized void openTimestampedFile() {
         mLastFileCreated = new Date();
         String filename = sDateFormatter.format(mLastFileCreated) + ".json";
         Log.i(TAG, "Opening trace file " + filename + " for writing");
