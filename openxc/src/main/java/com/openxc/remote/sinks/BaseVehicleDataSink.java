@@ -1,6 +1,7 @@
 package com.openxc.remote.sinks;
 
 import com.openxc.remote.RawMeasurement;
+import java.util.Map;
 
 /**
  * The interface for all output targets for raw vehicle measurements.
@@ -17,6 +18,14 @@ import com.openxc.remote.RawMeasurement;
  * methods.
  */
 public class BaseVehicleDataSink implements VehicleDataSink {
+    protected Map<String, RawMeasurement> mMeasurements;
+
+    public BaseVehicleDataSink() { }
+
+    public BaseVehicleDataSink(Map<String, RawMeasurement> measurements) {
+        mMeasurements = measurements;
+    }
+
     /**
      * Receive a data point with a name, a value and a event value.
      *
@@ -58,6 +67,11 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      */
     public void receive(String measurementId, RawMeasurement measurement) {
         // do nothing unless you override it
+    }
+
+    @Override
+    public void setMeasurements(Map<String, RawMeasurement> measurements) {
+        mMeasurements = measurements;
     }
 
     /**

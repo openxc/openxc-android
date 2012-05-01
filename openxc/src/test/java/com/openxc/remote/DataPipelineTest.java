@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.remote.sinks.BaseVehicleDataSink;
 
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSource;
@@ -130,7 +130,7 @@ public class DataPipelineTest {
         public void run() {}
     }
 
-    private class TestSink implements VehicleDataSink {
+    private class TestSink extends BaseVehicleDataSink {
         public boolean received = false;
 
         public void receive(String measurementId, Object value, Object event) {

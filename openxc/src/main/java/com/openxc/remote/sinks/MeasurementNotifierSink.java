@@ -23,12 +23,19 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
 
     private NotificationThread mNotificationThread;
     private BlockingQueue<String> mNotificationQueue;
-    private Map<String, RawMeasurement> mMeasurements;
     private Map<String, RemoteCallbackList<
         RemoteVehicleServiceListenerInterface>> mListeners;
 
     public MeasurementNotifierSink(Map<String, RawMeasurement> measurements) {
-        mMeasurements = measurements;
+        super(measurements);
+        init();
+    }
+
+    public MeasurementNotifierSink() {
+        init();
+    }
+
+    private void init() {
         mNotificationQueue = new LinkedBlockingQueue<String>();
         mListeners = Collections.synchronizedMap(
                 new HashMap<String, RemoteCallbackList<
@@ -132,8 +139,12 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
 
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
-                RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
-                propagateMeasurement(callbacks, measurementId, rawMeasurement);
+                if(mMeasurements != null) {
+                    RawMeasurement rawMeasurement = mMeasurements.get(
+                            measurementId);
+                    propagateMeasurement(callbacks, measurementId,
+                            rawMeasurement);
+                }
             }
             Log.d(TAG, "Stopped USB listener");
         }

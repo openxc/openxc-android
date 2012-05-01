@@ -13,8 +13,8 @@ import com.openxc.measurements.Longitude;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sinks.MockedLocationSink;
 import com.openxc.remote.sinks.DataSinkException;
-import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.FileRecorderSink;
 import com.openxc.remote.sinks.VehicleDataSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
@@ -78,9 +78,6 @@ public class RemoteVehicleService extends Service {
     private final static String[] DEFAULT_DATA_SOURCES = {
             UsbVehicleDataSource.class.getName(),
     };
-    private final static String[] DEFAULT_DATA_SINKS = {
-            DefaultDataSink.class.getName(),
-    };
 
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
@@ -91,8 +88,8 @@ public class RemoteVehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
-        initializeDefaultSinks();
         initializeDefaultSources();
+        initializeDefaultSinks();
         acquireWakeLock();
     }
 
@@ -119,13 +116,8 @@ public class RemoteVehicleService extends Service {
         Log.i(TAG, "Service binding in response to " + intent);
 
         mPipeline.removeSink(mNotifier);
-        try {
-            mNotifier = (MeasurementNotifierSink) mPipeline.addSink(
-                    createSinkFromClassName(
-                        MeasurementNotifierSink.class.getName()));
-        } catch(DataSinkException e) {
-            Log.w(TAG, "Unable to add notifier to pipeline sinks", e);
-        }
+        mNotifier = new MeasurementNotifierSink();
+        mPipeline.addSink(mNotifier);
 
         initializeDefaultSources();
         return mBinder;
@@ -145,14 +137,7 @@ public class RemoteVehicleService extends Service {
     }
 
     private void initializeDefaultSinks() {
-        mPipeline.clearSinks();
-        for(String sinkName : DEFAULT_DATA_SINKS) {
-            try {
-                mPipeline.addSink(createSinkFromClassName(sinkName));
-            } catch(DataSinkException e) {
-                Log.w(TAG, "Unable to add data sink " + sinkName, e);
-            }
-        }
+        mPipeline.addSink(new MockedLocationSink(this));
     }
 
     private void initializeDefaultSources() {
@@ -197,7 +182,7 @@ public class RemoteVehicleService extends Service {
 
         VehicleDataSource source = null;
         try {
-            source = constructor.newInstance(this, this, resourceUri);
+            source = constructor.newInstance(this, mPipeline, resourceUri);
         } catch(InstantiationException e) {
             Log.w(TAG, "Couldn't instantiate data source " + sourceType, e);
         } catch(IllegalAccessException e) {
@@ -220,53 +205,6 @@ public class RemoteVehicleService extends Service {
             }
         }
         return resourceUri;
-    }
-
-    public VehicleDataSink createSinkFromClassName(String sinkName) throws DataSinkException {
-        return createSinkFromClassName(sinkName, null);
-    }
-
-    // TODO move all of this to a helper class or kill it and just instantiate
-    // directly
-    // TODO do we add duplicate types? yes for now
-    public VehicleDataSink createSinkFromClassName(String sinkName, String resource)
-            throws DataSinkException {
-        Class<? extends VehicleDataSink> sinkType;
-        try {
-            sinkType = Class.forName(sinkName).asSubclass(
-                    VehicleDataSink.class);
-        } catch(ClassNotFoundException e) {
-            Log.w(TAG, "Couldn't find data sink type " + sinkName, e);
-            throw new DataSinkException();
-        }
-
-        Constructor<? extends VehicleDataSink> constructor;
-        try {
-            constructor = sinkType.getConstructor(Context.class, Map.class);
-        } catch(NoSuchMethodException e) {
-            Log.w(TAG, sinkType + " doesn't have a proper constructor");
-            throw new DataSinkException();
-        }
-
-        URI resourceUri = uriFromResourceString(resource);
-
-        VehicleDataSink sink = null;
-        try {
-            sink = constructor.newInstance(this, resourceUri);
-        } catch(InstantiationException e) {
-            Log.w(TAG, "Couldn't instantiate data sink " + sinkType, e);
-        } catch(IllegalAccessException e) {
-            Log.w(TAG, "Default constructor is not accessible on " +
-                    sinkType, e);
-        } catch(InvocationTargetException e) {
-            Log.w(TAG, sinkType + "'s constructor threw an exception",
-                    e);
-        }
-
-        if(sink != null) {
-            Log.i(TAG, "Initializing vehicle data sink " + sink);
-        }
-        return sink;
     }
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
@@ -339,7 +277,6 @@ public class RemoteVehicleService extends Service {
         // its type as we want to stop other recorders. for now we'll just clear
         // 'em
         if(enabled) {
-            initializeDefaultSinks();
             mPipeline.addSink(
                     new FileRecorderSink(new AndroidFileOpener(this)));
         } else {

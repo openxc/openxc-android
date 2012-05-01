@@ -1,13 +1,5 @@
 package com.openxc.remote;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import java.net.URISyntaxException;
-import java.net.URI;
-
-import java.util.ArrayList;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import java.util.HashMap;
@@ -17,10 +9,9 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
-import com.openxc.remote.sinks.DataSinkException;
 import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.remote.sinks.DefaultDataSink;
 
-import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSource;
 
@@ -32,8 +23,6 @@ public class DataPipeline implements SourceCallback {
     private final static String TAG = "DataPipeline";
 
     private int mMessagesReceived = 0;
-    // TODO move all of the measurement stuff to a sink
-    // and have the RVS create and handle that sink itself
     private Map<String, RawMeasurement> mMeasurements;
     private CopyOnWriteArrayList<VehicleDataSink> mSinks;
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
@@ -42,6 +31,8 @@ public class DataPipeline implements SourceCallback {
         mMeasurements = new HashMap<String, RawMeasurement>();
         mSinks = new CopyOnWriteArrayList<VehicleDataSink>();
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
+
+        addSink(new DefaultDataSink());
     }
 
     public void receive(String measurementId, Object value, Object event) {
@@ -62,11 +53,12 @@ public class DataPipeline implements SourceCallback {
         removeEndpoint(mSinks, sinkName);
     }
 
+    // TODO do we add duplicate types? yes for now
     public VehicleDataSink addSink(VehicleDataSink sink) {
+        sink.setMeasurements(mMeasurements);
         mSinks.add(sink);
         return sink;
     }
-
 
     public List<VehicleDataSink> getSinks() {
         return mSinks;
@@ -91,19 +83,6 @@ public class DataPipeline implements SourceCallback {
     public void removeSource(String sourceName) {
         removeEndpoint(mSources, sourceName);
     }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void removeEndpoint(CopyOnWriteArrayList endpoints,
-            String endpointName) {
-        for(Iterator<VehicleDataEndpoint> i = endpoints.iterator();
-                i.hasNext();) {
-            VehicleDataEndpoint endpoint = i.next();
-            if(endpoint.getClass().getName().equals(endpointName)) {
-                endpoint.stop();
-                endpoints.remove(endpoint);
-            }
-        }
-    };
 
     public void stop() {
         clearSources();
@@ -149,4 +128,16 @@ public class DataPipeline implements SourceCallback {
             .toString();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void removeEndpoint(CopyOnWriteArrayList endpoints,
+            String endpointName) {
+        for(Iterator<VehicleDataEndpoint> i = endpoints.iterator();
+                i.hasNext();) {
+            VehicleDataEndpoint endpoint = i.next();
+            if(endpoint.getClass().getName().equals(endpointName)) {
+                endpoint.stop();
+                endpoints.remove(endpoint);
+            }
+        }
+    };
 }

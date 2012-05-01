@@ -26,7 +26,7 @@ import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import com.openxc.remote.sinks.DefaultDataSink;
+import com.openxc.remote.sinks.MockedLocationSink;
 
 import android.content.Context;
 import android.app.Service;
@@ -61,7 +61,7 @@ import android.util.Log;
  */
 public class VehicleService extends Service {
     public final static String VEHICLE_LOCATION_PROVIDER =
-            DefaultDataSink.VEHICLE_LOCATION_PROVIDER;
+            MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleService";
 
     private boolean mIsBound;
