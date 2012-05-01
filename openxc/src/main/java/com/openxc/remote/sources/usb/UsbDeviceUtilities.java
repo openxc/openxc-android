@@ -3,7 +3,7 @@ package com.openxc.remote.sources.usb;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.openxc.remote.sources.VehicleDataSourceResourceException;
+import com.openxc.remote.sources.DataSourceResourceException;
 
 /**
  * Stateless utilities for finding and opening USB devices.
@@ -29,15 +29,15 @@ public class UsbDeviceUtilities {
      * Return an integer vendor ID from a URI specifying a USB device.
      *
      * @param uri the USB device URI
-     * @throws VehicleDataSourceResourceException If the URI doesn't match the
+     * @throws DataSourceResourceException If the URI doesn't match the
      *      format usb://<vendor id>/<device id>
      */
     public static int vendorFromUri(URI uri)
-            throws VehicleDataSourceResourceException {
+            throws DataSourceResourceException {
         try {
             return Integer.parseInt(uri.getAuthority(), 16);
         } catch(NumberFormatException e) {
-            throw new VehicleDataSourceResourceException(
+            throw new DataSourceResourceException(
                 "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
                 " -- the given " + uri + " has a bad vendor ID");
         }
@@ -47,19 +47,19 @@ public class UsbDeviceUtilities {
      * Return an integer product ID from a URI specifying a USB device.
      *
      * @param uri the USB device URI
-     * @throws VehicleDataSourceResourceException If the URI doesn't match the
+     * @throws DataSourceResourceException If the URI doesn't match the
      *      format usb://<vendor id>/<device id>
      */
     public static int productFromUri(URI uri)
-            throws VehicleDataSourceResourceException {
+            throws DataSourceResourceException {
         try {
             return Integer.parseInt(uri.getPath().substring(1), 16);
         } catch(NumberFormatException e) {
-            throw new VehicleDataSourceResourceException(
+            throw new DataSourceResourceException(
                 "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
                 " -- the given " + uri + " has a bad product ID");
         } catch(StringIndexOutOfBoundsException e) {
-            throw new VehicleDataSourceResourceException(
+            throw new DataSourceResourceException(
                 "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
                 " -- the given " + uri + " has a bad product ID");
         }

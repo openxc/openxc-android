@@ -7,8 +7,8 @@ import java.net.URISyntaxException;
 
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.SourceCallback;
-import com.openxc.remote.sources.VehicleDataSourceException;
-import com.openxc.remote.sources.VehicleDataSourceResourceException;
+import com.openxc.remote.sources.DataSourceException;
+import com.openxc.remote.sources.DataSourceResourceException;
 
 import junit.framework.Assert;
 
@@ -53,35 +53,35 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
     }
 
     @SmallTest
-    public void testDefaultDevice() throws VehicleDataSourceException {
+    public void testDefaultDevice() throws DataSourceException {
         source = new UsbVehicleDataSource(callback, getContext());
     }
 
     @SmallTest
-    public void testCustomDevice() throws VehicleDataSourceException {
+    public void testCustomDevice() throws DataSourceException {
         source = new UsbVehicleDataSource(callback, getContext(),
                 deviceUri);
     }
 
     @SmallTest
-    public void testMalformedUri() throws VehicleDataSourceException {
+    public void testMalformedUri() throws DataSourceException {
         try {
             new UsbVehicleDataSource(callback, getContext(),
                     malformedDeviceUri);
-        } catch(VehicleDataSourceResourceException e) {
+        } catch(DataSourceResourceException e) {
             return;
         }
-        Assert.fail("Expected a VehicleDataSourceResourceException");
+        Assert.fail("Expected a DataSourceResourceException");
     }
 
     @SmallTest
-    public void testUriWithBadScheme() throws VehicleDataSourceException {
+    public void testUriWithBadScheme() throws DataSourceException {
         try {
             new UsbVehicleDataSource(callback, getContext(),
                     incorrectSchemeUri);
-        } catch(VehicleDataSourceResourceException e) {
+        } catch(DataSourceResourceException e) {
             return;
         }
-        Assert.fail("Expected a VehicleDataSourceResourceException");
+        Assert.fail("Expected a DataSourceResourceException");
     }
 }

@@ -15,8 +15,8 @@ import com.openxc.remote.sources.JsonVehicleDataSource;
 
 import com.openxc.remote.sources.usb.UsbDeviceException;
 
-import com.openxc.remote.sources.VehicleDataSourceException;
-import com.openxc.remote.sources.VehicleDataSourceResourceException;
+import com.openxc.remote.sources.DataSourceException;
+import com.openxc.remote.sources.DataSourceResourceException;
 
 import android.app.PendingIntent;
 
@@ -86,11 +86,11 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
      *      received and parsed.
      * @param device a USB device URI (see {@link UsbDeviceUtilities} for the
      *      format) to look for.
-     * @throws VehicleDataSourceException  If the URI doesn't have the correct
+     * @throws DataSourceException  If the URI doesn't have the correct
      *          format
      */
     public UsbVehicleDataSource(SourceCallback callback, Context context,
-            URI device) throws VehicleDataSourceException {
+            URI device) throws DataSourceException {
         super(callback, context);
         if(device == null) {
             device = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
@@ -99,7 +99,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         }
 
         if(device.getScheme() == null || !device.getScheme().equals("usb")) {
-            throw new VehicleDataSourceResourceException(
+            throw new DataSourceResourceException(
                     "USB device URI must have the usb:// scheme");
         }
 
@@ -127,7 +127,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         mProductId = UsbDeviceUtilities.productFromUri(device);
         try {
             setupDevice(mManager, mVendorId, mProductId);
-        } catch(VehicleDataSourceException e) {
+        } catch(DataSourceException e) {
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
         }
@@ -145,12 +145,17 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
      * @param callback An object implementing the
      *      SourceCallback that should receive data as it is
      *      received and parsed.
-     * @throws VehicleDataSourceException  in exceptional circumstances, i.e.
+     * @throws DataSourceException  in exceptional circumstances, i.e.
      *      only if the default device URI is malformed.
      */
     public UsbVehicleDataSource(SourceCallback callback, Context context)
-            throws VehicleDataSourceException {
+            throws DataSourceException {
         this(callback, context, null);
+    }
+
+    public UsbVehicleDataSource(Context context)
+            throws DataSourceException {
+        this(null, null);
     }
 
     /**
@@ -262,7 +267,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     }
 
     private void setupDevice(UsbManager manager, int vendorId,
-            int productId) throws VehicleDataSourceResourceException {
+            int productId) throws DataSourceResourceException {
         UsbDevice device = findDevice(manager, vendorId, productId);
         if(manager.hasPermission(device)) {
             Log.d(TAG, "Already have permission to use " + device);
@@ -286,7 +291,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     }
 
     private UsbDevice findDevice(UsbManager manager, int vendorId,
-            int productId) throws VehicleDataSourceResourceException {
+            int productId) throws DataSourceResourceException {
         Log.d(TAG, "Looking for USB device with vendor ID " + vendorId +
                 " and product ID " + productId);
 
@@ -298,7 +303,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             }
         }
 
-        throw new VehicleDataSourceResourceException("USB device with vendor " +
+        throw new DataSourceResourceException("USB device with vendor " +
                 "ID " + vendorId + " and product ID " + productId +
                 " not found");
     }
@@ -363,7 +368,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
                 Log.d(TAG, "Device attached");
                 try {
                     setupDevice(mManager, mVendorId, mProductId);
-                } catch(VehicleDataSourceException e) {
+                } catch(DataSourceException e) {
                     Log.i(TAG, "Unable to load USB device -- waiting for it " +
                             "to appear", e);
                 }

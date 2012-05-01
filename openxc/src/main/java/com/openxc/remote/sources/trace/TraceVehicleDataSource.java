@@ -19,7 +19,7 @@ import com.google.common.base.Objects;
 import com.openxc.remote.sources.SourceCallback;
 
 import com.openxc.remote.sources.JsonVehicleDataSource;
-import com.openxc.remote.sources.VehicleDataSourceException;
+import com.openxc.remote.sources.DataSourceException;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -97,13 +97,13 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
      *      should receive data as it is received and parsed.
      * @param filename a raw file resource URI of the format
      *          "resource://resource_id"
-     * @throws VehicleDataSourceException  if no filename is specified
+     * @throws DataSourceException  if no filename is specified
      */
     public TraceVehicleDataSource(Context context, SourceCallback callback,
-            URI filename) throws VehicleDataSourceException {
+            URI filename) throws DataSourceException {
         this(context, callback);
         if(filename == null) {
-            throw new VehicleDataSourceException(
+            throw new DataSourceException(
                     "No filename specified for the trace source");
         }
 
@@ -144,7 +144,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
             BufferedReader reader;
             try {
                 reader = openFile(mFilename);
-            } catch(VehicleDataSourceException e) {
+            } catch(DataSourceException e) {
                 Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
                 break;
             }
@@ -224,15 +224,15 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
     }
 
     private BufferedReader openRegularFile(URI filename)
-            throws VehicleDataSourceException {
+            throws DataSourceException {
         FileInputStream stream;
         try {
             stream = new FileInputStream(filename.toURL().getFile());
         } catch(FileNotFoundException e) {
-            throw new VehicleDataSourceException(
+            throw new DataSourceException(
                 "Couldn't open the trace file " + filename, e);
         } catch(MalformedURLException e) {
-            throw new VehicleDataSourceException(
+            throw new DataSourceException(
                 "Couldn't open the trace file " + filename, e);
         }
 
@@ -245,7 +245,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
     }
 
     private BufferedReader openFile(URI filename)
-            throws VehicleDataSourceException {
+            throws DataSourceException {
         if(filename.getScheme().equals("resource")) {
             return openResourceFile(filename);
         } else {
