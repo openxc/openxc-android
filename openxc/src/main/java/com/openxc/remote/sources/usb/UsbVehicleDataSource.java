@@ -155,7 +155,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
 
     public UsbVehicleDataSource(Context context)
             throws DataSourceException {
-        this(null, null);
+        this(null, context);
     }
 
     /**
