@@ -45,32 +45,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
 
     protected void handleMessage(String name, Object value, Object event) {
         if(mCallback != null) {
-            Method method;
-            // TODO since we now have an interace, I think all of this
-            // metaprogramming is unnecessary. yay!
-            try {
-                method = SourceCallback.class.getMethod(
-                        RECEIVE_METHOD_NAME, String.class, Object.class,
-                        Object.class);
-            } catch(NoSuchMethodException e) {
-                String logMessage = "Received data of an unsupported type " +
-                    "from the data source: " + value + ", a " +
-                    value.getClass();
-                if(event != null) {
-                    logMessage += " and event " + event + ", a " +
-                        event.getClass();
-                }
-                Log.w(TAG, logMessage);
-                return;
-            }
-
-            try {
-                method.invoke(mCallback, name, value, event);
-            } catch(IllegalAccessException e) {
-                Log.w(TAG, "Data receiver method is private", e);
-            } catch(InvocationTargetException e) {
-                Log.w(TAG, "Unable to call data receive method", e);
-            }
+            mCallback.receive(name, value, event);
         }
     }
 
