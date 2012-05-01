@@ -211,19 +211,6 @@ public class RemoteVehicleService extends Service {
                 Log.i(TAG, "Adding listener " + listener + " to " +
                         measurementId);
                 mNotifier.register(measurementId, listener);
-
-                // TODO move this to the notifier
-                if(mPipeline.containsMeasurement(measurementId)) {
-                    // send the last known value to the new listener
-                    RawMeasurement rawMeasurement =
-                        mPipeline.get(measurementId);
-                    try {
-                        listener.receive(measurementId, rawMeasurement);
-                    } catch(RemoteException e) {
-                        Log.w(TAG, "Couldn't notify application " +
-                                "listener -- did it crash?", e);
-                    }
-                }
             }
 
             public void removeListener(String measurementId,

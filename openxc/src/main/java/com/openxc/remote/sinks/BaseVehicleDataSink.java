@@ -74,6 +74,19 @@ public class BaseVehicleDataSink implements VehicleDataSink {
         mMeasurements = measurements;
     }
 
+    public boolean containsMeasurement(String measurementId) {
+        return mMeasurements.containsKey(measurementId);
+    }
+
+    // TODO this is duplicated from DataPipeline
+    public RawMeasurement get(String measurementId) {
+        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
+        if(rawMeasurement == null) {
+            rawMeasurement = new RawMeasurement();
+        }
+        return rawMeasurement;
+    }
+
     /**
      * Release any acquired resources in preparation for exiting.
      */

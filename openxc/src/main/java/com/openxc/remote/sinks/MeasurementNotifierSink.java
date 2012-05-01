@@ -53,6 +53,16 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
     public void register(String measurementId,
             RemoteVehicleServiceListenerInterface listener) {
         getOrCreateCallbackList(measurementId).register(listener);
+        if(containsMeasurement(measurementId)) {
+            // send the last known value to the new listener
+            RawMeasurement rawMeasurement = get(measurementId);
+            try {
+                listener.receive(measurementId, rawMeasurement);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Couldn't notify application " +
+                        "listener -- did it crash?", e);
+            }
+        }
     }
 
     public void unregister(String measurementId,
@@ -139,9 +149,8 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
 
                 RemoteCallbackList<RemoteVehicleServiceListenerInterface>
                     callbacks = mListeners.get(measurementId);
-                if(mMeasurements != null) {
-                    RawMeasurement rawMeasurement = mMeasurements.get(
-                            measurementId);
+                RawMeasurement rawMeasurement = get(measurementId);
+                if(rawMeasurement != null) {
                     propagateMeasurement(callbacks, measurementId,
                             rawMeasurement);
                 }
