@@ -172,8 +172,8 @@ public class RemoteVehicleService extends Service {
 
     // TODO do we add duplicate sources of the same type? yes for now, this will
     // screw up some tests that rely on it stopping the previous source
-    public VehicleDataSource createSourceFromClassName(String sourceName, String resource)
-            throws DataSourceException {
+    public VehicleDataSource createSourceFromClassName(String sourceName,
+            String resource) throws DataSourceException {
         Class<? extends VehicleDataSource> sourceType;
         try {
             sourceType = Class.forName(sourceName).asSubclass(
