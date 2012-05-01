@@ -3,8 +3,6 @@ package com.openxc.remote.sources;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import android.content.Context;
-
 import android.util.Log;
 
 import com.openxc.remote.sources.SourceCallback;
@@ -19,35 +17,18 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     private static final String RECEIVE_METHOD_NAME = "receive";
 
     private SourceCallback mCallback;
-    // TODO see if we can move context to another subclass just like we need to
-    // do with sinks - not all sources need it and otherwise this is a
-    // non-Android class
-    private Context mContext;
 
     public BaseVehicleDataSource() { }
 
     /**
-     * Construct a new instance with the given context and set the callback.
+     * Construct a new instance and set the callback.
      *
-     * @param context Current Android content (i.e. an Activity or Service)
      * @param callback An object implementing the
      *      SourceCallback interface that should receive data from this
      *      source.
      */
-    public BaseVehicleDataSource(Context context, SourceCallback callback) {
-        mContext = context;
-        setCallback(callback);
-    }
-
-    /**
-     * Construct a new instance with no context and set the callback.
-     *
-     * @param callback An object implementing the
-     *      SourceCallback that should receive data from this
-     *      source.
-     */
     public BaseVehicleDataSource(SourceCallback callback) {
-        this(null, callback);
+        setCallback(callback);
     }
 
     public void setCallback(SourceCallback callback) {
@@ -91,10 +72,6 @@ public class BaseVehicleDataSource implements VehicleDataSource {
                 Log.w(TAG, "Unable to call data receive method", e);
             }
         }
-    }
-
-    protected Context getContext() {
-        return mContext;
     }
 
     protected SourceCallback getCallback() {

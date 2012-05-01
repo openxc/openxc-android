@@ -1,7 +1,5 @@
 package com.openxc.remote.sources;
 
-import java.net.URI;
-
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 
@@ -16,23 +14,22 @@ import android.os.Looper;
 
 import android.util.Log;
 
-public class NativeLocationSource extends BaseVehicleDataSource
+public class NativeLocationSource extends ContextualVehicleDataSource
         implements LocationListener, Runnable {
     private final static String TAG = "NativeLocationSource";
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
 
     private LocationManager mLocationManager;
 
-    public NativeLocationSource(Context context, SourceCallback callback,
-            URI resourceUri) {
-        this(context, callback);
+    public NativeLocationSource(Context context) {
+        this(null, context);
     }
 
-    public NativeLocationSource(Context context, SourceCallback callback) {
-        super(context, callback);
-        new Thread(this).start();
+    public NativeLocationSource(SourceCallback callback, Context context) {
+        super(callback, context);
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
+        new Thread(this).start();
     }
 
     public void run() {

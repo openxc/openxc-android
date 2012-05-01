@@ -89,9 +89,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
      * @throws VehicleDataSourceException  If the URI doesn't have the correct
      *          format
      */
-    public UsbVehicleDataSource(Context context, SourceCallback callback,
+    public UsbVehicleDataSource(SourceCallback callback, Context context,
             URI device) throws VehicleDataSourceException {
-        super(context, callback);
+        super(callback, context);
         if(device == null) {
             device = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
             Log.i(TAG, "No USB device specified -- using default " +
@@ -108,7 +108,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         mDeviceConnectionLock = new ReentrantLock();
         mDevicePermissionChanged = mDeviceConnectionLock.newCondition();
 
-        mManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+        mManager = (UsbManager) getContext().getSystemService(
+                Context.USB_SERVICE);
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
@@ -147,9 +148,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
      * @throws VehicleDataSourceException  in exceptional circumstances, i.e.
      *      only if the default device URI is malformed.
      */
-    public UsbVehicleDataSource(Context context, SourceCallback callback)
+    public UsbVehicleDataSource(SourceCallback callback, Context context)
             throws VehicleDataSourceException {
-        this(context, callback, null);
+        this(callback, context, null);
     }
 
     /**

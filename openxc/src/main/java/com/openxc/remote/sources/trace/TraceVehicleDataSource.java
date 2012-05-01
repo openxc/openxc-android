@@ -62,7 +62,8 @@ import android.util.Log;
  * the {@link * com.openxc.remote.sources.BaseVehicleDataSource#setCallback(SourceCallback)}
  * function.
  */
-public class TraceVehicleDataSource extends JsonVehicleDataSource implements Runnable {
+public class TraceVehicleDataSource extends JsonVehicleDataSource
+            implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
     private Long mFirstTimestamp;
@@ -83,7 +84,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource implements Run
      *      should receive data as it is received and parsed.
      */
     public TraceVehicleDataSource(Context context, SourceCallback callback) {
-        super(context, callback);
+        super(callback, context);
         new Thread(this).start();
     }
 

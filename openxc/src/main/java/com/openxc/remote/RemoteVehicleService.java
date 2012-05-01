@@ -12,6 +12,7 @@ import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.MockedLocationSink;
 import com.openxc.remote.sinks.FileRecorderSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
+import com.openxc.remote.sinks.VehicleDataSink;
 
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.DataSourceException;
@@ -70,6 +71,8 @@ public class RemoteVehicleService extends Service {
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
     private MeasurementNotifierSink mNotifier;
+    private VehicleDataSource mNativeLocationSource;
+    private VehicleDataSink mFileRecorder;
 
     @Override
     public void onCreate() {
@@ -271,23 +274,20 @@ public class RemoteVehicleService extends Service {
         // its type as we want to stop other recorders. for now we'll just clear
         // 'em
         if(enabled) {
-            mPipeline.addSink(
+            mFileRecorder = mPipeline.addSink(
                     new FileRecorderSink(new AndroidFileOpener(this)));
-        } else {
-             mPipeline.removeSink(FileRecorderSink.class.getName());
+        } else if(mFileRecorder != null) {
+             mPipeline.removeSink(mFileRecorder);
         }
     }
 
     private void enableNativeGpsPassthrough(boolean enabled) {
         if(enabled) {
-            try {
-                mPipeline.addSource(createSourceFromClassName(
-                            NativeLocationSource.class.getName()));
-            } catch(DataSourceException e) {
-                Log.w(TAG, "Unable to enable native GPS passthrough", e);
-            }
-        } else {
-            mPipeline.removeSource(NativeLocationSource.class.getName());
+            mNativeLocationSource = mPipeline.addSource(
+                    new NativeLocationSource(this));
+        } else if(mNativeLocationSource != null) {
+            mPipeline.removeSource(mNativeLocationSource);
+            mNativeLocationSource = null;
         }
     }
 

@@ -9,7 +9,6 @@ import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSourceException;
 import com.openxc.remote.sources.VehicleDataSourceResourceException;
-import com.openxc.remote.sources.VehicleDataSource;
 
 import junit.framework.Assert;
 
@@ -55,19 +54,19 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
 
     @SmallTest
     public void testDefaultDevice() throws VehicleDataSourceException {
-        source = new UsbVehicleDataSource(getContext(), callback);
+        source = new UsbVehicleDataSource(callback, getContext());
     }
 
     @SmallTest
     public void testCustomDevice() throws VehicleDataSourceException {
-        source = new UsbVehicleDataSource(getContext(), callback,
+        source = new UsbVehicleDataSource(callback, getContext(),
                 deviceUri);
     }
 
     @SmallTest
     public void testMalformedUri() throws VehicleDataSourceException {
         try {
-            new UsbVehicleDataSource(getContext(), callback,
+            new UsbVehicleDataSource(callback, getContext(),
                     malformedDeviceUri);
         } catch(VehicleDataSourceResourceException e) {
             return;
@@ -78,7 +77,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
     @SmallTest
     public void testUriWithBadScheme() throws VehicleDataSourceException {
         try {
-            new UsbVehicleDataSource(getContext(), callback,
+            new UsbVehicleDataSource(callback, getContext(),
                     incorrectSchemeUri);
         } catch(VehicleDataSourceResourceException e) {
             return;

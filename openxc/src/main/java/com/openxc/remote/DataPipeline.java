@@ -46,10 +46,6 @@ public class DataPipeline implements SourceCallback {
         }
     }
 
-    public void removeSink(String sinkName) {
-        removeEndpoint(mSinks, sinkName);
-    }
-
     // TODO do we add duplicate types? yes for now
     public VehicleDataSink addSink(VehicleDataSink sink) {
         sink.setMeasurements(mMeasurements);
@@ -65,9 +61,10 @@ public class DataPipeline implements SourceCallback {
         return mSources;
     }
 
-    public void addSource(VehicleDataSource source) {
+    public VehicleDataSource addSource(VehicleDataSource source) {
         source.setCallback(this);
         mSources.add(source);
+        return source;
     }
 
     public void removeSource(VehicleDataSource source) {
@@ -75,10 +72,6 @@ public class DataPipeline implements SourceCallback {
             mSources.remove(source);
             source.stop();
         }
-    }
-
-    public void removeSource(String sourceName) {
-        removeEndpoint(mSources, sourceName);
     }
 
     public void stop() {
@@ -124,17 +117,4 @@ public class DataPipeline implements SourceCallback {
             .add("numMeasurementTypes", mMeasurements.size())
             .toString();
     }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void removeEndpoint(CopyOnWriteArrayList endpoints,
-            String endpointName) {
-        for(Iterator<VehicleDataEndpoint> i = endpoints.iterator();
-                i.hasNext();) {
-            VehicleDataEndpoint endpoint = i.next();
-            if(endpoint.getClass().getName().equals(endpointName)) {
-                endpoint.stop();
-                endpoints.remove(endpoint);
-            }
-        }
-    };
 }
