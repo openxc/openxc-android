@@ -98,7 +98,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
                     device);
         }
 
-        if(!device.getScheme().equals("usb")) {
+        if(device.getScheme() == null || !device.getScheme().equals("usb")) {
             throw new VehicleDataSourceResourceException(
                     "USB device URI must have the usb:// scheme");
         }

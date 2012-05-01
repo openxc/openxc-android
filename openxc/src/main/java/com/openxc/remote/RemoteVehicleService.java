@@ -173,13 +173,18 @@ public class RemoteVehicleService extends Service {
         try {
             source = constructor.newInstance(this, mPipeline, resourceUri);
         } catch(InstantiationException e) {
-            Log.w(TAG, "Couldn't instantiate data source " + sourceType, e);
+            String message = "Couldn't instantiate data source " + sourceType;
+            Log.w(TAG, message, e);
+            throw new DataSourceException(message, e);
         } catch(IllegalAccessException e) {
-            Log.w(TAG, "Default constructor is not accessible on " +
-                    sourceType, e);
+            String message = "Default constructor is not accessible on " +
+                    sourceType;
+            Log.w(TAG, message, e);
+            throw new DataSourceException(message, e);
         } catch(InvocationTargetException e) {
-            Log.w(TAG, sourceType + "'s constructor threw an exception",
-                    e);
+            String message = sourceType + "'s constructor threw an exception";
+            Log.w(TAG, message, e);
+            throw new DataSourceException(message, e);
         }
         return source;
     }

@@ -187,8 +187,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             throws UnrecognizedMeasurementTypeException,
             NoValueException, RemoteVehicleServiceException {
         pause(150);
-        service.setDataSource(UsbVehicleDataSource.class.getName(),
-                "nothing");
+        service.setDataSource(UsbVehicleDataSource.class.getName());
         pause(150);
         VehicleMeasurement measurement = service.get(VehicleSpeed.class);
         double age = measurement.getAge();
