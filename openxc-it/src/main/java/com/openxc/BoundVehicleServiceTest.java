@@ -124,8 +124,9 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         pause(300);
         // kill the incoming data stream
         service.setDataSource(UsbVehicleDataSource.class.getName());
-        pause(500);
+        pause(100);
         service.addListener(VehicleSpeed.class, speedListener);
+        pause(50);
         checkReceivedMeasurement(speedReceived);
     }
 
