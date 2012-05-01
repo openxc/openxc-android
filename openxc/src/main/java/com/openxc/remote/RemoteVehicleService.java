@@ -64,9 +64,6 @@ import android.util.Log;
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";
-    private final static String[] DEFAULT_DATA_SOURCES = {
-            UsbVehicleDataSource.class.getName(),
-    };
 
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
@@ -134,12 +131,10 @@ public class RemoteVehicleService extends Service {
 
     private void initializeDefaultSources() {
         mPipeline.clearSources();
-        for(String sourceName : DEFAULT_DATA_SOURCES) {
-            try {
-                mPipeline.addSource(createSourceFromClassName(sourceName));
-            } catch(DataSourceException e) {
-                Log.w(TAG, "Unable to add data source " + sourceName, e);
-            }
+        try {
+            mPipeline.addSource(new UsbVehicleDataSource(this));
+        } catch(DataSourceException e) {
+            Log.w(TAG, "Unable to add default USB data source", e);
         }
     }
 
