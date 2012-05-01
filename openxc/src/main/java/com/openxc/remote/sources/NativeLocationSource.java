@@ -1,5 +1,7 @@
 package com.openxc.remote.sources;
 
+import java.net.URI;
+
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 
@@ -20,6 +22,11 @@ public class NativeLocationSource extends BaseVehicleDataSource
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
 
     private LocationManager mLocationManager;
+
+    public NativeLocationSource(Context context, SourceCallback callback,
+            URI resourceUri) {
+        this(context, callback);
+    }
 
     public NativeLocationSource(Context context, SourceCallback callback) {
         super(context, callback);
