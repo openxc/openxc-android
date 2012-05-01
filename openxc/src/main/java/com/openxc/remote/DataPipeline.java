@@ -46,7 +46,6 @@ public class DataPipeline implements SourceCallback {
         }
     }
 
-    // TODO do we add duplicate types? yes for now
     public VehicleDataSink addSink(VehicleDataSink sink) {
         sink.setMeasurements(mMeasurements);
         mSinks.add(sink);

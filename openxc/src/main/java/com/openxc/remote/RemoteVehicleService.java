@@ -143,8 +143,6 @@ public class RemoteVehicleService extends Service {
         return createSourceFromClassName(sourceName, null);
     }
 
-    // TODO do we add duplicate sources of the same type? yes for now, this will
-    // screw up some tests that rely on it stopping the previous source
     public VehicleDataSource createSourceFromClassName(String sourceName,
             String resource) throws DataSourceException {
         Class<? extends VehicleDataSource> sourceType;
@@ -225,6 +223,8 @@ public class RemoteVehicleService extends Service {
                 Log.i(TAG, "Setting data source to " + dataSource +
                         " with resource " + resource);
                 // TODO clearing everything when adding is a legacy feature
+                // and actually, it will erase the sources besides USB like the
+                // native location source
                 mPipeline.clearSources();
                 try {
                     mPipeline.addSource(createSourceFromClassName(
@@ -252,9 +252,6 @@ public class RemoteVehicleService extends Service {
     };
 
     private void enableRecording(boolean enabled) {
-        // TODO need a flag in this function to say if it should be unique in
-        // its type as we want to stop other recorders. for now we'll just clear
-        // 'em
         if(enabled) {
             mFileRecorder = mPipeline.addSink(
                     new FileRecorderSink(new AndroidFileOpener(this)));
