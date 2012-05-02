@@ -115,8 +115,8 @@ public class RemoteVehicleService extends Service {
      * Reset the data source to the default when all clients disconnect.
      *
      * Since normal service users that want the default (i.e. USB device) don't
-     * call setDataSource, they get stuck in a situation where a trace file
-     * is being used.
+     * usually set a new data source, they get could stuck in a situation where
+     * a trace file is being used if we don't reset it.
      */
     @Override
     public boolean onUnbind(Intent intent) {
@@ -136,53 +136,6 @@ public class RemoteVehicleService extends Service {
         } catch(DataSourceException e) {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
-    }
-
-    public VehicleDataSource createSourceFromClassName(String sourceName)
-            throws DataSourceException {
-        return createSourceFromClassName(sourceName, null);
-    }
-
-    public VehicleDataSource createSourceFromClassName(String sourceName,
-            String resource) throws DataSourceException {
-        Class<? extends VehicleDataSource> sourceType;
-        try {
-            sourceType = Class.forName(sourceName).asSubclass(
-                    VehicleDataSource.class);
-        } catch(ClassNotFoundException e) {
-            Log.w(TAG, "Couldn't find data source type " + sourceName, e);
-            throw new DataSourceException();
-        }
-
-        Constructor<? extends VehicleDataSource> constructor;
-        try {
-            constructor = sourceType.getConstructor(Context.class,
-                    SourceCallback.class, URI.class);
-        } catch(NoSuchMethodException e) {
-            Log.w(TAG, sourceType + " doesn't have a proper constructor");
-            throw new DataSourceException();
-        }
-
-        URI resourceUri = uriFromResourceString(resource);
-
-        VehicleDataSource source = null;
-        try {
-            source = constructor.newInstance(this, mPipeline, resourceUri);
-        } catch(InstantiationException e) {
-            String message = "Couldn't instantiate data source " + sourceType;
-            Log.w(TAG, message, e);
-            throw new DataSourceException(message, e);
-        } catch(IllegalAccessException e) {
-            String message = "Default constructor is not accessible on " +
-                    sourceType;
-            Log.w(TAG, message, e);
-            throw new DataSourceException(message, e);
-        } catch(InvocationTargetException e) {
-            String message = sourceType + "'s constructor threw an exception";
-            Log.w(TAG, message, e);
-            throw new DataSourceException(message, e);
-        }
-        return source;
     }
 
     private URI uriFromResourceString(String resource) {
@@ -218,21 +171,8 @@ public class RemoteVehicleService extends Service {
                 mNotifier.unregister(measurementId, listener);
             }
 
-            public void setDataSource(String dataSource, String resource)
-                    throws RemoteException {
-                Log.i(TAG, "Setting data source to " + dataSource +
-                        " with resource " + resource);
-                // TODO clearing everything when adding is a legacy feature
-                // and actually, it will erase the sources besides USB like the
-                // native location source
-                mPipeline.clearSources();
-                try {
-                    mPipeline.addSource(createSourceFromClassName(
-                                dataSource, resource));
-                } catch(DataSourceException e) {
-                    Log.w(TAG, "Unable to add data source", e);
-                    throw new RemoteException();
-                }
+            public void resetDataSources() {
+                initializeDefaultSources();
             }
 
             public void enableRecording(boolean enabled) {

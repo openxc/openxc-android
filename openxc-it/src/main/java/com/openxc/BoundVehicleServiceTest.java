@@ -88,15 +88,14 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.setDataSource(TraceVehicleDataSource.class.getName(),
-                traceUri.toString());
+        service.setDataSource(new TraceVehicleDataSource(getContext, traceUri));
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
         if(service != null)  {
-            service.setDataSource(UsbVehicleDataSource.class.getName());
+            service.resetDataSources();
         }
     }
 
@@ -120,7 +119,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             UnrecognizedMeasurementTypeException {
         pause(300);
         // kill the incoming data stream
-        service.setDataSource(UsbVehicleDataSource.class.getName());
+        service.resetDataSources();
         pause(100);
         service.addListener(VehicleSpeed.class, speedListener);
         pause(50);
@@ -185,7 +184,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
             throws UnrecognizedMeasurementTypeException,
             NoValueException, RemoteVehicleServiceException {
         pause(150);
-        service.setDataSource(UsbVehicleDataSource.class.getName());
+        service.resetDataSources();
         pause(150);
         VehicleMeasurement measurement = service.get(VehicleSpeed.class);
         double age = measurement.getAge();

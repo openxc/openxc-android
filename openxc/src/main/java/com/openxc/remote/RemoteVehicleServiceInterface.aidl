@@ -22,7 +22,7 @@ interface RemoteVehicleServiceInterface {
     void removeListener(String measurementType,
             RemoteVehicleServiceListenerInterface listener);
 
-    void setDataSource(String dataSource, String resource);
+    void resetDataSources();
     void enableRecording(boolean enabled);
     void enableNativeGpsPassthrough(boolean enabled);
     int getMessageCount();

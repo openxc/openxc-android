@@ -83,7 +83,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
      * @param callback An object implementing the SourceCallback interface that
      *      should receive data as it is received and parsed.
      */
-    public TraceVehicleDataSource(Context context, SourceCallback callback) {
+    public TraceVehicleDataSource(SourceCallback callback, Context context) {
         super(callback, context);
         new Thread(this).start();
     }
@@ -99,9 +99,9 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
      *          "resource://resource_id"
      * @throws DataSourceException  if no filename is specified
      */
-    public TraceVehicleDataSource(Context context, SourceCallback callback,
+    public TraceVehicleDataSource(SourceCallback callback, Context context,
             URI filename) throws DataSourceException {
-        this(context, callback);
+        this(callback, context);
         if(filename == null) {
             throw new DataSourceException(
                     "No filename specified for the trace source");
@@ -110,6 +110,11 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
         mFilename = filename;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
+    }
+
+    public TraceVehicleDataSource(Context context, URI filename)
+            throws DataSourceException {
+        this(null, context, filename);
     }
 
     /**

@@ -78,8 +78,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.setDataSource(TraceVehicleDataSource.class.getName(),
-                traceUri.toString());
+        service.setDataSource(new TraceVehicleDataSource(getContext(), traceUri));
         pause(200);
     }
 
@@ -87,7 +86,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
     protected void tearDown() throws Exception {
         super.tearDown();
         if(service != null)  {
-            service.setDataSource(UsbVehicleDataSource.class.getName());
+            service.resetDataSources();
         }
     }
 

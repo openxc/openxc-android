@@ -26,6 +26,7 @@ import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.remote.sources.VehicleDataSource;
 import com.openxc.remote.sinks.MockedLocationSink;
 
 import android.content.Context;
@@ -236,6 +237,31 @@ public class VehicleService extends Service {
     }
 
     /**
+     * Reset vehicle service to use only the default vehicle source.
+     *
+     * The default vehicle data source is USB. If a USB CAN translator is not
+     * connected, there will be no more data.
+     *
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public void resetDataSources() throws RemoteVehicleServiceException {
+        Log.i(TAG, "Resetting data sources");
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.resetDataSources();
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to reset data sources");
+            }
+        } else {
+            Log.w(TAG, "Can't reset data sources -- " +
+                    "not connected to remote service yet");
+        }
+    }
+
+    /**
      * Unregister a previously reigstered VehicleMeasurement.Listener instance.
      *
      * When an application is no longer interested in received measurement
@@ -275,11 +301,6 @@ public class VehicleService extends Service {
         }
     }
 
-    public void setDataSource(String dataSource)
-        throws RemoteVehicleServiceException {
-        setDataSource(dataSource, null);
-    }
-
     /**
      * Set and initialize the data source for the vehicle service.
      *
@@ -287,40 +308,21 @@ public class VehicleService extends Service {
      * the setDataSource method after binding with VehicleService:
      *
      *      service.setDataSource(
-     *              TraceVehicleDataSource.class.getName(),
-     *              "resource://" + R.raw.tracejson);
+     *              new TraceVehicleDataSource("/sdcard/openxc/trace.json"));
      *
      * If no data source is specified (i.e. this method is never called), the
      * {@link UsbVehicleDataSource} will be used by default with the a default
      * USB device ID.
      *
-     * @param dataSource The name of a class implementing the
-     *      VehicleDataSource.
-     * @param resource An optional initializer for the data source - this will
-     *      be passed to its constructor as a String. An example is a path to a
-     *      file if the data source is a trace file playback.
+     * @param source an instance of a VehicleDataSource
      * @throws RemoteVehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
-    public void setDataSource(String dataSource, String resource)
+    public void setDataSource(VehicleDataSource source)
             throws RemoteVehicleServiceException {
-        mDataSource = dataSource;
-        mDataSourceResource = resource;
-
-        if(mRemoteService != null) {
-            try {
-                Log.i(TAG, "Setting data source to " + dataSource);
-                mRemoteService.setDataSource(dataSource, resource);
-            } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException("Unable to set data " +
-                        "source of remote vehicle service", e);
-            }
-        } else {
-            Log.w(TAG, "Can't set data source -- " +
-                    "not connected to remote service yet, but will set when " +
-                    "connected");
-        }
+        Log.i(TAG, "Setting data source to " + source);
+        // TODO
     }
 
     /**
@@ -473,14 +475,6 @@ public class VehicleService extends Service {
                 }
             }
 
-            // in case the data source was set before being bound, set it again
-            if(mDataSource != null && mDataSourceResource != null) {
-                try {
-                    setDataSource(mDataSource, mDataSourceResource);
-                } catch(RemoteVehicleServiceException e) {
-                    Log.w(TAG, "Unable to set data source after binding", e);
-                }
-            }
             setRecordingStatus();
             setNativeGpsStatus();
         }
