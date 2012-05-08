@@ -1,10 +1,5 @@
 package com.openxc.remote.sources;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import android.util.Log;
-
 import com.openxc.remote.sources.SourceCallback;
 
 /**
@@ -12,10 +7,6 @@ import com.openxc.remote.sources.SourceCallback;
  * sources.
  */
 public class BaseVehicleDataSource implements VehicleDataSource {
-
-    private static final String TAG = "BaseVehicleDataSource";
-    private static final String RECEIVE_METHOD_NAME = "receive";
-
     private SourceCallback mCallback;
 
     public BaseVehicleDataSource() { }
@@ -38,6 +29,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     public void stop() {
         // do nothing by default
     }
+
 
     protected void handleMessage(String name, Object value) {
         handleMessage(name, value, null);
