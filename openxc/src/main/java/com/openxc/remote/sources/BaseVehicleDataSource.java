@@ -1,5 +1,9 @@
 package com.openxc.remote.sources;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.openxc.remote.sources.SourceCallback;
 
 /**
@@ -8,8 +12,13 @@ import com.openxc.remote.sources.SourceCallback;
  */
 public class BaseVehicleDataSource implements VehicleDataSource {
     private SourceCallback mCallback;
+    private final Lock mCallbackLock;
+    private final Condition mCallbackChanged;
 
-    public BaseVehicleDataSource() { }
+    public BaseVehicleDataSource() {
+        mCallbackLock = new ReentrantLock();
+        mCallbackChanged = mCallbackLock.newCondition();
+    }
 
     /**
      * Construct a new instance and set the callback.
@@ -19,11 +28,15 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      *      source.
      */
     public BaseVehicleDataSource(SourceCallback callback) {
+        this();
         setCallback(callback);
     }
 
     public void setCallback(SourceCallback callback) {
+        mCallbackLock.lock();
         mCallback = callback;
+        mCallbackChanged.signal();
+        mCallbackLock.unlock();
     }
 
     public void stop() {
@@ -43,5 +56,15 @@ public class BaseVehicleDataSource implements VehicleDataSource {
 
     protected SourceCallback getCallback() {
         return mCallback;
+    }
+
+    protected void waitForCallbackInitialization() {
+        mCallbackLock.lock();
+        while(getCallback() == null) {
+            try {
+                mCallbackChanged.await();
+            } catch(InterruptedException e) { }
+        }
+        mCallbackLock.unlock();
     }
 }

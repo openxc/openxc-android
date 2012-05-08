@@ -132,16 +132,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
      * thread will die a quick death.
      */
     public void run() {
-        synchronized(getCallback()) {
-            while(getCallback() == null) {
-                try {
-                    getCallback().wait();
-                } catch(InterruptedException e) {
-                    Log.w(TAG, "Interrupted while waiting for a " +
-                            "callback to be created", e);
-                }
-            }
-        }
+        waitForCallbackInitialization();
         Log.d(TAG, "Starting the trace playback because we have valid " +
                 "callback " + getCallback());
 
