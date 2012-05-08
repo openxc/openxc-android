@@ -5,8 +5,7 @@ import com.openxc.units.Boolean;
 /**
  * The ParkingBrakeStatus measurement knows if the parking brake is engaged or not.
  */
-public class ParkingBrakeStatus extends Measurement<Boolean>
-        implements VehicleMeasurement {
+public class ParkingBrakeStatus extends Measurement<Boolean> {
     public final static String ID = "parking_brake_status";
 
     public ParkingBrakeStatus(Boolean value) {

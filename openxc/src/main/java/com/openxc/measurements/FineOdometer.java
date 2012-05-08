@@ -6,8 +6,7 @@ import com.openxc.util.Range;
 /**
  * The FineOdometer is a persistent odometer recording.
  */
-public class FineOdometer extends Measurement<Kilometer>
-        implements VehicleMeasurement {
+public class FineOdometer extends Measurement<Kilometer> {
     private final static Range<Kilometer> RANGE =
         new Range<Kilometer>(new Kilometer(0), new Kilometer(100));
     public final static String ID = "fine_odometer_since_restart";

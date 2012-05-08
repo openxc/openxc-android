@@ -25,7 +25,7 @@ import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleButtonEvent;
-import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
@@ -90,7 +90,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         }
     }
 
-    private void checkReceivedMeasurement(VehicleMeasurement measurement) {
+    private void checkReceivedMeasurement(MeasurementInterface measurement) {
         assertNotNull(measurement);
     }
 

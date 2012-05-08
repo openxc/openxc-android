@@ -17,8 +17,7 @@ import com.openxc.units.Boolean;
  * synchronously?
  */
 public class VehicleDoorStatus
-        extends Measurement<State<VehicleDoorStatus.DoorId>>
-        implements VehicleMeasurement {
+        extends Measurement<State<VehicleDoorStatus.DoorId>> {
     private AgingData<Boolean> mAction;
 
     public final static String ID = "door_status";

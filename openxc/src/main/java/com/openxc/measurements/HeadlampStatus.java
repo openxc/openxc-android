@@ -5,8 +5,7 @@ import com.openxc.units.Boolean;
 /**
  * The HeadlampStatus measurement knows if the headlamps are off or on.
  */
-public class HeadlampStatus extends Measurement<Boolean>
-        implements VehicleMeasurement {
+public class HeadlampStatus extends Measurement<Boolean> {
     public final static String ID = "headlamp_status";
 
     public HeadlampStatus(Boolean value) {

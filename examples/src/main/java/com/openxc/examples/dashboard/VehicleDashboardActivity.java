@@ -31,7 +31,7 @@ import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleButtonEvent;
-import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.FuelConsumed;
 import com.openxc.measurements.FuelLevel;
@@ -72,7 +72,7 @@ public class VehicleDashboardActivity extends Activity {
 
     WindshieldWiperStatus.Listener mWiperListener =
             new WindshieldWiperStatus.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final WindshieldWiperStatus wiperStatus =
                 (WindshieldWiperStatus) measurement;
             mHandler.post(new Runnable() {
@@ -85,7 +85,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     VehicleSpeed.Listener mSpeedListener = new VehicleSpeed.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final VehicleSpeed speed = (VehicleSpeed) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -97,7 +97,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     FuelConsumed.Listener mFuelConsumedListener = new FuelConsumed.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final FuelConsumed fuel = (FuelConsumed) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -109,7 +109,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     FuelLevel.Listener mFuelLevelListener = new FuelLevel.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final FuelLevel level = (FuelLevel) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -121,7 +121,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     Odometer.Listener mOdometerListener = new Odometer.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final Odometer odometer = (Odometer) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -133,7 +133,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     FineOdometer.Listener mFineOdometerListener = new FineOdometer.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final FineOdometer odometer = (FineOdometer) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -146,7 +146,7 @@ public class VehicleDashboardActivity extends Activity {
 
     BrakePedalStatus.Listener mBrakePedalStatus =
             new BrakePedalStatus.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final BrakePedalStatus status = (BrakePedalStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -159,7 +159,7 @@ public class VehicleDashboardActivity extends Activity {
 
     ParkingBrakeStatus.Listener mParkingBrakeStatus =
             new ParkingBrakeStatus.Listener() {
-    	public void receive(VehicleMeasurement measurement) {
+    	public void receive(MeasurementInterface measurement) {
 	    final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -171,7 +171,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     HeadlampStatus.Listener mHeadlampStatus = new HeadlampStatus.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final HeadlampStatus status = (HeadlampStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -183,7 +183,7 @@ public class VehicleDashboardActivity extends Activity {
     };
 
     EngineSpeed.Listener mEngineSpeed = new EngineSpeed.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final EngineSpeed status = (EngineSpeed) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -196,7 +196,7 @@ public class VehicleDashboardActivity extends Activity {
 
     PowertrainTorque.Listener mPowertrainTorque =
             new PowertrainTorque.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final PowertrainTorque status = (PowertrainTorque) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -209,7 +209,7 @@ public class VehicleDashboardActivity extends Activity {
 
     AcceleratorPedalPosition.Listener mAcceleratorPedalPosition =
             new AcceleratorPedalPosition.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final AcceleratorPedalPosition status =
                 (AcceleratorPedalPosition) measurement;
             mHandler.post(new Runnable() {
@@ -224,7 +224,7 @@ public class VehicleDashboardActivity extends Activity {
 
     TransmissionGearPosition.Listener mTransmissionGearPos =
             new TransmissionGearPosition.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final TransmissionGearPosition status =
                     (TransmissionGearPosition) measurement;
             mHandler.post(new Runnable() {
@@ -238,7 +238,7 @@ public class VehicleDashboardActivity extends Activity {
 
     IgnitionStatus.Listener mIgnitionStatus =
             new IgnitionStatus.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final IgnitionStatus status = (IgnitionStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -251,7 +251,7 @@ public class VehicleDashboardActivity extends Activity {
 
     VehicleButtonEvent.Listener mButtonEvent =
             new VehicleButtonEvent.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final VehicleButtonEvent event = (VehicleButtonEvent) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -265,7 +265,7 @@ public class VehicleDashboardActivity extends Activity {
 
     VehicleDoorStatus.Listener mDoorStatus =
             new VehicleDoorStatus.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final VehicleDoorStatus event = (VehicleDoorStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -279,7 +279,7 @@ public class VehicleDashboardActivity extends Activity {
 
     Latitude.Listener mLatitude =
             new Latitude.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final Latitude lat = (Latitude) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -292,7 +292,7 @@ public class VehicleDashboardActivity extends Activity {
 
     Longitude.Listener mLongitude =
             new Longitude.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final Longitude lng = (Longitude) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
@@ -322,7 +322,7 @@ public class VehicleDashboardActivity extends Activity {
 
     SteeringWheelAngle.Listener mSteeringWheelListener =
             new SteeringWheelAngle.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             final SteeringWheelAngle angle = (SteeringWheelAngle) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
