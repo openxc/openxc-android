@@ -346,6 +346,13 @@ public class VehicleService extends Service implements SourceCallback {
         mSources.add(source);
     }
 
+    public void removeDataSource(VehicleDataSource source) {
+        if(source != null) {
+            mSources.remove(source);
+            source.stop();
+        }
+    }
+
     /**
      * Enable or disable recording of a trace file.
      *
