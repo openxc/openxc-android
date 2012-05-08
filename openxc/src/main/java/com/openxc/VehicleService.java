@@ -1,5 +1,7 @@
 package com.openxc;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,6 +23,7 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 
+import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSource;
 import com.openxc.remote.sinks.MockedLocationSink;
 
@@ -55,7 +58,7 @@ import android.util.Log;
  * Measurement.Listener object and passing it to the service via the
  * addListener method.
  */
-public class VehicleService extends Service {
+public class VehicleService extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleService";
@@ -71,6 +74,7 @@ public class VehicleService extends Service {
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
     private ListenerSink mNotifier;
+    private CopyOnWriteArrayList<VehicleDataSource> mSources;
     private BiMap<String, Class<? extends MeasurementInterface>>
             mMeasurementIdToClass;
     private BiMap<Class<? extends MeasurementInterface>, String>
@@ -127,6 +131,9 @@ public class VehicleService extends Service {
         mPreferenceListener = watchPreferences(mPreferences);
 
         mPipeline = new DataPipeline();
+        mNotifier = new ListenerSink(mMeasurementIdToClass);
+        mPipeline.addSink(mNotifier);
+        mSources = new CopyOnWriteArrayList<VehicleDataSource>();
         mMeasurementIdToClass = HashBiMap.create();
         mMeasurementClassToId = HashBiMap.create();
         bindRemote();
@@ -258,6 +265,22 @@ public class VehicleService extends Service {
         }
     }
 
+    public void clearSources() throws RemoteVehicleServiceException {
+        Log.i(TAG, "Clearing all data sources");
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.clearSources();
+            } catch(RemoteException e) {
+                throw new RemoteVehicleServiceException(
+                        "Unable to clear data sources");
+            }
+        } else {
+            Log.w(TAG, "Can't clear all data sources -- " +
+                    "not connected to remote service yet");
+        }
+        mSources.clear();
+    }
+
     /**
      * Unregister a previously reigstered Measurement.Listener instance.
      *
@@ -302,9 +325,9 @@ public class VehicleService extends Service {
      * Set and initialize the data source for the vehicle service.
      *
      * For example, to use the trace data source to playback a trace file, call
-     * the setDataSource method after binding with VehicleService:
+     * the addDataSource method after binding with VehicleService:
      *
-     *      service.setDataSource(
+     *      service.addDataSource(
      *              new TraceVehicleDataSource("/sdcard/openxc/trace.json"));
      *
      * If no data source is specified (i.e. this method is never called), the
@@ -316,10 +339,11 @@ public class VehicleService extends Service {
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
-    public void setDataSource(VehicleDataSource source)
+    public void addDataSource(VehicleDataSource source)
             throws RemoteVehicleServiceException {
-        Log.i(TAG, "Setting data source to " + source);
-        // TODO
+        Log.i(TAG, "Adding data source " + source);
+        source.setCallback(this);
+        mSources.add(source);
     }
 
     /**
@@ -401,6 +425,15 @@ public class VehicleService extends Service {
             .toString();
     }
 
+    public void receive(String measurementId, Object value, Object event) {
+        try {
+            mRemoteService.receive(measurementId,
+                    RawMeasurement.measurementFromObjects(value, event));
+        } catch(RemoteException e) {
+            Log.d(TAG, "Unable to send message to remote service", e);
+        }
+    }
+
     private void setRecordingStatus() {
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
@@ -449,15 +482,8 @@ public class VehicleService extends Service {
             mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
                     service);
 
-            mRemoteBoundLock.lock();
-            mIsBound = true;
-            mRemoteBoundCondition.signal();
-            mRemoteBoundLock.unlock();
-
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mPipeline.addSource(mRemoteSource);
-            mNotifier = new ListenerSink(mMeasurementIdToClass);
-            mPipeline.addSink(mNotifier);
 
             // in case we had listeners registered before the remote service was
             // connected, sync up here.
@@ -478,6 +504,11 @@ public class VehicleService extends Service {
 
             setRecordingStatus();
             setNativeGpsStatus();
+
+            mRemoteBoundLock.lock();
+            mIsBound = true;
+            mRemoteBoundCondition.signal();
+            mRemoteBoundLock.unlock();
         }
 
         public void onServiceDisconnected(ComponentName className) {

@@ -22,20 +22,14 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receive(String measurementId, RawMeasurement value) {
-                handleMessage(measurementId, value);
+            public void receive(String measurementId,
+                    RawMeasurement measurement) {
+                handleMessage(measurementId, measurement.getValue(),
+                        measurement.getEvent());
             }
         };
 
     public RemoteVehicleServiceListenerInterface getListener() {
         return mRemoteListener;
-    }
-
-    private void handleMessage(String name, RawMeasurement measurement) {
-        try {
-            mService.receive(name, measurement);
-        } catch(RemoteException e) {
-            Log.d(TAG, "Unable to send message to remote service", e);
-        }
     }
 }
