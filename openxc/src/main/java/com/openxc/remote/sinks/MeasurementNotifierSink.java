@@ -74,8 +74,7 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
         return mListeners.size();
     }
 
-    public void receive(String measurementId,
-            RawMeasurement measurement) {
+    public void receive(String measurementId, RawMeasurement measurement) {
         if(mListeners.containsKey(measurementId)) {
             try  {
                 mNotificationQueue.put(measurementId);
@@ -155,7 +154,7 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
                             rawMeasurement);
                 }
             }
-            Log.d(TAG, "Stopped USB listener");
+            Log.d(TAG, "Stopped measurement notifier");
         }
     }
 };
