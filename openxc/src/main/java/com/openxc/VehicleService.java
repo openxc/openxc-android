@@ -130,12 +130,12 @@ public class VehicleService extends Service implements SourceCallback {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPreferenceListener = watchPreferences(mPreferences);
 
+        mMeasurementIdToClass = HashBiMap.create();
+        mMeasurementClassToId = HashBiMap.create();
         mPipeline = new DataPipeline();
         mNotifier = new ListenerSink(mMeasurementIdToClass);
         mPipeline.addSink(mNotifier);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
-        mMeasurementIdToClass = HashBiMap.create();
-        mMeasurementClassToId = HashBiMap.create();
         bindRemote();
     }
 
