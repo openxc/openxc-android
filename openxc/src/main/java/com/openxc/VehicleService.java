@@ -482,7 +482,7 @@ public class VehicleService extends Service implements SourceCallback {
             mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
                     service);
 
-            mRemoteSource = new RemoteListenerSource(mRemoteService);
+            mRemoteSource = new RemoteListenerSource();
             mPipeline.addSource(mRemoteSource);
 
             // in case we had listeners registered before the remote service was
