@@ -21,8 +21,11 @@ interface RemoteVehicleServiceInterface {
             RemoteVehicleServiceListenerInterface listener);
     void removeListener(String measurementType,
             RemoteVehicleServiceListenerInterface listener);
+    void receive(String measurementType, in RawMeasurement measurement);
 
-    void resetDataSources();
+    void initializeDefaultSources();
+    void clearSources();
+
     void enableRecording(boolean enabled);
     void enableNativeGpsPassthrough(boolean enabled);
     int getMessageCount();

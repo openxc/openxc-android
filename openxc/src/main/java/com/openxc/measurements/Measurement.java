@@ -1,6 +1,12 @@
 package com.openxc.measurements;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.google.common.base.Objects;
+
+import com.openxc.remote.NoValueException;
+import com.openxc.remote.RawMeasurement;
 
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
@@ -76,6 +82,54 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
 
     public TheUnit getValue() {
         return mValue.getValue();
+    }
+
+    public static MeasurementInterface getMeasurementFromRaw(
+            Class<? extends MeasurementInterface> measurementType,
+            RawMeasurement rawMeasurement)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Constructor<? extends MeasurementInterface> constructor;
+        try {
+            constructor = measurementType.getConstructor(
+                    Double.class, Double.class);
+        } catch(NoSuchMethodException e) {
+            constructor = null;
+        }
+
+        if(constructor == null) {
+            try {
+                constructor = measurementType.getConstructor(Double.class);
+            } catch(NoSuchMethodException e) {
+                throw new UnrecognizedMeasurementTypeException(measurementType +
+                        " doesn't have a numerical constructor", e);
+            }
+        }
+
+        if(rawMeasurement.isValid()) {
+            MeasurementInterface measurement;
+            try {
+                if(rawMeasurement.hasEvent()) {
+                    measurement = constructor.newInstance(
+                            rawMeasurement.getValue(),
+                            rawMeasurement.getEvent());
+                } else {
+                    measurement = constructor.newInstance(rawMeasurement.getValue());
+                }
+            } catch(InstantiationException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " is abstract", e);
+            } catch(IllegalAccessException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " has a private constructor", e);
+            } catch(InvocationTargetException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + "'s constructor threw an exception",
+                        e);
+            }
+            measurement.setTimestamp(rawMeasurement.getTimestamp());
+            return measurement;
+        }
+        throw new NoValueException();
     }
 
     @Override

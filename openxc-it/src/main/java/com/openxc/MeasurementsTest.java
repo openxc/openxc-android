@@ -85,7 +85,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
     protected void tearDown() throws Exception {
         super.tearDown();
         if(service != null)  {
-            service.resetDataSources();
+            service.initializeDefaultSources();
         }
     }
 

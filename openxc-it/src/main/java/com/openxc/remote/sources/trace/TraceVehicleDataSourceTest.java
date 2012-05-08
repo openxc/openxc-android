@@ -90,7 +90,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             DataSourceException {
         receivedNumericalCallback = false;
         receivedBooleanCallback = false;
-        source = new TraceVehicleDataSource(getContext(), callback, traceUri);
+        source = new TraceVehicleDataSource(callback, getContext(), traceUri);
         startTrace(source);
         assertTrue(receivedNumericalCallback);
         assertTrue(receivedBooleanCallback);
@@ -101,7 +101,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             DataSourceException {
         receivedNumericalCallback = false;
         receivedBooleanCallback = false;
-        source = new TraceVehicleDataSource(getContext(), callback,
+        source = new TraceVehicleDataSource(callback, getContext(),
                 malformedTraceUri);
         startTrace(source);
         assertFalse(receivedNumericalCallback);
@@ -114,7 +114,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             URISyntaxException {
         receivedNumericalCallback = false;
         receivedBooleanCallback = false;
-        source = new TraceVehicleDataSource(getContext(), callback,
+        source = new TraceVehicleDataSource(callback, getContext(),
                 new URL("file:///foo").toURI());
         startTrace(source);
         assertFalse(receivedNumericalCallback);
@@ -123,6 +123,6 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @SmallTest
     public void testConstructWithCallbackAndFile()
             throws DataSourceException {
-        source = new TraceVehicleDataSource(getContext(), callback, traceUri);
+        source = new TraceVehicleDataSource(callback, getContext(), traceUri);
     }
 }

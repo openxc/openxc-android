@@ -8,7 +8,7 @@ import com.openxc.remote.sinks.FileRecorderSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
 import com.openxc.remote.sinks.VehicleDataSink;
 
-import com.openxc.remote.sources.SourceCallback;
+import com.openxc.remote.sources.ApplicationSource;
 import com.openxc.remote.sources.DataSourceException;
 import com.openxc.remote.sources.NativeLocationSource;
 import com.openxc.remote.sources.usb.UsbVehicleDataSource;
@@ -63,6 +63,7 @@ public class RemoteVehicleService extends Service {
     private DataPipeline mPipeline;
     private MeasurementNotifierSink mNotifier;
     private VehicleDataSource mNativeLocationSource;
+    private ApplicationSource mApplicationSource;
     private VehicleDataSink mFileRecorder;
 
     @Override
@@ -130,18 +131,9 @@ public class RemoteVehicleService extends Service {
         } catch(DataSourceException e) {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
-    }
 
-    private URI uriFromResourceString(String resource) {
-        URI resourceUri = null;
-        if(resource != null) {
-            try {
-                resourceUri = new URI(resource);
-            } catch(URISyntaxException e) {
-                Log.w(TAG, "Unable to parse resource as URI " + resource);
-            }
-        }
-        return resourceUri;
+        mApplicationSource = new ApplicationSource();
+        mPipeline.addSource(mApplicationSource);
     }
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
@@ -149,6 +141,11 @@ public class RemoteVehicleService extends Service {
             public RawMeasurement get(String measurementId)
                     throws RemoteException {
                 return mPipeline.get(measurementId);
+            }
+
+            public void receive(String measurementId,
+                    RawMeasurement measurement) {
+                mApplicationSource.handleMessage(measurementId, measurement);
             }
 
             public void addListener(String measurementId,
@@ -165,8 +162,12 @@ public class RemoteVehicleService extends Service {
                 mNotifier.unregister(measurementId, listener);
             }
 
-            public void resetDataSources() {
-                initializeDefaultSources();
+            public void initializeDefaultSources() {
+                RemoteVehicleService.this.initializeDefaultSources();
+            }
+
+            public void clearSources() {
+                mPipeline.clearSources();
             }
 
             public void enableRecording(boolean enabled) {

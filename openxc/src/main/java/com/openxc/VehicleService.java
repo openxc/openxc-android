@@ -63,18 +63,17 @@ public class VehicleService extends Service {
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
     private Condition mRemoteBoundCondition;
-    private String mDataSource;
-    private String mDataSourceResource;
     private PreferenceListener mPreferenceListener;
     private SharedPreferences mPreferences;
 
     private IBinder mBinder = new VehicleServiceBinder();
     private RemoteVehicleServiceInterface mRemoteService;
-    private Multimap<Class<? extends VehicleMeasurement>,
-            VehicleMeasurement.Listener> mListeners;
-    private BiMap<String, Class<? extends VehicleMeasurement>>
+    private DataPipeline mPipeline;
+    private RemoteListenerSource mRemoteSource;
+    private ListenerSink mNotifier;
+    private BiMap<String, Class<? extends MeasurementInterface>>
             mMeasurementIdToClass;
-    private BiMap<Class<? extends VehicleMeasurement>, String>
+    private BiMap<Class<? extends MeasurementInterface>, String>
             mMeasurementClassToId;
 
     /**
@@ -127,8 +126,7 @@ public class VehicleService extends Service {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPreferenceListener = watchPreferences(mPreferences);
 
-        mListeners = HashMultimap.create();
-        mListeners = Multimaps.synchronizedMultimap(mListeners);
+        mPipeline = new DataPipeline();
         mMeasurementIdToClass = HashBiMap.create();
         mMeasurementClassToId = HashBiMap.create();
         bindRemote();
@@ -138,6 +136,9 @@ public class VehicleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Service being destroyed");
+        if(mPipeline != null) {
+            mPipeline.stop();
+        }
         unwatchPreferences(mPreferences, mPreferenceListener);
         unbindRemote();
     }
@@ -150,28 +151,27 @@ public class VehicleService extends Service {
     }
 
     /**
-     * Retrieve a VehicleMeasurement from the current data source.
+     * Retrieve a Measurement from the current data source.
      *
      * Regardless of if a measurement is available or not, return a
-     * VehicleMeasurement instance of the specified type. The measurement can be
+     * Measurement instance of the specified type. The measurement can be
      * checked to see if it has a value.
      *
-     * @param measurementType The class of the requested VehicleMeasurement
+     * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
-     * @return An instance of the requested VehicleMeasurement which may or may
+     * @return An instance of the requested Measurement which may or may
      *      not have a value.
      * @throws UnrecognizedMeasurementTypeException if passed a measurementType
-     *      that does not extend VehicleMeasurement
+     *      that does not extend Measurement
      * @throws NoValueException if no value has yet been received for this
      *      measurementType
-     * @see VehicleMeasurement
+     * @see Measurement
      */
-    public VehicleMeasurement get(
-            Class<? extends VehicleMeasurement> measurementType)
+    public MeasurementInterface get(
+            Class<? extends MeasurementInterface> measurementType)
             throws UnrecognizedMeasurementTypeException, NoValueException {
 
         cacheMeasurementId(measurementType);
-
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
                     "throwing a NoValueException");
@@ -182,7 +182,8 @@ public class VehicleService extends Service {
         try {
             RawMeasurement rawMeasurement = mRemoteService.get(
                     mMeasurementClassToId.get(measurementType));
-            return getMeasurementFromRaw(measurementType, rawMeasurement);
+            return Measurement.getMeasurementFromRaw(measurementType,
+                    rawMeasurement);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             throw new NoValueException();
@@ -190,36 +191,36 @@ public class VehicleService extends Service {
     }
 
     /**
-     * Register to receive async updates for a specific VehicleMeasurement type.
+     * Register to receive async updates for a specific Measurement type.
      *
      * Use this method to register an object implementing the
-     * VehicleMeasurement.Listener interface to receive real-time updates
+     * Measurement.Listener interface to receive real-time updates
      * whenever a new value is received for the specified measurementType.
      *
-     * @param measurementType The class of the VehicleMeasurement
+     * @param measurementType The class of the Measurement
      *      (e.g. VehicleSpeed.class) the listener was listening for
-     * @param listener An VehicleMeasurement.Listener instance that was
+     * @param listener An Measurement.Listener instance that was
      *      previously registered with addListener
      * @throws RemoteVehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      * @throws UnrecognizedMeasurementTypeException if passed a measurementType
-     *      not extend VehicleMeasurement
+     *      not extend Measurement
      */
     public void addListener(
-            Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement.Listener listener)
+            Class<? extends MeasurementInterface> measurementType,
+            MeasurementInterface.Listener listener)
             throws RemoteVehicleServiceException,
             UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         cacheMeasurementId(measurementType);
-        mListeners.put(measurementType, listener);
+        mNotifier.register(measurementType, listener);
 
         if(mRemoteService != null) {
             try {
                 mRemoteService.addListener(
                         mMeasurementClassToId.get(measurementType),
-                        mRemoteListener);
+                        mRemoteSource.getListener());
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(
                         "Unable to register listener with remote vehicle " +
@@ -241,11 +242,12 @@ public class VehicleService extends Service {
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
-    public void resetDataSources() throws RemoteVehicleServiceException {
+    public void initializeDefaultSources()
+            throws RemoteVehicleServiceException {
         Log.i(TAG, "Resetting data sources");
         if(mRemoteService != null) {
             try {
-                mRemoteService.resetDataSources();
+                mRemoteService.initializeDefaultSources();
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(
                         "Unable to reset data sources");
@@ -257,33 +259,33 @@ public class VehicleService extends Service {
     }
 
     /**
-     * Unregister a previously reigstered VehicleMeasurement.Listener instance.
+     * Unregister a previously reigstered Measurement.Listener instance.
      *
      * When an application is no longer interested in received measurement
      * updates (e.g. when it's pausing or exiting) it should unregister all
      * previously registered listeners to save on CPU.
      *
-     * @param measurementType The class of the requested VehicleMeasurement
+     * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
-     * @param listener An object implementing the VehicleMeasurement.Listener
+     * @param listener An object implementing the Measurement.Listener
      *      interface that should be called with any new measurements.
      * @throws RemoteVehicleServiceException if the listener is unable to be
      *      registered with the library internals - an exceptional situation
      *      that shouldn't occur.
      * @throws UnrecognizedMeasurementTypeException if passed a class that does
-     *      not extend VehicleMeasurement
+     *      not extend Measurement
      */
-    public void removeListener(Class<? extends VehicleMeasurement>
-            measurementType, VehicleMeasurement.Listener listener)
+    public void removeListener(Class<? extends MeasurementInterface>
+            measurementType, MeasurementInterface.Listener listener)
             throws RemoteVehicleServiceException {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
-        mListeners.remove(measurementType, listener);
+        mNotifier.unregister(measurementType, listener);
         if(mRemoteService != null) {
             try {
                 mRemoteService.removeListener(
                         mMeasurementClassToId.get(measurementType),
-                        mRemoteListener);
+                        mRemoteSource.getListener());
             } catch(RemoteException e) {
                 throw new RemoteVehicleServiceException(
                         "Unable to unregister listener from remote " +
@@ -396,7 +398,6 @@ public class VehicleService extends Service {
     public String toString() {
         return Objects.toStringHelper(this)
             .add("bound", mIsBound)
-            .add("numListeners", mListeners.size())
             .toString();
     }
 
@@ -453,15 +454,20 @@ public class VehicleService extends Service {
             mRemoteBoundCondition.signal();
             mRemoteBoundLock.unlock();
 
+            mRemoteSource = new RemoteListenerSource(mRemoteService);
+            mPipeline.addSource(mRemoteSource);
+            mNotifier = new ListenerSink(mMeasurementIdToClass);
+            mPipeline.addSink(mNotifier);
+
             // in case we had listeners registered before the remote service was
             // connected, sync up here.
-            Set<Class<? extends VehicleMeasurement>> listenerKeys =
-                mListeners.keySet();
-            for(Class<? extends VehicleMeasurement> key : listenerKeys) {
+            Set<Class<? extends MeasurementInterface>> listenerKeys =
+                mNotifier.getListeners().keySet();
+            for(Class<? extends MeasurementInterface> key : listenerKeys) {
                 try {
                     mRemoteService.addListener(
                             mMeasurementClassToId.get(key),
-                            mRemoteListener);
+                            mRemoteSource.getListener());
                     Log.i(TAG, "Added listener " + key +
                             " to remote vehicle service after it started up");
                 } catch(RemoteException e) {
@@ -478,11 +484,12 @@ public class VehicleService extends Service {
             Log.w(TAG, "RemoteVehicleService disconnected unexpectedly");
             mRemoteService = null;
             mIsBound = false;
+            mPipeline.removeSource(mRemoteSource);
         }
     };
 
     private void cacheMeasurementId(
-            Class<? extends VehicleMeasurement> measurementType)
+            Class<? extends MeasurementInterface> measurementType)
             throws UnrecognizedMeasurementTypeException {
         String measurementId;
         try {
@@ -497,56 +504,6 @@ public class VehicleService extends Service {
                     measurementType + " has an inaccessible ID", e);
         }
         mMeasurementClassToId = mMeasurementIdToClass.inverse();
-    }
-
-    private RemoteVehicleServiceListenerInterface mRemoteListener =
-        new RemoteVehicleServiceListenerInterface.Stub() {
-            public void receive(String measurementId,
-                    RawMeasurement value) {
-                Class<? extends VehicleMeasurement> measurementClass =
-                    mMeasurementIdToClass.get(measurementId);
-                VehicleMeasurement measurement;
-                try {
-                    measurement = getMeasurementFromRaw(measurementClass,
-                            value);
-                } catch(UnrecognizedMeasurementTypeException e) {
-                    Log.w(TAG, "Received notification for a malformed " +
-                            "measurement type: " + measurementClass, e);
-                    return;
-                } catch(NoValueException e) {
-                    Log.w(TAG, "Received notification for a blank " +
-                            "measurement of type: " + measurementClass, e);
-                    return;
-                }
-                // TODO we may want to dump these in a queue handled by another
-                // thread or post runnables to the main handler, sort of like we
-                // do in the RemoteVehicleService. If the listener's receive
-                // blocks...actually it might be OK.
-                //
-                // we do this in RVS because the data source would block waiting
-                // for the receive to return before handling another.
-                //
-                // in this case we're being called from the handler thread in
-                // RVS...so yeah, we don't want to block.
-                //
-                // AppLink posts runnables, but that might create a ton of
-                // objects and be a lot of overhead. the queue method might be
-                // fine, and if we use that we should see if the queue+notifying
-                // thread setup can be abstracted and shared by the two
-                // services.
-                notifyListeners(measurementClass, measurement);
-            }
-        };
-
-    private void notifyListeners(
-            Class<? extends VehicleMeasurement> measurementType,
-            VehicleMeasurement measurement) {
-        synchronized(mListeners) {
-            for(VehicleMeasurement.Listener listener :
-                    mListeners.get(measurementType)) {
-                listener.receive(measurement);
-            }
-        }
     }
 
     private void bindRemote() {
@@ -570,57 +527,6 @@ public class VehicleService extends Service {
         if(mRemoteBoundLock != null) {
             mRemoteBoundLock.unlock();
         }
-    }
-
-    private VehicleMeasurement getMeasurementFromRaw(
-            Class<? extends VehicleMeasurement> measurementType,
-            RawMeasurement rawMeasurement)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
-        Constructor<? extends VehicleMeasurement> constructor;
-        try {
-            constructor = measurementType.getConstructor(
-                    Double.class, Double.class);
-        } catch(NoSuchMethodException e) {
-            constructor = null;
-        }
-
-        if(constructor == null) {
-            try {
-                constructor = measurementType.getConstructor(Double.class);
-            } catch(NoSuchMethodException e) {
-                throw new UnrecognizedMeasurementTypeException(measurementType +
-                        " doesn't have a numerical constructor", e);
-            }
-        }
-
-        if(rawMeasurement.isValid()) {
-            VehicleMeasurement measurement;
-            try {
-                if(rawMeasurement.hasEvent()) {
-                    measurement = constructor.newInstance(
-                            rawMeasurement.getValue(),
-                            rawMeasurement.getEvent());
-                } else {
-                    measurement = constructor.newInstance(rawMeasurement.getValue());
-                }
-            } catch(InstantiationException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " is abstract", e);
-            } catch(IllegalAccessException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " has a private constructor", e);
-            } catch(InvocationTargetException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + "'s constructor threw an exception",
-                        e);
-            }
-            measurement.setTimestamp(rawMeasurement.getTimestamp());
-            return measurement;
-        } else {
-            Log.d(TAG, rawMeasurement +
-                    " isn't valid -- returning a blank measurement");
-        }
-        throw new NoValueException();
     }
 
     private class PreferenceListener
