@@ -26,7 +26,6 @@ interface RemoteVehicleServiceInterface {
     void initializeDefaultSources();
     void clearSources();
 
-    void enableRecording(boolean enabled);
     void enableNativeGpsPassthrough(boolean enabled);
     int getMessageCount();
 }

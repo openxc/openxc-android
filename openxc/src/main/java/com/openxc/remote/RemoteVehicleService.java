@@ -4,7 +4,6 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.MockedLocationSink;
-import com.openxc.remote.sinks.FileRecorderSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
 import com.openxc.remote.sinks.VehicleDataSink;
 
@@ -64,7 +63,6 @@ public class RemoteVehicleService extends Service {
     private MeasurementNotifierSink mNotifier;
     private VehicleDataSource mNativeLocationSource;
     private ApplicationSource mApplicationSource;
-    private VehicleDataSink mFileRecorder;
 
     @Override
     public void onCreate() {
@@ -170,11 +168,6 @@ public class RemoteVehicleService extends Service {
                 mPipeline.clearSources();
             }
 
-            public void enableRecording(boolean enabled) {
-                Log.i(TAG, "Setting trace recording status to " + enabled);
-                RemoteVehicleService.this.enableRecording(enabled);
-            }
-
             public void enableNativeGpsPassthrough(boolean enabled) {
                 Log.i(TAG, "Setting native GPS passtrough status to " +
                         enabled);
@@ -185,15 +178,6 @@ public class RemoteVehicleService extends Service {
                 return RemoteVehicleService.this.getMessageCount();
             }
     };
-
-    private void enableRecording(boolean enabled) {
-        if(enabled) {
-            mFileRecorder = mPipeline.addSink(
-                    new FileRecorderSink(new AndroidFileOpener(this)));
-        } else if(mFileRecorder != null) {
-             mPipeline.removeSink(mFileRecorder);
-        }
-    }
 
     private void enableNativeGpsPassthrough(boolean enabled) {
         if(enabled) {

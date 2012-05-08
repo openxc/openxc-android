@@ -23,9 +23,14 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 
+import com.openxc.remote.sinks.VehicleDataSink;
+
 import com.openxc.remote.sources.SourceCallback;
 import com.openxc.remote.sources.VehicleDataSource;
 import com.openxc.remote.sinks.MockedLocationSink;
+import com.openxc.remote.sinks.FileRecorderSink;
+
+import com.openxc.util.AndroidFileOpener;
 
 import android.content.Context;
 import android.app.Service;
@@ -73,6 +78,7 @@ public class VehicleService extends Service implements SourceCallback {
     private RemoteVehicleServiceInterface mRemoteService;
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
+    private VehicleDataSink mFileRecorder;
     private ListenerSink mNotifier;
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
     private BiMap<String, Class<? extends MeasurementInterface>>
@@ -363,18 +369,12 @@ public class VehicleService extends Service implements SourceCallback {
      */
     public void enableRecording(boolean enabled)
             throws RemoteVehicleServiceException {
-        if(mRemoteService != null) {
-            try {
-                Log.i(TAG, "Setting recording to " + enabled);
-                mRemoteService.enableRecording(enabled);
-            } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException("Unable to set " +
-                        "recording status of remote vehicle service", e);
-            }
-        } else {
-            Log.w(TAG, "Can't set recording status -- " +
-                    "not connected to remote service yet, but will set when " +
-                    "connected");
+        Log.i(TAG, "Setting recording to " + enabled);
+        if(enabled) {
+            mFileRecorder = mPipeline.addSink(
+                    new FileRecorderSink(new AndroidFileOpener(this)));
+        } else if(mFileRecorder != null) {
+             mPipeline.removeSink(mFileRecorder);
         }
     }
 
