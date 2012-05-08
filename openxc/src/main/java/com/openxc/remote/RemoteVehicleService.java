@@ -1,11 +1,5 @@
 package com.openxc.remote;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import java.net.URISyntaxException;
-import java.net.URI;
-
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sinks.DefaultDataSink;

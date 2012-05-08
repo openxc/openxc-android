@@ -1,8 +1,5 @@
 package com.openxc;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,18 +10,16 @@ import com.google.common.base.Objects;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Multimap;
 
+import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.Measurement;
 
+import com.openxc.remote.DataPipeline;
 import com.openxc.remote.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.remote.sources.VehicleDataSource;
 import com.openxc.remote.sinks.MockedLocationSink;
@@ -57,7 +52,7 @@ import android.util.Log;
  * measurement to the get method.
  *
  * Asynchronous measurements are obtained by defining a
- * VehicleMeasurement.Listener object and passing it to the service via the
+ * Measurement.Listener object and passing it to the service via the
  * addListener method.
  */
 public class VehicleService extends Service {

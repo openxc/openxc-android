@@ -11,8 +11,6 @@ import java.text.SimpleDateFormat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.openxc.remote.RawMeasurement;
-
 import com.openxc.util.FileOpener;
 
 import android.util.Log;

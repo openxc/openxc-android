@@ -19,8 +19,6 @@ import com.openxc.remote.sources.VehicleDataSource;
  * VehicleDataSinks.
  */
 public class DataPipeline implements SourceCallback {
-    private final static String TAG = "DataPipeline";
-
     private int mMessagesReceived = 0;
     private Map<String, RawMeasurement> mMeasurements;
     private CopyOnWriteArrayList<VehicleDataSink> mSinks;

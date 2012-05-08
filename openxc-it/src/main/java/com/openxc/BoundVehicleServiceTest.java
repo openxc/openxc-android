@@ -21,7 +21,6 @@ import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
 
 import com.openxc.remote.sources.trace.TraceVehicleDataSource;
-import com.openxc.remote.sources.usb.UsbVehicleDataSource;
 
 import com.openxc.VehicleService;
 

@@ -3,18 +3,14 @@ package com.openxc.remote.sinks;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
-
-import android.os.Parcelable;
 
 public class MeasurementNotifierSinkTest {
     Map<String, RawMeasurement> measurements;
