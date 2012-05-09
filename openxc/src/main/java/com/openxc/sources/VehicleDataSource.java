@@ -2,7 +2,7 @@ package com.openxc.sources;
 
 import com.openxc.sources.SourceCallback;
 
-import com.openxc.remote.VehicleDataEndpoint;
+import com.openxc.VehicleDataEndpoint;
 
 /**
  * The interface for all sources of raw vehicle measurements.

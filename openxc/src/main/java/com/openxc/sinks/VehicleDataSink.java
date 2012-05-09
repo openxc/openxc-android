@@ -3,7 +3,7 @@ package com.openxc.sinks;
 import java.util.Map;
 
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.VehicleDataEndpoint;
+import com.openxc.VehicleDataEndpoint;
 
 public interface VehicleDataSink extends VehicleDataEndpoint {
     public void receive(String measurementId, Object value, Object event);
