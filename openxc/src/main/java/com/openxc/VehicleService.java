@@ -403,11 +403,13 @@ public class VehicleService extends Service implements SourceCallback {
     }
 
     public void receive(String measurementId, Object value, Object event) {
-        try {
-            mRemoteService.receive(measurementId,
-                    RawMeasurement.measurementFromObjects(value, event));
-        } catch(RemoteException e) {
-            Log.d(TAG, "Unable to send message to remote service", e);
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.receive(measurementId,
+                        RawMeasurement.measurementFromObjects(value, event));
+            } catch(RemoteException e) {
+                Log.d(TAG, "Unable to send message to remote service", e);
+            }
         }
     }
 
