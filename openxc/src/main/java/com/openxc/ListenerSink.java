@@ -27,7 +27,7 @@ public class ListenerSink extends BaseVehicleDataSink {
             mMeasurementIdToClass;
 
     public ListenerSink(BiMap<String, Class<? extends MeasurementInterface>>
-            measurementIdToClass) {
+                measurementIdToClass) {
         mMeasurementIdToClass = measurementIdToClass;
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
@@ -36,6 +36,13 @@ public class ListenerSink extends BaseVehicleDataSink {
     public void register(Class<? extends MeasurementInterface> measurementType,
             Measurement.Listener listener) {
         mListeners.put(measurementType, listener);
+
+        String measurementId = mMeasurementIdToClass.inverse().get(measurementType);
+        if(containsMeasurement(measurementId)) {
+            // send the last known value to the new listener
+            RawMeasurement rawMeasurement = get(measurementId);
+            receive(measurementId, rawMeasurement);
+        }
     }
 
     public void unregister(Class<? extends MeasurementInterface> measurementType,
