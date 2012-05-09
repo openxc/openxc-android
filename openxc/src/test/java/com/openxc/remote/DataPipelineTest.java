@@ -8,10 +8,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-import com.openxc.remote.sinks.BaseVehicleDataSink;
+import com.openxc.sinks.BaseVehicleDataSink;
 
-import com.openxc.remote.sources.SourceCallback;
-import com.openxc.remote.sources.VehicleDataSource;
+import com.openxc.sources.SourceCallback;
+import com.openxc.sources.VehicleDataSource;
 
 public class DataPipelineTest {
     DataPipeline pipeline;

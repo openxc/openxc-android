@@ -23,12 +23,12 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 
-import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.sinks.VehicleDataSink;
 
-import com.openxc.remote.sources.SourceCallback;
-import com.openxc.remote.sources.VehicleDataSource;
-import com.openxc.remote.sinks.MockedLocationSink;
-import com.openxc.remote.sinks.FileRecorderSink;
+import com.openxc.sources.SourceCallback;
+import com.openxc.sources.VehicleDataSource;
+import com.openxc.sinks.MockedLocationSink;
+import com.openxc.sinks.FileRecorderSink;
 
 import com.openxc.util.AndroidFileOpener;
 

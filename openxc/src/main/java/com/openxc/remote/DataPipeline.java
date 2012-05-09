@@ -9,10 +9,10 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
-import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.sinks.VehicleDataSink;
 
-import com.openxc.remote.sources.SourceCallback;
-import com.openxc.remote.sources.VehicleDataSource;
+import com.openxc.sources.SourceCallback;
+import com.openxc.sources.VehicleDataSource;
 
 /**
  * The DataPipeline ferries raw messages from VehicleDataSources to

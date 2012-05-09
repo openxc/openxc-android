@@ -2,15 +2,15 @@ package com.openxc.remote;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import com.openxc.remote.sinks.MockedLocationSink;
-import com.openxc.remote.sinks.MeasurementNotifierSink;
-import com.openxc.remote.sinks.VehicleDataSink;
+import com.openxc.sinks.MockedLocationSink;
+import com.openxc.sinks.MeasurementNotifierSink;
+import com.openxc.sinks.VehicleDataSink;
 
-import com.openxc.remote.sources.ApplicationSource;
-import com.openxc.remote.sources.DataSourceException;
-import com.openxc.remote.sources.NativeLocationSource;
-import com.openxc.remote.sources.usb.UsbVehicleDataSource;
-import com.openxc.remote.sources.VehicleDataSource;
+import com.openxc.sources.ApplicationSource;
+import com.openxc.sources.DataSourceException;
+import com.openxc.sources.NativeLocationSource;
+import com.openxc.sources.usb.UsbVehicleDataSource;
+import com.openxc.sources.VehicleDataSource;
 
 import com.openxc.util.AndroidFileOpener;
 
@@ -46,10 +46,10 @@ import android.util.Log;
  *
  * When a message is received from the data source, it is passed to any and all
  * registered message "sinks" - these receivers conform to the
- * {@link com.openxc.remote.sinks.VehicleDataSinkInterface}. There will always
+ * {@link com.openxc.sinks.VehicleDataSinkInterface}. There will always
  * be at least one sink that stores the latest messages and handles passing on
  * data to users of the VehicleService class. Other possible sinks include the
- * {@link com.openxc.remote.sinks.FileRecorderSink} which records a trace of the
+ * {@link com.openxc.sinks.FileRecorderSink} which records a trace of the
  * raw OpenXC measurements to a file and a web streaming sink (which streams the
  * raw data to a web application). Users cannot register additional sinks at
  * this time, but the feature is planned.

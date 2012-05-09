@@ -30,7 +30,7 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
 
-import com.openxc.remote.sources.trace.TraceVehicleDataSource;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
 
