@@ -1,5 +1,6 @@
 package com.openxc.remote.sinks;
 
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
     }
 
     private void init() {
+        mNotificationQueue = new LinkedBlockingQueue<String>();
         mListeners = new RemoteCallbackList<
             RemoteVehicleServiceListenerInterface>();
         mNotificationThread = new NotificationThread();
