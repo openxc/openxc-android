@@ -4,6 +4,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * A file opener that uses the standard Java IO API.
+ *
+ * This file opener will work in a regular JVM, so it is good for test cases.
+ */
 public class JavaFileOpener implements FileOpener {
     private final boolean APPEND = true;
 

@@ -9,6 +9,11 @@ import android.content.Context;
 
 import android.util.Log;
 
+/**
+ * A file opener that uses Android's permission flags.
+ *
+ * This file opener will only work on an Android device.
+ */
 public class AndroidFileOpener implements FileOpener {
     private static final String TAG = "AndroidFileOpener";
 
