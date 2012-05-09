@@ -145,18 +145,16 @@ public class RemoteVehicleService extends Service {
                 mApplicationSource.handleMessage(measurementId, measurement);
             }
 
-            public void addListener(String measurementId,
+            public void register(
                     RemoteVehicleServiceListenerInterface listener) {
-                Log.i(TAG, "Adding listener " + listener + " to " +
-                        measurementId);
-                mNotifier.register(measurementId, listener);
+                Log.i(TAG, "Adding listener " + listener);
+                mNotifier.register(listener);
             }
 
-            public void removeListener(String measurementId,
+            public void unregister(
                     RemoteVehicleServiceListenerInterface listener) {
-                Log.i(TAG, "Removing listener " + listener + " from " +
-                        measurementId);
-                mNotifier.unregister(measurementId, listener);
+                Log.i(TAG, "Removing listener " + listener);
+                mNotifier.unregister(listener);
             }
 
             public void initializeDefaultSources() {

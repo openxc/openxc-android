@@ -1,11 +1,7 @@
 package com.openxc.remote.sinks;
 
-import java.util.Collections;
-
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.openxc.remote.RawMeasurement;
@@ -23,8 +19,9 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
 
     private NotificationThread mNotificationThread;
     private BlockingQueue<String> mNotificationQueue;
-    private Map<String, RemoteCallbackList<
-        RemoteVehicleServiceListenerInterface>> mListeners;
+    private int mListenerCount;
+    private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+            mListeners;
 
     public MeasurementNotifierSink(Map<String, RawMeasurement> measurements) {
         super(measurements);
@@ -36,10 +33,8 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
     }
 
     private void init() {
-        mNotificationQueue = new LinkedBlockingQueue<String>();
-        mListeners = Collections.synchronizedMap(
-                new HashMap<String, RemoteCallbackList<
-                RemoteVehicleServiceListenerInterface>>());
+        mListeners = new RemoteCallbackList<
+            RemoteVehicleServiceListenerInterface>();
         mNotificationThread = new NotificationThread();
         mNotificationThread.start();
     }
@@ -50,51 +45,42 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
         }
     }
 
-    public void register(String measurementId,
+    public synchronized void register(
             RemoteVehicleServiceListenerInterface listener) {
-        getOrCreateCallbackList(measurementId).register(listener);
-        if(containsMeasurement(measurementId)) {
-            // send the last known value to the new listener
-            RawMeasurement rawMeasurement = get(measurementId);
+        mListeners.register(listener);
+        ++mListenerCount;
+
+        // send the last known value of all measurements to the new listener
+        for(Map.Entry<String, RawMeasurement> entry :
+                mMeasurements.entrySet()) {
             try {
-                listener.receive(measurementId, rawMeasurement);
+                listener.receive(entry.getKey(), entry.getValue());
             } catch(RemoteException e) {
                 Log.w(TAG, "Couldn't notify application " +
                         "listener -- did it crash?", e);
+                break;
             }
         }
     }
 
-    public void unregister(String measurementId,
-            RemoteVehicleServiceListenerInterface listener) {
-        getOrCreateCallbackList(measurementId).unregister(listener);
+    public void unregister(RemoteVehicleServiceListenerInterface listener) {
+        mListeners.unregister(listener);
+        --mListenerCount;
     }
 
     public int getListenerCount() {
-        return mListeners.size();
+        return mListenerCount;
     }
 
     public void receive(String measurementId, RawMeasurement measurement) {
-        if(mListeners.containsKey(measurementId)) {
+        if(mNotificationQueue != null) {
             try  {
                 mNotificationQueue.put(measurementId);
             } catch(InterruptedException e) {}
         }
     }
 
-    private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-            getOrCreateCallbackList(String measurementId) {
-        RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-            callbackList = mListeners.get(measurementId);
-        if(callbackList == null) {
-            callbackList = new RemoteCallbackList<
-                RemoteVehicleServiceListenerInterface>();
-            mListeners.put(measurementId, callbackList);
-        }
-        return callbackList;
-    }
-
-    private void propagateMeasurement(
+    private static void propagateMeasurement(
             RemoteCallbackList<RemoteVehicleServiceListenerInterface> callbacks,
             String measurementId,
             RawMeasurement measurement) {
@@ -146,11 +132,9 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
                     continue;
                 }
 
-                RemoteCallbackList<RemoteVehicleServiceListenerInterface>
-                    callbacks = mListeners.get(measurementId);
                 RawMeasurement rawMeasurement = get(measurementId);
                 if(rawMeasurement != null) {
-                    propagateMeasurement(callbacks, measurementId,
+                    propagateMeasurement(mListeners, measurementId,
                             rawMeasurement);
                 }
             }

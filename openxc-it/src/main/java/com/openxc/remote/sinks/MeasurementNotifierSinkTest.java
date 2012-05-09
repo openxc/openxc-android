@@ -35,7 +35,7 @@ public class MeasurementNotifierSinkTest {
     @Test
     public void testRegister() {
         assertThat(notifier.getListenerCount(), equalTo(0));
-        notifier.register(measurementId, listener);
+        notifier.register(listener);
         assertThat(notifier.getListenerCount(), equalTo(1));
     }
 
@@ -44,31 +44,23 @@ public class MeasurementNotifierSinkTest {
         // this just shouldn't explode, it should ignore it...or should it?
         // failing silently is usually a bad thing
         assertThat(notifier.getListenerCount(), equalTo(0));
-        notifier.unregister(measurementId, listener);
+        notifier.unregister(listener);
         assertThat(notifier.getListenerCount(), equalTo(0));
     }
 
     @Test
     public void testUnregisterValid() {
-        notifier.register(measurementId, listener);
+        notifier.register(listener);
         assertThat(notifier.getListenerCount(), equalTo(1));
-        notifier.unregister(measurementId, listener);
+        notifier.unregister(listener);
         assertThat(notifier.getListenerCount(), equalTo(0));
     }
 
     @Test
     public void testReceiveCorrectId() {
-        notifier.register(measurementId, listener);
+        notifier.register(listener);
         assertThat(receivedId, equalTo(null));
         notifier.receive(measurementId, new RawMeasurement(1));
         assertThat(receivedId, equalTo(measurementId));
-    }
-
-    @Test
-    public void testNoReceiveAnotherId() {
-        notifier.register(measurementId, listener);
-        assertThat(receivedId, equalTo(null));
-        notifier.receive("another_measurement", new RawMeasurement(1));
-        assertThat(receivedId, equalTo(null));
     }
 }

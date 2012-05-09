@@ -228,21 +228,6 @@ public class VehicleService extends Service implements SourceCallback {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         cacheMeasurementId(measurementType);
         mNotifier.register(measurementType, listener);
-
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.addListener(
-                        mMeasurementClassToId.get(measurementType),
-                        mRemoteSource.getListener());
-            } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
-                        "Unable to register listener with remote vehicle " +
-                        "service", e);
-            }
-        } else {
-            Log.w(TAG, "Can't add listener -- " +
-                    "not connected to remote service yet");
-        }
     }
 
     /**
@@ -310,21 +295,6 @@ public class VehicleService extends Service implements SourceCallback {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
         mNotifier.unregister(measurementType, listener);
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.removeListener(
-                        mMeasurementClassToId.get(measurementType),
-                        mRemoteSource.getListener());
-            } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
-                        "Unable to unregister listener from remote " +
-                        "vehicle service", e);
-            }
-        } else {
-            Log.w(TAG, "Can't remove listener -- " +
-                    "not connected to remote vehicle service yet");
-
-        }
     }
 
     /**
@@ -492,23 +462,12 @@ public class VehicleService extends Service implements SourceCallback {
             mRemoteSource = new RemoteListenerSource();
             mPipeline.addSource(mRemoteSource);
 
-            // in case we had listeners registered before the remote service was
-            // connected, sync up here.
-            Set<Class<? extends MeasurementInterface>> listenerKeys =
-                mNotifier.getListeners().keySet();
-            for(Class<? extends MeasurementInterface> key : listenerKeys) {
-                try {
-                    mRemoteService.addListener(
-                            mMeasurementClassToId.get(key),
-                            mRemoteSource.getListener());
-                    Log.i(TAG, "Added listener " + key +
-                            " to remote vehicle service after it started up");
-                } catch(RemoteException e) {
-                    Log.w(TAG, "Unable to register listener with remote " +
-                            "vehicle service", e);
-                }
+            try {
+                mRemoteService.register(mRemoteSource.getListener());
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to register to receive " +
+                        "measurement callbacks", e);
             }
-
             setRecordingStatus();
             setNativeGpsStatus();
 
