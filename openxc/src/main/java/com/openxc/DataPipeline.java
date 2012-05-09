@@ -54,12 +54,6 @@ public class DataPipeline implements SourceCallback {
         return sink;
     }
 
-    public List<VehicleDataSink> getSinks() {
-        return mSinks;
-    }
-
-    public List<VehicleDataSource> getSources() {
-        return mSources;
     }
 
     public VehicleDataSource addSource(VehicleDataSource source) {

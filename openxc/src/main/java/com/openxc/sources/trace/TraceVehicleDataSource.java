@@ -121,6 +121,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
      * Stop trace file playback and the playback thread.
      */
     public void stop() {
+        super.stop();
         Log.d(TAG, "Stopping trace playback");
         mRunning = false;
     }

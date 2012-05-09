@@ -40,7 +40,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     }
 
     public void stop() {
-        // do nothing by default
+        setCallback(null);
     }
 
 

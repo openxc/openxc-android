@@ -166,6 +166,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
      * collector to aviod leaking a receiver in the Android framework.
      */
     public void stop() {
+        super.stop();
         Log.d(TAG, "Stopping USB listener");
         if(!mRunning) {
             Log.d(TAG, "Already stopped.");
