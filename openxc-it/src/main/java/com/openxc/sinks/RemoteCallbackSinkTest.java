@@ -24,7 +24,8 @@ public class RemoteCallbackSinkTest {
         // TODO what are the contractual guarantees that this class says about
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
-        notifier = new RemoteCallbackSink(measurements);
+        notifier = new RemoteCallbackSink();
+        notifier.setMeasurements(measurements);
         listener = new RemoteVehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId, RawMeasurement value) {
                 receivedId = measurementId;

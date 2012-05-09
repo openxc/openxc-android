@@ -1,7 +1,5 @@
 package com.openxc.sinks;
 
-import com.google.common.base.Objects;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
@@ -14,21 +12,19 @@ import com.openxc.measurements.Measurement;
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 
-import com.openxc.sinks.BaseVehicleDataSink;
-
 import android.util.Log;
 
-public class MeasurementListenerSink extends BaseVehicleDataSink {
+public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MeasurementListenerSink";
 
     private Multimap<Class<? extends MeasurementInterface>,
             MeasurementInterface.Listener> mListeners;
-    private BiMap<String, Class<? extends MeasurementInterface>>
-            mMeasurementIdToClass;
+    private static BiMap<String, Class<? extends MeasurementInterface>>
+            sMeasurementIdToClass;
 
     public MeasurementListenerSink(BiMap<String, Class<? extends MeasurementInterface>>
                 measurementIdToClass) {
-        mMeasurementIdToClass = measurementIdToClass;
+        sMeasurementIdToClass = measurementIdToClass;
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
     }
@@ -37,7 +33,7 @@ public class MeasurementListenerSink extends BaseVehicleDataSink {
             Measurement.Listener listener) {
         mListeners.put(measurementType, listener);
 
-        String measurementId = mMeasurementIdToClass.inverse().get(measurementType);
+        String measurementId = sMeasurementIdToClass.inverse().get(measurementType);
         if(containsMeasurement(measurementId)) {
             // send the last known value to the new listener
             RawMeasurement rawMeasurement = get(measurementId);
@@ -50,37 +46,21 @@ public class MeasurementListenerSink extends BaseVehicleDataSink {
         mListeners.remove(measurementType, listener);
     }
 
-    // TODO we may want to dump these in a queue handled by another
-    // thread or post runnables to the main handler, sort of like we
-    // do in the RemoteVehicleService. If the listener's receive
-    // blocks...actually it might be OK.
-    //
-    // we do this in RVS because the data source would block waiting
-    // for the receive to return before handling another.
-    //
-    // in this case we're being called from the handler thread in
-    // RVS...so yeah, we don't want to block.
-    //
-    // AppLink posts runnables, but that might create a ton of
-    // objects and be a lot of overhead. the queue method might be
-    // fine, and if we use that we should see if the queue+notifying
-    // thread setup can be abstracted and shared by the two
-    // services.
-    public void receive(String measurementId, RawMeasurement rawMeasurement) {
-        synchronized(mListeners) {
-            MeasurementInterface measurement = createMeasurement(
-                    measurementId, rawMeasurement);
-            for(MeasurementInterface.Listener listener :
-                    mListeners.get(mMeasurementIdToClass.get(measurementId))) {
-                listener.receive(measurement);
-            }
+    protected void propagateMeasurement(
+            String measurementId,
+            RawMeasurement rawMeasurement) {
+        MeasurementInterface measurement = createMeasurement(
+                measurementId, rawMeasurement);
+        for(MeasurementInterface.Listener listener :
+                mListeners.get(sMeasurementIdToClass.get(measurementId))) {
+            listener.receive(measurement);
         }
     }
 
-    private MeasurementInterface createMeasurement(
+    private static MeasurementInterface createMeasurement(
             String measurementId, RawMeasurement value) {
         Class<? extends MeasurementInterface> measurementClass =
-            mMeasurementIdToClass.get(measurementId);
+            sMeasurementIdToClass.get(measurementId);
         MeasurementInterface measurement = null;
         try {
             measurement = Measurement.getMeasurementFromRaw(
@@ -98,12 +78,5 @@ public class MeasurementListenerSink extends BaseVehicleDataSink {
     public Multimap<Class<? extends MeasurementInterface>,
            Measurement.Listener> getListeners() {
         return mListeners;
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("numListeners", mListeners.size())
-            .toString();
     }
 }
