@@ -67,6 +67,7 @@ public class RemoteVehicleService extends Service {
         super.onCreate();
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
+        mApplicationSource = new ApplicationSource();
         initializeDefaultSources();
         initializeDefaultSinks();
         acquireWakeLock();
@@ -125,9 +126,6 @@ public class RemoteVehicleService extends Service {
         } catch(DataSourceException e) {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
-
-        mApplicationSource = new ApplicationSource();
-        mPipeline.addSource(mApplicationSource);
     }
 
     private final RemoteVehicleServiceInterface.Stub mBinder =
@@ -160,6 +158,10 @@ public class RemoteVehicleService extends Service {
 
             public void clearSources() {
                 mPipeline.clearSources();
+                // the application source is a bit special and always needs to
+                // be there, otherwise an application developer will never be
+                // able to remove the USB source but still add their own source.
+                mPipeline.addSource(mApplicationSource);
             }
 
             public void enableNativeGpsPassthrough(boolean enabled) {
