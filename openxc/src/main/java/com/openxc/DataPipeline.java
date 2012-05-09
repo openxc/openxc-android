@@ -1,4 +1,4 @@
-package com.openxc.remote;
+package com.openxc;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
