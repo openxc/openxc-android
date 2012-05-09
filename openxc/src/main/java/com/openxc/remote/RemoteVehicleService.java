@@ -41,20 +41,17 @@ import android.util.Log;
  * RemoteVehicleService is purposefully primative as there are a small set of
  * objects that can be natively marshalled through an AIDL interface.
  *
- * The service initializes and connects to the vehicle data source when bound.
- * The data source is selected by the application by passing extra data along
- * with the bind Intent - see the {@link #onBind(Intent)} method for details.
- * Only one data source is supported at a time.
+ * By default, the only source of vehicle data is an OpenXC USB device. Other
+ * data sources can be instantiated by applications and given the
+ * RemoteVehicleService as their callback - data will flow backwards from the
+ * application process to the remote service and be indistinguishable from local
+ * data sources.
  *
- * When a message is received from the data source, it is passed to any and all
- * registered message "sinks" - these receivers conform to the
- * {@link com.openxc.sinks.VehicleDataSinkInterface}. There will always
- * be at least one sink that stores the latest messages and handles passing on
- * data to users of the VehicleService class. Other possible sinks include the
- * {@link com.openxc.sinks.FileRecorderSink} which records a trace of the
- * raw OpenXC measurements to a file and a web streaming sink (which streams the
- * raw data to a web application). Users cannot register additional sinks at
- * this time, but the feature is planned.
+ * This service uses the same {@link DataPipeline} as the {@link VehicleService}
+ * to move data from sources to sinks, but it the pipeline is not modifiable by
+ * the application as there is no good way to pass running sources through the
+ * AIDL interface. The same style is used here for clarity and in order to share
+ * code.
  */
 public class RemoteVehicleService extends Service {
     private final static String TAG = "RemoteVehicleService";

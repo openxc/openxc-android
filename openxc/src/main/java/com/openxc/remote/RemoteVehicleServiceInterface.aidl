@@ -15,15 +15,70 @@ import com.openxc.remote.RawMeasurement;
  * loosely typed in order to slip through the limited AIDL interface.
  */
 interface RemoteVehicleServiceInterface {
+    /**
+     * Retreive the most recent value for the measurement.
+     *
+     * @param measurementType must match the ID field of a known Measurement
+     *                        subclass.
+     * @return a RawMeasurement which may or may not have a value. This function
+     *         will never return null, even if no value is available.
+     */
     RawMeasurement get(String measurementType);
 
+    /**
+     * Register to receive asynchronous updates when measurements are received.
+     *
+     * All instances of VehicleService in application processes must register
+     * themselves if they want to use the asynchronous interface.
+     */
     void register(RemoteVehicleServiceListenerInterface listener);
+
+    /**
+     * Stop sending asynchronous measurement updates to a remote listener.
+     *
+     * Instances of VehicleService should unregister themselves if they no
+     * longer require real-time updates.
+     */
     void unregister(RemoteVehicleServiceListenerInterface listener);
+
+    /**
+     * Receive a new measurement that originates from an application.
+     *
+     * Applications may have alternative data sources that cannot be
+     * instantiated in the remote process (e.g. a trace file playback source).
+     * As an application's source receive updates, it can pass them back into
+     * the remote process using this method.
+     */
     void receive(String measurementType, in RawMeasurement measurement);
 
+    /**
+     * Re-initialize the list of sources back to the defaults.
+     *
+     * The default sources are the USB device source and a source that listens
+     * for application-generated updates via the
+     * {@link #receive(String, RawMeasurement)} method.
+     */
     void initializeDefaultSources();
+
+    /**
+     * Remove all existing data sources from the pipeline.
+     *
+     * No further measurements will be received after this method is called
+     * until either the default sources are re-initialized using
+     * {@link #initializeDefaultSources}. Note that this also removes the
+     * special "application" source which listens for updates via the
+     * {@link #receive(String, RawMeasurement)} method.
+     *
+     * TODO maybe it shouldn't remove that, it won't do anything unless the
+     * application developer does that anyway.
+     */
     void clearSources();
 
+    // TODO move this up to VehicleService just like the recorder
     void enableNativeGpsPassthrough(boolean enabled);
+
+    /**
+     * @return number of messages received since instantiation.
+     */
     int getMessageCount();
 }

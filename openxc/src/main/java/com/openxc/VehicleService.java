@@ -58,11 +58,24 @@ import android.util.Log;
  * will shut down when no more clients are bound to it.
  *
  * Synchronous measurements are obtained by passing the type of the desired
- * measurement to the get method.
- *
- * Asynchronous measurements are obtained by defining a
- * Measurement.Listener object and passing it to the service via the
+ * measurement to the get method. Asynchronous measurements are obtained by
+ * defining a Measurement.Listener object and passing it to the service via the
  * addListener method.
+ *
+ * The sources of data and any post-processing that happens is controlled by
+ * modifying a list of "sources" and "sinks". When a message is received from a
+ * data source, it is passed to any and all registered message "sinks" - these
+ * receivers conform to the {@link com.openxc.sinks.VehicleDataSinkInterface}.
+ * There will always be at least one sink that stores the latest messages and
+ * handles passing on data to users of the VehicleService class. Other possible
+ * sinks include the {@link com.openxc.sinks.FileRecorderSink} which records a
+ * trace of the raw OpenXC measurements to a file and a web streaming sink
+ * (which streams the raw data to a web application). Other possible sources
+ * include the {@link com.openxc.sources.TraceVehicleDataSource} which reads a
+ * previously recorded vehicle data trace file and plays back the measurements
+ * in real-time.
+ *
+ * TODO add a function to add custom in-process sinks
  */
 public class VehicleService extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
@@ -159,7 +172,7 @@ public class VehicleService extends Service implements SourceCallback {
     }
 
     /**
-     * Retrieve a Measurement from the current data source.
+     * Retrieve the most current value of a measurement.
      *
      * Regardless of if a measurement is available or not, return a
      * Measurement instance of the specified type. The measurement can be
@@ -224,7 +237,7 @@ public class VehicleService extends Service implements SourceCallback {
     }
 
     /**
-     * Reset vehicle service to use only the default vehicle source.
+     * Reset vehicle service to use only the default vehicle sources.
      *
      * The default vehicle data source is USB. If a USB CAN translator is not
      * connected, there will be no more data.
