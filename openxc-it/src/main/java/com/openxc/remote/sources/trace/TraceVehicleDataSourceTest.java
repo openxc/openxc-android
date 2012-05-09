@@ -13,7 +13,7 @@ import java.net.URL;
 import org.apache.commons.io.FileUtils;
 
 import com.openxc.remote.sources.SourceCallback;
-import com.openxc.remote.sources.VehicleDataSourceException;
+import com.openxc.remote.sources.DataSourceException;
 
 import android.test.AndroidTestCase;
 
@@ -87,7 +87,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @SmallTest
     public void testPlaybackFile() throws InterruptedException,
-            VehicleDataSourceException {
+            DataSourceException {
         receivedNumericalCallback = false;
         receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback, traceUri);
@@ -98,7 +98,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @SmallTest
     public void testMalformedJson() throws InterruptedException ,
-            VehicleDataSourceException {
+            DataSourceException {
         receivedNumericalCallback = false;
         receivedBooleanCallback = false;
         source = new TraceVehicleDataSource(getContext(), callback,
@@ -110,7 +110,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @SmallTest
     public void testMissingFile() throws MalformedURLException,
-            InterruptedException, VehicleDataSourceException,
+            InterruptedException, DataSourceException,
             URISyntaxException {
         receivedNumericalCallback = false;
         receivedBooleanCallback = false;
@@ -122,7 +122,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
 
     @SmallTest
     public void testConstructWithCallbackAndFile()
-            throws VehicleDataSourceException {
+            throws DataSourceException {
         source = new TraceVehicleDataSource(getContext(), callback, traceUri);
     }
 }
