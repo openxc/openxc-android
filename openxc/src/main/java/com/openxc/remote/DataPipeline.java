@@ -31,6 +31,8 @@ public class DataPipeline implements SourceCallback {
     }
 
     public void receive(String measurementId, Object value, Object event) {
+        mMeasurements.put(measurementId,
+                RawMeasurement.measurementFromObjects(value, event));
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             (i.next()).receive(measurementId, value, event);
         }

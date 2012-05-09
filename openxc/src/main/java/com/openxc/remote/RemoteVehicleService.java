@@ -2,7 +2,6 @@ package com.openxc.remote;
 
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-import com.openxc.remote.sinks.DefaultDataSink;
 import com.openxc.remote.sinks.MockedLocationSink;
 import com.openxc.remote.sinks.MeasurementNotifierSink;
 import com.openxc.remote.sinks.VehicleDataSink;
@@ -118,7 +117,6 @@ public class RemoteVehicleService extends Service {
         mNotifier = new MeasurementNotifierSink();
         mPipeline.addSink(mNotifier);
         mPipeline.addSink(new MockedLocationSink(this));
-        mPipeline.addSink(new DefaultDataSink());
     }
 
     private void initializeDefaultSources() {
