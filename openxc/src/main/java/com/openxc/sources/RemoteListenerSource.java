@@ -1,4 +1,4 @@
-package com.openxc;
+package com.openxc.sources;
 
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;

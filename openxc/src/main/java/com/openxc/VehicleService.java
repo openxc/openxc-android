@@ -17,14 +17,15 @@ import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.Measurement;
 
-import com.openxc.remote.DataPipeline;
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 
+import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.VehicleDataSink;
 
+import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sinks.MockedLocationSink;

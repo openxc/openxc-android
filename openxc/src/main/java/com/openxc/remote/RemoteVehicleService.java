@@ -1,5 +1,7 @@
 package com.openxc.remote;
 
+import com.openxc.DataPipeline;
+
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.sinks.MockedLocationSink;

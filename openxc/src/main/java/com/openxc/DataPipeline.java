@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.sources.SourceCallback;

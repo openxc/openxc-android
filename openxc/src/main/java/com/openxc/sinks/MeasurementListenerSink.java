@@ -1,4 +1,4 @@
-package com.openxc;
+package com.openxc.sinks;
 
 import com.google.common.base.Objects;
 

@@ -1,4 +1,4 @@
-package com.openxc.remote;
+package com.openxc;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+
+import com.openxc.remote.RawMeasurement;
 
 import com.openxc.sinks.BaseVehicleDataSink;
 
