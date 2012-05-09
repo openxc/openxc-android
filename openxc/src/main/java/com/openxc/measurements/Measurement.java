@@ -74,8 +74,15 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     }
 
     public static Class<? extends MeasurementInterface>
-            getClassForId(String measurementId) {
-        return sMeasurementIdToClass.get(measurementId);
+            getClassForId(String measurementId)
+            throws UnrecognizedMeasurementTypeException {
+        Class<? extends MeasurementInterface> result = sMeasurementIdToClass.get(measurementId);
+        if(result == null) {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Didn't have a measurement with ID " + measurementId +
+                    " cached");
+        }
+        return result;
     }
 
 

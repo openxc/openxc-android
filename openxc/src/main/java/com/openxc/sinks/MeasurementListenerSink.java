@@ -44,36 +44,28 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
 
     protected void propagateMeasurement(String measurementId,
             RawMeasurement rawMeasurement) {
-        Class<? extends MeasurementInterface> measurementClass =
-            Measurement.getClassForId(measurementId);
-        if(measurementClass != null) {
-            // if nobody has registered to listen for this measurement we won't
-            // have cached the mapping from its ID to class. kind of hacky.
+        try {
             MeasurementInterface measurement = createMeasurement(
                     measurementId, rawMeasurement);
             for(MeasurementInterface.Listener listener :
-                    mListeners.get(measurementClass)) {
+                    mListeners.get(Measurement.getClassForId(measurementId))) {
                 listener.receive(measurement);
             }
+        } catch(UnrecognizedMeasurementTypeException e) {
+            Log.w(TAG, "Received notification for a unrecognized " +
+                    "measurement type", e);
+        } catch(NoValueException e) {
+            Log.w(TAG, "Received notification for a blank measurement", e);
         }
     }
 
     private static MeasurementInterface createMeasurement(
-            String measurementId, RawMeasurement value) {
+            String measurementId, RawMeasurement value)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends MeasurementInterface> measurementClass =
             Measurement.getClassForId(measurementId);
-        MeasurementInterface measurement = null;
-        try {
-            measurement = Measurement.getMeasurementFromRaw(
-                    measurementClass, value);
-        } catch(UnrecognizedMeasurementTypeException e) {
-            Log.w(TAG, "Received notification for a malformed " +
-                    "measurement type: " + measurementClass, e);
-        } catch(NoValueException e) {
-            Log.w(TAG, "Received notification for a blank " +
-                    "measurement of type: " + measurementClass, e);
-        }
-        return measurement;
+        return Measurement.getMeasurementFromRaw(
+                measurementClass, value);
     }
 
     public Multimap<Class<? extends MeasurementInterface>,
