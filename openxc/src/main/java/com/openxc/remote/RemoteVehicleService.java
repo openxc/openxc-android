@@ -96,9 +96,6 @@ public class RemoteVehicleService extends Service {
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
 
-        mPipeline.removeSink(mNotifier);
-        mNotifier = new MeasurementNotifierSink();
-        mPipeline.addSink(mNotifier);
 
         initializeDefaultSources();
         return mBinder;
@@ -118,6 +115,8 @@ public class RemoteVehicleService extends Service {
     }
 
     private void initializeDefaultSinks() {
+        mNotifier = new MeasurementNotifierSink();
+        mPipeline.addSink(mNotifier);
         mPipeline.addSink(new MockedLocationSink(this));
         mPipeline.addSink(new DefaultDataSink());
     }
