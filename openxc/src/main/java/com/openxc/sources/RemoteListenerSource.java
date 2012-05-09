@@ -5,11 +5,10 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.sources.BaseVehicleDataSource;
 
-import android.util.Log;
-
+/**
+ * TODO
+ */
 public class RemoteListenerSource extends BaseVehicleDataSource {
-    private static String TAG = "RemoteListenerSource";
-
     public RemoteListenerSource() {
         super();
     }

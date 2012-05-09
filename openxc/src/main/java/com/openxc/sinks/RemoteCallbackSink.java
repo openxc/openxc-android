@@ -13,6 +13,9 @@ import android.os.RemoteException;
 
 import android.util.Log;
 
+/**
+ * TODO
+ */
 public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "RemoteCallbackSink";
 

@@ -14,6 +14,9 @@ import android.os.Looper;
 
 import android.util.Log;
 
+/**
+ * TODO
+ */
 public class NativeLocationSource extends ContextualVehicleDataSource
         implements LocationListener, Runnable {
     private final static String TAG = "NativeLocationSource";

@@ -13,6 +13,9 @@ import android.location.LocationManager;
 
 import android.util.Log;
 
+/**
+ * TODO
+ */
 public class MockedLocationSink extends ContextualVehicleDataSink {
     public final static String TAG = "MockedLocationSink";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";

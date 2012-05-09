@@ -59,7 +59,8 @@ import android.util.Log;
  * as the original recording (at least according to the timestamps in the file).
  *
  * Playback will not begin until a callback is set, either via a constructor or
- * the {@link * com.openxc.sources.BaseVehicleDataSource#setCallback(SourceCallback)}
+ * the
+ * {@link com.openxc.sources.BaseVehicleDataSource#setCallback(SourceCallback)}
  * function.
  */
 public class TraceVehicleDataSource extends JsonVehicleDataSource
@@ -111,7 +112,8 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
         mRunning = false;
     }
 
-    /** While running, continuously read from the trace file and send messages
+    /**
+     * While running, continuously read from the trace file and send messages
      * to the callback.
      *
      * If the callback is not set, this function will exit immediately and the

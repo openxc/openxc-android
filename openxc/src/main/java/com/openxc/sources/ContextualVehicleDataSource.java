@@ -2,6 +2,9 @@ package com.openxc.sources;
 
 import android.content.Context;
 
+/**
+ * A parent class for data sources that require access to an Android context.
+ */
 public class ContextualVehicleDataSource extends BaseVehicleDataSource {
     private Context mContext;
 
