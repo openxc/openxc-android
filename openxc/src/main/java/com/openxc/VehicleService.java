@@ -18,7 +18,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.Measurement;
 
 import com.openxc.remote.DataPipeline;
-import com.openxc.remote.NoValueException;
+import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;

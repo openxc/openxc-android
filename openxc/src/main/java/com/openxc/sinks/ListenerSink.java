@@ -11,7 +11,7 @@ import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.Measurement;
 
-import com.openxc.remote.NoValueException;
+import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 
 import com.openxc.sinks.BaseVehicleDataSink;

@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.google.common.base.Objects;
 
-import com.openxc.remote.NoValueException;
+import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 
 import com.openxc.units.Unit;
