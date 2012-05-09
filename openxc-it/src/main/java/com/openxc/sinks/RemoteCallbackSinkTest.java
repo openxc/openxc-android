@@ -12,9 +12,9 @@ import static org.hamcrest.Matchers.equalTo;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
-public class MeasurementNotifierSinkTest {
+public class RemoteCallbackSinkTest {
     Map<String, RawMeasurement> measurements;
-    MeasurementNotifierSink notifier;
+    RemoteCallbackSink notifier;
     RemoteVehicleServiceListenerInterface listener;
     String measurementId = "the_measurement";
     String receivedId = null;
@@ -24,7 +24,7 @@ public class MeasurementNotifierSinkTest {
         // TODO what are the contractual guarantees that this class says about
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
-        notifier = new MeasurementNotifierSink(measurements);
+        notifier = new RemoteCallbackSink(measurements);
         listener = new RemoteVehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId, RawMeasurement value) {
                 receivedId = measurementId;

@@ -18,15 +18,15 @@ import com.openxc.sinks.BaseVehicleDataSink;
 
 import android.util.Log;
 
-public class ListenerSink extends BaseVehicleDataSink {
-    private final static String TAG = "ListenerSink";
+public class MeasurementListenerSink extends BaseVehicleDataSink {
+    private final static String TAG = "MeasurementListenerSink";
 
     private Multimap<Class<? extends MeasurementInterface>,
             MeasurementInterface.Listener> mListeners;
     private BiMap<String, Class<? extends MeasurementInterface>>
             mMeasurementIdToClass;
 
-    public ListenerSink(BiMap<String, Class<? extends MeasurementInterface>>
+    public MeasurementListenerSink(BiMap<String, Class<? extends MeasurementInterface>>
                 measurementIdToClass) {
         mMeasurementIdToClass = measurementIdToClass;
         mListeners = HashMultimap.create();

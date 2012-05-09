@@ -15,8 +15,8 @@ import android.os.RemoteException;
 
 import android.util.Log;
 
-public class MeasurementNotifierSink extends BaseVehicleDataSink {
-    private final static String TAG = "MeasurementNotifierSink";
+public class RemoteCallbackSink extends BaseVehicleDataSink {
+    private final static String TAG = "RemoteCallbackSink";
 
     private NotificationThread mNotificationThread;
     private BlockingQueue<String> mNotificationQueue;
@@ -24,12 +24,12 @@ public class MeasurementNotifierSink extends BaseVehicleDataSink {
     private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
             mListeners;
 
-    public MeasurementNotifierSink(Map<String, RawMeasurement> measurements) {
+    public RemoteCallbackSink(Map<String, RawMeasurement> measurements) {
         super(measurements);
         init();
     }
 
-    public MeasurementNotifierSink() {
+    public RemoteCallbackSink() {
         init();
     }
 

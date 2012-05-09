@@ -79,7 +79,7 @@ public class VehicleService extends Service implements SourceCallback {
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
     private VehicleDataSink mFileRecorder;
-    private ListenerSink mNotifier;
+    private MeasurementListenerSink mNotifier;
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
     private BiMap<String, Class<? extends MeasurementInterface>>
             mMeasurementIdToClass;
@@ -139,7 +139,7 @@ public class VehicleService extends Service implements SourceCallback {
         mMeasurementIdToClass = HashBiMap.create();
         mMeasurementClassToId = HashBiMap.create();
         mPipeline = new DataPipeline();
-        mNotifier = new ListenerSink(mMeasurementIdToClass);
+        mNotifier = new MeasurementListenerSink(mMeasurementIdToClass);
         mPipeline.addSink(mNotifier);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
         bindRemote();

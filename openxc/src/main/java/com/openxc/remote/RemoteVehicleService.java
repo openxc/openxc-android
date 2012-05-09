@@ -3,7 +3,7 @@ package com.openxc.remote;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.sinks.MockedLocationSink;
-import com.openxc.sinks.MeasurementNotifierSink;
+import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.sources.ApplicationSource;
@@ -59,7 +59,7 @@ public class RemoteVehicleService extends Service {
 
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
-    private MeasurementNotifierSink mNotifier;
+    private RemoteCallbackSink mNotifier;
     private VehicleDataSource mNativeLocationSource;
     private ApplicationSource mApplicationSource;
 
@@ -114,7 +114,7 @@ public class RemoteVehicleService extends Service {
     }
 
     private void initializeDefaultSinks() {
-        mNotifier = new MeasurementNotifierSink();
+        mNotifier = new RemoteCallbackSink();
         mPipeline.addSink(mNotifier);
         mPipeline.addSink(new MockedLocationSink(this));
     }
