@@ -70,7 +70,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                     continue;
                 }
 
-                RawMeasurement rawMeasurement = get(measurementId);
+                RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
                 if(rawMeasurement != null) {
                     propagateMeasurement(measurementId, rawMeasurement);
                 }

@@ -20,9 +20,4 @@ public interface VehicleDataSource extends VehicleDataEndpoint {
      * directed to a single, central collector.
      */
     public void setCallback(SourceCallback callback);
-
-    /**
-     * Release any acquired resources in preparation for exiting.
-     */
-    public void stop();
 }
