@@ -1,6 +1,5 @@
 package com.openxc.sinks;
 
-import com.google.common.collect.BiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multimap;
@@ -19,21 +18,18 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
 
     private Multimap<Class<? extends MeasurementInterface>,
             MeasurementInterface.Listener> mListeners;
-    private static BiMap<String, Class<? extends MeasurementInterface>>
-            sMeasurementIdToClass;
 
-    public MeasurementListenerSink(BiMap<String, Class<? extends MeasurementInterface>>
-                measurementIdToClass) {
-        sMeasurementIdToClass = measurementIdToClass;
+    public MeasurementListenerSink() {
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
     }
 
     public void register(Class<? extends MeasurementInterface> measurementType,
-            Measurement.Listener listener) {
+            Measurement.Listener listener)
+            throws UnrecognizedMeasurementTypeException {
         mListeners.put(measurementType, listener);
 
-        String measurementId = sMeasurementIdToClass.inverse().get(measurementType);
+        String measurementId = Measurement.getIdForClass(measurementType);
         if(containsMeasurement(measurementId)) {
             // send the last known value to the new listener
             RawMeasurement rawMeasurement = get(measurementId);
@@ -46,21 +42,26 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         mListeners.remove(measurementType, listener);
     }
 
-    protected void propagateMeasurement(
-            String measurementId,
+    protected void propagateMeasurement(String measurementId,
             RawMeasurement rawMeasurement) {
-        MeasurementInterface measurement = createMeasurement(
-                measurementId, rawMeasurement);
-        for(MeasurementInterface.Listener listener :
-                mListeners.get(sMeasurementIdToClass.get(measurementId))) {
-            listener.receive(measurement);
+        Class<? extends MeasurementInterface> measurementClass =
+            Measurement.getClassForId(measurementId);
+        if(measurementClass != null) {
+            // if nobody has registered to listen for this measurement we won't
+            // have cached the mapping from its ID to class. kind of hacky.
+            MeasurementInterface measurement = createMeasurement(
+                    measurementId, rawMeasurement);
+            for(MeasurementInterface.Listener listener :
+                    mListeners.get(measurementClass)) {
+                listener.receive(measurement);
+            }
         }
     }
 
     private static MeasurementInterface createMeasurement(
             String measurementId, RawMeasurement value) {
         Class<? extends MeasurementInterface> measurementClass =
-            sMeasurementIdToClass.get(measurementId);
+            Measurement.getClassForId(measurementId);
         MeasurementInterface measurement = null;
         try {
             measurement = Measurement.getMeasurementFromRaw(

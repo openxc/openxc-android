@@ -82,10 +82,6 @@ public class VehicleService extends Service implements SourceCallback {
     private VehicleDataSink mFileRecorder;
     private MeasurementListenerSink mNotifier;
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
-    private BiMap<String, Class<? extends MeasurementInterface>>
-            mMeasurementIdToClass;
-    private BiMap<Class<? extends MeasurementInterface>, String>
-            mMeasurementClassToId;
 
     /**
      * Binder to connect IBinder in a ServiceConnection with the VehicleService.
@@ -137,10 +133,8 @@ public class VehicleService extends Service implements SourceCallback {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPreferenceListener = watchPreferences(mPreferences);
 
-        mMeasurementIdToClass = HashBiMap.create();
-        mMeasurementClassToId = HashBiMap.create();
         mPipeline = new DataPipeline();
-        mNotifier = new MeasurementListenerSink(mMeasurementIdToClass);
+        mNotifier = new MeasurementListenerSink();
         mPipeline.addSink(mNotifier);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
         bindRemote();
@@ -185,7 +179,6 @@ public class VehicleService extends Service implements SourceCallback {
             Class<? extends MeasurementInterface> measurementType)
             throws UnrecognizedMeasurementTypeException, NoValueException {
 
-        cacheMeasurementId(measurementType);
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
                     "throwing a NoValueException");
@@ -195,7 +188,7 @@ public class VehicleService extends Service implements SourceCallback {
         Log.d(TAG, "Looking up measurement for " + measurementType);
         try {
             RawMeasurement rawMeasurement = mRemoteService.get(
-                    mMeasurementClassToId.get(measurementType));
+                    Measurement.getIdForClass(measurementType));
             return Measurement.getMeasurementFromRaw(measurementType,
                     rawMeasurement);
         } catch(RemoteException e) {
@@ -227,7 +220,6 @@ public class VehicleService extends Service implements SourceCallback {
             throws RemoteVehicleServiceException,
             UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
-        cacheMeasurementId(measurementType);
         mNotifier.register(measurementType, listener);
     }
 
@@ -487,24 +479,6 @@ public class VehicleService extends Service implements SourceCallback {
             mPipeline.removeSource(mRemoteSource);
         }
     };
-
-    private void cacheMeasurementId(
-            Class<? extends MeasurementInterface> measurementType)
-            throws UnrecognizedMeasurementTypeException {
-        String measurementId;
-        try {
-            measurementId = (String) measurementType.getField("ID").get(
-                    measurementType);
-            mMeasurementIdToClass.put(measurementId, measurementType);
-        } catch(NoSuchFieldException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " doesn't have an ID field", e);
-        } catch(IllegalAccessException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " has an inaccessible ID", e);
-        }
-        mMeasurementClassToId = mMeasurementIdToClass.inverse();
-    }
 
     private void bindRemote() {
         Log.i(TAG, "Binding to RemoteVehicleService");

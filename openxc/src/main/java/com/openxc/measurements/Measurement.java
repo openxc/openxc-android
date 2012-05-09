@@ -5,6 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.google.common.base.Objects;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 
@@ -37,6 +40,44 @@ import com.openxc.util.Range;
 public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     private AgingData<TheUnit> mValue;
     private Range<TheUnit> mRange;
+    private static BiMap<String, Class<? extends MeasurementInterface>>
+            sMeasurementIdToClass;
+
+    static {
+        sMeasurementIdToClass = HashBiMap.create();
+    }
+
+    private static void cacheMeasurementId(
+            Class<? extends MeasurementInterface> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        String measurementId;
+        try {
+            measurementId = (String) measurementType.getField("ID").get(
+                    measurementType);
+            sMeasurementIdToClass.put(measurementId, measurementType);
+        } catch(NoSuchFieldException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " doesn't have an ID field", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has an inaccessible ID", e);
+        }
+    }
+
+    public static String getIdForClass(
+            Class<? extends MeasurementInterface> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
+            cacheMeasurementId(measurementType);
+        }
+        return sMeasurementIdToClass.inverse().get(measurementType);
+    }
+
+    public static Class<? extends MeasurementInterface>
+            getClassForId(String measurementId) {
+        return sMeasurementIdToClass.get(measurementId);
+    }
+
 
     /**
      * Construct a new Measurement with the given value.
