@@ -70,26 +70,10 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
     private boolean mRunning = true;
     private URI mFilename;
 
-    /** Construct a trace data source with the given context and callback.
-     *
-     * If the callback is not null, playback will begin immediately.
-     *
-     * TODO Does this explode if you don't set a filename? It might, doesn't
-     * look like we check that in run(). It might just continuously try to open
-     * null.
-     *
-     * @param context the Activity or Service context, used to access the raw
-     *      trace file resource via Android.
-     * @param callback An object implementing the SourceCallback interface that
-     *      should receive data as it is received and parsed.
-     */
-    public TraceVehicleDataSource(SourceCallback callback, Context context) {
-        super(callback, context);
-        new Thread(this).start();
-    }
-
     /** Construct a trace data source with the given context, callback and
      * trace file resource URI.
+     *
+     * If the callback is not null, playback will begin immediately.
      *
      * @param context the Activity or Service context, used to access the raw
      *      trace file resource via Android.
@@ -101,7 +85,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
      */
     public TraceVehicleDataSource(SourceCallback callback, Context context,
             URI filename) throws DataSourceException {
-        this(callback, context);
+        super(callback, context);
         if(filename == null) {
             throw new DataSourceException(
                     "No filename specified for the trace source");
@@ -110,6 +94,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
         mFilename = filename;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
+        new Thread(this).start();
     }
 
     public TraceVehicleDataSource(Context context, URI filename)
