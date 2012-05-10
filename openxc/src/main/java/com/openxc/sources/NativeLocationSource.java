@@ -15,7 +15,14 @@ import android.os.Looper;
 import android.util.Log;
 
 /**
- * TODO
+ * Generate location measurements based on native GPS updates.
+ *
+ * This source listens for GPS location updates from the built-in Android location
+ * framework and passes them to the OpenXC vehicle measurement framework as if
+ * they originated from the vehicle. This source is useful to seamlessly use
+ * location in an application regardless of it the vehicle has built-in GPS.
+ *
+ * The ACCESS_FINE_LOCATION permission is required to use this source.
  */
 public class NativeLocationSource extends ContextualVehicleDataSource
         implements LocationListener, Runnable {
