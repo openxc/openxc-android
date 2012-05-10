@@ -33,10 +33,6 @@ public abstract class JsonVehicleDataSource
 
     /**
      * Parses a JSON string and calls handleMessage with the values.
-     *
-     * TODO It would be perhaps better if this didn't have the implicit
-     * dependency on handleMessage, but we can't return multiple values from
-     * this function without having yet another wrapper object.
      */
     protected void handleJson(String json) {
         final JSONObject message;
