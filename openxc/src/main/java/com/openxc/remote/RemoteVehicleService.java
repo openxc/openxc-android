@@ -6,15 +6,11 @@ import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
-import com.openxc.sinks.VehicleDataSink;
-
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.sources.VehicleDataSource;
-
-import com.openxc.util.AndroidFileOpener;
 
 import android.app.Service;
 
