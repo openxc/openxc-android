@@ -14,7 +14,10 @@ import com.openxc.remote.RawMeasurement;
 import android.util.Log;
 
 /**
- * TODO
+ * A data sink that sends new measurements of specific types to listeners.
+ *
+ * Applications requesting asynchronous updates for specific signals get their
+ * values through this sink.
  */
 public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MeasurementListenerSink";
@@ -70,10 +73,5 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
             Measurement.getClassForId(measurementId);
         return Measurement.getMeasurementFromRaw(
                 measurementClass, value);
-    }
-
-    public Multimap<Class<? extends MeasurementInterface>,
-           Measurement.Listener> getListeners() {
-        return mListeners;
     }
 }

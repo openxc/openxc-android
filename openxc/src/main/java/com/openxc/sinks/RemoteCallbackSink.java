@@ -14,7 +14,12 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * TODO
+ * A data sink that sends new measurements through an AIDL interface.
+ *
+ * This sink is used to send all new measurements over an AIDL interface in
+ * Android to applications using {@link com.openxc.VehicleService}. Once
+ * registered, a receiver gets all measurements regardless of their type or
+ * value.
  */
 public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "RemoteCallbackSink";
