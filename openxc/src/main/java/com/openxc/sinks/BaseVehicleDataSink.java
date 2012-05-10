@@ -4,18 +4,8 @@ import com.openxc.remote.RawMeasurement;
 import java.util.Map;
 
 /**
- * The interface for all output targets for raw vehicle measurements.
+ * A common parent class for all vehicle data sinks.
  *
- * Data sinks are registered with the
- * {@link com.openxc.remote.RemoteVehicleService} and receive all raw messages
- * from the vehicle data source as they arrive. Common applications of this
- * class are trace file recording, web streaming or custom CAN message handling.
- *
- * The RemoteVehicleService pipes all data received from a vehicle data source
- * to a list of objects registered with this interface. Those wishing to receive
- * the updates must register an object extending this class and implementing the
- * {@link #receive(String, Object)} and {@link #receive(String, Object, Object)}
- * methods.
  */
 public class BaseVehicleDataSink implements VehicleDataSink {
     protected Map<String, RawMeasurement> mMeasurements;
