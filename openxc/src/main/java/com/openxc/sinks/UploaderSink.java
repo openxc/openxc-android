@@ -36,21 +36,21 @@ import android.util.Log;
 
 public class UploaderSink extends ContextualVehicleDataSink {
     private final static String TAG = "UploaderSink";
-    private final static String UPLOAD_URL =
-            "http://fiesta.eecs.umich.edu:5000/records";
     private final static int UPLOAD_BATCH_SIZE = 25;
     private final static int MAXIMUM_QUEUED_RECORDS = 2000;
     private final static int HTTP_TIMEOUT = 5000;
     private static DecimalFormat sTimestampFormatter =
             new DecimalFormat("##########.000000");
 
+    private String mUrl;
     private BlockingQueue<JSONObject> mRecordQueue;
     private Lock mQueueLock;
     private Condition mRecordsQueuedSignal;
     private UploaderThread mUploader;
 
-    public UploaderSink(Context context) {
+    public UploaderSink(Context context, String url) {
         super(context);
+        mUrl = url;
         mRecordQueue = new LinkedBlockingQueue<JSONObject>(
                 MAXIMUM_QUEUED_RECORDS);
         mQueueLock = new ReentrantLock();
@@ -116,7 +116,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
         private HttpPost constructRequest(JSONObject data)
                 throws UploaderException {
-            HttpPost request = new HttpPost(UPLOAD_URL);
+            HttpPost request = new HttpPost(mUrl);
             try {
                 ByteArrayEntity entity = new ByteArrayEntity(
                         data.toString().getBytes("UTF8"));

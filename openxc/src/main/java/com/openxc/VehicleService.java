@@ -18,6 +18,7 @@ import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 
 import com.openxc.sinks.MeasurementListenerSink;
+import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.sources.RemoteListenerSource;
@@ -74,6 +75,8 @@ public class VehicleService extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleService";
+    private final static String UPLOAD_URL =
+            "http://fiesta.eecs.umich.edu:5000/records";
 
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
@@ -86,6 +89,7 @@ public class VehicleService extends Service implements SourceCallback {
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
     private VehicleDataSink mFileRecorder;
+    private VehicleDataSink mUploader;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
     // RemoteListenerSource that receives measurements from the
@@ -383,8 +387,10 @@ public class VehicleService extends Service implements SourceCallback {
         if(enabled) {
             mFileRecorder = mPipeline.addSink(
                     new FileRecorderSink(new AndroidFileOpener(this)));
-        } else if(mFileRecorder != null) {
-             mPipeline.removeSink(mFileRecorder);
+            mUploader = mPipeline.addSink(new UploaderSink(this, UPLOAD_URL));
+        } else {
+            mPipeline.removeSink(mFileRecorder);
+            mPipeline.removeSink(mUploader);
         }
     }
 
