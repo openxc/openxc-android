@@ -74,8 +74,6 @@ import android.util.Log;
  * include the {@link com.openxc.sources.TraceVehicleDataSource} which reads a
  * previously recorded vehicle data trace file and plays back the measurements
  * in real-time.
- *
- * TODO add a function to add custom in-process sinks
  */
 public class VehicleService extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
@@ -94,6 +92,19 @@ public class VehicleService extends Service implements SourceCallback {
     private RemoteListenerSource mRemoteSource;
     private VehicleDataSink mFileRecorder;
     private MeasurementListenerSink mNotifier;
+    // The DataPipeline in this class must only have 1 source - the special
+    // RemoteListenerSource that receives measurements from the
+    // RemoteVehicleService and propagates them to all of the user-registered
+    // sinks. Any user-registered sources must live in a separate array,
+    // unfortunately, so they don't try to circumvent the RemoteVehicleService
+    // and send their values directly to the in-process sinks (otherwise no
+    // other applications could receive updates from that source). For most
+    // applications that might be fine, but since we want to control trace
+    // playback from the Enabler, it needs to be able to inject those into the
+    // RVS. TODO actually, maybe that's the only case. If there are no other
+    // cases where a user application should be able to inject source data for
+    // all other apps to share, we should reconsider this and special case the
+    // trace source.
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
 
     /**
@@ -304,34 +315,62 @@ public class VehicleService extends Service implements SourceCallback {
     }
 
     /**
-     * Set and initialize the data source for the vehicle service.
+     * Add a new data source to the vehicle service.
      *
      * For example, to use the trace data source to playback a trace file, call
      * the addDataSource method after binding with VehicleService:
      *
-     *      service.addDataSource(
-     *              new TraceVehicleDataSource("/sdcard/openxc/trace.json"));
+     *      service.addDataSource(new TraceVehicleDataSource(
+     *                  new URI("/sdcard/openxc/trace.json"))));
      *
-     * If no data source is specified (i.e. this method is never called), the
-     * {@link UsbVehicleDataSource} will be used by default with the a default
-     * USB device ID.
+     * The {@link UsbVehicleDataSource} exists by default with the default USB
+     * device ID. To clear all existing sources, use the {@link #clearSources()}
+     * method. To revert back to the default set of sources, use
+     * {@link #initializeDefaultSources}.
      *
      * @param source an instance of a VehicleDataSource
-     * @throws RemoteVehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
      */
-    public void addDataSource(VehicleDataSource source)
-            throws RemoteVehicleServiceException {
+    public void addDataSource(VehicleDataSource source) {
         Log.i(TAG, "Adding data source " + source);
         source.setCallback(this);
         mSources.add(source);
     }
 
+    /**
+     * Remove a previously registered source from the data pipeline.
+     */
     public void removeDataSource(VehicleDataSource source) {
         if(source != null) {
             mSources.remove(source);
             source.stop();
+        }
+    }
+
+    /**
+     * Add a new data sink to the vehicle service.
+     *
+     * A data sink added with this method will receive all new measurements as
+     * they arrive from registered data sources.  For example, to use the trace
+     * file recorder sink, call the addDataSink method after binding with
+     * VehicleService:
+     *
+     *      service.addDataSink(new FileRecorderSink(
+     *              new AndroidFileOpener(this)));
+     *
+     * @param sink an instance of a VehicleDataSink
+     */
+    public void addDataSink(VehicleDataSink sink) {
+        Log.i(TAG, "Adding data sink " + sink);
+        mPipeline.addSink(sink);
+    }
+
+    /**
+     * Remove a previously registered sink from the data pipeline.
+     */
+    public void removeDataSink(VehicleDataSink sink) {
+        if(sink != null) {
+            mPipeline.removeSink(sink);
+            sink.stop();
         }
     }
 
