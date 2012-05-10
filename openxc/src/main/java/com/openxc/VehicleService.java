@@ -467,15 +467,9 @@ public class VehicleService extends Service implements SourceCallback {
             mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
                     service);
 
-            mRemoteSource = new RemoteListenerSource();
+            mRemoteSource = new RemoteListenerSource(mRemoteService);
             mPipeline.addSource(mRemoteSource);
 
-            try {
-                mRemoteService.register(mRemoteSource.getListener());
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to register to receive " +
-                        "measurement callbacks", e);
-            }
             setRecordingStatus();
             setNativeGpsStatus();
 
