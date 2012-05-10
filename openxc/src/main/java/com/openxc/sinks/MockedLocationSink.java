@@ -13,8 +13,18 @@ import android.location.LocationManager;
 
 import android.util.Log;
 
+
 /**
- * TODO
+ * Propagate vehicle location updates through the Android location interface.
+ *
+ * If we have at least latitude, longitude and vehicle speed from
+ * the vehicle, we send out a mocked location for the
+ * LocationManager.GPS_PROVIDER and VEHICLE_LOCATION_PROVIDER
+ * providers.
+ *
+ * Developers can either use the standard Android location framework
+ * with mocked locations enabled, or the specific OpenXC
+ * Latitude/Longitude measurements.
  */
 public class MockedLocationSink extends ContextualVehicleDataSink {
     public final static String TAG = "MockedLocationSink";
@@ -65,18 +75,6 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         }
     }
 
-    /**
-     * Setup Android location framework to accept vehicle GPS.
-     *
-     * If we have at least latitude, longitude and vehicle speed from
-     * the vehicle, we send out a mocked location for the
-     * LocationManager.GPS_PROVIDER and VEHICLE_LOCATION_PROVIDER
-     * providers.
-     *
-     * Developers can either use the standard Android location framework
-     * with mocked locations enabled, or the specific OpenXC
-     * Latitude/Longitude measurements.
-     */
     private void setupMockLocations() {
         try {
             mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
