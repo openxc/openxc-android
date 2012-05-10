@@ -6,6 +6,9 @@ import java.util.Map;
 /**
  * A common parent class for all vehicle data sinks.
  *
+ * Many sinks require a reference to last known value of all measurements. This
+ * class encapsulates the functionality require to store a reference to the
+ * measurements data structure and query it for values.
  */
 public class BaseVehicleDataSink implements VehicleDataSink {
     protected Map<String, RawMeasurement> mMeasurements;

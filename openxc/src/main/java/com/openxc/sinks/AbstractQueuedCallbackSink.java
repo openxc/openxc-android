@@ -9,7 +9,16 @@ import com.openxc.remote.RawMeasurement;
 import android.util.Log;
 
 /**
- * TODO
+ * Functionality to notify multiple clients asynchronously of new measurements.
+ *
+ * This class encapsulates the functionality to keep a thread-safe list of
+ * listeners that want to be notified of updates asyncronously. Subclasses need
+ * only to implement the {@link #propagateMeasurement(String, RawMeasurement)}
+ * to add the actual logic for looping over the list of receivers and send them
+ * new values.
+ *
+ * New measurments are queued up and propagated to receivers in a separate
+ * thread, to avoid blocking the original sender of the data.
  */
 public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private final static String TAG = "AbstractQueuedCallbackSink";
