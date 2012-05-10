@@ -121,6 +121,7 @@ public class RemoteVehicleService extends Service {
 
     private void initializeDefaultSources() {
         mPipeline.clearSources();
+        mPipeline.addSource(mApplicationSource);
         try {
             mPipeline.addSource(new UsbVehicleDataSource(this));
         } catch(DataSourceException e) {
