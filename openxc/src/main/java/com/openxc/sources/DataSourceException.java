@@ -1,7 +1,12 @@
 package com.openxc.sources;
 
 public class DataSourceException extends Exception {
-    public DataSourceException() { }
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7086411602769827012L;
+
+	public DataSourceException() { }
 
     public DataSourceException(String message) {
         super(message);

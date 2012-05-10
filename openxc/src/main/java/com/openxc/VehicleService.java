@@ -6,12 +6,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import java.util.Set;
-
 import com.google.common.base.Objects;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 
 import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
