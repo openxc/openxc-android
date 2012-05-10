@@ -1,12 +1,8 @@
-package com.openxc.remote.sinks;
+package com.openxc.sinks;
 
-import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -15,7 +11,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,12 +31,10 @@ import org.apache.http.message.BasicHeader;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.openxc.remote.RawMeasurement;
-
 import android.content.Context;
 import android.util.Log;
 
-public class UploaderSink implements VehicleDataSinkInterface {
+public class UploaderSink extends ContextualVehicleDataSink {
     private final static String TAG = "UploaderSink";
     private final static String UPLOAD_URL =
             "http://fiesta.eecs.umich.edu:5000/records";
@@ -57,6 +50,7 @@ public class UploaderSink implements VehicleDataSinkInterface {
     private UploaderThread mUploader;
 
     public UploaderSink(Context context) {
+        super(context);
         mRecordQueue = new LinkedBlockingQueue<JSONObject>(
                 MAXIMUM_QUEUED_RECORDS);
         mQueueLock = new ReentrantLock();
@@ -66,7 +60,8 @@ public class UploaderSink implements VehicleDataSinkInterface {
     }
 
     public void stop() {
-        mUploader.stop();
+        super.stop();
+        mUploader.done();
     }
 
     public void receive(String measurementId, Object value, Object event) {
@@ -162,7 +157,7 @@ public class UploaderSink implements VehicleDataSinkInterface {
             mQueueLock.lock();
             mRecordsQueuedSignal.await();
 
-            ArrayList<JSONObject> records = new ArrayList();
+            ArrayList<JSONObject> records = new ArrayList<JSONObject>();
             mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
 
             mQueueLock.unlock();
