@@ -75,8 +75,6 @@ public class VehicleService extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleService";
-    private final static String UPLOAD_URL =
-            "http://fiesta.eecs.umich.edu:5000/records";
 
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
@@ -374,6 +372,32 @@ public class VehicleService extends Service implements SourceCallback {
     }
 
     /**
+     * Enable or disable uploading of a vehicle trace to a remote web server.
+     *
+     * The URL of the web server to upload the trace to is read from the shared
+     * preferences.
+     *
+     * @param enabled true if uploading should be enabled
+     * @throws RemoteVehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public void enableUploading(boolean enabled)
+            throws RemoteVehicleServiceException {
+        Log.i(TAG, "Setting uploading to " + enabled);
+        if(enabled) {
+            SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+            String uploadUrl = preferences.getString(
+                    getString(R.string.uploading_path_key),
+                    "http://festa.eecs.umich.edu:5000/records");
+            mUploader = mPipeline.addSink(new UploaderSink(this, uploadUrl));
+        } else {
+            mPipeline.removeSink(mUploader);
+        }
+    }
+
+    /**
      * Enable or disable recording of a trace file.
      *
      * @param enabled true if recording should be enabled
@@ -387,10 +411,8 @@ public class VehicleService extends Service implements SourceCallback {
         if(enabled) {
             mFileRecorder = mPipeline.addSink(
                     new FileRecorderSink(new AndroidFileOpener(this)));
-            mUploader = mPipeline.addSink(new UploaderSink(this, UPLOAD_URL));
         } else {
             mPipeline.removeSink(mFileRecorder);
-            mPipeline.removeSink(mUploader);
         }
     }
 
@@ -459,6 +481,18 @@ public class VehicleService extends Service implements SourceCallback {
         }
     }
 
+    private void setUploadingStatus() {
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        boolean uploadingEnabled = preferences.getBoolean(
+                getString(R.string.uploading_checkbox_key), false);
+        try {
+            enableUploading(uploadingEnabled);
+        } catch(RemoteVehicleServiceException e) {
+            Log.w(TAG, "Unable to set uploading status after binding", e);
+        }
+    }
+
     private void setRecordingStatus() {
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
@@ -510,6 +544,7 @@ public class VehicleService extends Service implements SourceCallback {
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mPipeline.addSource(mRemoteSource);
 
+            setUploadingStatus();
             setRecordingStatus();
             setNativeGpsStatus();
 
@@ -558,6 +593,8 @@ public class VehicleService extends Service implements SourceCallback {
                 setRecordingStatus();
             } else if(key.equals(getString(R.string.native_gps_checkbox_key))) {
                 setNativeGpsStatus();
+            } else if(key.equals(getString(R.string.uploading_checkbox_key))) {
+                setUploadingStatus();
             }
         }
     }
