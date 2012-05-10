@@ -65,12 +65,7 @@ interface RemoteVehicleServiceInterface {
      *
      * No further measurements will be received after this method is called
      * until either the default sources are re-initialized using
-     * {@link #initializeDefaultSources}. Note that this also removes the
-     * special "application" source which listens for updates via the
-     * {@link #receive(String, RawMeasurement)} method.
-     *
-     * TODO maybe it shouldn't remove that, it won't do anything unless the
-     * application developer does that anyway.
+     * {@link #initializeDefaultSources}.
      */
     void clearSources();
 
