@@ -22,12 +22,16 @@ import android.os.Parcel;
  * and combine this with RawMeasurement?
  */
 public abstract class AbstractRawMeasurement<TheValueUnit, TheEventUnit> {
+    protected double mTimestamp;
     protected TheValueUnit mValue;
     protected TheEventUnit mEvent;
 
-    public AbstractRawMeasurement() { }
+    public AbstractRawMeasurement() {
+        mTimestamp = System.nanoTime();
+    }
 
     public AbstractRawMeasurement(TheValueUnit value) {
+        this();
         mValue = value;
     }
 
@@ -60,8 +64,16 @@ public abstract class AbstractRawMeasurement<TheValueUnit, TheEventUnit> {
         mEvent = event;
     }
 
+    protected void setTimestamp(double timestamp) {
+        mTimestamp = timestamp;
+    }
+
     public boolean hasEvent() {
         return mEvent != null;
+    }
+
+    public double getTimestamp() {
+        return mTimestamp;
     }
 
     public abstract void writeToParcel(Parcel out, int flags);

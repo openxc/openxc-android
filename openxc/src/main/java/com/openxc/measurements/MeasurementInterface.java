@@ -10,12 +10,22 @@ import com.openxc.util.Range;
  * valid values.
  */
 public interface MeasurementInterface {
+    public interface Listener {
+        public void receive(MeasurementInterface measurement);
+    }
+
     /**
      * Retreive the age of this measurement.
      *
      * @return the age of the data in seconds.
      */
     public double getAge();
+
+    /**
+     * Set the birth timestamp for this measurement.
+     *
+     */
+    public void setTimestamp(double timestamp);
 
     /**
      * Determine if this measurement has a valid range.

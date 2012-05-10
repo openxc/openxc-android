@@ -9,8 +9,7 @@ import com.openxc.util.Range;
  * When the pedal is fully depressed, the position is 100%. When it is not
  * pressed at all, the position is 0%.
  */
-public class AcceleratorPedalPosition extends Measurement<Percentage>
-        implements VehicleMeasurement {
+public class AcceleratorPedalPosition extends Measurement<Percentage> {
     private final static Range<Percentage> RANGE =
         new Range<Percentage>(new Percentage(0), new Percentage(100));
     public final static String ID = "accelerator_pedal_position";

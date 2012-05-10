@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import android.view.Menu;
@@ -26,7 +25,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.openxc.VehicleService;
-import com.openxc.remote.RemoteVehicleServiceException;
 
 public class OpenXcEnablerActivity extends Activity {
 

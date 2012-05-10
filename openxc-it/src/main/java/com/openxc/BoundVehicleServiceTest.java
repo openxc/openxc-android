@@ -12,14 +12,15 @@ import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
-import com.openxc.remote.NoValueException;
+import com.openxc.NoValueException;
 import com.openxc.remote.RemoteVehicleServiceException;
 import com.openxc.remote.RemoteVehicleService;
-import com.openxc.remote.sources.trace.TraceVehicleDataSource;
+
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
 
@@ -38,14 +39,14 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     URI traceUri;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             speedReceived = (VehicleSpeed) measurement;
         }
     };
 
     SteeringWheelAngle.Listener steeringWheelListener =
             new SteeringWheelAngle.Listener() {
-        public void receive(VehicleMeasurement measurement) {
+        public void receive(MeasurementInterface measurement) {
             steeringAngleReceived = (SteeringWheelAngle) measurement;
         }
     };
@@ -86,11 +87,19 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.setDataSource(TraceVehicleDataSource.class.getName(),
-                traceUri.toString());
+        service.addDataSource(new TraceVehicleDataSource(getContext(),
+                    traceUri));
     }
 
-    private void checkReceivedMeasurement(VehicleMeasurement measurement) {
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        if(service != null)  {
+            service.clearSources();
+        }
+    }
+
+    private void checkReceivedMeasurement(MeasurementInterface measurement) {
         assertNotNull(measurement);
     }
 
@@ -105,11 +114,24 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
+    public void testListenerGetsLastKnownValue()
+            throws RemoteVehicleServiceException,
+            UnrecognizedMeasurementTypeException {
+        pause(300);
+        // kill the incoming data stream
+        service.clearSources();
+        pause(100);
+        service.addListener(VehicleSpeed.class, speedListener);
+        pause(50);
+        checkReceivedMeasurement(speedReceived);
+    }
+
+    @MediumTest
     public void testAddListener() throws RemoteVehicleServiceException,
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        pause(100);
+        pause(300);
         checkReceivedMeasurement(speedReceived);
     }
 
@@ -155,6 +177,19 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         speedReceived = null;
         pause(100);
         assertNull(speedReceived);
+    }
+
+    @MediumTest
+    public void testConsistentAge()
+            throws UnrecognizedMeasurementTypeException,
+            NoValueException, RemoteVehicleServiceException {
+        pause(150);
+        service.clearSources();
+        pause(150);
+        MeasurementInterface measurement = service.get(VehicleSpeed.class);
+        double age = measurement.getAge();
+        assertTrue("Measurement age (" + age + ") should be > 0.05",
+                age > .05);
     }
 
     private void pause(int millis) {

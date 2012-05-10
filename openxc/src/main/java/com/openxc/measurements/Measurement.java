@@ -1,6 +1,15 @@
 package com.openxc.measurements;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.google.common.base.Objects;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+import com.openxc.NoValueException;
+import com.openxc.remote.RawMeasurement;
 
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
@@ -31,6 +40,51 @@ import com.openxc.util.Range;
 public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     private AgingData<TheUnit> mValue;
     private Range<TheUnit> mRange;
+    private static BiMap<String, Class<? extends MeasurementInterface>>
+            sMeasurementIdToClass;
+
+    static {
+        sMeasurementIdToClass = HashBiMap.create();
+    }
+
+    private static void cacheMeasurementId(
+            Class<? extends MeasurementInterface> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        String measurementId;
+        try {
+            measurementId = (String) measurementType.getField("ID").get(
+                    measurementType);
+            sMeasurementIdToClass.put(measurementId, measurementType);
+        } catch(NoSuchFieldException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " doesn't have an ID field", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has an inaccessible ID", e);
+        }
+    }
+
+    public static String getIdForClass(
+            Class<? extends MeasurementInterface> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
+            cacheMeasurementId(measurementType);
+        }
+        return sMeasurementIdToClass.inverse().get(measurementType);
+    }
+
+    public static Class<? extends MeasurementInterface>
+            getClassForId(String measurementId)
+            throws UnrecognizedMeasurementTypeException {
+        Class<? extends MeasurementInterface> result = sMeasurementIdToClass.get(measurementId);
+        if(result == null) {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Didn't have a measurement with ID " + measurementId +
+                    " cached");
+        }
+        return result;
+    }
+
 
     /**
      * Construct a new Measurement with the given value.
@@ -42,7 +96,7 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     }
 
     /**
-     * Construct an new Measurement with the gievn value and valid Range.
+     * Construct an new Measurement with the given value and valid Range.
      *
      * There is not currently any automated verification that the value is
      * within the range - this is up to the application programmer.
@@ -59,6 +113,10 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         return mValue.getAge();
     }
 
+    public void setTimestamp(double timestamp) {
+        mValue.setTimestamp(timestamp);
+    }
+
     public boolean hasRange() {
         return mRange != null;
     }
@@ -72,6 +130,54 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
 
     public TheUnit getValue() {
         return mValue.getValue();
+    }
+
+    public static MeasurementInterface getMeasurementFromRaw(
+            Class<? extends MeasurementInterface> measurementType,
+            RawMeasurement rawMeasurement)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Constructor<? extends MeasurementInterface> constructor;
+        try {
+            constructor = measurementType.getConstructor(
+                    Double.class, Double.class);
+        } catch(NoSuchMethodException e) {
+            constructor = null;
+        }
+
+        if(constructor == null) {
+            try {
+                constructor = measurementType.getConstructor(Double.class);
+            } catch(NoSuchMethodException e) {
+                throw new UnrecognizedMeasurementTypeException(measurementType +
+                        " doesn't have a numerical constructor", e);
+            }
+        }
+
+        if(rawMeasurement.isValid()) {
+            MeasurementInterface measurement;
+            try {
+                if(rawMeasurement.hasEvent()) {
+                    measurement = constructor.newInstance(
+                            rawMeasurement.getValue(),
+                            rawMeasurement.getEvent());
+                } else {
+                    measurement = constructor.newInstance(rawMeasurement.getValue());
+                }
+            } catch(InstantiationException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " is abstract", e);
+            } catch(IllegalAccessException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " has a private constructor", e);
+            } catch(InvocationTargetException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + "'s constructor threw an exception",
+                        e);
+            }
+            measurement.setTimestamp(rawMeasurement.getTimestamp());
+            return measurement;
+        }
+        throw new NoValueException();
     }
 
     @Override

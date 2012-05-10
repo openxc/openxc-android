@@ -20,17 +20,17 @@ import com.openxc.measurements.Odometer;
 import com.openxc.measurements.FineOdometer;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.remote.NoValueException;
+import com.openxc.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.PowertrainTorque;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleButtonEvent;
-import com.openxc.measurements.VehicleMeasurement;
+import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
 
-import com.openxc.remote.sources.trace.TraceVehicleDataSource;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 import com.openxc.VehicleService;
 
@@ -77,12 +77,20 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         service = ((VehicleService.VehicleServiceBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.setDataSource(TraceVehicleDataSource.class.getName(),
-                traceUri.toString());
+        service.addDataSource(
+                new TraceVehicleDataSource(getContext(), traceUri));
         pause(200);
     }
 
-    private void checkReceivedMeasurement(VehicleMeasurement measurement) {
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        if(service != null)  {
+            service.initializeDefaultSources();
+        }
+    }
+
+    private void checkReceivedMeasurement(MeasurementInterface measurement) {
         assertNotNull(measurement);
     }
 

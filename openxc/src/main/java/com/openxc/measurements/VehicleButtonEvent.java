@@ -21,8 +21,7 @@ import com.openxc.util.AgingData;
  * need to ignore and let live?
  */
 public class VehicleButtonEvent
-        extends Measurement<State<VehicleButtonEvent.ButtonId>>
-        implements VehicleMeasurement {
+        extends Measurement<State<VehicleButtonEvent.ButtonId>> {
     private AgingData<State<ButtonAction>> mAction;
 
     public final static String ID = "button_event";

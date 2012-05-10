@@ -4,13 +4,9 @@ import java.util.List;
 
 import android.os.Bundle;
 
-import android.preference.PreferenceActivity.Header;
 
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-
-import android.widget.Button;
 
 public class SettingsActivity extends PreferenceActivity {
     @Override

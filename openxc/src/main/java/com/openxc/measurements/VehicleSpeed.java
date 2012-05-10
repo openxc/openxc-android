@@ -6,8 +6,7 @@ import com.openxc.util.Range;
 /**
  * The VehicleSpeed is the current forward speed of the vehicle.
  */
-public class VehicleSpeed extends Measurement<KilometersPerHour>
-        implements VehicleMeasurement {
+public class VehicleSpeed extends Measurement<KilometersPerHour> {
     // TODO this should change based on the vehicle platform - needs to be read
     // from the CAN translator (which has this info stored statically)
     private final static Range<KilometersPerHour> RANGE =

@@ -2,8 +2,7 @@ package com.openxc.measurements;
 
 import com.openxc.units.Boolean;
 
-public class WindshieldWiperStatus extends Measurement<Boolean>
-        implements VehicleMeasurement {
+public class WindshieldWiperStatus extends Measurement<Boolean> {
     public final static String ID = "windshield_wiper_status";
 
     public WindshieldWiperStatus(Boolean value) {

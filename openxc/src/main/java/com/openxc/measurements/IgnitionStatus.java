@@ -6,8 +6,7 @@ import com.openxc.units.State;
  * The IgnitionStatus is the current status of the vehicle's ignition.
  */
 public class IgnitionStatus
-        extends Measurement<State<IgnitionStatus.IgnitionPosition>>
-        implements VehicleMeasurement {
+        extends Measurement<State<IgnitionStatus.IgnitionPosition>> {
     public final static String ID = "ignition_status";
 
     public enum IgnitionPosition {
