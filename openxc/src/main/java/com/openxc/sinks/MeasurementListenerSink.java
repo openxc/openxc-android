@@ -55,8 +55,9 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
                 listener.receive(measurement);
             }
         } catch(UnrecognizedMeasurementTypeException e) {
-            Log.w(TAG, "Received notification for a unrecognized " +
-                    "measurement type", e);
+            // This happens quite often if nobody has registered to receive
+            // updates for the specific signal. It can be an error, but if we
+            // log here it's really, really noisy.
         } catch(NoValueException e) {
             Log.w(TAG, "Received notification for a blank measurement", e);
         }
