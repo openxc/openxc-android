@@ -32,7 +32,6 @@ public class OpenXcEnablerActivity extends Activity {
 
     private final Handler mHandler = new Handler();
     private TextView mVehicleServiceStatusView;;
-    private TextView mRecordingStatusView;
     private TextView mMessageCountView;
     private TimerTask mUpdateMessageCountTask;
     private Timer mTimer;
@@ -78,7 +77,6 @@ public class OpenXcEnablerActivity extends Activity {
 
         mVehicleServiceStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
-        mRecordingStatusView = (TextView) findViewById(R.id.recording_status);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
     }
 
@@ -88,7 +86,6 @@ public class OpenXcEnablerActivity extends Activity {
         Log.i(TAG, "OpenXC Enabler resumed");
         bindService(new Intent(this, VehicleService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
-        updateRecordingStatus();
     }
 
     @Override
@@ -115,21 +112,5 @@ public class OpenXcEnablerActivity extends Activity {
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void updateRecordingStatus() {
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean recordingEnabled = preferences.getBoolean(
-                getString(R.string.recording_checkbox_key), false);
-        mHandler.post(new Runnable() {
-            public void run() {
-                if(recordingEnabled) {
-                    mRecordingStatusView.setText("Enabled");
-                } else {
-                    mRecordingStatusView.setText("Disabled");
-                }
-            }
-        });
     }
 }
