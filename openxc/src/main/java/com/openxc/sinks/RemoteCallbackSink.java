@@ -36,8 +36,10 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
 
     public synchronized void register(
             RemoteVehicleServiceListenerInterface listener) {
-        mListeners.register(listener);
-        ++mListenerCount;
+        synchronized(mListeners) {
+            mListeners.register(listener);
+            ++mListenerCount;
+        }
 
         // send the last known value of all measurements to the new listener
         for(Map.Entry<String, RawMeasurement> entry :
@@ -53,8 +55,10 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     }
 
     public void unregister(RemoteVehicleServiceListenerInterface listener) {
-        mListeners.unregister(listener);
-        --mListenerCount;
+        synchronized(mListeners) {
+            mListeners.unregister(listener);
+            --mListenerCount;
+        }
     }
 
     public int getListenerCount() {
@@ -64,18 +68,20 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
 
     protected void propagateMeasurement(String measurementId,
             RawMeasurement measurement) {
-        int i = mListeners.beginBroadcast();
-        while(i > 0) {
-            i--;
-            try {
-                mListeners.getBroadcastItem(i).receive(measurementId,
-                        measurement);
-            } catch(RemoteException e) {
-                Log.w(TAG, "Couldn't notify application " +
-                        "listener -- did it crash?", e);
+        synchronized(mListeners) {
+            int i = mListeners.beginBroadcast();
+            while(i > 0) {
+                i--;
+                try {
+                    mListeners.getBroadcastItem(i).receive(measurementId,
+                            measurement);
+                } catch(RemoteException e) {
+                    Log.w(TAG, "Couldn't notify application " +
+                            "listener -- did it crash?", e);
+                }
             }
+            mListeners.finishBroadcast();
         }
-        mListeners.finishBroadcast();
     }
 
     @Override
