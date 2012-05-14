@@ -1,16 +1,42 @@
 package com.openxc;
 
+import java.lang.Class;
+
+import java.util.ArrayList;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import java.util.List;
+
 import com.google.common.base.Objects;
 
+import com.openxc.measurements.AcceleratorPedalPosition;
+import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.EngineSpeed;
+import com.openxc.measurements.FineOdometer;
+import com.openxc.measurements.FuelConsumed;
+import com.openxc.measurements.FuelLevel;
+import com.openxc.measurements.HeadlampStatus;
+import com.openxc.measurements.HighBeamStatus;
+import com.openxc.measurements.IgnitionStatus;
+import com.openxc.measurements.Latitude;
+import com.openxc.measurements.Longitude;
 import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Odometer;
+import com.openxc.measurements.ParkingBrakeStatus;
+import com.openxc.measurements.PowertrainTorque;
+import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.Measurement;
+import com.openxc.measurements.VehicleButtonEvent;
+import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
@@ -28,6 +54,8 @@ import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.FileRecorderSink;
 
 import com.openxc.util.AndroidFileOpener;
+
+import com.openxc.VehicleService;
 
 import android.content.Context;
 import android.app.Service;
@@ -103,6 +131,51 @@ public class VehicleService extends Service implements SourceCallback {
     // all other apps to share, we should reconsider this and special case the
     // trace source.
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
+
+    // TODO I've tried really hard to avoid doing this - requiring that all
+    // measurements classes be registered somewhere. There doesn't seem to be a
+    // good way to enumerate all of the classes without reading the filesystem.
+    // The problem is that we need to be able to map from a measurement's ID to
+    // its class and vice versa. We need *someone* to refer to to Class in Java
+    // before we can load its ID. Since we reworked the sources and sinks to be
+    // in application space, and the file trace recorder and uploader need to
+    // receive all measurements regardless of if someone has actually registered
+    // to receive callbacks for that measurement or not, we need to pre-load the
+    // name mapping cache before doing anything.
+    private static List<Class<? extends MeasurementInterface>>
+            MEASUREMENT_TYPES =
+                new ArrayList<Class<? extends MeasurementInterface>>();
+
+    static {
+        MEASUREMENT_TYPES.add(AcceleratorPedalPosition.class);
+        MEASUREMENT_TYPES.add(BrakePedalStatus.class);
+        MEASUREMENT_TYPES.add(EngineSpeed.class);
+        MEASUREMENT_TYPES.add(FineOdometer.class);
+        MEASUREMENT_TYPES.add(FuelConsumed.class);
+        MEASUREMENT_TYPES.add(FuelLevel.class);
+        MEASUREMENT_TYPES.add(HeadlampStatus.class);
+        MEASUREMENT_TYPES.add(HighBeamStatus.class);
+        MEASUREMENT_TYPES.add(IgnitionStatus.class);
+        MEASUREMENT_TYPES.add(Latitude.class);
+        MEASUREMENT_TYPES.add(Longitude.class);
+        MEASUREMENT_TYPES.add(Odometer.class);
+        MEASUREMENT_TYPES.add(ParkingBrakeStatus.class);
+        MEASUREMENT_TYPES.add(PowertrainTorque.class);
+        MEASUREMENT_TYPES.add(SteeringWheelAngle.class);
+        MEASUREMENT_TYPES.add(TransmissionGearPosition.class);
+        MEASUREMENT_TYPES.add(VehicleButtonEvent.class);
+        MEASUREMENT_TYPES.add(VehicleDoorStatus.class);
+        MEASUREMENT_TYPES.add(VehicleSpeed.class);
+        MEASUREMENT_TYPES.add(WindshieldWiperStatus.class);
+
+        for(Class<? extends MeasurementInterface> measurementType : MEASUREMENT_TYPES) {
+            try {
+            Measurement.getIdForClass(measurementType);
+            } catch(UnrecognizedMeasurementTypeException e) {
+                Log.w(TAG, "Unable to initialize list of measurements", e);
+            }
+        }
+    }
 
     /**
      * Binder to connect IBinder in a ServiceConnection with the VehicleService.

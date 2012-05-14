@@ -74,7 +74,10 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
                     handleMessage(measurementId, measurement.getValue(),
                             measurement.getEvent());
                 } catch(UnrecognizedMeasurementTypeException e) {
-                } catch(NoValueException e) { }
+                    Log.w(TAG, "Unable to receive a measurement", e);
+                } catch(NoValueException e) {
+                    Log.w(TAG, "Measurement received with no value", e);
+                }
             }
         };
 }
