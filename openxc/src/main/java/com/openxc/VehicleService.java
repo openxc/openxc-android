@@ -389,9 +389,13 @@ public class VehicleService extends Service implements SourceCallback {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
             String uploadUrl = preferences.getString(
-                    getString(R.string.uploading_path_key),
-                    "http://festa.eecs.umich.edu:5000/records");
-            mUploader = mPipeline.addSink(new UploaderSink(this, uploadUrl));
+                    getString(R.string.uploading_path_key), null);
+            if(uploadUrl != null) {
+                mUploader = mPipeline.addSink(new UploaderSink(this, uploadUrl));
+            } else {
+                Log.w(TAG, "No target URL set in preferences -- not " +
+                        "starting uploading a trace");
+            }
         } else {
             mPipeline.removeSink(mUploader);
         }
