@@ -51,7 +51,7 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     protected void propagateMeasurement(String measurementId,
             RawMeasurement rawMeasurement) {
         try {
-            MeasurementInterface measurement = createMeasurement(
+            MeasurementInterface measurement = Measurement.getMeasurementFromRaw(
                     measurementId, rawMeasurement);
             for(MeasurementInterface.Listener listener :
                     mListeners.get(Measurement.getClassForId(measurementId))) {
@@ -64,14 +64,5 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         } catch(NoValueException e) {
             Log.w(TAG, "Received notification for a blank measurement", e);
         }
-    }
-
-    private static MeasurementInterface createMeasurement(
-            String measurementId, RawMeasurement value)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
-        Class<? extends MeasurementInterface> measurementClass =
-            Measurement.getClassForId(measurementId);
-        return Measurement.getMeasurementFromRaw(
-                measurementClass, value);
     }
 }

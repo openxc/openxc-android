@@ -257,7 +257,7 @@ public class VehicleDashboardActivity extends Activity {
                 public void run() {
                     mButtonEventView.setText(
                         event.getValue().enumValue() + " is " +
-                        event.getAction().enumValue());
+                        event.getEvent().enumValue());
                 }
             });
         }
@@ -271,7 +271,7 @@ public class VehicleDashboardActivity extends Activity {
                 public void run() {
                     mDoorStatusView.setText(
                         event.getValue().enumValue() + " is ajar: " +
-                        event.getAction().booleanValue());
+                        event.getEvent().booleanValue());
                 }
             });
         }

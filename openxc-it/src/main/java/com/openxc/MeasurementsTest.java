@@ -254,7 +254,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         checkReceivedMeasurement(event);
         assertEquals(event.getValue().enumValue(),
                 VehicleButtonEvent.ButtonId.OK);
-        assertEquals(event.getAction().enumValue(),
+        assertEquals(event.getEvent().enumValue(),
                 VehicleButtonEvent.ButtonAction.PRESSED);
     }
 

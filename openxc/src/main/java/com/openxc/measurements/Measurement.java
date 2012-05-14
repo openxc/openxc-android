@@ -39,6 +39,7 @@ import com.openxc.util.Range;
  */
 public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     private AgingData<TheUnit> mValue;
+    private AgingData<Unit> mEvent;
     private Range<TheUnit> mRange;
     private static BiMap<String, Class<? extends MeasurementInterface>>
             sMeasurementIdToClass;
@@ -95,6 +96,11 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         mValue = new AgingData<TheUnit>(value);
     }
 
+    public Measurement(TheUnit value, Unit event) {
+        mValue = new AgingData<TheUnit>(value);
+        mEvent = new AgingData<Unit>(event);
+    }
+
     /**
      * Construct an new Measurement with the given value and valid Range.
      *
@@ -130,6 +136,19 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
 
     public TheUnit getValue() {
         return mValue.getValue();
+    }
+
+    public Object getEvent() {
+        return mEvent.getValue();
+    }
+
+    public static MeasurementInterface getMeasurementFromRaw(
+            String measurementId, RawMeasurement rawMeasurement)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Class<? extends MeasurementInterface> measurementClass =
+            Measurement.getClassForId(measurementId);
+        return Measurement.getMeasurementFromRaw(measurementClass,
+                rawMeasurement);
     }
 
     public static MeasurementInterface getMeasurementFromRaw(

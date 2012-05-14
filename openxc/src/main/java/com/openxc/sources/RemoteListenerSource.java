@@ -4,7 +4,13 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteVehicleServiceInterface;
 import com.openxc.remote.RemoteVehicleServiceListenerInterface;
 
+import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
 import com.openxc.sources.BaseVehicleDataSource;
+
+import com.openxc.NoValueException;
 
 import android.os.RemoteException;
 
@@ -53,9 +59,22 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
     private RemoteVehicleServiceListenerInterface mRemoteListener =
         new RemoteVehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId,
-                    RawMeasurement measurement) {
-                handleMessage(measurementId, measurement.getValue(),
-                        measurement.getEvent());
+                    RawMeasurement rawMeasurement) {
+                // TODO we end up doing this conversion from raw to non-raw
+                // twice (once here and once in MeasurementListenerSink because
+                // the DataPipline stores RawMeasurement in its internal map,
+                // not MeasurementInterface. That works well on the remote side,
+                // but it isn't so ideal here. Maybe we could make DataPipeline
+                // a generic class and let us specicy the objec tot store in
+                // that map.
+                try {
+                    MeasurementInterface measurement =
+                        Measurement.getMeasurementFromRaw(
+                                measurementId, rawMeasurement);
+                    handleMessage(measurementId, measurement.getValue(),
+                            measurement.getEvent());
+                } catch(UnrecognizedMeasurementTypeException e) {
+                } catch(NoValueException e) { }
             }
         };
 }

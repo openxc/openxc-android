@@ -18,8 +18,6 @@ import com.openxc.units.Boolean;
  */
 public class VehicleDoorStatus
         extends Measurement<State<VehicleDoorStatus.DoorId>> {
-    private AgingData<Boolean> mAction;
-
     public final static String ID = "door_status";
 
     /**
@@ -53,20 +51,20 @@ public class VehicleDoorStatus
         }
     }
 
-    public VehicleDoorStatus(State<DoorId> value, Boolean action) {
-        super(value);
-        mAction = new AgingData<Boolean>(action);
+    public VehicleDoorStatus(State<DoorId> value, Boolean event) {
+        super(value, event);
     }
 
-    public VehicleDoorStatus(DoorId value, Boolean action) {
-        this(new State<DoorId>(value), action);
+    public VehicleDoorStatus(DoorId value, Boolean event) {
+        this(new State<DoorId>(value), event);
     }
 
-    public VehicleDoorStatus(Double value, Double action) {
-        this(DoorId.fromHashCode(value.intValue()), new Boolean(action));
+    public VehicleDoorStatus(Double value, Double event) {
+        this(DoorId.fromHashCode(value.intValue()), new Boolean(event));
     }
 
-    public Boolean getAction() {
-        return mAction.getValue();
+    @Override
+    public Boolean getEvent() {
+        return (Boolean) super.getEvent();
     }
 }

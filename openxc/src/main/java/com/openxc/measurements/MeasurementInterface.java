@@ -48,4 +48,8 @@ public interface MeasurementInterface {
      * @return The wrapped value (an instance of TheUnit)
      */
     public Unit getValue();
+
+    // TODO argh, no easy way to get a type for this without having two template
+    // parameters
+    public Object getEvent();
 }

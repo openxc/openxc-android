@@ -22,8 +22,6 @@ import com.openxc.util.AgingData;
  */
 public class VehicleButtonEvent
         extends Measurement<State<VehicleButtonEvent.ButtonId>> {
-    private AgingData<State<ButtonAction>> mAction;
-
     public final static String ID = "button_event";
 
     /**
@@ -91,21 +89,21 @@ public class VehicleButtonEvent
     }
 
     public VehicleButtonEvent(State<ButtonId> value,
-            State<ButtonAction> action) {
-        super(value);
-        mAction = new AgingData<State<ButtonAction>>(action);
+            State<ButtonAction> event) {
+        super(value, event);
     }
 
-    public VehicleButtonEvent(ButtonId value, ButtonAction action) {
-        this(new State<ButtonId>(value), new State<ButtonAction>(action));
+    public VehicleButtonEvent(ButtonId value, ButtonAction event) {
+        this(new State<ButtonId>(value), new State<ButtonAction>(event));
     }
 
-    public VehicleButtonEvent(Double value, Double action) {
+    public VehicleButtonEvent(Double value, Double event) {
         this(ButtonId.fromHashCode(value.intValue()),
-                ButtonAction.fromHashCode(action.intValue()));
+                ButtonAction.fromHashCode(event.intValue()));
     }
 
-    public State<ButtonAction> getAction() {
-        return mAction.getValue();
+    @Override
+    public State<ButtonAction> getEvent() {
+        return (State<ButtonAction>) super.getEvent();
     }
 }

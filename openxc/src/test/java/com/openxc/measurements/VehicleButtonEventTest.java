@@ -26,7 +26,7 @@ public class VehicleButtonEventTest {
     public void testGet() {
         assertThat(measurement.getValue().enumValue(), equalTo(
                     VehicleButtonEvent.ButtonId.OK));
-        assertThat(measurement.getAction().enumValue(), equalTo(
+        assertThat(measurement.getEvent().enumValue(), equalTo(
                     VehicleButtonEvent.ButtonAction.PRESSED));
     }
 
