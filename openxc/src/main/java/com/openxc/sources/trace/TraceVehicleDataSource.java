@@ -166,6 +166,9 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
                 }
             }
             Log.d(TAG, "Restarting playback of trace " + mFilename);
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException e) {}
         }
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
