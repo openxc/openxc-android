@@ -139,11 +139,14 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     }
 
     public Object getSerializedValue() {
-        return getValue();
+        return getValue().getSerializedValue();
     }
 
     public Object getEvent() {
-        return mEvent.getValue();
+        if(mEvent != null) {
+            return mEvent.getValue();
+        }
+        return null;
     }
 
     public Object getSerializedEvent() {

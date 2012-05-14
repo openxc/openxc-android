@@ -33,6 +33,10 @@ public class State<T extends Enum<?>> implements Unit {
         return mValue;
     }
 
+    public String getSerializedValue() {
+        return mValue.toString();
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

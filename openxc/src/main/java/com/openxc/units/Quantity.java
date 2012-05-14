@@ -29,6 +29,10 @@ public abstract class Quantity<T extends Number> {
         return mValue.doubleValue();
     }
 
+    public Object getSerializedValue() {
+        return doubleValue();
+    }
+
     public int intValue() {
         return mValue.intValue();
     }

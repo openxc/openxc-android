@@ -32,6 +32,10 @@ public class Boolean implements Unit {
         return mValue;
     }
 
+    public java.lang.Boolean getSerializedValue() {
+        return new java.lang.Boolean(booleanValue());
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

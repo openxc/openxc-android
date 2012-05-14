@@ -5,4 +5,5 @@ package com.openxc.units;
  * {@link com.openxc.measurements.Measurement}.
  */
 public interface Unit {
+    public Object getSerializedValue();
 }
