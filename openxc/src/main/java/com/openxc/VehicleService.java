@@ -2,6 +2,8 @@ package com.openxc;
 
 import java.lang.Class;
 
+import java.net.URI;
+
 import java.util.ArrayList;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -461,14 +463,20 @@ public class VehicleService extends Service implements SourceCallback {
         if(enabled) {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
-            String uploadUrl = preferences.getString(
-                    getString(R.string.uploading_path_key), null);
-            if(uploadUrl != null) {
-                mUploader = mPipeline.addSink(new UploaderSink(this, uploadUrl));
-            } else {
-                Log.w(TAG, "No target URL set in preferences -- not " +
-                        "starting uploading a trace");
+            try {
+                URI uri = new URI(preferences.getString(
+                        getString(R.string.uploading_path_key), null));
+                if(uri.isAbsolute()) {
+                    mUploader = mPipeline.addSink(new UploaderSink(this, uri));
+                } else {
+                    Log.w(TAG, "No target URL set or invalid in preferences " +
+                        "-- not starting uploading a trace");
+                }
+            } catch(java.net.URISyntaxException e) {
+                Log.w(TAG, "Target URL in preferences not valid " +
+                    "-- not starting uploading a trace", e);
             }
+
         } else {
             mPipeline.removeSink(mUploader);
         }

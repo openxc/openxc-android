@@ -3,6 +3,8 @@ package com.openxc.sinks;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -42,15 +44,15 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private static DecimalFormat sTimestampFormatter =
             new DecimalFormat("##########.000000");
 
-    private String mUrl;
+    private URI mUri;
     private BlockingQueue<JSONObject> mRecordQueue;
     private Lock mQueueLock;
     private Condition mRecordsQueuedSignal;
     private UploaderThread mUploader;
 
-    public UploaderSink(Context context, String url) {
+    public UploaderSink(Context context, URI uri) {
         super(context);
-        mUrl = url;
+        mUri = uri;
         mRecordQueue = new LinkedBlockingQueue<JSONObject>(
                 MAXIMUM_QUEUED_RECORDS);
         mQueueLock = new ReentrantLock();
@@ -116,7 +118,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
         private HttpPost constructRequest(JSONObject data)
                 throws UploaderException {
-            HttpPost request = new HttpPost(mUrl);
+            HttpPost request = new HttpPost(mUri);
             try {
                 ByteArrayEntity entity = new ByteArrayEntity(
                         data.toString().getBytes("UTF8"));
