@@ -49,7 +49,11 @@ public interface MeasurementInterface {
      */
     public Unit getValue();
 
+    public Object getSerializedValue();
+
     // TODO argh, no easy way to get a type for this without having two template
     // parameters
     public Object getEvent();
+
+    public Object getSerializedEvent();
 }

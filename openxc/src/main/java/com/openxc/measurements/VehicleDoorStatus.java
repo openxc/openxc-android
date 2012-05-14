@@ -67,4 +67,14 @@ public class VehicleDoorStatus
     public Boolean getEvent() {
         return (Boolean) super.getEvent();
     }
+
+    @Override
+    public java.lang.Boolean getSerializedEvent() {
+        return new java.lang.Boolean(getEvent().booleanValue());
+    }
+
+    @Override
+    public String getSerializedValue() {
+        return getValue().enumValue().toString();
+    }
 }

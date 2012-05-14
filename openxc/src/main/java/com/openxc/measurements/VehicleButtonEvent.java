@@ -106,4 +106,14 @@ public class VehicleButtonEvent
     public State<ButtonAction> getEvent() {
         return (State<ButtonAction>) super.getEvent();
     }
+
+    @Override
+    public String getSerializedEvent() {
+        return getEvent().enumValue().toString();
+    }
+
+    @Override
+    public String getSerializedValue() {
+        return getValue().enumValue().toString();
+    }
 }

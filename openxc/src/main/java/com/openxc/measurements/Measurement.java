@@ -138,8 +138,16 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         return mValue.getValue();
     }
 
+    public Object getSerializedValue() {
+        return getValue();
+    }
+
     public Object getEvent() {
         return mEvent.getValue();
+    }
+
+    public Object getSerializedEvent() {
+        return getEvent();
     }
 
     public static MeasurementInterface getMeasurementFromRaw(
