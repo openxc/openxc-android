@@ -87,7 +87,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         pause(200);
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);
-        service = ((VehicleManager.VehicleManagerBinder)
+        service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
         service.addSource(new TraceVehicleDataSource(getContext(),

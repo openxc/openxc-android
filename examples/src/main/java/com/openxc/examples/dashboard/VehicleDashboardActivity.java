@@ -337,7 +337,7 @@ public class VehicleDashboardActivity extends Activity {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleManager");
-            mVehicleManager = ((VehicleManager.VehicleManagerBinder)service
+            mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
             try {

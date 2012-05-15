@@ -113,7 +113,7 @@ public class VehicleManager extends Service implements SourceCallback {
     private PreferenceListener mPreferenceListener;
     private SharedPreferences mPreferences;
 
-    private IBinder mBinder = new VehicleManagerBinder();
+    private IBinder mBinder = new VehicleBinder();
     private VehicleServiceInterface mRemoteService;
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
@@ -186,11 +186,11 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * This class is used in the onServiceConnected method of a
      * ServiceConnection in a client of this service - the IBinder given to the
-     * application can be cast to the VehicleManagerBinder to retrieve the
+     * application can be cast to the VehicleBinder to retrieve the
      * actual service instance. This is required to actaully call any of its
      * methods.
      */
-    public class VehicleManagerBinder extends Binder {
+    public class VehicleBinder extends Binder {
         /*
          * Return this Binder's parent VehicleManager instance.
          *
