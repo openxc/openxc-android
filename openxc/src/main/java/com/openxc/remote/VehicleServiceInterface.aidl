@@ -69,9 +69,6 @@ interface VehicleServiceInterface {
      */
     void clearSources();
 
-    // TODO move this up to VehicleManager just like the recorder
-    void enableNativeGpsPassthrough(boolean enabled);
-
     /**
      * @return number of messages received since instantiation.
      */

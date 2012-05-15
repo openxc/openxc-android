@@ -49,6 +49,7 @@ import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
 
+import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
@@ -117,6 +118,7 @@ public class VehicleManager extends Service implements SourceCallback {
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
     private VehicleDataSink mFileRecorder;
+    private VehicleDataSource mNativeLocationSource;
     private VehicleDataSink mUploader;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
@@ -502,8 +504,7 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Enable or disable passing native host GPS through as vehicle
-     * measurements.
+     * Enable or disable reading GPS from the native Android stack.
      *
      * @param enabled true if native GPS should be passed through
      * @throws VehicleServiceException if the listener is unable to be
@@ -512,18 +513,13 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public void enableNativeGpsPassthrough(boolean enabled)
             throws VehicleServiceException {
-        if(mRemoteService != null) {
-            try {
-                Log.i(TAG, "Setting native GPS to " + enabled);
-                mRemoteService.enableNativeGpsPassthrough(enabled);
-            } catch(RemoteException e) {
-                throw new VehicleServiceException("Unable to set " +
-                        "native GPS status of remote vehicle service", e);
-            }
-        } else {
-            Log.w(TAG, "Can't set native GPS status -- " +
-                    "not connected to remote service yet, but will set when " +
-                    "connected");
+        Log.i(TAG, "Setting native GPS to " + enabled);
+        if(enabled) {
+            mNativeLocationSource = mPipeline.addSource(
+                    new NativeLocationSource(this));
+        } else if(mNativeLocationSource != null) {
+            mPipeline.removeSource(mNativeLocationSource);
+            mNativeLocationSource = null;
         }
     }
 

@@ -8,7 +8,6 @@ import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
-import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.sources.VehicleDataSource;
 
@@ -55,7 +54,6 @@ public class VehicleService extends Service {
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
     private RemoteCallbackSink mNotifier;
-    private VehicleDataSource mNativeLocationSource;
     private ApplicationSource mApplicationSource;
 
     @Override
@@ -161,26 +159,10 @@ public class VehicleService extends Service {
                 mPipeline.addSource(mApplicationSource);
             }
 
-            public void enableNativeGpsPassthrough(boolean enabled) {
-                Log.i(TAG, "Setting native GPS passtrough status to " +
-                        enabled);
-                VehicleService.this.enableNativeGpsPassthrough(enabled);
-            }
-
             public int getMessageCount() {
                 return VehicleService.this.getMessageCount();
             }
     };
-
-    private void enableNativeGpsPassthrough(boolean enabled) {
-        if(enabled) {
-            mNativeLocationSource = mPipeline.addSource(
-                    new NativeLocationSource(this));
-        } else if(mNativeLocationSource != null) {
-            mPipeline.removeSource(mNativeLocationSource);
-            mNativeLocationSource = null;
-        }
-    }
 
     private int getMessageCount() {
         return mPipeline.getMessageCount();
