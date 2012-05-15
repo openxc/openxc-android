@@ -21,6 +21,8 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleService;
 
 import com.openxc.sources.trace.TraceVehicleDataSource;
+import com.openxc.sinks.BaseVehicleDataSink;
+import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.VehicleManager;
 
@@ -37,6 +39,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     VehicleSpeed speedReceived;
     SteeringWheelAngle steeringAngleReceived;
     URI traceUri;
+    String receivedMeasurementId;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(MeasurementInterface measurement) {
@@ -136,6 +139,18 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
+    public void testCustomSink() {
+        assertNull(receivedMeasurementId);
+        service.addSink(mCustomSink);
+        pause(100);
+        assertNotNull(receivedMeasurementId);
+        service.removeSink(mCustomSink);
+        receivedMeasurementId = null;
+        pause(100);
+        assertNull(receivedMeasurementId);
+    }
+
+    @MediumTest
     public void testAddListenersTwoMeasurements()
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
@@ -197,5 +212,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             Thread.sleep(millis);
         } catch(InterruptedException e) {}
     }
+
+    private VehicleDataSink mCustomSink = new BaseVehicleDataSink() {
+        public void receive(String measurementId, Object value, Object event) {
+            receivedMeasurementId = measurementId;
+        }
+    };
 }
 
