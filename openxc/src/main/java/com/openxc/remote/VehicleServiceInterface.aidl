@@ -1,20 +1,20 @@
 package com.openxc.remote;
 
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListenerInterface;
 import com.openxc.remote.RawMeasurement;
 
 /**
- * The AIDL interface for a RemoteVehicleService running in a separate process.
+ * The AIDL interface for a VehicleService running in a separate process.
  *
  * This interface is used to bind to an AIDL interface in order to interact with
- * a centralized RemoteVehicleService that is reading data from a vehicle, trace
+ * a centralized VehicleService that is reading data from a vehicle, trace
  * file or other source.
  *
- * Applications should use the in-process VehicleService, as that builds the
+ * Applications should use the in-process VehicleManager, as that builds the
  * proper Measurement types before returning - the data at this level is very
  * loosely typed in order to slip through the limited AIDL interface.
  */
-interface RemoteVehicleServiceInterface {
+interface VehicleServiceInterface {
     /**
      * Retreive the most recent value for the measurement.
      *
@@ -28,18 +28,18 @@ interface RemoteVehicleServiceInterface {
     /**
      * Register to receive asynchronous updates when measurements are received.
      *
-     * All instances of VehicleService in application processes must register
+     * All instances of VehicleManager in application processes must register
      * themselves if they want to use the asynchronous interface.
      */
-    void register(RemoteVehicleServiceListenerInterface listener);
+    void register(VehicleServiceListenerInterface listener);
 
     /**
      * Stop sending asynchronous measurement updates to a remote listener.
      *
-     * Instances of VehicleService should unregister themselves if they no
+     * Instances of VehicleManager should unregister themselves if they no
      * longer require real-time updates.
      */
-    void unregister(RemoteVehicleServiceListenerInterface listener);
+    void unregister(VehicleServiceListenerInterface listener);
 
     /**
      * Receive a new measurement that originates from an application.
@@ -69,7 +69,7 @@ interface RemoteVehicleServiceInterface {
      */
     void clearSources();
 
-    // TODO move this up to VehicleService just like the recorder
+    // TODO move this up to VehicleManager just like the recorder
     void enableNativeGpsPassthrough(boolean enabled);
 
     /**

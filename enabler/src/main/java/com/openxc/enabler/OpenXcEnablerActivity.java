@@ -24,44 +24,44 @@ import android.util.Log;
 
 import android.widget.TextView;
 
-import com.openxc.VehicleService;
+import com.openxc.VehicleManager;
 
 public class OpenXcEnablerActivity extends Activity {
 
     private static String TAG = "OpenXcEnablerActivity";
 
     private final Handler mHandler = new Handler();
-    private TextView mVehicleServiceStatusView;;
+    private TextView mVehicleManagerStatusView;;
     private TextView mMessageCountView;
     private TimerTask mUpdateMessageCountTask;
     private Timer mTimer;
-    private VehicleService mVehicleService;
+    private VehicleManager mVehicleManager;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
-            Log.i(TAG, "Bound to VehicleService");
-            mVehicleService = ((VehicleService.VehicleServiceBinder)service
+            Log.i(TAG, "Bound to VehicleManager");
+            mVehicleManager = ((VehicleManager.VehicleManagerBinder)service
                     ).getService();
 
             mHandler.post(new Runnable() {
                 public void run() {
-                    mVehicleServiceStatusView.setText("Running");
+                    mVehicleManagerStatusView.setText("Running");
                 }
             });
 
-            mUpdateMessageCountTask = new MessageCountTask(mVehicleService,
+            mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
                     mHandler, mMessageCountView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.w(TAG, "RemoteVehicleService disconnected unexpectedly");
-            mVehicleService = null;
+            Log.w(TAG, "VehicleService disconnected unexpectedly");
+            mVehicleManager = null;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mVehicleServiceStatusView.setText("Not running");
+                    mVehicleManagerStatusView.setText("Not running");
                 }
             });
         }
@@ -73,9 +73,9 @@ public class OpenXcEnablerActivity extends Activity {
         setContentView(R.layout.main);
         Log.i(TAG, "OpenXC Enabler created");
 
-        startService(new Intent(this, VehicleService.class));
+        startService(new Intent(this, VehicleManager.class));
 
-        mVehicleServiceStatusView = (TextView) findViewById(
+        mVehicleManagerStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
     }
@@ -84,7 +84,7 @@ public class OpenXcEnablerActivity extends Activity {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "OpenXC Enabler resumed");
-        bindService(new Intent(this, VehicleService.class),
+        bindService(new Intent(this, VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
     }
 

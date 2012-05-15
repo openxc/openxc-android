@@ -8,10 +8,10 @@ import android.os.Parcelable;
 import android.util.Log;
 
 /**
- * An untyped measurement used only for the AIDL RemoteVehicleService interface.
+ * An untyped measurement used only for the AIDL VehicleService interface.
  *
  * All OpenXC measurements need to be representable by a double so they can be
- * easily fit through the AIDL interface to RemoteVehicleService. This class
+ * easily fit through the AIDL interface to VehicleService. This class
  * shouldn't be used anywhere else becuase hey, types are important.
  *
  * This class implements the Parcelable interface, so it can be used directly as

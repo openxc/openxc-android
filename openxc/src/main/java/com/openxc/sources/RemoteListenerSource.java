@@ -1,8 +1,8 @@
 package com.openxc.sources;
 
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteVehicleServiceInterface;
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceInterface;
+import com.openxc.remote.VehicleServiceListenerInterface;
 
 import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.Measurement;
@@ -17,24 +17,24 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * Pass measurements from a RemoteVehicleService to an in-process callback.
+ * Pass measurements from a VehicleService to an in-process callback.
  *
  * This source is a bit of a special case - it's used by the
- * {@link com.openxc.VehicleService} to inject measurement updates from a
- * {@link com.openxc.remote.RemoteVehicleService} into an in-process data
+ * {@link com.openxc.VehicleManager} to inject measurement updates from a
+ * {@link com.openxc.remote.VehicleService} into an in-process data
  * pipeline. By using the same workflow as on the remote process side, we can
  * share code between remote and in-process data sources and sinks. This makes
  * adding new sources and sinks possible for end users, since the
- * RemoteVehicleService doesn't need to have every possible implementation.
+ * VehicleService doesn't need to have every possible implementation.
  */
 public class RemoteListenerSource extends BaseVehicleDataSource {
     private final static String TAG = "RemoteListenerSource";
-    private RemoteVehicleServiceInterface mService;
+    private VehicleServiceInterface mService;
 
     /**
      * Registers a measurement listener with the remote service.
      */
-    public RemoteListenerSource(RemoteVehicleServiceInterface service) {
+    public RemoteListenerSource(VehicleServiceInterface service) {
         super();
         mService = service;
 
@@ -56,8 +56,8 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
         }
     }
 
-    private RemoteVehicleServiceListenerInterface mRemoteListener =
-        new RemoteVehicleServiceListenerInterface.Stub() {
+    private VehicleServiceListenerInterface mRemoteListener =
+        new VehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId,
                     RawMeasurement rawMeasurement) {
                 // TODO we end up doing this conversion from raw to non-raw

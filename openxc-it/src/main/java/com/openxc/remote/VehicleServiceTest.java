@@ -1,6 +1,6 @@
 package com.openxc.remote;
 
-import com.openxc.remote.RemoteVehicleService;
+import com.openxc.remote.VehicleService;
 
 import android.content.Intent;
 
@@ -9,19 +9,19 @@ import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
-public class RemoteVehicleServiceTest
-        extends ServiceTestCase<RemoteVehicleService> {
+public class VehicleServiceTest
+        extends ServiceTestCase<VehicleService> {
     Intent startIntent;
 
-    public RemoteVehicleServiceTest() {
-        super(RemoteVehicleService.class);
+    public VehicleServiceTest() {
+        super(VehicleService.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         startIntent = new Intent();
-        startIntent.setClass(getContext(), RemoteVehicleServiceInterface.class);
+        startIntent.setClass(getContext(), VehicleServiceInterface.class);
     }
 
     @SmallTest

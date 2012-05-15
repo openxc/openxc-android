@@ -31,7 +31,7 @@ import android.util.Log;
  *
  * This class is primarily for testing - a pre-recorded trace of the output from
  * an OpenXC CAN translator is played back line by line into the library.
- * Everything from the RemoteVehicleService on up the chain is identical to when
+ * Everything from the VehicleService on up the chain is identical to when
  * operating in a live vehicle.
  *
  * The expected format of the trace file is UNIX timestamps followed by JSON

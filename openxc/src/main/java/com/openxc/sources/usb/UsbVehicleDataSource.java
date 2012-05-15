@@ -76,7 +76,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
      * waiting for a signal to check again.
      *
      * TODO Do we ever send such a signal? Or did I delete that because in order
-     * to have that signal sent, we have to shut down the RemoteVehicleService
+     * to have that signal sent, we have to shut down the VehicleService
      * (and thus this UsbVehicleDataSource) anyway?
      *
      * @param context The Activity or Service context, used to get access to the

@@ -6,10 +6,10 @@
       <uses-feature android:name="android.hardware.usb.host"
               android:required="true" />
       <uses-library android:name="android.test.runner" />
-      <service android:name=".VehicleService"/>
-      <service android:name=".remote.RemoteVehicleService" android:process=":remote">
+      <service android:name=".VehicleManager"/>
+      <service android:name=".remote.VehicleService" android:process=":remote">
           <intent-filter>
-              <action android:name="com.openxc.remote.RemoteVehicleServiceInterface" />
+              <action android:name="com.openxc.remote.VehicleServiceInterface" />
           </intent-filter>
       </service>
   </application>

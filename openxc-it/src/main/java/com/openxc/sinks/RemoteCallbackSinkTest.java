@@ -10,12 +10,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListenerInterface;
 
 public class RemoteCallbackSinkTest {
     Map<String, RawMeasurement> measurements;
     RemoteCallbackSink notifier;
-    RemoteVehicleServiceListenerInterface listener;
+    VehicleServiceListenerInterface listener;
     String measurementId = "the_measurement";
     String receivedId = null;
 
@@ -26,7 +26,7 @@ public class RemoteCallbackSinkTest {
         measurements = new HashMap<String, RawMeasurement>();
         notifier = new RemoteCallbackSink();
         notifier.setMeasurements(measurements);
-        listener = new RemoteVehicleServiceListenerInterface.Stub() {
+        listener = new VehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId, RawMeasurement value) {
                 receivedId = measurementId;
             }

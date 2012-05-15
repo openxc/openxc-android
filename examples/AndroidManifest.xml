@@ -9,7 +9,7 @@
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
       </activity>
-      <service android:name="com.openxc.VehicleService"/>
+      <service android:name="com.openxc.VehicleManager"/>
   </application>
 
   <supports-screens android:largeScreens="true" android:xlargeScreens="true"

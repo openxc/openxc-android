@@ -17,12 +17,12 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.NoValueException;
-import com.openxc.remote.RemoteVehicleServiceException;
-import com.openxc.remote.RemoteVehicleService;
+import com.openxc.remote.VehicleServiceException;
+import com.openxc.remote.VehicleService;
 
 import com.openxc.sources.trace.TraceVehicleDataSource;
 
-import com.openxc.VehicleService;
+import com.openxc.VehicleManager;
 
 import android.content.Intent;
 
@@ -32,8 +32,8 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import junit.framework.Assert;
 
-public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
-    VehicleService service;
+public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
+    VehicleManager service;
     VehicleSpeed speedReceived;
     SteeringWheelAngle steeringAngleReceived;
     URI traceUri;
@@ -51,8 +51,8 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         }
     };
 
-    public BoundVehicleServiceTest() {
-        super(VehicleService.class);
+    public BoundVehicleManagerTest() {
+        super(VehicleManager.class);
     }
 
     private void copyTraces() {
@@ -80,11 +80,11 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
         // if the service is already running (and thus may have old data
         // cached), kill it.
         getContext().stopService(new Intent(getContext(),
-                    RemoteVehicleService.class));
+                    VehicleService.class));
         pause(200);
         Intent startIntent = new Intent();
-        startIntent.setClass(getContext(), VehicleService.class);
-        service = ((VehicleService.VehicleServiceBinder)
+        startIntent.setClass(getContext(), VehicleManager.class);
+        service = ((VehicleManager.VehicleManagerBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
         service.addDataSource(new TraceVehicleDataSource(getContext(),
@@ -115,7 +115,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testListenerGetsLastKnownValue()
-            throws RemoteVehicleServiceException,
+            throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         pause(300);
         // kill the incoming data stream
@@ -127,7 +127,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testAddListener() throws RemoteVehicleServiceException,
+    public void testAddListener() throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
@@ -137,7 +137,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testAddListenersTwoMeasurements()
-            throws RemoteVehicleServiceException,
+            throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
@@ -148,7 +148,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     }
 
     @MediumTest
-    public void testRemoveListener() throws RemoteVehicleServiceException,
+    public void testRemoveListener() throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
@@ -161,14 +161,14 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
 
     @MediumTest
     public void testRemoveWithoutListening()
-            throws RemoteVehicleServiceException {
+            throws VehicleServiceException {
         service.removeListener(VehicleSpeed.class, speedListener);
         assertNull(speedReceived);
     }
 
     @MediumTest
     public void testRemoveOneMeasurementListener()
-            throws RemoteVehicleServiceException,
+            throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
@@ -182,7 +182,7 @@ public class BoundVehicleServiceTest extends ServiceTestCase<VehicleService> {
     @MediumTest
     public void testConsistentAge()
             throws UnrecognizedMeasurementTypeException,
-            NoValueException, RemoteVehicleServiceException {
+            NoValueException, VehicleServiceException {
         pause(150);
         service.clearSources();
         pause(150);

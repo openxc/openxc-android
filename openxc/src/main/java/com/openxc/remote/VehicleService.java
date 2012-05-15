@@ -2,7 +2,7 @@ package com.openxc.remote;
 
 import com.openxc.DataPipeline;
 
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListenerInterface;
 
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
@@ -25,32 +25,32 @@ import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 /**
- * The RemoteVehicleService is the centralized source of all vehicle data.
+ * The VehicleService is the centralized source of all vehicle data.
  *
  * To minimize overhead, only one object connects to the current vehicle data
  * source (e.g. a CAN translator or trace file being played back) and all
  * application requests are eventually propagated back to this service.
  *
  * Applications should not use this service directly, but should bind to the
- * in-process {@link com.openxc.VehicleService} instead - that has an interface
+ * in-process {@link com.openxc.VehicleManager} instead - that has an interface
  * that respects Measurement types. The interface used for the
- * RemoteVehicleService is purposefully primative as there are a small set of
+ * VehicleService is purposefully primative as there are a small set of
  * objects that can be natively marshalled through an AIDL interface.
  *
  * By default, the only source of vehicle data is an OpenXC USB device. Other
  * data sources can be instantiated by applications and given the
- * RemoteVehicleService as their callback - data will flow backwards from the
+ * VehicleService as their callback - data will flow backwards from the
  * application process to the remote service and be indistinguishable from local
  * data sources.
  *
- * This service uses the same {@link DataPipeline} as the {@link VehicleService}
+ * This service uses the same {@link DataPipeline} as the {@link VehicleManager}
  * to move data from sources to sinks, but it the pipeline is not modifiable by
  * the application as there is no good way to pass running sources through the
  * AIDL interface. The same style is used here for clarity and in order to share
  * code.
  */
-public class RemoteVehicleService extends Service {
-    private final static String TAG = "RemoteVehicleService";
+public class VehicleService extends Service {
+    private final static String TAG = "VehicleService";
 
     private WakeLock mWakeLock;
     private DataPipeline mPipeline;
@@ -125,8 +125,8 @@ public class RemoteVehicleService extends Service {
         }
     }
 
-    private final RemoteVehicleServiceInterface.Stub mBinder =
-        new RemoteVehicleServiceInterface.Stub() {
+    private final VehicleServiceInterface.Stub mBinder =
+        new VehicleServiceInterface.Stub() {
             public RawMeasurement get(String measurementId)
                     throws RemoteException {
                 return mPipeline.get(measurementId);
@@ -138,19 +138,19 @@ public class RemoteVehicleService extends Service {
             }
 
             public void register(
-                    RemoteVehicleServiceListenerInterface listener) {
+                    VehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener);
                 mNotifier.register(listener);
             }
 
             public void unregister(
-                    RemoteVehicleServiceListenerInterface listener) {
+                    VehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener);
                 mNotifier.unregister(listener);
             }
 
             public void initializeDefaultSources() {
-                RemoteVehicleService.this.initializeDefaultSources();
+                VehicleService.this.initializeDefaultSources();
             }
 
             public void clearSources() {
@@ -164,11 +164,11 @@ public class RemoteVehicleService extends Service {
             public void enableNativeGpsPassthrough(boolean enabled) {
                 Log.i(TAG, "Setting native GPS passtrough status to " +
                         enabled);
-                RemoteVehicleService.this.enableNativeGpsPassthrough(enabled);
+                VehicleService.this.enableNativeGpsPassthrough(enabled);
             }
 
             public int getMessageCount() {
-                return RemoteVehicleService.this.getMessageCount();
+                return VehicleService.this.getMessageCount();
             }
     };
 

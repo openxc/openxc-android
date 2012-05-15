@@ -10,7 +10,7 @@ import com.openxc.VehicleDataEndpoint;
  *
  * A VehicleDataSink in a {@link DataPipeline} is given new measurements via the
  * receive methods. Data sinks are registered with a
- * {@link com.openxc.remote.RemoteVehicleService} receive all raw messages
+ * {@link com.openxc.remote.VehicleService} receive all raw messages
  * from the vehicle data sources as they arrive without having to explicitly
  * register for asynchronous updates on specific measurements. Common
  * applications of this class are trace file recording, web streaming or custom

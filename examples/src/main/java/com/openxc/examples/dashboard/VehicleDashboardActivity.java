@@ -15,7 +15,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.openxc.VehicleService;
+import com.openxc.VehicleManager;
 import com.openxc.examples.R;
 import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.HeadlampStatus;
@@ -38,13 +38,13 @@ import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.Odometer;
 import com.openxc.measurements.FineOdometer;
 import com.openxc.measurements.WindshieldWiperStatus;
-import com.openxc.remote.RemoteVehicleServiceException;
+import com.openxc.remote.VehicleServiceException;
 
 public class VehicleDashboardActivity extends Activity {
 
     private static String TAG = "VehicleDashboard";
 
-    private VehicleService mVehicleService;
+    private VehicleManager mVehicleManager;
     private boolean mIsBound;
     private final Handler mHandler = new Handler();
     private TextView mSteeringWheelAngleView;
@@ -336,50 +336,50 @@ public class VehicleDashboardActivity extends Activity {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
-            Log.i(TAG, "Bound to VehicleService");
-            mVehicleService = ((VehicleService.VehicleServiceBinder)service
+            Log.i(TAG, "Bound to VehicleManager");
+            mVehicleManager = ((VehicleManager.VehicleManagerBinder)service
                     ).getService();
 
             try {
-                mVehicleService.addListener(SteeringWheelAngle.class,
+                mVehicleManager.addListener(SteeringWheelAngle.class,
                         mSteeringWheelListener);
-                mVehicleService.addListener(VehicleSpeed.class,
+                mVehicleManager.addListener(VehicleSpeed.class,
                         mSpeedListener);
-                mVehicleService.addListener(FuelConsumed.class,
+                mVehicleManager.addListener(FuelConsumed.class,
                         mFuelConsumedListener);
-                mVehicleService.addListener(FuelLevel.class,
+                mVehicleManager.addListener(FuelLevel.class,
                         mFuelLevelListener);
-                mVehicleService.addListener(Odometer.class,
+                mVehicleManager.addListener(Odometer.class,
                         mOdometerListener);
-                mVehicleService.addListener(FineOdometer.class,
+                mVehicleManager.addListener(FineOdometer.class,
                         mFineOdometerListener);
-                mVehicleService.addListener(WindshieldWiperStatus.class,
+                mVehicleManager.addListener(WindshieldWiperStatus.class,
                         mWiperListener);
-                mVehicleService.addListener(BrakePedalStatus.class,
+                mVehicleManager.addListener(BrakePedalStatus.class,
                         mBrakePedalStatus);
-                mVehicleService.addListener(ParkingBrakeStatus.class,
+                mVehicleManager.addListener(ParkingBrakeStatus.class,
                         mParkingBrakeStatus);
-                mVehicleService.addListener(HeadlampStatus.class,
+                mVehicleManager.addListener(HeadlampStatus.class,
                         mHeadlampStatus);
-                mVehicleService.addListener(EngineSpeed.class,
+                mVehicleManager.addListener(EngineSpeed.class,
                         mEngineSpeed);
-                mVehicleService.addListener(PowertrainTorque.class,
+                mVehicleManager.addListener(PowertrainTorque.class,
                         mPowertrainTorque);
-                mVehicleService.addListener(AcceleratorPedalPosition.class,
+                mVehicleManager.addListener(AcceleratorPedalPosition.class,
                         mAcceleratorPedalPosition);
-                mVehicleService.addListener(TransmissionGearPosition.class,
+                mVehicleManager.addListener(TransmissionGearPosition.class,
                         mTransmissionGearPos);
-                mVehicleService.addListener(IgnitionStatus.class,
+                mVehicleManager.addListener(IgnitionStatus.class,
                         mIgnitionStatus);
-                mVehicleService.addListener(Latitude.class,
+                mVehicleManager.addListener(Latitude.class,
                         mLatitude);
-                mVehicleService.addListener(Longitude.class,
+                mVehicleManager.addListener(Longitude.class,
                         mLongitude);
-                mVehicleService.addListener(VehicleButtonEvent.class,
+                mVehicleManager.addListener(VehicleButtonEvent.class,
                         mButtonEvent);
-                mVehicleService.addListener(VehicleDoorStatus.class,
+                mVehicleManager.addListener(VehicleDoorStatus.class,
                         mDoorStatus);
-            } catch(RemoteVehicleServiceException e) {
+            } catch(VehicleServiceException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
@@ -388,8 +388,8 @@ public class VehicleDashboardActivity extends Activity {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.w(TAG, "RemoteVehicleService disconnected unexpectedly");
-            mVehicleService = null;
+            Log.w(TAG, "VehicleService disconnected unexpectedly");
+            mVehicleManager = null;
             mIsBound = false;
         }
     };
@@ -449,14 +449,14 @@ public class VehicleDashboardActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        bindService(new Intent(this, VehicleService.class),
+        bindService(new Intent(this, VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
 
         LocationManager locationManager = (LocationManager)
             getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(
-                    VehicleService.VEHICLE_LOCATION_PROVIDER, 0, 0,
+                    VehicleManager.VEHICLE_LOCATION_PROVIDER, 0, 0,
                     mAndroidLocationListener);
         } catch(IllegalArgumentException e) {
             Log.w(TAG, "Vehicle location provider is unavailable");

@@ -6,7 +6,7 @@ import com.google.common.base.Objects;
 
 import com.openxc.remote.RawMeasurement;
 
-import com.openxc.remote.RemoteVehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListenerInterface;
 
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -17,7 +17,7 @@ import android.util.Log;
  * A data sink that sends new measurements through an AIDL interface.
  *
  * This sink is used to send all new measurements over an AIDL interface in
- * Android to applications using {@link com.openxc.VehicleService}. Once
+ * Android to applications using {@link com.openxc.VehicleManager}. Once
  * registered, a receiver gets all measurements regardless of their type or
  * value.
  */
@@ -25,17 +25,17 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "RemoteCallbackSink";
 
     private int mListenerCount;
-    private RemoteCallbackList<RemoteVehicleServiceListenerInterface>
+    private RemoteCallbackList<VehicleServiceListenerInterface>
             mListeners;
 
     public RemoteCallbackSink() {
         super();
         mListeners = new RemoteCallbackList<
-            RemoteVehicleServiceListenerInterface>();
+            VehicleServiceListenerInterface>();
     }
 
     public synchronized void register(
-            RemoteVehicleServiceListenerInterface listener) {
+            VehicleServiceListenerInterface listener) {
         synchronized(mListeners) {
             mListeners.register(listener);
             ++mListenerCount;
@@ -54,7 +54,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
         }
     }
 
-    public void unregister(RemoteVehicleServiceListenerInterface listener) {
+    public void unregister(VehicleServiceListenerInterface listener) {
         synchronized(mListeners) {
             mListeners.unregister(listener);
             --mListenerCount;

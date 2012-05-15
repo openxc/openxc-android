@@ -42,8 +42,8 @@ import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteVehicleServiceException;
-import com.openxc.remote.RemoteVehicleServiceInterface;
+import com.openxc.remote.VehicleServiceException;
+import com.openxc.remote.VehicleServiceInterface;
 
 import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.UploaderSink;
@@ -57,7 +57,7 @@ import com.openxc.sinks.FileRecorderSink;
 
 import com.openxc.util.AndroidFileOpener;
 
-import com.openxc.VehicleService;
+import com.openxc.VehicleManager;
 
 import android.content.Context;
 import android.app.Service;
@@ -76,7 +76,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * The VehicleService is an in-process Android service and the primary entry
+ * The VehicleManager is an in-process Android service and the primary entry
  * point into the OpenXC library.
  *
  * An OpenXC application should bind to this service and request vehicle
@@ -93,7 +93,7 @@ import android.util.Log;
  * data source, it is passed to any and all registered message "sinks" - these
  * receivers conform to the {@link com.openxc.sinks.VehicleDataSinkInterface}.
  * There will always be at least one sink that stores the latest messages and
- * handles passing on data to users of the VehicleService class. Other possible
+ * handles passing on data to users of the VehicleManager class. Other possible
  * sinks include the {@link com.openxc.sinks.FileRecorderSink} which records a
  * trace of the raw OpenXC measurements to a file and a web streaming sink
  * (which streams the raw data to a web application). Other possible sources
@@ -101,10 +101,10 @@ import android.util.Log;
  * previously recorded vehicle data trace file and plays back the measurements
  * in real-time.
  */
-public class VehicleService extends Service implements SourceCallback {
+public class VehicleManager extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
-    private final static String TAG = "VehicleService";
+    private final static String TAG = "VehicleManager";
 
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
@@ -112,8 +112,8 @@ public class VehicleService extends Service implements SourceCallback {
     private PreferenceListener mPreferenceListener;
     private SharedPreferences mPreferences;
 
-    private IBinder mBinder = new VehicleServiceBinder();
-    private RemoteVehicleServiceInterface mRemoteService;
+    private IBinder mBinder = new VehicleManagerBinder();
+    private VehicleServiceInterface mRemoteService;
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
     private VehicleDataSink mFileRecorder;
@@ -121,9 +121,9 @@ public class VehicleService extends Service implements SourceCallback {
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
     // RemoteListenerSource that receives measurements from the
-    // RemoteVehicleService and propagates them to all of the user-registered
+    // VehicleService and propagates them to all of the user-registered
     // sinks. Any user-registered sources must live in a separate array,
-    // unfortunately, so they don't try to circumvent the RemoteVehicleService
+    // unfortunately, so they don't try to circumvent the VehicleService
     // and send their values directly to the in-process sinks (otherwise no
     // other applications could receive updates from that source). For most
     // applications that might be fine, but since we want to control trace
@@ -180,27 +180,27 @@ public class VehicleService extends Service implements SourceCallback {
     }
 
     /**
-     * Binder to connect IBinder in a ServiceConnection with the VehicleService.
+     * Binder to connect IBinder in a ServiceConnection with the VehicleManager.
      *
      * This class is used in the onServiceConnected method of a
      * ServiceConnection in a client of this service - the IBinder given to the
-     * application can be cast to the VehicleServiceBinder to retrieve the
+     * application can be cast to the VehicleManagerBinder to retrieve the
      * actual service instance. This is required to actaully call any of its
      * methods.
      */
-    public class VehicleServiceBinder extends Binder {
+    public class VehicleManagerBinder extends Binder {
         /*
-         * Return this Binder's parent VehicleService instance.
+         * Return this Binder's parent VehicleManager instance.
          *
-         * @return an instance of VehicleService.
+         * @return an instance of VehicleManager.
          */
-        public VehicleService getService() {
-            return VehicleService.this;
+        public VehicleManager getService() {
+            return VehicleManager.this;
         }
     }
 
     /**
-     * Block until the VehicleService is alive and can return measurements.
+     * Block until the VehicleManager is alive and can return measurements.
      *
      * Most applications don't need this and don't wait this method, but it can
      * be useful for testing when you need to make sure you will get a
@@ -208,7 +208,7 @@ public class VehicleService extends Service implements SourceCallback {
      */
     public void waitUntilBound() {
         mRemoteBoundLock.lock();
-        Log.i(TAG, "Waiting for the RemoteVehicleService to bind to " + this);
+        Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
         while(!mIsBound) {
             try {
                 mRemoteBoundCondition.await();
@@ -276,7 +276,7 @@ public class VehicleService extends Service implements SourceCallback {
             throws UnrecognizedMeasurementTypeException, NoValueException {
 
         if(mRemoteService == null) {
-            Log.w(TAG, "Not connected to the RemoteVehicleService -- " +
+            Log.w(TAG, "Not connected to the VehicleService -- " +
                     "throwing a NoValueException");
             throw new NoValueException();
         }
@@ -304,7 +304,7 @@ public class VehicleService extends Service implements SourceCallback {
      *      (e.g. VehicleSpeed.class) the listener was listening for
      * @param listener An Measurement.Listener instance that was
      *      previously registered with addListener
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      * @throws UnrecognizedMeasurementTypeException if passed a measurementType
@@ -313,7 +313,7 @@ public class VehicleService extends Service implements SourceCallback {
     public void addListener(
             Class<? extends MeasurementInterface> measurementType,
             MeasurementInterface.Listener listener)
-            throws RemoteVehicleServiceException,
+            throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         mNotifier.register(measurementType, listener);
@@ -325,18 +325,18 @@ public class VehicleService extends Service implements SourceCallback {
      * The default vehicle data source is USB. If a USB CAN translator is not
      * connected, there will be no more data.
      *
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
     public void initializeDefaultSources()
-            throws RemoteVehicleServiceException {
+            throws VehicleServiceException {
         Log.i(TAG, "Resetting data sources");
         if(mRemoteService != null) {
             try {
                 mRemoteService.initializeDefaultSources();
             } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
+                throw new VehicleServiceException(
                         "Unable to reset data sources");
             }
         } else {
@@ -345,13 +345,13 @@ public class VehicleService extends Service implements SourceCallback {
         }
     }
 
-    public void clearSources() throws RemoteVehicleServiceException {
+    public void clearSources() throws VehicleServiceException {
         Log.i(TAG, "Clearing all data sources");
         if(mRemoteService != null) {
             try {
                 mRemoteService.clearSources();
             } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
+                throw new VehicleServiceException(
                         "Unable to clear data sources");
             }
         } else {
@@ -372,7 +372,7 @@ public class VehicleService extends Service implements SourceCallback {
      *      (e.g. VehicleSpeed.class)
      * @param listener An object implementing the Measurement.Listener
      *      interface that should be called with any new measurements.
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      registered with the library internals - an exceptional situation
      *      that shouldn't occur.
      * @throws UnrecognizedMeasurementTypeException if passed a class that does
@@ -380,7 +380,7 @@ public class VehicleService extends Service implements SourceCallback {
      */
     public void removeListener(Class<? extends MeasurementInterface>
             measurementType, MeasurementInterface.Listener listener)
-            throws RemoteVehicleServiceException {
+            throws VehicleServiceException {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
         mNotifier.unregister(measurementType, listener);
@@ -390,7 +390,7 @@ public class VehicleService extends Service implements SourceCallback {
      * Add a new data source to the vehicle service.
      *
      * For example, to use the trace data source to playback a trace file, call
-     * the addDataSource method after binding with VehicleService:
+     * the addDataSource method after binding with VehicleManager:
      *
      *      service.addDataSource(new TraceVehicleDataSource(
      *                  new URI("/sdcard/openxc/trace.json"))));
@@ -424,7 +424,7 @@ public class VehicleService extends Service implements SourceCallback {
      * A data sink added with this method will receive all new measurements as
      * they arrive from registered data sources.  For example, to use the trace
      * file recorder sink, call the addDataSink method after binding with
-     * VehicleService:
+     * VehicleManager:
      *
      *      service.addDataSink(new FileRecorderSink(
      *              new AndroidFileOpener(this)));
@@ -453,12 +453,12 @@ public class VehicleService extends Service implements SourceCallback {
      * preferences.
      *
      * @param enabled true if uploading should be enabled
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
     public void enableUploading(boolean enabled)
-            throws RemoteVehicleServiceException {
+            throws VehicleServiceException {
         Log.i(TAG, "Setting uploading to " + enabled);
         if(enabled) {
             SharedPreferences preferences =
@@ -486,12 +486,12 @@ public class VehicleService extends Service implements SourceCallback {
      * Enable or disable recording of a trace file.
      *
      * @param enabled true if recording should be enabled
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
     public void enableRecording(boolean enabled)
-            throws RemoteVehicleServiceException {
+            throws VehicleServiceException {
         Log.i(TAG, "Setting recording to " + enabled);
         if(enabled) {
             mFileRecorder = mPipeline.addSink(
@@ -506,18 +506,18 @@ public class VehicleService extends Service implements SourceCallback {
      * measurements.
      *
      * @param enabled true if native GPS should be passed through
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
     public void enableNativeGpsPassthrough(boolean enabled)
-            throws RemoteVehicleServiceException {
+            throws VehicleServiceException {
         if(mRemoteService != null) {
             try {
                 Log.i(TAG, "Setting native GPS to " + enabled);
                 mRemoteService.enableNativeGpsPassthrough(enabled);
             } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException("Unable to set " +
+                throw new VehicleServiceException("Unable to set " +
                         "native GPS status of remote vehicle service", e);
             }
         } else {
@@ -530,20 +530,20 @@ public class VehicleService extends Service implements SourceCallback {
     /**
      * Read the number of messages received by the vehicle service.
      *
-     * @throws RemoteVehicleServiceException if the listener is unable to be
+     * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
-    public int getMessageCount() throws RemoteVehicleServiceException {
+    public int getMessageCount() throws VehicleServiceException {
         if(mRemoteService != null) {
             try {
                 return mRemoteService.getMessageCount();
             } catch(RemoteException e) {
-                throw new RemoteVehicleServiceException(
+                throw new VehicleServiceException(
                         "Unable to retrieve message count", e);
             }
         } else {
-            throw new RemoteVehicleServiceException(
+            throw new VehicleServiceException(
                     "Unable to retrieve message count");
         }
     }
@@ -573,7 +573,7 @@ public class VehicleService extends Service implements SourceCallback {
                 getString(R.string.uploading_checkbox_key), false);
         try {
             enableUploading(uploadingEnabled);
-        } catch(RemoteVehicleServiceException e) {
+        } catch(VehicleServiceException e) {
             Log.w(TAG, "Unable to set uploading status after binding", e);
         }
     }
@@ -585,7 +585,7 @@ public class VehicleService extends Service implements SourceCallback {
                 getString(R.string.recording_checkbox_key), false);
         try {
             enableRecording(recordingEnabled);
-        } catch(RemoteVehicleServiceException e) {
+        } catch(VehicleServiceException e) {
             Log.w(TAG, "Unable to set recording status after binding", e);
         }
     }
@@ -597,7 +597,7 @@ public class VehicleService extends Service implements SourceCallback {
                 getString(R.string.native_gps_checkbox_key), false);
         try {
             enableNativeGpsPassthrough(nativeGpsEnabled);
-        } catch(RemoteVehicleServiceException e) {
+        } catch(VehicleServiceException e) {
             Log.w(TAG, "Unable to set native GPS status after binding", e);
         }
     }
@@ -622,8 +622,8 @@ public class VehicleService extends Service implements SourceCallback {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
-            Log.i(TAG, "Bound to RemoteVehicleService");
-            mRemoteService = RemoteVehicleServiceInterface.Stub.asInterface(
+            Log.i(TAG, "Bound to VehicleService");
+            mRemoteService = VehicleServiceInterface.Stub.asInterface(
                     service);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
@@ -640,7 +640,7 @@ public class VehicleService extends Service implements SourceCallback {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.w(TAG, "RemoteVehicleService disconnected unexpectedly");
+            Log.w(TAG, "VehicleService disconnected unexpectedly");
             mRemoteService = null;
             mIsBound = false;
             mPipeline.removeSource(mRemoteSource);
@@ -648,9 +648,9 @@ public class VehicleService extends Service implements SourceCallback {
     };
 
     private void bindRemote() {
-        Log.i(TAG, "Binding to RemoteVehicleService");
+        Log.i(TAG, "Binding to VehicleService");
         Intent intent = new Intent(
-                RemoteVehicleServiceInterface.class.getName());
+                VehicleServiceInterface.class.getName());
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -660,7 +660,7 @@ public class VehicleService extends Service implements SourceCallback {
         }
 
         if(mIsBound) {
-            Log.i(TAG, "Unbinding from RemoteVehicleService");
+            Log.i(TAG, "Unbinding from VehicleService");
             unbindService(mConnection);
             mIsBound = false;
         }

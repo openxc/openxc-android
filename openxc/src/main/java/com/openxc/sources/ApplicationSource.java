@@ -5,7 +5,7 @@ import com.openxc.remote.RawMeasurement;
 /**
  * A "reverse" source to pass externally generated measurements to the callback.
  *
- * This class is used by the {@link com.openxc.remote.RemoteVehicleService} to
+ * This class is used by the {@link com.openxc.remote.VehicleService} to
  * pass measurements received from applications (e.g. from a trace file source
  * in an app) into the normal measurement workflow.
  */

@@ -32,7 +32,7 @@ import com.openxc.measurements.WindshieldWiperStatus;
 
 import com.openxc.sources.trace.TraceVehicleDataSource;
 
-import com.openxc.VehicleService;
+import com.openxc.VehicleManager;
 
 import android.content.Intent;
 
@@ -44,12 +44,12 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import junit.framework.Assert;
 
-public class MeasurementsTest extends ServiceTestCase<VehicleService> {
-    VehicleService service;
+public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
+    VehicleManager service;
     URI traceUri;
 
     public MeasurementsTest() {
-        super(VehicleService.class);
+        super(VehicleManager.class);
     }
 
     private void copyTraces() {
@@ -73,8 +73,8 @@ public class MeasurementsTest extends ServiceTestCase<VehicleService> {
         copyTraces();
 
         Intent startIntent = new Intent();
-        startIntent.setClass(getContext(), VehicleService.class);
-        service = ((VehicleService.VehicleServiceBinder)
+        startIntent.setClass(getContext(), VehicleManager.class);
+        service = ((VehicleManager.VehicleManagerBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
         service.addDataSource(

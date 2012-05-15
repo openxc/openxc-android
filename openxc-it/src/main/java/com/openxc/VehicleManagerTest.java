@@ -1,6 +1,6 @@
 package com.openxc;
 
-import com.openxc.VehicleService;
+import com.openxc.VehicleManager;
 
 import android.content.Intent;
 
@@ -9,18 +9,18 @@ import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
-public class VehicleServiceTest extends ServiceTestCase<VehicleService> {
+public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     Intent startIntent;
 
-    public VehicleServiceTest() {
-        super(VehicleService.class);
+    public VehicleManagerTest() {
+        super(VehicleManager.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         startIntent = new Intent();
-        startIntent.setClass(getContext(), VehicleService.class);
+        startIntent.setClass(getContext(), VehicleManager.class);
     }
 
     @SmallTest

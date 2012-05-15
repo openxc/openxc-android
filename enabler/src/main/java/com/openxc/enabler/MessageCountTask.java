@@ -2,20 +2,20 @@ package com.openxc.enabler;
 
 import java.util.TimerTask;
 
-import com.openxc.VehicleService;
-import com.openxc.remote.RemoteVehicleServiceException;
+import com.openxc.VehicleManager;
+import com.openxc.remote.VehicleServiceException;
 
 import android.os.Handler;
 import android.widget.TextView;
 
 public class MessageCountTask extends TimerTask {
-    private VehicleService mVehicleService;
+    private VehicleManager mVehicleManager;
     private Handler mHandler;
     private TextView mMessageCountView;
 
-    public MessageCountTask(VehicleService vehicleService, Handler handler,
+    public MessageCountTask(VehicleManager vehicleService, Handler handler,
             TextView view) {
-        mVehicleService = vehicleService;
+        mVehicleManager = vehicleService;
         mHandler = handler;
         mMessageCountView = view;
     }
@@ -23,8 +23,8 @@ public class MessageCountTask extends TimerTask {
     public void run() {
         int messageCount;
         try {
-            messageCount = mVehicleService.getMessageCount();
-        } catch(RemoteVehicleServiceException e) {
+            messageCount = mVehicleManager.getMessageCount();
+        } catch(VehicleServiceException e) {
             messageCount = 0;
         }
 
