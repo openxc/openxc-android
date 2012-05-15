@@ -77,7 +77,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         service = ((VehicleManager.VehicleManagerBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.addDataSource(
+        service.addSource(
                 new TraceVehicleDataSource(getContext(), traceUri));
         pause(200);
     }

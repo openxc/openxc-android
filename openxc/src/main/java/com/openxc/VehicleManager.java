@@ -390,9 +390,9 @@ public class VehicleManager extends Service implements SourceCallback {
      * Add a new data source to the vehicle service.
      *
      * For example, to use the trace data source to playback a trace file, call
-     * the addDataSource method after binding with VehicleManager:
+     * the addSource method after binding with VehicleManager:
      *
-     *      service.addDataSource(new TraceVehicleDataSource(
+     *      service.addSource(new TraceVehicleDataSource(
      *                  new URI("/sdcard/openxc/trace.json"))));
      *
      * The {@link UsbVehicleDataSource} exists by default with the default USB
@@ -402,7 +402,7 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * @param source an instance of a VehicleDataSource
      */
-    public void addDataSource(VehicleDataSource source) {
+    public void addSource(VehicleDataSource source) {
         Log.i(TAG, "Adding data source " + source);
         source.setCallback(this);
         mSources.add(source);
@@ -411,7 +411,7 @@ public class VehicleManager extends Service implements SourceCallback {
     /**
      * Remove a previously registered source from the data pipeline.
      */
-    public void removeDataSource(VehicleDataSource source) {
+    public void removeSource(VehicleDataSource source) {
         if(source != null) {
             mSources.remove(source);
             source.stop();
@@ -423,15 +423,15 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * A data sink added with this method will receive all new measurements as
      * they arrive from registered data sources.  For example, to use the trace
-     * file recorder sink, call the addDataSink method after binding with
+     * file recorder sink, call the addSink method after binding with
      * VehicleManager:
      *
-     *      service.addDataSink(new FileRecorderSink(
+     *      service.addSink(new FileRecorderSink(
      *              new AndroidFileOpener(this)));
      *
      * @param sink an instance of a VehicleDataSink
      */
-    public void addDataSink(VehicleDataSink sink) {
+    public void addSink(VehicleDataSink sink) {
         Log.i(TAG, "Adding data sink " + sink);
         mPipeline.addSink(sink);
     }
@@ -439,7 +439,7 @@ public class VehicleManager extends Service implements SourceCallback {
     /**
      * Remove a previously registered sink from the data pipeline.
      */
-    public void removeDataSink(VehicleDataSink sink) {
+    public void removeSink(VehicleDataSink sink) {
         if(sink != null) {
             mPipeline.removeSink(sink);
             sink.stop();
