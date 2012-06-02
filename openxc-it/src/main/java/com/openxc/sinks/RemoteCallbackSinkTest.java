@@ -5,9 +5,8 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceListenerInterface;
@@ -39,33 +38,33 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testRegister() {
-        assertThat(notifier.getListenerCount(), equalTo(0));
+        assertTrue(notifier.getListenerCount() == 0);
         notifier.register(listener);
-        assertThat(notifier.getListenerCount(), equalTo(1));
+        assertTrue(notifier.getListenerCount() == 1);
     }
 
     @SmallTest
     public void testUnregisterInvalid() {
         // this just shouldn't explode, it should ignore it...or should it?
         // failing silently is usually a bad thing
-        assertThat(notifier.getListenerCount(), equalTo(0));
+        assertTrue(notifier.getListenerCount() == 0);
         notifier.unregister(listener);
-        assertThat(notifier.getListenerCount(), equalTo(0));
+        assertTrue(notifier.getListenerCount() == 0);
     }
 
     @SmallTest
     public void testUnregisterValid() {
         notifier.register(listener);
-        assertThat(notifier.getListenerCount(), equalTo(1));
+        assertTrue(notifier.getListenerCount() == 1);
         notifier.unregister(listener);
-        assertThat(notifier.getListenerCount(), equalTo(0));
+        assertTrue(notifier.getListenerCount() == 0);
     }
 
     @SmallTest
     public void testReceiveCorrectId() {
         notifier.register(listener);
-        assertThat(receivedId, equalTo(null));
+        assertTrue(receivedId == null);
         notifier.receive(measurementId, new RawMeasurement(1));
-        assertThat(receivedId, equalTo(measurementId));
+        assertTrue(receivedId.equals(measurementId));
     }
 }
