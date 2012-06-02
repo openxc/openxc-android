@@ -259,7 +259,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     }
 
     private void parseStringBuffer(StringBuffer buffer) {
-        int newlineIndex = buffer.indexOf("\r\n");
+        int newlineIndex = buffer.indexOf("\n");
         if(newlineIndex != -1) {
             final String messageString = buffer.substring(0, newlineIndex);
             buffer.delete(0, newlineIndex + 1);
