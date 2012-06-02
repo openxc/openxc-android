@@ -12,7 +12,11 @@ import static org.hamcrest.Matchers.equalTo;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceListenerInterface;
 
-public class RemoteCallbackSinkTest {
+import android.test.AndroidTestCase;
+
+import android.test.suitebuilder.annotation.SmallTest;
+
+public class RemoteCallbackSinkTest extends AndroidTestCase {
     Map<String, RawMeasurement> measurements;
     RemoteCallbackSink notifier;
     VehicleServiceListenerInterface listener;
@@ -33,14 +37,14 @@ public class RemoteCallbackSinkTest {
         };
     }
 
-    @Test
+    @SmallTest
     public void testRegister() {
         assertThat(notifier.getListenerCount(), equalTo(0));
         notifier.register(listener);
         assertThat(notifier.getListenerCount(), equalTo(1));
     }
 
-    @Test
+    @SmallTest
     public void testUnregisterInvalid() {
         // this just shouldn't explode, it should ignore it...or should it?
         // failing silently is usually a bad thing
@@ -49,7 +53,7 @@ public class RemoteCallbackSinkTest {
         assertThat(notifier.getListenerCount(), equalTo(0));
     }
 
-    @Test
+    @SmallTest
     public void testUnregisterValid() {
         notifier.register(listener);
         assertThat(notifier.getListenerCount(), equalTo(1));
@@ -57,7 +61,7 @@ public class RemoteCallbackSinkTest {
         assertThat(notifier.getListenerCount(), equalTo(0));
     }
 
-    @Test
+    @SmallTest
     public void testReceiveCorrectId() {
         notifier.register(listener);
         assertThat(receivedId, equalTo(null));
