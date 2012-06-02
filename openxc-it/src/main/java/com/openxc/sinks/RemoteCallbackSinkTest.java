@@ -3,8 +3,6 @@ package com.openxc.sinks;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -23,7 +21,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     String measurementId = "the_measurement";
     String receivedId = null;
 
-    @Before
+    @Override
     public void setUp() {
         // TODO what are the contractual guarantees that this class says about
         // this measurements map?

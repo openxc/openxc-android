@@ -1,10 +1,8 @@
 package com.openxc;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import junit.framework.TestCase;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -15,25 +13,23 @@ import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 
-public class DataPipelineTest {
+public class DataPipelineTest extends TestCase {
     DataPipeline pipeline;
     TestSource source;
     TestSink sink;
 
-    @Before
+    @Override
     public void setUp() {
         pipeline = new DataPipeline();
         source = new TestSource();
         sink = new TestSink();
     }
 
-    @Test
     public void testAddSource() {
         pipeline.addSource(source);
         assertThat(source.callback, notNullValue());
     }
 
-    @Test
     public void testAddSink() {
         pipeline.addSource(source);
         source.sendTestMessage();
@@ -43,7 +39,6 @@ public class DataPipelineTest {
         assertTrue(sink.received);
     }
 
-    @Test
     public void testClearSources() {
         pipeline.addSource(source);
         pipeline.addSink(sink);
@@ -52,7 +47,6 @@ public class DataPipelineTest {
         assertFalse(sink.received);
     }
 
-    @Test
     public void testClearSinks() {
         pipeline.addSink(sink);
         pipeline.clearSinks();
@@ -60,7 +54,6 @@ public class DataPipelineTest {
         assertFalse(sink.received);
     }
 
-    @Test
     public void testStopClearsPipeline() {
         pipeline.addSink(sink);
         pipeline.addSource(source);
@@ -72,14 +65,12 @@ public class DataPipelineTest {
         assertFalse(sink.received);
     }
 
-    @Test
     public void testReceiveNewData() {
         pipeline.addSink(sink);
         pipeline.receive("measurement", "value", "event");
         assertTrue(sink.received);
     }
 
-    @Test
     public void testConnectsSourceCallback() {
         pipeline.addSink(sink);
         pipeline.addSource(source);
@@ -87,7 +78,6 @@ public class DataPipelineTest {
         assertTrue(sink.received);
     }
 
-    @Test
     public void testRemoveSink() {
         pipeline.addSink(sink);
         TestSink anotherSink = new TestSink();
@@ -97,7 +87,6 @@ public class DataPipelineTest {
         assertFalse(sink.received);
     }
 
-    @Test
     public void testRemoveSource() {
         pipeline.addSource(source);
         TestSource anotherSource = new TestSource();

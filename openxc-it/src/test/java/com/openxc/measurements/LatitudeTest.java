@@ -1,34 +1,30 @@
 package com.openxc.measurements;
 
+import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertNotNull;
 
 import com.openxc.units.Degree;
 
-public class LatitudeTest {
+public class LatitudeTest extends TestCase {
     Latitude measurement;
 
-    @Before
+    @Override
     public void setUp() {
         measurement = new Latitude(new Degree(42.0));
     }
 
-    @Test
     public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(42.0));
     }
 
-    @Test
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
 
-    @Test
     public void testHasId() {
         assertNotNull(Latitude.ID);
     }

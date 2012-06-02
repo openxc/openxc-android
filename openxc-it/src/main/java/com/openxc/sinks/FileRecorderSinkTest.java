@@ -7,19 +7,13 @@ import java.io.StringWriter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
-import org.mockito.invocation.InvocationOnMock;
-
-import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertFalse;
 
 import com.openxc.util.FileOpener;
 
@@ -35,7 +29,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     String value = "value";
     String event = "event";
 
-    @Before
+    @Override
     public void setUp() throws IOException {
         outputString = new StringWriter();
         opener = new MockFileOpener();

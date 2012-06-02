@@ -1,34 +1,30 @@
 package com.openxc.measurements;
 
+import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertNotNull;
 
 import com.openxc.units.Kilometer;
 
-public class OdometerTest {
+public class OdometerTest extends TestCase {
     Odometer measurement;
 
-    @Before
+    @Override
     public void setUp() {
         measurement = new Odometer(new Kilometer(1.0));
     }
 
-    @Test
     public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
     }
 
-    @Test
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
 
-    @Test
     public void testHasId() {
         assertNotNull(Odometer.ID);
     }

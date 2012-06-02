@@ -1,37 +1,33 @@
 package com.openxc.measurements;
 
+import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 
 import com.openxc.units.State;
 
-public class TransmissionGearPositionTest {
+public class TransmissionGearPositionTest extends TestCase {
     TransmissionGearPosition measurement;
 
-    @Before
+    @Override
     public void setUp() {
         measurement = new TransmissionGearPosition(
                 new State<TransmissionGearPosition.GearPosition>(
                     TransmissionGearPosition.GearPosition.FIRST));
     }
 
-    @Test
     public void testGet() {
         assertThat(measurement.getValue().enumValue(), equalTo(
                     TransmissionGearPosition.GearPosition.FIRST));
     }
 
-    @Test
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
 
-    @Test
     public void testHasId() {
         assertNotNull(TransmissionGearPosition.ID);
     }

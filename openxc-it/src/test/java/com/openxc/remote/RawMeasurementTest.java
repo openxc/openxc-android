@@ -1,19 +1,17 @@
 package com.openxc.remote;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import junit.framework.TestCase;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertEquals;
 
-public class RawMeasurementTest {
+public class RawMeasurementTest extends TestCase {
     RawMeasurement measurement;
 
-    @Test
     public void testValue() {
         measurement = new RawMeasurement(new Double(42.0));
     }
 
-    @Test
     public void testValidity() {
         measurement = new RawMeasurement(new Double(42));
         assertTrue(measurement.isValid());
@@ -22,13 +20,11 @@ public class RawMeasurementTest {
         assertFalse(measurement.isValid());
     }
 
-    @Test
     public void testHasAge() {
         measurement = new RawMeasurement(new Double(42));
         assertTrue(measurement.getTimestamp() > 0);
     }
 
-    @Test
     public void testStopsAging() {
         measurement = new RawMeasurement(new Double(42));
         double timestamp = measurement.getTimestamp();

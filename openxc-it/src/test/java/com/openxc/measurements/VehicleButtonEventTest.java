@@ -3,17 +3,16 @@ package com.openxc.measurements;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import junit.framework.TestCase;
 
 import com.openxc.units.State;
 
-public class VehicleButtonEventTest {
+public class VehicleButtonEventTest extends TestCase {
     VehicleButtonEvent measurement;
 
-    @Before
+    @Override
     public void setUp() {
         measurement = new VehicleButtonEvent(
                 new State<VehicleButtonEvent.ButtonId>(
@@ -22,7 +21,6 @@ public class VehicleButtonEventTest {
                     VehicleButtonEvent.ButtonAction.PRESSED));
     }
 
-    @Test
     public void testGet() {
         assertThat(measurement.getValue().enumValue(), equalTo(
                     VehicleButtonEvent.ButtonId.OK));
@@ -30,12 +28,10 @@ public class VehicleButtonEventTest {
                     VehicleButtonEvent.ButtonAction.PRESSED));
     }
 
-    @Test
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
 
-    @Test
     public void testHasId() {
         assertNotNull(VehicleButtonEvent.ID);
     }

@@ -1,32 +1,28 @@
 package com.openxc.measurements;
 
+import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 
-public class WindshieldWiperStatusTest {
+public class WindshieldWiperStatusTest extends TestCase {
     WindshieldWiperStatus measurement;
 
-    @Before
+    @Override
     public void setUp() {
         measurement = new WindshieldWiperStatus(new Boolean(true));
     }
 
-    @Test
     public void testGet() {
         assertThat(measurement.getValue().booleanValue(), equalTo(true));
     }
 
-    @Test
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
 
-    @Test
     public void testHasId() {
         assertNotNull(WindshieldWiperStatus.ID);
     }
