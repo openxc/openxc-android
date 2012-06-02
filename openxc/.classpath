@@ -8,7 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" output="bin/classes" path="src/main/java"/>
-	<classpathentry kind="src" output="bin/classes" path="src/test/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
