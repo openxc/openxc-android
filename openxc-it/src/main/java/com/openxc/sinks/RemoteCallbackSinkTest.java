@@ -47,9 +47,9 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     public void testUnregisterInvalid() {
         // this just shouldn't explode, it should ignore it...or should it?
         // failing silently is usually a bad thing
-        assertTrue(notifier.getListenerCount() == 0);
+        assertEquals(0, notifier.getListenerCount());
         notifier.unregister(listener);
-        assertTrue(notifier.getListenerCount() == 0);
+        assertEquals(0, notifier.getListenerCount());
     }
 
     @SmallTest
@@ -65,6 +65,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         notifier.register(listener);
         assertTrue(receivedId == null);
         notifier.receive(measurementId, new RawMeasurement(1));
+        assertNotNull(receivedId);
         assertTrue(receivedId.equals(measurementId));
     }
 }

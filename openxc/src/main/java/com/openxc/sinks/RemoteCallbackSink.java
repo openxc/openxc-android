@@ -37,8 +37,9 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     public synchronized void register(
             VehicleServiceListenerInterface listener) {
         synchronized(mListeners) {
-            mListeners.register(listener);
-            ++mListenerCount;
+            if(mListeners.register(listener)) {
+                ++mListenerCount;
+            }
         }
 
         // send the last known value of all measurements to the new listener
@@ -56,8 +57,9 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
 
     public void unregister(VehicleServiceListenerInterface listener) {
         synchronized(mListeners) {
-            mListeners.unregister(listener);
-            --mListenerCount;
+            if(mListeners.unregister(listener)) {
+                --mListenerCount;
+            }
         }
     }
 
