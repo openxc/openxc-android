@@ -3,11 +3,6 @@ package com.openxc.sinks;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceListenerInterface;
 
@@ -22,7 +17,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     String measurementId = "the_measurement";
     String receivedId = null;
 
-    @Before
+    @Override
     public void setUp() {
         // TODO what are the contractual guarantees that this class says about
         // this measurements map?
@@ -38,9 +33,9 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testRegister() {
-        assertTrue(notifier.getListenerCount() == 0);
+        assertEquals(0, notifier.getListenerCount());
         notifier.register(listener);
-        assertTrue(notifier.getListenerCount() == 1);
+        assertEquals(1, notifier.getListenerCount());
     }
 
     @SmallTest
@@ -55,17 +50,17 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     @SmallTest
     public void testUnregisterValid() {
         notifier.register(listener);
-        assertTrue(notifier.getListenerCount() == 1);
+        assertEquals(1, notifier.getListenerCount());
         notifier.unregister(listener);
-        assertTrue(notifier.getListenerCount() == 0);
+        assertEquals(0, notifier.getListenerCount());
     }
 
     @SmallTest
     public void testReceiveCorrectId() {
         notifier.register(listener);
-        assertTrue(receivedId == null);
+        assertNull(receivedId);
         notifier.receive(measurementId, new RawMeasurement(1));
         assertNotNull(receivedId);
-        assertTrue(receivedId.equals(measurementId));
+        assertEquals(receivedId, measurementId);
     }
 }

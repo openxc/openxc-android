@@ -7,13 +7,6 @@ import java.io.StringWriter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
-import org.mockito.invocation.InvocationOnMock;
-
-import static org.mockito.Mockito.*;
-
 import com.openxc.util.FileOpener;
 
 import android.test.AndroidTestCase;
