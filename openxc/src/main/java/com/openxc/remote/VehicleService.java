@@ -21,6 +21,9 @@ import android.os.RemoteException;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import com.openxc.controllers.VehicleController;
+import com.openxc.measurements.MeasurementInterface;
+
 import android.util.Log;
 
 /**
@@ -55,6 +58,8 @@ public class VehicleService extends Service {
     private DataPipeline mPipeline;
     private RemoteCallbackSink mNotifier;
     private ApplicationSource mApplicationSource;
+    private UsbVehicleDataSource mUsbDevice;
+    private VehicleController mController;
 
     @Override
     public void onCreate() {
@@ -62,6 +67,13 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
         mApplicationSource = new ApplicationSource();
+        try {
+            mUsbDevice = new UsbVehicleDataSource(this);
+        } catch(DataSourceException e) {
+            Log.w(TAG, "Unable to add default USB data source", e);
+        }
+        mController = mUsbDevice;
+
         initializeDefaultSources();
         initializeDefaultSinks();
         acquireWakeLock();
@@ -79,6 +91,7 @@ public class VehicleService extends Service {
         if(mPipeline != null) {
             mPipeline.stop();
         }
+        mUsbDevice.close();
         releaseWakeLock();
     }
 
@@ -116,11 +129,7 @@ public class VehicleService extends Service {
     private void initializeDefaultSources() {
         mPipeline.clearSources();
         mPipeline.addSource(mApplicationSource);
-        try {
-            mPipeline.addSource(new UsbVehicleDataSource(this));
-        } catch(DataSourceException e) {
-            Log.w(TAG, "Unable to add default USB data source", e);
-        }
+        mPipeline.addSource(mUsbDevice);
     }
 
     private final VehicleServiceInterface.Stub mBinder =
@@ -128,6 +137,11 @@ public class VehicleService extends Service {
             public RawMeasurement get(String measurementId)
                     throws RemoteException {
                 return mPipeline.get(measurementId);
+            }
+
+            // TODO should set use a CommandInterface instead of Measurement?
+            public void set(MeasurementInterface measurement) {
+                mController.set(measurement);
             }
 
             public void receive(String measurementId,

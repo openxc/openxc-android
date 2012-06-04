@@ -207,6 +207,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
                 age > .05);
     }
 
+    @MediumTest
+    public void testWrite() {
+        service.set(new VehicleSpeed(42));
+    }
+
     private void pause(int millis) {
         try {
             Thread.sleep(millis);

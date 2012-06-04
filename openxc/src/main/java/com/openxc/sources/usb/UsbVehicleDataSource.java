@@ -31,6 +31,9 @@ import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 
+import com.openxc.controllers.VehicleController;
+import com.openxc.measurements.MeasurementInterface;
+
 import android.util.Log;
 
 /**
@@ -49,7 +52,7 @@ import android.util.Log;
  * become active.
  */
 public class UsbVehicleDataSource extends JsonVehicleDataSource
-        implements Runnable {
+        implements Runnable, VehicleController {
     private static final String TAG = "UsbVehicleDataSource";
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
@@ -103,7 +106,6 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
                     "USB device URI must have the usb:// scheme");
         }
 
-        mRunning = true;
         mDeviceUri = device;
         mDeviceConnectionLock = new ReentrantLock();
         mDevicePermissionChanged = mDeviceConnectionLock.newCondition();
@@ -131,7 +133,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
         }
-        new Thread(this).start();
+        start();
     }
 
     /**
@@ -158,12 +160,17 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         this(null, context);
     }
 
+    public void start() {
+        mRunning = true;
+        new Thread(this).start();
+    }
+
     /**
      * Unregister USB device intent broadcast receivers and stop waiting for a
      * connection.
      *
      * This should be called before the object is given up to the garbage
-     * collector to aviod leaking a receiver in the Android framework.
+     * collector to avoid leaking a receiver in the Android framework.
      */
     public void stop() {
         super.stop();
@@ -173,6 +180,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             return;
         }
         mRunning = false;
+    }
+
+    public void close() {
         mDeviceConnectionLock.lock();
         mDevicePermissionChanged.signal();
         mDeviceConnectionLock.unlock();
@@ -236,6 +246,10 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             .add("connection", mConnection)
             .add("endpoint", mEndpoint)
             .toString();
+    }
+
+    public void set(MeasurementInterface measurement) {
+        // TODO
     }
 
     private void logTransferStats(final long startTime, final long endTime) {
