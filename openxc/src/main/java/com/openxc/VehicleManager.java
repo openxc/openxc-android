@@ -465,9 +465,15 @@ public class VehicleManager extends Service implements SourceCallback {
         if(enabled) {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
+            String uploadingPath = preferences.getString(
+            		getString(R.string.uploading_path_key), null);
+            if(uploadingPath == null) {
+            	Log.w(TAG, "No uploading path set, not enabling recording. " +
+            			"Value is " + uploadingPath );
+            	return; 
+            }
             try {
-                URI uri = new URI(preferences.getString(
-                        getString(R.string.uploading_path_key), null));
+                URI uri = new URI(uploadingPath);
                 if(uri.isAbsolute()) {
                     mUploader = mPipeline.addSink(new UploaderSink(this, uri));
                 } else {
