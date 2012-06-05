@@ -64,7 +64,11 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         // expect someone to put measurements in the map, but that's done by the
         // pipeilne, not by the callback. but it has a reference to it?
         // something is messed up.
-        // assertNotNull(receivedId);
-        // assertEquals(receivedId, measurementId);
+        try {
+            Thread.sleep(500);
+        } catch(InterruptedException e) {}
+        assertTrue(notifier.containsMeasurement(measurementId));
+        assertNotNull(receivedId);
+        assertEquals(receivedId, measurementId);
     }
 }

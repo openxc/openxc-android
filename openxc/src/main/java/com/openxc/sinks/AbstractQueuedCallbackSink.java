@@ -41,11 +41,10 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     }
 
     public void receive(String measurementId, RawMeasurement rawMeasurement) {
-        if(mNotificationQueue != null) {
-            try  {
-                mNotificationQueue.put(measurementId);
-            } catch(InterruptedException e) {}
-        }
+        Log.d(TAG, "Adding " + measurementId + " to notification queue");
+        try  {
+            mNotificationQueue.put(measurementId);
+        } catch(InterruptedException e) {}
     }
 
     private class NotificationThread extends Thread {
@@ -81,8 +80,11 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                 if(measurementId == null) {
                     continue;
                 }
+                Log.d(TAG, "Found " + measurementId);
 
                 RawMeasurement rawMeasurement = get(measurementId);
+                Log.d(TAG, "got this from the measurements map: "
+                        + rawMeasurement);
                 if(rawMeasurement != null) {
                     propagateMeasurement(measurementId, rawMeasurement);
                 }

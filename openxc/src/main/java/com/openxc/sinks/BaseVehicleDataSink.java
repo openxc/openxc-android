@@ -34,6 +34,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
         RawMeasurement measurement =
             RawMeasurement.measurementFromObjects(value, event);
         mMeasurements.put(measurementId, measurement);
+        System.out.println("Added measurement");
         receive(measurementId, measurement);
     }
 
