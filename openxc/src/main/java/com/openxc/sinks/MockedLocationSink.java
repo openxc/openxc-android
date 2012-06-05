@@ -47,12 +47,12 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
     }
 
     private void updateLocation() {
-        if(mMeasurements == null || mLocationManager == null ||
-                !mMeasurements.containsKey(Latitude.ID) ||
-                !mMeasurements.containsKey(Longitude.ID) ||
-                !mMeasurements.containsKey(VehicleSpeed.ID)) {
+        if(mLocationManager == null ||
+                !containsMeasurement(Latitude.ID) ||
+                !containsMeasurement(Longitude.ID) ||
+                !containsMeasurement(VehicleSpeed.ID)) {
             return;
-                }
+        }
 
         Location location = new Location(LocationManager.GPS_PROVIDER);
         location.setLatitude(mMeasurements.get(Latitude.ID)

@@ -1,7 +1,9 @@
 package com.openxc.sinks;
 
-import com.openxc.remote.RawMeasurement;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+
+import com.openxc.remote.RawMeasurement;
 
 /**
  * A common parent class for all vehicle data sinks.
@@ -13,10 +15,8 @@ import java.util.Map;
 public class BaseVehicleDataSink implements VehicleDataSink {
     protected Map<String, RawMeasurement> mMeasurements;
 
-    public BaseVehicleDataSink() { }
-
-    public BaseVehicleDataSink(Map<String, RawMeasurement> measurements) {
-        mMeasurements = measurements;
+    public BaseVehicleDataSink() {
+        mMeasurements = new ConcurrentHashMap<String, RawMeasurement>();
     }
 
     /**
@@ -32,6 +32,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     public void receive(String measurementId, Object value, Object event) {
         RawMeasurement measurement =
             RawMeasurement.measurementFromObjects(value, event);
+        mMeasurements.put(measurementId, measurement);
         receive(measurementId, measurement);
     }
 
@@ -58,10 +59,6 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      */
     public void receive(String measurementId, RawMeasurement measurement) {
         // do nothing unless you override it
-    }
-
-    public void setMeasurements(Map<String, RawMeasurement> measurements) {
-        mMeasurements = measurements;
     }
 
     public boolean containsMeasurement(String measurementId) {

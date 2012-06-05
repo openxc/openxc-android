@@ -23,7 +23,6 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
         notifier = new RemoteCallbackSink();
-        notifier.setMeasurements(measurements);
         listener = new VehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId, RawMeasurement value) {
                 receivedId = measurementId;
