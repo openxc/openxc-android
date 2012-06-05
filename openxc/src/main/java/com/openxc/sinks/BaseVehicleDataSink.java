@@ -2,6 +2,7 @@ package com.openxc.sinks;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -13,7 +14,7 @@ import com.openxc.remote.RawMeasurement;
  * measurements data structure and query it for values.
  */
 public class BaseVehicleDataSink implements VehicleDataSink {
-    protected Map<String, RawMeasurement> mMeasurements;
+    private Map<String, RawMeasurement> mMeasurements;
 
     public BaseVehicleDataSink() {
         mMeasurements = new ConcurrentHashMap<String, RawMeasurement>();
@@ -63,6 +64,18 @@ public class BaseVehicleDataSink implements VehicleDataSink {
 
     public boolean containsMeasurement(String measurementId) {
         return mMeasurements.containsKey(measurementId);
+    }
+
+    public RawMeasurement get(String measurementId) {
+        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
+        if(rawMeasurement == null) {
+            rawMeasurement = new RawMeasurement();
+        }
+        return rawMeasurement;
+    }
+
+    public Set<Map.Entry<String, RawMeasurement>> getMeasurements() {
+        return mMeasurements.entrySet();
     }
 
     public void stop() {
