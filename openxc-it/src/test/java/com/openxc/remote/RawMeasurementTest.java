@@ -20,6 +20,14 @@ public class RawMeasurementTest extends TestCase {
         assertFalse(measurement.isValid());
     }
 
+    public void testNotANumberInvalid() {
+        measurement = new RawMeasurement(Double.NaN);
+        assertFalse(measurement.isValid());
+
+        measurement = new RawMeasurement(new Double(42), Double.NaN);
+        assertFalse(measurement.hasEvent());
+    }
+
     public void testHasAge() {
         measurement = new RawMeasurement(new Double(42));
         assertTrue(measurement.getTimestamp() > 0);

@@ -102,12 +102,22 @@ public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
         readFromParcel(in);
     }
 
-    public boolean isValid() {
-        return super.isValid() && !getValue().isNaN();
+    @Override
+    public Double getValue() {
+        Double value = super.getValue();
+        if(value != null && value.isNaN()) {
+            value = null;
+        }
+        return value;
     }
 
-    public boolean hasEvent() {
-        return super.hasEvent() && !getEvent().isNaN();
+    @Override
+    public Double getEvent() {
+        Double event = super.getEvent();
+        if(event != null && event.isNaN()) {
+            event = null;
+        }
+        return event;
     }
 
     public void writeToParcel(Parcel out, int flags) {

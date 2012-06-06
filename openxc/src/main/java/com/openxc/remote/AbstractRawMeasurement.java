@@ -41,7 +41,7 @@ public abstract class AbstractRawMeasurement<TheValueUnit, TheEventUnit> {
     }
 
     public boolean isValid() {
-        return mValue != null;
+        return getValue() != null;
     }
 
     public int describeContents() {
@@ -69,7 +69,7 @@ public abstract class AbstractRawMeasurement<TheValueUnit, TheEventUnit> {
     }
 
     public boolean hasEvent() {
-        return mEvent != null;
+        return getEvent() != null;
     }
 
     public double getTimestamp() {
