@@ -74,15 +74,20 @@ public class SettingsActivity extends PreferenceActivity {
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
             if(key.equals(getString(R.string.uploading_path_key))) {
+                String uploadingPath = preferences.getString(key, "");
                 try {
-                    URI uri = new URI(getString(R.string.uploading_path_key));
+                    URI uri = new URI(uploadingPath);
                     if(!uri.isAbsolute()) {
-                        Toast.makeText(getApplicationContext(), "Invalid URL",
+                        String errorMessage = "Invalid target URL \"" +
+                            uploadingPath + "\" -- must be an absolute URL " +
+                            "with http:// prefix";
+                        Toast.makeText(getApplicationContext(), errorMessage,
                                 Toast.LENGTH_SHORT).show();
-                        Log.w(TAG, "Invalid target URL set");
+                        Log.w(TAG, errorMessage);
                     }
                 } catch(java.net.URISyntaxException e) {
-                    Log.w(TAG, "Target URL in preferences not valid ", e);
+                    Log.w(TAG, "Invalid target URL \"" + uploadingPath + "\"",
+                            e);
                 }
             }
         }
