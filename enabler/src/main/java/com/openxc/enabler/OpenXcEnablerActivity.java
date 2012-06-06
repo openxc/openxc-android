@@ -21,7 +21,6 @@ import android.view.MenuInflater;
 import android.util.Log;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.openxc.R;
 import com.openxc.VehicleManager;
