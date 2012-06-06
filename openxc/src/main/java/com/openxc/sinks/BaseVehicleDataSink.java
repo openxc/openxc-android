@@ -33,8 +33,6 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     public void receive(String measurementId, Object value, Object event) {
         RawMeasurement measurement =
             RawMeasurement.measurementFromObjects(value, event);
-        mMeasurements.put(measurementId, measurement);
-        System.out.println("Added measurement");
         receive(measurementId, measurement);
     }
 
@@ -60,7 +58,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * interface.
      */
     public void receive(String measurementId, RawMeasurement measurement) {
-        // do nothing unless you override it
+        mMeasurements.put(measurementId, measurement);
     }
 
     public boolean containsMeasurement(String measurementId) {

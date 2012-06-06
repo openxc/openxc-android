@@ -40,6 +40,7 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
     }
 
     public void receive(String measurementId, RawMeasurement measurement) {
+        super.receive(measurementId, measurement);
         if(measurementId.equals(Latitude.ID) ||
                 measurementId.equals(Longitude.ID)) {
             updateLocation();

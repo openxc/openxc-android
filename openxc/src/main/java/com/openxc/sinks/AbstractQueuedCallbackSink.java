@@ -41,7 +41,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     }
 
     public void receive(String measurementId, RawMeasurement rawMeasurement) {
-        Log.d(TAG, "Adding " + measurementId + " to notification queue");
+        super.receive(measurementId, rawMeasurement);
         try  {
             mNotificationQueue.put(measurementId);
         } catch(InterruptedException e) {}
@@ -77,16 +77,11 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                     return;
                 }
 
-                if(measurementId == null) {
-                    continue;
-                }
-                Log.d(TAG, "Found " + measurementId);
-
-                RawMeasurement rawMeasurement = get(measurementId);
-                Log.d(TAG, "got this from the measurements map: "
-                        + rawMeasurement);
-                if(rawMeasurement != null) {
-                    propagateMeasurement(measurementId, rawMeasurement);
+                if(measurementId != null) {
+                    RawMeasurement rawMeasurement = get(measurementId);
+                    if(rawMeasurement != null) {
+                        propagateMeasurement(measurementId, rawMeasurement);
+                    }
                 }
             }
             Log.d(TAG, "Stopped measurement notifier");

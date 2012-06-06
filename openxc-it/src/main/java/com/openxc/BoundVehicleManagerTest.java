@@ -90,8 +90,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.addSource(new TraceVehicleDataSource(getContext(),
-                    traceUri));
+        service.addSource(new TraceVehicleDataSource(getContext(), traceUri));
     }
 
     @Override
