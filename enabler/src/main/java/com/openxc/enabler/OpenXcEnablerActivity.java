@@ -1,7 +1,5 @@
 package com.openxc.enabler;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.TimerTask;
 import java.util.Timer;
 
@@ -10,14 +8,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 
-import android.preference.PreferenceManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,9 +26,7 @@ import android.widget.Toast;
 import com.openxc.R;
 import com.openxc.VehicleManager;
 
-public class OpenXcEnablerActivity extends Activity
-    //implements OnSharedPreferenceChangeListener
-    {
+public class OpenXcEnablerActivity extends Activity {
 
     private static String TAG = "OpenXcEnablerActivity";
 
@@ -43,8 +36,6 @@ public class OpenXcEnablerActivity extends Activity
     private TimerTask mUpdateMessageCountTask;
     private Timer mTimer;
     private VehicleManager mVehicleManager;
-    private PreferenceListener listener;
-    private SharedPreferences preferences;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -88,10 +79,6 @@ public class OpenXcEnablerActivity extends Activity
                 R.id.vehicle_service_status);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
 
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        listener = new PreferenceListener();
-        preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -100,7 +87,6 @@ public class OpenXcEnablerActivity extends Activity
         Log.i(TAG, "OpenXC Enabler resumed");
         bindService(new Intent(this, VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
-        preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -109,7 +95,6 @@ public class OpenXcEnablerActivity extends Activity
         if(mConnection != null) {
             unbindService(mConnection);
         }
-        preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -129,25 +114,4 @@ public class OpenXcEnablerActivity extends Activity
             return super.onOptionsItemSelected(item);
         }
     }
-    private class PreferenceListener
-    implements SharedPreferences.OnSharedPreferenceChangeListener {
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-
-            if(key.equals(getString(R.string.uploading_path_key))) {
-                try {
-                    URI uri = new URI(getString(R.string.uploading_path_key));
-                    if(!uri.isAbsolute()) {
-                        Toast.makeText(getApplicationContext(), "Invalid URL",
-                                Toast.LENGTH_SHORT).show();
-                        Log.w(TAG, "Invalid target URL set");
-                    }
-                } catch(java.net.URISyntaxException e) {
-                    Log.w(TAG, "Target URL in preferences not valid ", e);
-                }
-            }
-            else return;
-        }
-    }
-
 }
