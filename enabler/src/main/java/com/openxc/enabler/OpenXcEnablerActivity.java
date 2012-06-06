@@ -32,8 +32,8 @@ import com.openxc.R;
 import com.openxc.VehicleManager;
 
 public class OpenXcEnablerActivity extends Activity
-	//implements OnSharedPreferenceChangeListener
-	{
+    //implements OnSharedPreferenceChangeListener
+    {
 
     private static String TAG = "OpenXcEnablerActivity";
 
@@ -81,16 +81,16 @@ public class OpenXcEnablerActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Log.i(TAG, "OpenXC Enabler created");
-        
+
         startService(new Intent(this, VehicleManager.class));
 
         mVehicleManagerStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
-        
-       
+
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        listener = new PreferenceListener();              
+        listener = new PreferenceListener();
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
@@ -121,33 +121,33 @@ public class OpenXcEnablerActivity extends Activity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
+        switch (item.getItemId()) {
         case R.id.settings:
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         default:
-            return super.onOptionsItemSelected(item); 
+            return super.onOptionsItemSelected(item);
         }
     }
     private class PreferenceListener
     implements SharedPreferences.OnSharedPreferenceChangeListener {
-    	public void onSharedPreferenceChanged(SharedPreferences preferences,
-    			String key) {
+        public void onSharedPreferenceChanged(SharedPreferences preferences,
+                String key) {
 
-    		if(key.equals(getString(R.string.uploading_path_key))) {
-    			try {
-    				URI uri = new URI(getString(R.string.uploading_path_key));
-    				if(!uri.isAbsolute()) {
-    					Toast.makeText(getApplicationContext(), "Invalid URL", 
-    							Toast.LENGTH_SHORT).show();
-    					Log.w(TAG, "Invalid target URL set");
-    				}
-    			} catch(java.net.URISyntaxException e) {
-    				Log.w(TAG, "Target URL in preferences not valid ", e);
-    			}
-    		}
-    		else return;
-    	}
+            if(key.equals(getString(R.string.uploading_path_key))) {
+                try {
+                    URI uri = new URI(getString(R.string.uploading_path_key));
+                    if(!uri.isAbsolute()) {
+                        Toast.makeText(getApplicationContext(), "Invalid URL",
+                                Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "Invalid target URL set");
+                    }
+                } catch(java.net.URISyntaxException e) {
+                    Log.w(TAG, "Target URL in preferences not valid ", e);
+                }
+            }
+            else return;
+        }
     }
-   
+
 }
