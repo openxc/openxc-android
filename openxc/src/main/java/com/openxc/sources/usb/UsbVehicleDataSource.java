@@ -32,7 +32,12 @@ import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 
 import com.openxc.controllers.VehicleController;
+
 import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
+import com.openxc.NoValueException;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -255,6 +260,25 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     }
 
     public void set(String measurementId, RawMeasurement command) {
+        // TODO we do this a THIRD time here, duplicated on the remote process
+        // in RemoteListnerSource. Argh.
+        try {
+            // TODO this fails for any signal we haven't seen in an async read
+            // before (because we haven't cached the ID, which is going to be
+            // nearly all commands. hm, I always hated this interface anyway.
+            MeasurementInterface measurement =
+                Measurement.getMeasurementFromRaw(
+                        measurementId, command);
+            Log.d(TAG, "Measurement to write is " + measurement);
+            String message = createMessage(measurementId,
+                    measurement.getSerializedValue(),
+                    measurement.getSerializedEvent());
+            Log.d(TAG, "Writing message to USB: " + message);
+        } catch(UnrecognizedMeasurementTypeException e) {
+            Log.w(TAG, "Unable to receive a measurement", e);
+        } catch(NoValueException e) {
+            Log.w(TAG, "Measurement received with no value", e);
+        }
         // TODO
     }
 

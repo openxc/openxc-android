@@ -69,6 +69,7 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
             Class<? extends MeasurementInterface> measurementType)
             throws UnrecognizedMeasurementTypeException {
         if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
+            System.out.println("caching " + measurementType);
             cacheMeasurementId(measurementType);
         }
         return sMeasurementIdToClass.inverse().get(measurementType);
@@ -77,7 +78,8 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
     public static Class<? extends MeasurementInterface>
             getClassForId(String measurementId)
             throws UnrecognizedMeasurementTypeException {
-        Class<? extends MeasurementInterface> result = sMeasurementIdToClass.get(measurementId);
+        Class<? extends MeasurementInterface> result =
+                sMeasurementIdToClass.get(measurementId);
         if(result == null) {
             throw new UnrecognizedMeasurementTypeException(
                     "Didn't have a measurement with ID " + measurementId +

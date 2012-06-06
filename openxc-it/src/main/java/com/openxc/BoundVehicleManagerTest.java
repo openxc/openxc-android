@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -26,6 +27,7 @@ import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.VehicleManager;
+
 
 import android.content.Intent;
 
@@ -211,6 +213,8 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testWrite() throws UnrecognizedMeasurementTypeException {
         service.set(new TurnSignalStatus(
                     TurnSignalStatus.TurnSignalPosition.LEFT));
+        // TODO how can we actually test that it gets written? might need to do
+        // smaller unit tests.
     }
 
     private void pause(int millis) {
