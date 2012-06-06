@@ -139,7 +139,7 @@ public class OpenXcEnablerActivity extends Activity
     				URI uri = new URI(getString(R.string.uploading_path_key));
     				if(!uri.isAbsolute()) {
     					Toast.makeText(getApplicationContext(), "Invalid URL", 
-    							Toast.LENGTH_SHORT);
+    							Toast.LENGTH_SHORT).show();
     					Log.w(TAG, "Invalid target URL set");
     				}
     			} catch(java.net.URISyntaxException e) {
