@@ -466,11 +466,11 @@ public class VehicleManager extends Service implements SourceCallback {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
             String uploadingPath = preferences.getString(
-            		getString(R.string.uploading_path_key), null);
+                    getString(R.string.uploading_path_key), null);
             if(uploadingPath == null) {
-            	Log.w(TAG, "No uploading path set, not enabling recording. " +
-            			"Value is " + uploadingPath );
-            	return; 
+                Log.w(TAG, "No uploading path set, not enabling recording. " +
+                        "Value is " + uploadingPath );
+                return;
             }
             try {
                 URI uri = new URI(uploadingPath);

@@ -8,13 +8,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 
-import android.preference.PreferenceManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +22,7 @@ import android.util.Log;
 
 import android.widget.TextView;
 
+import com.openxc.R;
 import com.openxc.VehicleManager;
 
 public class OpenXcEnablerActivity extends Activity {
@@ -78,6 +77,7 @@ public class OpenXcEnablerActivity extends Activity {
         mVehicleManagerStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
+
     }
 
     @Override
