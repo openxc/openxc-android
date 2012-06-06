@@ -62,6 +62,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     private boolean mRunning;
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
+    private UsbInterface mInterface;
     private UsbEndpoint mEndpoint;
     private PendingIntent mPermissionIntent;
     private final URI mDeviceUri;
@@ -185,6 +186,9 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     public void close() {
         mDeviceConnectionLock.lock();
         mDevicePermissionChanged.signal();
+        if(mConnection != null && mInterface != null) {
+            mConnection.releaseInterface(mInterface);
+        }
         mDeviceConnectionLock.unlock();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
@@ -331,7 +335,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             throw new UsbDeviceException("Couldn't open a connection to " +
                     "device -- user may not have given permission");
         }
-        connection.claimInterface(iface, true);
+        mInterface = iface;
+        connection.claimInterface(mInterface, true);
         return connection;
     }
 
