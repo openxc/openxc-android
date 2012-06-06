@@ -25,6 +25,8 @@ interface VehicleServiceInterface {
      */
     RawMeasurement get(String measurementType);
 
+    void set(String measurementId, in RawMeasurement measurement);
+
     /**
      * Register to receive asynchronous updates when measurements are received.
      *

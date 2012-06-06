@@ -34,6 +34,8 @@ import android.hardware.usb.UsbManager;
 import com.openxc.controllers.VehicleController;
 import com.openxc.measurements.MeasurementInterface;
 
+import com.openxc.remote.RawMeasurement;
+
 import android.util.Log;
 
 /**
@@ -252,7 +254,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             .toString();
     }
 
-    public void set(MeasurementInterface measurement) {
+    public void set(String measurementId, RawMeasurement command) {
         // TODO
     }
 

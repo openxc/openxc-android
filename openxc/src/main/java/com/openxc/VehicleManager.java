@@ -296,6 +296,33 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
+     * Send a command back to the vehicle.
+     *
+     * This fails silently if it is unable to connect to the remote vehicle
+     * service.
+     *
+     * @param measurement The desired command to send to the vehicle.
+     */
+    public void set(MeasurementInterface command) throws
+                UnrecognizedMeasurementTypeException {
+        if(mRemoteService == null) {
+            Log.w(TAG, "Not connected to the VehicleService");
+            return;
+        }
+
+        Log.d(TAG, "Sending command " + command);
+        try {
+            RawMeasurement rawCommand = RawMeasurement.measurementFromObjects(
+                    command.getSerializedValue(),
+                    command.getSerializedEvent());
+            mRemoteService.set(Measurement.getIdForClass(command.getClass()),
+                    rawCommand);
+        } catch(RemoteException e) {
+            Log.w(TAG, "Unable to send command to remote vehicle service", e);
+        }
+    }
+
+    /**
      * Register to receive async updates for a specific Measurement type.
      *
      * Use this method to register an object implementing the
@@ -470,7 +497,7 @@ public class VehicleManager extends Service implements SourceCallback {
             if(uploadingPath == null) {
             	Log.w(TAG, "No uploading path set, not enabling recording. " +
             			"Value is " + uploadingPath );
-            	return; 
+            	return;
             }
             try {
                 URI uri = new URI(uploadingPath);

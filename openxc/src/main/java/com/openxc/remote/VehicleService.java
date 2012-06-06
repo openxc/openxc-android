@@ -22,7 +22,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import com.openxc.controllers.VehicleController;
-import com.openxc.measurements.MeasurementInterface;
 
 import android.util.Log;
 
@@ -140,8 +139,8 @@ public class VehicleService extends Service {
             }
 
             // TODO should set use a CommandInterface instead of Measurement?
-            public void set(MeasurementInterface measurement) {
-                mController.set(measurement);
+            public void set(String measurementId, RawMeasurement measurement) {
+                mController.set(measurementId, measurement);
             }
 
             public void receive(String measurementId,

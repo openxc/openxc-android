@@ -14,6 +14,7 @@ import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.NoValueException;
@@ -207,8 +208,9 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testWrite() {
-        service.set(new VehicleSpeed(42));
+    public void testWrite() throws UnrecognizedMeasurementTypeException {
+        service.set(new TurnSignalStatus(
+                    TurnSignalStatus.TurnSignalPosition.LEFT));
     }
 
     private void pause(int millis) {
