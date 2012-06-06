@@ -43,8 +43,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
         }
 
         // send the last known value of all measurements to the new listener
-        for(Map.Entry<String, RawMeasurement> entry :
-                mMeasurements.entrySet()) {
+        for(Map.Entry<String, RawMeasurement> entry : getMeasurements()) {
             try {
                 listener.receive(entry.getKey(), entry.getValue());
             } catch(RemoteException e) {

@@ -52,14 +52,8 @@ public class DataPipeline implements SourceCallback {
 
     /**
      * Add a new sink to the pipeline.
-     *
-     * The sink is also given a reference to a map of the currently known values
-     * for all measurements using the
-     * {@link VehicleDataSink#setMeasuremrents(Map<String, RawMeasurement>)}
-     * method.
      */
     public VehicleDataSink addSink(VehicleDataSink sink) {
-        sink.setMeasurements(mMeasurements);
         mSinks.add(sink);
         return sink;
     }

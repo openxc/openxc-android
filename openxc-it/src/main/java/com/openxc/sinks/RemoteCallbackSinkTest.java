@@ -23,7 +23,6 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
         notifier = new RemoteCallbackSink();
-        notifier.setMeasurements(measurements);
         listener = new VehicleServiceListenerInterface.Stub() {
             public void receive(String measurementId, RawMeasurement value) {
                 receivedId = measurementId;
@@ -60,12 +59,11 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         notifier.register(listener);
         assertNull(receivedId);
         notifier.receive(measurementId, new RawMeasurement(1));
-        // TODO this test actually fails and it exposes some fundamental design
-        // weirdness with the measurements map within the data pipeline. we
-        // expect someone to put measurements in the map, but that's done by the
-        // pipeilne, not by the callback. but it has a reference to it?
-        // something is messed up.
-        // assertNotNull(receivedId);
-        // assertEquals(receivedId, measurementId);
+        try {
+            Thread.sleep(50);
+        } catch(InterruptedException e) {}
+        assertTrue(notifier.containsMeasurement(measurementId));
+        assertNotNull(receivedId);
+        assertEquals(receivedId, measurementId);
     }
 }

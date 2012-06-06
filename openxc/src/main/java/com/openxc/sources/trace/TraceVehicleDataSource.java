@@ -136,7 +136,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
             String line = null;
             long startingTime = System.nanoTime();
             try {
-                while((line = reader.readLine()) != null) {
+                while(mRunning && (line = reader.readLine()) != null) {
                     String[] record = line.split(":", 2);
                     if(record.length != 2) {
                         Log.w(TAG, "A trace line was not in the expected " +

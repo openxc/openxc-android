@@ -1,7 +1,10 @@
 package com.openxc.sinks;
 
-import com.openxc.remote.RawMeasurement;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+import java.util.Set;
+
+import com.openxc.remote.RawMeasurement;
 
 /**
  * A common parent class for all vehicle data sinks.
@@ -11,12 +14,10 @@ import java.util.Map;
  * measurements data structure and query it for values.
  */
 public class BaseVehicleDataSink implements VehicleDataSink {
-    protected Map<String, RawMeasurement> mMeasurements;
+    private Map<String, RawMeasurement> mMeasurements;
 
-    public BaseVehicleDataSink() { }
-
-    public BaseVehicleDataSink(Map<String, RawMeasurement> measurements) {
-        mMeasurements = measurements;
+    public BaseVehicleDataSink() {
+        mMeasurements = new ConcurrentHashMap<String, RawMeasurement>();
     }
 
     /**
@@ -57,15 +58,23 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * interface.
      */
     public void receive(String measurementId, RawMeasurement measurement) {
-        // do nothing unless you override it
-    }
-
-    public void setMeasurements(Map<String, RawMeasurement> measurements) {
-        mMeasurements = measurements;
+        mMeasurements.put(measurementId, measurement);
     }
 
     public boolean containsMeasurement(String measurementId) {
         return mMeasurements.containsKey(measurementId);
+    }
+
+    public RawMeasurement get(String measurementId) {
+        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
+        if(rawMeasurement == null) {
+            rawMeasurement = new RawMeasurement();
+        }
+        return rawMeasurement;
+    }
+
+    public Set<Map.Entry<String, RawMeasurement>> getMeasurements() {
+        return mMeasurements.entrySet();
     }
 
     public void stop() {

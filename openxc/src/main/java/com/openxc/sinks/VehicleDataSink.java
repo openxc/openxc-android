@@ -1,7 +1,5 @@
 package com.openxc.sinks;
 
-import java.util.Map;
-
 import com.openxc.remote.RawMeasurement;
 import com.openxc.VehicleDataEndpoint;
 
@@ -29,13 +27,4 @@ public interface VehicleDataSink extends VehicleDataEndpoint {
      * @param event The String event of the element.
      */
     public void receive(String measurementId, Object value, Object event);
-
-    /**
-     * Store a reference to a map of current values for all known measurements.
-     *
-     * This function doesn't neccessarily need to do anything unless the sink
-     * demands it, but it needs to at least be defined as empty since
-     * DataPipeline calls it.
-     */
-    public void setMeasurements(Map<String, RawMeasurement> measurements);
 }
