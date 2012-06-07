@@ -34,7 +34,7 @@ public class State<T extends Enum<?>> implements Unit {
     }
 
     public String getSerializedValue() {
-        return mValue.toString();
+        return mValue.toString().toLowerCase();
     }
 
     @Override
