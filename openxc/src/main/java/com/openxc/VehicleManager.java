@@ -303,7 +303,7 @@ public class VehicleManager extends Service implements SourceCallback {
      * This fails silently if it is unable to connect to the remote vehicle
      * service.
      *
-     * @param measurement The desired command to send to the vehicle.
+     * @param command The desired command to send to the vehicle.
      */
     public void set(MeasurementInterface command) throws
                 UnrecognizedMeasurementTypeException {
@@ -317,8 +317,7 @@ public class VehicleManager extends Service implements SourceCallback {
             RawMeasurement rawCommand = RawMeasurement.measurementFromObjects(
                     command.getSerializedValue(),
                     command.getSerializedEvent());
-            mRemoteService.set(Measurement.getIdForClass(command.getClass()),
-                    rawCommand);
+            mRemoteService.set(command.getClass().getName(), rawCommand);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to send command to remote vehicle service", e);
         }

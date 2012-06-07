@@ -75,6 +75,21 @@ public class Measurement<TheUnit extends Unit> implements MeasurementInterface {
         return sMeasurementIdToClass.inverse().get(measurementType);
     }
 
+    public static String getIdForClass(String measurementTypeName)
+            throws UnrecognizedMeasurementTypeException {
+        try {
+            Class<? extends MeasurementInterface> measurementType =
+                (Class<? extends MeasurementInterface>)
+                Class.forName(measurementTypeName);
+            return getIdForClass((Class<? extends MeasurementInterface>)
+                    Class.forName(measurementTypeName));
+        } catch(ClassNotFoundException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Measurement with class name " +
+                    measurementTypeName + " not recognized", e);
+        }
+    }
+
     public static Class<? extends MeasurementInterface>
             getClassForId(String measurementId)
             throws UnrecognizedMeasurementTypeException {

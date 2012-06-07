@@ -2,6 +2,8 @@ package com.openxc.remote;
 
 import com.openxc.DataPipeline;
 
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
 import com.openxc.remote.VehicleServiceListenerInterface;
 
 import com.openxc.sinks.MockedLocationSink;
@@ -22,6 +24,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import com.openxc.controllers.VehicleController;
+
+import com.openxc.measurements.Measurement;
 
 import android.util.Log;
 
@@ -133,14 +137,19 @@ public class VehicleService extends Service {
 
     private final VehicleServiceInterface.Stub mBinder =
         new VehicleServiceInterface.Stub() {
-            public RawMeasurement get(String measurementId)
-                    throws RemoteException {
+            public RawMeasurement get(String measurementId) {
                 return mPipeline.get(measurementId);
             }
 
             // TODO should set use a CommandInterface instead of Measurement?
-            public void set(String measurementId, RawMeasurement measurement) {
-                mController.set(measurementId, measurement);
+            public void set(String measurementClass,
+                    RawMeasurement measurement) {
+                try {
+                mController.set(Measurement.getIdForClass(measurementClass),
+                        measurement);
+                } catch(UnrecognizedMeasurementTypeException e) {
+                    Log.w(TAG, "Unable to set new measurement value", e);
+                }
             }
 
             public void receive(String measurementId,
@@ -148,14 +157,12 @@ public class VehicleService extends Service {
                 mApplicationSource.handleMessage(measurementId, measurement);
             }
 
-            public void register(
-                    VehicleServiceListenerInterface listener) {
+            public void register(VehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Adding listener " + listener);
                 mNotifier.register(listener);
             }
 
-            public void unregister(
-                    VehicleServiceListenerInterface listener) {
+            public void unregister(VehicleServiceListenerInterface listener) {
                 Log.i(TAG, "Removing listener " + listener);
                 mNotifier.unregister(listener);
             }
