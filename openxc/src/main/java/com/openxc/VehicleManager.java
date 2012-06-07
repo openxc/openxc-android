@@ -39,6 +39,7 @@ import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
+import com.openxc.measurements.TurnSignalStatus;
 
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
@@ -171,6 +172,7 @@ public class VehicleManager extends Service implements SourceCallback {
         MEASUREMENT_TYPES.add(VehicleDoorStatus.class);
         MEASUREMENT_TYPES.add(VehicleSpeed.class);
         MEASUREMENT_TYPES.add(WindshieldWiperStatus.class);
+        MEASUREMENT_TYPES.add(TurnSignalStatus.class);
 
         for(Class<? extends MeasurementInterface> measurementType : MEASUREMENT_TYPES) {
             try {
