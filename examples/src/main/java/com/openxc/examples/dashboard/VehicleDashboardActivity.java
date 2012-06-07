@@ -20,7 +20,7 @@ import com.openxc.examples.R;
 import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.HeadlampStatus;
 import com.openxc.measurements.EngineSpeed;
-import com.openxc.measurements.PowertrainTorque;
+import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.AcceleratorPedalPosition;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
@@ -56,7 +56,7 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mVehicleBrakeStatusView;
     private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
-    private TextView mPowertrainTorqueView;
+    private TextView mTorqueAtTransmissionView;
     private TextView mAcceleratorPedalPositionView;
     private TextView mTransmissionGearPosView;
     private TextView mIgnitionStatusView;
@@ -194,13 +194,13 @@ public class VehicleDashboardActivity extends Activity {
         }
     };
 
-    PowertrainTorque.Listener mPowertrainTorque =
-            new PowertrainTorque.Listener() {
+    TorqueAtTransmission.Listener mTorqueAtTransmission =
+            new TorqueAtTransmission.Listener() {
         public void receive(MeasurementInterface measurement) {
-            final PowertrainTorque status = (PowertrainTorque) measurement;
+            final TorqueAtTransmission status = (TorqueAtTransmission) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mPowertrainTorqueView.setText(
+                    mTorqueAtTransmissionView.setText(
                         "" + status.getValue().doubleValue());
                 }
             });
@@ -363,8 +363,8 @@ public class VehicleDashboardActivity extends Activity {
                         mHeadlampStatus);
                 mVehicleManager.addListener(EngineSpeed.class,
                         mEngineSpeed);
-                mVehicleManager.addListener(PowertrainTorque.class,
-                        mPowertrainTorque);
+                mVehicleManager.addListener(TorqueAtTransmission.class,
+                        mTorqueAtTransmission);
                 mVehicleManager.addListener(AcceleratorPedalPosition.class,
                         mAcceleratorPedalPosition);
                 mVehicleManager.addListener(TransmissionGearPosition.class,
@@ -423,8 +423,8 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.headlamp_status);
         mVehicleEngineSpeedView = (TextView) findViewById(
                 R.id.engine_speed);
-        mPowertrainTorqueView = (TextView) findViewById(
-                R.id.powertrain_torque);
+        mTorqueAtTransmissionView = (TextView) findViewById(
+                R.id.torque_at_transmission);
         mAcceleratorPedalPositionView = (TextView) findViewById(
                 R.id.accelerator_pedal_position);
         mTransmissionGearPosView = (TextView) findViewById(

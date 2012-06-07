@@ -39,7 +39,7 @@ import android.util.Log;
  *
  * 1332794184.319404: {"name":"fuel_consumed_since_restart","value":0.090000}
  * 1332794184.502802: {"name":"steering_wheel_angle","value":-346.985229}
- * 1332794184.559463: {"name":"powertrain_torque","value":1.000000}
+ * 1332794184.559463: {"name":"torque_at_transmission","value":1.000000}
  *
  * The trace file to use is specified via the constructor as an Android-style
  * resource URI, e.g. "resource://42" or a plain file path

@@ -4,18 +4,18 @@ import com.openxc.units.NewtonMeter;
 import com.openxc.util.Range;
 
 /**
- * The PowertrainTorque is the actual current torque in the powertrain.
+ * The TorqueAtTransmission is the actual current torque in the transmission.
  */
-public class PowertrainTorque extends Measurement<NewtonMeter> {
+public class TorqueAtTransmission extends Measurement<NewtonMeter> {
     private final static Range<NewtonMeter> RANGE = new Range<NewtonMeter>(
             new NewtonMeter(-500), new NewtonMeter(1500));
-    public final static String ID = "powertrain_torque";
+    public final static String ID = "torque_at_transmission";
 
-    public PowertrainTorque(NewtonMeter value) {
+    public TorqueAtTransmission(NewtonMeter value) {
         super(value, RANGE);
     }
 
-    public PowertrainTorque(Double value) {
+    public TorqueAtTransmission(Double value) {
         this(new NewtonMeter(value));
     }
 }

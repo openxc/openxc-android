@@ -30,7 +30,7 @@ import com.openxc.measurements.Longitude;
 import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.Odometer;
 import com.openxc.measurements.ParkingBrakeStatus;
-import com.openxc.measurements.PowertrainTorque;
+import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -164,7 +164,7 @@ public class VehicleManager extends Service implements SourceCallback {
         MEASUREMENT_TYPES.add(Longitude.class);
         MEASUREMENT_TYPES.add(Odometer.class);
         MEASUREMENT_TYPES.add(ParkingBrakeStatus.class);
-        MEASUREMENT_TYPES.add(PowertrainTorque.class);
+        MEASUREMENT_TYPES.add(TorqueAtTransmission.class);
         MEASUREMENT_TYPES.add(SteeringWheelAngle.class);
         MEASUREMENT_TYPES.add(TransmissionGearPosition.class);
         MEASUREMENT_TYPES.add(VehicleButtonEvent.class);

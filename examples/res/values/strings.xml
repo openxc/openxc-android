@@ -11,7 +11,7 @@
     <string name="brake_pedal_status_label">Brake Pedal Status</string>
     <string name="headlamp_status_label">Headlamp Status</string>
     <string name="engine_speed_label">Engine Speed</string>
-    <string name="powertrain_torque_label">Powertrain Torque</string>
+    <string name="torque_at_transmission_label">Torque At Transmission</string>
     <string name="accelerator_pedal_position_label">
         Accelerator Pedal Position
     </string>

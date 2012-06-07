@@ -9,7 +9,7 @@
 1332432977.836315: {"name": "door_status", "value": "driver", "event": true}
 1332432977.836977: {"name": "headlamp_status", "value": true}
 1332432977.837776: {"name": "high_beam_status", "value": false}
-1332432977.838441: {"name": "powertrain_torque", "value": 232.1}
+1332432977.838441: {"name": "torque_at_transmission", "value": 232.1}
 1332432977.839072: {"name": "fuel_level", "value": 71.2}
 1332432977.839698: {"name": "fuel_consumed_since_restart", "value": 81.2}
 1332432977.840451: {"name": "accelerator_pedal_position", "value": 14.0}

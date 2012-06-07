@@ -9,12 +9,12 @@ import static junit.framework.Assert.assertNotNull;
 
 import com.openxc.units.NewtonMeter;
 
-public class PowertrainTorqueTest extends TestCase {
-    PowertrainTorque measurement;
+public class TorqueAtTransmissionTest extends TestCase {
+    TorqueAtTransmission measurement;
 
     @Override
     public void setUp() {
-        measurement = new PowertrainTorque(new NewtonMeter(1.0));
+        measurement = new TorqueAtTransmission(new NewtonMeter(1.0));
     }
 
     public void testGet() {
@@ -26,6 +26,6 @@ public class PowertrainTorqueTest extends TestCase {
     }
 
     public void testHasId() {
-        assertNotNull(PowertrainTorque.ID);
+        assertNotNull(TorqueAtTransmission.ID);
     }
 }
