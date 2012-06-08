@@ -55,8 +55,8 @@ public class MeasurementTest extends TestCase {
     }
 
     public void testDeserialize() {
-        assertThat(BaseMeasurement.deserialize(measurement.serialize()),
-                equalTo(measurement));
+        assertTrue(BaseMeasurement.deserialize(measurement.serialize()).
+                equals(measurement));
     }
 
     private class TestMeasurement extends BaseMeasurement<Meter> {
