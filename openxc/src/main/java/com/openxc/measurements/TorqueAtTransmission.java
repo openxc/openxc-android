@@ -19,7 +19,8 @@ public class TorqueAtTransmission extends BaseMeasurement<NewtonMeter> {
         this(new NewtonMeter(value));
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

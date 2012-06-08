@@ -21,7 +21,8 @@ public class EngineSpeed extends BaseMeasurement<RotationsPerMinute> {
         super(value, RANGE);
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

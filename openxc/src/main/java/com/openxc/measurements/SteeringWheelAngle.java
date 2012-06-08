@@ -22,7 +22,8 @@ public class SteeringWheelAngle extends BaseMeasurement<Degree> {
         super(value, RANGE);
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

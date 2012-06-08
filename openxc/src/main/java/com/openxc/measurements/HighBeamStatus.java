@@ -20,7 +20,8 @@ public class HighBeamStatus extends BaseMeasurement<Boolean> {
         this(new Boolean(value));
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

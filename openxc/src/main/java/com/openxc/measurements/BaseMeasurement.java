@@ -8,6 +8,8 @@ import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import com.openxc.measurements.serializers.JsonSerializer;
+
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 
@@ -94,10 +96,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mValue.getValue();
     }
 
-    public Object getSerializedValue() {
-        return getValue().getSerializedValue();
-    }
-
     public Object getEvent() {
         if(mEvent != null) {
             return mEvent.getValue();
@@ -105,13 +103,18 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return null;
     }
 
+    public Object getSerializedValue() {
+        return getValue().getSerializedValue();
+    }
+
     public Object getSerializedEvent() {
         return getEvent();
     }
 
     public String serialize() {
-        // TODO
-        return "";
+        return JsonSerializer.serialize(getGenericName(),
+                getValue().getSerializedValue(),
+                getEvent());
     }
 
     public static Measurement deserialize(String serializedMeasurement) {
@@ -122,7 +125,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     // TODO can we make this protected for everyone? it's really internal state
     // because all external users should care about is it being serialized. the
     // only place we use it right now is the MockedLocationSink.
-    public static String getGenericName() {
+    public String getGenericName() {
         // TODO this needs to go away.
         return null;
     }

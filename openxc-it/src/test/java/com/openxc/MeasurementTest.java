@@ -20,11 +20,11 @@ public class MeasurementTest extends TestCase {
     @Override
     public void setUp() {
         range = new Range<Meter>(new Meter(0.0), new Meter(101.2));
-        measurement = new TestMeasurement(new Meter(10.0), range);
+        measurement = new TestMeasurement(new Meter(10.1), range);
     }
 
     public void testGet() {
-        assertThat(measurement.getValue().doubleValue(), equalTo(10.0));
+        assertThat(measurement.getValue().doubleValue(), equalTo(10.1));
     }
 
     public void testHasRange() {
@@ -41,7 +41,7 @@ public class MeasurementTest extends TestCase {
 
     public void testEquality() {
         TestMeasurement anotherMeasurement =
-            new TestMeasurement(new Meter(10.0), range);
+            new TestMeasurement(new Meter(10.1), range);
         TestMeasurement inequalMeasurement  =
             new TestMeasurement(new Meter(12.0), range);
         assertTrue(measurement.equals(anotherMeasurement));
@@ -49,9 +49,10 @@ public class MeasurementTest extends TestCase {
     }
 
     public void testSerialize() {
-        assertThat(measurement.serialize(), equalTo(
-                    "{\"name\": \"" + measurement.ID + "\", \"value\": "
-                    + measurement.getValue() + "}"));
+        assertTrue(measurement.serialize().equals(
+                    "{\"name\":\"" + TestMeasurement.ID
+                    + "\",\"value\":"
+                    + measurement.getSerializedValue() + "}"));
     }
 
     public void testDeserialize() {
@@ -59,11 +60,16 @@ public class MeasurementTest extends TestCase {
                 equals(measurement));
     }
 
-    private class TestMeasurement extends BaseMeasurement<Meter> {
+    private static class TestMeasurement extends BaseMeasurement<Meter> {
         public final static String ID = "test_generic_name";
 
         public TestMeasurement(Meter value, Range<Meter> range) {
             super(value, range);
+        }
+
+        @Override
+        public String getGenericName() {
+            return ID;
         }
     }
 }

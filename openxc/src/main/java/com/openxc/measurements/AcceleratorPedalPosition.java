@@ -22,7 +22,8 @@ public class AcceleratorPedalPosition extends BaseMeasurement<Percentage> {
         super(value, RANGE);
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

@@ -19,7 +19,8 @@ public class FineOdometer extends BaseMeasurement<Kilometer> {
         super(value, RANGE);
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

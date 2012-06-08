@@ -19,7 +19,8 @@ public class FuelConsumed extends BaseMeasurement<Liter> {
         super(value, RANGE);
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

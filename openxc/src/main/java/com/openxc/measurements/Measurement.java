@@ -51,6 +51,8 @@ public interface Measurement {
 
     public String serialize();
 
+    public String getGenericName();
+
     /**
      * Return the value of this measurement as a type good for serialization.
      *

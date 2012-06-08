@@ -78,7 +78,8 @@ public class VehicleDoorStatus
         return getValue().enumValue().toString();
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

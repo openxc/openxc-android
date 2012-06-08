@@ -10,7 +10,7 @@ import com.openxc.util.Range;
 public class Latitude extends BaseMeasurement<Degree> {
     private final static Range<Degree> RANGE = new Range<Degree>(
             new Degree(-89.0), new Degree(89.0));
-    private final static String ID = "latitude";
+    public final static String ID = "latitude";
 
     public Latitude(Degree value) {
         super(value, RANGE);
@@ -20,7 +20,8 @@ public class Latitude extends BaseMeasurement<Degree> {
         this(new Degree(value));
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

@@ -73,8 +73,8 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     }
 
     public void onLocationChanged(final Location location) {
-        handleMessage(Latitude.getGenericName(), location.getLatitude());
-        handleMessage(Longitude.getGenericName(), location.getLongitude());
+        handleMessage(Latitude.ID, location.getLatitude());
+        handleMessage(Longitude.ID, location.getLongitude());
     }
 
     public void onStatusChanged(String provider, int status,

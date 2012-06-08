@@ -48,7 +48,8 @@ public class IgnitionStatus
         this(IgnitionPosition.fromHashCode(value.intValue()));
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }

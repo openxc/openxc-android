@@ -57,7 +57,8 @@ public class TransmissionGearPosition
         this(GearPosition.fromHashCode(value.intValue()));
     }
 
-    public static String getGenericName() {
+    @Override
+    public String getGenericName() {
         return ID;
     }
 }
