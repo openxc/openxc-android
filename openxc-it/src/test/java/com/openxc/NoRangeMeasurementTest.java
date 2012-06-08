@@ -4,9 +4,6 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
-
 import com.openxc.units.Meter;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.NoRangeException;

@@ -9,8 +9,6 @@ import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.usb.UsbVehicleDataSource;
-import com.openxc.sources.VehicleDataSource;
-
 import android.app.Service;
 
 import android.content.Context;

@@ -1,6 +1,5 @@
 package com.openxc.sinks;
 
-import com.openxc.remote.RawMeasurement;
 import com.openxc.VehicleDataEndpoint;
 
 /**

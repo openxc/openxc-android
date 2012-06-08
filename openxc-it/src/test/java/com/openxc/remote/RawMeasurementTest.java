@@ -1,9 +1,6 @@
 package com.openxc.remote;
 
 import junit.framework.TestCase;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertEquals;
 
 public class RawMeasurementTest extends TestCase {
     RawMeasurement measurement;

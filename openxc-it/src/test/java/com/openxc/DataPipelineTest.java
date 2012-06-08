@@ -1,8 +1,6 @@
 package com.openxc;
 
 import junit.framework.TestCase;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 

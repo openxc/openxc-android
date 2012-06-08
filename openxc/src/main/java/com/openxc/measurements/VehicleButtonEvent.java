@@ -2,8 +2,6 @@ package com.openxc.measurements;
 
 import com.openxc.units.State;
 
-import com.openxc.util.AgingData;
-
 /**
  * A ButtonEvent represents a button press, release or hold on the vehicle HMI.
  *

@@ -2,7 +2,6 @@ package com.openxc.measurements;
 
 import com.openxc.units.State;
 
-import com.openxc.util.AgingData;
 import com.openxc.units.Boolean;
 
 /**
