@@ -9,7 +9,7 @@ import com.openxc.util.Range;
 public class FuelLevel extends BaseMeasurement<Percentage> {
     private final static Range<Percentage> RANGE =
         new Range<Percentage>(new Percentage(0), new Percentage(100));
-    public final static String ID = "fuel_level";
+    private final static String ID = "fuel_level";
 
     public FuelLevel(Double value) {
         super(new Percentage(value), RANGE);
@@ -17,5 +17,9 @@ public class FuelLevel extends BaseMeasurement<Percentage> {
 
     public FuelLevel(Percentage value) {
         super(value, RANGE);
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

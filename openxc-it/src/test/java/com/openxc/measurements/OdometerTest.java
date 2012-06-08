@@ -24,8 +24,4 @@ public class OdometerTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(Odometer.ID);
-    }
 }

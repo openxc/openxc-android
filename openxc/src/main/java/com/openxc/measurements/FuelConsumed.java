@@ -9,7 +9,7 @@ import com.openxc.util.Range;
 public class FuelConsumed extends BaseMeasurement<Liter> {
     private final static Range<Liter> RANGE =
         new Range<Liter>(new Liter(0), new Liter(4294967295.0));
-    public final static String ID = "fuel_consumed_since_restart";
+    private final static String ID = "fuel_consumed_since_restart";
 
     public FuelConsumed(Double value) {
         super(new Liter(value), RANGE);
@@ -17,5 +17,9 @@ public class FuelConsumed extends BaseMeasurement<Liter> {
 
     public FuelConsumed(Liter value) {
         super(value, RANGE);
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

@@ -24,8 +24,4 @@ public class FuelConsumedTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(FuelConsumed.ID);
-    }
 }

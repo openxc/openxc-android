@@ -12,7 +12,7 @@ public class VehicleSpeed extends BaseMeasurement<KilometersPerHour> {
     private final static Range<KilometersPerHour> RANGE =
         new Range<KilometersPerHour>(new KilometersPerHour(0.0),
                 new KilometersPerHour(655.0));
-    public final static String ID = "vehicle_speed";
+    private final static String ID = "vehicle_speed";
 
     public VehicleSpeed(KilometersPerHour value) {
         super(value, RANGE);
@@ -20,5 +20,9 @@ public class VehicleSpeed extends BaseMeasurement<KilometersPerHour> {
 
     public VehicleSpeed(Double value) {
         this(new KilometersPerHour(value));
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

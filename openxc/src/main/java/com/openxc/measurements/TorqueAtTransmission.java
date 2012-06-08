@@ -9,7 +9,7 @@ import com.openxc.util.Range;
 public class TorqueAtTransmission extends BaseMeasurement<NewtonMeter> {
     private final static Range<NewtonMeter> RANGE = new Range<NewtonMeter>(
             new NewtonMeter(-500), new NewtonMeter(1500));
-    public final static String ID = "torque_at_transmission";
+    private final static String ID = "torque_at_transmission";
 
     public TorqueAtTransmission(NewtonMeter value) {
         super(value, RANGE);
@@ -17,5 +17,9 @@ public class TorqueAtTransmission extends BaseMeasurement<NewtonMeter> {
 
     public TorqueAtTransmission(Double value) {
         this(new NewtonMeter(value));
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

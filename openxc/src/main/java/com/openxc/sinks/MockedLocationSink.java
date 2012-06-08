@@ -41,24 +41,24 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
 
     public void receive(String measurementId, RawMeasurement measurement) {
         super.receive(measurementId, measurement);
-        if(measurementId.equals(Latitude.ID) ||
-                measurementId.equals(Longitude.ID)) {
+        if(measurementId.equals(Latitude.getGenericName()) ||
+                measurementId.equals(Longitude.getGenericName())) {
             updateLocation();
         }
     }
 
     private void updateLocation() {
         if(mLocationManager == null ||
-                !containsMeasurement(Latitude.ID) ||
-                !containsMeasurement(Longitude.ID) ||
-                !containsMeasurement(VehicleSpeed.ID)) {
+                !containsMeasurement(Latitude.getGenericName()) ||
+                !containsMeasurement(Longitude.getGenericName()) ||
+                !containsMeasurement(VehicleSpeed.getGenericName())) {
             return;
         }
 
         Location location = new Location(LocationManager.GPS_PROVIDER);
-        location.setLatitude(get(Latitude.ID).getValue().doubleValue());
-        location.setLongitude(get(Longitude.ID).getValue().doubleValue());
-        location.setSpeed(get(VehicleSpeed.ID).getValue().floatValue());
+        location.setLatitude(get(Latitude.getGenericName()).getValue().doubleValue());
+        location.setLongitude(get(Longitude.getGenericName()).getValue().doubleValue());
+        location.setSpeed(get(VehicleSpeed.getGenericName()).getValue().floatValue());
         location.setTime(System.currentTimeMillis());
 
         try {

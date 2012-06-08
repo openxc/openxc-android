@@ -31,8 +31,4 @@ public class VehicleButtonEventTest extends TestCase {
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(VehicleButtonEvent.ID);
-    }
 }

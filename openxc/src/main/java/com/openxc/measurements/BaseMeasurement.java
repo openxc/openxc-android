@@ -31,11 +31,6 @@ import com.openxc.util.Range;
  * the measurement and its unit type. This unfortunately means we have to add
  * constructors to every child class because they aren't inherited from
  * Measurement. If you know of a better way, please say so.
- *
- *
- * All subclasses must have a public static String field named ID to be used
- * with the OpenXC vehicle services - this is unfortunately not enforced by the
- * class hierarchy.
  */
 public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     private AgingData<TheUnit> mValue;
@@ -47,45 +42,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     static {
         sMeasurementIdToClass = HashBiMap.create();
     }
-
-    private static void cacheMeasurementId(
-            Class<? extends Measurement> measurementType)
-            throws UnrecognizedMeasurementTypeException {
-        String measurementId;
-        try {
-            measurementId = (String) measurementType.getField("ID").get(
-                    measurementType);
-            sMeasurementIdToClass.put(measurementId, measurementType);
-        } catch(NoSuchFieldException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " doesn't have an ID field", e);
-        } catch(IllegalAccessException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " has an inaccessible ID", e);
-        }
-    }
-
-    public static String getIdForClass(
-            Class<? extends Measurement> measurementType)
-            throws UnrecognizedMeasurementTypeException {
-        if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
-            cacheMeasurementId(measurementType);
-        }
-        return sMeasurementIdToClass.inverse().get(measurementType);
-    }
-
-    public static Class<? extends Measurement>
-            getClassForId(String measurementId)
-            throws UnrecognizedMeasurementTypeException {
-        Class<? extends Measurement> result = sMeasurementIdToClass.get(measurementId);
-        if(result == null) {
-            throw new UnrecognizedMeasurementTypeException(
-                    "Didn't have a measurement with ID " + measurementId +
-                    " cached");
-        }
-        return result;
-    }
-
 
     /**
      * Construct a new Measurement with the given value.
@@ -151,6 +107,56 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
     public Object getSerializedEvent() {
         return getEvent();
+    }
+
+    // TODO can we make this protected for everyone? it's really internal state
+    // because all external users should care about is it being serialized. the
+    // only place we use it right now is the MockedLocationSink.
+    public static String getGenericName() {
+        // TODO this needs to go away.
+        return null;
+    }
+
+    private static void cacheMeasurementId(
+            Class<? extends Measurement> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        String measurementId;
+        try {
+            measurementId = (String) measurementType.getDeclaredMethod(
+                    "getGenericName", null).invoke(null, null);
+            sMeasurementIdToClass.put(measurementId, measurementType);
+        } catch(NoSuchMethodException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " doesn't have a getGenericName method",
+                    e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has an inaccessible ID", e);
+        } catch(InvocationTargetException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has an inaccessible ID", e);
+        }
+    }
+
+    public static String getIdForClass(
+            Class<? extends Measurement> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
+            cacheMeasurementId(measurementType);
+        }
+        return sMeasurementIdToClass.inverse().get(measurementType);
+    }
+
+    public static Class<? extends Measurement>
+            getClassForId(String measurementId)
+            throws UnrecognizedMeasurementTypeException {
+        Class<? extends Measurement> result = sMeasurementIdToClass.get(measurementId);
+        if(result == null) {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Didn't have a measurement with ID " + measurementId +
+                    " cached");
+        }
+        return result;
     }
 
     public static Measurement getMeasurementFromRaw(

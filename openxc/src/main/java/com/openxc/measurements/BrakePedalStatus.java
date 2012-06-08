@@ -6,7 +6,7 @@ import com.openxc.units.Boolean;
  * The BrakePedalStatus measurement knows if the brake pedal is pressed.
  */
 public class BrakePedalStatus extends BaseMeasurement<Boolean> {
-    public final static String ID = "brake_pedal_status";
+    private final static String ID = "brake_pedal_status";
 
     public BrakePedalStatus(Boolean value) {
         super(value);
@@ -18,5 +18,9 @@ public class BrakePedalStatus extends BaseMeasurement<Boolean> {
 
     public BrakePedalStatus(Double value) {
         this(new Boolean(value));
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

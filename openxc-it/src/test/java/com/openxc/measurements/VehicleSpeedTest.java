@@ -24,8 +24,4 @@ public class VehicleSpeedTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(VehicleSpeed.ID);
-    }
 }

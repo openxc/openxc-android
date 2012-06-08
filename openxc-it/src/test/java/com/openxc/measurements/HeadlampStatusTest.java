@@ -23,8 +23,4 @@ public class HeadlampStatusTest extends TestCase {
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(HeadlampStatus.ID);
-    }
 }
