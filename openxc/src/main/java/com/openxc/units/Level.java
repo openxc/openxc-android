@@ -5,7 +5,7 @@ package com.openxc.units;
  *
  * e.g. my World of Warcraft character is Level 46.
  */
-public class Level extends Quantity<Double> implements Unit {
+public class Level extends Quantity<Double> {
 
     public Level(double value) {
         super(value);

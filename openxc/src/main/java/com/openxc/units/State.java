@@ -5,7 +5,7 @@ import com.google.common.base.Objects;
 /**
  * A State is a type of Unit with a limited number of acceptable values.
  */
-public class State<T extends Enum<?>> implements Unit {
+public class State<T extends Enum<?>> extends Unit {
     private T mValue;
 
     /**
@@ -17,9 +17,14 @@ public class State<T extends Enum<?>> implements Unit {
         mValue = value;
     }
 
-    public boolean equalTo(T otherValue) {
-        // TODO  this is incorrect - need to check cast and look at mValue
-        return mValue.equals(otherValue);
+    @Override
+    public boolean equals(Object obj) {
+        if(!super.equals(obj)) {
+            return false;
+        }
+
+        final State<T> other = (State<T>) obj;
+        return mValue.equals(other.mValue);
     }
 
     /**

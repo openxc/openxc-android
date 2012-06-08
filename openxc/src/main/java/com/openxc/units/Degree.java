@@ -5,7 +5,7 @@ package com.openxc.units;
  *
  * TODO this shouldn't represent two things.
  */
-public class Degree extends Quantity<Double> implements Unit {
+public class Degree extends Quantity<Double> {
 
     public Degree(double value) {
         super(value);

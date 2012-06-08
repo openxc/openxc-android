@@ -220,6 +220,46 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+
+        if(obj == null) {
+            return false;
+        }
+
+        if(getClass() != obj.getClass()) {
+            return false;
+        }
+
+        final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
+        if(!other.getValue().equals(getValue())) {
+            return false;
+        }
+
+        if(other.getEvent() != null && getEvent() != null) {
+            if(!other.getEvent().equals(getEvent())) {
+                return false;
+            }
+        } else if(other.getEvent() != getEvent()) {
+            return false;
+        }
+
+        if(other.hasRange() != hasRange()) {
+            return false;
+        } else {
+            try {
+                if(!other.getRange().equals(getRange())) {
+                    return false;
+                }
+            } catch(NoRangeException e) { }
+        }
+
+        return true;
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("value", mValue)

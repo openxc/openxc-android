@@ -14,13 +14,13 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.NoRangeException;
 
 public class MeasurementTest extends TestCase {
-    BaseMeasurement<Meter> measurement;
+    TestMeasurement measurement;
     Range<Meter> range;
 
     @Override
     public void setUp() {
         range = new Range<Meter>(new Meter(0.0), new Meter(101.2));
-        measurement = new BaseMeasurement<Meter>(new Meter(10.0), range);
+        measurement = new TestMeasurement(new Meter(10.0), range);
     }
 
     public void testGet() {
@@ -40,12 +40,12 @@ public class MeasurementTest extends TestCase {
     }
 
     public void testEquality() {
-        BaseMeasurement<Meter> anotherMeasurement =
-            new BaseMeasurement<Meter>(new Meter(10.0), range);
-        BaseMeasurement<Meter> inequalMeasurement  =
-            new BaseMeasurement<Meter>(new Meter(12.0), range);
-        assertThat(measurement, equalTo(anotherMeasurement));
-        assertThat(measurement, not(equalTo(inequalMeasurement)));
+        TestMeasurement anotherMeasurement =
+            new TestMeasurement(new Meter(10.0), range);
+        TestMeasurement inequalMeasurement  =
+            new TestMeasurement(new Meter(12.0), range);
+        assertTrue(measurement.equals(anotherMeasurement));
+        assertFalse(measurement.equals(inequalMeasurement));
     }
 
     public void testSerialize() {
@@ -57,5 +57,13 @@ public class MeasurementTest extends TestCase {
     public void testDeserialize() {
         assertThat(BaseMeasurement.deserialize(measurement.serialize()),
                 equalTo(measurement));
+    }
+
+    private class TestMeasurement extends BaseMeasurement<Meter> {
+        public final static String ID = "test_generic_name";
+
+        public TestMeasurement(Meter value, Range<Meter> range) {
+            super(value, range);
+        }
     }
 }

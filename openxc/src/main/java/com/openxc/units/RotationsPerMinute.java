@@ -5,7 +5,7 @@ package com.openxc.units;
  *
  * This is commonly used with regard to engine speed (i.e. RPM).
  */
-public class RotationsPerMinute extends Quantity<Double> implements Unit {
+public class RotationsPerMinute extends Quantity<Double> {
 
     public RotationsPerMinute(double value) {
         super(value);
