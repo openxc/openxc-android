@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
@@ -61,6 +62,7 @@ import android.util.Log;
 public class UsbVehicleDataSource extends JsonVehicleDataSource
         implements Runnable, VehicleController {
     private static final String TAG = "UsbVehicleDataSource";
+    private static final int ENDPOINT_COUNT = 2;
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
     public static final String ACTION_USB_DEVICE_ATTACHED =
@@ -70,7 +72,8 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
     private UsbInterface mInterface;
-    private UsbEndpoint mEndpoint;
+    private UsbEndpoint mInEndpoint;
+    private UsbEndpoint mOutEndpoint;
     private PendingIntent mPermissionIntent;
     private final URI mDeviceUri;
     private final Lock mDeviceConnectionLock;
@@ -227,7 +230,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             // USB wakes backup? Why does USB seem to go to sleep in the first
             // place?
             int received = mConnection.bulkTransfer(
-                    mEndpoint, bytes, bytes.length, 0);
+                    mInEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
                 // Creating a new String object for each message causes the
                 // GC to go a little crazy, but I don't see another obvious way
@@ -255,31 +258,47 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         return Objects.toStringHelper(this)
             .add("device", mDeviceUri)
             .add("connection", mConnection)
-            .add("endpoint", mEndpoint)
+            .add("in_endpoint", mInEndpoint)
+            .add("out_endpoint", mOutEndpoint)
             .toString();
     }
 
     public void set(String measurementId, RawMeasurement command) {
         // TODO we do this a THIRD time here, duplicated on the remote process
         // in RemoteListnerSource. Argh.
+        String message;
         try {
             // TODO this fails for any signal we haven't seen in an async read
             // before (because we haven't cached the ID, which is going to be
             // nearly all commands. hm, I always hated this interface anyway.
             MeasurementInterface measurement =
-                Measurement.getMeasurementFromRaw(
-                        measurementId, command);
+                Measurement.getMeasurementFromRaw(measurementId, command);
             Log.d(TAG, "Measurement to write is " + measurement);
-            String message = createMessage(measurementId,
+            message = createMessage(measurementId,
                     measurement.getSerializedValue(),
                     measurement.getSerializedEvent());
-            Log.d(TAG, "Writing message to USB: " + message);
         } catch(UnrecognizedMeasurementTypeException e) {
-            Log.w(TAG, "Unable to receive a measurement", e);
+            Log.w(TAG, "Unable to write a measurement", e);
+            return;
         } catch(NoValueException e) {
             Log.w(TAG, "Measurement received with no value", e);
+            return;
         }
-        // TODO
+
+        if(mOutEndpoint != null) {
+            Log.d(TAG, "Writing message to USB: " + message);
+            byte[] bytes = message.getBytes();
+            Log.d(TAG, "Writing bytes to USB: " + bytes);
+            int transferred = mConnection.bulkTransfer(
+                    mOutEndpoint, bytes, bytes.length, 0);
+            if(transferred < 0) {
+                Log.w(TAG, "Unable to write CAN message to USB endpoint, error "
+                        + transferred);
+            }
+        } else {
+            Log.w(TAG, "No OUT endpoint available on USB device, " +
+                    "can't send write command");
+        }
     }
 
     private void logTransferStats(final long startTime, final long endTime) {
@@ -329,9 +348,35 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             throw new UsbDeviceException("USB device didn't have an " +
                     "interface for us to open");
         }
-        UsbInterface iface = device.getInterface(0);
-        Log.d(TAG, "Connecting to endpoint 1 on interface " + iface);
-        mEndpoint = iface.getEndpoint(1);
+        UsbInterface iface = null;
+        for(int i = 0; i < device.getInterfaceCount(); i++) {
+            iface = device.getInterface(i);
+            if(iface.getEndpointCount() == ENDPOINT_COUNT) {
+                break;
+            }
+        }
+
+        if(iface == null) {
+            Log.w(TAG, "Unable to find a USB device interface with the " +
+                    "expected number of endpoints (" + ENDPOINT_COUNT + ")");
+            return null;
+        }
+
+        for(int i = 0; i < iface.getEndpointCount(); i++) {
+            UsbEndpoint endpoint = iface.getEndpoint(i);
+            if(endpoint.getType() ==
+                    UsbConstants.USB_ENDPOINT_XFER_BULK) {
+                if(endpoint.getDirection() == UsbConstants.USB_DIR_IN) {
+                    mInEndpoint = endpoint;
+                } else {
+                    mOutEndpoint = endpoint;
+                }
+            }
+
+            if(mInEndpoint != null && mOutEndpoint != null) {
+                break;
+            }
+        }
         return openInterface(manager, device, iface);
     }
 

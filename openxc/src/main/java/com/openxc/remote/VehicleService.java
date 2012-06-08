@@ -145,8 +145,8 @@ public class VehicleService extends Service {
             public void set(String measurementClass,
                     RawMeasurement measurement) {
                 try {
-                mController.set(Measurement.getIdForClass(measurementClass),
-                        measurement);
+                    mController.set(Measurement.getIdForClass(measurementClass),
+                            measurement);
                 } catch(UnrecognizedMeasurementTypeException e) {
                     Log.w(TAG, "Unable to set new measurement value", e);
                 }
