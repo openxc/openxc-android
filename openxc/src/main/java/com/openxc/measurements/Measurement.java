@@ -49,6 +49,8 @@ public interface Measurement {
      */
     public Unit getValue();
 
+    public String serialize();
+
     /**
      * Return the value of this measurement as a type good for serialization.
      *

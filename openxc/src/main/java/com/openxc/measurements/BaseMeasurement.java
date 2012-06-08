@@ -32,7 +32,6 @@ import com.openxc.util.Range;
  * constructors to every child class because they aren't inherited from
  * Measurement. If you know of a better way, please say so.
  *
- *
  * All subclasses must have a public static String field named ID to be used
  * with the OpenXC vehicle services - this is unfortunately not enforced by the
  * class hierarchy.
@@ -151,6 +150,16 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
     public Object getSerializedEvent() {
         return getEvent();
+    }
+
+    public String serialize() {
+        // TODO
+        return "";
+    }
+
+    public static Measurement deserialize(String serializedMeasurement) {
+        // TODO
+        return null;
     }
 
     public static Measurement getMeasurementFromRaw(

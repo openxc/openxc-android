@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -36,5 +37,25 @@ public class MeasurementTest extends TestCase {
 
     public void testAgeIsPositive() {
         assertThat(measurement.getAge(), greaterThan(0.0));
+    }
+
+    public void testEquality() {
+        BaseMeasurement<Meter> anotherMeasurement =
+            new BaseMeasurement<Meter>(new Meter(10.0), range);
+        BaseMeasurement<Meter> inequalMeasurement  =
+            new BaseMeasurement<Meter>(new Meter(12.0), range);
+        assertThat(measurement, equalTo(anotherMeasurement));
+        assertThat(measurement, not(equalTo(inequalMeasurement)));
+    }
+
+    public void testSerialize() {
+        assertThat(measurement.serialize(), equalTo(
+                    "{\"name\": \"" + measurement.ID + "\", \"value\": "
+                    + measurement.getValue() + "}"));
+    }
+
+    public void testDeserialize() {
+        assertThat(BaseMeasurement.deserialize(measurement.serialize()),
+                equalTo(measurement));
     }
 }
