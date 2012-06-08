@@ -2,7 +2,7 @@ package com.openxc.remote;
 
 import com.openxc.DataPipeline;
 
-import com.openxc.remote.VehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListener;
 
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
@@ -136,13 +136,13 @@ public class VehicleService extends Service {
             }
 
             public void register(
-                    VehicleServiceListenerInterface listener) {
+                    VehicleServiceListener listener) {
                 Log.i(TAG, "Adding listener " + listener);
                 mNotifier.register(listener);
             }
 
             public void unregister(
-                    VehicleServiceListenerInterface listener) {
+                    VehicleServiceListener listener) {
                 Log.i(TAG, "Removing listener " + listener);
                 mNotifier.unregister(listener);
             }

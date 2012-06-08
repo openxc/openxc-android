@@ -2,7 +2,7 @@ package com.openxc.sources;
 
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.remote.VehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListener;
 
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.BaseMeasurement;
@@ -56,8 +56,8 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
         }
     }
 
-    private VehicleServiceListenerInterface mRemoteListener =
-        new VehicleServiceListenerInterface.Stub() {
+    private VehicleServiceListener mRemoteListener =
+        new VehicleServiceListener.Stub() {
             public void receive(String measurementId,
                     RawMeasurement rawMeasurement) {
                 // TODO we end up doing this conversion from raw to non-raw
