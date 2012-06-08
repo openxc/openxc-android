@@ -6,7 +6,7 @@ import com.openxc.util.Range;
 /**
  * The TorqueAtTransmission is the actual current torque in the transmission.
  */
-public class TorqueAtTransmission extends Measurement<NewtonMeter> {
+public class TorqueAtTransmission extends BaseMeasurement<NewtonMeter> {
     private final static Range<NewtonMeter> RANGE = new Range<NewtonMeter>(
             new NewtonMeter(-500), new NewtonMeter(1500));
     public final static String ID = "torque_at_transmission";

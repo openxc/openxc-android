@@ -17,7 +17,7 @@ import android.util.Log;
  * This class implements the Parcelable interface, so it can be used directly as
  * a return value or function parameter in an AIDL interface.
  *
- * @see com.openxc.measurements.Measurement
+ * @see com.openxc.measurements.BaseMeasurement
  */
 public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
         implements Parcelable {

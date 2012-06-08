@@ -17,7 +17,7 @@ import com.openxc.units.Boolean;
  * synchronously?
  */
 public class VehicleDoorStatus
-        extends Measurement<State<VehicleDoorStatus.DoorId>> {
+        extends BaseMeasurement<State<VehicleDoorStatus.DoorId>> {
     public final static String ID = "door_status";
 
     /**

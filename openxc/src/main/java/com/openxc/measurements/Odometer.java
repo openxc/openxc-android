@@ -6,7 +6,7 @@ import com.openxc.util.Range;
 /**
  * The Odometer is a persistent odometer recording.
  */
-public class Odometer extends Measurement<Kilometer> {
+public class Odometer extends BaseMeasurement<Kilometer> {
     private final static Range<Kilometer> RANGE =
         new Range<Kilometer>(new Kilometer(0), new Kilometer(100));
     public final static String ID = "odometer";

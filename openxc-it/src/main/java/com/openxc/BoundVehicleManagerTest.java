@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
@@ -42,14 +42,14 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     String receivedMeasurementId;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
-        public void receive(MeasurementInterface measurement) {
+        public void receive(Measurement measurement) {
             speedReceived = (VehicleSpeed) measurement;
         }
     };
 
     SteeringWheelAngle.Listener steeringWheelListener =
             new SteeringWheelAngle.Listener() {
-        public void receive(MeasurementInterface measurement) {
+        public void receive(Measurement measurement) {
             steeringAngleReceived = (SteeringWheelAngle) measurement;
         }
     };
@@ -101,7 +101,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         }
     }
 
-    private void checkReceivedMeasurement(MeasurementInterface measurement) {
+    private void checkReceivedMeasurement(Measurement measurement) {
         assertNotNull(measurement);
     }
 
@@ -200,7 +200,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         pause(150);
         service.clearSources();
         pause(150);
-        MeasurementInterface measurement = service.get(VehicleSpeed.class);
+        Measurement measurement = service.get(VehicleSpeed.class);
         double age = measurement.getAge();
         assertTrue("Measurement age (" + age + ") should be > 0.05",
                 age > .05);

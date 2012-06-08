@@ -8,7 +8,7 @@ import com.openxc.util.Range;
  *
  * The valid range for this measurement is from 0 to 8000 RotationsPerMinute.
  */
-public class EngineSpeed extends Measurement<RotationsPerMinute> {
+public class EngineSpeed extends BaseMeasurement<RotationsPerMinute> {
     private final static Range<RotationsPerMinute> RANGE =
         new Range<RotationsPerMinute>(new RotationsPerMinute(0),
                 new RotationsPerMinute(16382));

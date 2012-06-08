@@ -4,8 +4,8 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListenerInterface;
 
-import com.openxc.measurements.MeasurementInterface;
 import com.openxc.measurements.Measurement;
+import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.sources.BaseVehicleDataSource;
@@ -68,8 +68,8 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
                 // a generic class and let us specicy the objec tot store in
                 // that map.
                 try {
-                    MeasurementInterface measurement =
-                        Measurement.getMeasurementFromRaw(
+                    Measurement measurement =
+                        BaseMeasurement.getMeasurementFromRaw(
                                 measurementId, rawMeasurement);
                     handleMessage(
                             measurementId, measurement.getSerializedValue(),

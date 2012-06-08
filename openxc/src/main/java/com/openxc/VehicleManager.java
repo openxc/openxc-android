@@ -27,14 +27,14 @@ import com.openxc.measurements.HighBeamStatus;
 import com.openxc.measurements.IgnitionStatus;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Odometer;
 import com.openxc.measurements.ParkingBrakeStatus;
 import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.Measurement;
+import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleSpeed;
@@ -146,9 +146,9 @@ public class VehicleManager extends Service implements SourceCallback {
     // receive all measurements regardless of if someone has actually registered
     // to receive callbacks for that measurement or not, we need to pre-load the
     // name mapping cache before doing anything.
-    private static List<Class<? extends MeasurementInterface>>
+    private static List<Class<? extends Measurement>>
             MEASUREMENT_TYPES =
-                new ArrayList<Class<? extends MeasurementInterface>>();
+                new ArrayList<Class<? extends Measurement>>();
 
     static {
         MEASUREMENT_TYPES.add(AcceleratorPedalPosition.class);
@@ -172,9 +172,9 @@ public class VehicleManager extends Service implements SourceCallback {
         MEASUREMENT_TYPES.add(VehicleSpeed.class);
         MEASUREMENT_TYPES.add(WindshieldWiperStatus.class);
 
-        for(Class<? extends MeasurementInterface> measurementType : MEASUREMENT_TYPES) {
+        for(Class<? extends Measurement> measurementType : MEASUREMENT_TYPES) {
             try {
-            Measurement.getIdForClass(measurementType);
+            BaseMeasurement.getIdForClass(measurementType);
             } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Unable to initialize list of measurements", e);
             }
@@ -271,10 +271,10 @@ public class VehicleManager extends Service implements SourceCallback {
      *      that does not extend Measurement
      * @throws NoValueException if no value has yet been received for this
      *      measurementType
-     * @see Measurement
+     * @see BaseMeasurement
      */
-    public MeasurementInterface get(
-            Class<? extends MeasurementInterface> measurementType)
+    public Measurement get(
+            Class<? extends Measurement> measurementType)
             throws UnrecognizedMeasurementTypeException, NoValueException {
 
         if(mRemoteService == null) {
@@ -286,8 +286,8 @@ public class VehicleManager extends Service implements SourceCallback {
         Log.d(TAG, "Looking up measurement for " + measurementType);
         try {
             RawMeasurement rawMeasurement = mRemoteService.get(
-                    Measurement.getIdForClass(measurementType));
-            return Measurement.getMeasurementFromRaw(measurementType,
+                    BaseMeasurement.getIdForClass(measurementType));
+            return BaseMeasurement.getMeasurementFromRaw(measurementType,
                     rawMeasurement);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
@@ -313,8 +313,8 @@ public class VehicleManager extends Service implements SourceCallback {
      *      not extend Measurement
      */
     public void addListener(
-            Class<? extends MeasurementInterface> measurementType,
-            MeasurementInterface.Listener listener)
+            Class<? extends Measurement> measurementType,
+            Measurement.Listener listener)
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
@@ -380,8 +380,8 @@ public class VehicleManager extends Service implements SourceCallback {
      * @throws UnrecognizedMeasurementTypeException if passed a class that does
      *      not extend Measurement
      */
-    public void removeListener(Class<? extends MeasurementInterface>
-            measurementType, MeasurementInterface.Listener listener)
+    public void removeListener(Class<? extends Measurement>
+            measurementType, Measurement.Listener listener)
             throws VehicleServiceException {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);

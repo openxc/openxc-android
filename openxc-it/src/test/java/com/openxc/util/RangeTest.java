@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-
 import com.openxc.util.Range;
 
 public class RangeTest extends TestCase {

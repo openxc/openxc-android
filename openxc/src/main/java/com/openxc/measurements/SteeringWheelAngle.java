@@ -9,7 +9,7 @@ import com.openxc.util.Range;
  * The wheel is considered centered with the angle is 0. The wheel is turned to
  * the left when the angle is negative, and to the right when it is positive.
  */
-public class SteeringWheelAngle extends Measurement<Degree> {
+public class SteeringWheelAngle extends BaseMeasurement<Degree> {
     private final static Range<Degree> RANGE =
         new Range<Degree>(new Degree(-508), new Degree(508));
     public final static String ID = "steering_wheel_angle";

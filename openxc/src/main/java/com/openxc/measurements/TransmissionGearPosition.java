@@ -9,7 +9,7 @@ import com.openxc.units.State;
  * by the driver or computer.
  */
 public class TransmissionGearPosition
-        extends Measurement<State<TransmissionGearPosition.GearPosition>> {
+        extends BaseMeasurement<State<TransmissionGearPosition.GearPosition>> {
     public final static String ID = "transmission_gear_position";
 
     public enum GearPosition {

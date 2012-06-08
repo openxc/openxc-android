@@ -4,9 +4,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multimap;
 
-import com.openxc.measurements.MeasurementInterface;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.Measurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.BaseMeasurement;
 
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
@@ -22,20 +22,20 @@ import android.util.Log;
 public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MeasurementListenerSink";
 
-    private Multimap<Class<? extends MeasurementInterface>,
-            MeasurementInterface.Listener> mListeners;
+    private Multimap<Class<? extends Measurement>,
+            Measurement.Listener> mListeners;
 
     public MeasurementListenerSink() {
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
     }
 
-    public void register(Class<? extends MeasurementInterface> measurementType,
+    public void register(Class<? extends Measurement> measurementType,
             Measurement.Listener listener)
             throws UnrecognizedMeasurementTypeException {
         mListeners.put(measurementType, listener);
 
-        String measurementId = Measurement.getIdForClass(measurementType);
+        String measurementId = BaseMeasurement.getIdForClass(measurementType);
         if(containsMeasurement(measurementId)) {
             // send the last known value to the new listener
             RawMeasurement rawMeasurement = get(measurementId);
@@ -43,7 +43,7 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         }
     }
 
-    public void unregister(Class<? extends MeasurementInterface> measurementType,
+    public void unregister(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
         mListeners.remove(measurementType, listener);
     }
@@ -51,10 +51,10 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     protected void propagateMeasurement(String measurementId,
             RawMeasurement rawMeasurement) {
         try {
-            MeasurementInterface measurement = Measurement.getMeasurementFromRaw(
+            Measurement measurement = BaseMeasurement.getMeasurementFromRaw(
                     measurementId, rawMeasurement);
-            for(MeasurementInterface.Listener listener :
-                    mListeners.get(Measurement.getClassForId(measurementId))) {
+            for(Measurement.Listener listener :
+                    mListeners.get(BaseMeasurement.getClassForId(measurementId))) {
                 listener.receive(measurement);
             }
         } catch(UnrecognizedMeasurementTypeException e) {
