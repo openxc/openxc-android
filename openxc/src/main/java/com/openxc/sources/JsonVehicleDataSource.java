@@ -46,7 +46,7 @@ public abstract class JsonVehicleDataSource
             Log.w(TAG, "Unable to encode all data to JSON -- " +
                     "message may be incomplete", e);
         }
-        return message.toString();
+        return message.toString() + "\u0000";
     }
 
     /**
