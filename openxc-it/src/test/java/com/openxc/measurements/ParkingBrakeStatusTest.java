@@ -22,8 +22,4 @@ public class ParkingBrakeStatusTest extends TestCase {
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(ParkingBrakeStatus.ID);
-    }
 }

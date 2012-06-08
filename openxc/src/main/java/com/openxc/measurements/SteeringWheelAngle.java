@@ -12,7 +12,7 @@ import com.openxc.util.Range;
 public class SteeringWheelAngle extends BaseMeasurement<Degree> {
     private final static Range<Degree> RANGE =
         new Range<Degree>(new Degree(-508), new Degree(508));
-    public final static String ID = "steering_wheel_angle";
+    private final static String ID = "steering_wheel_angle";
 
     public SteeringWheelAngle(Double value) {
         super(new Degree(value), RANGE);
@@ -20,5 +20,9 @@ public class SteeringWheelAngle extends BaseMeasurement<Degree> {
 
     public SteeringWheelAngle(Degree value) {
         super(value, RANGE);
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

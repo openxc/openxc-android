@@ -7,7 +7,7 @@ import com.openxc.units.State;
  */
 public class IgnitionStatus
         extends BaseMeasurement<State<IgnitionStatus.IgnitionPosition>> {
-    public final static String ID = "ignition_status";
+    private final static String ID = "ignition_status";
 
     public enum IgnitionPosition {
         OFF,
@@ -46,5 +46,9 @@ public class IgnitionStatus
 
     public IgnitionStatus(Double value) {
         this(IgnitionPosition.fromHashCode(value.intValue()));
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

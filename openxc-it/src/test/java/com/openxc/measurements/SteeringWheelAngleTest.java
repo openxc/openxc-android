@@ -24,8 +24,4 @@ public class SteeringWheelAngleTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(SteeringWheelAngle.ID);
-    }
 }

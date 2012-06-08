@@ -9,7 +9,7 @@ import com.openxc.util.Range;
 public class Odometer extends BaseMeasurement<Kilometer> {
     private final static Range<Kilometer> RANGE =
         new Range<Kilometer>(new Kilometer(0), new Kilometer(100));
-    public final static String ID = "odometer";
+    private final static String ID = "odometer";
 
     public Odometer(Double value) {
         super(new Kilometer(value), RANGE);
@@ -17,5 +17,9 @@ public class Odometer extends BaseMeasurement<Kilometer> {
 
     public Odometer(Kilometer value) {
         super(value, RANGE);
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

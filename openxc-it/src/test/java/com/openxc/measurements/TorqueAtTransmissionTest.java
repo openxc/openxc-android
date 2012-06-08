@@ -24,8 +24,4 @@ public class TorqueAtTransmissionTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(TorqueAtTransmission.ID);
-    }
 }

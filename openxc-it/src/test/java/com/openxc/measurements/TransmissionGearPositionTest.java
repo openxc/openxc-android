@@ -27,8 +27,4 @@ public class TransmissionGearPositionTest extends TestCase {
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(TransmissionGearPosition.ID);
-    }
 }

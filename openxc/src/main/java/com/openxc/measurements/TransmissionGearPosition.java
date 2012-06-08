@@ -10,7 +10,7 @@ import com.openxc.units.State;
  */
 public class TransmissionGearPosition
         extends BaseMeasurement<State<TransmissionGearPosition.GearPosition>> {
-    public final static String ID = "transmission_gear_position";
+    private final static String ID = "transmission_gear_position";
 
     public enum GearPosition {
         FIRST,
@@ -55,5 +55,9 @@ public class TransmissionGearPosition
 
     public TransmissionGearPosition(Double value) {
         this(GearPosition.fromHashCode(value.intValue()));
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

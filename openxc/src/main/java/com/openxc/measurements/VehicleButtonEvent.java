@@ -22,7 +22,7 @@ import com.openxc.util.AgingData;
  */
 public class VehicleButtonEvent
         extends BaseMeasurement<State<VehicleButtonEvent.ButtonId>> {
-    public final static String ID = "button_event";
+    private final static String ID = "button_event";
 
     /**
      * The ButtonId is the direction of a button within a single control
@@ -115,5 +115,9 @@ public class VehicleButtonEvent
     @Override
     public String getSerializedValue() {
         return getValue().enumValue().toString();
+    }
+
+    public static String getGenericName() {
+        return ID;
     }
 }

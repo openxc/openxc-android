@@ -24,8 +24,4 @@ public class LongitudeTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(Longitude.ID);
-    }
 }

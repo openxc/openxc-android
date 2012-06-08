@@ -24,8 +24,4 @@ public class LatitudeTest extends TestCase {
     public void testHasRange() {
         assertTrue(measurement.hasRange());
     }
-
-    public void testHasId() {
-        assertNotNull(Latitude.ID);
-    }
 }
