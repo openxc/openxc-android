@@ -136,7 +136,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         mVendorId = UsbDeviceUtilities.vendorFromUri(device);
         mProductId = UsbDeviceUtilities.productFromUri(device);
         try {
-            setupDevice(mManager, mVendorId, mProductId);
+            connectToDevice(mManager, mVendorId, mProductId);
         } catch(DataSourceException e) {
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
@@ -311,7 +311,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         }
     }
 
-    private void setupDevice(UsbManager manager, int vendorId,
+    private void connectToDevice(UsbManager manager, int vendorId,
             int productId) throws DataSourceResourceException {
         UsbDevice device = findDevice(manager, vendorId, productId);
         if(manager.hasPermission(device)) {
@@ -332,7 +332,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         UsbInterface iface = device.getInterface(0);
         Log.d(TAG, "Connecting to endpoint 1 on interface " + iface);
         mEndpoint = iface.getEndpoint(1);
-        return connectToDevice(manager, device, iface);
+        return openInterface(manager, device, iface);
     }
 
     private UsbDevice findDevice(UsbManager manager, int vendorId,
@@ -353,7 +353,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
                 " not found");
     }
 
-    private UsbDeviceConnection connectToDevice(UsbManager manager,
+    private UsbDeviceConnection openInterface(UsbManager manager,
             UsbDevice device, UsbInterface iface)
             throws UsbDeviceException {
         UsbDeviceConnection connection = manager.openDevice(device);
@@ -413,7 +413,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
             } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
                 Log.d(TAG, "Device attached");
                 try {
-                    setupDevice(mManager, mVendorId, mProductId);
+                    connectToDevice(mManager, mVendorId, mProductId);
                 } catch(DataSourceException e) {
                     Log.i(TAG, "Unable to load USB device -- waiting for it " +
                             "to appear", e);
