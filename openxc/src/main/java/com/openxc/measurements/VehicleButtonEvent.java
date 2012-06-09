@@ -20,7 +20,7 @@ import com.openxc.units.State;
  */
 public class VehicleButtonEvent
         extends BaseMeasurement<State<VehicleButtonEvent.ButtonId>> {
-    private final static String ID = "button_event";
+    public final static String ID = "button_event";
 
     /**
      * The ButtonId is the direction of a button within a single control

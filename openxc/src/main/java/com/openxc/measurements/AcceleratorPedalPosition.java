@@ -12,7 +12,7 @@ import com.openxc.util.Range;
 public class AcceleratorPedalPosition extends BaseMeasurement<Percentage> {
     private final static Range<Percentage> RANGE =
         new Range<Percentage>(new Percentage(0), new Percentage(100));
-    private final static String ID = "accelerator_pedal_position";
+    public final static String ID = "accelerator_pedal_position";
 
     public AcceleratorPedalPosition(Number value) {
         super(new Percentage(value), RANGE);

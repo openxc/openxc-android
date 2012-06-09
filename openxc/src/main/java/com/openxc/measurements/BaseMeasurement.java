@@ -117,9 +117,11 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
                 getEvent());
     }
 
-    public static Measurement deserialize(String serializedMeasurement) {
-        // TODO
-        return null;
+    public static Measurement deserialize(String measurementString)
+            throws NoValueException, UnrecognizedMeasurementTypeException {
+        RawMeasurement rawMeasurement = RawMeasurement.deserialize(
+                measurementString);
+        return BaseMeasurement.getMeasurementFromRaw(rawMeasurement);
     }
 
     // TODO can we make this protected for everyone? it's really internal state
@@ -127,7 +129,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     // only place we use it right now is the MockedLocationSink.
     public String getGenericName() {
         // TODO this needs to go away.
-        return null;
+        return "";
     }
 
     private static void cacheMeasurementId(
@@ -135,19 +137,16 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             throws UnrecognizedMeasurementTypeException {
         String measurementId;
         try {
-            measurementId = (String) measurementType.getDeclaredMethod(
-                    "getGenericName", null).invoke(null, null);
+            measurementId = (String) measurementType.getField("ID").get(
+                    measurementType);
             sMeasurementIdToClass.put(measurementId, measurementType);
-        } catch(NoSuchMethodException e) {
+        } catch(NoSuchFieldException e) {
             throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " doesn't have a getGenericName method",
-                    e);
+                    measurementType + " doesn't have an ID field", e);
         } catch(IllegalAccessException e) {
             throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " has an inaccessible ID", e);
-        } catch(InvocationTargetException e) {
-            throw new UnrecognizedMeasurementTypeException(
-                    measurementType + " has an inaccessible ID", e);
+                    measurementType + " has an inaccessible " +
+                    "ID field", e);
         }
     }
 

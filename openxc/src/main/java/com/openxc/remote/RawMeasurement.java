@@ -59,37 +59,14 @@ public class RawMeasurement implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        JSONObject message = new JSONObject();
-        try {
-            message.put(NAME_FIELD, getName());
-            message.put(TIMESTAMP_FIELD, getTimestamp());
-            message.put(VALUE_FIELD, getValue());
-            message.putOpt(EVENT_FIELD, getEvent());
-        } catch(JSONException e) {
-            Log.w(TAG, "Unable to encode all data to JSON -- " +
-                    "message may be incomplete", e);
-        }
-        out.writeString(message.toString());
+        out.writeString(serialize());
     }
 
     public void readFromParcel(Parcel in) {
-        String measurementString = in.readString();
-        JSONObject serializedMeasurement;
-        try {
-            serializedMeasurement = new JSONObject(measurementString);
-        } catch(JSONException e) {
-            Log.w(TAG, "Couldn't decode JSON from: " + measurementString);
-            return;
-        }
-
-        try {
-            mTimestamp = serializedMeasurement.getDouble(TIMESTAMP_FIELD);
-            mName = serializedMeasurement.getString(NAME_FIELD);
-            mValue = serializedMeasurement.get(VALUE_FIELD);
-            mEvent = serializedMeasurement.opt(EVENT_FIELD);
-        } catch(JSONException e) {
-            Log.w(TAG, "JSON message didn't have the expected format: "
-                    + serializedMeasurement, e);
+        RawMeasurement measurement = RawMeasurement.deserialize(
+                in.readString());
+        if(measurement != null) {
+            copy(measurement);
         }
     }
 
@@ -103,6 +80,45 @@ public class RawMeasurement implements Parcelable {
             return new RawMeasurement[size];
         }
     };
+
+    public String serialize() {
+        JSONObject message = new JSONObject();
+        try {
+            message.put(NAME_FIELD, getName());
+            message.put(TIMESTAMP_FIELD, getTimestamp());
+            message.put(VALUE_FIELD, getValue());
+            message.putOpt(EVENT_FIELD, getEvent());
+        } catch(JSONException e) {
+            Log.w(TAG, "Unable to encode all data to JSON -- " +
+                    "message may be incomplete", e);
+        }
+        return message.toString();
+    }
+
+    public static RawMeasurement deserialize(String measurementString) {
+        JSONObject serializedMeasurement;
+        try {
+            serializedMeasurement = new JSONObject(measurementString);
+        } catch(JSONException e) {
+            Log.w(TAG, "Couldn't decode JSON from: " + measurementString);
+            return null;
+        }
+
+        RawMeasurement measurement = new RawMeasurement();
+        try {
+            double timestamp = serializedMeasurement.optDouble(TIMESTAMP_FIELD);
+            if(timestamp != Double.NaN) {
+                measurement.mTimestamp = timestamp;
+            }
+            measurement.mName = serializedMeasurement.getString(NAME_FIELD);
+            measurement.mValue = serializedMeasurement.get(VALUE_FIELD);
+            measurement.mEvent = serializedMeasurement.opt(EVENT_FIELD);
+        } catch(JSONException e) {
+            Log.w(TAG, "JSON message didn't have the expected format: "
+                    + serializedMeasurement, e);
+        }
+        return measurement;
+    }
 
     public String getName() {
         return mName;
@@ -126,6 +142,13 @@ public class RawMeasurement implements Parcelable {
 
     public int describeContents() {
         return 0;
+    }
+
+    private void copy(RawMeasurement measurement) {
+        mTimestamp = measurement.getTimestamp();
+        mName = measurement.getName();
+        mValue = measurement.getValue();
+        mEvent = measurement.getEvent();
     }
 
     @Override

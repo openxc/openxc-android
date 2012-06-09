@@ -17,7 +17,7 @@ import com.openxc.units.Boolean;
  */
 public class VehicleDoorStatus
         extends BaseMeasurement<State<VehicleDoorStatus.DoorId>> {
-    private final static String ID = "door_status";
+    public final static String ID = "door_status";
 
     /**
      * The DoorId is the specific door of the vehicle.

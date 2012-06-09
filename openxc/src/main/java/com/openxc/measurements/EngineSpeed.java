@@ -12,7 +12,7 @@ public class EngineSpeed extends BaseMeasurement<RotationsPerMinute> {
     private final static Range<RotationsPerMinute> RANGE =
         new Range<RotationsPerMinute>(new RotationsPerMinute(0),
                 new RotationsPerMinute(16382));
-    private final static String ID = "engine_speed";
+    public final static String ID = "engine_speed";
 
     public EngineSpeed(Number value) {
         super(new RotationsPerMinute(value), RANGE);
