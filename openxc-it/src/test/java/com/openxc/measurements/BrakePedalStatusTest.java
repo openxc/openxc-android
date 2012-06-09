@@ -20,4 +20,8 @@ public class BrakePedalStatusTest extends TestCase {
     public void testHasNoRange() {
         assertFalse(measurement.hasRange());
     }
+
+    public void testGenericName() {
+        assertEquals(measurement.getGenericName(), measurement.ID);
+    }
 }
