@@ -38,8 +38,7 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         String measurementId = BaseMeasurement.getIdForClass(measurementType);
         if(containsMeasurement(measurementId)) {
             // send the last known value to the new listener
-            RawMeasurement rawMeasurement = get(measurementId);
-            receive(measurementId, rawMeasurement);
+            receive(get(measurementId));
         }
     }
 
@@ -52,7 +51,7 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
             RawMeasurement rawMeasurement) {
         try {
             Measurement measurement = BaseMeasurement.getMeasurementFromRaw(
-                    measurementId, rawMeasurement);
+                    rawMeasurement);
             for(Measurement.Listener listener :
                     mListeners.get(BaseMeasurement.getClassForId(measurementId))) {
                 listener.receive(measurement);

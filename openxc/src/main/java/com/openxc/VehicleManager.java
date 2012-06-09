@@ -561,8 +561,8 @@ public class VehicleManager extends Service implements SourceCallback {
     public void receive(String measurementId, Object value, Object event) {
         if(mRemoteService != null) {
             try {
-                mRemoteService.receive(measurementId,
-                        RawMeasurement.measurementFromObjects(value, event));
+                mRemoteService.receive(
+                        new RawMeasurement(measurementId, value, event));
             } catch(RemoteException e) {
                 Log.d(TAG, "Unable to send message to remote service", e);
             }

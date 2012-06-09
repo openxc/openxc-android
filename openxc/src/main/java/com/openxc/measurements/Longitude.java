@@ -16,7 +16,7 @@ public class Longitude extends BaseMeasurement<Degree> {
         super(value, RANGE);
     }
 
-    public Longitude(Double value) {
+    public Longitude(Number value) {
         this(new Degree(value));
     }
 

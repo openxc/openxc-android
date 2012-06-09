@@ -31,9 +31,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * happen.
      */
     public void receive(String measurementId, Object value, Object event) {
-        RawMeasurement measurement =
-            RawMeasurement.measurementFromObjects(value, event);
-        receive(measurementId, measurement);
+        receive(new RawMeasurement(measurementId, value, event));
     }
 
     /**
@@ -57,8 +55,8 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * pseduo serialized to a Double in order to pass through the AIDL
      * interface.
      */
-    public void receive(String measurementId, RawMeasurement measurement) {
-        mMeasurements.put(measurementId, measurement);
+    public void receive(RawMeasurement measurement) {
+        mMeasurements.put(measurement.getName(), measurement);
     }
 
     public boolean containsMeasurement(String measurementId) {
@@ -66,11 +64,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     }
 
     public RawMeasurement get(String measurementId) {
-        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
-        if(rawMeasurement == null) {
-            rawMeasurement = new RawMeasurement();
-        }
-        return rawMeasurement;
+        return mMeasurements.get(measurementId);
     }
 
     public Set<Map.Entry<String, RawMeasurement>> getMeasurements() {

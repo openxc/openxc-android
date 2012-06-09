@@ -15,7 +15,7 @@ public class TorqueAtTransmission extends BaseMeasurement<NewtonMeter> {
         super(value, RANGE);
     }
 
-    public TorqueAtTransmission(Double value) {
+    public TorqueAtTransmission(Number value) {
         this(new NewtonMeter(value));
     }
 

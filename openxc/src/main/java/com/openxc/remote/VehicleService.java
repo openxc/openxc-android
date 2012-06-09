@@ -9,8 +9,6 @@ import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.usb.UsbVehicleDataSource;
-import com.openxc.sources.VehicleDataSource;
-
 import android.app.Service;
 
 import android.content.Context;
@@ -130,9 +128,8 @@ public class VehicleService extends Service {
                 return mPipeline.get(measurementId);
             }
 
-            public void receive(String measurementId,
-                    RawMeasurement measurement) {
-                mApplicationSource.handleMessage(measurementId, measurement);
+            public void receive(RawMeasurement measurement) {
+                mApplicationSource.handleMessage(measurement);
             }
 
             public void register(

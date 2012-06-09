@@ -16,7 +16,7 @@ public class VehicleSpeed extends BaseMeasurement<KilometersPerHour> {
         super(value, RANGE);
     }
 
-    public VehicleSpeed(Double value) {
+    public VehicleSpeed(Number value) {
         this(new KilometersPerHour(value));
     }
 

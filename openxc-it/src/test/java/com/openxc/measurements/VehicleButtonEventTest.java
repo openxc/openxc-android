@@ -3,8 +3,6 @@ package com.openxc.measurements;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
 import junit.framework.TestCase;
 
 import com.openxc.units.State;

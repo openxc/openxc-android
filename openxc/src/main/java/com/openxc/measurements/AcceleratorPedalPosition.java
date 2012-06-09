@@ -14,7 +14,7 @@ public class AcceleratorPedalPosition extends BaseMeasurement<Percentage> {
         new Range<Percentage>(new Percentage(0), new Percentage(100));
     private final static String ID = "accelerator_pedal_position";
 
-    public AcceleratorPedalPosition(Double value) {
+    public AcceleratorPedalPosition(Number value) {
         super(new Percentage(value), RANGE);
     }
 

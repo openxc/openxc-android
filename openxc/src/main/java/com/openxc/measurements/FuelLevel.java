@@ -11,7 +11,7 @@ public class FuelLevel extends BaseMeasurement<Percentage> {
         new Range<Percentage>(new Percentage(0), new Percentage(100));
     private final static String ID = "fuel_level";
 
-    public FuelLevel(Double value) {
+    public FuelLevel(Number value) {
         super(new Percentage(value), RANGE);
     }
 

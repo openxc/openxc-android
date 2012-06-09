@@ -56,21 +56,6 @@ public interface Measurement {
     /**
      * Return the value of this measurement as a type good for serialization.
      *
-     * This is required because we go through this process with each
-     * measurement:
-     *
-     *     - Incoming JSON is parsed to String, boolean, double, and int.
-     *     - All types are converted to double by RawMeasurement in order to fit
-     *     over AIDL (TODO this seems really, really wrong and adds a ton of
-     *     complication - I know I spent 2 or 3 days on trying to do templated
-     *     classes over AIDL and it just didn't seem to work, but there must be
-     *     a better way)
-     *     - Converted to full Measurement in VehicleManager (the specific
-     *     Measurement classes know how to convert from a double back to the
-     *     real value.
-     *     - Output the original values (as if they were directly from JSON)
-     *     form the Measurement for the data sinks in the VehicleManager.
-     *
      * @return something easily serializable - e.g. String, Double, Boolean.
      */
     public Object getSerializedValue();

@@ -14,7 +14,7 @@ public class SteeringWheelAngle extends BaseMeasurement<Degree> {
         new Range<Degree>(new Degree(-508), new Degree(508));
     private final static String ID = "steering_wheel_angle";
 
-    public SteeringWheelAngle(Double value) {
+    public SteeringWheelAngle(Number value) {
         super(new Degree(value), RANGE);
     }
 

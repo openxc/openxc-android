@@ -58,8 +58,7 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     private VehicleServiceListener mRemoteListener =
         new VehicleServiceListener.Stub() {
-            public void receive(String measurementId,
-                    RawMeasurement rawMeasurement) {
+            public void receive(RawMeasurement rawMeasurement) {
                 // TODO we end up doing this conversion from raw to non-raw
                 // twice (once here and once in MeasurementListenerSink because
                 // the DataPipline stores RawMeasurement in its internal map,
@@ -69,10 +68,9 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
                 // that map.
                 try {
                     Measurement measurement =
-                        BaseMeasurement.getMeasurementFromRaw(
-                                measurementId, rawMeasurement);
-                    handleMessage(
-                            measurementId, measurement.getSerializedValue(),
+                        BaseMeasurement.getMeasurementFromRaw(rawMeasurement);
+                    handleMessage(rawMeasurement.getName(),
+                            measurement.getSerializedValue(),
                             measurement.getSerializedEvent());
                 } catch(UnrecognizedMeasurementTypeException e) {
                     Log.w(TAG, "Unable to receive a measurement", e);

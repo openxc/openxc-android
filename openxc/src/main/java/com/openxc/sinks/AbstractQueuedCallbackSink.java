@@ -40,10 +40,10 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         }
     }
 
-    public void receive(String measurementId, RawMeasurement rawMeasurement) {
-        super.receive(measurementId, rawMeasurement);
+    public void receive(RawMeasurement rawMeasurement) {
+        super.receive(rawMeasurement);
         try  {
-            mNotificationQueue.put(measurementId);
+            mNotificationQueue.put(rawMeasurement.getName());
         } catch(InterruptedException e) {}
     }
 

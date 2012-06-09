@@ -6,8 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 
-import static junit.framework.Assert.assertTrue;
-
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
 import com.openxc.measurements.BaseMeasurement;

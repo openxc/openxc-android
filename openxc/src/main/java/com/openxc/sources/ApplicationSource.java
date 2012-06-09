@@ -16,9 +16,8 @@ public class ApplicationSource extends BaseVehicleDataSource {
      * Note that this method is public - users of this class can directly force
      * it to send new values.
      */
-    public void handleMessage(String measurementId,
-            RawMeasurement measurement) {
-        handleMessage(measurementId, measurement.getValue(),
+    public void handleMessage(RawMeasurement measurement) {
+        handleMessage(measurement.getName(), measurement.getValue(),
                 measurement.getEvent());
     }
 }

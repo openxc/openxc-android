@@ -2,7 +2,6 @@ package com.openxc.measurements;
 
 import com.openxc.units.State;
 
-import com.openxc.util.AgingData;
 import com.openxc.units.Boolean;
 
 /**
@@ -28,27 +27,7 @@ public class VehicleDoorStatus
         PASSENGER,
         REAR_LEFT,
         REAR_RIGHT,
-        BOOT;
-
-        private final int mHashCode;
-
-        private DoorId() {
-            mHashCode = toString().hashCode();
-        }
-
-        public int getHashCode() {
-            return mHashCode;
-        }
-
-        public static DoorId fromHashCode(int hashCode) {
-            for(DoorId position : DoorId.values()) {
-                if(hashCode == position.getHashCode()) {
-                    return position;
-                }
-            }
-            throw new IllegalArgumentException(
-                    "No valid door ID for hash code " + hashCode);
-        }
+        BOOT
     }
 
     public VehicleDoorStatus(State<DoorId> value, Boolean event) {
@@ -59,8 +38,8 @@ public class VehicleDoorStatus
         this(new State<DoorId>(value), event);
     }
 
-    public VehicleDoorStatus(Double value, Double event) {
-        this(DoorId.fromHashCode(value.intValue()), new Boolean(event));
+    public VehicleDoorStatus(String value, java.lang.Boolean event) {
+        this(DoorId.valueOf(value.toUpperCase()), new Boolean(event));
     }
 
     @Override
