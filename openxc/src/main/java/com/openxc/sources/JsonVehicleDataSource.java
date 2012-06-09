@@ -1,15 +1,10 @@
 package com.openxc.sources;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.openxc.remote.RawMeasurement;
 
 import com.openxc.sources.SourceCallback;
 
 import android.content.Context;
-
-import android.util.Log;
 
 /**
  * A vehicle data source expecting JSON messages as raw input.

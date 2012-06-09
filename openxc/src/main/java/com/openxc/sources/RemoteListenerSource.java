@@ -4,13 +4,7 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListener;
 
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.BaseMeasurement;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 import com.openxc.sources.BaseVehicleDataSource;
-
-import com.openxc.NoValueException;
 
 import android.os.RemoteException;
 
