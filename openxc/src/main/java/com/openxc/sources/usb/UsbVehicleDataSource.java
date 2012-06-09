@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Objects;
 
+import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-import com.openxc.sources.JsonVehicleDataSource;
 
 import com.openxc.sources.usb.UsbDeviceException;
 
@@ -48,7 +48,7 @@ import android.util.Log;
  * cause a pop-up dialog that the user must dismiss before the data source will
  * become active.
  */
-public class UsbVehicleDataSource extends JsonVehicleDataSource
+public class UsbVehicleDataSource extends ContextualVehicleDataSource
         implements Runnable {
     private static final String TAG = "UsbVehicleDataSource";
     public static final String ACTION_USB_PERMISSION =
@@ -263,7 +263,7 @@ public class UsbVehicleDataSource extends JsonVehicleDataSource
         if(newlineIndex != -1) {
             final String messageString = buffer.substring(0, newlineIndex);
             buffer.delete(0, newlineIndex + 1);
-            handleJson(messageString);
+            handleMessage(messageString);
         }
     }
 

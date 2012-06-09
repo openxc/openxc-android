@@ -1,5 +1,7 @@
 package com.openxc.sources.trace;
 
+import com.google.common.base.Objects;
+
 import java.util.concurrent.TimeUnit;
 
 import java.io.BufferedReader;
@@ -16,9 +18,9 @@ import java.net.URI;
 
 import com.google.common.base.Objects;
 
+import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 
-import com.openxc.sources.JsonVehicleDataSource;
 import com.openxc.sources.DataSourceException;
 
 import android.content.Context;
@@ -63,7 +65,7 @@ import android.util.Log;
  * {@link com.openxc.sources.BaseVehicleDataSource#setCallback(SourceCallback)}
  * function.
  */
-public class TraceVehicleDataSource extends JsonVehicleDataSource
+public class TraceVehicleDataSource extends ContextualVehicleDataSource
             implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
@@ -152,7 +154,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
                                 "format: " + line);
                         continue;
                     }
-                    handleJson(record[1]);
+                    handleMessage(record[1]);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +

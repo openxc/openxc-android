@@ -73,6 +73,10 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         }
     }
 
+    protected void handleMessage(String serializedMeasurement) {
+        handleMessage(RawMeasurement.deserialize(serializedMeasurement));
+    }
+
     protected SourceCallback getCallback() {
         return mCallback;
     }
