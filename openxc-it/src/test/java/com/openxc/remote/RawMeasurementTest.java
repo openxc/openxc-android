@@ -9,14 +9,6 @@ public class RawMeasurementTest extends TestCase {
         measurement = new RawMeasurement("measurement_type", new Double(42.0));
     }
 
-    public void testValidity() {
-        measurement = new RawMeasurement("measurement_type", new Double(42));
-        assertTrue(measurement.isValid());
-
-        measurement = new RawMeasurement("measurement_type", null);
-        assertFalse(measurement.isValid());
-    }
-
     public void testHasAge() {
         measurement = new RawMeasurement("measurement_type", new Double(42));
         assertTrue(measurement.getTimestamp() > 0);

@@ -22,10 +22,6 @@ import android.util.Log;
  * be identified). The value and event are both nullable, for cases where a
  * measurement needs to be returned but there is no valid value for it.
  *
- * All OpenXC measurements need to be representable by a double so they can be
- * easily fit through the AIDL interface to VehicleService. This class
- * shouldn't be used anywhere else becuase hey, types are important.
- *
  * This class implements the Parcelable interface, so it can be used directly as
  * a return value or function parameter in an AIDL interface.
  *
@@ -42,17 +38,6 @@ public class RawMeasurement implements Parcelable {
     private String mName;
     private Object mValue;
     private Object mEvent;
-
-    public static final Parcelable.Creator<RawMeasurement> CREATOR =
-            new Parcelable.Creator<RawMeasurement>() {
-        public RawMeasurement createFromParcel(Parcel in) {
-            return new RawMeasurement(in);
-        }
-
-        public RawMeasurement[] newArray(int size) {
-            return new RawMeasurement[size];
-        }
-    };
 
     public RawMeasurement(String name, Object value) {
         this();
@@ -108,32 +93,39 @@ public class RawMeasurement implements Parcelable {
         }
     }
 
+    public static final Parcelable.Creator<RawMeasurement> CREATOR =
+            new Parcelable.Creator<RawMeasurement>() {
+        public RawMeasurement createFromParcel(Parcel in) {
+            return new RawMeasurement(in);
+        }
+
+        public RawMeasurement[] newArray(int size) {
+            return new RawMeasurement[size];
+        }
+    };
+
     public String getName() {
         return mName;
-    }
-
-    public boolean isValid() {
-        return getValue() != null;
-    }
-
-    public int describeContents() {
-        return 0;
     }
 
     public Object getValue() {
         return mValue;
     }
 
-    public Object getEvent() {
-        return mEvent;
-    }
-
     public boolean hasEvent() {
         return getEvent() != null;
     }
 
+    public Object getEvent() {
+        return mEvent;
+    }
+
     public double getTimestamp() {
         return mTimestamp;
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -141,7 +133,6 @@ public class RawMeasurement implements Parcelable {
         return Objects.toStringHelper(this)
             .add("value", getValue())
             .add("event", getEvent())
-            .add("valid", isValid())
             .toString();
     }
 }
