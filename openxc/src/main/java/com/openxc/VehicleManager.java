@@ -306,7 +306,7 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * @param command The desired command to send to the vehicle.
      */
-    public void set(MeasurementInterface command) throws
+    public void set(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the VehicleService");
@@ -315,10 +315,13 @@ public class VehicleManager extends Service implements SourceCallback {
 
         Log.d(TAG, "Sending command " + command);
         try {
-            RawMeasurement rawCommand = RawMeasurement.measurementFromObjects(
+            // TODO measurement should know how to convert itself back to raw...
+            // or maybe we don't even need raw in this case. oh wait, we can't
+            // send templated class over AIDL so we do.
+            RawMeasurement rawCommand = new RawMeasurement(command.getGenericName(),
                     command.getSerializedValue(),
                     command.getSerializedEvent());
-            mRemoteService.set(command.getClass().getName(), rawCommand);
+            mRemoteService.set(rawCommand);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to send command to remote vehicle service", e);
         }

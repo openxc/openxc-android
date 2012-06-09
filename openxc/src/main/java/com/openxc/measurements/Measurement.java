@@ -4,7 +4,7 @@ import com.openxc.units.Unit;
 import com.openxc.util.Range;
 
 /**
- * The MeasurementInterface is the base for all OpenXC measurements.
+ * The Measurement is the base for all OpenXC measurements.
  *
  * A Measurement has at least a value and an age, and optionally a range of
  * valid values.

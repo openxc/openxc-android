@@ -28,13 +28,9 @@ interface VehicleServiceInterface {
     /**
      * Set a new value for the measurement class on the vehicle.
      *
-     * @param measurementType The name of a measurement class. This is not the
-     *      usual measurement ID that we deal with, but the actual Java class
-     *      name.
-     * @return a RawMeasurement which may or may not have a value. This function
-     *         will never return null, even if no value is available.
+     * @param measurement The measurement to set on the vehicle.
      */
-    void set(String measurementClass, in RawMeasurement measurement);
+    void set(in RawMeasurement measurement);
 
     /**
      * Register to receive asynchronous updates when measurements are received.

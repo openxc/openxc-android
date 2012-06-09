@@ -24,6 +24,7 @@ import android.os.PowerManager.WakeLock;
 import com.openxc.controllers.VehicleController;
 
 import com.openxc.measurements.Measurement;
+import com.openxc.measurements.BaseMeasurement;
 
 import android.util.Log;
 
@@ -140,14 +141,8 @@ public class VehicleService extends Service {
             }
 
             // TODO should set use a CommandInterface instead of Measurement?
-            public void set(String measurementClass,
-                    RawMeasurement measurement) {
-                try {
-                    mController.set(Measurement.getIdForClass(measurementClass),
-                            measurement);
-                } catch(UnrecognizedMeasurementTypeException e) {
-                    Log.w(TAG, "Unable to set new measurement value", e);
-                }
+            public void set(RawMeasurement measurement) {
+                mController.set(measurement);
             }
 
             public void receive(RawMeasurement measurement) {

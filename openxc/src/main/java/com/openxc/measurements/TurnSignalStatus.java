@@ -3,7 +3,7 @@ package com.openxc.measurements;
 import com.openxc.units.State;
 
 public class TurnSignalStatus extends
-        Measurement<State<TurnSignalStatus.TurnSignalPosition>> {
+        BaseMeasurement<State<TurnSignalStatus.TurnSignalPosition>> {
     public final static String ID = "turn_signal_status";
 
     public enum TurnSignalPosition {

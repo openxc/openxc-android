@@ -34,7 +34,7 @@ import android.hardware.usb.UsbManager;
 
 import com.openxc.controllers.VehicleController;
 
-import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
@@ -166,8 +166,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         this(callback, context, null);
     }
 
-    public UsbVehicleDataSource(Context context)
-            throws DataSourceException {
+    public UsbVehicleDataSource(Context context) throws DataSourceException {
         this(null, context);
     }
 
@@ -263,26 +262,8 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             .toString();
     }
 
-    public void set(String measurementId, RawMeasurement command) {
-        // TODO we do this a THIRD time here, duplicated on the remote process
-        // in RemoteListnerSource. Argh.
-        String message;
-        try {
-            // TODO this fails for any signal we haven't seen in an async read
-            // before (because we haven't cached the ID, which is going to be
-            // nearly all commands. hm, I always hated this interface anyway.
-            MeasurementInterface measurement =
-                Measurement.getMeasurementFromRaw(measurementId, command);
-            Log.d(TAG, "Measurement to write is " + measurement);
-            message = command.serialize() + "\u0000";
-        } catch(UnrecognizedMeasurementTypeException e) {
-            Log.w(TAG, "Unable to write a measurement", e);
-            return;
-        } catch(NoValueException e) {
-            Log.w(TAG, "Measurement received with no value", e);
-            return;
-        }
-
+    public void set(RawMeasurement command) {
+        String message = command.serialize() + "\u0000";
         if(mOutEndpoint != null) {
             Log.d(TAG, "Writing message to USB: " + message);
             byte[] bytes = message.getBytes();
