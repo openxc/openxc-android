@@ -18,8 +18,6 @@ import android.content.Context;
  */
 public abstract class JsonVehicleDataSource
         extends ContextualVehicleDataSource {
-    private static final String TAG = "JsonVehicleDataSource";
-
     public JsonVehicleDataSource(Context context) {
         super(context);
     }
