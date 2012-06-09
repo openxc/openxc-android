@@ -16,7 +16,7 @@ public class Latitude extends BaseMeasurement<Degree> {
         super(value, RANGE);
     }
 
-    public Latitude(Double value) {
+    public Latitude(Number value) {
         this(new Degree(value));
     }
 }

@@ -95,9 +95,9 @@ public class VehicleButtonEvent
         this(new State<ButtonId>(value), new State<ButtonAction>(event));
     }
 
-    public VehicleButtonEvent(Double value, Double event) {
-        this(ButtonId.fromHashCode(value.intValue()),
-                ButtonAction.fromHashCode(event.intValue()));
+    public VehicleButtonEvent(String value, String event) {
+        this(ButtonId.valueOf(value.toUpperCase()),
+                ButtonAction.valueOf(event.toUpperCase()));
     }
 
     @Override

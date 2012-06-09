@@ -11,7 +11,7 @@ public class FineOdometer extends BaseMeasurement<Kilometer> {
         new Range<Kilometer>(new Kilometer(0), new Kilometer(100));
     public final static String ID = "fine_odometer_since_restart";
 
-    public FineOdometer(Double value) {
+    public FineOdometer(Number value) {
         super(new Kilometer(value), RANGE);
     }
 

@@ -12,11 +12,7 @@ public class BrakePedalStatus extends BaseMeasurement<Boolean> {
         super(value);
     }
 
-    public BrakePedalStatus(boolean value) {
-        this(new Boolean(value));
-    }
-
-    public BrakePedalStatus(Double value) {
+    public BrakePedalStatus(java.lang.Boolean value) {
         this(new Boolean(value));
     }
 }

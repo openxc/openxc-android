@@ -43,7 +43,7 @@ public class DataPipeline implements SourceCallback {
      */
     public void receive(String measurementId, Object value, Object event) {
         mMeasurements.put(measurementId,
-                RawMeasurement.measurementFromObjects(value, event));
+                new RawMeasurement(measurementId, value, event));
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             (i.next()).receive(measurementId, value, event);
         }
@@ -131,15 +131,11 @@ public class DataPipeline implements SourceCallback {
     /**
      * Return the last received value for the measurement if known.
      *
-     * @return a RawMeasurement with the last known value, or an empty
-     * RawMeasurement if no value has been received.
+     * @return a RawMeasurement with the last known value, or null if no value
+     *          has been received.
      */
     public RawMeasurement get(String measurementId) {
-        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
-        if(rawMeasurement == null) {
-            rawMeasurement = new RawMeasurement();
-        }
-        return rawMeasurement;
+        return mMeasurements.get(measurementId);
     }
 
     /**

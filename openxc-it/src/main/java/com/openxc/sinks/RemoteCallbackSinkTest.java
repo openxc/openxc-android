@@ -58,7 +58,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     public void testReceiveCorrectId() {
         notifier.register(listener);
         assertNull(receivedId);
-        notifier.receive(measurementId, new RawMeasurement(1));
+        notifier.receive(measurementId, new RawMeasurement(measurementId, 1));
         try {
             Thread.sleep(50);
         } catch(InterruptedException e) {}

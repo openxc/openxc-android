@@ -97,7 +97,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public BaseMeasurement(TheUnit value, Unit event) {
-        mValue = new AgingData<TheUnit>(value);
+        this(value);
         mEvent = new AgingData<Unit>(event);
     }
 
@@ -115,12 +115,12 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         mRange = range;
     }
 
-    public double getAge() {
-        return mValue.getAge();
-    }
-
     public void setTimestamp(double timestamp) {
         mValue.setTimestamp(timestamp);
+    }
+
+    public double getAge() {
+        return mValue.getAge();
     }
 
     public boolean hasRange() {
@@ -166,46 +166,61 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             Class<? extends Measurement> measurementType,
             RawMeasurement rawMeasurement)
             throws UnrecognizedMeasurementTypeException, NoValueException {
-        Constructor<? extends Measurement> constructor;
-        try {
-            constructor = measurementType.getConstructor(
-                    Double.class, Double.class);
-        } catch(NoSuchMethodException e) {
-            constructor = null;
-        }
+        Constructor<? extends Measurement> constructor = null;
+        if(rawMeasurement != null) {
+            Class valueClass = rawMeasurement.getValue().getClass();
+            if(valueClass == Double.class || valueClass == Integer.class) {
+                valueClass = Number.class;
+            }
 
-        if(constructor == null) {
+            Class eventClass = rawMeasurement.hasEvent() ?
+                                rawMeasurement.getEvent().getClass()
+                                : null;
+            if(eventClass == Double.class || eventClass == Integer.class) {
+                eventClass = Number.class;
+            }
+
             try {
-                constructor = measurementType.getConstructor(Double.class);
+                if(eventClass != null) {
+                    constructor = measurementType.getConstructor(
+                            valueClass, eventClass);
+                } else {
+                    constructor = measurementType.getConstructor(valueClass);
+                }
             } catch(NoSuchMethodException e) {
                 throw new UnrecognizedMeasurementTypeException(measurementType +
-                        " doesn't have a numerical constructor", e);
+                        " doesn't have the expected constructor, " +
+                       measurementType + "(" +
+                       valueClass +
+                       (eventClass != null ? ", " + eventClass : "") + ")");
             }
-        }
 
-        if(rawMeasurement.isValid()) {
             Measurement measurement;
             try {
-                if(rawMeasurement.hasEvent()) {
+                if(eventClass != null) {
                     measurement = constructor.newInstance(
                             rawMeasurement.getValue(),
                             rawMeasurement.getEvent());
                 } else {
-                    measurement = constructor.newInstance(rawMeasurement.getValue());
+                    measurement = constructor.newInstance(
+                            rawMeasurement.getValue());
                 }
+                measurement.setTimestamp(rawMeasurement.getTimestamp());
+                return measurement;
             } catch(InstantiationException e) {
                 throw new UnrecognizedMeasurementTypeException(
                         measurementType + " is abstract", e);
             } catch(IllegalAccessException e) {
                 throw new UnrecognizedMeasurementTypeException(
                         measurementType + " has a private constructor", e);
+            } catch(IllegalArgumentException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType + " has unexpected arguments", e);
             } catch(InvocationTargetException e) {
                 throw new UnrecognizedMeasurementTypeException(
                         measurementType + "'s constructor threw an exception",
                         e);
             }
-            measurement.setTimestamp(rawMeasurement.getTimestamp());
-            return measurement;
         }
         throw new NoValueException();
     }

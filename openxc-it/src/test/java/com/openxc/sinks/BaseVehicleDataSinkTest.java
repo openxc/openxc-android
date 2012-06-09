@@ -25,7 +25,8 @@ public class BaseVehicleDataSinkTest extends TestCase {
     }
 
     public void testReceiveRawMeasurement() {
-        sink.receive("measurement", new RawMeasurement("value"));
+        sink.receive("measurement", new RawMeasurement("measurement_type",
+                    "value"));
     }
 
     public void testStop() {

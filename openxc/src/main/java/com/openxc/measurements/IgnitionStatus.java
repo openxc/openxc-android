@@ -44,7 +44,7 @@ public class IgnitionStatus
         this(new State<IgnitionPosition>(value));
     }
 
-    public IgnitionStatus(Double value) {
-        this(IgnitionPosition.fromHashCode(value.intValue()));
+    public IgnitionStatus(String value) {
+        this(IgnitionPosition.valueOf(value.toUpperCase()));
     }
 }

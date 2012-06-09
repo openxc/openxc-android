@@ -32,7 +32,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      */
     public void receive(String measurementId, Object value, Object event) {
         RawMeasurement measurement =
-            RawMeasurement.measurementFromObjects(value, event);
+            new RawMeasurement(measurementId, value, event);
         receive(measurementId, measurement);
     }
 
@@ -66,11 +66,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     }
 
     public RawMeasurement get(String measurementId) {
-        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
-        if(rawMeasurement == null) {
-            rawMeasurement = new RawMeasurement();
-        }
-        return rawMeasurement;
+        return mMeasurements.get(measurementId);
     }
 
     public Set<Map.Entry<String, RawMeasurement>> getMeasurements() {

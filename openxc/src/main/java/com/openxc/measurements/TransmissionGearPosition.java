@@ -53,7 +53,7 @@ public class TransmissionGearPosition
         this(new State<GearPosition>(value));
     }
 
-    public TransmissionGearPosition(Double value) {
-        this(GearPosition.fromHashCode(value.intValue()));
+    public TransmissionGearPosition(String value) {
+        this(GearPosition.valueOf(value.toUpperCase()));
     }
 }

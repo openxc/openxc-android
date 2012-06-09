@@ -1,7 +1,9 @@
 package com.openxc.remote;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.common.base.Objects;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,6 +11,16 @@ import android.util.Log;
 
 /**
  * An untyped measurement used only for the AIDL VehicleService interface.
+ *
+ * This abstract base class is intented to be the parent of numerical, state and
+ * boolean measurements. The architecture ended up using only numerical
+ * measurements, with other types being coerced to doubles.
+ *
+ * A raw measurement can have a value, an event, both or neither. Most
+ * measurements have only a value - measurements also with an event include
+ * things like button events (where both the button direction and action need to
+ * be identified). The value and event are both nullable, for cases where a
+ * measurement needs to be returned but there is no valid value for it.
  *
  * All OpenXC measurements need to be representable by a double so they can be
  * easily fit through the AIDL interface to VehicleService. This class
@@ -19,9 +31,17 @@ import android.util.Log;
  *
  * @see com.openxc.measurements.BaseMeasurement
  */
-public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
-        implements Parcelable {
+public class RawMeasurement implements Parcelable {
     private static final String TAG = "RawMeasurement";
+    private static final String NAME_FIELD = "name";
+    private static final String EVENT_FIELD = "event";
+    private static final String VALUE_FIELD = "value";
+    private static final String TIMESTAMP_FIELD = "timestamp";
+
+    private double mTimestamp;
+    private String mName;
+    private Object mValue;
+    private Object mEvent;
 
     public static final Parcelable.Creator<RawMeasurement> CREATOR =
             new Parcelable.Creator<RawMeasurement>() {
@@ -34,143 +54,94 @@ public class RawMeasurement extends AbstractRawMeasurement<Double, Double>
         }
     };
 
-    public RawMeasurement() {
-        super();
+    public RawMeasurement(String name, Object value) {
+        this();
+        mName = name;
+        mValue = value;
     }
 
-    public RawMeasurement(Double value) {
-        super(value);
-    }
-
-    /**
-     * The value is cast to a Double, with no loss of precision.
-     *
-     * @param value The Integer value of the element.
-     */
-    public RawMeasurement(Integer value) {
-        this(new Double(value));
-    }
-
-    /**
-     * The boolean is cast to a double (1 for true, 0 for false with no loss of
-     * precision.
-     *
-     * @param value The Boolean value of the element.
-     */
-    public RawMeasurement(Boolean value) {
-        this(RawMeasurement.booleanToDouble(value));
-    }
-
-    /**
-     * The value is converted to a Double equal to the hash of the string.
-     *
-     * @param value The String value of the element.
-     */
-    public RawMeasurement(String value) {
-        this(new Double(value.toUpperCase().hashCode()));
-    }
-
-    /**
-     * The value and event are converted to Doubles equal to the hash of the
-     * strings.
-     *
-     * @param value The String value of the element.
-     * @param event The String event of the element.
-     */
-    public RawMeasurement(String value, String event) {
-        this(new Double(value.toUpperCase().hashCode()),
-               new Double(event.toUpperCase().hashCode()));
-    }
-
-    /**
-     * The value and event are converted to Doubles equal to the hash of the
-     * strings.
-     *
-     * @param value The String value of the element.
-     * @param event The Boolean event of the element.
-     */
-    public RawMeasurement(String value, Boolean event) {
-        this(new Double(value.toUpperCase().hashCode()),
-                RawMeasurement.booleanToDouble(event));
-    }
-
-    public RawMeasurement(Double value, Double event) {
-        super(value, event);
+    public RawMeasurement(String name, Object value, Object event) {
+        this(name, value);
+        mEvent = event;
     }
 
     private RawMeasurement(Parcel in) {
         readFromParcel(in);
     }
 
-    public boolean isValid() {
-        return super.isValid() && !getValue().isNaN();
-    }
-
-    public boolean hasEvent() {
-        return super.hasEvent() && !getEvent().isNaN();
+    private RawMeasurement() {
+        mTimestamp = System.nanoTime();
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeDouble(getTimestamp());
-        out.writeDouble(getValue().doubleValue());
-        if(getEvent() != null) {
-            out.writeDouble(getEvent().doubleValue());
-        } else {
-            out.writeDouble(Double.NaN);
+        JSONObject message = new JSONObject();
+        try {
+            message.put(NAME_FIELD, getName());
+            message.put(TIMESTAMP_FIELD, getTimestamp());
+            message.put(VALUE_FIELD, getValue());
+            message.putOpt(EVENT_FIELD, getEvent());
+        } catch(JSONException e) {
+            Log.w(TAG, "Unable to encode all data to JSON -- " +
+                    "message may be incomplete", e);
         }
+        out.writeString(message.toString());
     }
 
     public void readFromParcel(Parcel in) {
-        setTimestamp(new Double(in.readDouble()));
-        setValue(new Double(in.readDouble()));
-        setEvent(new Double(in.readDouble()));
-    }
-
-    public static RawMeasurement measurementFromObjects(Object value) {
-        return RawMeasurement.measurementFromObjects(value, null);
-    }
-
-    public static RawMeasurement measurementFromObjects(Object value,
-            Object event) {
-        Constructor<RawMeasurement> constructor;
+        String measurementString = in.readString();
+        JSONObject serializedMeasurement;
         try {
-            if(event != null) {
-                constructor = RawMeasurement.class.getConstructor(
-                        value.getClass(), event.getClass());
-            } else {
-                constructor = RawMeasurement.class.getConstructor(
-                        value.getClass());
-            }
-        } catch(NoSuchMethodException e) {
-            String logMessage = "Received data of an unsupported type " +
-                "from the data source: " + value + ", a " +
-                value.getClass();
-            if(event != null) {
-                logMessage += " and event " + event + ", a " +
-                    event.getClass();
-            }
-            Log.w(TAG, logMessage);
-            return null;
+            serializedMeasurement = new JSONObject(measurementString);
+        } catch(JSONException e) {
+            Log.w(TAG, "Couldn't decode JSON from: " + measurementString);
+            return;
         }
 
-        RawMeasurement measurement = null;
         try {
-            if(event != null) {
-                measurement = constructor.newInstance(value, event);
-            } else {
-                measurement = constructor.newInstance(value);
-            }
-        } catch(InstantiationException e) {
-            Log.w(TAG, "Couldn't instantiate raw measurement", e);
-        } catch(IllegalAccessException e) {
-            Log.w(TAG, "Constructor is not accessible", e);
-        } catch(InvocationTargetException e) {
-            Log.w(TAG, "Constructor threw an exception", e);
+            mTimestamp = serializedMeasurement.getDouble(TIMESTAMP_FIELD);
+            mName = serializedMeasurement.getString(NAME_FIELD);
+            mValue = serializedMeasurement.get(VALUE_FIELD);
+            mEvent = serializedMeasurement.opt(EVENT_FIELD);
+        } catch(JSONException e) {
+            Log.w(TAG, "JSON message didn't have the expected format: "
+                    + serializedMeasurement, e);
         }
-        return measurement;
     }
 
-    private static Double booleanToDouble(Boolean value) {
-        return new Double(value.booleanValue() ? 1 : 0);
+    public String getName() {
+        return mName;
+    }
+
+    public boolean isValid() {
+        return getValue() != null;
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public Object getValue() {
+        return mValue;
+    }
+
+    public Object getEvent() {
+        return mEvent;
+    }
+
+    public boolean hasEvent() {
+        return getEvent() != null;
+    }
+
+    public double getTimestamp() {
+        return mTimestamp;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("value", getValue())
+            .add("event", getEvent())
+            .add("valid", isValid())
+            .toString();
     }
 }

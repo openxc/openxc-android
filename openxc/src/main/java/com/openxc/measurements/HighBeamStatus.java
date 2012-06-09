@@ -12,11 +12,7 @@ public class HighBeamStatus extends BaseMeasurement<Boolean> {
         super(value);
     }
 
-    public HighBeamStatus(boolean value) {
-        this(new Boolean(value));
-    }
-
-    public HighBeamStatus(Double value) {
+    public HighBeamStatus(java.lang.Boolean value) {
         this(new Boolean(value));
     }
 }

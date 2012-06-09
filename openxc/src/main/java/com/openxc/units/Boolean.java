@@ -24,8 +24,8 @@ public class Boolean implements Unit {
      *
      * @param value If the value == 1, the constructed object will be true.
      */
-    public Boolean(Double value) {
-        mValue = value == 1;
+    public Boolean(Number value) {
+        mValue = value.intValue() == 1;
     }
 
     public boolean booleanValue() {

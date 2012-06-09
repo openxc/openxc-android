@@ -58,8 +58,8 @@ public class VehicleDoorStatus
         this(new State<DoorId>(value), event);
     }
 
-    public VehicleDoorStatus(Double value, Double event) {
-        this(DoorId.fromHashCode(value.intValue()), new Boolean(event));
+    public VehicleDoorStatus(String value, java.lang.Boolean event) {
+        this(DoorId.valueOf(value.toUpperCase()), new Boolean(event));
     }
 
     @Override

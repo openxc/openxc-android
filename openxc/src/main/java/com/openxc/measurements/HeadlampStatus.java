@@ -12,11 +12,7 @@ public class HeadlampStatus extends BaseMeasurement<Boolean> {
         super(value);
     }
 
-    public HeadlampStatus(boolean value) {
-        this(new Boolean(value));
-    }
-
-    public HeadlampStatus(Double value) {
+    public HeadlampStatus(java.lang.Boolean value) {
         this(new Boolean(value));
     }
 }

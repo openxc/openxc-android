@@ -9,11 +9,7 @@ public class WindshieldWiperStatus extends BaseMeasurement<Boolean> {
         super(value);
     }
 
-    public WindshieldWiperStatus(Double value) {
-        super(new Boolean(value));
-    }
-
-    public WindshieldWiperStatus(boolean value) {
+    public WindshieldWiperStatus(java.lang.Boolean value) {
         this(new Boolean(value));
     }
 }
