@@ -22,6 +22,6 @@ public class BrakePedalStatusTest extends TestCase {
     }
 
     public void testGenericName() {
-        assertEquals(measurement.getGenericName(), measurement.ID);
+        assertEquals(measurement.getGenericName(), BrakePedalStatus.ID);
     }
 }
