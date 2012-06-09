@@ -1,6 +1,6 @@
 package com.openxc.remote;
 
-import com.openxc.remote.VehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListener;
 import com.openxc.remote.RawMeasurement;
 
 /**
@@ -42,7 +42,7 @@ interface VehicleServiceInterface {
      * All instances of VehicleManager in application processes must register
      * themselves if they want to use the asynchronous interface.
      */
-    void register(VehicleServiceListenerInterface listener);
+    void register(VehicleServiceListener listener);
 
     /**
      * Stop sending asynchronous measurement updates to a remote listener.
@@ -50,7 +50,7 @@ interface VehicleServiceInterface {
      * Instances of VehicleManager should unregister themselves if they no
      * longer require real-time updates.
      */
-    void unregister(VehicleServiceListenerInterface listener);
+    void unregister(VehicleServiceListener listener);
 
     /**
      * Receive a new measurement that originates from an application.
@@ -60,7 +60,7 @@ interface VehicleServiceInterface {
      * As an application's source receive updates, it can pass them back into
      * the remote process using this method.
      */
-    void receive(String measurementType, in RawMeasurement measurement);
+    void receive(in RawMeasurement measurement);
 
     /**
      * Re-initialize the list of sources back to the defaults.

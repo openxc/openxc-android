@@ -4,15 +4,13 @@ import com.openxc.DataPipeline;
 
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
-import com.openxc.remote.VehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListener;
 
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.usb.UsbVehicleDataSource;
-import com.openxc.sources.VehicleDataSource;
-
 import android.app.Service;
 
 import android.content.Context;
@@ -152,17 +150,17 @@ public class VehicleService extends Service {
                 }
             }
 
-            public void receive(String measurementId,
-                    RawMeasurement measurement) {
-                mApplicationSource.handleMessage(measurementId, measurement);
+            public void receive(RawMeasurement measurement) {
+                mApplicationSource.handleMessage(measurement);
             }
 
-            public void register(VehicleServiceListenerInterface listener) {
+            public void register(
+                    VehicleServiceListener listener) {
                 Log.i(TAG, "Adding listener " + listener);
                 mNotifier.register(listener);
             }
 
-            public void unregister(VehicleServiceListenerInterface listener) {
+            public void unregister(VehicleServiceListener listener) {
                 Log.i(TAG, "Removing listener " + listener);
                 mNotifier.unregister(listener);
             }

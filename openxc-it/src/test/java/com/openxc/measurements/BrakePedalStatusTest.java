@@ -4,9 +4,6 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-
 
 public class BrakePedalStatusTest extends TestCase {
     BrakePedalStatus measurement;
@@ -24,7 +21,7 @@ public class BrakePedalStatusTest extends TestCase {
         assertFalse(measurement.hasRange());
     }
 
-    public void testHasId() {
-        assertNotNull(BrakePedalStatus.ID);
+    public void testGenericName() {
+        assertEquals(measurement.getGenericName(), BrakePedalStatus.ID);
     }
 }

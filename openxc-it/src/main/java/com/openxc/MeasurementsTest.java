@@ -22,10 +22,10 @@ import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.NoValueException;
 import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.PowertrainTorque;
+import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.VehicleButtonEvent;
-import com.openxc.measurements.MeasurementInterface;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.WindshieldWiperStatus;
@@ -89,7 +89,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         }
     }
 
-    private void checkReceivedMeasurement(MeasurementInterface measurement) {
+    private void checkReceivedMeasurement(Measurement measurement) {
         assertNotNull(measurement);
     }
 
@@ -113,11 +113,11 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testGetPowertrainTorque()
+    public void testGetTorqueAtTransmission()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        PowertrainTorque measurement = (PowertrainTorque)
-                service.get(PowertrainTorque.class);
+        TorqueAtTransmission measurement = (TorqueAtTransmission)
+                service.get(TorqueAtTransmission.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 232.1);
     }

@@ -1,5 +1,7 @@
 package com.openxc.sources.trace;
 
+import com.google.common.base.Objects;
+
 import java.util.concurrent.TimeUnit;
 
 import java.io.BufferedReader;
@@ -16,9 +18,9 @@ import java.net.URI;
 
 import com.google.common.base.Objects;
 
+import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 
-import com.openxc.sources.JsonVehicleDataSource;
 import com.openxc.sources.DataSourceException;
 
 import android.content.Context;
@@ -39,7 +41,7 @@ import android.util.Log;
  *
  * 1332794184.319404: {"name":"fuel_consumed_since_restart","value":0.090000}
  * 1332794184.502802: {"name":"steering_wheel_angle","value":-346.985229}
- * 1332794184.559463: {"name":"powertrain_torque","value":1.000000}
+ * 1332794184.559463: {"name":"torque_at_transmission","value":1.000000}
  *
  * The trace file to use is specified via the constructor as an Android-style
  * resource URI, e.g. "resource://42" or a plain file path
@@ -63,7 +65,7 @@ import android.util.Log;
  * {@link com.openxc.sources.BaseVehicleDataSource#setCallback(SourceCallback)}
  * function.
  */
-public class TraceVehicleDataSource extends JsonVehicleDataSource
+public class TraceVehicleDataSource extends ContextualVehicleDataSource
             implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
@@ -152,7 +154,7 @@ public class TraceVehicleDataSource extends JsonVehicleDataSource
                                 "format: " + line);
                         continue;
                     }
-                    handleJson(record[1]);
+                    handleMessage(record[1]);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +

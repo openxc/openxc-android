@@ -12,6 +12,8 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.DataSourceException;
 
@@ -55,10 +57,10 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     protected void setUp() {
         copyTraces();
         callback = new SourceCallback() {
-            public void receive(String name, Object value, Object event) {
-                if(value.getClass() == Boolean.class) {
+            public void receive(RawMeasurement measurement) {
+                if(measurement.getValue().getClass() == Boolean.class) {
                     receivedBooleanCallback = true;
-                } else if(value.getClass() == Double.class)  {
+                } else if(measurement.getValue().getClass() == Double.class)  {
                     receivedNumericalCallback = true;
                 }
             }

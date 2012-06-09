@@ -110,12 +110,12 @@
             style="@style/DefaultFont" />
 
         <TextView
-            android:id="@+id/powertrain_torque_label"
+            android:id="@+id/torque_at_transmission_label"
             style="@style/DefaultFont"
-            android:text="@string/powertrain_torque_label" />
+            android:text="@string/torque_at_transmission_label" />
 
         <TextView
-            android:id="@+id/powertrain_torque"
+            android:id="@+id/torque_at_transmission"
             style="@style/DefaultFont" />
 
         <TextView

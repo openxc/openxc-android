@@ -33,6 +33,10 @@ import org.apache.http.message.BasicHeader;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.openxc.measurements.serializers.JsonSerializer;
+
+import com.openxc.remote.RawMeasurement;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -66,18 +70,14 @@ public class UploaderSink extends ContextualVehicleDataSink {
         mUploader.done();
     }
 
-    public void receive(String measurementId, Object value, Object event) {
+    public void receive(RawMeasurement measurement) {
         double timestamp = System.currentTimeMillis() / 1000.0;
         String timestampString = sTimestampFormatter.format(timestamp);
 
-        JSONObject object = new JSONObject();
+        JSONObject object = JsonSerializer.preSerialize(measurement.getName(),
+                measurement.getValue(), measurement.getEvent());
         try {
-            object.put("name", measurementId);
             object.put("timestamp", timestampString);
-            object.put("value", value);
-            if(event != null) {
-                object.put("event", event);
-            }
         } catch(JSONException e) {
             Log.w(TAG, "Unable to create JSON for trace file", e);
             return;

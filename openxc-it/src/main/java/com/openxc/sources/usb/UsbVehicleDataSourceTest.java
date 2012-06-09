@@ -5,6 +5,8 @@ import java.lang.InterruptedException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.DataSourceException;
@@ -35,7 +37,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
         }
 
         callback = new SourceCallback() {
-            public void receive(String name, Object value, Object event) {
+            public void receive(RawMeasurement measurement) {
             }
         };
     }

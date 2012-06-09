@@ -7,7 +7,7 @@ import com.openxc.util.Range;
  * The Latitude is the current latitude of the vehicle in degrees according to
  * GPS.
  */
-public class Latitude extends Measurement<Degree> {
+public class Latitude extends BaseMeasurement<Degree> {
     private final static Range<Degree> RANGE = new Range<Degree>(
             new Degree(-89.0), new Degree(89.0));
     public final static String ID = "latitude";
@@ -16,7 +16,12 @@ public class Latitude extends Measurement<Degree> {
         super(value, RANGE);
     }
 
-    public Latitude(Double value) {
+    public Latitude(Number value) {
         this(new Degree(value));
+    }
+
+    @Override
+    public String getGenericName() {
+        return ID;
     }
 }

@@ -3,9 +3,9 @@ package com.openxc.units;
 /**
  * A NewtonMeter is a unit of torque.
  */
-public class NewtonMeter extends Quantity<Double> implements Unit {
+public class NewtonMeter extends Quantity<Number> {
 
-    public NewtonMeter(double value) {
+    public NewtonMeter(Number value) {
         super(value);
     }
 }

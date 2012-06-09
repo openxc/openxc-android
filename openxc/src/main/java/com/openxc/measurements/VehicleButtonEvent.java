@@ -2,8 +2,6 @@ package com.openxc.measurements;
 
 import com.openxc.units.State;
 
-import com.openxc.util.AgingData;
-
 /**
  * A ButtonEvent represents a button press, release or hold on the vehicle HMI.
  *
@@ -21,7 +19,7 @@ import com.openxc.util.AgingData;
  * need to ignore and let live?
  */
 public class VehicleButtonEvent
-        extends Measurement<State<VehicleButtonEvent.ButtonId>> {
+        extends BaseMeasurement<State<VehicleButtonEvent.ButtonId>> {
     public final static String ID = "button_event";
 
     /**
@@ -33,27 +31,7 @@ public class VehicleButtonEvent
         RIGHT,
         UP,
         DOWN,
-        OK;
-
-        private final int mHashCode;
-
-        private ButtonId() {
-            mHashCode = toString().hashCode();
-        }
-
-        public int getHashCode() {
-            return mHashCode;
-        }
-
-        public static ButtonId fromHashCode(int hashCode) {
-            for(ButtonId position : ButtonId.values()) {
-                if(hashCode == position.getHashCode()) {
-                    return position;
-                }
-            }
-            throw new IllegalArgumentException(
-                    "No valid button ID for hash code " + hashCode);
-        }
+        OK
     }
 
     /**
@@ -65,27 +43,7 @@ public class VehicleButtonEvent
         RELEASED,
         HELD_SHORT,
         HELD_LONG,
-        STUCK;
-
-        private final int mHashCode;
-
-        private ButtonAction() {
-            mHashCode = toString().hashCode();
-        }
-
-        public int getHashCode() {
-            return mHashCode;
-        }
-
-        public static ButtonAction fromHashCode(int hashCode) {
-            for(ButtonAction position : ButtonAction.values()) {
-                if(hashCode == position.getHashCode()) {
-                    return position;
-                }
-            }
-            throw new IllegalArgumentException(
-                    "No valid button action for hash code " + hashCode);
-        }
+        STUCK
     }
 
     public VehicleButtonEvent(State<ButtonId> value,
@@ -97,9 +55,9 @@ public class VehicleButtonEvent
         this(new State<ButtonId>(value), new State<ButtonAction>(event));
     }
 
-    public VehicleButtonEvent(Double value, Double event) {
-        this(ButtonId.fromHashCode(value.intValue()),
-                ButtonAction.fromHashCode(event.intValue()));
+    public VehicleButtonEvent(String value, String event) {
+        this(ButtonId.valueOf(value.toUpperCase()),
+                ButtonAction.valueOf(event.toUpperCase()));
     }
 
     @Override
@@ -115,5 +73,10 @@ public class VehicleButtonEvent
     @Override
     public String getSerializedValue() {
         return getValue().enumValue().toString();
+    }
+
+    @Override
+    public String getGenericName() {
+        return ID;
     }
 }

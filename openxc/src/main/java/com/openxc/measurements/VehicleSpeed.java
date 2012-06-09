@@ -6,9 +6,7 @@ import com.openxc.util.Range;
 /**
  * The VehicleSpeed is the current forward speed of the vehicle.
  */
-public class VehicleSpeed extends Measurement<KilometersPerHour> {
-    // TODO this should change based on the vehicle platform - needs to be read
-    // from the CAN translator (which has this info stored statically)
+public class VehicleSpeed extends BaseMeasurement<KilometersPerHour> {
     private final static Range<KilometersPerHour> RANGE =
         new Range<KilometersPerHour>(new KilometersPerHour(0.0),
                 new KilometersPerHour(655.0));
@@ -18,7 +16,12 @@ public class VehicleSpeed extends Measurement<KilometersPerHour> {
         super(value, RANGE);
     }
 
-    public VehicleSpeed(Double value) {
+    public VehicleSpeed(Number value) {
         this(new KilometersPerHour(value));
+    }
+
+    @Override
+    public String getGenericName() {
+        return ID;
     }
 }

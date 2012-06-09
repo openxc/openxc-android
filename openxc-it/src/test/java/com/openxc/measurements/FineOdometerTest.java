@@ -4,9 +4,6 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertNotNull;
-
 import com.openxc.units.Kilometer;
 
 public class FineOdometerTest extends TestCase {
@@ -23,9 +20,5 @@ public class FineOdometerTest extends TestCase {
 
     public void testHasRange() {
         assertTrue(measurement.hasRange());
-    }
-
-    public void testHasId() {
-        assertNotNull(FineOdometer.ID);
     }
 }

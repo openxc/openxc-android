@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.VehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListener;
 
 import android.test.AndroidTestCase;
 
@@ -13,7 +13,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 public class RemoteCallbackSinkTest extends AndroidTestCase {
     Map<String, RawMeasurement> measurements;
     RemoteCallbackSink notifier;
-    VehicleServiceListenerInterface listener;
+    VehicleServiceListener listener;
     String measurementId = "the_measurement";
     String receivedId = null;
 
@@ -23,9 +23,9 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         // this measurements map?
         measurements = new HashMap<String, RawMeasurement>();
         notifier = new RemoteCallbackSink();
-        listener = new VehicleServiceListenerInterface.Stub() {
-            public void receive(String measurementId, RawMeasurement value) {
-                receivedId = measurementId;
+        listener = new VehicleServiceListener.Stub() {
+            public void receive(RawMeasurement value) {
+                receivedId = value.getName();
             }
         };
     }
@@ -58,7 +58,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     public void testReceiveCorrectId() {
         notifier.register(listener);
         assertNull(receivedId);
-        notifier.receive(measurementId, new RawMeasurement(1));
+        notifier.receive(new RawMeasurement(measurementId, 1));
         try {
             Thread.sleep(50);
         } catch(InterruptedException e) {}

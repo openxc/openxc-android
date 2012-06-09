@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import static junit.framework.Assert.assertNotNull;
-
 import com.openxc.units.RotationsPerMinute;
 
 public class EngineSpeedTest extends TestCase {
@@ -18,9 +16,5 @@ public class EngineSpeedTest extends TestCase {
 
     public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
-    }
-
-    public void testHasId() {
-        assertNotNull(EngineSpeed.ID);
     }
 }

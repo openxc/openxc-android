@@ -6,7 +6,7 @@ import com.google.common.base.Objects;
 
 import com.openxc.remote.RawMeasurement;
 
-import com.openxc.remote.VehicleServiceListenerInterface;
+import com.openxc.remote.VehicleServiceListener;
 
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -25,17 +25,17 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "RemoteCallbackSink";
 
     private int mListenerCount;
-    private RemoteCallbackList<VehicleServiceListenerInterface>
+    private RemoteCallbackList<VehicleServiceListener>
             mListeners;
 
     public RemoteCallbackSink() {
         super();
         mListeners = new RemoteCallbackList<
-            VehicleServiceListenerInterface>();
+            VehicleServiceListener>();
     }
 
     public synchronized void register(
-            VehicleServiceListenerInterface listener) {
+            VehicleServiceListener listener) {
         synchronized(mListeners) {
             if(mListeners.register(listener)) {
                 ++mListenerCount;
@@ -45,7 +45,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
         // send the last known value of all measurements to the new listener
         for(Map.Entry<String, RawMeasurement> entry : getMeasurements()) {
             try {
-                listener.receive(entry.getKey(), entry.getValue());
+                listener.receive(entry.getValue());
             } catch(RemoteException e) {
                 Log.w(TAG, "Couldn't notify application " +
                         "listener -- did it crash?", e);
@@ -54,7 +54,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
         }
     }
 
-    public void unregister(VehicleServiceListenerInterface listener) {
+    public void unregister(VehicleServiceListener listener) {
         synchronized(mListeners) {
             if(mListeners.unregister(listener)) {
                 --mListenerCount;
@@ -74,8 +74,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
             while(i > 0) {
                 i--;
                 try {
-                    mListeners.getBroadcastItem(i).receive(measurementId,
-                            measurement);
+                    mListeners.getBroadcastItem(i).receive(measurement);
                 } catch(RemoteException e) {
                     Log.w(TAG, "Couldn't notify application " +
                             "listener -- did it crash?", e);

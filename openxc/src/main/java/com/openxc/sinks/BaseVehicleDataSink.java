@@ -21,35 +21,6 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     }
 
     /**
-     * Receive a data point with a name, a value and a event value.
-     *
-     * @see VehicleDataSink.receive(measurementId, Object, Object)
-     *
-     * If you override this method be sure to call super.receive to make sure
-     * a RawMeasurement is created and passed to
-     * {@link #receive(String, RawMeasurement)}, unless you don't want that to
-     * happen.
-     */
-    public void receive(String measurementId, Object value, Object event) {
-        RawMeasurement measurement =
-            RawMeasurement.measurementFromObjects(value, event);
-        receive(measurementId, measurement);
-    }
-
-    /**
-     * Receive a data point with a name and value.
-     *
-     * This method is the same as {@link #receive(String, Object, Object)} but
-     * passes null for the optional event.
-     *
-     * @param name The name of the element.
-     * @param value The String value of the element.
-     */
-    public void receive(String measurementId, Object value) {
-        receive(measurementId, value, null);
-    }
-
-    /**
      * Receive a measurement serialized to Double in RawMeasurement.
      *
      * The reason some sinks will need the raw objects vs. the RawMeasurement is
@@ -57,8 +28,8 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * pseduo serialized to a Double in order to pass through the AIDL
      * interface.
      */
-    public void receive(String measurementId, RawMeasurement measurement) {
-        mMeasurements.put(measurementId, measurement);
+    public void receive(RawMeasurement measurement) {
+        mMeasurements.put(measurement.getName(), measurement);
     }
 
     public boolean containsMeasurement(String measurementId) {
@@ -66,11 +37,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     }
 
     public RawMeasurement get(String measurementId) {
-        RawMeasurement rawMeasurement = mMeasurements.get(measurementId);
-        if(rawMeasurement == null) {
-            rawMeasurement = new RawMeasurement();
-        }
-        return rawMeasurement;
+        return mMeasurements.get(measurementId);
     }
 
     public Set<Map.Entry<String, RawMeasurement>> getMeasurements() {

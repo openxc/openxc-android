@@ -9,7 +9,7 @@ import com.openxc.units.State;
  * by the driver or computer.
  */
 public class TransmissionGearPosition
-        extends Measurement<State<TransmissionGearPosition.GearPosition>> {
+        extends BaseMeasurement<State<TransmissionGearPosition.GearPosition>> {
     public final static String ID = "transmission_gear_position";
 
     public enum GearPosition {
@@ -22,27 +22,7 @@ public class TransmissionGearPosition
         SEVENTH,
         EIGHTH,
         NEUTRAL,
-        REVERSE;
-
-        private final int mHashCode;
-
-        private GearPosition() {
-            mHashCode = toString().hashCode();
-        }
-
-        public int getHashCode() {
-            return mHashCode;
-        }
-
-        public static GearPosition fromHashCode(int hashCode) {
-            for(GearPosition position : GearPosition.values()) {
-                if(hashCode == position.getHashCode()) {
-                    return position;
-                }
-            }
-            throw new IllegalArgumentException(
-                    "No valid gear position for hash code " + hashCode);
-        }
+        REVERSE
     }
 
     public TransmissionGearPosition(State<GearPosition> value) {
@@ -53,7 +33,12 @@ public class TransmissionGearPosition
         this(new State<GearPosition>(value));
     }
 
-    public TransmissionGearPosition(Double value) {
-        this(GearPosition.fromHashCode(value.intValue()));
+    public TransmissionGearPosition(String value) {
+        this(GearPosition.valueOf(value.toUpperCase()));
+    }
+
+    @Override
+    public String getGenericName() {
+        return ID;
     }
 }

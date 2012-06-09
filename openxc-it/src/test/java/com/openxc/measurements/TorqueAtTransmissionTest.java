@@ -4,17 +4,14 @@ import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertNotNull;
-
 import com.openxc.units.NewtonMeter;
 
-public class PowertrainTorqueTest extends TestCase {
-    PowertrainTorque measurement;
+public class TorqueAtTransmissionTest extends TestCase {
+    TorqueAtTransmission measurement;
 
     @Override
     public void setUp() {
-        measurement = new PowertrainTorque(new NewtonMeter(1.0));
+        measurement = new TorqueAtTransmission(new NewtonMeter(1.0));
     }
 
     public void testGet() {
@@ -23,9 +20,5 @@ public class PowertrainTorqueTest extends TestCase {
 
     public void testHasRange() {
         assertTrue(measurement.hasRange());
-    }
-
-    public void testHasId() {
-        assertNotNull(PowertrainTorque.ID);
     }
 }

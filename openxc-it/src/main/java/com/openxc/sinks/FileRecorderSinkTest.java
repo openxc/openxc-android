@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.util.FileOpener;
 
 import android.test.AndroidTestCase;
@@ -31,7 +33,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     @SmallTest
     public void testReceiveValueOnly() {
         assertTrue(outputString.toString().indexOf(measurementId) == -1);
-        sink.receive(measurementId, value);
+        sink.receive(new RawMeasurement(measurementId, value));
         sink.flush();
         assertTrue(outputString.toString().indexOf(measurementId) != -1);
         assertTrue(outputString.toString().indexOf(value) != -1);
@@ -39,7 +41,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testReceiveEvented() {
-        sink.receive(measurementId, value, event);
+        sink.receive(new RawMeasurement(measurementId, value, event));
         sink.flush();
         assertTrue(outputString.toString().indexOf(measurementId) != -1);
         assertTrue(outputString.toString().indexOf(value) != -1);
@@ -48,7 +50,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testOutputFormat() throws JSONException {
-        sink.receive(measurementId, value);
+        sink.receive(new RawMeasurement(measurementId, value));
         sink.flush();
 
         String[] record = outputString.toString().split(":", 2);

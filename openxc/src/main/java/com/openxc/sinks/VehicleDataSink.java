@@ -1,6 +1,7 @@
 package com.openxc.sinks;
 
 import com.openxc.remote.RawMeasurement;
+
 import com.openxc.VehicleDataEndpoint;
 
 /**
@@ -22,9 +23,7 @@ public interface VehicleDataSink extends VehicleDataEndpoint {
      * source get behind in processing data from a source potentially external
      * to the system.
      *
-     * @param name The name of the element.
-     * @param value The String value of the element.
-     * @param event The String event of the element.
+     * @param measuremetn The new measurement.
      */
-    public void receive(String measurementId, Object value, Object event);
+    public void receive(RawMeasurement measurement);
 }
