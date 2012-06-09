@@ -154,10 +154,10 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public static Measurement getMeasurementFromRaw(
-            String measurementId, RawMeasurement rawMeasurement)
+            RawMeasurement rawMeasurement)
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
-            BaseMeasurement.getClassForId(measurementId);
+            BaseMeasurement.getClassForId(rawMeasurement.getName());
         return BaseMeasurement.getMeasurementFromRaw(measurementClass,
                 rawMeasurement);
     }

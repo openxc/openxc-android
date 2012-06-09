@@ -128,9 +128,8 @@ public class VehicleService extends Service {
                 return mPipeline.get(measurementId);
             }
 
-            public void receive(String measurementId,
-                    RawMeasurement measurement) {
-                mApplicationSource.handleMessage(measurementId, measurement);
+            public void receive(RawMeasurement measurement) {
+                mApplicationSource.handleMessage(measurement);
             }
 
             public void register(

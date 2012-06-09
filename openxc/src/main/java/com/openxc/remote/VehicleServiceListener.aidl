@@ -7,5 +7,5 @@ import com.openxc.remote.RawMeasurement;
  * VehicleService over AIDL.
  */
 oneway interface VehicleServiceListener {
-    void receive(String measurementId, in RawMeasurement value);
+    void receive(in RawMeasurement value);
 }

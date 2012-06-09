@@ -49,7 +49,7 @@ interface VehicleServiceInterface {
      * As an application's source receive updates, it can pass them back into
      * the remote process using this method.
      */
-    void receive(String measurementType, in RawMeasurement measurement);
+    void receive(in RawMeasurement measurement);
 
     /**
      * Re-initialize the list of sources back to the defaults.
