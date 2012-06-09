@@ -27,27 +27,7 @@ public class VehicleDoorStatus
         PASSENGER,
         REAR_LEFT,
         REAR_RIGHT,
-        BOOT;
-
-        private final int mHashCode;
-
-        private DoorId() {
-            mHashCode = toString().hashCode();
-        }
-
-        public int getHashCode() {
-            return mHashCode;
-        }
-
-        public static DoorId fromHashCode(int hashCode) {
-            for(DoorId position : DoorId.values()) {
-                if(hashCode == position.getHashCode()) {
-                    return position;
-                }
-            }
-            throw new IllegalArgumentException(
-                    "No valid door ID for hash code " + hashCode);
-        }
+        BOOT
     }
 
     public VehicleDoorStatus(State<DoorId> value, Boolean event) {
