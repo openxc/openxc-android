@@ -3,6 +3,8 @@ package com.openxc.sources;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 
+import com.openxc.remote.RawMeasurement;
+
 import android.content.Context;
 
 import android.location.Location;
@@ -73,8 +75,8 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     }
 
     public void onLocationChanged(final Location location) {
-        handleMessage(Latitude.ID, location.getLatitude());
-        handleMessage(Longitude.ID, location.getLongitude());
+        handleMessage(new RawMeasurement(Latitude.ID, location.getLatitude()));
+        handleMessage(new RawMeasurement(Longitude.ID, location.getLongitude()));
     }
 
     public void onStatusChanged(String provider, int status,

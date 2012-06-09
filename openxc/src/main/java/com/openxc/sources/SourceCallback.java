@@ -1,5 +1,7 @@
 package com.openxc.sources;
 
+import com.openxc.remote.RawMeasurement;
+
 /**
  * A receipient of measurement updates from a vehicle data source.
  *
@@ -11,10 +13,7 @@ public interface SourceCallback {
     /**
      * Receive a new measurement with at least a value and optionally an event.
      *
-     * @param measurementId the ID of the new measurement
-     * @param value the value of the measurement - will always be not null.
-     * @param event an optional event associated with the measurement - may be
-     *              null
+     * @param measurement the new measurement.
      */
-    public void receive(String measurementId, Object value, Object event);
+    public void receive(RawMeasurement measurement);
 }

@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import com.google.common.base.Objects;
 
+import com.openxc.measurements.serializers.JsonSerializer;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -82,16 +84,17 @@ public class RawMeasurement implements Parcelable {
     };
 
     public String serialize() {
-        JSONObject message = new JSONObject();
-        try {
-            message.put(NAME_FIELD, getName());
-            message.put(TIMESTAMP_FIELD, getTimestamp());
-            message.put(VALUE_FIELD, getValue());
-            message.putOpt(EVENT_FIELD, getEvent());
-        } catch(JSONException e) {
-            Log.w(TAG, "Unable to encode all data to JSON -- " +
-                    "message may be incomplete", e);
+        JSONObject message = JsonSerializer.preSerialize(
+                getName(), getValue(), getEvent());
+        if(!Double.isNaN(getTimestamp())) {
+            try {
+                message.put(TIMESTAMP_FIELD, getTimestamp());
+            } catch(JSONException e) {
+                Log.w(TAG, "Unable to encode all data to JSON -- " +
+                        "message may be incomplete", e);
+            }
         }
+
         return message.toString();
     }
 
@@ -106,9 +109,9 @@ public class RawMeasurement implements Parcelable {
 
         RawMeasurement measurement = new RawMeasurement();
         try {
-            double timestamp = serializedMeasurement.optDouble(TIMESTAMP_FIELD);
-            if(timestamp != Double.NaN) {
-                measurement.mTimestamp = timestamp;
+            if(serializedMeasurement.has(TIMESTAMP_FIELD)) {
+                measurement.mTimestamp = serializedMeasurement.optDouble(
+                        TIMESTAMP_FIELD);
             }
             measurement.mName = serializedMeasurement.getString(NAME_FIELD);
             measurement.mValue = serializedMeasurement.get(VALUE_FIELD);
@@ -136,7 +139,7 @@ public class RawMeasurement implements Parcelable {
         return mEvent;
     }
 
-    public double getTimestamp() {
+    public Double getTimestamp() {
         return mTimestamp;
     }
 

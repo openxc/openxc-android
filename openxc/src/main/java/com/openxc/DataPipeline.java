@@ -41,11 +41,10 @@ public class DataPipeline implements SourceCallback {
      *
      * This method is required to implement the SourceCallback interface.
      */
-    public void receive(String measurementId, Object value, Object event) {
-        mMeasurements.put(measurementId,
-                new RawMeasurement(measurementId, value, event));
+    public void receive(RawMeasurement measurement) {
+        mMeasurements.put(measurement.getName(), measurement);
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
-            (i.next()).receive(measurementId, value, event);
+            (i.next()).receive(measurement);
         }
         mMessagesReceived++;
     }

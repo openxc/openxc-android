@@ -17,7 +17,6 @@ public class ApplicationSource extends BaseVehicleDataSource {
      * it to send new values.
      */
     public void handleMessage(RawMeasurement measurement) {
-        handleMessage(measurement.getName(), measurement.getValue(),
-                measurement.getEvent());
+        super.handleMessage(measurement);
     }
 }

@@ -14,16 +14,6 @@ public class BaseVehicleDataSinkTest extends TestCase {
         sink = spy(new BaseVehicleDataSink());
     }
 
-    public void testReceiveValueOnly() {
-        sink.receive("measurement", "value");
-        verify(sink).receive(any(RawMeasurement.class));
-    }
-
-    public void testReceiveEvented() {
-        sink.receive("measurement", "value", "event");
-        verify(sink).receive(any(RawMeasurement.class));
-    }
-
     public void testReceiveRawMeasurement() {
         sink.receive(new RawMeasurement("measurement_type", "value"));
     }

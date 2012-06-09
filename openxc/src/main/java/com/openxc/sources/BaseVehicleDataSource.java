@@ -4,6 +4,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.sources.SourceCallback;
 
 /**
@@ -12,7 +14,7 @@ import com.openxc.sources.SourceCallback;
  * This class encapsulates funcationaliy common to most data sources. It accepts
  * and stores a SourceCallback reference (required by the
  * {@link com.opnexc.sources.VehicleDataSource} interface) and implements a
- * {@link #handleMessage(String, Object, Object)} method for subclass to call
+ * {@link #handleMessage(RawMeasurement)} method for subclass to call
  * with each new measurement, regardless of its origin.
  */
 public class BaseVehicleDataSource implements VehicleDataSource {
@@ -63,18 +65,12 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     /**
      * Pass a new measurement to the callback, if set.
      *
-     * @param name the name of the new measurement
-     * @param value the value of the new measurement
-     * @param event an optional event associated with the measurement
+     * @param measurement the new measurement object.
      */
-    protected void handleMessage(String name, Object value, Object event) {
+    protected void handleMessage(RawMeasurement measurement) {
         if(mCallback != null) {
-            mCallback.receive(name, value, event);
+            mCallback.receive(measurement);
         }
-    }
-
-    protected void handleMessage(String name, Object value) {
-        handleMessage(name, value, null);
     }
 
     protected SourceCallback getCallback() {

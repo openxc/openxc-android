@@ -21,33 +21,6 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     }
 
     /**
-     * Receive a data point with a name, a value and a event value.
-     *
-     * @see VehicleDataSink.receive(measurementId, Object, Object)
-     *
-     * If you override this method be sure to call super.receive to make sure
-     * a RawMeasurement is created and passed to
-     * {@link #receive(String, RawMeasurement)}, unless you don't want that to
-     * happen.
-     */
-    public void receive(String measurementId, Object value, Object event) {
-        receive(new RawMeasurement(measurementId, value, event));
-    }
-
-    /**
-     * Receive a data point with a name and value.
-     *
-     * This method is the same as {@link #receive(String, Object, Object)} but
-     * passes null for the optional event.
-     *
-     * @param name The name of the element.
-     * @param value The String value of the element.
-     */
-    public void receive(String measurementId, Object value) {
-        receive(measurementId, value, null);
-    }
-
-    /**
      * Receive a measurement serialized to Double in RawMeasurement.
      *
      * The reason some sinks will need the raw objects vs. the RawMeasurement is

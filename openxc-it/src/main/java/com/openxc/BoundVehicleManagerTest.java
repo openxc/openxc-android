@@ -17,6 +17,7 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import com.openxc.NoValueException;
+import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleService;
 
@@ -213,8 +214,8 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     private VehicleDataSink mCustomSink = new BaseVehicleDataSink() {
-        public void receive(String measurementId, Object value, Object event) {
-            receivedMeasurementId = measurementId;
+        public void receive(RawMeasurement measurement) {
+            receivedMeasurementId = measurement.getName();
         }
     };
 }

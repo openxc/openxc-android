@@ -8,8 +8,7 @@ import java.util.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.openxc.remote.RawMeasurement;
 
 import com.openxc.util.FileOpener;
 
@@ -41,19 +40,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     /**
      * Record a message to a file, selected by the current time.
      */
-    public synchronized void receive(String measurementId, Object value, Object event) {
-        JSONObject object = new JSONObject();
-        try {
-            object.put("name", measurementId);
-            object.put("value", value);
-            if(event != null) {
-                object.put("event", event);
-            }
-        } catch(JSONException e) {
-            Log.w(TAG, "Unable to create JSON for trace file", e);
-            return;
-        }
-
+    public synchronized void receive(RawMeasurement measurement) {
         double timestamp = System.currentTimeMillis() / 1000.0;
         String timestampString = sTimestampFormatter.format(timestamp);
         if(mWriter != null) {
@@ -63,7 +50,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             }
 
             try {
-                mWriter.write(timestampString + ": " + object.toString());
+                mWriter.write(timestampString + ": " + measurement.serialize());
                 mWriter.newLine();
             } catch(IOException e) {
                 Log.w(TAG, "Unable to write measurement to file", e);

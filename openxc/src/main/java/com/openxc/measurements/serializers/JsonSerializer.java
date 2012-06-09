@@ -12,6 +12,10 @@ public class JsonSerializer implements MeasurementSerializer {
     private static final String EVENT_FIELD_NAME = "event";
 
     public static String serialize(String name, Object value, Object event) {
+        return preSerialize(name, value, event).toString();
+    }
+
+    public static JSONObject preSerialize(String name, Object value, Object event) {
         JSONObject message = new JSONObject();
         try {
             message.put(NAME_FIELD_NAME, name);
@@ -21,6 +25,6 @@ public class JsonSerializer implements MeasurementSerializer {
             Log.w(TAG, "Unable to encode all data to JSON -- " +
                     "message may be incomplete", e);
         }
-        return message.toString();
+        return message;
     }
 }

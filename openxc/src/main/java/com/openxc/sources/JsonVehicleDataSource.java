@@ -3,6 +3,8 @@ package com.openxc.sources;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.sources.SourceCallback;
 
 import android.content.Context;
@@ -35,23 +37,6 @@ public abstract class JsonVehicleDataSource
      * Parses a JSON string and calls handleMessage with the values.
      */
     protected void handleJson(String json) {
-        final JSONObject message;
-
-        try {
-            message = new JSONObject(json);
-        } catch(JSONException e) {
-            Log.w(TAG, "Couldn't decode JSON from: " + json);
-            return;
-        }
-
-        try {
-            handleMessage(message.getString("name"),
-                    message.get("value"),
-                    message.opt("event"));
-            return;
-        } catch(JSONException e) {
-            Log.w(TAG, "JSON message didn't have the expected format: "
-                    + message, e);
-        }
+        handleMessage(RawMeasurement.deserialize(json));
     }
 }
