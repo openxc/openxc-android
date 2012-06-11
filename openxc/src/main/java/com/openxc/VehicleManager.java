@@ -177,7 +177,6 @@ public class VehicleManager extends Service implements SourceCallback {
         for(Class<? extends Measurement> measurementType : MEASUREMENT_TYPES) {
             try {
                 BaseMeasurement.getIdForClass(measurementType);
-                Log.d(TAG, "FOO " + measurementType);
             } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Unable to initialize list of measurements", e);
             }

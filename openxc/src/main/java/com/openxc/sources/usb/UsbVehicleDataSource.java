@@ -397,6 +397,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 mConnection = setupDevice(mManager, device);
                 Log.i(TAG, "Connected to USB device with " +
                         mConnection);
+                start();
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
