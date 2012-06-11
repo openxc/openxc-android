@@ -23,4 +23,9 @@ public class TurnSignalStatus extends
     public TurnSignalStatus(String value) {
         this(TurnSignalPosition.valueOf(value));
     }
+
+    @Override
+    public String getGenericName() {
+        return ID;
+    }
 }

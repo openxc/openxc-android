@@ -1,5 +1,7 @@
 package com.openxc.examples.dashboard;
 
+import com.openxc.measurements.TurnSignalStatus;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -154,6 +156,14 @@ public class VehicleDashboardActivity extends Activity {
                         "" + status.getValue().booleanValue());
                 }
             });
+
+            TurnSignalStatus command = new TurnSignalStatus(
+                    TurnSignalStatus.TurnSignalPosition.LEFT);
+            try {
+                mVehicleManager.set(command);
+            } catch(UnrecognizedMeasurementTypeException e) {
+                Log.w(TAG, "Unable to send turn signal command", e);
+            }
         }
     };
 
