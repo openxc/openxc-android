@@ -149,8 +149,7 @@ public class VehicleService extends Service {
                 mApplicationSource.handleMessage(measurement);
             }
 
-            public void register(
-                    VehicleServiceListener listener) {
+            public void register(VehicleServiceListener listener) {
                 Log.i(TAG, "Adding listener " + listener);
                 mNotifier.register(listener);
             }
