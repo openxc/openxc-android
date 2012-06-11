@@ -9,27 +9,7 @@ public class TurnSignalStatus extends
     public enum TurnSignalPosition {
         OFF,
         LEFT,
-        RIGHT;
-
-        private final int mHashCode;
-
-        private TurnSignalPosition() {
-            mHashCode = toString().hashCode();
-        }
-
-        public int getHashCode() {
-            return mHashCode;
-        }
-
-        public static TurnSignalPosition fromHashCode(int hashCode) {
-            for(TurnSignalPosition position : TurnSignalPosition.values()) {
-                if(hashCode == position.getHashCode()) {
-                    return position;
-                }
-            }
-            throw new IllegalArgumentException(
-                    "No valid turn signal position for hash code " + hashCode);
-        }
+        RIGHT
     }
 
     public TurnSignalStatus(State<TurnSignalPosition> value) {
@@ -40,7 +20,7 @@ public class TurnSignalStatus extends
         this(new State<TurnSignalPosition>(value));
     }
 
-    public TurnSignalStatus(Double value) {
-        this(TurnSignalPosition.fromHashCode(value.intValue()));
+    public TurnSignalStatus(String value) {
+        this(TurnSignalPosition.valueOf(value));
     }
 }
