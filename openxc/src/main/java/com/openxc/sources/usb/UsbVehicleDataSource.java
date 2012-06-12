@@ -346,8 +346,10 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             if(endpoint.getType() ==
                     UsbConstants.USB_ENDPOINT_XFER_BULK) {
                 if(endpoint.getDirection() == UsbConstants.USB_DIR_IN) {
+                    Log.d(TAG, "Found IN endpoint " + endpoint);
                     mInEndpoint = endpoint;
                 } else {
+                    Log.d(TAG, "Found OUT endpoint " + endpoint);
                     mOutEndpoint = endpoint;
                 }
             }
@@ -416,6 +418,9 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             mDeviceConnectionLock.lock();
             mConnection.close();
             mConnection = null;
+            mInEndpoint = null;
+            mOutEndpoint = null;
+            mInterface = null;
             mDeviceConnectionLock.unlock();
         }
     }
