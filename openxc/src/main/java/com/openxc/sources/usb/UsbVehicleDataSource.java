@@ -171,6 +171,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     }
 
     public void start() {
+        primeOutput();
         mRunning = true;
         new Thread(this).start();
     }
@@ -264,9 +265,13 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
 
     public void set(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
-        if(mOutEndpoint != null) {
-            Log.d(TAG, "Writing message to USB: " + message);
-            byte[] bytes = message.getBytes();
+        Log.d(TAG, "Writing message to USB: " + message);
+        byte[] bytes = message.getBytes();
+        write(bytes);
+    }
+
+    private void write(byte[] bytes) {
+        if(mConnection != null && mOutEndpoint != null) {
             Log.d(TAG, "Writing bytes to USB: " + bytes);
             int transferred = mConnection.bulkTransfer(
                     mOutEndpoint, bytes, bytes.length, 0);
@@ -390,6 +395,16 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         mInterface = iface;
         connection.claimInterface(mInterface, true);
         return connection;
+    }
+
+    /**
+     * TODO we oddly need to "prime" this endpoint from Android because the
+     * first message we send, if it's over 1 packet in size, we only get the
+     * last packet.
+     */
+    private void primeOutput() {
+        Log.d(TAG, "Priming output endpoint");
+        write(new String("prime\u0000").getBytes());
     }
 
     private void openDeviceConnection(UsbDevice device) {
