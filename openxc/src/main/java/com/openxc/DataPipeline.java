@@ -60,7 +60,7 @@ public class DataPipeline implements SourceCallback {
     /**
      * Remove a previously added sink from the pipeline.
      *
-     * Once removed, the sink will no longer receive any new measurments from
+     * Once removed, the sink will no longer receive any new measurements from
      * the pipeline's sources. The sink's {@link VehicleDataSink#stop()} method
      * is also called.
      *
