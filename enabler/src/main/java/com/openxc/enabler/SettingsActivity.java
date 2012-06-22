@@ -3,6 +3,9 @@ package com.openxc.enabler;
 import java.net.URI;
 import java.util.List;
 
+import com.openxc.sinks.FileRecorderSink;
+import com.openxc.sinks.UploaderSink;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -66,37 +69,27 @@ public class SettingsActivity extends PreferenceActivity {
         SharedPreferences.OnSharedPreferenceChangeListener {
             public void onSharedPreferenceChanged(SharedPreferences preferences,
                     String key) {
-                if(key.equals(getString(R.string.uploading_path_key))) {
-                    String uploadingPath = preferences.getString(key, "");
-                    try {
-                        URI uri = new URI(uploadingPath);
-                        if(!uri.isAbsolute()) {
-                            String errorMessage = "Invalid target URL \"" +
-                                uploadingPath + "\" -- must be an absolute URL " +
+                if(key.equals(getString(R.string.uploading_path_key))
+                        || key.equals(getString(R.string.recording_path_key))) {
+                    String path = preferences.getString(key, null);
+                    if(path != null) {
+                        String error = null;
+                        if(key.equals(getString(R.string.uploading_path_key))
+                            && !UploaderSink.validatePath(path)) {
+                            error = "Invalid target URL \"" + path +
+                                "\" -- must be an absolute URL " +
                                 "with http:// prefix";
-                            Toast.makeText(getApplicationContext(), errorMessage,
-                                    Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, errorMessage);
+                        } else if(!FileRecorderSink.validatePath(path)) {
+                            error = "Invalid output directory \"" + path +
+                                "\" choose directory such " +
+                                "as /sdcard/openxc";
                         }
-                    } catch(java.net.URISyntaxException e) {
-                        Log.w(TAG, "Invalid target URL \"" + uploadingPath + "\"",
-                                e);
-                    }
-                } else if (key.equals(getString(R.string.recording_path_key))) {
-                    //needs work. does not correctly identify if recording path is valid
-                    String recordingPath = preferences.getString(key, "");
-                    try {
-                        URI uri = new URI(recordingPath);
-                        if(!uri.isAbsolute()) {
-                            String errorMessage = "Invalid output directory \"" +
-                                recordingPath + "\" choose directory such as /sdcard/openxc";
-                            Toast.makeText(getApplicationContext(), errorMessage,
+
+                        if(error != null) {
+                            Toast.makeText(getApplicationContext(), error,
                                     Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, errorMessage);
+                            Log.w(TAG, error);
                         }
-                    } catch(java.net.URISyntaxException e) {
-                        Log.w(TAG, "Invalid output directory \"" + recordingPath + "\"",
-                                e);
                     }
                 }
             }

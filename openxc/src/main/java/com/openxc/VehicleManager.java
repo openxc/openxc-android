@@ -448,26 +448,19 @@ public class VehicleManager extends Service implements SourceCallback {
         if(enabled) {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
-            String uploadingPath = preferences.getString(
+            String path = preferences.getString(
                     getString(R.string.uploading_path_key), null);
-            if(uploadingPath == null) {
-                Log.w(TAG, "No uploading path set, not enabling uploading. " +
-                        "Value is " + uploadingPath );
-                return;
-            }
-            try {
-                URI uri = new URI(uploadingPath);
-                if(uri.isAbsolute()) {
-                    mUploader = mPipeline.addSink(new UploaderSink(this, uri));
-                } else {
-                    Log.w(TAG, "No target URL set or invalid in preferences " +
-                        "-- not starting uploading a trace");
+            String error = "Target URL in preferences not valid " +
+                    "-- not starting uploading a trace";
+            if(!UploaderSink.validatePath(path)) {
+                Log.w(TAG, error);
+            } else {
+                try {
+                    mUploader = mPipeline.addSink(new UploaderSink(this, path));
+                } catch(java.net.URISyntaxException e) {
+                    Log.w(TAG, error, e);
                 }
-            } catch(java.net.URISyntaxException e) {
-                Log.w(TAG, "Target URL in preferences not valid " +
-                    "-- not starting uploading a trace", e);
             }
-
         } else {
             mPipeline.removeSink(mUploader);
         }
@@ -488,14 +481,15 @@ public class VehicleManager extends Service implements SourceCallback {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
-            recordingPath = preferences.getString(
+            String path = preferences.getString(
                     getString(R.string.recording_path_key), null);
-            if(recordingPath == null) {
+            if(!FileRecorderSink.validatePath(path)) {
                 Log.w(TAG, "No recording path set, not enabling recording." +
-                        "Value is " + recordingPath );
+                        "Value is " + path );
+            } else {
+                mFileRecorder = mPipeline.addSink(
+                        new FileRecorderSink(new AndroidFileOpener(this)));
             }
-            mFileRecorder = mPipeline.addSink(
-                    new FileRecorderSink(new AndroidFileOpener(this)));
         }
         else {
             mPipeline.removeSink(mFileRecorder);

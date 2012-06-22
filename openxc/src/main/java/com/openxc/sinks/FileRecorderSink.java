@@ -2,6 +2,8 @@ package com.openxc.sinks;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+
+import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,6 +82,20 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             } catch(IOException e) {
                 Log.w(TAG, "Unable to flush writer", e);
             }
+        }
+    }
+
+    public static boolean validatePath(String path) {
+        if(path == null) {
+            Log.w(TAG, "Recording path not set (it's " + path + ")");
+            return false;
+        }
+
+        try {
+            URI uri = new URI(path);
+            return uri.isAbsolute();
+        } catch(java.net.URISyntaxException e) {
+            return false;
         }
     }
 
