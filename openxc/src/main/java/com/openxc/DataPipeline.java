@@ -1,19 +1,25 @@
 package com.openxc;
 
+import java.util.ArrayList;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Objects;
 
 import com.openxc.remote.RawMeasurement;
 
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
+
+import android.util.Log;
 
 /**
  * A pipeline that ferries data from VehicleDataSources to VehicleDataSinks.
@@ -37,16 +43,34 @@ public class DataPipeline implements SourceCallback {
     }
 
     /**
-     * Accept new values from data sources.
+     * Accept new values from data sources and send it out to all registered
+     * sinks.
      *
      * This method is required to implement the SourceCallback interface.
+     *
+     * If any data sink throws a DataSinkException when receiving data, it will
+     * be removed from the list of sinks.
      */
     public void receive(RawMeasurement measurement) {
         mMeasurements.put(measurement.getName(), measurement);
+        List<VehicleDataSink> deadSinks = new ArrayList<VehicleDataSink>();
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
-            (i.next()).receive(measurement);
+            VehicleDataSink sink = i.next();
+            try {
+                sink.receive(measurement);
+            } catch(DataSinkException e) {
+                // TODO I'd like to use the Android log here, but I don't want
+                // that to be the only com.android import.
+                System.out.println(this.getClass().getName() + ": The sink " +
+                        sink + " exploded when we sent a new message " +
+                        "-- removing it from the pipeline");
+                deadSinks.add(sink);
+            }
         }
         mMessagesReceived++;
+        for(VehicleDataSink sink : deadSinks) {
+            removeSink(sink);
+        }
     }
 
     /**

@@ -31,21 +31,31 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     private Date mLastFileCreated;
     private FileOpener mFileOpener;
 
-    public FileRecorderSink(FileOpener fileOpener) {
+    public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
         mFileOpener = fileOpener;
-        openTimestampedFile();
+        try {
+            openTimestampedFile();
+        } catch(IOException e) {
+            throw new DataSinkException("Unable to open file for recording", e);
+        }
     }
 
     /**
      * Record a message to a file, selected by the current time.
      */
-    public synchronized void receive(RawMeasurement measurement) {
+    public synchronized void receive(RawMeasurement measurement)
+            throws DataSinkException {
         double timestamp = System.currentTimeMillis() / 1000.0;
         String timestampString = sTimestampFormatter.format(timestamp);
         if(mWriter != null) {
             if((new Date()).getHours() != mLastFileCreated.getHours()) {
                 // flip to a new file every hour
-                openTimestampedFile();
+                try {
+                    openTimestampedFile();
+                } catch(IOException e) {
+                    throw new DataSinkException("Unable to open file nfor recording",
+                            e);
+                }
             }
 
             try {
@@ -99,15 +109,10 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         }
     }
 
-    private synchronized void openTimestampedFile() {
+    private synchronized void openTimestampedFile() throws IOException {
         mLastFileCreated = new Date();
         String filename = sDateFormatter.format(mLastFileCreated) + ".json";
-        try {
-            mWriter = mFileOpener.openForWriting(filename);
-            Log.i(TAG, "Opened trace file " + filename + " for writing");
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to open " + filename + " for writing", e);
-            mWriter = null;
-        }
+        mWriter = mFileOpener.openForWriting(filename);
+        Log.i(TAG, "Opened trace file " + filename + " for writing");
     }
 }

@@ -55,7 +55,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     }
 
     @SmallTest
-    public void testReceiveCorrectId() {
+    public void testReceiveCorrectId() throws DataSinkException {
         notifier.register(listener);
         assertNull(receivedId);
         notifier.receive(new RawMeasurement(measurementId, 1));

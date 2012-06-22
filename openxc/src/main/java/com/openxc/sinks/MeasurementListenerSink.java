@@ -38,7 +38,11 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         String measurementId = BaseMeasurement.getIdForClass(measurementType);
         if(containsMeasurement(measurementId)) {
             // send the last known value to the new listener
-            receive(get(measurementId));
+            try {
+                receive(get(measurementId));
+            } catch(DataSinkException e) {
+                Log.w(TAG, "Sink could't receive measurement", e);
+            }
         }
     }
 

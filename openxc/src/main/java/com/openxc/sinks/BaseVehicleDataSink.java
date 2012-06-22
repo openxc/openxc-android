@@ -28,7 +28,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * pseduo serialized to a Double in order to pass through the AIDL
      * interface.
      */
-    public void receive(RawMeasurement measurement) {
+    public void receive(RawMeasurement measurement) throws DataSinkException {
         mMeasurements.put(measurement.getName(), measurement);
     }
 

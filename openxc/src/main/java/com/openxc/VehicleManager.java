@@ -8,6 +8,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.openxc.sinks.DataSinkException;
+
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
