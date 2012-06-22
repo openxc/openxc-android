@@ -8,8 +8,8 @@
     <string name="settings">Settings</string>
     <string name="recording_checkbox_title">Record Trace</string>
     <string name="recording_checkbox_summary">Record the vehicle data stream to a file</string>
-    <string name="recording_path_title">Output Directory</string>
-    <string name="recording_path_summary">Save recorded traces in this directory</string>
+    <string name="recording_directory_title">Output Directory</string>
+    <string name="recording_directory_summary">Save recorded traces in this directory</string>
     <string name="uploading_checkbox_title">Upload Trace</string>
     <string name="uploading_checkbox_summary">Upload the vehicle data stream to a remote web server</string>
     <string name="uploading_path_title">Target URL</string>

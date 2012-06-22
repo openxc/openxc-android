@@ -1,9 +1,7 @@
 package com.openxc.enabler;
 
-import java.net.URI;
 import java.util.List;
 
-import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.UploaderSink;
 
 import android.content.SharedPreferences;
@@ -69,27 +67,17 @@ public class SettingsActivity extends PreferenceActivity {
         SharedPreferences.OnSharedPreferenceChangeListener {
             public void onSharedPreferenceChanged(SharedPreferences preferences,
                     String key) {
-                if(key.equals(getString(R.string.uploading_path_key))
-                        || key.equals(getString(R.string.recording_path_key))) {
+                if(key.equals(getString(R.string.uploading_path_key))) {
                     String path = preferences.getString(key, null);
-                    if(path != null) {
-                        String error = null;
-                        if(key.equals(getString(R.string.uploading_path_key))
-                            && !UploaderSink.validatePath(path)) {
-                            error = "Invalid target URL \"" + path +
-                                "\" -- must be an absolute URL " +
-                                "with http:// prefix";
-                        } else if(!FileRecorderSink.validatePath(path)) {
-                            error = "Invalid output directory \"" + path +
-                                "\" choose directory such " +
-                                "as /sdcard/openxc";
-                        }
-
-                        if(error != null) {
-                            Toast.makeText(getApplicationContext(), error,
-                                    Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, error);
-                        }
+                    if(path != null && key.equals(getString(
+                                    R.string.uploading_path_key))
+                        && !UploaderSink.validatePath(path)) {
+                        String error = "Invalid target URL \"" + path +
+                            "\" -- must be an absolute URL " +
+                            "with http:// prefix";
+                        Toast.makeText(getApplicationContext(), error,
+                                Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, error);
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.openxc.sinks;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.IOException;
 
 import java.net.URI;
 import java.text.DecimalFormat;

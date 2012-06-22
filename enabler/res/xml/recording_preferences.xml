@@ -8,10 +8,10 @@
             android:defaultValue="false" />
 
     <EditTextPreference
-            android:key="@string/recording_path_key"
-            android:title="@string/recording_path_title"
-            android:summary="@string/recording_path_summary"
-            android:defaultValue="/openxcdata/data" />
+            android:key="@string/recording_directory_key"
+            android:title="@string/recording_directory_title"
+            android:summary="@string/recording_directory_summary"
+            android:defaultValue="openxc-traces" />
 
     <CheckBoxPreference
             android:key="@string/uploading_checkbox_key"

@@ -91,7 +91,6 @@ public class VehicleManager extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
-    public static String recordingPath = null;
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
     private Condition mRemoteBoundCondition;
@@ -414,7 +413,7 @@ public class VehicleManager extends Service implements SourceCallback {
      * VehicleManager:
      *
      *      service.addSink(new FileRecorderSink(
-     *              new AndroidFileOpener(this)));
+     *              new AndroidFileOpener("openxc", this)));
      *
      * @param sink an instance of a VehicleDataSink
      */
@@ -483,14 +482,13 @@ public class VehicleManager extends Service implements SourceCallback {
             SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
-            String path = preferences.getString(
-                    getString(R.string.recording_path_key), null);
-            if(!FileRecorderSink.validatePath(path)) {
-                Log.w(TAG, "No recording path set, not enabling recording." +
-                        "Value is " + path );
-            } else {
-                mFileRecorder = mPipeline.addSink(
-                        new FileRecorderSink(new AndroidFileOpener(this)));
+            String directory = preferences.getString(
+                    getString(R.string.recording_directory_key), null);
+            try {
+                mFileRecorder = mPipeline.addSink(new FileRecorderSink(
+                            new AndroidFileOpener(this, directory)));
+            } catch(DataSinkException e) {
+                Log.w(TAG, "Unable to start trace recording", e);
             }
         }
         else {
