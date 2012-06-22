@@ -1,22 +1,28 @@
 package com.openxc;
 
-import java.lang.Class;
-
 import java.net.URI;
-
 import java.util.ArrayList;
-
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import java.util.List;
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.common.base.Objects;
-
 import com.openxc.measurements.AcceleratorPedalPosition;
+import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.FineOdometer;
@@ -30,51 +36,28 @@ import com.openxc.measurements.Longitude;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Odometer;
 import com.openxc.measurements.ParkingBrakeStatus;
-import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
-
-import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-
+import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.MeasurementListenerSink;
+import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
-
 import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
-import com.openxc.sinks.MockedLocationSink;
-import com.openxc.sinks.FileRecorderSink;
-
+import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.util.AndroidFileOpener;
-
-import com.openxc.VehicleManager;
-
-import android.content.Context;
-import android.app.Service;
-
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-
-import android.preference.PreferenceManager;
-
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.RemoteException;
-
-import android.util.Log;
 
 /**
  * The VehicleManager is an in-process Android service and the primary entry
@@ -106,7 +89,7 @@ public class VehicleManager extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
-
+    public static String recordingPath = null;
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
     private Condition mRemoteBoundCondition;
@@ -468,7 +451,7 @@ public class VehicleManager extends Service implements SourceCallback {
             String uploadingPath = preferences.getString(
                     getString(R.string.uploading_path_key), null);
             if(uploadingPath == null) {
-                Log.w(TAG, "No uploading path set, not enabling recording. " +
+                Log.w(TAG, "No uploading path set, not enabling uploading. " +
                         "Value is " + uploadingPath );
                 return;
             }
@@ -495,16 +478,26 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * @param enabled true if recording should be enabled
      * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
+     *      unregistered with the library internals - an exceptional
+     *      situation that shouldn't occur.
      */
     public void enableRecording(boolean enabled)
             throws VehicleServiceException {
         Log.i(TAG, "Setting recording to " + enabled);
         if(enabled) {
+            SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+            recordingPath = preferences.getString(
+                    getString(R.string.recording_path_key), null);
+            if(recordingPath == null) {
+                Log.w(TAG, "No recording path set, not enabling recording." +
+                        "Value is " + recordingPath );
+            }
             mFileRecorder = mPipeline.addSink(
                     new FileRecorderSink(new AndroidFileOpener(this)));
-        } else {
+        }
+        else {
             mPipeline.removeSink(mFileRecorder);
         }
     }
@@ -681,7 +674,10 @@ public class VehicleManager extends Service implements SourceCallback {
                 setNativeGpsStatus();
             } else if(key.equals(getString(R.string.uploading_checkbox_key))) {
                 setUploadingStatus();
+            } else if(key.equals(getString(R.string.recording_checkbox_key))) {
+                setRecordingStatus();
             }
+
         }
     }
 }

@@ -2,17 +2,14 @@ package com.openxc.sinks;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-
-import java.util.Date;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-
-import com.openxc.remote.RawMeasurement;
-
-import com.openxc.util.FileOpener;
+import java.util.Date;
 
 import android.util.Log;
+
+import com.openxc.remote.RawMeasurement;
+import com.openxc.util.FileOpener;
 
 /**
  * Record raw vehicle measurements to a file as JSON.
@@ -89,9 +86,9 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     private synchronized void openTimestampedFile() {
         mLastFileCreated = new Date();
         String filename = sDateFormatter.format(mLastFileCreated) + ".json";
-        Log.i(TAG, "Opening trace file " + filename + " for writing");
         try {
             mWriter = mFileOpener.openForWriting(filename);
+            Log.i(TAG, "Opened trace file " + filename + " for writing");
         } catch(IOException e) {
             Log.w(TAG, "Unable to open " + filename + " for writing", e);
             mWriter = null;

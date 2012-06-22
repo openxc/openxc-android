@@ -1,12 +1,16 @@
 package com.openxc.util;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
+import com.openxc.VehicleManager;
 
 import android.content.Context;
-
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -27,14 +31,20 @@ public class AndroidFileOpener implements FileOpener {
         return mContext;
     }
 
-    public BufferedWriter openForWriting(String path) throws IOException {
-        Log.i(TAG, "Opening file " + path + " for writing");
+    public BufferedWriter openForWriting(String name) throws IOException {
+        Log.i(TAG, "Opening file " + name + " for writing");
+
+        File path = Environment.getExternalStoragePublicDirectory(VehicleManager.recordingPath);
+        File file = new File(path, name);
         try {
-            OutputStream outputStream = getContext().openFileOutput(path,
-                    Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+
+            OutputStream outputStream = new FileOutputStream(file);
             return new BufferedWriter(new OutputStreamWriter(outputStream));
         } catch(IOException e) {
-            Log.w(TAG, "Unable to open " + path + " for writing", e);
+            Log.w(TAG, "Unable to open " + name + " for writing", e);
             throw e;
         }
     }

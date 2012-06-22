@@ -1,22 +1,15 @@
 package com.openxc.enabler;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-
 import java.util.List;
 
-import android.os.Bundle;
-
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-
-import android.widget.Toast;
-
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
     private static String TAG = "SettingsActivity";
@@ -70,26 +63,42 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     private class PreferenceListener implements
-            SharedPreferences.OnSharedPreferenceChangeListener {
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.uploading_path_key))) {
-                String uploadingPath = preferences.getString(key, "");
-                try {
-                    URI uri = new URI(uploadingPath);
-                    if(!uri.isAbsolute()) {
-                        String errorMessage = "Invalid target URL \"" +
-                            uploadingPath + "\" -- must be an absolute URL " +
-                            "with http:// prefix";
-                        Toast.makeText(getApplicationContext(), errorMessage,
-                                Toast.LENGTH_SHORT).show();
-                        Log.w(TAG, errorMessage);
+        SharedPreferences.OnSharedPreferenceChangeListener {
+            public void onSharedPreferenceChanged(SharedPreferences preferences,
+                    String key) {
+                if(key.equals(getString(R.string.uploading_path_key))) {
+                    String uploadingPath = preferences.getString(key, "");
+                    try {
+                        URI uri = new URI(uploadingPath);
+                        if(!uri.isAbsolute()) {
+                            String errorMessage = "Invalid target URL \"" +
+                                uploadingPath + "\" -- must be an absolute URL " +
+                                "with http:// prefix";
+                            Toast.makeText(getApplicationContext(), errorMessage,
+                                    Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, errorMessage);
+                        }
+                    } catch(java.net.URISyntaxException e) {
+                        Log.w(TAG, "Invalid target URL \"" + uploadingPath + "\"",
+                                e);
                     }
-                } catch(java.net.URISyntaxException e) {
-                    Log.w(TAG, "Invalid target URL \"" + uploadingPath + "\"",
-                            e);
+                } else if (key.equals(getString(R.string.recording_path_key))) {
+                    //needs work. does not correctly identify if recording path is valid
+                    String recordingPath = preferences.getString(key, "");
+                    try {
+                        URI uri = new URI(recordingPath);
+                        if(!uri.isAbsolute()) {
+                            String errorMessage = "Invalid output directory \"" +
+                                recordingPath + "\" choose directory such as /sdcard/openxc";
+                            Toast.makeText(getApplicationContext(), errorMessage,
+                                    Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, errorMessage);
+                        }
+                    } catch(java.net.URISyntaxException e) {
+                        Log.w(TAG, "Invalid output directory \"" + recordingPath + "\"",
+                                e);
+                    }
                 }
             }
-        }
-    }
+        };
 }

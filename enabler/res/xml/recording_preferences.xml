@@ -11,7 +11,7 @@
             android:key="@string/recording_path_key"
             android:title="@string/recording_path_title"
             android:summary="@string/recording_path_summary"
-            android:defaultValue="/sdcard/openxc" />
+            android:defaultValue="/openxcdata/data" />
 
     <CheckBoxPreference
             android:key="@string/uploading_checkbox_key"
