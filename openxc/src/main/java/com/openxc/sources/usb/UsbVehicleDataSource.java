@@ -144,7 +144,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
         }
-        start();
     }
 
     /**
@@ -168,6 +167,12 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
 
     public UsbVehicleDataSource(Context context) throws DataSourceException {
         this(null, context);
+    }
+
+    @Override
+    public void setCallback(SourceCallback callback) {
+        super.setCallback(callback);
+        start();
     }
 
     public void start() {
