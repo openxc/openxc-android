@@ -63,7 +63,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     private PendingIntent mPermissionIntent;
     private final URI mDeviceUri;
     private final Lock mDeviceConnectionLock;
-    private final Condition mDevicePermissionChanged;
+    private final Condition mDeviceChanged;
     private int mVendorId;
     private int mProductId;
     private double mBytesReceived;
@@ -106,7 +106,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         mRunning = true;
         mDeviceUri = device;
         mDeviceConnectionLock = new ReentrantLock();
-        mDevicePermissionChanged = mDeviceConnectionLock.newCondition();
+        mDeviceChanged = mDeviceConnectionLock.newCondition();
 
         mManager = (UsbManager) getContext().getSystemService(
                 Context.USB_SERVICE);
@@ -174,7 +174,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         }
         mRunning = false;
         mDeviceConnectionLock.lock();
-        mDevicePermissionChanged.signal();
+        mDeviceChanged.signal();
         mDeviceConnectionLock.unlock();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
@@ -253,7 +253,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         while(mRunning && mConnection == null) {
             Log.d(TAG, "Still no device available");
             try {
-                mDevicePermissionChanged.await();
+                mDeviceChanged.await();
             } catch(InterruptedException e) {}
         }
         mDeviceConnectionLock.unlock();
@@ -332,7 +332,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
-                mDevicePermissionChanged.signal();
+                mDeviceChanged.signal();
                 mDeviceConnectionLock.unlock();
             }
         } else {
