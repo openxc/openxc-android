@@ -25,5 +25,5 @@ public interface VehicleDataSink extends VehicleDataEndpoint {
      *
      * @param measuremetn The new measurement.
      */
-    public void receive(RawMeasurement measurement);
+    public void receive(RawMeasurement measurement) throws DataSinkException;
 }

@@ -223,6 +223,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
 
             mDeviceConnectionLock.lock();
             if(mConnection == null) {
+            	mDeviceConnectionLock.unlock();
                 continue;
             }
             // TODO when there haven't been any USB transfers for a long time,

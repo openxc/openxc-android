@@ -24,14 +24,14 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     String event = "event";
 
     @Override
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, DataSinkException {
         outputString = new StringWriter();
         opener = new MockFileOpener();
         sink = new FileRecorderSink(opener);
     }
 
     @SmallTest
-    public void testReceiveValueOnly() {
+    public void testReceiveValueOnly() throws DataSinkException {
         assertTrue(outputString.toString().indexOf(measurementId) == -1);
         sink.receive(new RawMeasurement(measurementId, value));
         sink.flush();
@@ -40,7 +40,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     }
 
     @SmallTest
-    public void testReceiveEvented() {
+    public void testReceiveEvented() throws DataSinkException {
         sink.receive(new RawMeasurement(measurementId, value, event));
         sink.flush();
         assertTrue(outputString.toString().indexOf(measurementId) != -1);
@@ -49,7 +49,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     }
 
     @SmallTest
-    public void testOutputFormat() throws JSONException {
+    public void testOutputFormat() throws JSONException, DataSinkException {
         sink.receive(new RawMeasurement(measurementId, value));
         sink.flush();
 

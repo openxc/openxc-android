@@ -65,6 +65,11 @@ public class UploaderSink extends ContextualVehicleDataSink {
         mUploader.start();
     }
 
+    public UploaderSink(Context context, String path)
+            throws java.net.URISyntaxException {
+        this(context, new URI(path));
+    }
+
     public void stop() {
         super.stop();
         mUploader.done();
@@ -87,6 +92,20 @@ public class UploaderSink extends ContextualVehicleDataSink {
             mQueueLock.lock();
             mRecordsQueuedSignal.signal();
             mQueueLock.unlock();
+        }
+    }
+
+    public static boolean validatePath(String path) {
+        if(path == null) {
+            Log.w(TAG, "Uploading path not set (it's " + path + ")");
+            return false;
+        }
+
+        try {
+            URI uri = new URI(path);
+            return uri.isAbsolute();
+        } catch(java.net.URISyntaxException e) {
+            return false;
         }
     }
 
