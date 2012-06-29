@@ -3,6 +3,9 @@ package com.openxc.enabler;
 import java.util.TimerTask;
 import java.util.Timer;
 
+import com.openxc.measurements.TurnSignalStatus;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -105,9 +108,28 @@ public class OpenXcEnablerActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        TurnSignalStatus command;
         switch (item.getItemId()) {
         case R.id.settings:
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        case R.id.left_turn:
+            command = new TurnSignalStatus(
+                    TurnSignalStatus.TurnSignalPosition.LEFT);
+            try {
+                mVehicleManager.set(command);
+            } catch(UnrecognizedMeasurementTypeException e) {
+                Log.w(TAG, "Unable to send turn signal command", e);
+            }
+            return true;
+        case R.id.right_turn:
+            command = new TurnSignalStatus(
+                    TurnSignalStatus.TurnSignalPosition.RIGHT);
+            try {
+                mVehicleManager.set(command);
+            } catch(UnrecognizedMeasurementTypeException e) {
+                Log.w(TAG, "Unable to send turn signal command", e);
+            }
             return true;
         default:
             return super.onOptionsItemSelected(item);

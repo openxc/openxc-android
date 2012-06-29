@@ -18,7 +18,7 @@ import com.openxc.util.AgingData;
 import com.openxc.util.Range;
 
 /**
- * The Measurement is the base implementation of the MeasurementInterface, and
+ * The BaseMeasurement is the base implementation of the Measurement, and
  * wraps wraps an instance of a {@link Unit}, and the value it returns is always
  * in terms of this Unit.
  *
@@ -151,6 +151,21 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + " has an inaccessible " +
                     "ID field", e);
+        }
+    }
+
+    public static String getIdForClass(String measurementTypeName)
+        throws UnrecognizedMeasurementTypeException {
+        try {
+            Class<? extends Measurement> measurementType =
+                (Class<? extends Measurement>)
+                Class.forName(measurementTypeName);
+            return getIdForClass((Class<? extends Measurement>)
+                    Class.forName(measurementTypeName));
+        } catch(ClassNotFoundException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Measurement with class name " +
+                    measurementTypeName + " not recognized", e);
         }
     }
 

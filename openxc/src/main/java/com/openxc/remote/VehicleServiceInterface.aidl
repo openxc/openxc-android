@@ -26,6 +26,13 @@ interface VehicleServiceInterface {
     RawMeasurement get(String measurementType);
 
     /**
+     * Set a new value for the measurement class on the vehicle.
+     *
+     * @param measurement The measurement to set on the vehicle.
+     */
+    void set(in RawMeasurement measurement);
+
+    /**
      * Register to receive asynchronous updates when measurements are received.
      *
      * All instances of VehicleManager in application processes must register

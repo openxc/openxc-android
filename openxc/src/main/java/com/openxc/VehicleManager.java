@@ -46,6 +46,9 @@ import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
+import com.openxc.measurements.TurnSignalStatus;
+
+import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
@@ -155,6 +158,7 @@ public class VehicleManager extends Service implements SourceCallback {
         MEASUREMENT_TYPES.add(VehicleDoorStatus.class);
         MEASUREMENT_TYPES.add(VehicleSpeed.class);
         MEASUREMENT_TYPES.add(WindshieldWiperStatus.class);
+        MEASUREMENT_TYPES.add(TurnSignalStatus.class);
 
         for(Class<? extends Measurement> measurementType : MEASUREMENT_TYPES) {
             try {
@@ -276,6 +280,35 @@ public class VehicleManager extends Service implements SourceCallback {
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             throw new NoValueException();
+        }
+    }
+
+    /**
+     * Send a command back to the vehicle.
+     *
+     * This fails silently if it is unable to connect to the remote vehicle
+     * service.
+     *
+     * @param command The desired command to send to the vehicle.
+     */
+    public void set(Measurement command) throws
+                UnrecognizedMeasurementTypeException {
+        if(mRemoteService == null) {
+            Log.w(TAG, "Not connected to the VehicleService");
+            return;
+        }
+
+        Log.d(TAG, "Sending command " + command);
+        try {
+            // TODO measurement should know how to convert itself back to raw...
+            // or maybe we don't even need raw in this case. oh wait, we can't
+            // send templated class over AIDL so we do.
+            RawMeasurement rawCommand = new RawMeasurement(command.getGenericName(),
+                    command.getSerializedValue(),
+                    command.getSerializedEvent());
+            mRemoteService.set(rawCommand);
+        } catch(RemoteException e) {
+            Log.w(TAG, "Unable to send command to remote vehicle service", e);
         }
     }
 

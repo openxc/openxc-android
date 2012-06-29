@@ -25,11 +25,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+
+import com.openxc.controllers.VehicleController;
+
+import com.openxc.measurements.BaseMeasurement;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
+import com.openxc.NoValueException;
+
+import com.openxc.remote.RawMeasurement;
 
 import android.util.Log;
 
@@ -49,8 +60,9 @@ import android.util.Log;
  * become active.
  */
 public class UsbVehicleDataSource extends ContextualVehicleDataSource
-        implements Runnable {
+        implements Runnable, VehicleController {
     private static final String TAG = "UsbVehicleDataSource";
+    private static final int ENDPOINT_COUNT = 2;
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
     public static final String ACTION_USB_DEVICE_ATTACHED =
@@ -59,7 +71,9 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     private boolean mRunning;
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
-    private UsbEndpoint mEndpoint;
+    private UsbInterface mInterface;
+    private UsbEndpoint mInEndpoint;
+    private UsbEndpoint mOutEndpoint;
     private PendingIntent mPermissionIntent;
     private final URI mDeviceUri;
     private final Lock mDeviceConnectionLock;
@@ -103,7 +117,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                     "USB device URI must have the usb:// scheme");
         }
 
-        mRunning = true;
         mDeviceUri = device;
         mDeviceConnectionLock = new ReentrantLock();
         mDeviceChanged = mDeviceConnectionLock.newCondition();
@@ -126,12 +139,11 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         mVendorId = UsbDeviceUtilities.vendorFromUri(device);
         mProductId = UsbDeviceUtilities.productFromUri(device);
         try {
-            setupDevice(mManager, mVendorId, mProductId);
+            connectToDevice(mManager, mVendorId, mProductId);
         } catch(DataSourceException e) {
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
         }
-        new Thread(this).start();
     }
 
     /**
@@ -153,9 +165,20 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         this(callback, context, null);
     }
 
-    public UsbVehicleDataSource(Context context)
-            throws DataSourceException {
+    public UsbVehicleDataSource(Context context) throws DataSourceException {
         this(null, context);
+    }
+
+    @Override
+    public void setCallback(SourceCallback callback) {
+        super.setCallback(callback);
+        start();
+    }
+
+    public void start() {
+        primeOutput();
+        mRunning = true;
+        new Thread(this).start();
     }
 
     /**
@@ -163,7 +186,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
      * connection.
      *
      * This should be called before the object is given up to the garbage
-     * collector to aviod leaking a receiver in the Android framework.
+     * collector to avoid leaking a receiver in the Android framework.
      */
     public void stop() {
         super.stop();
@@ -173,8 +196,14 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             return;
         }
         mRunning = false;
+    }
+
+    public void close() {
         mDeviceConnectionLock.lock();
         mDeviceChanged.signal();
+        if(mConnection != null && mInterface != null) {
+            mConnection.releaseInterface(mInterface);
+        }
         mDeviceConnectionLock.unlock();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
@@ -207,7 +236,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             // USB wakes backup? Why does USB seem to go to sleep in the first
             // place?
             int received = mConnection.bulkTransfer(
-                    mEndpoint, bytes, bytes.length, 0);
+                    mInEndpoint, bytes, bytes.length, 0);
             if(received > 0) {
                 // Creating a new String object for each message causes the
                 // GC to go a little crazy, but I don't see another obvious way
@@ -235,8 +264,31 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         return Objects.toStringHelper(this)
             .add("device", mDeviceUri)
             .add("connection", mConnection)
-            .add("endpoint", mEndpoint)
+            .add("in_endpoint", mInEndpoint)
+            .add("out_endpoint", mOutEndpoint)
             .toString();
+    }
+
+    public void set(RawMeasurement command) {
+        String message = command.serialize() + "\u0000";
+        Log.d(TAG, "Writing message to USB: " + message);
+        byte[] bytes = message.getBytes();
+        write(bytes);
+    }
+
+    private void write(byte[] bytes) {
+        if(mConnection != null && mOutEndpoint != null) {
+            Log.d(TAG, "Writing bytes to USB: " + bytes);
+            int transferred = mConnection.bulkTransfer(
+                    mOutEndpoint, bytes, bytes.length, 0);
+            if(transferred < 0) {
+                Log.w(TAG, "Unable to write CAN message to USB endpoint, error "
+                        + transferred);
+            }
+        } else {
+            Log.w(TAG, "No OUT endpoint available on USB device, " +
+                    "can't send write command");
+        }
     }
 
     private void logTransferStats(final long startTime, final long endTime) {
@@ -268,7 +320,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    private void setupDevice(UsbManager manager, int vendorId,
+    private void connectToDevice(UsbManager manager, int vendorId,
             int productId) throws DataSourceResourceException {
         UsbDevice device = findDevice(manager, vendorId, productId);
         if(manager.hasPermission(device)) {
@@ -286,10 +338,38 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             throw new UsbDeviceException("USB device didn't have an " +
                     "interface for us to open");
         }
-        UsbInterface iface = device.getInterface(0);
-        Log.d(TAG, "Connecting to endpoint 1 on interface " + iface);
-        mEndpoint = iface.getEndpoint(1);
-        return connectToDevice(manager, device, iface);
+        UsbInterface iface = null;
+        for(int i = 0; i < device.getInterfaceCount(); i++) {
+            iface = device.getInterface(i);
+            if(iface.getEndpointCount() == ENDPOINT_COUNT) {
+                break;
+            }
+        }
+
+        if(iface == null) {
+            Log.w(TAG, "Unable to find a USB device interface with the " +
+                    "expected number of endpoints (" + ENDPOINT_COUNT + ")");
+            return null;
+        }
+
+        for(int i = 0; i < iface.getEndpointCount(); i++) {
+            UsbEndpoint endpoint = iface.getEndpoint(i);
+            if(endpoint.getType() ==
+                    UsbConstants.USB_ENDPOINT_XFER_BULK) {
+                if(endpoint.getDirection() == UsbConstants.USB_DIR_IN) {
+                    Log.d(TAG, "Found IN endpoint " + endpoint);
+                    mInEndpoint = endpoint;
+                } else {
+                    Log.d(TAG, "Found OUT endpoint " + endpoint);
+                    mOutEndpoint = endpoint;
+                }
+            }
+
+            if(mInEndpoint != null && mOutEndpoint != null) {
+                break;
+            }
+        }
+        return openInterface(manager, device, iface);
     }
 
     private UsbDevice findDevice(UsbManager manager, int vendorId,
@@ -310,7 +390,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 " not found");
     }
 
-    private UsbDeviceConnection connectToDevice(UsbManager manager,
+    private UsbDeviceConnection openInterface(UsbManager manager,
             UsbDevice device, UsbInterface iface)
             throws UsbDeviceException {
         UsbDeviceConnection connection = manager.openDevice(device);
@@ -318,8 +398,19 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             throw new UsbDeviceException("Couldn't open a connection to " +
                     "device -- user may not have given permission");
         }
-        connection.claimInterface(iface, true);
+        mInterface = iface;
+        connection.claimInterface(mInterface, true);
         return connection;
+    }
+
+    /**
+     * TODO we oddly need to "prime" this endpoint from Android because the
+     * first message we send, if it's over 1 packet in size, we only get the
+     * last packet.
+     */
+    private void primeOutput() {
+        Log.d(TAG, "Priming output endpoint");
+        write(new String("prime\u0000").getBytes());
     }
 
     private void openDeviceConnection(UsbDevice device) {
@@ -329,6 +420,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 mConnection = setupDevice(mManager, device);
                 Log.i(TAG, "Connected to USB device with " +
                         mConnection);
+                start();
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
@@ -347,6 +439,9 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             mDeviceConnectionLock.lock();
             mConnection.close();
             mConnection = null;
+            mInEndpoint = null;
+            mOutEndpoint = null;
+            mInterface = null;
             mDeviceConnectionLock.unlock();
         }
     }
@@ -369,7 +464,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
                 Log.d(TAG, "Device attached");
                 try {
-                    setupDevice(mManager, mVendorId, mProductId);
+                    connectToDevice(mManager, mVendorId, mProductId);
                 } catch(DataSourceException e) {
                     Log.i(TAG, "Unable to load USB device -- waiting for it " +
                             "to appear", e);

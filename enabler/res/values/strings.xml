@@ -6,6 +6,8 @@
     <string name="message_count_label">Messages Received</string>
 
     <string name="settings">Settings</string>
+    <string name="left_turn">Left Turn</string>
+    <string name="right_turn">Right Turn</string>
     <string name="recording_checkbox_title">Record Trace</string>
     <string name="recording_checkbox_summary">Record the vehicle data stream to a file</string>
     <string name="recording_directory_title">Output Directory</string>

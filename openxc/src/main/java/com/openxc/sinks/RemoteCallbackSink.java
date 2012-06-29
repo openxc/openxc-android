@@ -30,8 +30,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
 
     public RemoteCallbackSink() {
         super();
-        mListeners = new RemoteCallbackList<
-            VehicleServiceListener>();
+        mListeners = new RemoteCallbackList<VehicleServiceListener>();
     }
 
     public synchronized void register(
