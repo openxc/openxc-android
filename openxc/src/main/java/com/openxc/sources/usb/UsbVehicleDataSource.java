@@ -216,21 +216,15 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
      * either waits for a new device connection or reads USB packets.
      */
     public void run() {
-        waitForDeviceConnection();
-
         double lastLoggedTransferStatsAtByte = 0;
         byte[] bytes = new byte[128];
         StringBuffer buffer = new StringBuffer();
         final long startTime = System.nanoTime();
         long endTime;
         while(mRunning) {
+            mDeviceConnectionLock.lock();
             waitForDeviceConnection();
 
-            mDeviceConnectionLock.lock();
-            if(mConnection == null) {
-            	mDeviceConnectionLock.unlock();
-                continue;
-            }
             // TODO when there haven't been any USB transfers for a long time,
             // we can get stuck here. do we need a timeout so it retries after
             // USB wakes backup? Why does USB seem to go to sleep in the first
@@ -255,6 +249,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 lastLoggedTransferStatsAtByte = mBytesReceived;
                 logTransferStats(startTime, endTime);
             }
+            mDeviceConnectionLock.unlock();
         }
         Log.d(TAG, "Stopped USB listener");
     }
@@ -300,15 +295,16 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             kilobytesTransferred / elapsedTime + " KB/s");
     }
 
+    /* You must have the mDeviceConnectionLock locked before calling this
+     * function.
+     */
     private void waitForDeviceConnection() {
-        mDeviceConnectionLock.lock();
         while(mRunning && mConnection == null) {
             Log.d(TAG, "Still no device available");
             try {
                 mDeviceChanged.await();
             } catch(InterruptedException e) {}
         }
-        mDeviceConnectionLock.unlock();
     }
 
     private void parseStringBuffer(StringBuffer buffer) {
