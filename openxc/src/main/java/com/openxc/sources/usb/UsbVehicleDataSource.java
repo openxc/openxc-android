@@ -169,12 +169,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         this(null, context);
     }
 
-    @Override
-    public void setCallback(SourceCallback callback) {
-        super.setCallback(callback);
-        start();
-    }
-
     public void start() {
         primeOutput();
         mRunning = true;
