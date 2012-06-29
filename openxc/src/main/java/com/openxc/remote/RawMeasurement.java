@@ -100,7 +100,7 @@ public class RawMeasurement implements Parcelable {
         try {
             serializedMeasurement = new JSONObject(measurementString);
         } catch(JSONException e) {
-            Log.w(TAG, "Couldn't decode JSON from: " + measurementString);
+            Log.w(TAG, "Couldn't decode JSON from: " + measurementString, e);
             return null;
         }
 

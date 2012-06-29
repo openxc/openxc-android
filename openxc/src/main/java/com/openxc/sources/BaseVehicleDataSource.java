@@ -68,7 +68,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * @param measurement the new measurement object.
      */
     protected void handleMessage(RawMeasurement measurement) {
-        if(mCallback != null) {
+        if(mCallback != null && measurement != null) {
             mCallback.receive(measurement);
         }
     }

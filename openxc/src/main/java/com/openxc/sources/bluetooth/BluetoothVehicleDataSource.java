@@ -144,12 +144,14 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     }
 
     private void waitForDeviceConnection() {
-        try {
-            mSocket = mDeviceManager.connect(mAddress);
-            connectStreams();
-        } catch(BluetoothException e) {
-            Log.w(TAG, "Unable to connect to device at address " +
-                    mAddress, e);
+        if(mSocket == null) {
+            try {
+                mSocket = mDeviceManager.connect(mAddress);
+                connectStreams();
+            } catch(BluetoothException e) {
+                Log.w(TAG, "Unable to connect to device at address " +
+                        mAddress, e);
+            }
         }
     }
 
