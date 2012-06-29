@@ -37,9 +37,15 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         try {
             mDeviceManager = new DeviceManager(getContext());
         } catch(BluetoothException e) {
-            Log.w(TAG, "Unable to open Bluetooth device manager", e);
+            throw new DataSourceException(
+                    "Unable to open Bluetooth device manager", e);
         }
         mAddress = address;
+    }
+
+    public BluetoothVehicleDataSource(Context context, String address)
+            throws DataSourceException {
+        this(null, context, address);
     }
 
     @Override

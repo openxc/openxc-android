@@ -9,6 +9,8 @@ import com.openxc.remote.VehicleServiceListener;
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sources.ApplicationSource;
+
+import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.usb.UsbVehicleDataSource;
 import android.app.Service;
@@ -61,6 +63,7 @@ public class VehicleService extends Service {
     private RemoteCallbackSink mNotifier;
     private ApplicationSource mApplicationSource;
     private UsbVehicleDataSource mUsbDevice;
+    private BluetoothVehicleDataSource mBluetoothDevice;
     private VehicleController mController;
 
     @Override
@@ -75,6 +78,13 @@ public class VehicleService extends Service {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
         mController = mUsbDevice;
+
+        try {
+            mBluetoothDevice = new BluetoothVehicleDataSource(this,
+                    "00:06:66:46:C2:AF");
+        } catch(DataSourceException e) {
+            Log.w(TAG, "Unable to add Bluetooth source", e);
+        }
 
         initializeDefaultSources();
         initializeDefaultSinks();
@@ -94,6 +104,7 @@ public class VehicleService extends Service {
             mPipeline.stop();
         }
         mUsbDevice.close();
+        mBluetoothDevice.close();
         releaseWakeLock();
     }
 
@@ -132,6 +143,7 @@ public class VehicleService extends Service {
         mPipeline.clearSources();
         mPipeline.addSource(mApplicationSource);
         mPipeline.addSource(mUsbDevice);
+        mPipeline.addSource(mBluetoothDevice);
     }
 
     private final VehicleServiceInterface.Stub mBinder =
