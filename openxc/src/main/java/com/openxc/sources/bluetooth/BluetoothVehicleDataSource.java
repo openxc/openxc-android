@@ -79,8 +79,18 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
 
     public void run() {
         while(mRunning) {
-            waitForDeviceConnection();
-            // TODO
+            try {
+                waitForDeviceConnection();
+            } catch(BluetoothException e) {
+                Log.i(TAG, "Unable to connect to target device -- " +
+                        "sleeping for awhile before trying again");
+                try {
+                    Thread.sleep(5000);
+                } catch(InterruptedException e2){
+                    stop();
+                }
+                continue;
+            }
             String line = null;
             try {
                 line = mInStream.readLine();
@@ -143,7 +153,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         mOutStream.flush();
     }
 
-    private void waitForDeviceConnection() {
+    private void waitForDeviceConnection() throws BluetoothException {
         if(mSocket == null) {
             try {
                 mSocket = mDeviceManager.connect(mAddress);
@@ -151,6 +161,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
             } catch(BluetoothException e) {
                 Log.w(TAG, "Unable to connect to device at address " +
                         mAddress, e);
+                throw e;
             }
         }
     }
