@@ -537,14 +537,14 @@ public class VehicleManager extends Service implements SourceCallback {
                     Log.w(TAG, "Unable to add Bluetooth source", e);
                     return;
                 }
-                mPipeline.addSource(mBluetoothSource);
+                addSource(mBluetoothSource);
             } else {
                 Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
                         "), not starting source");
             }
         }
         else {
-            mPipeline.removeSource(mBluetoothSource);
+            removeSource(mBluetoothSource);
             if(mBluetoothSource != null) {
                 mBluetoothSource.close();
             }
