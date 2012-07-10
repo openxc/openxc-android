@@ -90,11 +90,13 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
                 line = mInStream.readLine();
             } catch(IOException e) {
                 Log.e(TAG, "Unable to read response");
+                disconnect();
                 continue;
             }
 
             if(line == null){
                 Log.e(TAG, "Device has dropped offline");
+                disconnect();
                 continue;
             }
             handleMessage(line);
