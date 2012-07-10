@@ -246,7 +246,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 lastLoggedTransferStatsAtByte = mBytesReceived;
                 logTransferStats(startTime, endTime);
             }
-            mDeviceConnectionLock.unlock();
         }
         Log.d(TAG, "Stopped USB listener");
     }
