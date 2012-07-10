@@ -301,22 +301,31 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public void set(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
-        if(mRemoteService == null) {
-            Log.w(TAG, "Not connected to the VehicleService");
-            return;
-        }
-
         Log.d(TAG, "Sending command " + command);
-        try {
-            // TODO measurement should know how to convert itself back to raw...
-            // or maybe we don't even need raw in this case. oh wait, we can't
-            // send templated class over AIDL so we do.
-            RawMeasurement rawCommand = new RawMeasurement(command.getGenericName(),
-                    command.getSerializedValue(),
-                    command.getSerializedEvent());
-            mRemoteService.set(rawCommand);
-        } catch(RemoteException e) {
-            Log.w(TAG, "Unable to send command to remote vehicle service", e);
+
+        // TODO measurement should know how to convert itself back to raw...
+        // or maybe we don't even need raw in this case. oh wait, we can't
+        // send templated class over AIDL so we do.
+        RawMeasurement rawCommand = new RawMeasurement(command.getGenericName(),
+                command.getSerializedValue(),
+                command.getSerializedEvent());
+
+        // prefer the Bluetooth controller, if connected
+        if(mBluetoothSource != null) {
+            Log.d(TAG, "Sending " + rawCommand + " over Bluetooth to " +
+                    mBluetoothSource);
+            mBluetoothSource.set(rawCommand);
+        } else {
+            if(mRemoteService == null) {
+                Log.w(TAG, "Not connected to the VehicleService");
+                return;
+            }
+
+            try {
+                mRemoteService.set(rawCommand);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to send command to remote vehicle service", e);
+            }
         }
     }
 
