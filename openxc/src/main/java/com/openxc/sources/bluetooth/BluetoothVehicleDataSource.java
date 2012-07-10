@@ -169,7 +169,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
                         mSocket.getOutputStream()));
             mInStream = new BufferedReader(new InputStreamReader(
                         mSocket.getInputStream()));
-            Log.i(TAG, "Socket stream to HUD opened successfully");
+            Log.i(TAG, "Socket stream to CAN translator opened successfully");
         } catch(IOException e) {
             // We are expecting to see "host is down" when repeatedly
             // autoconnecting
