@@ -170,9 +170,11 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     }
 
     public void start() {
-        primeOutput();
-        mRunning = true;
-        new Thread(this).start();
+        if(!mRunning) {
+            primeOutput();
+            mRunning = true;
+            new Thread(this).start();
+        }
     }
 
     /**

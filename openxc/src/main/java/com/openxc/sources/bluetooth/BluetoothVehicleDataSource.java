@@ -55,8 +55,10 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     }
 
     public void start() {
-        mRunning = true;
-        new Thread(this).start();
+        if(!mRunning) {
+            mRunning = true;
+            new Thread(this).start();
+        }
     }
 
     public void stop() {
