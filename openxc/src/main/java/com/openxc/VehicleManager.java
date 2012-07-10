@@ -10,6 +10,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.openxc.sinks.DataSinkException;
 
+import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
+
+import com.openxc.sources.DataSourceException;
+
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -106,6 +110,7 @@ public class VehicleManager extends Service implements SourceCallback {
     private RemoteListenerSource mRemoteSource;
     private VehicleDataSink mFileRecorder;
     private VehicleDataSource mNativeLocationSource;
+    private BluetoothVehicleDataSource mBluetoothSource;
     private VehicleDataSink mUploader;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
@@ -232,6 +237,9 @@ public class VehicleManager extends Service implements SourceCallback {
         Log.i(TAG, "Service being destroyed");
         if(mPipeline != null) {
             mPipeline.stop();
+        }
+        if(mBluetoothSource != null) {
+            mBluetoothSource.close();
         }
         unwatchPreferences(mPreferences, mPreferenceListener);
         unbindRemote();
@@ -501,6 +509,48 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
+     * Enable or disable receiving vehicle data from a Bluetooth CAN device.
+     *
+     * @param enabled true if bluetooth should be enabled
+     * @throws VehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional
+     *      situation that shouldn't occur.
+     */
+    public void enableBluetoothSource(boolean enabled)
+            throws VehicleServiceException {
+        Log.i(TAG, "Setting bluetooth data source to " + enabled);
+        if(enabled) {
+            SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+            String deviceAddress = preferences.getString(
+                    getString(R.string.bluetooth_mac_key), null);
+            if(deviceAddress != null) {
+                if(mBluetoothSource != null) {
+                    mBluetoothSource.close();
+                }
+
+                try {
+                    mBluetoothSource =
+                        new BluetoothVehicleDataSource(this, deviceAddress);
+                } catch(DataSourceException e) {
+                    Log.w(TAG, "Unable to add Bluetooth source", e);
+                    return;
+                }
+                mPipeline.addSource(mBluetoothSource);
+            } else {
+                Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
+                        "), not starting source");
+            }
+        }
+        else {
+            mPipeline.removeSource(mBluetoothSource);
+            mBluetoothSource.close();
+        }
+    }
+
+
+    /**
      * Enable or disable recording of a trace file.
      *
      * @param enabled true if recording should be enabled
@@ -596,6 +646,18 @@ public class VehicleManager extends Service implements SourceCallback {
             enableUploading(uploadingEnabled);
         } catch(VehicleServiceException e) {
             Log.w(TAG, "Unable to set uploading status after binding", e);
+        }
+    }
+
+    private void setBluetoothSourceStatus() {
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        boolean bluetoothEnabled = preferences.getBoolean(
+                getString(R.string.bluetooth_checkbox_key), false);
+        try {
+            enableBluetoothSource(bluetoothEnabled);
+        } catch(VehicleServiceException e) {
+            Log.w(TAG, "Unable to set Bluetooth data source after binding", e);
         }
     }
 
@@ -701,6 +763,9 @@ public class VehicleManager extends Service implements SourceCallback {
                 setNativeGpsStatus();
             } else if(key.equals(getString(R.string.uploading_checkbox_key))) {
                 setUploadingStatus();
+            } else if(key.equals(getString(R.string.bluetooth_checkbox_key))
+                        || key.equals(getString(R.string.bluetooth_mac_key))) {
+                setBluetoothSourceStatus();
             }
         }
     }
