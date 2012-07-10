@@ -86,6 +86,7 @@ public class SettingsActivity extends PreferenceActivity {
                     findPreference(getString(R.string.bluetooth_mac_key));
             mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
                     mBluetoothDeviceListener);
+
             fillDeviceList(mBluetoothDeviceListPreference);
             findPreference(getString(R.string.bluetooth_checkbox_key))
                 .setOnPreferenceChangeListener(mBluetoothCheckboxListener);
@@ -95,6 +96,16 @@ public class SettingsActivity extends PreferenceActivity {
                             getActivity());
             mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
                         getString(R.string.bluetooth_checkbox_key), false));
+
+            String currentDevice = preferences.getString(
+                    getString(R.string.bluetooth_mac_key), null);
+            String summary = null;
+            if(currentDevice != null) {
+                summary = "Currently using " + currentDevice;
+            } else {
+                summary = "No device selected";
+            }
+            mBluetoothDeviceListPreference.setSummary(summary);
         }
 
         private OnPreferenceChangeListener mBluetoothDeviceListener =
