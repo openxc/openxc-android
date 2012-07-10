@@ -193,6 +193,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     }
 
     public void close() {
+        stop();
         mDeviceConnectionLock.lock();
         mDeviceChanged.signal();
         if(mConnection != null && mInterface != null) {

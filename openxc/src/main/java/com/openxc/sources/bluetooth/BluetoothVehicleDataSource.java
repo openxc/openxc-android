@@ -70,6 +70,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     }
 
     public void close() {
+        stop();
         try {
             disconnect();
         } catch(BluetoothException e) {
