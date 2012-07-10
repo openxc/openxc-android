@@ -715,6 +715,7 @@ public class VehicleManager extends Service implements SourceCallback {
             setUploadingStatus();
             setRecordingStatus();
             setNativeGpsStatus();
+            setBluetoothSourceStatus();
 
             mRemoteBoundLock.lock();
             mIsBound = true;
