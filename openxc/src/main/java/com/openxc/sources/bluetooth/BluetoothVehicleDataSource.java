@@ -71,11 +71,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
 
     public void close() {
         stop();
-        try {
-            disconnect();
-        } catch(BluetoothException e) {
-            Log.d(TAG, "Unable to disconnect when being destroyed", e);
-        }
+        disconnect();
     }
 
     public void run() {
@@ -119,10 +115,10 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    private void disconnect() throws BluetoothException {
+    private void disconnect() {
         if(mSocket == null) {
             Log.w(TAG, "Unable to disconnect -- not connected");
-            throw new BluetoothException();
+            return;
         }
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
