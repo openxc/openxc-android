@@ -169,7 +169,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         this(null, context);
     }
 
-    public void start() {
+    public synchronized void start() {
         if(!mRunning) {
             primeOutput();
             mRunning = true;

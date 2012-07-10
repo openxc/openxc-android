@@ -41,6 +41,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
                     "Unable to open Bluetooth device manager", e);
         }
         mAddress = address;
+        start();
     }
 
     public BluetoothVehicleDataSource(Context context, String address)
@@ -48,13 +49,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         this(null, context, address);
     }
 
-    @Override
-    public void setCallback(SourceCallback callback) {
-        super.setCallback(callback);
-        start();
-    }
-
-    public void start() {
+    public synchronized void start() {
         if(!mRunning) {
             mRunning = true;
             new Thread(this).start();
