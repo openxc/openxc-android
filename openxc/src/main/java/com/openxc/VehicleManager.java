@@ -701,10 +701,7 @@ public class VehicleManager extends Service implements SourceCallback {
                 setNativeGpsStatus();
             } else if(key.equals(getString(R.string.uploading_checkbox_key))) {
                 setUploadingStatus();
-            } else if(key.equals(getString(R.string.recording_checkbox_key))) {
-                setRecordingStatus();
             }
-
         }
     }
 }
