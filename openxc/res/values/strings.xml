@@ -6,4 +6,6 @@
     <string name="recording_directory_key">recording_output</string>
     <string name="uploading_checkbox_key">uploading_enabled</string>
     <string name="uploading_path_key">uploading_target</string>
+    <string name="bluetooth_checkbox_key">bluetooth_checkbox</string>
+    <string name="bluetooth_mac_key">bluetooth_mac</string>
 </resources>

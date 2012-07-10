@@ -1,11 +1,21 @@
 package com.openxc.enabler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.openxc.sinks.UploaderSink;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+
+import android.preference.Preference.OnPreferenceChangeListener;
+
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -55,11 +65,71 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     public static class DataSourcePreferences extends PreferenceFragment {
+        private BluetoothAdapter mBluetoothAdapter;
+        private ListPreference mBluetoothDeviceListPreference;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if(mBluetoothAdapter == null) {
+                String message = "This device most likely does not have " +
+                        "a Bluetooth adapter";
+                Log.w(TAG, message);
+                return;
+            }
+
             addPreferencesFromResource(R.xml.data_source_preferences);
+            mBluetoothDeviceListPreference = (ListPreference)
+                    findPreference(getString(R.string.bluetooth_mac_key));
+            mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
+                    mBluetoothDeviceListener);
+            fillDeviceList(mBluetoothDeviceListPreference);
+            findPreference(getString(R.string.bluetooth_checkbox_key))
+                .setOnPreferenceChangeListener(mBluetoothCheckboxListener);
+
+            SharedPreferences preferences =
+                    PreferenceManager.getDefaultSharedPreferences(
+                            getActivity());
+            mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
+                        getString(R.string.bluetooth_checkbox_key), false));
+        }
+
+        private OnPreferenceChangeListener mBluetoothDeviceListener =
+                new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference,
+                    Object newValue) {
+                preference.setSummary("Currently using " + newValue);
+                return true;
+            }
+        };
+
+        private OnPreferenceChangeListener mBluetoothCheckboxListener =
+                new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference,
+                    Object newValue) {
+                mBluetoothDeviceListPreference.setEnabled((Boolean)newValue);
+                return true;
+            }
+        };
+
+        private void fillDeviceList(ListPreference preference) {
+            Log.d(TAG, "Starting device discovery");
+            Set<BluetoothDevice> pairedDevices =
+                mBluetoothAdapter.getBondedDevices();
+            ArrayList<String> entries = new ArrayList<String>();
+            ArrayList<String> values = new ArrayList<String>();
+            for(BluetoothDevice device : pairedDevices) {
+                Log.d(TAG, "Found paired device: " + device);
+                entries.add(device.getName() + " (" + device.getAddress() +
+                        ")");
+                values.add(device.getAddress());
+            }
+            CharSequence[] sample = {};
+            preference.setEntries(entries.toArray(sample));
+            preference.setEntryValues(values.toArray(sample));
         }
     }
 

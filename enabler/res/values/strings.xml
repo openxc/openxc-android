@@ -6,6 +6,7 @@
     <string name="message_count_label">Messages Received</string>
 
     <string name="settings">Settings</string>
+    <string name="bluetooth_settings">Bluetooth</string>
     <string name="left_turn">Left Turn</string>
     <string name="right_turn">Right Turn</string>
     <string name="recording_checkbox_title">Record Trace</string>
@@ -18,4 +19,7 @@
     <string name="uploading_path_summary">Send trace data to this URL</string>
     <string name="native_gps_checkbox_title">Use built-in GPS</string>
     <string name="native_gps_checkbox_summary">For vehicles without a GPS receiver, send the host\'s built-in GPS location instead</string>
+    <string name="bluetooth_checkbox_title">Use a Bluetooth CAN translator</string>
+    <string name="bluetooth_checkbox_summary">Read vehicle data from a CAN translator connected wirelessly via Bluetooth</string>
+    <string name="bluetooth_mac_title">Bluetooth Device</string>
 </resources>

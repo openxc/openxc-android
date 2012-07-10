@@ -5,4 +5,15 @@
             android:title="@string/native_gps_checkbox_title"
             android:summary="@string/native_gps_checkbox_summary"
             android:defaultValue="false" />
+    <PreferenceCategory
+            android:title="@string/bluetooth_settings">
+        <CheckBoxPreference
+                android:key="@string/bluetooth_checkbox_key"
+                android:title="@string/bluetooth_checkbox_title"
+                android:summary="@string/bluetooth_checkbox_summary"
+                android:defaultValue="false" />
+        <ListPreference
+                android:key="@string/bluetooth_mac_key"
+                android:title="@string/bluetooth_mac_title"/>
+    </PreferenceCategory>
 </PreferenceScreen>
