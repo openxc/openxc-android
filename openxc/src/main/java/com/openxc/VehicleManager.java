@@ -545,7 +545,9 @@ public class VehicleManager extends Service implements SourceCallback {
         }
         else {
             mPipeline.removeSource(mBluetoothSource);
-            mBluetoothSource.close();
+            if(mBluetoothSource != null) {
+                mBluetoothSource.close();
+
         }
     }
 
