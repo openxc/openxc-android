@@ -93,6 +93,11 @@ import com.openxc.util.AndroidFileOpener;
  * include the {@link com.openxc.sources.TraceVehicleDataSource} which reads a
  * previously recorded vehicle data trace file and plays back the measurements
  * in real-time.
+ *
+ * One small inconsistency is that if a Bluetooth data source is added, any
+ * calls to set() will be sent to that device. If no Belutooth data source is
+ * in the pipeline, the standard USB device will be used instead. There is
+ * currently no way to modify this behavior.
  */
 public class VehicleManager extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =

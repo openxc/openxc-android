@@ -20,6 +20,17 @@ import android.content.Context;
 
 import android.util.Log;
 
+/**
+ * A vehicle data source reading measurements from an Bluetooth-enabled
+ * OpenXC device.
+ *
+ * This class tries to connect to a previously paired Bluetooth device with a
+ * given MAC address. If found, it opens a socket to the device and streams
+ * both read and write OpenXC messages.
+ *
+ * This class requires both the android.permission.BLUETOOTH and
+ * android.permission.BLUETOOTH_ADMIN permissions.
+ */
 public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         implements Runnable, VehicleController {
     private static final String TAG = "BluetoothVehicleDataSource";
@@ -71,6 +82,8 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         disconnect();
     }
 
+    // TODO this could be made generic so we could use any standard serial
+    // device, e.g. xbee or FTDI
     public void run() {
         while(mRunning) {
             try {
