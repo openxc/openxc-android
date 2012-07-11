@@ -67,17 +67,17 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    public void stop() {
+    public synchronized void stop() {
         super.stop();
-        Log.d(TAG, "Stopping Bluetooth source");
         if(!mRunning) {
             Log.d(TAG, "Already stopped.");
             return;
         }
+        Log.d(TAG, "Stopping Bluetooth source");
         mRunning = false;
     }
 
-    public void close() {
+    public synchronized void close() {
         stop();
         disconnect();
     }
