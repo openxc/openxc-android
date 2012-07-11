@@ -85,6 +85,8 @@ public class DeviceManager {
             throw new BluetoothException();
         }
 
+        mBluetoothAdapter.cancelDiscovery();
+
         Log.d(TAG, "Scanning services on " + device);
         BluetoothSocket socket = null;
         try {
