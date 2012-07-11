@@ -1,6 +1,7 @@
 package com.openxc.enabler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -9,6 +10,10 @@ import com.openxc.sinks.UploaderSink;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -67,11 +72,11 @@ public class SettingsActivity extends PreferenceActivity {
     public static class DataSourcePreferences extends PreferenceFragment {
         private BluetoothAdapter mBluetoothAdapter;
         private ListPreference mBluetoothDeviceListPreference;
+        private BroadcastReceiver mReceiver;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
 
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if(mBluetoothAdapter == null) {
@@ -108,6 +113,15 @@ public class SettingsActivity extends PreferenceActivity {
             mBluetoothDeviceListPreference.setSummary(summary);
         }
 
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            if(mReceiver != null) {
+                getActivity().unregisterReceiver(mReceiver);
+                mBluetoothAdapter.cancelDiscovery();
+            }
+        }
+
         private OnPreferenceChangeListener mBluetoothDeviceListener =
                 new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference,
@@ -126,7 +140,7 @@ public class SettingsActivity extends PreferenceActivity {
             }
         };
 
-        private void fillDeviceList(ListPreference preference) {
+        private void fillDeviceList(final ListPreference preference) {
             Log.d(TAG, "Starting device discovery");
             Set<BluetoothDevice> pairedDevices =
                 mBluetoothAdapter.getBondedDevices();
@@ -138,9 +152,45 @@ public class SettingsActivity extends PreferenceActivity {
                         ")");
                 values.add(device.getAddress());
             }
-            CharSequence[] sample = {};
-            preference.setEntries(entries.toArray(sample));
-            preference.setEntryValues(values.toArray(sample));
+
+            CharSequence[] prototype = {};
+            preference.setEntries(entries.toArray(prototype));
+            preference.setEntryValues(values.toArray(prototype));
+
+            mReceiver = new BroadcastReceiver() {
+                public void onReceive(Context context, Intent intent) {
+                    if(BluetoothDevice.ACTION_FOUND.equals(
+                                intent.getAction())) {
+                        BluetoothDevice device = intent.getParcelableExtra(
+                                BluetoothDevice.EXTRA_DEVICE);
+                        if(device.getBondState() !=
+                                BluetoothDevice.BOND_BONDED) {
+                            List<CharSequence> entries =
+                                new ArrayList<CharSequence>(
+                                    Arrays.asList(preference.getEntries()));
+                            List<CharSequence> values =
+                                new ArrayList<CharSequence>(
+                                    Arrays.asList(preference.getEntryValues()));
+                            entries.add(device.getName() + " (" +
+                                    device.getAddress() + ")");
+                            values.add(device.getAddress());
+                            CharSequence[] prototype = {};
+                            preference.setEntries(entries.toArray(prototype));
+                            preference.setEntryValues(
+                                    values.toArray(prototype));
+                        }
+                    }
+                }
+            };
+
+            IntentFilter filter = new IntentFilter(
+                    BluetoothDevice.ACTION_FOUND);
+            getActivity().registerReceiver(mReceiver, filter);
+
+            if(mBluetoothAdapter.isDiscovering()) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
+            mBluetoothAdapter.startDiscovery();
         }
     }
 
