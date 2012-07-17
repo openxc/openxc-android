@@ -121,8 +121,15 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         mDeviceConnectionLock = new ReentrantLock();
         mDeviceChanged = mDeviceConnectionLock.newCondition();
 
-        mManager = (UsbManager) getContext().getSystemService(
-                Context.USB_SERVICE);
+        try {
+            mManager = (UsbManager) getContext().getSystemService(
+                    Context.USB_SERVICE);
+        } catch(NoClassDefFoundError e) {
+            String message = "No USB service found on this device -- " +
+                "can't use USB vehicle interface";
+            Log.w(TAG, message);
+            throw new DataSourceException(message);
+        }
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);

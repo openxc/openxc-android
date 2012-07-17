@@ -88,7 +88,9 @@ public class VehicleService extends Service {
         if(mPipeline != null) {
             mPipeline.stop();
         }
-        mUsbDevice.close();
+        if(mUsbDevice != null) {
+            mUsbDevice.close();
+        }
         releaseWakeLock();
     }
 
@@ -126,7 +128,9 @@ public class VehicleService extends Service {
     private void initializeDefaultSources() {
         mPipeline.clearSources();
         mPipeline.addSource(mApplicationSource);
-        mPipeline.addSource(mUsbDevice);
+        if(mUsbDevice != null) {
+            mPipeline.addSource(mUsbDevice);
+        }
     }
 
     private final VehicleServiceInterface.Stub mBinder =
@@ -137,7 +141,12 @@ public class VehicleService extends Service {
 
             // TODO should set use a CommandInterface instead of Measurement?
             public void set(RawMeasurement measurement) {
-                mController.set(measurement);
+                if(mController != null) {
+                    mController.set(measurement);
+                } else {
+                    Log.w(TAG, "Unable to set value -- controller is "
+                            + mController);
+                }
             }
 
             public void receive(RawMeasurement measurement) {
