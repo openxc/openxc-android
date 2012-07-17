@@ -10,6 +10,8 @@ import com.openxc.sinks.UploaderSink;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+import android.os.Build;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +41,11 @@ public class SettingsActivity extends PreferenceActivity {
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPreferenceListener = new PreferenceListener();
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            addPreferencesFromResource(R.xml.recording_preferences);
+            addPreferencesFromResource(R.xml.data_source_preferences);
+        }
     }
 
     @Override
