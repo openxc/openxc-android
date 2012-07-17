@@ -48,39 +48,11 @@ public class SettingsActivity extends PreferenceActivity {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.recording_preferences);
             addPreferencesFromResource(R.xml.data_source_preferences);
+            mBluetoothDeviceListPreference = (ListPreference)
+                    findPreference(getString(R.string.bluetooth_mac_key));
+            initialize(mBluetoothDeviceListPreference,
+                    findPreference(getString(R.string.bluetooth_checkbox_key)));
         }
-
-        mBluetoothDeviceListPreference = (ListPreference)
-                findPreference(getString(R.string.bluetooth_mac_key));
-        mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
-                mBluetoothDeviceListener);
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(mBluetoothAdapter == null) {
-            String message = "This device most likely does not have " +
-                    "a Bluetooth adapter -- skipping device search";
-            Log.w(TAG, message);
-        }
-
-        fillDeviceList(mBluetoothDeviceListPreference);
-
-        findPreference(getString(R.string.bluetooth_checkbox_key))
-            .setOnPreferenceChangeListener(mBluetoothCheckboxListener);
-
-        SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
-                    getString(R.string.bluetooth_checkbox_key), false));
-
-        String currentDevice = preferences.getString(
-                getString(R.string.bluetooth_mac_key), null);
-        String summary = null;
-        if(currentDevice != null) {
-            summary = "Currently using " + currentDevice;
-        } else {
-            summary = "No device selected";
-        }
-        mBluetoothDeviceListPreference.setSummary(summary);
     }
 
     @Override
@@ -124,7 +96,45 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.data_source_preferences);
+            ((SettingsActivity)getActivity()).initialize(
+                (ListPreference)
+                findPreference(getString(R.string.bluetooth_mac_key)),
+                findPreference(getString(R.string.bluetooth_checkbox_key)));
         }
+    }
+
+    protected void initialize(ListPreference listPreference,
+            Preference checkboxPreference) {
+        mBluetoothDeviceListPreference = listPreference;
+        mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
+                mBluetoothDeviceListener);
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(mBluetoothAdapter == null) {
+            String message = "This device most likely does not have " +
+                "a Bluetooth adapter -- skipping device search";
+            Log.w(TAG, message);
+        }
+
+        fillDeviceList(mBluetoothDeviceListPreference);
+
+        checkboxPreference.setOnPreferenceChangeListener(
+                mBluetoothCheckboxListener);
+
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
+                    getString(R.string.bluetooth_checkbox_key), false));
+
+        String currentDevice = preferences.getString(
+                getString(R.string.bluetooth_mac_key), null);
+        String summary = null;
+        if(currentDevice != null) {
+            summary = "Currently using " + currentDevice;
+        } else {
+            summary = "No device selected";
+        }
+        mBluetoothDeviceListPreference.setSummary(summary);
     }
 
     private void fillDeviceList(final ListPreference preference) {
