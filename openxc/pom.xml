@@ -10,7 +10,7 @@
 
     <artifactId>openxc</artifactId>
     <packaging>apklib</packaging>
-    <name>OpenXC - Library</name>
+    <name>OpenXC Android Library</name>
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
