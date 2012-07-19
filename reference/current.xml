@@ -1,0 +1,4763 @@
+<api>
+<package name="com.openxc"
+>
+<class name="DataPipeline"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.sources.SourceCallback">
+</implements>
+<constructor name="DataPipeline"
+ type="com.openxc.DataPipeline"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="addSink"
+ return="com.openxc.sinks.VehicleDataSink"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sink" type="com.openxc.sinks.VehicleDataSink">
+</parameter>
+</method>
+<method name="addSource"
+ return="com.openxc.sources.VehicleDataSource"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="clearSinks"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearSources"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="containsMeasurement"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+</method>
+<method name="get"
+ return="com.openxc.remote.RawMeasurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+</method>
+<method name="getMessageCount"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="receive"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="removeSink"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sink" type="com.openxc.sinks.VehicleDataSink">
+</parameter>
+</method>
+<method name="removeSource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="stop"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="NoValueException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="NoValueException"
+ type="com.openxc.NoValueException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="R"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R"
+ type="com.openxc.R"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="R.attr"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R.attr"
+ type="com.openxc.R.attr"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="R.string"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R.string"
+ type="com.openxc.R.string"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="app_name"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837504"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="bluetooth_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837510"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="bluetooth_mac_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837511"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="native_gps_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837505"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="recording_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837506"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="recording_directory_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837507"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="uploading_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837508"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="uploading_path_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837509"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<interface name="VehicleDataEndpoint"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="stop"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<class name="VehicleManager"
+ extends="android.app.Service"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.sources.SourceCallback">
+</implements>
+<constructor name="VehicleManager"
+ type="com.openxc.VehicleManager"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="addListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<parameter name="listener" type="com.openxc.measurements.Measurement.Listener">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="addSink"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sink" type="com.openxc.sinks.VehicleDataSink">
+</parameter>
+</method>
+<method name="addSource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="clearSources"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="enableBluetoothSource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="enableNativeGpsPassthrough"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="enableRecording"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="enableUploading"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="get"
+ return="com.openxc.measurements.Measurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<exception name="NoValueException" type="com.openxc.NoValueException">
+</exception>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getMessageCount"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="initializeDefaultSources"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="onBind"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+</method>
+<method name="receive"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="removeListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<parameter name="listener" type="com.openxc.measurements.Measurement.Listener">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="removeSink"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sink" type="com.openxc.sinks.VehicleDataSink">
+</parameter>
+</method>
+<method name="removeSource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="set"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.measurements.Measurement">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="waitUntilBound"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="VEHICLE_LOCATION_PROVIDER"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;vehicle&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="VehicleManager.VehicleBinder"
+ extends="android.os.Binder"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleManager.VehicleBinder"
+ type="com.openxc.VehicleManager.VehicleBinder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getService"
+ return="com.openxc.VehicleManager"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+<package name="com.openxc.controllers"
+>
+<interface name="VehicleController"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="set"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+</interface>
+</package>
+<package name="com.openxc.measurements"
+>
+<class name="AcceleratorPedalPosition"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AcceleratorPedalPosition"
+ type="com.openxc.measurements.AcceleratorPedalPosition"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="AcceleratorPedalPosition"
+ type="com.openxc.measurements.AcceleratorPedalPosition"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Percentage">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;accelerator_pedal_position&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="BaseMeasurement"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.measurements.Measurement">
+</implements>
+<constructor name="BaseMeasurement"
+ type="com.openxc.measurements.BaseMeasurement"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="TheUnit">
+</parameter>
+</constructor>
+<constructor name="BaseMeasurement"
+ type="com.openxc.measurements.BaseMeasurement"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="TheUnit">
+</parameter>
+<parameter name="event" type="com.openxc.units.Unit">
+</parameter>
+</constructor>
+<constructor name="BaseMeasurement"
+ type="com.openxc.measurements.BaseMeasurement"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="TheUnit">
+</parameter>
+<parameter name="range" type="com.openxc.util.Range&lt;TheUnit&gt;">
+</parameter>
+</constructor>
+<method name="deserialize"
+ return="com.openxc.measurements.Measurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementString" type="java.lang.String">
+</parameter>
+<exception name="NoValueException" type="com.openxc.NoValueException">
+</exception>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getAge"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getClassForId"
+ return="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getEvent"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getGenericName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getIdForClass"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementTypeName" type="java.lang.String">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getIdForClass"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getMeasurementFromRaw"
+ return="com.openxc.measurements.Measurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="rawMeasurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="NoValueException" type="com.openxc.NoValueException">
+</exception>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getMeasurementFromRaw"
+ return="com.openxc.measurements.Measurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<parameter name="rawMeasurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="NoValueException" type="com.openxc.NoValueException">
+</exception>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="getRange"
+ return="com.openxc.util.Range&lt;TheUnit&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="NoRangeException" type="com.openxc.measurements.NoRangeException">
+</exception>
+</method>
+<method name="getSerializedEvent"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSerializedValue"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValue"
+ return="TheUnit"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasRange"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="serialize"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setTimestamp"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="timestamp" type="double">
+</parameter>
+</method>
+</class>
+<class name="BrakePedalStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BrakePedalStatus"
+ type="com.openxc.measurements.BrakePedalStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="BrakePedalStatus"
+ type="com.openxc.measurements.BrakePedalStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;brake_pedal_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="EngineSpeed"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="EngineSpeed"
+ type="com.openxc.measurements.EngineSpeed"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="EngineSpeed"
+ type="com.openxc.measurements.EngineSpeed"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.RotationsPerMinute">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;engine_speed&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="FineOdometer"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="FineOdometer"
+ type="com.openxc.measurements.FineOdometer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="FineOdometer"
+ type="com.openxc.measurements.FineOdometer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Kilometer">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;fine_odometer_since_restart&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="FuelConsumed"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="FuelConsumed"
+ type="com.openxc.measurements.FuelConsumed"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="FuelConsumed"
+ type="com.openxc.measurements.FuelConsumed"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Liter">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;fuel_consumed_since_restart&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="FuelLevel"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="FuelLevel"
+ type="com.openxc.measurements.FuelLevel"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="FuelLevel"
+ type="com.openxc.measurements.FuelLevel"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Percentage">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;fuel_level&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="HeadlampStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="HeadlampStatus"
+ type="com.openxc.measurements.HeadlampStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="HeadlampStatus"
+ type="com.openxc.measurements.HeadlampStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;headlamp_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="HighBeamStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="HighBeamStatus"
+ type="com.openxc.measurements.HighBeamStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="HighBeamStatus"
+ type="com.openxc.measurements.HighBeamStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;high_beam_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="IgnitionStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="IgnitionStatus"
+ type="com.openxc.measurements.IgnitionStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.State&lt;com.openxc.measurements.IgnitionStatus.IgnitionPosition&gt;">
+</parameter>
+</constructor>
+<constructor name="IgnitionStatus"
+ type="com.openxc.measurements.IgnitionStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.measurements.IgnitionStatus.IgnitionPosition">
+</parameter>
+</constructor>
+<constructor name="IgnitionStatus"
+ type="com.openxc.measurements.IgnitionStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;ignition_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="IgnitionStatus.IgnitionPosition"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="com.openxc.measurements.IgnitionStatus.IgnitionPosition"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.measurements.IgnitionStatus.IgnitionPosition[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="Latitude"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Latitude"
+ type="com.openxc.measurements.Latitude"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Degree">
+</parameter>
+</constructor>
+<constructor name="Latitude"
+ type="com.openxc.measurements.Latitude"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;latitude&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="Longitude"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Longitude"
+ type="com.openxc.measurements.Longitude"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Degree">
+</parameter>
+</constructor>
+<constructor name="Longitude"
+ type="com.openxc.measurements.Longitude"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;longitude&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<interface name="Measurement"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getAge"
+ return="double"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getEvent"
+ return="java.lang.Object"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getGenericName"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRange"
+ return="com.openxc.util.Range&lt;? extends com.openxc.units.Unit&gt;"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="NoRangeException" type="com.openxc.measurements.NoRangeException">
+</exception>
+</method>
+<method name="getSerializedEvent"
+ return="java.lang.Object"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSerializedValue"
+ return="java.lang.Object"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValue"
+ return="com.openxc.units.Unit"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasRange"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="serialize"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setTimestamp"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="timestamp" type="double">
+</parameter>
+</method>
+</interface>
+<interface name="Measurement.Listener"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="receive"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.measurements.Measurement">
+</parameter>
+</method>
+</interface>
+<class name="NoRangeException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="NoRangeException"
+ type="com.openxc.measurements.NoRangeException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="Odometer"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Odometer"
+ type="com.openxc.measurements.Odometer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="Odometer"
+ type="com.openxc.measurements.Odometer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Kilometer">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;odometer&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="ParkingBrakeStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ParkingBrakeStatus"
+ type="com.openxc.measurements.ParkingBrakeStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="ParkingBrakeStatus"
+ type="com.openxc.measurements.ParkingBrakeStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;parking_brake_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="SteeringWheelAngle"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SteeringWheelAngle"
+ type="com.openxc.measurements.SteeringWheelAngle"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<constructor name="SteeringWheelAngle"
+ type="com.openxc.measurements.SteeringWheelAngle"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Degree">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;steering_wheel_angle&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="TorqueAtTransmission"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="TorqueAtTransmission"
+ type="com.openxc.measurements.TorqueAtTransmission"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.NewtonMeter">
+</parameter>
+</constructor>
+<constructor name="TorqueAtTransmission"
+ type="com.openxc.measurements.TorqueAtTransmission"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;torque_at_transmission&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="TransmissionGearPosition"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="TransmissionGearPosition"
+ type="com.openxc.measurements.TransmissionGearPosition"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.State&lt;com.openxc.measurements.TransmissionGearPosition.GearPosition&gt;">
+</parameter>
+</constructor>
+<constructor name="TransmissionGearPosition"
+ type="com.openxc.measurements.TransmissionGearPosition"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.measurements.TransmissionGearPosition.GearPosition">
+</parameter>
+</constructor>
+<constructor name="TransmissionGearPosition"
+ type="com.openxc.measurements.TransmissionGearPosition"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;transmission_gear_position&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="TransmissionGearPosition.GearPosition"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="com.openxc.measurements.TransmissionGearPosition.GearPosition"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.measurements.TransmissionGearPosition.GearPosition[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="TurnSignalStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="TurnSignalStatus"
+ type="com.openxc.measurements.TurnSignalStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.State&lt;com.openxc.measurements.TurnSignalStatus.TurnSignalPosition&gt;">
+</parameter>
+</constructor>
+<constructor name="TurnSignalStatus"
+ type="com.openxc.measurements.TurnSignalStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.measurements.TurnSignalStatus.TurnSignalPosition">
+</parameter>
+</constructor>
+<constructor name="TurnSignalStatus"
+ type="com.openxc.measurements.TurnSignalStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;turn_signal_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="TurnSignalStatus.TurnSignalPosition"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="com.openxc.measurements.TurnSignalStatus.TurnSignalPosition"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.measurements.TurnSignalStatus.TurnSignalPosition[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="UnrecognizedMeasurementTypeException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UnrecognizedMeasurementTypeException"
+ type="com.openxc.measurements.UnrecognizedMeasurementTypeException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="UnrecognizedMeasurementTypeException"
+ type="com.openxc.measurements.UnrecognizedMeasurementTypeException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="VehicleButtonEvent"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleButtonEvent"
+ type="com.openxc.measurements.VehicleButtonEvent"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.State&lt;com.openxc.measurements.VehicleButtonEvent.ButtonId&gt;">
+</parameter>
+<parameter name="event" type="com.openxc.units.State&lt;com.openxc.measurements.VehicleButtonEvent.ButtonAction&gt;">
+</parameter>
+</constructor>
+<constructor name="VehicleButtonEvent"
+ type="com.openxc.measurements.VehicleButtonEvent"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.measurements.VehicleButtonEvent.ButtonId">
+</parameter>
+<parameter name="event" type="com.openxc.measurements.VehicleButtonEvent.ButtonAction">
+</parameter>
+</constructor>
+<constructor name="VehicleButtonEvent"
+ type="com.openxc.measurements.VehicleButtonEvent"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+<parameter name="event" type="java.lang.String">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;button_event&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="VehicleButtonEvent.ButtonAction"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="com.openxc.measurements.VehicleButtonEvent.ButtonAction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.measurements.VehicleButtonEvent.ButtonAction[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="VehicleButtonEvent.ButtonId"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="com.openxc.measurements.VehicleButtonEvent.ButtonId"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.measurements.VehicleButtonEvent.ButtonId[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="VehicleDoorStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleDoorStatus"
+ type="com.openxc.measurements.VehicleDoorStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.State&lt;com.openxc.measurements.VehicleDoorStatus.DoorId&gt;">
+</parameter>
+<parameter name="event" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="VehicleDoorStatus"
+ type="com.openxc.measurements.VehicleDoorStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.measurements.VehicleDoorStatus.DoorId">
+</parameter>
+<parameter name="event" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="VehicleDoorStatus"
+ type="com.openxc.measurements.VehicleDoorStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+<parameter name="event" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;door_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="VehicleDoorStatus.DoorId"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="com.openxc.measurements.VehicleDoorStatus.DoorId"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.measurements.VehicleDoorStatus.DoorId[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="VehicleSpeed"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleSpeed"
+ type="com.openxc.measurements.VehicleSpeed"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.KilometersPerHour">
+</parameter>
+</constructor>
+<constructor name="VehicleSpeed"
+ type="com.openxc.measurements.VehicleSpeed"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;vehicle_speed&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="WindshieldWiperStatus"
+ extends="com.openxc.measurements.BaseMeasurement"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="WindshieldWiperStatus"
+ type="com.openxc.measurements.WindshieldWiperStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.units.Boolean">
+</parameter>
+</constructor>
+<constructor name="WindshieldWiperStatus"
+ type="com.openxc.measurements.WindshieldWiperStatus"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<field name="ID"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;windshield_wiper_status&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+</package>
+<package name="com.openxc.measurements.serializers"
+>
+<class name="JsonSerializer"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.measurements.serializers.MeasurementSerializer">
+</implements>
+<constructor name="JsonSerializer"
+ type="com.openxc.measurements.serializers.JsonSerializer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="preSerialize"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+<parameter name="value" type="java.lang.Object">
+</parameter>
+<parameter name="event" type="java.lang.Object">
+</parameter>
+</method>
+<method name="serialize"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+<parameter name="value" type="java.lang.Object">
+</parameter>
+<parameter name="event" type="java.lang.Object">
+</parameter>
+</method>
+<field name="EVENT_FIELD"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;event&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NAME_FIELD"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;name&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="VALUE_FIELD"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;value&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<interface name="MeasurementSerializer"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</interface>
+</package>
+<package name="com.openxc.remote"
+>
+<class name="RawMeasurement"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.Parcelable">
+</implements>
+<constructor name="RawMeasurement"
+ type="com.openxc.remote.RawMeasurement"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+<parameter name="value" type="java.lang.Object">
+</parameter>
+</constructor>
+<constructor name="RawMeasurement"
+ type="com.openxc.remote.RawMeasurement"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+<parameter name="value" type="java.lang.Object">
+</parameter>
+<parameter name="event" type="java.lang.Object">
+</parameter>
+</constructor>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="deserialize"
+ return="com.openxc.remote.RawMeasurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementString" type="java.lang.String">
+</parameter>
+</method>
+<method name="getEvent"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTimestamp"
+ return="java.lang.Double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValue"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="readFromParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="in" type="android.os.Parcel">
+</parameter>
+</method>
+<method name="serialize"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="out" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="VehicleService"
+ extends="android.app.Service"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleService"
+ type="com.openxc.remote.VehicleService"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onBind"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+</method>
+</class>
+<class name="VehicleServiceException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleServiceException"
+ type="com.openxc.remote.VehicleServiceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+<constructor name="VehicleServiceException"
+ type="com.openxc.remote.VehicleServiceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<interface name="VehicleServiceInterface"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.IInterface">
+</implements>
+<method name="clearSources"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="get"
+ return="com.openxc.remote.RawMeasurement"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.String">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="getMessageCount"
+ return="int"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="initializeDefaultSources"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="receive"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="register"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="com.openxc.remote.VehicleServiceListener">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="set"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="unregister"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="com.openxc.remote.VehicleServiceListener">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<class name="VehicleServiceInterface.Stub"
+ extends="android.os.Binder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.remote.VehicleServiceInterface">
+</implements>
+<constructor name="VehicleServiceInterface.Stub"
+ type="com.openxc.remote.VehicleServiceInterface.Stub"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="asBinder"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="asInterface"
+ return="com.openxc.remote.VehicleServiceInterface"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="android.os.IBinder">
+</parameter>
+</method>
+<method name="onTransact"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="code" type="int">
+</parameter>
+<parameter name="data" type="android.os.Parcel">
+</parameter>
+<parameter name="reply" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</class>
+<interface name="VehicleServiceListener"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.IInterface">
+</implements>
+<method name="receive"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<class name="VehicleServiceListener.Stub"
+ extends="android.os.Binder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.remote.VehicleServiceListener">
+</implements>
+<constructor name="VehicleServiceListener.Stub"
+ type="com.openxc.remote.VehicleServiceListener.Stub"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="asBinder"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="asInterface"
+ return="com.openxc.remote.VehicleServiceListener"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="android.os.IBinder">
+</parameter>
+</method>
+<method name="onTransact"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="code" type="int">
+</parameter>
+<parameter name="data" type="android.os.Parcel">
+</parameter>
+<parameter name="reply" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</class>
+</package>
+<package name="com.openxc.sinks"
+>
+<class name="AbstractQueuedCallbackSink"
+ extends="com.openxc.sinks.BaseVehicleDataSink"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AbstractQueuedCallbackSink"
+ type="com.openxc.sinks.AbstractQueuedCallbackSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="propagateMeasurement"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+</class>
+<class name="BaseVehicleDataSink"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.sinks.VehicleDataSink">
+</implements>
+<constructor name="BaseVehicleDataSink"
+ type="com.openxc.sinks.BaseVehicleDataSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="containsMeasurement"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+</method>
+<method name="get"
+ return="com.openxc.remote.RawMeasurement"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+</method>
+<method name="getMeasurements"
+ return="java.util.Set&lt;java.util.Map.Entry&lt;java.lang.String, com.openxc.remote.RawMeasurement&gt;&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="receive"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="DataSinkException" type="com.openxc.sinks.DataSinkException">
+</exception>
+</method>
+<method name="stop"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="ContextualVehicleDataSink"
+ extends="com.openxc.sinks.BaseVehicleDataSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ContextualVehicleDataSink"
+ type="com.openxc.sinks.ContextualVehicleDataSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<method name="getContext"
+ return="android.content.Context"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+</class>
+<class name="DataSinkException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DataSinkException"
+ type="com.openxc.sinks.DataSinkException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="DataSinkException"
+ type="com.openxc.sinks.DataSinkException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="DataSinkException"
+ type="com.openxc.sinks.DataSinkException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="FileRecorderSink"
+ extends="com.openxc.sinks.BaseVehicleDataSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="FileRecorderSink"
+ type="com.openxc.sinks.FileRecorderSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="fileOpener" type="com.openxc.util.FileOpener">
+</parameter>
+<exception name="DataSinkException" type="com.openxc.sinks.DataSinkException">
+</exception>
+</constructor>
+<method name="flush"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isRunning"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="validatePath"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<class name="MeasurementListenerSink"
+ extends="com.openxc.sinks.AbstractQueuedCallbackSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MeasurementListenerSink"
+ type="com.openxc.sinks.MeasurementListenerSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="propagateMeasurement"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+<parameter name="rawMeasurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="register"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<parameter name="listener" type="com.openxc.measurements.Measurement.Listener">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="unregister"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurementType" type="java.lang.Class&lt;? extends com.openxc.measurements.Measurement&gt;">
+</parameter>
+<parameter name="listener" type="com.openxc.measurements.Measurement.Listener">
+</parameter>
+</method>
+</class>
+<class name="MockedLocationSink"
+ extends="com.openxc.sinks.ContextualVehicleDataSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MockedLocationSink"
+ type="com.openxc.sinks.MockedLocationSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<field name="TAG"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;MockedLocationSink&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="VEHICLE_LOCATION_PROVIDER"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;vehicle&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="RemoteCallbackSink"
+ extends="com.openxc.sinks.AbstractQueuedCallbackSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="RemoteCallbackSink"
+ type="com.openxc.sinks.RemoteCallbackSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getListenerCount"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="propagateMeasurement"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="measurementId" type="java.lang.String">
+</parameter>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="register"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="com.openxc.remote.VehicleServiceListener">
+</parameter>
+</method>
+<method name="unregister"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="com.openxc.remote.VehicleServiceListener">
+</parameter>
+</method>
+</class>
+<class name="UploaderSink"
+ extends="com.openxc.sinks.ContextualVehicleDataSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UploaderSink"
+ type="com.openxc.sinks.UploaderSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</constructor>
+<constructor name="UploaderSink"
+ type="com.openxc.sinks.UploaderSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="path" type="java.lang.String">
+</parameter>
+<exception name="URISyntaxException" type="java.net.URISyntaxException">
+</exception>
+</constructor>
+<method name="validatePath"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<interface name="VehicleDataSink"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.VehicleDataEndpoint">
+</implements>
+<method name="receive"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+<exception name="DataSinkException" type="com.openxc.sinks.DataSinkException">
+</exception>
+</method>
+</interface>
+</package>
+<package name="com.openxc.sources"
+>
+<class name="ApplicationSource"
+ extends="com.openxc.sources.BaseVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ApplicationSource"
+ type="com.openxc.sources.ApplicationSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="handleMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+</class>
+<class name="BaseVehicleDataSource"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.sources.VehicleDataSource">
+</implements>
+<constructor name="BaseVehicleDataSource"
+ type="com.openxc.sources.BaseVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="BaseVehicleDataSource"
+ type="com.openxc.sources.BaseVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+</constructor>
+<method name="getCallback"
+ return="com.openxc.sources.SourceCallback"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="handleMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="handleMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="serializedMeasurement" type="java.lang.String">
+</parameter>
+</method>
+<method name="setCallback"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+</method>
+<method name="stop"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="waitForCallbackInitialization"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+</class>
+<class name="ContextualVehicleDataSource"
+ extends="com.openxc.sources.BaseVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ContextualVehicleDataSource"
+ type="com.openxc.sources.ContextualVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<constructor name="ContextualVehicleDataSource"
+ type="com.openxc.sources.ContextualVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<method name="getContext"
+ return="android.content.Context"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+</class>
+<class name="DataSourceException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DataSourceException"
+ type="com.openxc.sources.DataSourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="DataSourceException"
+ type="com.openxc.sources.DataSourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="DataSourceException"
+ type="com.openxc.sources.DataSourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="DataSourceResourceException"
+ extends="com.openxc.sources.DataSourceException"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DataSourceResourceException"
+ type="com.openxc.sources.DataSourceResourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+<constructor name="DataSourceResourceException"
+ type="com.openxc.sources.DataSourceResourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="NativeLocationSource"
+ extends="com.openxc.sources.ContextualVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.lang.Runnable">
+</implements>
+<constructor name="NativeLocationSource"
+ type="com.openxc.sources.NativeLocationSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<constructor name="NativeLocationSource"
+ type="com.openxc.sources.NativeLocationSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<method name="onLocationChanged"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="location" type="android.location.Location">
+</parameter>
+</method>
+<method name="onProviderDisabled"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="provider" type="java.lang.String">
+</parameter>
+</method>
+<method name="onProviderEnabled"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="provider" type="java.lang.String">
+</parameter>
+</method>
+<method name="onStatusChanged"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="provider" type="java.lang.String">
+</parameter>
+<parameter name="status" type="int">
+</parameter>
+<parameter name="extras" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="run"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="RemoteListenerSource"
+ extends="com.openxc.sources.BaseVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="RemoteListenerSource"
+ type="com.openxc.sources.RemoteListenerSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="service" type="com.openxc.remote.VehicleServiceInterface">
+</parameter>
+</constructor>
+</class>
+<interface name="SourceCallback"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="receive"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+</interface>
+<interface name="VehicleDataSource"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.VehicleDataEndpoint">
+</implements>
+<method name="setCallback"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+</method>
+</interface>
+</package>
+<package name="com.openxc.sources.bluetooth"
+>
+<class name="BluetoothException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BluetoothException"
+ type="com.openxc.sources.bluetooth.BluetoothException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="BluetoothException"
+ type="com.openxc.sources.bluetooth.BluetoothException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="BluetoothException"
+ type="com.openxc.sources.bluetooth.BluetoothException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="BluetoothVehicleDataSource"
+ extends="com.openxc.sources.ContextualVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.lang.Runnable">
+</implements>
+<implements name="com.openxc.controllers.VehicleController">
+</implements>
+<constructor name="BluetoothVehicleDataSource"
+ type="com.openxc.sources.bluetooth.BluetoothVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="address" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="BluetoothVehicleDataSource"
+ type="com.openxc.sources.bluetooth.BluetoothVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="address" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<method name="close"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="run"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="set"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="start"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="DeviceManager"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DeviceManager"
+ type="com.openxc.sources.bluetooth.DeviceManager"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<exception name="BluetoothException" type="com.openxc.sources.bluetooth.BluetoothException">
+</exception>
+</constructor>
+<method name="connect"
+ return="android.bluetooth.BluetoothSocket"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="targetAddress" type="java.lang.String">
+</parameter>
+<exception name="BluetoothException" type="com.openxc.sources.bluetooth.BluetoothException">
+</exception>
+</method>
+</class>
+</package>
+<package name="com.openxc.sources.trace"
+>
+<class name="TraceVehicleDataSource"
+ extends="com.openxc.sources.ContextualVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.lang.Runnable">
+</implements>
+<constructor name="TraceVehicleDataSource"
+ type="com.openxc.sources.trace.TraceVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="filename" type="java.net.URI">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="TraceVehicleDataSource"
+ type="com.openxc.sources.trace.TraceVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="filename" type="java.net.URI">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<method name="run"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+<package name="com.openxc.sources.usb"
+>
+<class name="UsbDeviceAttachmentActivity"
+ extends="android.app.Activity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UsbDeviceAttachmentActivity"
+ type="com.openxc.sources.usb.UsbDeviceAttachmentActivity"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onResume"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="UsbDeviceException"
+ extends="com.openxc.sources.DataSourceException"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UsbDeviceException"
+ type="com.openxc.sources.usb.UsbDeviceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+<constructor name="UsbDeviceException"
+ type="com.openxc.sources.usb.UsbDeviceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="UsbDeviceUtilities"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="productFromUri"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceResourceException" type="com.openxc.sources.DataSourceResourceException">
+</exception>
+</method>
+<method name="vendorFromUri"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceResourceException" type="com.openxc.sources.DataSourceResourceException">
+</exception>
+</method>
+<field name="DEFAULT_USB_DEVICE_URI"
+ type="java.net.URI"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="UsbVehicleDataSource"
+ extends="com.openxc.sources.ContextualVehicleDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.lang.Runnable">
+</implements>
+<implements name="com.openxc.controllers.VehicleController">
+</implements>
+<constructor name="UsbVehicleDataSource"
+ type="com.openxc.sources.usb.UsbVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="device" type="java.net.URI">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="UsbVehicleDataSource"
+ type="com.openxc.sources.usb.UsbVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="UsbVehicleDataSource"
+ type="com.openxc.sources.usb.UsbVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<method name="close"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="run"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="set"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="start"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="ACTION_USB_DEVICE_ATTACHED"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;com.ford.openxc.USB_DEVICE_ATTACHED&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ACTION_USB_PERMISSION"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;com.ford.openxc.USB_PERMISSION&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+</package>
+<package name="com.openxc.units"
+>
+<class name="Boolean"
+ extends="com.openxc.units.Unit"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Boolean"
+ type="com.openxc.units.Boolean"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="boolean">
+</parameter>
+</constructor>
+<constructor name="Boolean"
+ type="com.openxc.units.Boolean"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+<method name="booleanValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSerializedValue"
+ return="java.lang.Boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="Degree"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Degree"
+ type="com.openxc.units.Degree"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="Kilometer"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Kilometer"
+ type="com.openxc.units.Kilometer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="KilometersPerHour"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="KilometersPerHour"
+ type="com.openxc.units.KilometersPerHour"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="Level"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Level"
+ type="com.openxc.units.Level"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="Liter"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Liter"
+ type="com.openxc.units.Liter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="Meter"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Meter"
+ type="com.openxc.units.Meter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="MetersPerSecond"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MetersPerSecond"
+ type="com.openxc.units.MetersPerSecond"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="NewtonMeter"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="NewtonMeter"
+ type="com.openxc.units.NewtonMeter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="Percentage"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Percentage"
+ type="com.openxc.units.Percentage"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="Quantity"
+ extends="com.openxc.units.Unit"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Quantity"
+ type="com.openxc.units.Quantity"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="T">
+</parameter>
+</constructor>
+<method name="doubleValue"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSerializedValue"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="intValue"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="RotationsPerMinute"
+ extends="com.openxc.units.Quantity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="RotationsPerMinute"
+ type="com.openxc.units.RotationsPerMinute"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.Number">
+</parameter>
+</constructor>
+</class>
+<class name="State"
+ extends="com.openxc.units.Unit"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="State"
+ type="com.openxc.units.State"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="T">
+</parameter>
+</constructor>
+<method name="enumValue"
+ return="T"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSerializedValue"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="Unit"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Unit"
+ type="com.openxc.units.Unit"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getSerializedValue"
+ return="java.lang.Object"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+<package name="com.openxc.util"
+>
+<class name="AgingData"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AgingData"
+ type="com.openxc.util.AgingData"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="TheUnit">
+</parameter>
+</constructor>
+<constructor name="AgingData"
+ type="com.openxc.util.AgingData"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="bornTime" type="double">
+</parameter>
+<parameter name="value" type="TheUnit">
+</parameter>
+</constructor>
+<method name="getAge"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValue"
+ return="TheUnit"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setTimestamp"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="timestamp" type="double">
+</parameter>
+</method>
+</class>
+<class name="AndroidFileOpener"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.util.FileOpener">
+</implements>
+<constructor name="AndroidFileOpener"
+ type="com.openxc.util.AndroidFileOpener"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="directory" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="getContext"
+ return="android.content.Context"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="openForWriting"
+ return="java.io.BufferedWriter"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="filename" type="java.lang.String">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+</class>
+<interface name="FileOpener"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="openForWriting"
+ return="java.io.BufferedWriter"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.lang.String">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+</interface>
+<class name="JavaFileOpener"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.util.FileOpener">
+</implements>
+<constructor name="JavaFileOpener"
+ type="com.openxc.util.JavaFileOpener"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="openForWriting"
+ return="java.io.BufferedWriter"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.lang.String">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+</class>
+<class name="Range"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Range"
+ type="com.openxc.util.Range"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="min" type="T">
+</parameter>
+<parameter name="max" type="T">
+</parameter>
+</constructor>
+<method name="getMax"
+ return="T"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getMin"
+ return="T"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+</api>
