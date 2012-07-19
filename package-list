@@ -1,9 +1,12 @@
 com.openxc
+com.openxc.controllers
 com.openxc.measurements
+com.openxc.measurements.serializers
 com.openxc.remote
-com.openxc.remote.sources
-com.openxc.remote.sources.manual
-com.openxc.remote.sources.trace
-com.openxc.remote.sources.usb
+com.openxc.sinks
+com.openxc.sources
+com.openxc.sources.bluetooth
+com.openxc.sources.trace
+com.openxc.sources.usb
 com.openxc.units
 com.openxc.util
