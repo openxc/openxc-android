@@ -26,7 +26,7 @@ import android.util.Log;
  *
  * A DataPipeline accepts two types of components - sources and sinks. The
  * sources (implementing {@link VehicleDataSource} call the
- * {@link #receive(String, Object, Object)} method on the this class when new
+ * {@link #receive(RawMeasurement)} method on the this class when new
  * values arrive. The DataPipeline then passes this value on to all currently
  * registered data sinks.
  */

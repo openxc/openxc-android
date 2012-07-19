@@ -84,14 +84,15 @@ import com.openxc.util.AndroidFileOpener;
  * The sources of data and any post-processing that happens is controlled by
  * modifying a list of "sources" and "sinks". When a message is received from a
  * data source, it is passed to any and all registered message "sinks" - these
- * receivers conform to the {@link com.openxc.sinks.VehicleDataSinkInterface}.
+ * receivers conform to the {@link com.openxc.sinks.VehicleDataSink}.
  * There will always be at least one sink that stores the latest messages and
  * handles passing on data to users of the VehicleManager class. Other possible
  * sinks include the {@link com.openxc.sinks.FileRecorderSink} which records a
  * trace of the raw OpenXC measurements to a file and a web streaming sink
  * (which streams the raw data to a web application). Other possible sources
- * include the {@link com.openxc.sources.TraceVehicleDataSource} which reads a
- * previously recorded vehicle data trace file and plays back the measurements
+ * include the {@link com.openxc.sources.trace.TraceVehicleDataSource} which
+ * reads a previously recorded vehicle data trace file and plays back the
+ * measurements
  * in real-time.
  *
  * One small inconsistency is that if a Bluetooth data source is added, any

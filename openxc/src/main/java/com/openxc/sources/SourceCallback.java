@@ -7,7 +7,7 @@ import com.openxc.remote.RawMeasurement;
  *
  * A VehicleDataSource is given a callback that implements this interface. When
  * new measurements arrive from the source, it uses the
- * {@link #receive(String, Object, Object)} method to pass along the new value.
+ * {@link #receive(RawMeasurement)} method to pass along the new value.
  */
 public interface SourceCallback {
     /**

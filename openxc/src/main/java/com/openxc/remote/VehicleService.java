@@ -42,11 +42,11 @@ import android.util.Log;
  * application process to the remote service and be indistinguishable from local
  * data sources.
  *
- * This service uses the same {@link DataPipeline} as the {@link VehicleManager}
- * to move data from sources to sinks, but it the pipeline is not modifiable by
- * the application as there is no good way to pass running sources through the
- * AIDL interface. The same style is used here for clarity and in order to share
- * code.
+ * This service uses the same {@link com.openxc.DataPipeline} as the
+ * {@link com.openxc.VehicleManager} to move data from sources to sinks, but it
+ * the pipeline is not modifiable by the application as there is no good way to
+ * pass running sources through the AIDL interface. The same style is used here
+ * for clarity and in order to share code.
  */
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";

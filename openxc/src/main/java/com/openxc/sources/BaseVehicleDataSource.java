@@ -13,7 +13,7 @@ import com.openxc.sources.SourceCallback;
  *
  * This class encapsulates funcationaliy common to most data sources. It accepts
  * and stores a SourceCallback reference (required by the
- * {@link com.opnexc.sources.VehicleDataSource} interface) and implements a
+ * {@link com.openxc.sources.VehicleDataSource} interface) and implements a
  * {@link #handleMessage(RawMeasurement)} method for subclass to call
  * with each new measurement, regardless of its origin.
  */

@@ -63,7 +63,7 @@ interface VehicleServiceInterface {
      *
      * The default sources are the USB device source and a source that listens
      * for application-generated updates via the
-     * {@link #receive(String, RawMeasurement)} method.
+     * {@link #receive(RawMeasurement)} method.
      */
     void initializeDefaultSources();
 

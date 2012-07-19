@@ -7,8 +7,8 @@ import com.openxc.VehicleDataEndpoint;
 /**
  * The interface for all vehicle data destination endpoints.
  *
- * A VehicleDataSink in a {@link DataPipeline} is given new measurements via the
- * receive methods. Data sinks are registered with a
+ * A VehicleDataSink in a {@link com.openxc.DataPipeline} is given new
+ * measurements via the receive methods. Data sinks are registered with a
  * {@link com.openxc.remote.VehicleService} receive all raw messages
  * from the vehicle data sources as they arrive without having to explicitly
  * register for asynchronous updates on specific measurements. Common
@@ -23,7 +23,7 @@ public interface VehicleDataSink extends VehicleDataEndpoint {
      * source get behind in processing data from a source potentially external
      * to the system.
      *
-     * @param measuremetn The new measurement.
+     * @param measurement The new measurement.
      */
     public void receive(RawMeasurement measurement) throws DataSinkException;
 }
