@@ -64,13 +64,6 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
         mApplicationSource = new ApplicationSource();
-        try {
-            mUsbDevice = new UsbVehicleDataSource(this);
-        } catch(DataSourceException e) {
-            Log.w(TAG, "Unable to add default USB data source", e);
-        }
-        mController = mUsbDevice;
-
         initializeDefaultSources();
         initializeDefaultSinks();
         acquireWakeLock();
@@ -88,7 +81,6 @@ public class VehicleService extends Service {
         if(mPipeline != null) {
             mPipeline.stop();
         }
-        mUsbDevice.close();
         releaseWakeLock();
     }
 
@@ -126,6 +118,13 @@ public class VehicleService extends Service {
     private void initializeDefaultSources() {
         mPipeline.clearSources();
         mPipeline.addSource(mApplicationSource);
+
+        try {
+            mUsbDevice = new UsbVehicleDataSource(this);
+        } catch(DataSourceException e) {
+            Log.w(TAG, "Unable to add default USB data source", e);
+        }
+        mController = mUsbDevice;
         mPipeline.addSource(mUsbDevice);
     }
 
@@ -137,7 +136,9 @@ public class VehicleService extends Service {
 
             // TODO should set use a CommandInterface instead of Measurement?
             public void set(RawMeasurement measurement) {
-                mController.set(measurement);
+                if(mController != null) {
+                    mController.set(measurement);
+                }
             }
 
             public void receive(RawMeasurement measurement) {

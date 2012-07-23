@@ -138,12 +138,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
 
         mVendorId = UsbDeviceUtilities.vendorFromUri(device);
         mProductId = UsbDeviceUtilities.productFromUri(device);
-        try {
-            connectToDevice(mManager, mVendorId, mProductId);
-        } catch(DataSourceException e) {
-            Log.i(TAG, "Unable to load USB device -- " +
-                    "waiting for it to appear", e);
-        }
+        start();
     }
 
     /**
@@ -171,6 +166,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
 
     public synchronized void start() {
         if(!mRunning) {
+            initializeDevice();
             primeOutput();
             mRunning = true;
             new Thread(this).start();
@@ -187,15 +183,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     public void stop() {
         super.stop();
         Log.d(TAG, "Stopping USB listener");
-        if(!mRunning) {
-            Log.d(TAG, "Already stopped.");
-            return;
-        }
-        mRunning = false;
-    }
 
-    public void close() {
-        stop();
         mDeviceConnectionLock.lock();
         mDeviceChanged.signal();
         if(mConnection != null && mInterface != null) {
@@ -203,6 +191,12 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         }
         mDeviceConnectionLock.unlock();
         getContext().unregisterReceiver(mBroadcastReceiver);
+
+        if(!mRunning) {
+            Log.d(TAG, "Already stopped.");
+            return;
+        }
+        mRunning = false;
     }
 
     /**
@@ -271,6 +265,15 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Writing message to USB: " + message);
         byte[] bytes = message.getBytes();
         write(bytes);
+    }
+
+    private void initializeDevice() {
+        try {
+            connectToDevice(mManager, mVendorId, mProductId);
+        } catch(DataSourceException e) {
+            Log.i(TAG, "Unable to load USB device -- " +
+                    "waiting for it to appear", e);
+        }
     }
 
     private void write(byte[] bytes) {
@@ -416,7 +419,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 mConnection = setupDevice(mManager, device);
                 Log.i(TAG, "Connected to USB device with " +
                         mConnection);
-                start();
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
