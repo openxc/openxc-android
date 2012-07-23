@@ -64,8 +64,6 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
         mApplicationSource = new ApplicationSource();
-        initializeDefaultSources();
-        initializeDefaultSinks();
         acquireWakeLock();
     }
 
@@ -91,8 +89,8 @@ public class VehicleService extends Service {
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
 
-
         initializeDefaultSources();
+        initializeDefaultSinks();
         return mBinder;
     }
 
