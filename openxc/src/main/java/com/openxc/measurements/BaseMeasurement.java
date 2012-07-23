@@ -204,7 +204,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             RawMeasurement rawMeasurement)
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor = null;
-        if(rawMeasurement != null) {
+        if(rawMeasurement != null && rawMeasurement.getValue() != null) {
             Class valueClass = rawMeasurement.getValue().getClass();
             if(valueClass == Double.class || valueClass == Integer.class) {
                 valueClass = Number.class;
