@@ -220,7 +220,13 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         long endTime;
         while(mRunning) {
             mDeviceConnectionLock.lock();
-            waitForDeviceConnection();
+
+            try {
+                waitForDeviceConnection();
+            } catch(InterruptedException e) {
+                Log.d(TAG, "Interrupted while waiting for a device");
+                break;
+            }
 
             // TODO when there haven't been any USB transfers for a long time,
             // we can get stuck here. do we need a timeout so it retries after
@@ -294,12 +300,10 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     /* You must have the mDeviceConnectionLock locked before calling this
      * function.
      */
-    private void waitForDeviceConnection() {
+    private void waitForDeviceConnection() throws InterruptedException {
         while(mRunning && mConnection == null) {
             Log.d(TAG, "Still no device available");
-            try {
-                mDeviceChanged.await();
-            } catch(InterruptedException e) {}
+            mDeviceChanged.await();
         }
     }
 
