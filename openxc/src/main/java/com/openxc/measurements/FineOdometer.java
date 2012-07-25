@@ -8,7 +8,7 @@ import com.openxc.util.Range;
  */
 public class FineOdometer extends BaseMeasurement<Kilometer> {
     private final static Range<Kilometer> RANGE =
-        new Range<Kilometer>(new Kilometer(0), new Kilometer(100));
+        new Range<Kilometer>(new Kilometer(0), new Kilometer(4294967295.0));
     public final static String ID = "fine_odometer_since_restart";
 
     public FineOdometer(Number value) {
