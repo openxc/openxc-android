@@ -119,11 +119,11 @@ public class VehicleService extends Service {
 
         try {
             mUsbDevice = new UsbVehicleDataSource(this);
+            mPipeline.addSource(mUsbDevice);
+            mController = mUsbDevice;
         } catch(DataSourceException e) {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
-        mController = mUsbDevice;
-        mPipeline.addSource(mUsbDevice);
     }
 
     private final VehicleServiceInterface.Stub mBinder =
@@ -136,6 +136,9 @@ public class VehicleService extends Service {
             public void set(RawMeasurement measurement) {
                 if(mController != null) {
                     mController.set(measurement);
+                } else {
+                    Log.w(TAG, "Unable to set value -- controller is "
+                            + mController);
                 }
             }
 
