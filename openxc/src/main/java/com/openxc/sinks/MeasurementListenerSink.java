@@ -4,6 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multimap;
 
+import com.google.common.base.Objects;
+
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.BaseMeasurement;
@@ -67,5 +69,12 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         } catch(NoValueException e) {
             Log.w(TAG, "Received notification for a blank measurement", e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("numListeners", mListeners.size())
+            .toString();
     }
 }

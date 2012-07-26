@@ -1,15 +1,20 @@
 package com.openxc.remote;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.openxc.DataPipeline;
 
 import com.openxc.remote.VehicleServiceListener;
 
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
+import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
 
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.usb.UsbVehicleDataSource;
+import com.openxc.sources.VehicleDataSource;
 import android.app.Service;
 
 import android.content.Context;
@@ -170,6 +175,22 @@ public class VehicleService extends Service {
 
             public int getMessageCount() {
                 return VehicleService.this.getMessageCount();
+            }
+
+            public List<String> getSourceSummaries() {
+                ArrayList<String> sources = new ArrayList<String>();
+                for(VehicleDataSource source : mPipeline.getSources()) {
+                    sources.add(source.toString());
+                }
+                return sources;
+            }
+
+            public List<String> getSinkSummaries() {
+                ArrayList<String> sinks = new ArrayList<String>();
+                for(VehicleDataSink sink : mPipeline.getSinks()) {
+                    sinks.add(sink.toString());
+                }
+                return sinks;
             }
     };
 

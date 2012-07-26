@@ -451,6 +451,44 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
+     * Return a list of all sources active in the system, suitable for
+     * displaying in a status view.
+     *
+     * This method is soley for being able to peek into the system to see what's
+     * active, which is why it returns strings intead of the actual source
+     * objects. We don't want applications to be able to modify the sources
+     * through this method.
+     *
+     * @return A list of the names and status of all sources.
+     */
+    public List<String> getSourceSummaries() {
+        ArrayList<String> sources = new ArrayList<String>();
+        for(VehicleDataSource source : mSources) {
+            sources.add(source.toString());
+        }
+
+        for(VehicleDataSource source : mPipeline.getSources()) {
+            sources.add(source.toString());
+        }
+        return sources;
+    }
+
+    /**
+     * Return a list of all sinks active in the system.
+     *
+     * The motivation for this method is the same as {@link #getSources}.
+     *
+     * @return A list of the names and status of all sinks.
+     */
+    public List<String> getSinkSummaries() {
+        ArrayList<String> sinks = new ArrayList<String>();
+        for(VehicleDataSink sink : mPipeline.getSinks()) {
+            sinks.add(sink.toString());
+        }
+        return sinks;
+    }
+
+    /**
      * Remove a previously registered source from the data pipeline.
      */
     public void removeSource(VehicleDataSource source) {

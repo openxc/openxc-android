@@ -126,6 +126,14 @@ public class DataPipeline implements SourceCallback {
         }
     }
 
+    public List<VehicleDataSource> getSources() {
+        return mSources;
+    }
+
+    public List<VehicleDataSink> getSinks() {
+        return mSinks;
+    }
+
     /**
      * Clear all sources and sinks from the pipeline and stop all of them.
      */

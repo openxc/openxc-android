@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
+import com.google.common.base.Objects;
+
 import com.openxc.controllers.VehicleController;
 
 import com.openxc.remote.RawMeasurement;
@@ -193,5 +195,13 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
             mSocket = null;
             throw new BluetoothException();
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("deviceAddress", mAddress)
+            .add("socket", mSocket)
+            .toString();
     }
 }

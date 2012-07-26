@@ -1,5 +1,7 @@
 package com.openxc.sources;
 
+import com.google.common.base.Objects;
+
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 
@@ -83,4 +85,11 @@ public class NativeLocationSource extends ContextualVehicleDataSource
             Bundle extras) {}
     public void onProviderEnabled(String provider) {}
     public void onProviderDisabled(String provider) {}
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("updateInterval", NATIVE_GPS_UPDATE_INTERVAL)
+            .toString();
+    }
 }

@@ -13,9 +13,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +22,7 @@ import android.view.MenuInflater;
 import android.util.Log;
 
 import android.widget.TextView;
+import android.widget.ListView;
 
 import com.openxc.R;
 import com.openxc.VehicleManager;
@@ -32,10 +31,12 @@ public class OpenXcEnablerActivity extends Activity {
 
     private static String TAG = "OpenXcEnablerActivity";
 
-    private final Handler mHandler = new Handler();
     private TextView mVehicleManagerStatusView;;
     private TextView mMessageCountView;
+    private ListView mSourceListView;
+    private ListView mSinkListView;
     private TimerTask mUpdateMessageCountTask;
+    private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
     private VehicleManager mVehicleManager;
 
@@ -46,22 +47,26 @@ public class OpenXcEnablerActivity extends Activity {
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
-            mHandler.post(new Runnable() {
+            OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     mVehicleManagerStatusView.setText("Running");
                 }
             });
 
             mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
-                    mHandler, mMessageCountView);
+                    OpenXcEnablerActivity.this, mMessageCountView);
+            mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
+                    mVehicleManager, OpenXcEnablerActivity.this,
+                    mSourceListView, mSinkListView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
+            mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
         }
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
-            mHandler.post(new Runnable() {
+            OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     mVehicleManagerStatusView.setText("Not running");
                 }
@@ -80,6 +85,8 @@ public class OpenXcEnablerActivity extends Activity {
         mVehicleManagerStatusView = (TextView) findViewById(
                 R.id.vehicle_service_status);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
+        mSourceListView = (ListView) findViewById(R.id.source_list);
+        mSinkListView = (ListView) findViewById(R.id.sink_list);
 
     }
 

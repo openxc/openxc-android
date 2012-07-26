@@ -22,4 +22,6 @@
     <string name="bluetooth_checkbox_title">Use a Bluetooth CAN translator</string>
     <string name="bluetooth_checkbox_summary">Read vehicle data from a CAN translator connected wirelessly via Bluetooth</string>
     <string name="bluetooth_mac_title">Bluetooth Device</string>
+    <string name="source_list_label">Data Sources</string>
+    <string name="sink_list_label">Data Sinks</string>
 </resources>

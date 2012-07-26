@@ -74,7 +74,9 @@ public class SettingsActivity extends PreferenceActivity {
         super.onDestroy();
         if(mReceiver != null) {
             unregisterReceiver(mReceiver);
-            mBluetoothAdapter.cancelDiscovery();
+            if(mBluetoothAdapter != null) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
         }
     }
 

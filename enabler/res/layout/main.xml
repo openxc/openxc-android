@@ -18,4 +18,12 @@
             android:text="@string/message_count_label" />
     <TextView android:id="@+id/message_count"
             style="@style/DefaultFont" />
+    <TextView android:id="@+id/source_list_label"
+            style="@style/DefaultFont"
+            android:text="@string/source_list_label" />
+    <ListView android:id="@+id/source_list" style="@style/DefaultFont" />
+    <TextView android:id="@+id/sink_list_label"
+            style="@style/DefaultFont"
+            android:text="@string/sink_list_label" />
+    <ListView android:id="@+id/sink_list" style="@style/DefaultFont" />
 </LinearLayout>

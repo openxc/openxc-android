@@ -5,18 +5,18 @@ import java.util.TimerTask;
 import com.openxc.VehicleManager;
 import com.openxc.remote.VehicleServiceException;
 
-import android.os.Handler;
+import android.app.Activity;
 import android.widget.TextView;
 
 public class MessageCountTask extends TimerTask {
     private VehicleManager mVehicleManager;
-    private Handler mHandler;
+    private Activity mActivity;
     private TextView mMessageCountView;
 
-    public MessageCountTask(VehicleManager vehicleService, Handler handler,
+    public MessageCountTask(VehicleManager vehicleService, Activity activity,
             TextView view) {
         mVehicleManager = vehicleService;
-        mHandler = handler;
+        mActivity = activity;
         mMessageCountView = view;
     }
 
@@ -29,7 +29,7 @@ public class MessageCountTask extends TimerTask {
         }
 
         final String messageText = messageCount + " messages";
-        mHandler.post(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mMessageCountView.setText(messageText);
             }

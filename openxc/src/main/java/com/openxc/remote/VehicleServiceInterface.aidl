@@ -80,4 +80,7 @@ interface VehicleServiceInterface {
      * @return number of messages received since instantiation.
      */
     int getMessageCount();
+
+    List<String> getSourceSummaries();
+    List<String> getSinkSummaries();
 }

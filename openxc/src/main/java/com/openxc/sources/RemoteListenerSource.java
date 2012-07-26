@@ -1,5 +1,7 @@
 package com.openxc.sources;
 
+import com.google.common.base.Objects;
+
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListener;
@@ -48,6 +50,11 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
             Log.w(TAG, "Unable to register to receive " +
                     "measurement callbacks", e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).toString();
     }
 
     private VehicleServiceListener mRemoteListener =
