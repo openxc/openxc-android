@@ -1,5 +1,7 @@
 package com.openxc.sinks;
 
+import com.google.common.base.Objects;
+
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
@@ -45,6 +47,11 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
                 measurement.getName().equals(Longitude.ID)) {
             updateLocation();
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).toString();
     }
 
     private void updateLocation() {

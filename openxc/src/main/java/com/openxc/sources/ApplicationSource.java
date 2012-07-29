@@ -1,5 +1,7 @@
 package com.openxc.sources;
 
+import com.google.common.base.Objects;
+
 import com.openxc.remote.RawMeasurement;
 
 /**
@@ -18,5 +20,10 @@ public class ApplicationSource extends BaseVehicleDataSource {
      */
     public void handleMessage(RawMeasurement measurement) {
         super.handleMessage(measurement);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).toString();
     }
 }

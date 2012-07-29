@@ -470,6 +470,15 @@ public class VehicleManager extends Service implements SourceCallback {
         for(VehicleDataSource source : mPipeline.getSources()) {
             sources.add(source.toString());
         }
+
+        if(mRemoteService != null) {
+            try {
+                sources.addAll(mRemoteService.getSourceSummaries());
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to retreive remote source summaries", e);
+            }
+
+        }
         return sources;
     }
 
@@ -484,6 +493,14 @@ public class VehicleManager extends Service implements SourceCallback {
         ArrayList<String> sinks = new ArrayList<String>();
         for(VehicleDataSink sink : mPipeline.getSinks()) {
             sinks.add(sink.toString());
+        }
+
+        if(mRemoteService != null) {
+            try {
+                sinks.addAll(mRemoteService.getSinkSummaries());
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to retreive remote sink summaries", e);
+            }
         }
         return sinks;
     }
