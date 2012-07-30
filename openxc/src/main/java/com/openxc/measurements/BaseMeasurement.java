@@ -157,9 +157,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     public static String getIdForClass(String measurementTypeName)
         throws UnrecognizedMeasurementTypeException {
         try {
-            Class<? extends Measurement> measurementType =
-                (Class<? extends Measurement>)
-                Class.forName(measurementTypeName);
+            Class.forName(measurementTypeName);
             return getIdForClass((Class<? extends Measurement>)
                     Class.forName(measurementTypeName));
         } catch(ClassNotFoundException e) {
