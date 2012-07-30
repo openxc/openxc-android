@@ -19,8 +19,6 @@ import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 
-import android.util.Log;
-
 /**
  * A pipeline that ferries data from VehicleDataSources to VehicleDataSinks.
  *

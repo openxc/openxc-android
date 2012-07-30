@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
-import com.google.common.base.Objects;
-
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 

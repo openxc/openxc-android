@@ -34,12 +34,6 @@ import android.hardware.usb.UsbManager;
 
 import com.openxc.controllers.VehicleController;
 
-import com.openxc.measurements.BaseMeasurement;
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
-import com.openxc.NoValueException;
-
 import com.openxc.remote.RawMeasurement;
 
 import android.util.Log;

@@ -5,8 +5,6 @@ import java.util.TimerTask;
 import android.app.Activity;
 
 import com.openxc.VehicleManager;
-import com.openxc.remote.VehicleServiceException;
-
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
