@@ -8,8 +8,10 @@ vehicle's CAN bus through the OpenXC CAN translation module in any Android
 application.
 
 Visit the [OpenXC][] project page for
-[installation instructions](http://openxcplatform.com/developers/android-library-installation.html)
-and [usage details](http://openxcplatform.com/developers/android-library-usage.html).
+[installation
+instructions](http://openxcplatform.com/getting-started/library-installation.html),
+[usage details](http://openxcplatform.com/android/api-guide.html) and the
+[source code documentation](http://openxcplatform.com/openxc-android).
 
 ## Contributing
 
@@ -17,7 +19,7 @@ Contributions are welcome - please file issues on
 [GitHub](https://github.com/openxc/openxc-android/issues) if you find any bugs.
 The repository includes a test suite (in the `openxc-it` sub-project) that you
 can use to confirm your fix or feature doesn't break anything else. New test
-cases are required for any contributions.
+cases are highly recommended with any contributions.
 
 ### Building
 
@@ -30,11 +32,11 @@ the `ANDROID_HOME` environment variable to the location of your SDK:
 
 After satisfying those requirements, the build is pretty simple:
 
-* Run `mvn clean package -pl openxc` from the root directory to build the
-    OpenXC library APK only
-* Run `mvn clean install -pl openxc` from the root directory to build the
-    library and also run the integration tests, this requires a connected Android
-    device or running emulator
+* Run `mvn clean install -pl openxc` from the root directory to build the OpenXC
+  library APK only.
+* Run `mvn clean install -pl openxc,openxc-it` from the root directory to build and run
+  the library and test suite. This requires that an Android device is attached or an
+  emulator is running.
 
 If you want the tests to wait for a debugger to attach, change the `testDebug`
 setting in `openxc-android/pom.xml` to `true`.
@@ -43,6 +45,7 @@ After the library is installed (run `mvn clean install -pl openxc`), run this
 to deploy the enabler and examples to an attached device:
 
     $ mvn clean package android:deploy -pl enabler,examples
+    $ mvn android:run -pl examples
 
 ### Building from Eclipse
 
