@@ -227,17 +227,19 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             // we can get stuck here. do we need a timeout so it retries after
             // USB wakes backup? Why does USB seem to go to sleep in the first
             // place?
-            int received = mConnection.bulkTransfer(
-                    mInEndpoint, bytes, bytes.length, 0);
-            if(received > 0) {
-                // Creating a new String object for each message causes the
-                // GC to go a little crazy, but I don't see another obvious way
-                // of converting the byte[] to something the StringBuffer can
-                // accept (either char[] or String). See #151.
-                buffer.append(new String(bytes, 0, received));
+            if(mConnection != null) {
+                int received = mConnection.bulkTransfer(
+                        mInEndpoint, bytes, bytes.length, 0);
+                if(received > 0) {
+                    // Creating a new String object for each message causes the
+                    // GC to go a little crazy, but I don't see another obvious way
+                    // of converting the byte[] to something the StringBuffer can
+                    // accept (either char[] or String). See #151.
+                    buffer.append(new String(bytes, 0, received));
 
-                parseStringBuffer(buffer);
-                mBytesReceived += received;
+                    parseStringBuffer(buffer);
+                    mBytesReceived += received;
+                }
             }
             mDeviceConnectionLock.unlock();
 
