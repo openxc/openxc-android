@@ -18,6 +18,7 @@ import com.openxc.sources.usb.UsbDeviceException;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 
 import android.content.BroadcastReceiver;
@@ -53,6 +54,7 @@ import android.util.Log;
  * cause a pop-up dialog that the user must dismiss before the data source will
  * become active.
  */
+@SuppressLint("NewApi")
 public class UsbVehicleDataSource extends ContextualVehicleDataSource
         implements Runnable, VehicleController {
     private static final String TAG = "UsbVehicleDataSource";
