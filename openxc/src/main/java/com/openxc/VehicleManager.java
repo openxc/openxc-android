@@ -133,51 +133,9 @@ public class VehicleManager extends Service implements SourceCallback {
     // trace source.
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
 
-    // TODO I've tried really hard to avoid doing this - requiring that all
-    // measurements classes be registered somewhere. There doesn't seem to be a
-    // good way to enumerate all of the classes without reading the filesystem.
-    // The problem is that we need to be able to map from a measurement's ID to
-    // its class and vice versa. We need *someone* to refer to to Class in Java
-    // before we can load its ID. Since we reworked the sources and sinks to be
-    // in application space, and the file trace recorder and uploader need to
-    // receive all measurements regardless of if someone has actually registered
-    // to receive callbacks for that measurement or not, we need to pre-load the
-    // name mapping cache before doing anything.
     private static List<Class<? extends Measurement>>
             MEASUREMENT_TYPES =
                 new ArrayList<Class<? extends Measurement>>();
-
-    static {
-        MEASUREMENT_TYPES.add(AcceleratorPedalPosition.class);
-        MEASUREMENT_TYPES.add(BrakePedalStatus.class);
-        MEASUREMENT_TYPES.add(EngineSpeed.class);
-        MEASUREMENT_TYPES.add(FineOdometer.class);
-        MEASUREMENT_TYPES.add(FuelConsumed.class);
-        MEASUREMENT_TYPES.add(FuelLevel.class);
-        MEASUREMENT_TYPES.add(HeadlampStatus.class);
-        MEASUREMENT_TYPES.add(HighBeamStatus.class);
-        MEASUREMENT_TYPES.add(IgnitionStatus.class);
-        MEASUREMENT_TYPES.add(Latitude.class);
-        MEASUREMENT_TYPES.add(Longitude.class);
-        MEASUREMENT_TYPES.add(Odometer.class);
-        MEASUREMENT_TYPES.add(ParkingBrakeStatus.class);
-        MEASUREMENT_TYPES.add(TorqueAtTransmission.class);
-        MEASUREMENT_TYPES.add(SteeringWheelAngle.class);
-        MEASUREMENT_TYPES.add(TransmissionGearPosition.class);
-        MEASUREMENT_TYPES.add(VehicleButtonEvent.class);
-        MEASUREMENT_TYPES.add(VehicleDoorStatus.class);
-        MEASUREMENT_TYPES.add(VehicleSpeed.class);
-        MEASUREMENT_TYPES.add(WindshieldWiperStatus.class);
-        MEASUREMENT_TYPES.add(TurnSignalStatus.class);
-
-        for(Class<? extends Measurement> measurementType : MEASUREMENT_TYPES) {
-            try {
-                BaseMeasurement.getIdForClass(measurementType);
-            } catch(UnrecognizedMeasurementTypeException e) {
-                Log.w(TAG, "Unable to initialize list of measurements", e);
-            }
-        }
-    }
 
     /**
      * Binder to connect IBinder in a ServiceConnection with the VehicleManager.
