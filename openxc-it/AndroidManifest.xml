@@ -3,8 +3,6 @@
   package="com.openxc" android:versionCode="1" android:versionName="1.0-SNAPSHOT">
 
   <application android:label="@string/app_name" android:debuggable="true">
-      <uses-feature android:name="android.hardware.usb.host"
-              android:required="true" />
       <uses-library android:name="android.test.runner" />
       <service android:name=".VehicleManager" android:exported="false"/>
       <service android:name=".remote.VehicleService" android:process=":remote"
@@ -23,6 +21,7 @@
   <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
-
+  <uses-feature android:name="android.hardware.usb.host"
+          android:required="true" />
 </manifest>
 
