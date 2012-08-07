@@ -9,4 +9,5 @@
           <action android:name="com.openxc.remote.VehicleServiceInterface" />
       </intent-filter>
   </service>
+  <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="12" />
 </manifest>
