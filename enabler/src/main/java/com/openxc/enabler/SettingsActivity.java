@@ -48,6 +48,7 @@ public class SettingsActivity extends PreferenceActivity {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.recording_preferences);
             addPreferencesFromResource(R.xml.data_source_preferences);
+            addPreferencesFromResource(R.xml.output_preferences);
             mBluetoothDeviceListPreference = (ListPreference)
                     findPreference(getString(R.string.bluetooth_mac_key));
             initialize(mBluetoothDeviceListPreference,
@@ -90,6 +91,14 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.recording_preferences);
+        }
+    }
+
+    public static class OutputPreferences extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.output_preferences);
         }
     }
 

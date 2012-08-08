@@ -1,0 +1,10 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+            android:key="@string/gps_overwrite_checkbox_key"
+            android:title="@string/gps_overwrite_checkbox_title"
+            android:summary="@string/gps_overwrite_checkbox_summary"
+            android:defaultValue="false" />
+
+</PreferenceScreen>

@@ -116,6 +116,7 @@ public class VehicleManager extends Service implements SourceCallback {
     private VehicleDataSink mFileRecorder;
     private VehicleDataSource mNativeLocationSource;
     private BluetoothVehicleDataSource mBluetoothSource;
+    private MockedLocationSink mMockedLocationSink;
     private VehicleDataSink mUploader;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
@@ -188,10 +189,16 @@ public class VehicleManager extends Service implements SourceCallback {
         mPreferenceListener = watchPreferences(mPreferences);
 
         mPipeline = new DataPipeline();
-        mNotifier = new MeasurementListenerSink();
-        mPipeline.addSink(mNotifier);
+        initializeDefaultSinks(mPipeline);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
         bindRemote();
+    }
+
+    private void initializeDefaultSinks(DataPipeline pipeline) {
+        mNotifier = new MeasurementListenerSink();
+        mMockedLocationSink = new MockedLocationSink(this);
+        pipeline.addSink(mNotifier);
+        pipeline.addSink(mMockedLocationSink);
     }
 
     @Override
@@ -605,9 +612,8 @@ public class VehicleManager extends Service implements SourceCallback {
      * Enable or disable reading GPS from the native Android stack.
      *
      * @param enabled true if native GPS should be passed through
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
+     * @throws VehicleServiceException if native GPS status is unable to be set
+     *      - an exceptional situation that shouldn't occur.
      */
     public void setNativeGpsStatus(boolean enabled)
             throws VehicleServiceException {
@@ -619,6 +625,22 @@ public class VehicleManager extends Service implements SourceCallback {
             mPipeline.removeSource(mNativeLocationSource);
             mNativeLocationSource = null;
         }
+    }
+
+    /**
+     * Enable or disable overwriting native GPS measurements with those from the
+     * vehicle.
+     *
+     * @see MockedLocationSink#setOverwritingStatus
+     *
+     * @param enabled true if native GPS should be overwritte.
+     * @throws VehicleServiceException if GPS overwriting status is unable to be
+     *      set - an exceptional situation that shouldn't occur.
+     */
+    public void setNativeGpsOverwriteStatus(boolean enabled)
+            throws VehicleServiceException {
+        Log.i(TAG, "Setting native GPS overwriting to " + enabled);
+        mMockedLocationSink.setOverwritingStatus(enabled);
     }
 
     /**
@@ -739,6 +761,9 @@ public class VehicleManager extends Service implements SourceCallback {
                             getString(R.string.recording_checkbox_key), false));
                 setNativeGpsStatus(mPreferences.getBoolean(
                             getString(R.string.native_gps_checkbox_key), false));
+                setNativeGpsOverwriteStatus(mPreferences.getBoolean(
+                            getString(R.string.gps_overwrite_checkbox_key),
+                            false));
                 setUploadingStatus(mPreferences.getBoolean(
                             getString(R.string.uploading_checkbox_key), false));
                 setBluetoothSourceStatus(mPreferences.getBoolean(
@@ -756,6 +781,8 @@ public class VehicleManager extends Service implements SourceCallback {
                     setFileRecordingStatus(preferences.getBoolean(key, false));
                 } else if(key.equals(getString(R.string.native_gps_checkbox_key))) {
                     setNativeGpsStatus(preferences.getBoolean(key, false));
+                } else if(key.equals(getString(R.string.gps_overwrite_checkbox_key))) {
+                    setNativeGpsOverwriteStatus(preferences.getBoolean(key, false));
                 } else if(key.equals(getString(R.string.uploading_checkbox_key))) {
                     setUploadingStatus(preferences.getBoolean(key, false));
                 } else if(key.equals(getString(R.string.bluetooth_checkbox_key))

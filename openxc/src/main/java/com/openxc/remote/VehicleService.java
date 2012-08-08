@@ -7,7 +7,6 @@ import com.openxc.DataPipeline;
 
 import com.openxc.remote.VehicleServiceListener;
 
-import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
@@ -95,7 +94,7 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service binding in response to " + intent);
 
         initializeDefaultSources();
-        initializeDefaultSinks();
+        initializeDefaultSinks(mPipeline);
         return mBinder;
     }
 
@@ -112,10 +111,9 @@ public class VehicleService extends Service {
         return false;
     }
 
-    private void initializeDefaultSinks() {
+    private void initializeDefaultSinks(DataPipeline pipeline) {
         mNotifier = new RemoteCallbackSink();
-        mPipeline.addSink(mNotifier);
-        mPipeline.addSink(new MockedLocationSink(this));
+        pipeline.addSink(mNotifier);
     }
 
     private void initializeDefaultSources() {
