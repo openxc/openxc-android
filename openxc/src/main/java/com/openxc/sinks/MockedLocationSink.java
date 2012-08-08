@@ -62,6 +62,12 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
             return;
         }
 
+        // Only enable overwriting the built-in Android GPS provider if we
+        // actually receive a GPS update from the vehicle. This is to avoid
+        // killing GPS just by having the OpenXC app installed (because it's
+        // always running the serivce in the background).
+        overwriteNativeProvider();
+
         Location location = new Location(LocationManager.GPS_PROVIDER);
         try {
             location.setLatitude(((Number)get(Latitude.ID).getValue()).doubleValue());
@@ -85,13 +91,21 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         }
     }
 
-    private void setupMockLocations() {
+    private void overwriteNativeProvider() {
         try {
             mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
                     false, false, false, false, false, true, false, 0, 5);
+
             mLocationManager.setTestProviderEnabled(
                     LocationManager.GPS_PROVIDER, true);
+        } catch(SecurityException e) {
+            Log.w(TAG, "Unable to use mocked locations, " +
+                    "insufficient privileges", e);
+        }
+    }
 
+    private void setupMockLocations() {
+        try {
             if(mLocationManager.getProvider(
                         VEHICLE_LOCATION_PROVIDER) == null) {
                 mLocationManager.addTestProvider(VEHICLE_LOCATION_PROVIDER,
