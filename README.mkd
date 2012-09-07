@@ -32,9 +32,9 @@ the `ANDROID_HOME` environment variable to the location of your SDK:
 
 After satisfying those requirements, the build is pretty simple:
 
-* Run `mvn clean install -pl openxc` from the root directory to build the OpenXC
+* Run `mvn clean install -pl openxc -am` from the root directory to build the OpenXC
   library APK only.
-* Run `mvn clean install -pl openxc,openxc-it` from the root directory to build and run
+* Run `mvn clean install -pl openxc,openxc-it -am` from the root directory to build and run
   the library and test suite. This requires that an Android device is attached or an
   emulator is running.
 
