@@ -26,4 +26,6 @@
     <string name="parking_brake_status_label">Parking Brake Status</string>
     <string name="button_event_label">Button Event</string>
     <string name="door_status_label">Door Status</string>
+    <string name="left_turn">Left Turn</string>
+    <string name="right_turn">Right Turn</string>
 </resources>
