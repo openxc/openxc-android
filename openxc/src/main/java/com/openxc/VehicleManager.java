@@ -112,10 +112,6 @@ public class VehicleManager extends Service implements SourceCallback {
     // trace source.
     private CopyOnWriteArrayList<VehicleDataSource> mSources;
 
-    private static List<Class<? extends Measurement>>
-            MEASUREMENT_TYPES =
-                new ArrayList<Class<? extends Measurement>>();
-
     /**
      * Binder to connect IBinder in a ServiceConnection with the VehicleManager.
      *
