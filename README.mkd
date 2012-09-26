@@ -15,11 +15,7 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 
 ## Contributing
 
-Contributions are welcome - please file issues on
-[GitHub](https://github.com/openxc/openxc-android/issues) if you find any bugs.
-The repository includes a test suite (in the `openxc-it` sub-project) that you
-can use to confirm your fix or feature doesn't break anything else. New test
-cases are highly recommended with any contributions.
+Please see our [Contibution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
 
 ### Building
 
