@@ -530,6 +530,7 @@ public class VehicleManager extends Service implements SourceCallback {
             String deviceAddress = mPreferences.getString(
                     getString(R.string.bluetooth_mac_key), null);
             if(deviceAddress != null) {
+                removeSource(mBluetoothSource);
                 if(mBluetoothSource != null) {
                     mBluetoothSource.close();
                 }
