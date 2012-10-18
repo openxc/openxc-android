@@ -13,15 +13,13 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 [usage details](http://openxcplatform.com/android/api-guide.html) and the
 [source code documentation](http://openxcplatform.com/openxc-android).
 
-## Contributing
+## Building from Eclipse
 
-Contributions are welcome - please file issues on
-[GitHub](https://github.com/openxc/openxc-android/issues) if you find any bugs.
-The repository includes a test suite (in the `openxc-it` sub-project) that you
-can use to confirm your fix or feature doesn't break anything else. New test
-cases are highly recommended with any contributions.
+If you have a version of Eclipse with Maven integration (e.g. Indigo for Java
+Developers), you can import the library as an "Existing Maven Project." The
+dependencies will be downloaded automatically.
 
-### Building
+## Building from Command Line
 
 The build requires [Maven](http://maven.apache.org/download.html)
 v3.0.3+ and the [Android SDK](http://developer.android.com/sdk/index.html)
@@ -47,11 +45,9 @@ to deploy the enabler and examples to an attached device:
     $ mvn clean package android:deploy -pl enabler,examples
     $ mvn android:run -pl examples
 
-### Building from Eclipse
+## Contributing
 
-If you have a version of Eclipse with Maven integration (e.g. Indigo for Java
-Developers), you can import the library as an "Existing Maven Project." The
-dependencies will be downloaded automatically.
+Please see our [Contibution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
 
 ## License
 
