@@ -19,7 +19,7 @@ public class UsbDeviceUtilities {
     public static URI DEFAULT_USB_DEVICE_URI = null;
     static {
         try {
-            DEFAULT_USB_DEVICE_URI = new URI("usb://04d8/0053");
+            DEFAULT_USB_DEVICE_URI = new URI("usb://1bc4/0001");
         } catch(URISyntaxException e) { }
     }
 
