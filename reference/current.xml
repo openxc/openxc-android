@@ -104,6 +104,28 @@
  visibility="public"
 >
 </method>
+<method name="getSinks"
+ return="java.util.List&lt;com.openxc.sinks.VehicleDataSink&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSources"
+ return="java.util.List&lt;com.openxc.sources.VehicleDataSource&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="receive"
  return="void"
  abstract="false"
@@ -222,17 +244,6 @@
  visibility="public"
 >
 </constructor>
-<field name="app_name"
- type="int"
- transient="false"
- volatile="false"
- value="2130837504"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 <field name="bluetooth_checkbox_key"
  type="int"
  transient="false"
@@ -255,11 +266,22 @@
  visibility="public"
 >
 </field>
-<field name="native_gps_checkbox_key"
+<field name="gps_overwrite_checkbox_key"
  type="int"
  transient="false"
  volatile="false"
  value="2130837505"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="native_gps_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837504"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -406,66 +428,6 @@
 <exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
 </exception>
 </method>
-<method name="enableBluetoothSource"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="enableNativeGpsPassthrough"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="enableRecording"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="enableUploading"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
 <method name="get"
  return="com.openxc.measurements.Measurement"
  abstract="false"
@@ -495,6 +457,28 @@
 >
 <exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
 </exception>
+</method>
+<method name="getSinkSummaries"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSourceSummaries"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 <method name="initializeDefaultSources"
  return="void"
@@ -591,6 +575,81 @@
 <parameter name="command" type="com.openxc.measurements.Measurement">
 </parameter>
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</method>
+<method name="setBluetoothSourceStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="setFileRecordingStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="setNativeGpsOverwriteStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="setNativeGpsStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
+</exception>
+</method>
+<method name="setUploadingStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
 </exception>
 </method>
 <method name="waitUntilBound"
@@ -819,21 +878,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-</method>
-<method name="getIdForClass"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="measurementTypeName" type="java.lang.String">
-</parameter>
-<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
-</exception>
 </method>
 <method name="getIdForClass"
  return="java.lang.String"
@@ -2595,6 +2639,32 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="getSinkSummaries"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="getSourceSummaries"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="initializeDefaultSources"
  return="void"
  abstract="true"
@@ -3146,6 +3216,19 @@
 <parameter name="context" type="android.content.Context">
 </parameter>
 </constructor>
+<method name="setOverwritingStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+</method>
 <field name="TAG"
  type="java.lang.String"
  transient="false"
@@ -4107,17 +4190,6 @@
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
 </exception>
 </constructor>
-<method name="close"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
 <method name="run"
  return="void"
  abstract="false"

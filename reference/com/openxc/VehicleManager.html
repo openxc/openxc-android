@@ -1158,78 +1158,6 @@ android.content.ComponentCallbacks2
             
             
             
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#enableBluetoothSource(boolean)">enableBluetoothSource</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable receiving vehicle data from a Bluetooth CAN device.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#enableNativeGpsPassthrough(boolean)">enableNativeGpsPassthrough</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable reading GPS from the native Android stack.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#enableRecording(boolean)">enableRecording</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable recording of a trace file.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#enableUploading(boolean)">enableUploading</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable uploading of a vehicle trace to a remote web server.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             <a href="../../com/openxc/measurements/Measurement.html">Measurement</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1254,6 +1182,43 @@ android.content.ComponentCallbacks2
         <span class="sympad"><a href="../../com/openxc/VehicleManager.html#getMessageCount()">getMessageCount</a></span>()</nobr>
         
         <div class="jd-descrdiv">Read the number of messages received by the vehicle service.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#getSinkSummaries()">getSinkSummaries</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return a list of all sinks active in the system.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#getSourceSummaries()">getSourceSummaries</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return a list of all sources active in the system, suitable for
+ displaying in a status view.</div>
   
   </td></tr>
 
@@ -1422,6 +1387,97 @@ android.content.ComponentCallbacks2
             
             
             
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setBluetoothSourceStatus(boolean)">setBluetoothSourceStatus</a></span>(boolean enabled)</nobr>
+        
+        <div class="jd-descrdiv">Enable or disable receiving vehicle data from a Bluetooth CAN device.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setFileRecordingStatus(boolean)">setFileRecordingStatus</a></span>(boolean enabled)</nobr>
+        
+        <div class="jd-descrdiv">Enable or disable recording of a trace file.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setNativeGpsOverwriteStatus(boolean)">setNativeGpsOverwriteStatus</a></span>(boolean enabled)</nobr>
+        
+        <div class="jd-descrdiv">Enable or disable overwriting native GPS measurements with those from the
+ vehicle.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setNativeGpsStatus(boolean)">setNativeGpsStatus</a></span>(boolean enabled)</nobr>
+        
+        <div class="jd-descrdiv">Enable or disable reading GPS from the native Android stack.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setUploadingStatus(boolean)">setUploadingStatus</a></span>(boolean enabled)</nobr>
+        
+        <div class="jd-descrdiv">Enable or disable uploading of a vehicle trace to a remote web server.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1431,7 +1487,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -5052,217 +5108,6 @@ From interface
 </div>
 
 
-<A NAME="enableBluetoothSource(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">enableBluetoothSource</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable receiving vehicle data from a Bluetooth CAN device.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if bluetooth should be enabled</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional
-      situation that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="enableNativeGpsPassthrough(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">enableNativeGpsPassthrough</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable reading GPS from the native Android stack.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if native GPS should be passed through</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional situation
-      that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="enableRecording(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">enableRecording</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable recording of a trace file.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if recording should be enabled</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional
-      situation that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="enableUploading(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">enableUploading</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable uploading of a vehicle trace to a remote web server.
-
- The URL of the web server to upload the trace to is read from the shared
- preferences.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if uploading should be enabled</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional situation
-      that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
 <A NAME="get(java.lang.Class<? extends com.openxc.measurements.Measurement>)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -5370,6 +5215,86 @@ From interface
 </td>
         </tr>
       </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="getSinkSummaries()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt;
+      </span>
+      <span class="sympad">getSinkSummaries</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Return a list of all sinks active in the system.
+
+ The motivation for this method is the same as #getSources.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>A list of the names and status of all sinks.
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="getSourceSummaries()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt;
+      </span>
+      <span class="sympad">getSourceSummaries</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Return a list of all sources active in the system, suitable for
+ displaying in a status view.
+
+ This method is soley for being able to peek into the system to see what's
+ active, which is why it returns strings intead of the actual source
+ objects. We don't want applications to be able to modify the sources
+ through this method.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>A list of the names and status of all sources.
+</li></ul>
   </div>
 
     </div>
@@ -5732,6 +5657,273 @@ From interface
         <tr>
             <th><a href="../../com/openxc/measurements/UnrecognizedMeasurementTypeException.html">UnrecognizedMeasurementTypeException</a></td>
             <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setBluetoothSourceStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setBluetoothSourceStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable receiving vehicle data from a Bluetooth CAN device.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>enabled</td>
+          <td>true if bluetooth should be enabled</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
+            <td>if the listener is unable to be
+      unregistered with the library internals - an exceptional
+      situation that shouldn't occur.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setFileRecordingStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setFileRecordingStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable recording of a trace file.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>enabled</td>
+          <td>true if recording should be enabled</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
+            <td>if the listener is unable to be
+      unregistered with the library internals - an exceptional
+      situation that shouldn't occur.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setNativeGpsOverwriteStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setNativeGpsOverwriteStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable overwriting native GPS measurements with those from the
+ vehicle.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>enabled</td>
+          <td>true if native GPS should be overwritte.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
+            <td>if GPS overwriting status is unable to be
+      set - an exceptional situation that shouldn't occur.
+</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li><code><a href="../../com/openxc/sinks/MockedLocationSink.html#setOverwritingStatus(boolean)">setOverwritingStatus(boolean)</a></code></li>
+      </ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setNativeGpsStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setNativeGpsStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable reading GPS from the native Android stack.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>enabled</td>
+          <td>true if native GPS should be passed through</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
+            <td>if native GPS status is unable to be set
+      - an exceptional situation that shouldn't occur.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setUploadingStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setUploadingStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable uploading of a vehicle trace to a remote web server.
+
+ The URL of the web server to upload the trace to is read from the shared
+ preferences.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>enabled</td>
+          <td>true if uploading should be enabled</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
+            <td>if the listener is unable to be
+      unregistered with the library internals - an exceptional situation
+      that shouldn't occur.
+</td>
         </tr>
       </table>
   </div>
