@@ -2,6 +2,8 @@ package com.openxc.sources.trace;
 
 import com.google.common.base.Objects;
 
+import org.json.JSONException;
+
 import java.util.concurrent.TimeUnit;
 
 import java.io.BufferedReader;
@@ -18,8 +20,9 @@ import java.net.URI;
 
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-
 import com.openxc.sources.DataSourceException;
+
+import com.openxc.remote.RawMeasurement;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -34,12 +37,13 @@ import android.util.Log;
  * Everything from the VehicleService on up the chain is identical to when
  * operating in a live vehicle.
  *
- * The expected format of the trace file is UNIX timestamps followed by JSON
- * objects, separated by newlines:
+ * The trace file format is simply a plain text file of OpenXC JSON messages with
+ * an additional timestamp field, separated by newlines:
  *
- * 1332794184.319404: {"name":"fuel_consumed_since_restart","value":0.090000}
- * 1332794184.502802: {"name":"steering_wheel_angle","value":-346.985229}
- * 1332794184.559463: {"name":"torque_at_transmission","value":1.000000}
+ * {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
+ * {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}
+ * {"timestamp": 1351176963.438211, "name": "brake_pedal_status", "value": false}
+ * {"timestamp": 1351176963.438318, "name": "transmission_gear_position", "value": "second"}
  *
  * The trace file to use is specified via the constructor as an Android-style
  * resource URI, e.g. "resource://42" or a plain file path
@@ -137,22 +141,29 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             long startingTime = System.nanoTime();
             try {
                 while(mRunning && (line = reader.readLine()) != null) {
-                    String[] record = line.split(":", 2);
-                    if(record.length != 2) {
+                    RawMeasurement measurement = RawMeasurement.deserialize(
+                            line);
+                    if(measurement == null) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
                         continue;
                     }
 
+                    if(measurement != null && !measurement.isTimestamped()) {
+                        Log.w(TAG, "A trace line was missing a timestamp: " +
+                                line);
+                        continue;
+                    }
+
                     try {
                         waitForNextRecord(startingTime,
-                                Double.parseDouble(record[0]));
+                                measurement.getTimestamp());
                     } catch(NumberFormatException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
                         continue;
                     }
-                    handleMessage(record[1]);
+                    handleMessage(measurement);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "An exception occured when reading the trace " +

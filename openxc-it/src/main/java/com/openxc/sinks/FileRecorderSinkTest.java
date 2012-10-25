@@ -50,14 +50,13 @@ public class FileRecorderSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testOutputFormat() throws JSONException, DataSinkException {
-        sink.receive(new RawMeasurement(measurementId, value));
+        RawMeasurement measurement = new RawMeasurement(measurementId, value);
+        measurement.timestamp();
+        sink.receive(measurement);
         sink.flush();
 
-        String[] record = outputString.toString().split(":", 2);
-        assertTrue(record.length == 2);
-
         JSONObject message;
-        message = new JSONObject(record[1]);
+        message = new JSONObject(outputString.toString());
         assertTrue(message.getString("name").equals(measurementId));
         assertTrue(message.getString("value").equals(value));
     }

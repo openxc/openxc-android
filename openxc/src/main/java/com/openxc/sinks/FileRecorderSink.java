@@ -3,7 +3,6 @@ package com.openxc.sinks;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URI;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,8 +22,6 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private static SimpleDateFormat sDateFormatter =
             new SimpleDateFormat("yyyy-MM-dd-HH");
-    private static DecimalFormat sTimestampFormatter =
-            new DecimalFormat("##########.000000");
 
     private BufferedWriter mWriter;
     private Date mLastFileCreated;
@@ -44,21 +41,20 @@ public class FileRecorderSink extends BaseVehicleDataSink {
      */
     public synchronized void receive(RawMeasurement measurement)
             throws DataSinkException {
-        double timestamp = System.currentTimeMillis() / 1000.0;
-        String timestampString = sTimestampFormatter.format(timestamp);
         if(mWriter != null) {
             if((new Date()).getHours() != mLastFileCreated.getHours()) {
                 // flip to a new file every hour
                 try {
                     openTimestampedFile();
                 } catch(IOException e) {
-                    throw new DataSinkException("Unable to open file nfor recording",
-                            e);
+                    throw new DataSinkException(
+                            "Unable to open file nfor recording", e);
                 }
             }
 
+            measurement.timestamp();
             try {
-                mWriter.write(timestampString + ": " + measurement.serialize());
+                mWriter.write(measurement.serialize());
                 mWriter.newLine();
             } catch(IOException e) {
                 Log.w(TAG, "Unable to write measurement to file", e);
