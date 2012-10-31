@@ -1,9 +1,0 @@
-The Maven for Eclipse plugin requires the src/test/java directory to exist.
-This sub-project does not have its own tests, this folder would normally
-be empty. Since empty directories cannot be committed to git repositories, we
-need this placeholder file to make sure all users have this folder when
-importing the project in Eclipse.
-
-Note that the placeholder files in enabler, examples and openxc all have unique
-names (e.g. README.enabler) because if they were the same, they would cause
-conflicts when being built into an Android .apk by Eclipse.
