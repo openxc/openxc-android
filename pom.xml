@@ -31,16 +31,6 @@
                 <artifactId>android-test</artifactId>
                 <version>4.0.1.2</version>
             </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>10.0.1</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -114,6 +104,23 @@
                     </additionalparam>
                     <useStandardDocletOptions>false</useStandardDocletOptions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/../libs</outputDirectory>
+                            <excludeScope>provided</excludeScope>
+                            <excludeArtifactIds>jsr305,openxc,openxc-it,openxc-examples,openxc-enabler</excludeArtifactIds>
+                            <excludeTransitive>true</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
