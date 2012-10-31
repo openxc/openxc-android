@@ -21,7 +21,7 @@ public class AgingData<TheUnit extends Unit> {
      */
     public AgingData(TheUnit value) {
         mValue = value;
-        mBornTime = System.nanoTime();
+        mBornTime = System.nanoTime() / 1000000000.0;
     }
 
     public AgingData(double bornTime, TheUnit value) {
@@ -39,12 +39,12 @@ public class AgingData<TheUnit extends Unit> {
     }
 
     /**
-     * Retreive the age of this piece of data.
+     * Retrieve the age of this piece of data.
      *
      * @return the age of the data in seconds.
      */
     public double getAge() {
-        return (System.nanoTime() - mBornTime) / 1000000000.0;
+        return (System.nanoTime() / 1000000000.0) - mBornTime;
     }
 
     public void setTimestamp(double timestamp) {
