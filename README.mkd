@@ -15,9 +15,17 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 
 ## Building from Eclipse
 
-If you have a version of Eclipse with Maven integration (e.g. Indigo for Java
-Developers), you can import the library as an "Existing Maven Project." The
-dependencies will be downloaded automatically.
+Before importing the projects, make sure Eclipse is set to use the Java 1.6
+compliler compliance level at `Windows -> Preferences -> Java -> Compiler`.
+
+Next, go to `File -> Import -> General -> Existing Projects into
+Workspace` and browse to the `openxc-android` repository. At the minimum, import
+the `openxc` folder (the Android library itself) and `openxc-enabler` (the
+Enabler app, required to run OpenXC applications).
+
+You can optionally import the `openxc-examples` project to see an example
+vehicle dashboard OpenXC application, and also the `openxc-it` which contains a
+test suite for the library and instrumentation tests that run on the device.
 
 ## Building from Command Line
 
