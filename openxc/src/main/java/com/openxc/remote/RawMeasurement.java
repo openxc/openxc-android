@@ -150,6 +150,10 @@ public class RawMeasurement implements Parcelable {
         mTimestamp = System.currentTimeMillis() / 1000.0;
     }
 
+    public void untimestamp() {
+    	mTimestamp = Double.NaN;
+    }
+    
     public int describeContents() {
         return 0;
     }

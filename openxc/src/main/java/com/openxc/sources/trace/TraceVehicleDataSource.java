@@ -163,6 +163,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                                 "format: " + line);
                         continue;
                     }
+                    measurement.untimestamp();
                     handleMessage(measurement);
                 }
             } catch(IOException e) {
