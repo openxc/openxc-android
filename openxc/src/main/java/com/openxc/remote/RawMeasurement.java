@@ -54,7 +54,7 @@ public class RawMeasurement implements Parcelable {
     }
 
     private RawMeasurement() {
-        mTimestamp = System.nanoTime();
+        timestamp();
     }
 
     public void writeToParcel(Parcel out, int flags) {
@@ -153,7 +153,7 @@ public class RawMeasurement implements Parcelable {
     public void untimestamp() {
     	mTimestamp = Double.NaN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

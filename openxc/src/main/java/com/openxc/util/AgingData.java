@@ -1,5 +1,8 @@
 package com.openxc.util;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.google.common.base.Objects;
 
 import com.openxc.units.Unit;
@@ -12,7 +15,7 @@ import com.openxc.units.Unit;
  */
 public class AgingData<TheUnit extends Unit> {
     TheUnit mValue;
-    private double mBornTime;
+    private Date mBirthdate;
 
     /**
      * Construct an instance of AgingData with the value of unit.
@@ -21,12 +24,12 @@ public class AgingData<TheUnit extends Unit> {
      */
     public AgingData(TheUnit value) {
         mValue = value;
-        mBornTime = System.nanoTime() / 1000000000.0;
+        mBirthdate = new Date();
     }
 
-    public AgingData(double bornTime, TheUnit value) {
+    public AgingData(Date birthdate, TheUnit value) {
         mValue = value;
-        mBornTime = bornTime;
+        mBirthdate = birthdate;
     }
 
     /**
@@ -44,18 +47,20 @@ public class AgingData<TheUnit extends Unit> {
      * @return the age of the data in seconds.
      */
     public double getAge() {
-        return (System.nanoTime() / 1000000000.0) - mBornTime;
+        return (new Date()).getTime() - mBirthdate.getTime();
     }
 
     public void setTimestamp(double timestamp) {
-        mBornTime = timestamp;
+        Calendar otherTime = Calendar.getInstance();
+        otherTime.setTimeInMillis(new Double(timestamp * 1000).longValue());
+        mBirthdate = otherTime.getTime();
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("value", mValue)
-            .add("born", mBornTime)
+            .add("birthdate", mBirthdate)
             .toString();
     }
 }

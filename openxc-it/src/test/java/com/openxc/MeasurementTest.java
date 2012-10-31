@@ -41,6 +41,7 @@ public class MeasurementTest extends TestCase {
     }
 
     public void testAgeIsPositive() {
+        pause(10);
         assertThat(measurement.getAge(), greaterThan(0.0));
     }
 
@@ -83,5 +84,11 @@ public class MeasurementTest extends TestCase {
         public String getGenericName() {
             return ID;
         }
+    }
+
+    private void pause(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch(InterruptedException e) {}
     }
 }
