@@ -1,0 +1,31 @@
+# OpenXC Android Library Changelog
+
+## v2.0
+
+* Test and verify Bluetooth data source.
+* Add an option to the Enabler's settings menu to use a Bluetooth source.
+* Change vehicle data trace file format to include timestamps as native JSON.
+* Remove Maven support for Eclipse developers; library dependencies are now
+  bundled in the repository.
+
+## v1.3
+
+* Greatly improve USB connection reliability.
+* Refactored library internals to allow greater flexibility, including
+  user-defined Measurement types, data sources and data sinks.
+
+## v1.2
+
+* Add OpenXC Enabler application to control VehicleService in a remote process.
+  Starts service at bootup and allows sharing the service between multiple
+  OpenXC applications.
+
+## v1.1
+
+* Measurement API changed, getValue() no longers throws an exception if data is
+  unavailable. Instead, measurement objects will not be returend to the caller
+  unless they have valid data.
+
+## v1.0
+
+* Initial release, USB CAN translator support.
