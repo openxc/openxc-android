@@ -1,6 +1,5 @@
 target
 bin
-.project
 .settings
 gen
 .DS_Store
