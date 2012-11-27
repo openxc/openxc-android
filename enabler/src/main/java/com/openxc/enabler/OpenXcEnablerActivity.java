@@ -22,7 +22,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.ListView;
 
-import com.openxc.R;
+import com.openxc.enabler.R;
 import com.openxc.VehicleManager;
 
 public class OpenXcEnablerActivity extends Activity {
