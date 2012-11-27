@@ -1,5 +1,7 @@
 package com.openxc.sinks;
 
+import java.lang.reflect.Method;
+
 import com.google.common.base.Objects;
 
 import com.openxc.measurements.Latitude;
@@ -14,7 +16,6 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import android.util.Log;
-
 
 /**
  * Propagate vehicle location updates through the Android location interface.
@@ -82,6 +83,33 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         return Objects.toStringHelper(this).toString();
     }
 
+    private void makeLocationComplete(Location location) {
+        // TODO This workaround is necessary to run on an Android 4.2 device,
+        // even though we are only targeting API level 12. This seems really
+        // broken to me, that suddenly Location must be "complete" but the
+        // methods to make it complete aren't available in order API versions.
+        // This code dynamically loads the method if it exists, otherwise it
+        // sets the timestamp with the older method.
+        Method makeCompleteMethod = null;
+        try {
+            makeCompleteMethod = Location.class.getMethod("makeComplete");
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        if(makeCompleteMethod != null) {
+            try {
+                makeCompleteMethod.invoke(location);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            location.setTime(System.currentTimeMillis());
+        }
+    }
+
     private void updateLocation() {
         if(mLocationManager == null ||
                 !containsMeasurement(Latitude.ID) ||
@@ -105,8 +133,8 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
             Log.e(TAG, "Expected a Number, but got something " +
                     "else -- not updating location", e);
         }
-        location.setTime(System.currentTimeMillis());
 
+        makeLocationComplete(location);
         try {
             if(mOverwriteNativeStatus) {
                 mLocationManager.setTestProviderLocation(
