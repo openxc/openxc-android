@@ -95,6 +95,9 @@ public class RawMeasurement implements Parcelable {
         return message.toString();
     }
 
+    // TODO I think there was a reason I had this return null instead of
+    // throwing an exception, but that should probably be revisited because in
+    // general it's not good practice.
     public static RawMeasurement deserialize(String measurementString) {
         JSONObject serializedMeasurement;
         try {
@@ -119,6 +122,7 @@ public class RawMeasurement implements Parcelable {
         } catch(JSONException e) {
             Log.w(TAG, "JSON message didn't have the expected format: "
                     + serializedMeasurement, e);
+            return null;
         }
         return measurement;
     }
