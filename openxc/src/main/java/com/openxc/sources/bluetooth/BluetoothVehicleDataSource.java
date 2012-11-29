@@ -15,6 +15,7 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
+import com.openxc.sources.SourceLogger;
 
 import android.bluetooth.BluetoothSocket;
 
@@ -87,6 +88,10 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     // TODO this could be made generic so we could use any standard serial
     // device, e.g. xbee or FTDI
     public void run() {
+        double lastLoggedTransferStatsAtByte = 0;
+        double bytesReceived = 0;
+        final long startTime = System.nanoTime();
+        long endTime;
         while(mRunning) {
             try {
                 waitForDeviceConnection();
@@ -114,7 +119,16 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
                 disconnect();
                 continue;
             }
+            bytesReceived += line.length();
             handleMessage(line);
+
+            endTime = System.nanoTime();
+            // log the transfer stats roughly every 1MB
+            if(bytesReceived > lastLoggedTransferStatsAtByte + 1024 * 1024) {
+                lastLoggedTransferStatsAtByte = bytesReceived;
+                SourceLogger.logTransferStats(TAG, startTime, endTime,
+                        bytesReceived);
+            }
         }
         Log.d(TAG, "Stopped Bluetooth listener");
     }

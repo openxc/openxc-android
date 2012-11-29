@@ -12,6 +12,7 @@ import com.google.common.base.Objects;
 
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
+import com.openxc.sources.SourceLogger;
 
 import com.openxc.sources.usb.UsbDeviceException;
 
@@ -74,7 +75,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     private final Condition mDeviceChanged;
     private int mVendorId;
     private int mProductId;
-    private double mBytesReceived;
 
     /**
      * Construct an instance of UsbVehicleDataSource with a receiver callback
@@ -213,6 +213,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         StringBuffer buffer = new StringBuffer();
         final long startTime = System.nanoTime();
         long endTime;
+        double bytesReceived = 0;
         while(mRunning) {
             mDeviceConnectionLock.lock();
 
@@ -238,16 +239,17 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                     buffer.append(new String(bytes, 0, received));
 
                     parseStringBuffer(buffer);
-                    mBytesReceived += received;
+                    bytesReceived += received;
                 }
             }
             mDeviceConnectionLock.unlock();
 
             endTime = System.nanoTime();
             // log the transfer stats roughly every 1MB
-            if(mBytesReceived > lastLoggedTransferStatsAtByte + 1024 * 1024) {
-                lastLoggedTransferStatsAtByte = mBytesReceived;
-                logTransferStats(startTime, endTime);
+            if(bytesReceived > lastLoggedTransferStatsAtByte + 1024 * 1024) {
+                lastLoggedTransferStatsAtByte = bytesReceived;
+                SourceLogger.logTransferStats(TAG, startTime, endTime,
+                        bytesReceived);
             }
         }
         Log.d(TAG, "Stopped USB listener");
@@ -292,15 +294,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             Log.w(TAG, "No OUT endpoint available on USB device, " +
                     "can't send write command");
         }
-    }
-
-    private void logTransferStats(final long startTime, final long endTime) {
-        double kilobytesTransferred = mBytesReceived / 1000.0;
-        long elapsedTime = TimeUnit.SECONDS.convert(
-            System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
-        Log.i(TAG, "Transferred " + kilobytesTransferred + " KB in "
-            + elapsedTime + " seconds at an average of " +
-            kilobytesTransferred / elapsedTime + " KB/s");
     }
 
     /* You must have the mDeviceConnectionLock locked before calling this
