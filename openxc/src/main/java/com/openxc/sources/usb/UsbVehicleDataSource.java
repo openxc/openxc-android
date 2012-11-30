@@ -210,7 +210,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     public void run() {
         double lastLoggedTransferStatsAtByte = 0;
         byte[] bytes = new byte[128];
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         final long startTime = System.nanoTime();
         long endTime;
         double bytesReceived = 0;
@@ -234,11 +234,11 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                 if(received > 0) {
                     // Creating a new String object for each message causes the
                     // GC to go a little crazy, but I don't see another obvious way
-                    // of converting the byte[] to something the StringBuffer can
+                    // of converting the byte[] to something the StringBuilder can
                     // accept (either char[] or String). See #151.
                     buffer.append(new String(bytes, 0, received));
 
-                    parseStringBuffer(buffer);
+                    parseBuffer(buffer);
                     bytesReceived += received;
                 }
             }
@@ -306,7 +306,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    private void parseStringBuffer(StringBuffer buffer) {
+    private void parseBuffer(StringBuilder buffer) {
         int newlineIndex = buffer.indexOf("\n");
         if(newlineIndex != -1) {
             final String messageString = buffer.substring(0, newlineIndex);
