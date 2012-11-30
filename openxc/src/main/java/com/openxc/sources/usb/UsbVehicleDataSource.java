@@ -210,7 +210,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     public void run() {
         double lastLoggedTransferStatsAtByte = 0;
         byte[] bytes = new byte[128];
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder(512);
         final long startTime = System.nanoTime();
         long endTime;
         double bytesReceived = 0;
@@ -238,7 +238,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                     // accept (either char[] or String). See #151.
                     buffer.append(new String(bytes, 0, received));
 
-                    parseBuffer(buffer);
+                    buffer = parseBuffer(buffer);
                     bytesReceived += received;
                 }
             }
@@ -306,13 +306,21 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    private void parseBuffer(StringBuilder buffer) {
-        int newlineIndex = buffer.indexOf("\n");
-        if(newlineIndex != -1) {
-            final String messageString = buffer.substring(0, newlineIndex);
-            buffer.delete(0, newlineIndex + 1);
-            handleMessage(messageString);
+    private StringBuilder parseBuffer(StringBuilder buffer) {
+        if(buffer.indexOf("\n") != -1) {
+            String[] splitBuffer = buffer.toString().split("\n");
+            for(int i = 0; i < splitBuffer.length - 1; i++) {
+                handleMessage(splitBuffer[i]);
+            }
+
+            if(splitBuffer.length > 1) {
+                String newBuffer = splitBuffer[splitBuffer.length - 1];
+                buffer = new StringBuilder(newBuffer.length() * 2);
+                buffer.append(newBuffer);
+
+            }
         }
+        return buffer;
     }
 
     private void connectToDevice(UsbManager manager, int vendorId,
