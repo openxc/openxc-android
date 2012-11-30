@@ -93,20 +93,10 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         Method makeCompleteMethod = null;
         try {
             makeCompleteMethod = Location.class.getMethod("makeComplete");
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-        if(makeCompleteMethod != null) {
-            try {
-                makeCompleteMethod.invoke(location);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        } else {
+            makeCompleteMethod.invoke(location);
+        } catch(NoSuchMethodException e) {
             location.setTime(System.currentTimeMillis());
+        } catch(Exception e) {
         }
     }
 
