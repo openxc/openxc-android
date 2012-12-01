@@ -117,8 +117,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         // effect. i'm wondering if maybe the JsonSerializer is really just a
         // part of RawMeasurement.
         return JsonSerializer.serialize(getGenericName(),
-                getValue().getSerializedValue(),
-                getEvent());
+                getValue().getSerializedValue(), getEvent(), null);
     }
 
     public static Measurement deserialize(String measurementString)

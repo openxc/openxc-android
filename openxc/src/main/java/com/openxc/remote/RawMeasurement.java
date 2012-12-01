@@ -1,7 +1,14 @@
 package com.openxc.remote;
 
+import java.io.IOException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 
 import com.google.common.base.Objects;
 
@@ -31,7 +38,6 @@ import android.util.Log;
  */
 public class RawMeasurement implements Parcelable {
     private static final String TAG = "RawMeasurement";
-    private static final String TIMESTAMP_FIELD = "timestamp";
 
     private double mTimestamp;
     private String mName;
@@ -81,50 +87,70 @@ public class RawMeasurement implements Parcelable {
     };
 
     public String serialize() {
-        JSONObject message = JsonSerializer.preSerialize(
-                getName(), getValue(), getEvent());
-        if(isTimestamped()) {
-            try {
-                message.put(TIMESTAMP_FIELD, getTimestamp());
-            } catch(JSONException e) {
-                Log.w(TAG, "Unable to encode all data to JSON -- " +
-                        "message may be incomplete", e);
-            }
-        }
-
-        return message.toString();
+        Double timestamp = isTimestamped() ? getTimestamp() : null;
+        return JsonSerializer.serialize(getName(), getValue(), getEvent(),
+                timestamp);
     }
 
     // TODO I think there was a reason I had this return null instead of
     // throwing an exception, but that should probably be revisited because in
     // general it's not good practice.
     public static RawMeasurement deserialize(String measurementString) {
-        JSONObject serializedMeasurement;
+        JsonFactory jsonFactory = new JsonFactory();
+        JsonParser parser;
         try {
-            serializedMeasurement = new JSONObject(measurementString);
-        } catch(JSONException e) {
+            parser = jsonFactory.createParser(measurementString);
+        } catch(IOException e) {
             Log.w(TAG, "Couldn't decode JSON from: " + measurementString, e);
             return null;
         }
 
         RawMeasurement measurement = new RawMeasurement();
         try {
-            if(serializedMeasurement.has(TIMESTAMP_FIELD)) {
-                measurement.mTimestamp = serializedMeasurement.optDouble(
-                        TIMESTAMP_FIELD);
+            parser.nextToken();
+            while(parser.nextToken() != JsonToken.END_OBJECT) {
+                String field = parser.getCurrentName();
+                parser.nextToken();
+                if(JsonSerializer.NAME_FIELD.equals(field)) {
+                    measurement.mName = parser.getText();
+                } else if(JsonSerializer.VALUE_FIELD.equals(field)) {
+                    // TODO
+                    measurement.mValue = parseUnknownType(parser);
+                } else if(JsonSerializer.EVENT_FIELD.equals(field)) {
+                    // TODO
+                    measurement.mEvent = parseUnknownType(parser);
+                } else if(JsonSerializer.TIMESTAMP_FIELD.equals(field)) {
+                    measurement.mTimestamp =
+                        parser.getNumberValue().doubleValue();
+                }
             }
-            measurement.mName = serializedMeasurement.getString(
-                    JsonSerializer.NAME_FIELD);
-            measurement.mValue = serializedMeasurement.get(
-                    JsonSerializer.VALUE_FIELD);
-            measurement.mEvent = serializedMeasurement.opt(
-                    JsonSerializer.EVENT_FIELD);
-        } catch(JSONException e) {
+        } catch(IOException e) {
             Log.w(TAG, "JSON message didn't have the expected format: "
-                    + serializedMeasurement, e);
+                    + measurementString, e);
             return null;
         }
+
         return measurement;
+    }
+
+    private static Object parseUnknownType(JsonParser parser) {
+        Object value = null;
+        try {
+            value = parser.getNumberValue();
+        } catch(JsonParseException e) {
+            try {
+                value = parser.getBooleanValue();
+            } catch(JsonParseException e2) {
+                try {
+                    value = parser.getText();
+                } catch(JsonParseException e3) {
+                } catch(IOException e4) {
+                }
+            } catch(IOException e5) {
+            }
+        } catch(IOException e) {
+        }
+        return value;
     }
 
     public String getName() {

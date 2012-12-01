@@ -76,23 +76,24 @@ public class UploaderSink extends ContextualVehicleDataSink {
     }
 
     public void receive(RawMeasurement measurement) {
-        double timestamp = System.currentTimeMillis() / 1000.0;
-        String timestampString = sTimestampFormatter.format(timestamp);
+        // TODO rework this to work with Jackson
+        // double timestamp = System.currentTimeMillis() / 1000.0;
+        // String timestampString = sTimestampFormatter.format(timestamp);
 
-        JSONObject object = JsonSerializer.preSerialize(measurement.getName(),
-                measurement.getValue(), measurement.getEvent());
-        try {
-            object.put("timestamp", timestampString);
-        } catch(JSONException e) {
-            Log.w(TAG, "Unable to create JSON for trace file", e);
-            return;
-        }
-        mRecordQueue.offer(object);
-        if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
-            mQueueLock.lock();
-            mRecordsQueuedSignal.signal();
-            mQueueLock.unlock();
-        }
+        // JSONObject object = JsonSerializer.preSerialize(measurement.getName(),
+                // measurement.getValue(), measurement.getEvent());
+        // try {
+            // object.put("timestamp", timestampString);
+        // } catch(JSONException e) {
+            // Log.w(TAG, "Unable to create JSON for trace file", e);
+            // return;
+        // }
+        // mRecordQueue.offer(object);
+        // if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
+            // mQueueLock.lock();
+            // mRecordsQueuedSignal.signal();
+            // mQueueLock.unlock();
+        // }
     }
 
     public static boolean validatePath(String path) {
