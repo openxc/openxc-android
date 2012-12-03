@@ -122,8 +122,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
     public static Measurement deserialize(String measurementString)
             throws NoValueException, UnrecognizedMeasurementTypeException {
-        RawMeasurement rawMeasurement = RawMeasurement.deserialize(
-                measurementString);
+        RawMeasurement rawMeasurement = new RawMeasurement(measurementString);
         return BaseMeasurement.getMeasurementFromRaw(rawMeasurement);
     }
 

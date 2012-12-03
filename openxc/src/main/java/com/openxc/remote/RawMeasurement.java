@@ -2,9 +2,6 @@ package com.openxc.remote;
 
 import java.io.IOException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -13,6 +10,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.google.common.base.Objects;
 
 import com.openxc.measurements.serializers.JsonSerializer;
+
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -39,6 +38,7 @@ import android.util.Log;
 public class RawMeasurement implements Parcelable {
     private static final String TAG = "RawMeasurement";
 
+    private String mCachedSerialization;
     private double mTimestamp;
     private String mName;
     private Object mValue;
@@ -55,7 +55,13 @@ public class RawMeasurement implements Parcelable {
         mEvent = event;
     }
 
+    public RawMeasurement(String serialized) throws UnrecognizedMeasurementTypeException {
+        this();
+        deserialize(serialized, this);
+    }
+
     private RawMeasurement(Parcel in) {
+        this();
         readFromParcel(in);
     }
 
@@ -68,10 +74,11 @@ public class RawMeasurement implements Parcelable {
     }
 
     public void readFromParcel(Parcel in) {
-        RawMeasurement measurement = RawMeasurement.deserialize(
-                in.readString());
-        if(measurement != null) {
+        try {
+            RawMeasurement measurement = new RawMeasurement(in.readString());
             copy(measurement);
+        } catch(UnrecognizedMeasurementTypeException e) {
+            return;
         }
     }
 
@@ -87,25 +94,30 @@ public class RawMeasurement implements Parcelable {
     };
 
     public String serialize() {
-        Double timestamp = isTimestamped() ? getTimestamp() : null;
-        return JsonSerializer.serialize(getName(), getValue(), getEvent(),
-                timestamp);
+        return serialize(false);
     }
 
-    // TODO I think there was a reason I had this return null instead of
-    // throwing an exception, but that should probably be revisited because in
-    // general it's not good practice.
-    public static RawMeasurement deserialize(String measurementString) {
+    public String serialize(boolean reserialize) {
+        if(reserialize || mCachedSerialization == null) {
+            Double timestamp = isTimestamped() ? getTimestamp() : null;
+            mCachedSerialization = JsonSerializer.serialize(getName(), getValue(), getEvent(),
+                    timestamp);
+        }
+        return mCachedSerialization;
+    }
+
+    private static void deserialize(String measurementString,
+            RawMeasurement measurement) throws UnrecognizedMeasurementTypeException {
         JsonFactory jsonFactory = new JsonFactory();
         JsonParser parser;
         try {
             parser = jsonFactory.createParser(measurementString);
         } catch(IOException e) {
-            Log.w(TAG, "Couldn't decode JSON from: " + measurementString, e);
-            return null;
+            String message = "Couldn't decode JSON from: " + measurementString;
+            Log.w(TAG, message, e);
+            throw new UnrecognizedMeasurementTypeException(message, e);
         }
 
-        RawMeasurement measurement = new RawMeasurement();
         try {
             parser.nextToken();
             while(parser.nextToken() != JsonToken.END_OBJECT) {
@@ -114,10 +126,8 @@ public class RawMeasurement implements Parcelable {
                 if(JsonSerializer.NAME_FIELD.equals(field)) {
                     measurement.mName = parser.getText();
                 } else if(JsonSerializer.VALUE_FIELD.equals(field)) {
-                    // TODO
                     measurement.mValue = parseUnknownType(parser);
                 } else if(JsonSerializer.EVENT_FIELD.equals(field)) {
-                    // TODO
                     measurement.mEvent = parseUnknownType(parser);
                 } else if(JsonSerializer.TIMESTAMP_FIELD.equals(field)) {
                     measurement.mTimestamp =
@@ -125,12 +135,12 @@ public class RawMeasurement implements Parcelable {
                 }
             }
         } catch(IOException e) {
-            Log.w(TAG, "JSON message didn't have the expected format: "
-                    + measurementString, e);
-            return null;
+            String message = "JSON message didn't have the expected format: "
+                    + measurementString;
+            Log.w(TAG, message, e);
+            throw new UnrecognizedMeasurementTypeException(message, e);
         }
-
-        return measurement;
+        measurement.mCachedSerialization = measurementString;
     }
 
     private static Object parseUnknownType(JsonParser parser) {

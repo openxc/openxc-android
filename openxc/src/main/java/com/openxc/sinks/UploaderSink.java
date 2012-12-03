@@ -1,6 +1,7 @@
 package com.openxc.sinks;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import java.net.URI;
@@ -11,12 +12,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import java.text.DecimalFormat;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.entity.ByteArrayEntity;
@@ -33,7 +28,8 @@ import org.apache.http.message.BasicHeader;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.openxc.measurements.serializers.JsonSerializer;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -45,11 +41,9 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private final static int UPLOAD_BATCH_SIZE = 25;
     private final static int MAXIMUM_QUEUED_RECORDS = 2000;
     private final static int HTTP_TIMEOUT = 5000;
-    private static DecimalFormat sTimestampFormatter =
-            new DecimalFormat("##########.000000");
 
     private URI mUri;
-    private BlockingQueue<JSONObject> mRecordQueue;
+    private BlockingQueue<String> mRecordQueue;
     private Lock mQueueLock;
     private Condition mRecordsQueuedSignal;
     private UploaderThread mUploader;
@@ -57,7 +51,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
     public UploaderSink(Context context, URI uri) {
         super(context);
         mUri = uri;
-        mRecordQueue = new LinkedBlockingQueue<JSONObject>(
+        mRecordQueue = new LinkedBlockingQueue<String>(
                 MAXIMUM_QUEUED_RECORDS);
         mQueueLock = new ReentrantLock();
         mRecordsQueuedSignal = mQueueLock.newCondition();
@@ -76,24 +70,13 @@ public class UploaderSink extends ContextualVehicleDataSink {
     }
 
     public void receive(RawMeasurement measurement) {
-        // TODO rework this to work with Jackson
-        // double timestamp = System.currentTimeMillis() / 1000.0;
-        // String timestampString = sTimestampFormatter.format(timestamp);
-
-        // JSONObject object = JsonSerializer.preSerialize(measurement.getName(),
-                // measurement.getValue(), measurement.getEvent());
-        // try {
-            // object.put("timestamp", timestampString);
-        // } catch(JSONException e) {
-            // Log.w(TAG, "Unable to create JSON for trace file", e);
-            // return;
-        // }
-        // mRecordQueue.offer(object);
-        // if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
-            // mQueueLock.lock();
-            // mRecordsQueuedSignal.signal();
-            // mQueueLock.unlock();
-        // }
+        String data = measurement.serialize(true);
+        mRecordQueue.offer(data);
+        if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
+            mQueueLock.lock();
+            mRecordsQueuedSignal.signal();
+            mQueueLock.unlock();
+        }
     }
 
     public static boolean validatePath(String path) {
@@ -119,29 +102,35 @@ public class UploaderSink extends ContextualVehicleDataSink {
             mRunning = false;
         }
 
-        private JSONObject constructRequestData(ArrayList<JSONObject> records)
+        private String constructRequestData(ArrayList<String> records)
                 throws UploaderException {
-            JSONArray recordArray = new JSONArray();
-            for(JSONObject record : records) {
-                recordArray.put(record);
-            }
-
-            JSONObject data = new JSONObject();
+            StringWriter buffer = new StringWriter(512);
+            JsonFactory jsonFactory = new JsonFactory();
             try {
-                data.put("records", recordArray);
-            } catch(JSONException e) {
-                Log.w(TAG, "Unable to create JSON for uploading records", e);
+                JsonGenerator gen = jsonFactory.createJsonGenerator(buffer);
+
+                gen.writeArrayFieldStart("records");
+                for(String record : records) {
+                    gen.writeStartObject();
+                    gen.writeRaw(record + ",");
+                    gen.writeEndObject();
+                }
+                gen.writeEndArray();
+
+                gen.close();
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to encode all data to JSON -- " +
+                        "message may be incomplete", e);
                 throw new UploaderException();
             }
-            return data;
+            return buffer.toString();
         }
 
-        private HttpPost constructRequest(JSONObject data)
+        private HttpPost constructRequest(String data)
                 throws UploaderException {
             HttpPost request = new HttpPost(mUri);
             try {
-                ByteArrayEntity entity = new ByteArrayEntity(
-                        data.toString().getBytes("UTF8"));
+                ByteArrayEntity entity = new ByteArrayEntity(data.getBytes("UTF8"));
                 entity.setContentEncoding(
                         new BasicHeader("Content-Type", "application/json"));
                 request.setEntity(entity);
@@ -174,12 +163,12 @@ public class UploaderSink extends ContextualVehicleDataSink {
             }
         }
 
-        private ArrayList<JSONObject> waitForRecords()
+        private ArrayList<String> waitForRecords()
                 throws InterruptedException {
             mQueueLock.lock();
             mRecordsQueuedSignal.await();
 
-            ArrayList<JSONObject> records = new ArrayList<JSONObject>();
+            ArrayList<String> records = new ArrayList<String>();
             mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
 
             mQueueLock.unlock();
@@ -189,8 +178,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
         public void run() {
             while(mRunning) {
                 try {
-                    ArrayList<JSONObject> records = waitForRecords();
-                    JSONObject data = constructRequestData(records);
+                    ArrayList<String> records = waitForRecords();
+                    String data = constructRequestData(records);
                     HttpPost request = constructRequest(data);
                     makeRequest(request);
                 } catch(UploaderException e) {

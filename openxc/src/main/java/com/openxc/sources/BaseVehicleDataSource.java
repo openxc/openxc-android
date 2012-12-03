@@ -4,6 +4,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
 import com.openxc.remote.RawMeasurement;
 
 import com.openxc.sources.SourceCallback;
@@ -74,7 +76,10 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     }
 
     protected void handleMessage(String serializedMeasurement) {
-        handleMessage(RawMeasurement.deserialize(serializedMeasurement));
+        try {
+          handleMessage(new RawMeasurement(serializedMeasurement));
+        } catch(UnrecognizedMeasurementTypeException e) {
+        }
     }
 
     protected SourceCallback getCallback() {

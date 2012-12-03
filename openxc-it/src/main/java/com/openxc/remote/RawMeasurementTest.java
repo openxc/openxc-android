@@ -33,7 +33,7 @@ public class RawMeasurementTest extends TestCase {
     }
 
     public void testDeserialize() {
-        measurement = RawMeasurement.deserialize(
+        measurement = new RawMeasurement(
                 "{\"name\": \"" + measurementName + "\", \"value\": " +
                 measurementValue.toString() + "}");
         assertEquals(measurement.getName(), measurementName);
@@ -41,12 +41,12 @@ public class RawMeasurementTest extends TestCase {
     }
 
     public void testDeserializeInvalidJson() {
-        measurement = RawMeasurement.deserialize("{\"name\":");
+        measurement = new RawMeasurement("{\"name\":");
         assertNull(measurement);
     }
 
     public void testDeserializeMissingAttribute() {
-        measurement = RawMeasurement.deserialize("{\"name\": \"" +
+        measurement = new RawMeasurement("{\"name\": \"" +
                 measurementName + "\"}");
         assertNull(measurement);
     }

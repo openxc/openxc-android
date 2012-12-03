@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.DataSourceException;
@@ -141,9 +143,10 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             long startingTime = System.nanoTime();
             try {
                 while(mRunning && (line = reader.readLine()) != null) {
-                    RawMeasurement measurement = RawMeasurement.deserialize(
-                            line);
-                    if(measurement == null) {
+                    RawMeasurement measurement;
+                    try {
+                        measurement = new RawMeasurement(line);
+                    } catch(UnrecognizedMeasurementTypeException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
                         continue;

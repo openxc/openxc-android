@@ -3,6 +3,8 @@ package com.openxc.measurements.serializers;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import java.text.DecimalFormat;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 
@@ -14,6 +16,8 @@ public class JsonSerializer implements MeasurementSerializer {
     public static final String VALUE_FIELD = "value";
     public static final String EVENT_FIELD = "event";
     public static final String TIMESTAMP_FIELD = "timestamp";
+    private static DecimalFormat sTimestampFormatter =
+            new DecimalFormat("##########.000000");
 
     public static String serialize(String name, Object value, Object event,
             Double timestamp) {
