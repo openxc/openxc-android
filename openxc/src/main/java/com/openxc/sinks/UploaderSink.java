@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Condition;
@@ -30,6 +31,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+
+import com.google.common.base.Objects;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -109,13 +112,17 @@ public class UploaderSink extends ContextualVehicleDataSink {
             try {
                 JsonGenerator gen = jsonFactory.createJsonGenerator(buffer);
 
+                gen.writeStartObject();
                 gen.writeArrayFieldStart("records");
-                for(String record : records) {
-                    gen.writeStartObject();
-                    gen.writeRaw(record + ",");
-                    gen.writeEndObject();
+                Iterator<String> recordIterator = records.iterator();
+                while(recordIterator.hasNext()) {
+                    gen.writeRaw(recordIterator.next());
+                    if(recordIterator.hasNext()) {
+                        gen.writeRaw(",");
+                    }
                 }
                 gen.writeEndArray();
+                gen.writeEndObject();
 
                 gen.close();
             } catch(IOException e) {
@@ -190,5 +197,13 @@ public class UploaderSink extends ContextualVehicleDataSink {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("uri", mUri)
+            .add("queuedRecords", mRecordQueue.size())
+            .toString();
     }
 }
