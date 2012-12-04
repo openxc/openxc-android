@@ -55,14 +55,15 @@ public class RawMeasurement implements Parcelable {
         mEvent = event;
     }
 
-    public RawMeasurement(String serialized) throws UnrecognizedMeasurementTypeException {
+    public RawMeasurement(String serialized)
+            throws UnrecognizedMeasurementTypeException {
         this();
         deserialize(serialized, this);
     }
 
-    private RawMeasurement(Parcel in) {
-        this();
-        readFromParcel(in);
+    private RawMeasurement(Parcel in)
+            throws UnrecognizedMeasurementTypeException {
+        this(in.readString());
     }
 
     private RawMeasurement() {
@@ -73,19 +74,14 @@ public class RawMeasurement implements Parcelable {
         out.writeString(serialize());
     }
 
-    public void readFromParcel(Parcel in) {
-        try {
-            RawMeasurement measurement = new RawMeasurement(in.readString());
-            copy(measurement);
-        } catch(UnrecognizedMeasurementTypeException e) {
-            return;
-        }
-    }
-
     public static final Parcelable.Creator<RawMeasurement> CREATOR =
             new Parcelable.Creator<RawMeasurement>() {
         public RawMeasurement createFromParcel(Parcel in) {
-            return new RawMeasurement(in);
+            try {
+                return new RawMeasurement(in);
+            } catch(UnrecognizedMeasurementTypeException e) {
+                return new RawMeasurement();
+            }
         }
 
         public RawMeasurement[] newArray(int size) {
@@ -100,14 +96,15 @@ public class RawMeasurement implements Parcelable {
     public String serialize(boolean reserialize) {
         if(reserialize || mCachedSerialization == null) {
             Double timestamp = isTimestamped() ? getTimestamp() : null;
-            mCachedSerialization = JsonSerializer.serialize(getName(), getValue(), getEvent(),
-                    timestamp);
+            mCachedSerialization = JsonSerializer.serialize(getName(),
+                    getValue(), getEvent(), timestamp);
         }
         return mCachedSerialization;
     }
 
     private static void deserialize(String measurementString,
-            RawMeasurement measurement) throws UnrecognizedMeasurementTypeException {
+            RawMeasurement measurement)
+            throws UnrecognizedMeasurementTypeException {
         JsonFactory jsonFactory = new JsonFactory();
         JsonParser parser;
         try {
