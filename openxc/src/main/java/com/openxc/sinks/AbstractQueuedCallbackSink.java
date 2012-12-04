@@ -1,7 +1,7 @@
 package com.openxc.sinks;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import com.openxc.remote.RawMeasurement;
@@ -22,11 +22,13 @@ import android.util.Log;
  */
 public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private final static String TAG = "AbstractQueuedCallbackSink";
+    private final static int MAX_QUEUE_LENGTH = 500;
+
     private NotificationThread mNotificationThread;
     private BlockingQueue<String> mNotificationQueue;
 
     public AbstractQueuedCallbackSink() {
-        mNotificationQueue = new LinkedBlockingQueue<String>();
+        mNotificationQueue = new ArrayBlockingQueue<String>(MAX_QUEUE_LENGTH);
         mNotificationThread = new NotificationThread();
         mNotificationThread.start();
     }
