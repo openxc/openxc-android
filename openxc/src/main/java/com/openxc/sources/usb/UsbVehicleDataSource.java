@@ -307,18 +307,16 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     }
 
     private StringBuilder parseBuffer(StringBuilder buffer) {
-        if(buffer.indexOf("\n") != -1) {
-            String[] splitBuffer = buffer.toString().split("\n");
-            for(int i = 0; i < splitBuffer.length - 1; i++) {
-                handleMessage(splitBuffer[i]);
-            }
+        String[] splitBuffer = buffer.toString().split("\n");
+        for(int i = 0; i < splitBuffer.length - 1; i++) {
+            handleMessage(splitBuffer[i]);
+        }
 
-            if(splitBuffer.length > 1) {
-                String newBuffer = splitBuffer[splitBuffer.length - 1];
-                buffer = new StringBuilder(newBuffer.length() * 2);
-                buffer.append(newBuffer);
+        if(splitBuffer.length > 1) {
+            String newBuffer = splitBuffer[splitBuffer.length - 1];
+            buffer = new StringBuilder(newBuffer.length() * 2);
+            buffer.append(newBuffer);
 
-            }
         }
         return buffer;
     }
