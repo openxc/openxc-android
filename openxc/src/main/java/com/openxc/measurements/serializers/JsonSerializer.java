@@ -38,7 +38,8 @@ public class JsonSerializer implements MeasurementSerializer {
             }
 
             if(timestamp != null) {
-                gen.writeNumberField(TIMESTAMP_FIELD, timestamp);
+                gen.writeFieldName(TIMESTAMP_FIELD);
+                gen.writeRawValue(sTimestampFormatter.format(timestamp));
             }
 
             gen.writeEndObject();
