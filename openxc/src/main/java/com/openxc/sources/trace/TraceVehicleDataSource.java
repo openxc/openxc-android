@@ -2,8 +2,6 @@ package com.openxc.sources.trace;
 
 import com.google.common.base.Objects;
 
-import org.json.JSONException;
-
 import java.util.concurrent.TimeUnit;
 
 import java.io.BufferedReader;
@@ -116,6 +114,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         super.stop();
         Log.d(TAG, "Stopping trace playback");
         mRunning = false;
+        disconnected();
     }
 
     /**
@@ -130,6 +129,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Starting the trace playback because we have valid " +
                 "callback " + getCallback());
 
+        connected();
         while(mRunning) {
             BufferedReader reader;
             try {
@@ -186,6 +186,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             } catch(InterruptedException e) {}
         }
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+        disconnected();
+    }
+
+    protected String getTag() {
+        return TAG;
     }
 
     @Override

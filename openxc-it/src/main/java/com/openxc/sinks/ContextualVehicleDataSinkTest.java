@@ -1,5 +1,7 @@
 package com.openxc.sinks;
 
+import com.openxc.remote.RawMeasurement;
+
 import android.test.AndroidTestCase;
 
 import android.test.suitebuilder.annotation.SmallTest;

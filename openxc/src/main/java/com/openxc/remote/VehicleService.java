@@ -16,12 +16,9 @@ import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.sources.VehicleDataSource;
 import android.app.Service;
 
-import android.content.Context;
 import android.content.Intent;
 
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 
 import com.openxc.controllers.VehicleController;
 
@@ -55,7 +52,6 @@ import android.util.Log;
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";
 
-    private WakeLock mWakeLock;
     private DataPipeline mPipeline;
     private RemoteCallbackSink mNotifier;
     private ApplicationSource mApplicationSource;
@@ -68,7 +64,6 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
         mApplicationSource = new ApplicationSource();
-        acquireWakeLock();
     }
 
     /**
@@ -83,7 +78,6 @@ public class VehicleService extends Service {
         if(mPipeline != null) {
             mPipeline.stop();
         }
-        releaseWakeLock();
     }
 
     /**
@@ -196,16 +190,4 @@ public class VehicleService extends Service {
         return mPipeline.getMessageCount();
     }
 
-    private void acquireWakeLock() {
-        PowerManager manager = (PowerManager) getSystemService(
-                Context.POWER_SERVICE);
-        mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
-        mWakeLock.acquire();
-    }
-
-    private void releaseWakeLock() {
-        if(mWakeLock != null && mWakeLock.isHeld()) {
-            mWakeLock.release();
-        }
-    }
 }

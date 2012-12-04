@@ -143,7 +143,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    private void disconnect() {
+    protected void disconnect() {
         if(mSocket == null) {
             Log.w(TAG, "Unable to disconnect -- not connected");
             return;
@@ -165,7 +165,13 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
             }
         }
         mSocket = null;
+
+        disconnected();
         Log.d(TAG, "Disconnected from the socket");
+    }
+
+    protected String getTag() {
+        return TAG;
     }
 
     private synchronized void write(String message) throws BluetoothException {
@@ -182,6 +188,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         if(mSocket == null) {
             try {
                 mSocket = mDeviceManager.connect(mAddress);
+                connected();
                 connectStreams();
             } catch(BluetoothException e) {
                 Log.w(TAG, "Unable to connect to device at address " +
@@ -207,6 +214,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
                 Log.e(TAG, "Error opening streams "+e);
             }
             mSocket = null;
+            disconnected();
             throw new BluetoothException();
         }
     }

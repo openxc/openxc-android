@@ -6,8 +6,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import java.util.concurrent.TimeUnit;
-
 import com.google.common.base.Objects;
 
 import com.openxc.sources.ContextualVehicleDataSource;
@@ -185,12 +183,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         super.stop();
         Log.d(TAG, "Stopping USB listener");
 
-        mDeviceConnectionLock.lock();
-        mDeviceChanged.signal();
-        if(mConnection != null && mInterface != null) {
-            mConnection.releaseInterface(mInterface);
-        }
-        mDeviceConnectionLock.unlock();
+        disconnectDevice();
         getContext().unregisterReceiver(mBroadcastReceiver);
 
         if(!mRunning) {
@@ -270,6 +263,10 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Writing message to USB: " + message);
         byte[] bytes = message.getBytes();
         write(bytes);
+    }
+
+    protected String getTag() {
+        return TAG;
     }
 
     private void initializeDevice() {
@@ -419,6 +416,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             mDeviceConnectionLock.lock();
             try {
                 mConnection = setupDevice(mManager, device);
+                connected();
                 Log.i(TAG, "Connected to USB device with " +
                         mConnection);
             } catch(UsbDeviceException e) {
@@ -437,12 +435,14 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             Log.d(TAG, "Closing connection " + mConnection +
                     " with USB device");
             mDeviceConnectionLock.lock();
+            mDeviceChanged.signal();
             mConnection.close();
             mConnection = null;
             mInEndpoint = null;
             mOutEndpoint = null;
             mInterface = null;
             mDeviceConnectionLock.unlock();
+            disconnected();
         }
     }
 

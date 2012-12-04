@@ -20,6 +20,7 @@ import com.openxc.sources.SourceCallback;
  * with each new measurement, regardless of its origin.
  */
 public class BaseVehicleDataSource implements VehicleDataSource {
+    private final static String TAG = "BaseVehicleDataSource";
     private SourceCallback mCallback;
     private final Lock mCallbackLock;
     private final Condition mCallbackChanged;
@@ -84,6 +85,13 @@ public class BaseVehicleDataSource implements VehicleDataSource {
 
     protected SourceCallback getCallback() {
         return mCallback;
+    }
+
+    /**
+     * Return a string suitable as a tag for logging.
+     */
+    protected String getTag() {
+      return TAG;
     }
 
     /**
