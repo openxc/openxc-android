@@ -47,14 +47,18 @@ public class RawMeasurementTest extends TestCase {
     public void testDeserializeInvalidJson() {
         try {
             new RawMeasurement("{\"name\":");
-        } catch(UnrecognizedMeasurementTypeException e) {}
+        } catch(UnrecognizedMeasurementTypeException e) {
+            return;
+        }
         Assert.fail();
     }
 
     public void testDeserializeMissingAttribute() {
         try {
             new RawMeasurement("{\"name\": \"" + measurementName + "\"}");
-        } catch(UnrecognizedMeasurementTypeException e) {}
+        } catch(UnrecognizedMeasurementTypeException e) {
+            return;
+        }
         Assert.fail();
     }
 

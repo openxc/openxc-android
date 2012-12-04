@@ -50,7 +50,9 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
             FileUtils.copyInputStreamToFile(
                     getContext().getResources().openRawResource(
                         R.raw.tracetxt), new File(malformedTraceUri));
-        } catch(IOException e) {}
+        } catch(IOException e) {
+            Assert.fail("Couldn't copy trace files to SD card" + e);
+        }
     }
 
     @Override

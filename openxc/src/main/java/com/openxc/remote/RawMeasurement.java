@@ -131,6 +131,15 @@ public class RawMeasurement implements Parcelable {
                         parser.getNumberValue().doubleValue();
                 }
             }
+
+            if(measurement.mName == null) {
+                throw new UnrecognizedMeasurementTypeException(
+                        "Missing name in: " + measurementString);
+            }
+            if(measurement.mValue == null) {
+                throw new UnrecognizedMeasurementTypeException(
+                        "Missing value in: " + measurementString);
+            }
         } catch(IOException e) {
             String message = "JSON message didn't have the expected format: "
                     + measurementString;

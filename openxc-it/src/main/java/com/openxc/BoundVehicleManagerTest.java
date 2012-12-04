@@ -72,7 +72,9 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             FileUtils.copyInputStreamToFile(
                     getContext().getResources().openRawResource(
                         R.raw.tracejson), new File(traceUri));
-        } catch(IOException e) {}
+        } catch(IOException e) {
+            Assert.fail("Couldn't copy trace files to SD card" + e);
+        }
     }
 
     @Override
@@ -104,10 +106,6 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         }
     }
 
-    private void checkReceivedMeasurement(Measurement measurement) {
-        assertNotNull(measurement);
-    }
-
     @MediumTest
     public void testGetNoData() throws UnrecognizedMeasurementTypeException {
         try {
@@ -128,7 +126,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         pause(100);
         service.addListener(VehicleSpeed.class, speedListener);
         pause(50);
-        checkReceivedMeasurement(speedReceived);
+        assertNotNull(speedReceived);
     }
 
     @MediumTest
@@ -137,7 +135,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
         pause(300);
-        checkReceivedMeasurement(speedReceived);
+        assertNotNull(speedReceived);
     }
 
     @MediumTest
@@ -160,8 +158,8 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         // let some measurements flow through the system
         pause(100);
-        checkReceivedMeasurement(speedReceived);
-        checkReceivedMeasurement(steeringAngleReceived);
+        assertNotNull(steeringAngleReceived);
+        assertNotNull(speedReceived);
     }
 
     @MediumTest
