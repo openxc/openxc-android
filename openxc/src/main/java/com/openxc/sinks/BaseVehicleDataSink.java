@@ -21,12 +21,10 @@ public class BaseVehicleDataSink implements VehicleDataSink {
     }
 
     /**
-     * Receive a measurement serialized to Double in RawMeasurement.
+     * Receive a raw measurement, deserialized to primatives.
      *
-     * The reason some sinks will need the raw objects vs. the RawMeasurement is
-     * that once we construct the RawMeasurement, the actual object values are
-     * pseduo serialized to a Double in order to pass through the AIDL
-     * interface.
+     * Children of this class can call super.receive() if they need to store
+     * copies of received measurements to access via the get(String) method.
      */
     public void receive(RawMeasurement measurement) throws DataSinkException {
         mMeasurements.put(measurement.getName(), measurement);
