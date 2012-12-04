@@ -1,8 +1,12 @@
 package com.openxc.sinks;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -22,13 +26,16 @@ import android.util.Log;
  */
 public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private final static String TAG = "AbstractQueuedCallbackSink";
-    private final static int MAX_QUEUE_LENGTH = 500;
 
     private NotificationThread mNotificationThread;
-    private BlockingQueue<String> mNotificationQueue;
+    private Lock mNotificationsLock;
+    private Condition mNotificationReceived;
+    private Set<String> mNotifications;
 
     public AbstractQueuedCallbackSink() {
-        mNotificationQueue = new ArrayBlockingQueue<String>(MAX_QUEUE_LENGTH);
+        mNotifications = new HashSet<String>(32);
+        mNotificationsLock = new ReentrantLock();
+        mNotificationReceived = mNotificationsLock.newCondition();
         mNotificationThread = new NotificationThread();
         mNotificationThread.start();
     }
@@ -45,9 +52,12 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     public void receive(RawMeasurement rawMeasurement)
             throws DataSinkException {
         super.receive(rawMeasurement);
-        try  {
-            mNotificationQueue.put(rawMeasurement.getName());
-        } catch(InterruptedException e) {}
+        mNotificationsLock.lock();
+        // TODO what we if we added the actual measurement here, that would save
+        // a lookup later
+        mNotifications.add(rawMeasurement.getName());
+        mNotificationReceived.signal();
+        mNotificationsLock.unlock();
     }
 
     private class NotificationThread extends Thread {
@@ -70,21 +80,28 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
 
         public void run() {
             while(isRunning()) {
-                String measurementId = null;
-                try {
-                    measurementId = mNotificationQueue.poll(1, TimeUnit.SECONDS);
-                } catch(InterruptedException e) {
-                    Log.d(TAG, "Interrupted while waiting for a new " +
-                            "item for notification -- likely shutting down");
-                    return;
+                mNotificationsLock.lock();
+                if(mNotifications.isEmpty()) {
+                    try {
+                        mNotificationReceived.await();
+                    } catch(InterruptedException e) {
+                        Log.d(TAG, "Interrupted while waiting for a new " +
+                                "item for notification -- likely shutting down");
+                        mNotificationsLock.unlock();
+                        return;
+                    }
                 }
 
-                if(measurementId != null) {
+                Iterator<String> it = mNotifications.iterator();
+                if(it.hasNext()) {
+                    String measurementId = it.next();
+                    it.remove();
                     RawMeasurement rawMeasurement = get(measurementId);
                     if(rawMeasurement != null) {
                         propagateMeasurement(measurementId, rawMeasurement);
                     }
                 }
+                mNotificationsLock.unlock();
             }
             Log.d(TAG, "Stopped measurement notifier");
         }
