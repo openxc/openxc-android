@@ -69,7 +69,7 @@
                     <sdk>
                         <platform>12</platform>
                     </sdk>
-                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                    <undeployBeforeDeploy>false</undeployBeforeDeploy>
                     <testDebug>false</testDebug>
                 </configuration>
             </plugin>
