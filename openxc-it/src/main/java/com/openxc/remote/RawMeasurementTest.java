@@ -1,7 +1,9 @@
 package com.openxc.remote;
 
 import com.openxc.remote.RawMeasurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class RawMeasurementTest extends TestCase {
@@ -33,22 +35,27 @@ public class RawMeasurementTest extends TestCase {
     }
 
     public void testDeserialize() {
-        measurement = new RawMeasurement(
-                "{\"name\": \"" + measurementName + "\", \"value\": " +
-                measurementValue.toString() + "}");
+        try {
+            measurement = new RawMeasurement(
+                    "{\"name\": \"" + measurementName + "\", \"value\": " +
+                    measurementValue.toString() + "}");
+        } catch(UnrecognizedMeasurementTypeException e) {}
         assertEquals(measurement.getName(), measurementName);
         assertEquals(measurement.getValue(), measurementValue);
     }
 
     public void testDeserializeInvalidJson() {
-        measurement = new RawMeasurement("{\"name\":");
-        assertNull(measurement);
+        try {
+            new RawMeasurement("{\"name\":");
+        } catch(UnrecognizedMeasurementTypeException e) {}
+        Assert.fail();
     }
 
     public void testDeserializeMissingAttribute() {
-        measurement = new RawMeasurement("{\"name\": \"" +
-                measurementName + "\"}");
-        assertNull(measurement);
+        try {
+            new RawMeasurement("{\"name\": \"" + measurementName + "\"}");
+        } catch(UnrecognizedMeasurementTypeException e) {}
+        Assert.fail();
     }
 
     private void pause(int millis) {
