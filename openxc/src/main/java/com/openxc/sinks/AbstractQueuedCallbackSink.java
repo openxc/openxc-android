@@ -70,8 +70,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
             while(isRunning()) {
                 String measurementId = null;
                 try {
-                    measurementId = mNotificationQueue.poll(1,
-                            TimeUnit.SECONDS);
+                    measurementId = mNotificationQueue.poll(1, TimeUnit.SECONDS);
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +
                             "item for notification -- likely shutting down");
