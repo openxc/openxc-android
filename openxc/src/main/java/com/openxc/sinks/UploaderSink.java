@@ -42,7 +42,7 @@ import android.util.Log;
 public class UploaderSink extends ContextualVehicleDataSink {
     private final static String TAG = "UploaderSink";
     private final static int UPLOAD_BATCH_SIZE = 25;
-    private final static int MAXIMUM_QUEUED_RECORDS = 2000;
+    private final static int MAXIMUM_QUEUED_RECORDS = 5000;
     private final static int HTTP_TIMEOUT = 5000;
 
     private URI mUri;
@@ -170,10 +170,14 @@ public class UploaderSink extends ContextualVehicleDataSink {
             }
         }
 
-        private ArrayList<String> waitForRecords()
-                throws InterruptedException {
+        private ArrayList<String> getRecords() throws InterruptedException {
             mQueueLock.lock();
-            mRecordsQueuedSignal.await();
+            if(mRecordQueue.isEmpty()) {
+                // the queue is already thread safe, but we use this lock to get
+                // a condition variable we can use to signal when a batch has
+                // been queued.
+                mRecordsQueuedSignal.await();
+            }
 
             ArrayList<String> records = new ArrayList<String>();
             mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
@@ -185,7 +189,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
         public void run() {
             while(mRunning) {
                 try {
-                    ArrayList<String> records = waitForRecords();
+                    ArrayList<String> records = getRecords();
                     String data = constructRequestData(records);
                     HttpPost request = constructRequest(data);
                     makeRequest(request);
