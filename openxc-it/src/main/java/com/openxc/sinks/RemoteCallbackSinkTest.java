@@ -11,7 +11,6 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 public class RemoteCallbackSinkTest extends AndroidTestCase {
-    Map<String, RawMeasurement> measurements;
     RemoteCallbackSink notifier;
     VehicleServiceListener listener;
     String measurementId = "the_measurement";
@@ -19,9 +18,6 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
 
     @Override
     public void setUp() {
-        // TODO what are the contractual guarantees that this class says about
-        // this measurements map?
-        measurements = new HashMap<String, RawMeasurement>();
         notifier = new RemoteCallbackSink();
         listener = new VehicleServiceListener.Stub() {
             public void receive(RawMeasurement value) {
