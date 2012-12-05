@@ -1,5 +1,15 @@
 # OpenXC Android Library Changelog
 
+## v2.1
+
+* Raise minimum Android API version to 9 (2.3) to use newer data structures.
+* Fix compatibility issue with Android 4.2.
+* Bump platform build version to Android SDK version 17 (4.2).
+* Significant performance improvements when parsing JSON and communicating
+  between remote and in-app vehicle services.
+* Continue to flush records in the UploaderSink even if the vehicle is
+  disconnected.
+
 ## v2.0
 
 * Test and verify Bluetooth data source.
@@ -23,7 +33,7 @@
 ## v1.1
 
 * Measurement API changed, getValue() no longers throws an exception if data is
-  unavailable. Instead, measurement objects will not be returend to the caller
+  unavailable. Instead, measurement objects will not be returned to the caller
   unless they have valid data.
 
 ## v1.0
