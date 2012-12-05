@@ -1,5 +1,9 @@
 # OpenXC Android Library Changelog
 
+## v2.1.1
+
+* Fix build error in Eclipse.
+
 ## v2.1
 
 * Raise minimum Android API version to 9 (2.3) to use newer data structures.
