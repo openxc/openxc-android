@@ -45,6 +45,8 @@ import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.util.AndroidFileOpener;
 
+import android.widget.Toast;
+
 /**
  * The VehicleManager is an in-process Android service and the primary entry
  * point into the OpenXC library.
@@ -696,7 +698,15 @@ public class VehicleManager extends Service implements SourceCallback {
         Log.i(TAG, "Binding to VehicleService");
         Intent intent = new Intent(
                 VehicleServiceInterface.class.getName());
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        try {
+            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        } catch(SecurityException e) {
+            Log.e(TAG, "Unable to bind with remote service, it's not exported "
+                    + "-- is the instrumentation tests package installed?", e);
+            Toast.makeText(this, "Vehicle service is not exported and is " +
+                    "inaccessible - are the instrumentation tests still " +
+                    "installed?", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void unbindRemote() {
