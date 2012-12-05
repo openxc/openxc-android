@@ -63,13 +63,12 @@ public class RawMeasurement implements Parcelable {
 
     public RawMeasurement(String serialized)
             throws UnrecognizedMeasurementTypeException {
-        this();
         deserialize(serialized, this);
     }
 
     private RawMeasurement(Parcel in)
             throws UnrecognizedMeasurementTypeException {
-        this(in.readString());
+        readFromParcel(in);
     }
 
     private RawMeasurement() {
@@ -77,7 +76,17 @@ public class RawMeasurement implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeString(serialize());
+        out.writeString(getName());
+        out.writeDouble(getTimestamp());
+        out.writeValue(getValue());
+        out.writeValue(getEvent());
+    }
+
+    public void readFromParcel(Parcel in) {
+        mName = in.readString();
+        mTimestamp = in.readDouble();
+        mValue = in.readValue(null);
+        mEvent = in.readValue(null);
     }
 
     public static final Parcelable.Creator<RawMeasurement> CREATOR =
@@ -208,13 +217,6 @@ public class RawMeasurement implements Parcelable {
 
     public int describeContents() {
         return 0;
-    }
-
-    private void copy(RawMeasurement measurement) {
-        mTimestamp = measurement.getTimestamp();
-        mName = measurement.getName();
-        mValue = measurement.getValue();
-        mEvent = measurement.getEvent();
     }
 
     @Override
