@@ -45,11 +45,16 @@ public class OpenXcEnablerActivity extends Activity {
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
-            OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
+            new Thread(new Runnable() {
                 public void run() {
-                    mVehicleManagerStatusView.setText("Running");
+                    mVehicleManager.waitUntilBound();
+                    OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            mVehicleManagerStatusView.setText("Running");
+                        }
+                    });
                 }
-            });
+            }).start();
 
             mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
                     OpenXcEnablerActivity.this, mMessageCountView);
@@ -85,6 +90,12 @@ public class OpenXcEnablerActivity extends Activity {
         mMessageCountView = (TextView) findViewById(R.id.message_count);
         mSourceListView = (ListView) findViewById(R.id.source_list);
         mSinkListView = (ListView) findViewById(R.id.sink_list);
+
+        OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                mVehicleManagerStatusView.setText("Not running");
+            }
+        });
 
     }
 
