@@ -84,19 +84,20 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
     }
 
     private void makeLocationComplete(Location location) {
-        // TODO This workaround is necessary to run on an Android 4.2 device,
-        // even though we are only targeting API level 12. This seems really
-        // broken to me, that suddenly Location must be "complete" but the
-        // methods to make it complete aren't available in order API versions.
-        // This code dynamically loads the method if it exists, otherwise it
-        // sets the timestamp with the older method.
-        Method makeCompleteMethod = null;
-        try {
-            makeCompleteMethod = Location.class.getMethod("makeComplete");
-            makeCompleteMethod.invoke(location);
-        } catch(NoSuchMethodException e) {
+        if(android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            // TODO When android 4.2 hits the maven repository we can simplify
+            // this and call the makeComplete method directly, until then we use
+            // reflection to load it without getting a compilation error.
+            Method makeCompleteMethod = null;
+            try {
+                makeCompleteMethod = Location.class.getMethod("makeComplete");
+                makeCompleteMethod.invoke(location);
+            } catch(NoSuchMethodException e) {
+            } catch(Exception e) {
+            }
+        } else {
             location.setTime(System.currentTimeMillis());
-        } catch(Exception e) {
         }
     }
 
