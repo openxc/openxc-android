@@ -48,7 +48,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
                     openTimestampedFile();
                 } catch(IOException e) {
                     throw new DataSinkException(
-                            "Unable to open file nfor recording", e);
+                            "Unable to open file for recording", e);
                 }
             }
 
