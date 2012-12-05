@@ -1,12 +1,12 @@
 package com.openxc.sinks;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -30,10 +30,10 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private NotificationThread mNotificationThread;
     private Lock mNotificationsLock;
     private Condition mNotificationReceived;
-    private Set<String> mNotifications;
+    private ConcurrentHashMap<String, RawMeasurement> mNotifications;
 
     public AbstractQueuedCallbackSink() {
-        mNotifications = new HashSet<String>(32);
+        mNotifications = new ConcurrentHashMap<String, RawMeasurement>(32);
         mNotificationsLock = new ReentrantLock();
         mNotificationReceived = mNotificationsLock.newCondition();
         mNotificationThread = new NotificationThread();
@@ -53,9 +53,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
             throws DataSinkException {
         super.receive(rawMeasurement);
         mNotificationsLock.lock();
-        // TODO what we if we added the actual measurement here, that would save
-        // a lookup later
-        mNotifications.add(rawMeasurement.getName());
+        mNotifications.put(rawMeasurement.getName(), rawMeasurement);
         mNotificationReceived.signal();
         mNotificationsLock.unlock();
     }
@@ -81,27 +79,25 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         public void run() {
             while(isRunning()) {
                 mNotificationsLock.lock();
-                if(mNotifications.isEmpty()) {
-                    try {
+                try {
+                    if(mNotifications.isEmpty()) {
                         mNotificationReceived.await();
-                    } catch(InterruptedException e) {
-                        Log.d(TAG, "Interrupted while waiting for a new " +
-                                "item for notification -- likely shutting down");
-                        mNotificationsLock.unlock();
-                        return;
                     }
+                } catch(InterruptedException e) {
+                    Log.d(TAG, "Interrupted while waiting for a new " +
+                            "item for notification -- likely shutting down");
+                    return;
+                } finally {
+                    mNotificationsLock.unlock();
                 }
 
-                Iterator<String> it = mNotifications.iterator();
-                if(it.hasNext()) {
-                    String measurementId = it.next();
+                // This iterator is weakly consistent, so we don't need the lock
+                Iterator<RawMeasurement> it = mNotifications.values().iterator();
+                while(it.hasNext()) {
+                    RawMeasurement measurement = it.next();
+                    propagateMeasurement(measurement.getName(), measurement);
                     it.remove();
-                    RawMeasurement rawMeasurement = get(measurementId);
-                    if(rawMeasurement != null) {
-                        propagateMeasurement(measurementId, rawMeasurement);
-                    }
                 }
-                mNotificationsLock.unlock();
             }
             Log.d(TAG, "Stopped measurement notifier");
         }
