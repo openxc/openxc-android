@@ -4,7 +4,5 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/com/google/guava/guava/10.0.1/guava-10.0.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.1.1/jackson-core-2.1.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
