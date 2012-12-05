@@ -55,6 +55,12 @@ public class RawMeasurement implements Parcelable {
         mEvent = event;
     }
 
+    public RawMeasurement(String name, Object value, Object event,
+            double timestamp) {
+        this(name, value, event);
+        mTimestamp = timestamp;
+    }
+
     public RawMeasurement(String serialized)
             throws UnrecognizedMeasurementTypeException {
         this();

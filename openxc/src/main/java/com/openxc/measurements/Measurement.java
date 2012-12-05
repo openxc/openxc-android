@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import com.openxc.remote.RawMeasurement;
+
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
 
@@ -50,6 +52,10 @@ public interface Measurement {
     public Unit getValue();
 
     public String serialize();
+
+    public RawMeasurement toRaw();
+
+    public double getBirthtime();
 
     public String getGenericName();
 

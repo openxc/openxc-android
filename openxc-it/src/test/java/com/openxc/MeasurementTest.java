@@ -2,10 +2,15 @@ package com.openxc;
 
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
+import com.openxc.NoValueException;
+
+import com.openxc.remote.RawMeasurement;
+
 import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.containsString;
 
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
@@ -56,10 +61,17 @@ public class MeasurementTest extends TestCase {
 
     public void testSerialize() {
         measurement = new TestMeasurement(10.1);
-        assertEquals(measurement.serialize(),
-                    "{\"name\":\"" + TestMeasurement.ID
-                    + "\",\"value\":"
-                    + measurement.getSerializedValue() + "}");
+        String data = measurement.serialize();
+        assertThat(data, containsString(TestMeasurement.ID));
+        assertThat(data, containsString(
+                    measurement.getSerializedValue().toString()));
+    }
+
+    public void testToRaw() {
+        measurement = new TestMeasurement(10.1);
+        RawMeasurement raw = measurement.toRaw();
+        assertEquals(raw.getName(), TestMeasurement.ID);
+        assertEquals(raw.getValue(), measurement.getValue().doubleValue());
     }
 
     public void testDeserialize() throws NoValueException,

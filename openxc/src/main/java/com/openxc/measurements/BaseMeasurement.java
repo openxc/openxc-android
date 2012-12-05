@@ -81,6 +81,10 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mValue.getAge();
     }
 
+    public double getBirthtime() {
+        return mValue.getTimestamp();
+    }
+
     public boolean hasRange() {
         return mRange != null;
     }
@@ -112,12 +116,12 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public String serialize() {
-        // TODO if we had a toRaw method to go to RawMeasurement from
-        // Measurement, we could just call serialize() on it to get the same
-        // effect. i'm wondering if maybe the JsonSerializer is really just a
-        // part of RawMeasurement.
-        return JsonSerializer.serialize(getGenericName(),
-                getValue().getSerializedValue(), getEvent(), null);
+        return toRaw().serialize();
+    }
+
+    public RawMeasurement toRaw() {
+        return new RawMeasurement(getGenericName(), getSerializedValue(),
+                getSerializedEvent(), mValue.getTimestamp());
     }
 
     public static Measurement deserialize(String measurementString)
@@ -126,12 +130,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return BaseMeasurement.getMeasurementFromRaw(rawMeasurement);
     }
 
-    // TODO can we make this protected for everyone? it's really internal state
-    // because all external users should care about is it being serialized. the
-    // only place we use it right now is the MockedLocationSink.
     public String getGenericName() {
-        // TODO this needs to go away.
-        return "";
+        return "base_measurement";
     }
 
     private static void cacheMeasurementId(

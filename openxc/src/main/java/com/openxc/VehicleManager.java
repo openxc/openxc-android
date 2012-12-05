@@ -247,13 +247,7 @@ public class VehicleManager extends Service implements SourceCallback {
                 UnrecognizedMeasurementTypeException {
         Log.d(TAG, "Sending command " + command);
 
-        // TODO measurement should know how to convert itself back to raw...
-        // or maybe we don't even need raw in this case. oh wait, we can't
-        // send templated class over AIDL so we do.
-        RawMeasurement rawCommand = new RawMeasurement(command.getGenericName(),
-                command.getSerializedValue(),
-                command.getSerializedEvent());
-
+        RawMeasurement rawCommand = command.toRaw();
         // prefer the Bluetooth controller, if connected
         if(mBluetoothSource != null) {
             Log.d(TAG, "Sending " + rawCommand + " over Bluetooth to " +
