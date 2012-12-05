@@ -1,8 +1,5 @@
 package com.openxc.sinks;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceListener;
 

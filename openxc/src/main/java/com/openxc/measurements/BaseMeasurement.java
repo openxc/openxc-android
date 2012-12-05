@@ -8,8 +8,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import com.openxc.measurements.serializers.JsonSerializer;
-
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 
