@@ -171,15 +171,6 @@ public class DataPipeline implements SourceCallback {
     }
 
     /**
-     * Determine if a type of measurement has yet been received.
-     *
-     * @return true if any value is known for the measurement ID.
-     */
-    public boolean containsMeasurement(String measurementId) {
-        return mMeasurements.containsKey(measurementId);
-    }
-
-    /**
      * @return number of messages received since instantiation.
      */
     public int getMessageCount() {
