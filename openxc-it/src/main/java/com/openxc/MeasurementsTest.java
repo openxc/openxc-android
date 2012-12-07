@@ -47,6 +47,7 @@ import junit.framework.Assert;
 public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
     URI traceUri;
+    TraceVehicleDataSource source;
 
     public MeasurementsTest() {
         super(VehicleManager.class);
@@ -77,13 +78,17 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.addSource(new TraceVehicleDataSource(getContext(), traceUri));
+        source = new TraceVehicleDataSource(getContext(), traceUri);
+        service.addSource(source);
         pause(200);
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+        if(source != null) {
+            source.stop();
+        }
         if(service != null)  {
             service.initializeDefaultSources();
         }

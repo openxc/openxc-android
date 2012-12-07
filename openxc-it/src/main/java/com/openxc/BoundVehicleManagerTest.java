@@ -43,6 +43,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     SteeringWheelAngle steeringAngleReceived;
     URI traceUri;
     String receivedMeasurementId;
+    TraceVehicleDataSource source;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(Measurement measurement) {
@@ -62,19 +63,25 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     private void copyTraces() {
+        traceUri = copyToStorage(R.raw.tracejson, "trace.json");
+    }
+
+    private URI copyToStorage(int resource, String filename) {
+        URI uri = null;
         try {
-            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
+            uri = new URI("file:///sdcard/com.openxc/" + filename);
         } catch(URISyntaxException e) {
             Assert.fail("Couldn't construct resource URIs: " + e);
         }
 
         try {
             FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(
-                        R.raw.tracejson), new File(traceUri));
+                    getContext().getResources().openRawResource(resource),
+                        new File(uri));
         } catch(IOException e) {
             Assert.fail("Couldn't copy trace files to SD card" + e);
         }
+        return uri;
     }
 
     @Override
@@ -95,14 +102,15 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        service.addSource(new TraceVehicleDataSource(getContext(), traceUri));
+        source = new TraceVehicleDataSource(getContext(), traceUri);
+        service.addSource(source);
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        if(service != null)  {
-            service.clearSources();
+        if(source != null) {
+            source.stop();
         }
     }
 
