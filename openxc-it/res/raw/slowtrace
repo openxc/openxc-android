@@ -1,0 +1,3 @@
+{"timestamp":1,"value":false,"name":"headlamp_status"}
+{"timestamp":2,"value":true,"name":"headlamp_status"}
+{"timestamp":3,"value":true,"name":"parking_brake_status"}

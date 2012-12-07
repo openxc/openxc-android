@@ -73,6 +73,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
     private Long mFirstTimestamp;
     private boolean mRunning = true;
+    private boolean mLoop = true;
     private URI mFilename;
 
     /** Construct a trace data source with the given context, callback and
@@ -90,6 +91,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      */
     public TraceVehicleDataSource(SourceCallback callback, Context context,
             URI filename) throws DataSourceException {
+        this(callback, context, filename, true);
+    }
+
+    public TraceVehicleDataSource(SourceCallback callback, Context context,
+            URI filename, boolean loop) throws DataSourceException {
         super(callback, context);
         if(filename == null) {
             throw new DataSourceException(
@@ -97,6 +103,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         }
 
         mFilename = filename;
+        mLoop = loop;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
         new Thread(this).start();
@@ -105,6 +112,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     public TraceVehicleDataSource(Context context, URI filename)
             throws DataSourceException {
         this(null, context, filename);
+    }
+
+    public TraceVehicleDataSource(Context context, URI filename, boolean loop)
+            throws DataSourceException {
+        this(null, context, filename, loop);
     }
 
     /**
@@ -179,6 +191,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 } catch(IOException e) {
                     Log.w(TAG, "Couldn't even close the trace file", e);
                 }
+            }
+
+            if(!mLoop) {
+                Log.d(TAG, "Not looping trace.");
+                break;
             }
             Log.d(TAG, "Restarting playback of trace " + mFilename);
             try {
