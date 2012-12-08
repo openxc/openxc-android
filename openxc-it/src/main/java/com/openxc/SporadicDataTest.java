@@ -3,8 +3,6 @@ package com.openxc;
 import java.io.File;
 import java.io.IOException;
 
-import java.lang.InterruptedException;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -22,8 +20,6 @@ import com.openxc.VehicleManager;
 
 
 import android.content.Intent;
-
-import android.os.Debug;
 
 import android.test.ServiceTestCase;
 

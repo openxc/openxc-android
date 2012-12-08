@@ -1,14 +1,8 @@
 package com.openxc;
 
-import java.io.File;
-import java.io.IOException;
-
 import java.lang.InterruptedException;
 
-import java.net.URISyntaxException;
 import java.net.URI;
-
-import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.AcceleratorPedalPosition;
 import com.openxc.measurements.BrakePedalStatus;
@@ -42,8 +36,6 @@ import android.test.ServiceTestCase;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
-import junit.framework.Assert;
-
 public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
     URI traceUri;
@@ -53,25 +45,12 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         super(VehicleManager.class);
     }
 
-    private void copyTraces() {
-        try {
-            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
-        } catch(URISyntaxException e) {
-            Assert.fail("Couldn't construct resource URIs: " + e);
-        }
-
-        try {
-            FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(
-                        R.raw.tracejson), new File(traceUri));
-        } catch(IOException e) {}
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        copyTraces();
+        traceUri = TestUtils.copyToStorage(getContext(), R.raw.tracejson,
+                "trace.json");
 
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);

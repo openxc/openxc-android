@@ -1,8 +1,5 @@
 package com.openxc.sources.trace;
 
-import java.io.File;
-import java.io.IOException;
-
 import java.lang.InterruptedException;
 
 import java.net.MalformedURLException;
@@ -10,16 +7,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.apache.commons.io.FileUtils;
-
 import com.openxc.remote.RawMeasurement;
 
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.DataSourceException;
 
-import android.test.AndroidTestCase;
+import com.openxc.TestUtils;
 
-import junit.framework.Assert;
+import android.test.AndroidTestCase;
 
 import com.openxc.R;
 
@@ -34,30 +29,12 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     boolean receivedNumericalCallback;
     boolean receivedBooleanCallback;;
 
-    private void copyTraces() {
-        try {
-            traceUri = new URI("file:///sdcard/com.openxc/trace.json");
-            malformedTraceUri = new URI(
-                    "file:///sdcard/com.openxc/malformed-trace.json");
-        } catch(URISyntaxException e) {
-            Assert.fail("Couldn't construct resource URIs: " + e);
-        }
-
-        try {
-            FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(
-                        R.raw.tracejson), new File(traceUri));
-            FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(
-                        R.raw.tracetxt), new File(malformedTraceUri));
-        } catch(IOException e) {
-            Assert.fail("Couldn't copy trace files to SD card" + e);
-        }
-    }
-
     @Override
     protected void setUp() {
-        copyTraces();
+        traceUri = TestUtils.copyToStorage(getContext(), R.raw.tracejson,
+                "trace.json");
+        malformedTraceUri = TestUtils.copyToStorage(getContext(),
+                R.raw.tracetxt, "malformed-trace.json");
         callback = new SourceCallback() {
             public void receive(RawMeasurement measurement) {
                 if(measurement.getValue().getClass() == Boolean.class) {

@@ -1,14 +1,6 @@
 package com.openxc;
 
-import java.io.File;
-import java.io.IOException;
-
-import java.lang.InterruptedException;
-
-import java.net.URISyntaxException;
 import java.net.URI;
-
-import org.apache.commons.io.FileUtils;
 
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.SteeringWheelAngle;
@@ -62,32 +54,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         super(VehicleManager.class);
     }
 
-    private void copyTraces() {
-        traceUri = copyToStorage(R.raw.tracejson, "trace.json");
-    }
-
-    private URI copyToStorage(int resource, String filename) {
-        URI uri = null;
-        try {
-            uri = new URI("file:///sdcard/com.openxc/" + filename);
-        } catch(URISyntaxException e) {
-            Assert.fail("Couldn't construct resource URIs: " + e);
-        }
-
-        try {
-            FileUtils.copyInputStreamToFile(
-                    getContext().getResources().openRawResource(resource),
-                        new File(uri));
-        } catch(IOException e) {
-            Assert.fail("Couldn't copy trace files to SD card" + e);
-        }
-        return uri;
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        copyTraces();
+        traceUri = TestUtils.copyToStorage(getContext(), R.raw.tracejson,
+                "trace.json");
 
         speedReceived = null;
         steeringAngleReceived = null;
