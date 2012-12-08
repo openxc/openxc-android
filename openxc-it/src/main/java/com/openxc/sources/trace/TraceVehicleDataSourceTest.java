@@ -70,7 +70,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     }
 
     @Override
-    protected void tearDown() {
+    protected void tearDown() throws Exception {
         if(source != null) {
             source.stop();
         }
@@ -79,6 +79,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
                 thread.join();
             } catch(InterruptedException e) {}
         }
+        super.tearDown();
     }
 
     private void startTrace(TraceVehicleDataSource source) {

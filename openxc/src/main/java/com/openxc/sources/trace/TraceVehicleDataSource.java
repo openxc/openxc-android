@@ -131,6 +131,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
         connected();
         while(mRunning) {
+            Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader;
             try {
                 reader = openFile(mFilename);
