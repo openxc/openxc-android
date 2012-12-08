@@ -62,6 +62,34 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     }
 
     @SmallTest
+    public void testCounts() throws JSONException, DataSinkException {
+        RawMeasurement measurement = new RawMeasurement("first", true);
+        measurement.timestamp();
+        sink.receive(measurement);
+
+        measurement = new RawMeasurement("first", false);
+        measurement.timestamp();
+        sink.receive(measurement);
+
+        measurement = new RawMeasurement("second", true);
+        measurement.timestamp();
+        sink.receive(measurement);
+
+        measurement = new RawMeasurement("second", true);
+        measurement.timestamp();
+        sink.receive(measurement);
+
+        sink.flush();
+
+        String[] records = outputString.toString().split("\n");
+        assertEquals(4, records.length);
+        assertTrue(records[0].indexOf("first") != -1);
+        assertTrue(records[1].indexOf("first") != -1);
+        assertTrue(records[2].indexOf("second") != -1);
+        assertTrue(records[3].indexOf("second") != -1);
+    }
+
+    @SmallTest
     public void testStop() {
         assertTrue(sink.isRunning());
         sink.stop();
