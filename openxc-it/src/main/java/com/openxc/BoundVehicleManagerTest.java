@@ -67,7 +67,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // cached), kill it.
         getContext().stopService(new Intent(getContext(),
                     VehicleService.class));
-        TestUtils.pause(200);
+        TestUtils.pause(50);
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);
         service = ((VehicleManager.VehicleBinder)
@@ -99,12 +99,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testListenerGetsLastKnownValue()
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
-        TestUtils.pause(300);
+        TestUtils.pause(100);
         // kill the incoming data stream
         service.clearSources();
-        TestUtils.pause(100);
         service.addListener(VehicleSpeed.class, speedListener);
-        TestUtils.pause(50);
+        TestUtils.pause(20);
         assertNotNull(speedReceived);
     }
 
@@ -113,7 +112,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        TestUtils.pause(300);
+        TestUtils.pause(100);
         assertNotNull(speedReceived);
     }
 

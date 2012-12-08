@@ -59,7 +59,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         service.waitUntilBound();
         source = new TraceVehicleDataSource(getContext(), traceUri);
         service.addSource(source);
-        TestUtils.pause(200);
+        TestUtils.pause(100);
     }
 
     @Override
@@ -175,7 +175,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetWindshieldWiperStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        TestUtils.pause(300);
         WindshieldWiperStatus measurement = (WindshieldWiperStatus)
                 service.get(WindshieldWiperStatus.class);
         checkReceivedMeasurement(measurement);
@@ -186,7 +185,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetBrakePedalStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        TestUtils.pause(300);
         BrakePedalStatus measurement = (BrakePedalStatus)
             service.get(BrakePedalStatus.class);
         checkReceivedMeasurement(measurement);
@@ -197,7 +195,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetHeadlampStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        TestUtils.pause(300);
         HeadlampStatus measurement = (HeadlampStatus)
             service.get(HeadlampStatus.class);
         checkReceivedMeasurement(measurement);
@@ -208,7 +205,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetHighBeamStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        TestUtils.pause(300);
         HighBeamStatus measurement = (HighBeamStatus)
             service.get(HighBeamStatus.class);
         checkReceivedMeasurement(measurement);
@@ -219,7 +215,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetTransmissionGearPosition()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        TestUtils.pause(300);
         TransmissionGearPosition measurement = (TransmissionGearPosition)
                 service.get(TransmissionGearPosition.class);
         checkReceivedMeasurement(measurement);
@@ -231,7 +226,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetVehicleButtonEvent()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
-        TestUtils.pause(300);
         VehicleButtonEvent event = (VehicleButtonEvent)
                 service.get(VehicleButtonEvent.class);
         checkReceivedMeasurement(event);
