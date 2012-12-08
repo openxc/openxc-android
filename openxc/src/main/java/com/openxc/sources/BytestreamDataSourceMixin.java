@@ -1,5 +1,9 @@
 package com.openxc.sources;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.util.Log;
 
 /**
@@ -8,7 +12,8 @@ import android.util.Log;
  */
 public class BytestreamDataSourceMixin {
     private final static String TAG = "BytestreamDataSourceMixin";
-    private StringBuilder mBuffer = new StringBuilder(512);
+    private final static int BUFFER_SIZE = 512;
+    private StringBuilder mBuffer = new StringBuilder(BUFFER_SIZE);
     private double mBytesReceived = 0;
     private double mLastLoggedTransferStatsAtByte = 0;
     private final long mStartTime = System.nanoTime();
@@ -29,12 +34,7 @@ public class BytestreamDataSourceMixin {
         mBuffer.append(data);
         mBytesReceived += length;
 
-        // log the transfer stats roughly every 1MB
-        if(mBytesReceived > mLastLoggedTransferStatsAtByte + 1024 * 1024) {
-            mLastLoggedTransferStatsAtByte = mBytesReceived;
-            SourceLogger.logTransferStats(TAG, mStartTime, System.nanoTime(),
-                    mBytesReceived);
-        }
+        logTransferStats();
     }
 
     /**
@@ -44,14 +44,33 @@ public class BytestreamDataSourceMixin {
      * @returns A list of messages parsed and subsequently removed from the
      * buffer, if any.
      */
-    public String[] parse() {
-        String[] records = mBuffer.toString().split("\n");
+    public List<String> parse() {
+        List<String> result;
+        if(mBuffer.indexOf("\n") != -1) {
+            String[] records = mBuffer.toString().split("\n", -1);
 
-        if(records.length > 1) {
-            String newBuffer = records[records.length - 1];
-            mBuffer = new StringBuilder(newBuffer.length() * 2);
-            mBuffer.append(newBuffer);
+            mBuffer = new StringBuilder(BUFFER_SIZE);
+            result = Arrays.asList(records).subList(0, records.length - 1);
+
+            // Preserve any remaining, trailing incomplete messages in the
+            // buffer
+            if(records[records.length - 1].length() > 0) {
+                mBuffer.append(records[records.length - 1]);
+            }
+        } else {
+            result = new ArrayList<String>();
         }
-        return records;
+
+        return result;
     }
+
+    private void logTransferStats() {
+        // log the transfer stats roughly every 1MB
+        if(mBytesReceived > mLastLoggedTransferStatsAtByte + 1024 * 1024) {
+            mLastLoggedTransferStatsAtByte = mBytesReceived;
+            SourceLogger.logTransferStats(TAG, mStartTime, System.nanoTime(),
+                    mBytesReceived);
+        }
+    }
+
 }
