@@ -56,7 +56,7 @@ public class AgingData<TheUnit extends Unit> {
 
     public void setTimestamp(double timestamp) {
         Calendar otherTime = Calendar.getInstance();
-        otherTime.setTimeInMillis(new Double(timestamp * 1000).longValue());
+        otherTime.setTimeInMillis(Double.valueOf(timestamp * 1000).longValue());
         mBirthdate = otherTime.getTime();
     }
 

@@ -222,7 +222,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         long timestamp = TimeUnit.NANOSECONDS.convert(
                 (long)(timestampSeconds * 1000), TimeUnit.MILLISECONDS);
         if(mFirstTimestamp == null) {
-            mFirstTimestamp = new Long(timestamp);
+            mFirstTimestamp = Long.valueOf(timestamp);
             Log.d(TAG, "Storing " + mFirstTimestamp + " as the first " +
                     "timestamp of the trace file");
         }
@@ -239,7 +239,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         InputStream stream;
         try {
             stream = getContext().getResources().openRawResource(
-                    new Integer(filename.getAuthority()));
+                    Integer.valueOf(filename.getAuthority()));
         } catch(Resources.NotFoundException e) {
             Log.w(TAG, "Unable to find a trace resource with URI " + filename
                     + " -- returning an empty buffer");
