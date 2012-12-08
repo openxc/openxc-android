@@ -96,7 +96,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // cached), kill it.
         getContext().stopService(new Intent(getContext(),
                     VehicleService.class));
-        pause(200);
+        TestUtils.pause(200);
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);
         service = ((VehicleManager.VehicleBinder)
@@ -128,12 +128,12 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testListenerGetsLastKnownValue()
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
-        pause(300);
+        TestUtils.pause(300);
         // kill the incoming data stream
         service.clearSources();
-        pause(100);
+        TestUtils.pause(100);
         service.addListener(VehicleSpeed.class, speedListener);
-        pause(50);
+        TestUtils.pause(50);
         assertNotNull(speedReceived);
     }
 
@@ -142,7 +142,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        pause(300);
+        TestUtils.pause(300);
         assertNotNull(speedReceived);
     }
 
@@ -150,11 +150,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testCustomSink() {
         assertNull(receivedMeasurementId);
         service.addSink(mCustomSink);
-        pause(100);
+        TestUtils.pause(100);
         assertNotNull(receivedMeasurementId);
         service.removeSink(mCustomSink);
         receivedMeasurementId = null;
-        pause(100);
+        TestUtils.pause(100);
         assertNull(receivedMeasurementId);
     }
 
@@ -165,7 +165,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         // let some measurements flow through the system
-        pause(100);
+        TestUtils.pause(100);
         assertNotNull(steeringAngleReceived);
         assertNotNull(speedReceived);
     }
@@ -175,10 +175,10 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        pause(100);
+        TestUtils.pause(100);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        pause(100);
+        TestUtils.pause(100);
         assertNull(speedReceived);
     }
 
@@ -195,10 +195,10 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        pause(100);
+        TestUtils.pause(100);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        pause(100);
+        TestUtils.pause(100);
         assertNull(speedReceived);
     }
 
@@ -206,9 +206,9 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testConsistentAge()
             throws UnrecognizedMeasurementTypeException,
             NoValueException, VehicleServiceException {
-        pause(150);
+        TestUtils.pause(150);
         service.clearSources();
-        pause(150);
+        TestUtils.pause(150);
         Measurement measurement = service.get(VehicleSpeed.class);
         double age = measurement.getAge();
         assertTrue("Measurement age (" + age + ") should be > 0.05",
@@ -221,12 +221,6 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
                     TurnSignalStatus.TurnSignalPosition.LEFT));
         // TODO how can we actually test that it gets written? might need to do
         // smaller unit tests.
-    }
-
-    private void pause(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch(InterruptedException e) {}
     }
 
     private VehicleDataSink mCustomSink = new BaseVehicleDataSink() {

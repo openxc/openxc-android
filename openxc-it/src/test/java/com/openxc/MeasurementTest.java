@@ -6,6 +6,8 @@ import com.openxc.NoValueException;
 
 import com.openxc.remote.RawMeasurement;
 
+import com.openxc.TestUtils;
+
 import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -46,7 +48,7 @@ public class MeasurementTest extends TestCase {
     }
 
     public void testAgeIsPositive() {
-        pause(10);
+        TestUtils.pause(10);
         assertThat(measurement.getAge(), greaterThan(0.0));
     }
 
@@ -96,11 +98,5 @@ public class MeasurementTest extends TestCase {
         public String getGenericName() {
             return ID;
         }
-    }
-
-    private void pause(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch(InterruptedException e) {}
     }
 }

@@ -3,6 +3,8 @@ package com.openxc.util;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.openxc.TestUtils;
+
 import com.openxc.units.Degree;
 
 import junit.framework.TestCase;
@@ -17,7 +19,7 @@ public class AgingDataTest extends TestCase {
 
     public void testBornNow() {
         data = new AgingData<Degree>(value);
-        pause(10);
+        TestUtils.pause(10);
         assertThat(data.getAge(), greaterThan(0.0));
     }
 
@@ -34,11 +36,5 @@ public class AgingDataTest extends TestCase {
         assertThat(data.getAge(), lessThanOrEqualTo(1.0));
         data.setTimestamp(data.getAge() + 100);
         assertThat(data.getAge(), greaterThanOrEqualTo(100.0));
-    }
-
-    private void pause(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch(InterruptedException e) {}
     }
 }

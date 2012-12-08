@@ -1,5 +1,6 @@
 package com.openxc.remote;
 
+import com.openxc.TestUtils;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
@@ -23,7 +24,7 @@ public class RawMeasurementTest extends TestCase {
     public void testStopsAging() {
         measurement = new RawMeasurement(measurementName, measurementValue);
         double timestamp = measurement.getTimestamp();
-        pause(10);
+        TestUtils.pause(10);
         assertEquals(timestamp, measurement.getTimestamp(), 0);
     }
 
@@ -60,11 +61,5 @@ public class RawMeasurementTest extends TestCase {
             return;
         }
         Assert.fail();
-    }
-
-    private void pause(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch(InterruptedException e) {}
     }
 }
