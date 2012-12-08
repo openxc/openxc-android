@@ -1,5 +1,7 @@
 package com.openxc.units;
 
+import java.util.Locale;
+
 import com.google.common.base.Objects;
 
 /**
@@ -39,7 +41,7 @@ public class State<T extends Enum<?>> extends Unit {
     }
 
     public String getSerializedValue() {
-        return mValue.toString().toLowerCase();
+        return mValue.toString().toLowerCase(Locale.US);
     }
 
     @Override

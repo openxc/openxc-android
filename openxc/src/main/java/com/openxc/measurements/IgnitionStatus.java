@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import java.util.Locale;
+
 import com.openxc.units.State;
 
 /**
@@ -25,7 +27,7 @@ public class IgnitionStatus
     }
 
     public IgnitionStatus(String value) {
-        this(IgnitionPosition.valueOf(value.toUpperCase()));
+        this(IgnitionPosition.valueOf(value.toUpperCase(Locale.US)));
     }
 
     @Override

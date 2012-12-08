@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import java.util.Locale;
+
 import com.openxc.units.State;
 
 import com.openxc.units.Boolean;
@@ -39,7 +41,7 @@ public class VehicleDoorStatus
     }
 
     public VehicleDoorStatus(String value, java.lang.Boolean event) {
-        this(DoorId.valueOf(value.toUpperCase()), new Boolean(event));
+        this(DoorId.valueOf(value.toUpperCase(Locale.US)), new Boolean(event));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import java.util.Locale;
+
 import com.openxc.units.State;
 
 /**
@@ -34,7 +36,7 @@ public class TransmissionGearPosition
     }
 
     public TransmissionGearPosition(String value) {
-        this(GearPosition.valueOf(value.toUpperCase()));
+        this(GearPosition.valueOf(value.toUpperCase(Locale.US)));
     }
 
     @Override

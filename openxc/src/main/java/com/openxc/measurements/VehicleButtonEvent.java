@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import java.util.Locale;
+
 import com.openxc.units.State;
 
 /**
@@ -56,8 +58,8 @@ public class VehicleButtonEvent
     }
 
     public VehicleButtonEvent(String value, String event) {
-        this(ButtonId.valueOf(value.toUpperCase()),
-                ButtonAction.valueOf(event.toUpperCase()));
+        this(ButtonId.valueOf(value.toUpperCase(Locale.US)),
+                ButtonAction.valueOf(event.toUpperCase(Locale.US)));
     }
 
     @Override

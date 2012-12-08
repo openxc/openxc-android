@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import android.util.Log;
 
@@ -21,7 +22,7 @@ import com.openxc.util.FileOpener;
 public class FileRecorderSink extends BaseVehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private static SimpleDateFormat sDateFormatter =
-            new SimpleDateFormat("yyyy-MM-dd-HH");
+            new SimpleDateFormat("yyyy-MM-dd-HH", Locale.US);
 
     private BufferedWriter mWriter;
     private Date mLastFileCreated;
