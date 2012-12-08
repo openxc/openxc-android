@@ -81,7 +81,7 @@ public class SporadicDataTest extends ServiceTestCase<VehicleManager> {
         // if the service is already running (and thus may have old data
         // cached), kill it.
         getContext().stopService(new Intent(getContext(), VehicleService.class));
-        pause(1000);
+        pause(5000);
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);
         service = ((VehicleManager.VehicleBinder)
@@ -97,10 +97,10 @@ public class SporadicDataTest extends ServiceTestCase<VehicleManager> {
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
         if(source != null) {
             source.stop();
         }
+        super.tearDown();
     }
 
     @MediumTest
