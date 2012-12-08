@@ -108,10 +108,10 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
         if(source != null) {
             source.stop();
         }
+        super.tearDown();
     }
 
     @MediumTest

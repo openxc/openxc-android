@@ -43,7 +43,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
     }
 
     @Override
-    protected void tearDown() {
+    protected void tearDown() throws Exception {
         if(source != null) {
             source.stop();
         }
@@ -52,6 +52,7 @@ public class UsbVehicleDataSourceTest extends AndroidTestCase {
                 thread.join();
             } catch(InterruptedException e) {}
         }
+        super.tearDown();
     }
 
     @SmallTest
