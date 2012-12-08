@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.google.common.base.Objects;
 
+import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.SourceLogger;
@@ -70,6 +71,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     private UsbEndpoint mInEndpoint;
     private UsbEndpoint mOutEndpoint;
     private PendingIntent mPermissionIntent;
+    private BytestreamDataSourceMixin mBuffer;
     private final URI mDeviceUri;
     private final Lock mDeviceConnectionLock;
     private final Condition mDeviceChanged;
@@ -139,6 +141,9 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
 
         mVendorId = UsbDeviceUtilities.vendorFromUri(device);
         mProductId = UsbDeviceUtilities.productFromUri(device);
+
+        mBuffer = new BytestreamDataSourceMixin();
+
         start();
     }
 
@@ -203,12 +208,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
      * either waits for a new device connection or reads USB packets.
      */
     public void run() {
-        double lastLoggedTransferStatsAtByte = 0;
         byte[] bytes = new byte[128];
-        StringBuilder buffer = new StringBuilder(512);
-        final long startTime = System.nanoTime();
-        long endTime;
-        double bytesReceived = 0;
         while(mRunning) {
             mDeviceConnectionLock.lock();
 
@@ -224,28 +224,16 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             // USB wakes backup? Why does USB seem to go to sleep in the first
             // place?
             if(mConnection != null) {
-                int received = mConnection.bulkTransfer(
-                        mInEndpoint, bytes, bytes.length, 0);
+                int received = mConnection.bulkTransfer(mInEndpoint, bytes,
+                        bytes.length, 0);
                 if(received > 0) {
-                    // Creating a new String object for each message causes the
-                    // GC to go a little crazy, but I don't see another obvious way
-                    // of converting the byte[] to something the StringBuilder can
-                    // accept (either char[] or String). See #151.
-                    buffer.append(new String(bytes, 0, received));
-
-                    buffer = parseBuffer(buffer);
-                    bytesReceived += received;
+                    mBuffer.receive(bytes, received);
+                    for(String record : mBuffer.parse()) {
+                        handleMessage(record);
+                    }
                 }
             }
             mDeviceConnectionLock.unlock();
-
-            endTime = System.nanoTime();
-            // log the transfer stats roughly every 1MB
-            if(bytesReceived > lastLoggedTransferStatsAtByte + 1024 * 1024) {
-                lastLoggedTransferStatsAtByte = bytesReceived;
-                SourceLogger.logTransferStats(TAG, startTime, endTime,
-                        bytesReceived);
-            }
         }
         Log.d(TAG, "Stopped USB listener");
     }
@@ -303,21 +291,6 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             Log.d(TAG, "Still no device available");
             mDeviceChanged.await();
         }
-    }
-
-    private StringBuilder parseBuffer(StringBuilder buffer) {
-        String[] splitBuffer = buffer.toString().split("\n");
-        for(int i = 0; i < splitBuffer.length - 1; i++) {
-            handleMessage(splitBuffer[i]);
-        }
-
-        if(splitBuffer.length > 1) {
-            String newBuffer = splitBuffer[splitBuffer.length - 1];
-            buffer = new StringBuilder(newBuffer.length() * 2);
-            buffer.append(newBuffer);
-
-        }
-        return buffer;
     }
 
     private void connectToDevice(UsbManager manager, int vendorId,
