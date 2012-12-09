@@ -4,5 +4,9 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/openxc/openxc/${project.version}/openxc-${project.version}.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-io/commons-io/2.1/commons-io-2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/mockito/mockito-core/1.9.0/mockito-core-1.9.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

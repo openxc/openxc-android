@@ -1,5 +1,10 @@
 # OpenXC Android Library Changelog
 
+## v2.1.2
+
+* Duplicate messages are no longer received from USB data source.
+* Infrequent messages are no longer lost by the USB data source.
+
 ## v2.1.1
 
 * Fix build error in Eclipse.
