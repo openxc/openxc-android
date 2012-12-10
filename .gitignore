@@ -5,3 +5,4 @@ gen
 .DS_Store
 /com/
 reference
+*/.classpath
