@@ -55,5 +55,7 @@
                 <extensions>true</extensions>
             </plugin>
         </plugins>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>tests</testSourceDirectory>
     </build>
 </project>

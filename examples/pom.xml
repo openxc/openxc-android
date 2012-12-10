@@ -33,5 +33,6 @@
                 <extensions>true</extensions>
             </plugin>
         </plugins>
+        <sourceDirectory>src</sourceDirectory>
     </build>
 </project>
