@@ -126,7 +126,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         super.stop();
         Log.d(TAG, "Stopping trace playback");
         mRunning = false;
-        disconnected();
     }
 
     /**
@@ -141,7 +140,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Starting the trace playback because we have valid " +
                 "callback " + getCallback());
 
-        connected();
         while(mRunning) {
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader;
@@ -204,7 +202,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             } catch(InterruptedException e) {}
         }
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
-        disconnected();
     }
 
     protected String getTag() {
