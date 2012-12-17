@@ -1,9 +1,5 @@
 package com.openxc.sources;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-
 import java.util.List;
 
 import android.test.AndroidTestCase;

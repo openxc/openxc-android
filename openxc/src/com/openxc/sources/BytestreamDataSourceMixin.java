@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
-
 /**
  * A "mixin" of sorts to be used with object composition, this contains
  * functionality common to data sources that received streams of bytes.
