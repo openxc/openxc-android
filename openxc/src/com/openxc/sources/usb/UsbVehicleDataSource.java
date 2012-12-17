@@ -227,7 +227,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                         bytes.length, 0);
                 if(received > 0) {
                     mBuffer.receive(bytes, received);
-                    for(String record : mBuffer.parse()) {
+                    for(String record : mBuffer.readLines()) {
                         handleMessage(record);
                     }
                 }

@@ -44,7 +44,7 @@ public class BytestreamDataSourceMixin {
      * @returns A list of messages parsed and subsequently removed from the
      * buffer, if any.
      */
-    public List<String> parse() {
+    public List<String> readLines() {
         List<String> result;
         if(mBuffer.indexOf("\n") != -1) {
             String[] records = mBuffer.toString().split("\n", -1);

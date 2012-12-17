@@ -112,7 +112,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
 
             if(received > 0) {
                 mBuffer.receive(bytes, received);
-                for(String record : mBuffer.parse()) {
+                for(String record : mBuffer.readLines()) {
                     handleMessage(record);
                 }
             }
