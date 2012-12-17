@@ -3,8 +3,9 @@ package com.openxc.util;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.google.common.base.Objects;
+import android.util.Log;
 
+import com.google.common.base.Objects;
 import com.openxc.units.Unit;
 
 /**
@@ -23,8 +24,7 @@ public class AgingData<TheUnit extends Unit> {
      * @param value The data value for this bit of AgingData.
      */
     public AgingData(TheUnit value) {
-        mValue = value;
-        mBirthdate = new Date();
+        this(new Date(), value);
     }
 
     public AgingData(Date birthdate, TheUnit value) {
@@ -55,9 +55,11 @@ public class AgingData<TheUnit extends Unit> {
     }
 
     public void setTimestamp(double timestamp) {
-        Calendar otherTime = Calendar.getInstance();
-        otherTime.setTimeInMillis(Double.valueOf(timestamp * 1000).longValue());
-        mBirthdate = otherTime.getTime();
+        if(timestamp != 0) {
+            Calendar otherTime = Calendar.getInstance();
+            otherTime.setTimeInMillis(Double.valueOf(timestamp * 1000).longValue());
+            mBirthdate = otherTime.getTime();
+        }
     }
 
     @Override

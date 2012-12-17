@@ -59,19 +59,12 @@ public class RawMeasurement implements Parcelable {
             double timestamp) {
         this(name, value, event);
         mTimestamp = timestamp;
+        timestamp();
     }
 
     public RawMeasurement(String serialized)
             throws UnrecognizedMeasurementTypeException {
         deserialize(serialized, this);
-    }
-
-    private RawMeasurement(Parcel in)
-            throws UnrecognizedMeasurementTypeException {
-        readFromParcel(in);
-    }
-
-    private RawMeasurement() {
         timestamp();
     }
 
@@ -115,6 +108,47 @@ public class RawMeasurement implements Parcelable {
                     getValue(), getEvent(), timestamp);
         }
         return mCachedSerialization;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public Object getValue() {
+        return mValue;
+    }
+
+    public boolean hasEvent() {
+        return getEvent() != null;
+    }
+
+    public Object getEvent() {
+        return mEvent;
+    }
+
+    public boolean isTimestamped() {
+        return getTimestamp() != null && !Double.isNaN(getTimestamp())
+            && getTimestamp() != 0;
+    }
+
+    public Double getTimestamp() {
+        return mTimestamp;
+    }
+
+    public void untimestamp() {
+    	mTimestamp = Double.NaN;
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("value", getValue())
+            .add("event", getEvent())
+            .toString();
     }
 
     private static void deserialize(String measurementString,
@@ -164,6 +198,7 @@ public class RawMeasurement implements Parcelable {
         measurement.mCachedSerialization = measurementString;
     }
 
+
     private static Object parseUnknownType(JsonParser parser) {
         Object value = null;
         try {
@@ -184,46 +219,20 @@ public class RawMeasurement implements Parcelable {
         return value;
     }
 
-    public String getName() {
-        return mName;
+    private RawMeasurement(Parcel in)
+            throws UnrecognizedMeasurementTypeException {
+        this();
+        readFromParcel(in);
+        timestamp();
     }
 
-    public Object getValue() {
-        return mValue;
+    private RawMeasurement() {
+        timestamp();
     }
 
-    public boolean hasEvent() {
-        return getEvent() != null;
-    }
-
-    public Object getEvent() {
-        return mEvent;
-    }
-
-    public boolean isTimestamped() {
-        return getTimestamp() != null && !Double.isNaN(getTimestamp());
-    }
-    public Double getTimestamp() {
-        return mTimestamp;
-    }
-
-    public void timestamp() {
-        mTimestamp = System.currentTimeMillis() / 1000.0;
-    }
-
-    public void untimestamp() {
-    	mTimestamp = Double.NaN;
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", getValue())
-            .add("event", getEvent())
-            .toString();
+    private void timestamp() {
+        if(!isTimestamped()) {
+            mTimestamp = System.currentTimeMillis() / 1000.0;
+        }
     }
 }

@@ -53,7 +53,6 @@ public class FileRecorderSink extends BaseVehicleDataSink {
                 }
             }
 
-            measurement.timestamp();
             try {
                 mWriter.write(measurement.serialize());
                 mWriter.newLine();
