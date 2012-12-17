@@ -11,7 +11,6 @@ import com.google.common.base.Objects;
 import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-import com.openxc.sources.SourceLogger;
 
 import com.openxc.sources.usb.UsbDeviceException;
 
