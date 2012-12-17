@@ -5,30 +5,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import com.openxc.sinks.UploaderSink;
-
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-
-import android.os.Build;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-
 import android.preference.Preference.OnPreferenceChangeListener;
-
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.sinks.UploaderSink;
+
+@TargetApi(12)
 public class SettingsActivity extends PreferenceActivity {
     private static String TAG = "SettingsActivity";
     private final static String RECORDING_PREFERENCE =

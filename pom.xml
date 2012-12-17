@@ -70,7 +70,6 @@
                         <platform>17</platform>
                     </sdk>
                     <undeployBeforeDeploy>false</undeployBeforeDeploy>
-                    <testDebug>false</testDebug>
                 </configuration>
             </plugin>
             <plugin>

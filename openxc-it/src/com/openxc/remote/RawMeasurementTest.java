@@ -9,7 +9,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 public class RawMeasurementTest extends TestCase {
     RawMeasurement measurement;
     final static String measurementName = "measurement_type";
-    final static Double measurementValue = new Double(42.0);
+    final static Double measurementValue = Double.valueOf(42.0);
 
     public void testValue() {
         measurement = new RawMeasurement(measurementName, measurementValue);
