@@ -1,6 +1,7 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <PreferenceCategory
+            android:title="@string/recording_preferences">
     <CheckBoxPreference
             android:key="@string/recording_checkbox_key"
             android:title="@string/recording_checkbox_title"
@@ -25,4 +26,5 @@
             android:summary="@string/uploading_path_summary"
             android:inputType="textUri" />
 
+    </PreferenceCategory>
 </PreferenceScreen>
