@@ -28,6 +28,6 @@
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
   <uses-feature android:name="android.hardware.usb.host"
           android:required="true" />
-  <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="17" />
+  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
 </manifest>
 

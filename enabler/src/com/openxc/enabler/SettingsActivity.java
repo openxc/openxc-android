@@ -31,6 +31,12 @@ import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
     private static String TAG = "SettingsActivity";
+    private final static String RECORDING_PREFERENCE =
+            "com.openxc.enabler.preferences.RECORDING";
+    private final static String DATA_SOURCE_PREFERENCE =
+            "com.openxc.enabler.preferences.DATA_SOURCE";
+    private final static String OUTPUT_PREFERENCE =
+            "com.openxc.enabler.preferences.OUTPUT";
 
     private PreferenceListener mPreferenceListener;
     private SharedPreferences mPreferences;
@@ -45,14 +51,21 @@ public class SettingsActivity extends PreferenceActivity {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPreferenceListener = new PreferenceListener();
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            addPreferencesFromResource(R.xml.recording_preferences);
-            addPreferencesFromResource(R.xml.data_source_preferences);
-            addPreferencesFromResource(R.xml.output_preferences);
-            mBluetoothDeviceListPreference = (ListPreference)
-                    findPreference(getString(R.string.bluetooth_mac_key));
-            initialize(mBluetoothDeviceListPreference,
-                    findPreference(getString(R.string.bluetooth_checkbox_key)));
+        String action = getIntent().getAction();
+        if(action != null) {
+            if(action.equals(RECORDING_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.recording_preferences);
+            } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.data_source_preferences);
+                mBluetoothDeviceListPreference = (ListPreference)
+                        findPreference(getString(R.string.bluetooth_mac_key));
+                initialize(mBluetoothDeviceListPreference,
+                        findPreference(getString(R.string.bluetooth_checkbox_key)));
+            } else if(action.equals(OUTPUT_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.output_preferences);
+            }
+        } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            addPreferencesFromResource(R.xml.preference_headers_legacy);
         }
     }
 
