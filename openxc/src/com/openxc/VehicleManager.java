@@ -499,6 +499,10 @@ public class VehicleManager extends Service implements SourceCallback {
                     "-- not starting uploading a trace";
             if(!UploaderSink.validatePath(path)) {
                 Log.w(TAG, error);
+                Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean(getString(R.string.uploading_checkbox_key), false);
+                editor.commit();
             } else {
                 try {
                     mUploader = mPipeline.addSink(new UploaderSink(this, path));
