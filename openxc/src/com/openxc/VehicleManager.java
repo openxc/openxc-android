@@ -7,45 +7,31 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.openxc.sinks.DataSinkException;
-
-import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
-
-import com.openxc.sources.DataSourceException;
-
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.base.Objects;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.MockedLocationSink;
-import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
-import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.usb.UsbVehicleDataSource;
-import com.openxc.util.AndroidFileOpener;
-
-import android.widget.Toast;
 
 /**
  * The VehicleManager is an in-process Android service and the primary entry
@@ -86,18 +72,11 @@ public class VehicleManager extends Service implements SourceCallback {
     private boolean mIsBound;
     private Lock mRemoteBoundLock;
     private Condition mRemoteBoundCondition;
-    private PreferenceListener mPreferenceListener;
-    private SharedPreferences mPreferences;
 
     private IBinder mBinder = new VehicleBinder();
     private VehicleServiceInterface mRemoteService;
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
-    private VehicleDataSink mFileRecorder;
-    private VehicleDataSource mNativeLocationSource;
-    private BluetoothVehicleDataSource mBluetoothSource;
-    private MockedLocationSink mMockedLocationSink;
-    private VehicleDataSink mUploader;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
     // RemoteListenerSource that receives measurements from the
@@ -161,9 +140,6 @@ public class VehicleManager extends Service implements SourceCallback {
         mRemoteBoundLock = new ReentrantLock();
         mRemoteBoundCondition = mRemoteBoundLock.newCondition();
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mPreferenceListener = watchPreferences(mPreferences);
-
         mPipeline = new DataPipeline();
         initializeDefaultSinks(mPipeline);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
@@ -172,9 +148,7 @@ public class VehicleManager extends Service implements SourceCallback {
 
     private void initializeDefaultSinks(DataPipeline pipeline) {
         mNotifier = new MeasurementListenerSink();
-        mMockedLocationSink = new MockedLocationSink(this);
         pipeline.addSink(mNotifier);
-        pipeline.addSink(mMockedLocationSink);
     }
 
     @Override
@@ -184,10 +158,6 @@ public class VehicleManager extends Service implements SourceCallback {
         if(mPipeline != null) {
             mPipeline.stop();
         }
-        if(mBluetoothSource != null) {
-            mBluetoothSource.close();
-        }
-        unwatchPreferences(mPreferences, mPreferenceListener);
         unbindRemote();
     }
 
@@ -251,22 +221,24 @@ public class VehicleManager extends Service implements SourceCallback {
 
         RawMeasurement rawCommand = command.toRaw();
         // prefer the Bluetooth controller, if connected
-        if(mBluetoothSource != null) {
-            Log.d(TAG, "Sending " + rawCommand + " over Bluetooth to " +
-                    mBluetoothSource);
-            mBluetoothSource.set(rawCommand);
-        } else {
-            if(mRemoteService == null) {
-                Log.w(TAG, "Not connected to the VehicleService");
-                return;
-            }
+        // TODO since we now manage the bluetooth source in the enabler, the
+        // VehicleManager should instead look through all existing data sources
+        // to see if any are writeable
+        // if(mBluetoothSource != null) {
+            // Log.d(TAG, "Sending " + rawCommand + " over Bluetooth to " +
+                    // mBluetoothSource);
+            // mBluetoothSource.set(rawCommand);
+        // } else {
+        if(mRemoteService == null) {
+            Log.w(TAG, "Not connected to the VehicleService");
+            return;
+        }
 
-            try {
-                mRemoteService.set(rawCommand);
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to send command to remote vehicle service",
-                        e);
-            }
+        try {
+            mRemoteService.set(rawCommand);
+        } catch(RemoteException e) {
+            Log.w(TAG, "Unable to send command to remote vehicle service",
+                    e);
         }
     }
 
@@ -479,156 +451,6 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Enable or disable uploading of a vehicle trace to a remote web server.
-     *
-     * The URL of the web server to upload the trace to is read from the shared
-     * preferences.
-     *
-     * @param enabled true if uploading should be enabled
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
-     */
-    public void setUploadingStatus(boolean enabled)
-            throws VehicleServiceException {
-        Log.i(TAG, "Setting uploading to " + enabled);
-        if(enabled) {
-            String path = mPreferences.getString(
-                    getString(R.string.uploading_path_key), null);
-            String error = "Target URL in preferences not valid " +
-                    "-- not starting uploading a trace";
-            if(!UploaderSink.validatePath(path)) {
-                Log.w(TAG, error);
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-                SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putBoolean(getString(R.string.uploading_checkbox_key),
-                        false);
-                editor.commit();
-            } else {
-                if(mUploader != null) {
-                    stopUploading();
-                }
-
-                try {
-                    mUploader = mPipeline.addSink(new UploaderSink(this, path));
-                } catch(java.net.URISyntaxException e) {
-                    Log.w(TAG, error, e);
-                }
-            }
-        } else {
-            stopUploading();
-        }
-    }
-
-    private void stopUploading() {
-        mPipeline.removeSink(mUploader);
-        mUploader = null;
-    }
-
-    /**
-     * Enable or disable receiving vehicle data from a Bluetooth CAN device.
-     *
-     * @param enabled true if bluetooth should be enabled
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional
-     *      situation that shouldn't occur.
-     */
-    public void setBluetoothSourceStatus(boolean enabled)
-            throws VehicleServiceException {
-        Log.i(TAG, "Setting bluetooth data source to " + enabled);
-        if(enabled) {
-            String deviceAddress = mPreferences.getString(
-                    getString(R.string.bluetooth_mac_key), null);
-            if(deviceAddress != null) {
-                removeSource(mBluetoothSource);
-                if(mBluetoothSource != null) {
-                    mBluetoothSource.close();
-                }
-
-                try {
-                    mBluetoothSource =
-                        new BluetoothVehicleDataSource(this, deviceAddress);
-                } catch(DataSourceException e) {
-                    Log.w(TAG, "Unable to add Bluetooth source", e);
-                    return;
-                }
-                addSource(mBluetoothSource);
-            } else {
-                Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
-                        "), not starting source");
-            }
-        }
-        else {
-            removeSource(mBluetoothSource);
-            if(mBluetoothSource != null) {
-                mBluetoothSource.close();
-            }
-        }
-    }
-
-
-    /**
-     * Enable or disable recording of a trace file.
-     *
-     * @param enabled true if recording should be enabled
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional
-     *      situation that shouldn't occur.
-     */
-    public void setFileRecordingStatus(boolean enabled)
-            throws VehicleServiceException {
-        Log.i(TAG, "Setting recording to " + enabled);
-        if(enabled) {
-            String directory = mPreferences.getString(
-                    getString(R.string.recording_directory_key), null);
-            try {
-                mFileRecorder = mPipeline.addSink(new FileRecorderSink(
-                            new AndroidFileOpener(this, directory)));
-            } catch(DataSinkException e) {
-                Log.w(TAG, "Unable to start trace recording", e);
-            }
-        }
-        else {
-            mPipeline.removeSink(mFileRecorder);
-        }
-    }
-
-    /**
-     * Enable or disable reading GPS from the native Android stack.
-     *
-     * @param enabled true if native GPS should be passed through
-     * @throws VehicleServiceException if native GPS status is unable to be set
-     *      - an exceptional situation that shouldn't occur.
-     */
-    public void setNativeGpsStatus(boolean enabled)
-            throws VehicleServiceException {
-        Log.i(TAG, "Setting native GPS to " + enabled);
-        if(enabled) {
-            mNativeLocationSource = mPipeline.addSource(
-                    new NativeLocationSource(this));
-        } else if(mNativeLocationSource != null) {
-            mPipeline.removeSource(mNativeLocationSource);
-            mNativeLocationSource = null;
-        }
-    }
-
-    /**
-     * Enable or disable overwriting native GPS measurements with those from the
-     * vehicle.
-     *
-     * @see MockedLocationSink#setOverwritingStatus
-     *
-     * @param enabled true if native GPS should be overwritte.
-     * @throws VehicleServiceException if GPS overwriting status is unable to be
-     *      set - an exceptional situation that shouldn't occur.
-     */
-    public void setNativeGpsOverwriteStatus(boolean enabled)
-            throws VehicleServiceException {
-        Log.i(TAG, "Setting native GPS overwriting to " + enabled);
-        mMockedLocationSink.setOverwritingStatus(enabled);
-    }
-
-    /**
      * Read the number of messages received by the vehicle service.
      *
      * @throws VehicleServiceException if the listener is unable to be
@@ -666,22 +488,6 @@ public class VehicleManager extends Service implements SourceCallback {
         }
     }
 
-    private void unwatchPreferences(SharedPreferences preferences,
-            PreferenceListener listener) {
-        if(preferences != null && listener != null) {
-            preferences.unregisterOnSharedPreferenceChangeListener(listener);
-        }
-    }
-
-    private PreferenceListener watchPreferences(SharedPreferences preferences) {
-        if(preferences != null) {
-            PreferenceListener listener = new PreferenceListener(preferences);
-            preferences.registerOnSharedPreferenceChangeListener(listener);
-            return listener;
-        }
-        return null;
-    }
-
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
@@ -691,8 +497,6 @@ public class VehicleManager extends Service implements SourceCallback {
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mPipeline.addSource(mRemoteSource);
-
-            mPreferenceListener.readStoredPreferences();
 
             mRemoteBoundLock.lock();
             mIsBound = true;
@@ -736,59 +540,6 @@ public class VehicleManager extends Service implements SourceCallback {
 
         if(mRemoteBoundLock != null) {
             mRemoteBoundLock.unlock();
-        }
-    }
-
-    private class PreferenceListener
-            implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-        SharedPreferences mPreferences;
-
-        public PreferenceListener(SharedPreferences preferences) {
-            mPreferences = preferences;
-        }
-
-        public void readStoredPreferences() {
-            try {
-                setFileRecordingStatus(mPreferences.getBoolean(
-                            getString(R.string.recording_checkbox_key), false));
-                setNativeGpsStatus(mPreferences.getBoolean(
-                            getString(R.string.native_gps_checkbox_key), false));
-                setNativeGpsOverwriteStatus(mPreferences.getBoolean(
-                            getString(R.string.gps_overwrite_checkbox_key),
-                            false));
-                setUploadingStatus(mPreferences.getBoolean(
-                            getString(R.string.uploading_checkbox_key), false));
-                setBluetoothSourceStatus(mPreferences.getBoolean(
-                            getString(R.string.bluetooth_checkbox_key), false));
-            } catch(VehicleServiceException e) {
-                Log.w(TAG, "Unable to initialize vehicle service with stored "
-                        + "preferences", e);
-            }
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            try {
-                if(key.equals(getString(R.string.recording_checkbox_key))) {
-                    setFileRecordingStatus(preferences.getBoolean(key, false));
-                } else if(key.equals(getString(R.string.native_gps_checkbox_key))) {
-                    setNativeGpsStatus(preferences.getBoolean(key, false));
-                } else if(key.equals(getString(R.string.gps_overwrite_checkbox_key))) {
-                    setNativeGpsOverwriteStatus(preferences.getBoolean(key, false));
-                } else if(key.equals(getString(R.string.uploading_checkbox_key))
-                            || key.equals(getString(R.string.uploading_path_key))) {
-                    setUploadingStatus(preferences.getBoolean(getString(
-                                    R.string.uploading_checkbox_key), false));
-                } else if(key.equals(getString(R.string.bluetooth_checkbox_key))
-                            || key.equals(getString(R.string.bluetooth_mac_key))) {
-                    setBluetoothSourceStatus(preferences.getBoolean(
-                                getString(R.string.bluetooth_checkbox_key), false));
-                }
-            } catch(VehicleServiceException e) {
-                Log.w(TAG, "Unable to update vehicle service when preference \""
-                        + key + "\" changed", e);
-            }
         }
     }
 }
