@@ -501,9 +501,14 @@ public class VehicleManager extends Service implements SourceCallback {
                 Log.w(TAG, error);
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putBoolean(getString(R.string.uploading_checkbox_key), false);
+                editor.putBoolean(getString(R.string.uploading_checkbox_key),
+                        false);
                 editor.commit();
             } else {
+                if(mUploader != null) {
+                    stopUploading();
+                }
+
                 try {
                     mUploader = mPipeline.addSink(new UploaderSink(this, path));
                 } catch(java.net.URISyntaxException e) {
@@ -511,8 +516,13 @@ public class VehicleManager extends Service implements SourceCallback {
                 }
             }
         } else {
-            mPipeline.removeSink(mUploader);
+            stopUploading();
         }
+    }
+
+    private void stopUploading() {
+        mPipeline.removeSink(mUploader);
+        mUploader = null;
     }
 
     /**
@@ -766,8 +776,10 @@ public class VehicleManager extends Service implements SourceCallback {
                     setNativeGpsStatus(preferences.getBoolean(key, false));
                 } else if(key.equals(getString(R.string.gps_overwrite_checkbox_key))) {
                     setNativeGpsOverwriteStatus(preferences.getBoolean(key, false));
-                } else if(key.equals(getString(R.string.uploading_checkbox_key))) {
-                    setUploadingStatus(preferences.getBoolean(key, false));
+                } else if(key.equals(getString(R.string.uploading_checkbox_key))
+                            || key.equals(getString(R.string.uploading_path_key))) {
+                    setUploadingStatus(preferences.getBoolean(getString(
+                                    R.string.uploading_checkbox_key), false));
                 } else if(key.equals(getString(R.string.bluetooth_checkbox_key))
                             || key.equals(getString(R.string.bluetooth_mac_key))) {
                     setBluetoothSourceStatus(preferences.getBoolean(
