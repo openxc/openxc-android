@@ -1,9 +1,27 @@
-package com.openxc.enabler;
+package com.openxc.enabler.preferences;
+
+import java.net.InetSocketAddress;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.openxc.enabler.R;
+import com.openxc.remote.VehicleServiceException;
+import com.openxc.sources.DataSourceException;
+import com.openxc.sources.ethernet.EthernetVehicleDataSource;
 
 public class EthernetPreferenceManager extends VehiclePreferenceManager {
     private EthernetVehicleDataSource mEthernetSource;
+    private final static String TAG = "EthernetPreferenceManager";
 
     public EthernetPreferenceManager(Context context) {
+        super(context);
+    }
+
+    protected PreferenceListener createPreferenceListener(
+            SharedPreferences preferences) {
+        return new EthernetPreferenceListener(preferences);
     }
 
     /**
@@ -18,9 +36,10 @@ public class EthernetPreferenceManager extends VehiclePreferenceManager {
     private void setEthernetSourceStatus(boolean enabled)
             throws VehicleServiceException {
         Log.i(TAG, "Setting ethernet data source to " + enabled);
+        // TODO if the address hasn't changed, don't re-initialize
         if(enabled) {
-            String deviceAddress = mPreferences.getString(
-                    getString(R.string.ethernet_connection_key), null);
+            String deviceAddress = getPreferenceString(
+                    R.string.ethernet_connection_key);
 
             InetSocketAddress ethernetAddr;
             String addressSplit[] = deviceAddress.split(":");
@@ -35,28 +54,27 @@ public class EthernetPreferenceManager extends VehiclePreferenceManager {
             }
 
             if(deviceAddress != null) {
-                removeSource(mEthernetSource);
+                getVehicleManager().removeSource(mEthernetSource);
                 if(mEthernetSource != null) {
                     mEthernetSource.stop();
                 }
 
                 try {
                     mEthernetSource = new EthernetVehicleDataSource(
-                            ethernetAddr, this);
+                            ethernetAddr, getContext());
                     mEthernetSource.start();
                 } catch (DataSourceException e) {
                     Log.w(TAG, "Unable to add Ethernet source", e);
                     return;
                 }
-                addSource(mEthernetSource);
-            }
-            else {
+                getVehicleManager().addSource(mEthernetSource);
+            } else {
                 Log.d(TAG, "No ethernet address set yet (" + deviceAddress +
                         "), not starting source");
             }
         }
         else {
-            removeSource(mEthernetSource);
+            getVehicleManager().removeSource(mEthernetSource);
             if(mEthernetSource != null) {
                 mEthernetSource.stop();
             }
@@ -69,7 +87,7 @@ public class EthernetPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void stopEthernet() {
-        getVehicleManager().removeSink(mEthernetSource);
+        getVehicleManager().removeSource(mEthernetSource);
         mEthernetSource = null;
     }
 

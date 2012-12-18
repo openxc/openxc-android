@@ -1,23 +1,23 @@
 package com.openxc.sources.ethernet;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import com.openxc.controllers.VehicleController;
 import com.openxc.remote.RawMeasurement;
+import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
+import com.openxc.sources.bluetooth.BluetoothException;
 
 /**
  * A vehicle data source reading measurements from an OpenXC Ethernet device.
@@ -29,18 +29,14 @@ import com.openxc.sources.SourceCallback;
 public class EthernetVehicleDataSource extends ContextualVehicleDataSource
         implements Runnable, VehicleController {
     private static final String TAG = "EthernetVehicleDataSource";
-
-    private boolean mRunning;
-
-    private double mBytesReceived;
-
-    private Socket nsocket; // Network Socket
-    private InputStream nis; // Network Input Stream
-    private OutputStream nos; // Network Output Stream
-
-    SocketAddress sockaddr = null;
     private static final int SOCKET_TIMEOUT = 10000;
     private static final int FRAME_LENGTH = 128;
+
+    private boolean mRunning;
+    private Socket mSocket;
+    private InputStream mInStream;
+    private OutputStream mOutStream;
+    private SocketAddress sockaddr = null;
 
     private NetworkTask task;
 
@@ -113,9 +109,9 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
         super.stop();
         Log.d(TAG, "Stopping ethernet listener");
 
-        if(nsocket != null) {
+        if(mSocket != null) {
             try {
-                nsocket.close();
+                mSocket.close();
             } catch (Exception e) {
                 Log.w(TAG, "Couldn't close socket. Quit.");
             }
@@ -129,6 +125,46 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
+    private void connectStreams() throws EthernetDeviceException {
+        try {
+            mInStream = mSocket.getInputStream();
+            mOutStream = mSocket.getOutputStream();
+        } catch(IOException e) {
+            String message = "Error opening Ethernet socket streams";
+            Log.e(TAG, message, e);
+            disconnected();
+            throw new EthernetDeviceException(message);
+        }
+        Log.i(TAG, "Socket created, streams assigned");
+    }
+
+    protected void disconnect() {
+        if(mSocket == null) {
+            Log.w(TAG, "Unable to disconnect -- not connected");
+            return;
+        }
+
+        Log.d(TAG, "Disconnecting from the socket " + mSocket);
+        try {
+            mOutStream.close();
+            mInStream.close();
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the input stream", e);
+        }
+
+        if(mSocket != null) {
+            try {
+                mSocket.close();
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the socket", e);
+            }
+        }
+        mSocket = null;
+
+        disconnected();
+        Log.d(TAG, "Disconnected from the socket");
+    }
+
     class NetworkTask extends AsyncTask<Object,Object,Boolean> {
 
         /**
@@ -140,65 +176,42 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
          */
         @Override
         protected Boolean doInBackground(Object... arg0) {
-            try {
-                nsocket = new Socket();
-                nsocket.connect(sockaddr, SOCKET_TIMEOUT);
+            byte[] frame = new byte[FRAME_LENGTH];
 
-                if(nsocket.isConnected()) {
-                    start();
-                } else {
-                    throw new ConnectException("Could not connect to server!");
-                }
-
-                nis = nsocket.getInputStream();
-                nos = nsocket.getOutputStream();
-                Log.i(TAG, "Socket created, streams assigned");
-                Log.i(TAG, "Waiting for initial data...");
-
-
-                byte[] frame = new byte[FRAME_LENGTH];
-                int read = 0;
-
-                double lastLoggedTransferStatsAtByte = 0;
-                StringBuffer buffer = new StringBuffer();
-                final long startTime = System.nanoTime();
-                long endTime;
-                String line = new String();
-
-                while (mRunning) {
+            BytestreamDataSourceMixin buffer = new BytestreamDataSourceMixin();
+            while(mRunning) {
+                try {
+                    waitForDeviceConnection();
+                } catch(EthernetDeviceException e) {
+                    Log.i(TAG, "Unable to connect to target IP address -- " +
+                            "sleeping for awhile before trying again");
                     try {
-                        read = nis.read(frame, 0, FRAME_LENGTH); // This is blocking
-                        while (read != -1) {
-                            if(read > 0) {
-                                // Creating a new String object for each message
-                                // causes the GC to go a little crazy, but I
-                                // don't see another obvious way of converting
-                                // the byte[] to something the StringBuffer can
-                                // accept (either char[] or String). See #151.
-                                buffer.append(new String(frame, 0, read));
-
-                                parseStringBuffer(buffer);
-                                mBytesReceived += read;
-                            }
-                            read = nis.read(frame, 0, FRAME_LENGTH); // This is blocking
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+                        Thread.sleep(5000);
+                    } catch(InterruptedException e2){
+                        stop();
                     }
-
-                }
-                endTime = System.nanoTime();
-
-                if(mBytesReceived > lastLoggedTransferStatsAtByte + 1024 * 1024) {
-                    lastLoggedTransferStatsAtByte = mBytesReceived;
-                    logTransferStats(startTime, endTime);
+                    continue;
                 }
 
-                return true;
-            } catch(Exception e) {
-                e.printStackTrace();
-                return false;
+                int received = 0;
+                try {
+                    mInStream.read(frame, 0, FRAME_LENGTH);
+                } catch(IOException e) {
+                    Log.e(TAG, "Unable to read response");
+                    disconnect();
+                    continue;
+                }
+
+                if(received == -1) {
+                    Log.w(TAG, "Lost connection to Ethernet stream");
+                    break;
+                }
+
+                if(received > 0) {
+                    buffer.receive(frame, received);
+                }
             }
+            return true;
         }
 
     };
@@ -209,8 +222,8 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
 
     @Override
     public String toString() {
-        if(nsocket != null ) {
-            return nsocket.toString();
+        if(mSocket != null ) {
+            return mSocket.toString();
         } else {
             return "";
         }
@@ -223,6 +236,30 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
         write(bytes);
     }
 
+    private void waitForDeviceConnection() throws EthernetDeviceException {
+        if(mSocket == null) {
+            mSocket = new Socket();
+            try {
+                mSocket.connect(sockaddr, SOCKET_TIMEOUT);
+            } catch(IOException e) {
+                String message = "Error opening streams";
+                Log.e(TAG, message, e);
+                disconnect();
+                throw new EthernetDeviceException(message, e);
+            }
+
+            if(mSocket.isConnected()) {
+                start();
+            } else {
+                disconnect();
+                throw new EthernetDeviceException("Could not connect to server!");
+            }
+
+            connected();
+            connectStreams();
+        }
+    }
+
     /**
      * Writes given data to the socket.
      *
@@ -230,39 +267,15 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
      *            will be written to the socket
      */
     private void write(byte[] bytes) {
-        if(nsocket != null && nsocket.isConnected()) {
+        if(mSocket != null && mSocket.isConnected()) {
             Log.d(TAG, "Writing bytes to socket: " + bytes);
             try {
-                nos.write(bytes);
+                mOutStream.write(bytes);
             } catch (Exception e) {
                 Log.w(TAG, "Unable to write CAN message to Ethernet. Error: " + e.toString());
             }
         } else {
             Log.w(TAG, "No connection established, could not send anything.");
-        }
-    }
-
-    private void logTransferStats(final long startTime, final long endTime) {
-        double kilobytesTransferred = mBytesReceived / 1000.0;
-        long elapsedTime = TimeUnit.SECONDS.convert(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
-        Log.i(TAG, "Transferred " + kilobytesTransferred + " KB in " + elapsedTime + " seconds at an average of "
-                + kilobytesTransferred / elapsedTime + " KB/s");
-    }
-
-    /**
-     * Parses received data and passes the first line to the openxc
-     *
-     * @param buffer
-     *            contains received messages
-     */
-    private void parseStringBuffer(StringBuffer buffer) {
-        int newlineIndex = buffer.indexOf("\n");// search for the end of the
-                                                // first line
-        if(newlineIndex != -1) {
-            final String messageString = buffer.substring(0, newlineIndex);
-            buffer.delete(0, newlineIndex + 1);
-            handleMessage(messageString);// pass a whole json-line to the
-                                            // openxc-system
         }
     }
 }

@@ -38,7 +38,6 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
     private String mAddress;
-    private BytestreamDataSourceMixin mBuffer;
 
     public BluetoothVehicleDataSource(SourceCallback callback, Context context,
             String address) throws DataSourceException {
@@ -50,7 +49,6 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
                     "Unable to open Bluetooth device manager", e);
         }
         mAddress = address;
-        mBuffer = new BytestreamDataSourceMixin();
         start();
     }
 
@@ -84,6 +82,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     // TODO this could be made generic so we could use any standard serial
     // device, e.g. xbee or FTDI
     public void run() {
+        BytestreamDataSourceMixin buffer = new BytestreamDataSourceMixin();
         while(mRunning) {
             try {
                 waitForDeviceConnection();
@@ -109,8 +108,8 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                mBuffer.receive(bytes, received);
-                for(String record : mBuffer.readLines()) {
+                buffer.receive(bytes, received);
+                for(String record : buffer.readLines()) {
                     handleMessage(record);
                 }
             }
