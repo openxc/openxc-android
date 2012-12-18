@@ -37,6 +37,12 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
         mMockedLocationSink.setOverwritingStatus(enabled);
     }
 
+    public void close() {
+        super.close();
+        getVehicleManager().removeSink(mMockedLocationSink);
+        mMockedLocationSink = null;
+    }
+
     protected PreferenceListener createPreferenceListener(
             SharedPreferences preferences) {
         return new GpsOverwritePreferenceListener(preferences);

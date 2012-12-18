@@ -42,8 +42,19 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
             }
         }
         else {
+            stopRecording();
             getVehicleManager().removeSink(mFileRecorder);
         }
+    }
+
+    private void stopRecording() {
+        getVehicleManager().removeSink(mFileRecorder);
+        mFileRecorder = null;
+    }
+
+    public void close() {
+        super.close();
+        stopRecording();
     }
 
     protected PreferenceListener createPreferenceListener(

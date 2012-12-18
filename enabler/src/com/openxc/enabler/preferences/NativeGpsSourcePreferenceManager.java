@@ -38,6 +38,16 @@ public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
         }
     }
 
+    private void stopNativeGps() {
+        getVehicleManager().removeSource(mNativeLocationSource);
+        mNativeLocationSource = null;
+    }
+
+    public void close() {
+        super.close();
+        stopNativeGps();
+    }
+
     protected PreferenceListener createPreferenceListener(
             SharedPreferences preferences) {
         return new NativeGpsSourcePreferenceListener(preferences);

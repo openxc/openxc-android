@@ -80,7 +80,9 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).toString();
+        return Objects.toStringHelper(this)
+            .add("enabled", mOverwriteNativeStatus)
+            .toString();
     }
 
     private void makeLocationComplete(Location location) {

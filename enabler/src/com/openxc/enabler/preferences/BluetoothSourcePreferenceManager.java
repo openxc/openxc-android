@@ -15,16 +15,17 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
 
     private BluetoothVehicleDataSource mBluetoothSource;
 
-    public BluetoothSourcePreferenceManager(Context context, VehicleManager vehicle) {
+    public BluetoothSourcePreferenceManager(Context context,
+            VehicleManager vehicle) {
         super(context, vehicle);
+        Log.d(TAG, "Created new " + TAG);
     }
 
     public void close() {
         super.close();
-        if(mBluetoothSource != null) {
-            mBluetoothSource.close();
-        }
+        stopBluetooth();
     }
+
     /**
      * Enable or disable receiving vehicle data from a Bluetooth CAN device.
      *
@@ -33,16 +34,14 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
      *      unregistered with the library internals - an exceptional
      *      situation that shouldn't occur.
      */
-    public void setBluetoothSourceStatus(boolean enabled)
+    public synchronized void setBluetoothSourceStatus(boolean enabled)
             throws VehicleServiceException {
         Log.i(TAG, "Setting bluetooth data source to " + enabled);
         if(enabled) {
-            String deviceAddress = getPreferenceString(R.string.bluetooth_mac_key);
+            String deviceAddress = getPreferenceString(
+                    R.string.bluetooth_mac_key);
             if(deviceAddress != null) {
-                getVehicleManager().removeSource(mBluetoothSource);
-                if(mBluetoothSource != null) {
-                    mBluetoothSource.close();
-                }
+                stopBluetooth();
 
                 try {
                     mBluetoothSource = new BluetoothVehicleDataSource(
@@ -56,12 +55,16 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
                 Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
                         "), not starting source");
             }
+        } else {
+            stopBluetooth();
         }
-        else {
-            getVehicleManager().removeSource(mBluetoothSource);
-            if(mBluetoothSource != null) {
-                mBluetoothSource.close();
-            }
+    }
+
+    private synchronized void stopBluetooth() {
+        getVehicleManager().removeSource(mBluetoothSource);
+        if(mBluetoothSource != null) {
+            mBluetoothSource.close();
+            mBluetoothSource = null;
         }
     }
 
@@ -72,7 +75,8 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
 
     private class BluetoothSourcePreferenceListener extends PreferenceListener {
 
-        public BluetoothSourcePreferenceListener(SharedPreferences preferences) {
+        public BluetoothSourcePreferenceListener(
+                SharedPreferences preferences) {
             super(preferences);
         }
 
@@ -85,9 +89,9 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
                 String key) {
             try {
                 if(key.equals(getString(R.string.bluetooth_checkbox_key))
-                            || key.equals(getString(R.string.bluetooth_mac_key))) {
+                        || key.equals(getString(R.string.bluetooth_mac_key))) {
                     setBluetoothSourceStatus(preferences.getBoolean(
-                                getString(R.string.bluetooth_checkbox_key), false));
+                            getString(R.string.bluetooth_checkbox_key), false));
                 }
             } catch(VehicleServiceException e) {
                 Log.w(TAG, "Unable to update vehicle service when preference \""

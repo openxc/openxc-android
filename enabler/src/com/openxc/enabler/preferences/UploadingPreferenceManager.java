@@ -66,6 +66,11 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
         return new UploadingPreferenceListener(preferences);
     }
 
+    public void close() {
+        super.close();
+        stopUploading();
+    }
+
     private void stopUploading() {
         getVehicleManager().removeSink(mUploader);
         mUploader = null;

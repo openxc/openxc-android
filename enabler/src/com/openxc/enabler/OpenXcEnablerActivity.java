@@ -59,6 +59,8 @@ public class OpenXcEnablerActivity extends Activity {
                 }
             }).start();
 
+            closePreferenceManagers();
+            mPreferenceManagers = new ArrayList<VehiclePreferenceManager>();
             mPreferenceManagers.add(new BluetoothSourcePreferenceManager(
                         OpenXcEnablerActivity.this, mVehicleManager));
             mPreferenceManagers.add(new FileRecordingPreferenceManager(
@@ -132,6 +134,10 @@ public class OpenXcEnablerActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        closePreferenceManagers();
+    }
+
+    private void closePreferenceManagers() {
         for(VehiclePreferenceManager manager : mPreferenceManagers) {
             manager.close();
         }
