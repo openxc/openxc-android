@@ -32,9 +32,9 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
         Log.i(TAG, "Setting network data source to " + enabled);
         if(enabled) {
             String address = getPreferenceString(R.string.network_host_key);
-            int port = Integer.valueOf(getPreferenceString(R.string.network_port_key));
+            String port = getPreferenceString(R.string.network_port_key);
 
-            if(!NetworkVehicleDataSource.validateAddress(address, port)) {
+            if(!NetworkVehicleDataSource.validate(address, port)) {
                 String error = "Network host address (" + address +
                     ") not valid -- not starting network data source";
                 Log.w(TAG, error);

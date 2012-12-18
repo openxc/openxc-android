@@ -197,6 +197,8 @@ public class SettingsActivity extends PreferenceActivity {
                 mNetworkAddressListener);
 
         mNetworkPortPreference = (EditTextPreference) portPreference;
+        mNetworkPortPreference.setOnPreferenceChangeListener(
+                mNetworkPortListener);
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
@@ -209,13 +211,9 @@ public class SettingsActivity extends PreferenceActivity {
                 preferences.getString(getString(
                         R.string.network_host_key), null));
 
-
-        Integer currentPort = preferences.getInt(getString(
-                    R.string.network_port_key), -1);
-        if(currentPort == -1) {
-            currentPort = null;
-        }
-        updateSummary(mNetworkPortPreference, currentPort);
+        updateSummary(mNetworkPortPreference,
+                preferences.getString(getString(
+                        R.string.network_port_key), null));
     }
 
     private void fillBluetoothDeviceList(final ListPreference preference) {
@@ -279,6 +277,23 @@ public class SettingsActivity extends PreferenceActivity {
             String address = (String) newValue;
             if(!NetworkVehicleDataSource.validateAddress(address)) {
                 String error = "Invalid host URL \"" + address + "\"";
+                Toast.makeText(getApplicationContext(), error,
+                        Toast.LENGTH_SHORT).show();
+                Log.w(TAG, error);
+                mNetworkSourcePreference.setChecked(false);
+            } else {
+                updateSummary(preference, newValue);
+            }
+            return true;
+        }
+    };
+
+    private OnPreferenceChangeListener mNetworkPortListener =
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference,
+                Object newValue) {
+            if(!NetworkVehicleDataSource.validatePort((String)newValue)) {
+                String error = "Invalid host port \"" + newValue + "\"";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);

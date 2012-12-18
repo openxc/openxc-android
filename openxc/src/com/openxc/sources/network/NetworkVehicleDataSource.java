@@ -36,6 +36,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
     private Socket mSocket;
     private InputStream mInStream;
     private OutputStream mOutStream;
+    private String mStringAddress;
     private InetAddress mAddress;
     private int mPort;
 
@@ -58,7 +59,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
      * @throws DataSourceException
      *             If no connection could be established
      */
-    public NetworkVehicleDataSource(InetAddress address, int port,
+    public NetworkVehicleDataSource(String address, String port,
             SourceCallback callback, Context context)
             throws DataSourceException {
         super(callback, context);
@@ -66,23 +67,12 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         if(address == null) {
             throw new NetworkSourceException("Invalid address: " + address);
         }
-        mAddress = address;
-        mPort = port;
+        mStringAddress = address;
+        mPort = createPort(port);
         start();
     }
 
-    public NetworkVehicleDataSource(String address, int port,
-            SourceCallback callback, Context context)
-            throws DataSourceException {
-        this(createAddress(address), port, callback, context);
-    }
-
-    public NetworkVehicleDataSource(InetAddress address, int port,
-            Context context) throws DataSourceException {
-        this(address, port, null, context);
-    }
-
-    public NetworkVehicleDataSource(String address, int port, Context context)
+    public NetworkVehicleDataSource(String address, String port, Context context)
             throws DataSourceException {
         this(address, port, null, context);
     }
@@ -125,35 +115,42 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    public boolean sameAddress(String address, int port) {
+    public boolean sameAddress(String address, String port) {
         try {
-            return mAddress.equals(createAddress(address)) && mPort == port;
+            return mAddress.equals(createAddress(address))
+                && mPort == createPort(port);
+        } catch(DataSourceException e) {
+            return false;
+        }
+    }
+
+    public static boolean validate(String address, String port) {
+        return validatePort(port) && validateAddress(address);
+    }
+
+    public static boolean validatePort(String portString) {
+        try {
+            Integer port = createPort(portString);
+            return port > 0;
         } catch(DataSourceException e) {
             return false;
         }
     }
 
     public static boolean validateAddress(String address) {
-        return validateAddress(address, 80);
-    }
-
-    public static boolean validateAddress(String address, int port) {
         if(address == null) {
             Log.w(TAG, "Network host address not set (it's " + address + ")");
             return false;
         }
+        return true;
+    }
 
-        if(port <= 0) {
-            Log.w(TAG, "Network host port of " + port + " isn't valid");
-            return false;
-        }
-
+    private static int createPort(String port) throws DataSourceException {
         try {
-            createAddress(address);
-            return true;
-        } catch(DataSourceException e) {
-            Log.w(TAG, "Network host address invalid", e);
-            return false;
+            return Integer.valueOf(port);
+        } catch(NumberFormatException e) {
+            throw new DataSourceException(
+                    "Target network port is invalid (" + port + ")", e);
         }
     }
 
@@ -223,7 +220,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         while(mRunning) {
             try {
                 waitForDeviceConnection();
-            } catch(NetworkSourceException e) {
+            } catch(DataSourceException e) {
                 Log.i(TAG, "Unable to connect to target IP address -- " +
                         "sleeping for awhile before trying again");
                 try {
@@ -269,7 +266,11 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         write(bytes);
     }
 
-    private void waitForDeviceConnection() throws NetworkSourceException {
+    private void waitForDeviceConnection() throws DataSourceException {
+        if(mAddress == null) {
+            mAddress = createAddress(mStringAddress);
+        }
+
         if(mSocket == null) {
             mSocket = new Socket();
             try {
