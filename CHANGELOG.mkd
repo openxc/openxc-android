@@ -1,5 +1,10 @@
 # OpenXC Android Library Changelog
 
+## v2.2-dev
+
+* Add support for network-based CAN translator (thanks Ewgenij Sokolovski and
+  Robert Rembold)
+
 ## v2.1.3
 
 * Fix build error in Eclipse, hopefully once and for all.
