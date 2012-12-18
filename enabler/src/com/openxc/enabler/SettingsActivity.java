@@ -42,7 +42,6 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
     private EditTextPreference mEthernetConnectionPreference;
-    private Preference mUploadingPathPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -133,9 +132,7 @@ public class SettingsActivity extends PreferenceActivity {
             Preference uploadingPreference,
             Preference uploadingPathPreference) {
         mUploadingPreference = (CheckBoxPreference) uploadingPreference;
-        mUploadingPathPreference = uploadingPathPreference;
-
-        mUploadingPathPreference.setOnPreferenceChangeListener(
+        uploadingPathPreference.setOnPreferenceChangeListener(
                 mUploadingPathPreferenceListener);
     }
 
@@ -174,7 +171,7 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeEthernet(Preference editPreference,
-        Preference checkboxPreference) {
+            Preference checkboxPreference) {
         mEthernetConnectionPreference = (EditTextPreference) editPreference;
         mEthernetConnectionPreference.setOnPreferenceChangeListener(
                 mEthernetConnectionListener);
@@ -193,7 +190,7 @@ public class SettingsActivity extends PreferenceActivity {
         if(currentConnection != null) {
             summary = "Currently using host " + currentConnection;
         } else {
-            summary = "No device selected";
+            summary = "No server specified";
         }
         mEthernetConnectionPreference.setSummary(summary);
     }
@@ -219,12 +216,10 @@ public class SettingsActivity extends PreferenceActivity {
 
         mReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-                if(BluetoothDevice.ACTION_FOUND.equals(
-                            intent.getAction())) {
+                if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                     BluetoothDevice device = intent.getParcelableExtra(
                             BluetoothDevice.EXTRA_DEVICE);
-                    if(device.getBondState() !=
-                            BluetoothDevice.BOND_BONDED) {
+                    if(device.getBondState() != BluetoothDevice.BOND_BONDED) {
                         List<CharSequence> entries =
                             new ArrayList<CharSequence>(
                                     Arrays.asList(preference.getEntries()));
@@ -236,10 +231,9 @@ public class SettingsActivity extends PreferenceActivity {
                         values.add(device.getAddress());
                         CharSequence[] prototype = {};
                         preference.setEntries(entries.toArray(prototype));
-                        preference.setEntryValues(
-                                values.toArray(prototype));
-                            }
-                            }
+                        preference.setEntryValues(values.toArray(prototype));
+                    }
+                }
             }
         };
 
