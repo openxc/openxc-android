@@ -3,9 +3,9 @@ package com.openxc.sources.network;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.URI;
 
 import android.content.Context;
@@ -36,7 +36,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
     private Socket mSocket;
     private InputStream mInStream;
     private OutputStream mOutStream;
-    private SocketAddress mAddress = null;
+    private URI mAddress = null;
 
     /**
      * Construct an instance of NetworkVehicleDataSource with a receiver
@@ -57,8 +57,8 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
      * @throws DataSourceException
      *             If no connection could be established
      */
-    public NetworkVehicleDataSource(InetSocketAddress address,
-            SourceCallback callback, Context context) throws DataSourceException {
+    public NetworkVehicleDataSource(URI address, SourceCallback callback,
+            Context context) throws DataSourceException {
         super(callback, context);
 
         if(address == null) {
@@ -70,29 +70,20 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
 
     public NetworkVehicleDataSource(String address, SourceCallback callback,
             Context context) throws DataSourceException {
-        this(socketAddressFromString(address), callback, context);
+        this(uriFromString(address), callback, context);
     }
 
-    private static InetSocketAddress socketAddressFromString(String address)
+    private static URI uriFromString(String address)
             throws DataSourceException {
-        String addressSplit[] = address.split(":");
-        if(addressSplit.length != 2) {
+        try {
+            return new URI(address);
+        } catch(java.net.URISyntaxException e) {
             throw new DataSourceException(
                 "Device address in wrong format -- expected: ip:port");
         }
-
-        // TODO do we handle addresses without a port? 80 by default?
-        Integer port;
-        try {
-            port = Integer.valueOf(addressSplit[1]);
-        } catch(NumberFormatException e) {
-            throw new DataSourceException(
-                "Port \"" + addressSplit[0] + "\" is not a valid integer");
-        }
-        return new InetSocketAddress(addressSplit[0], port);
     }
 
-    public NetworkVehicleDataSource(InetSocketAddress address, Context context)
+    public NetworkVehicleDataSource(URI address, Context context)
             throws DataSourceException {
         this(address, null, context);
     }
@@ -140,6 +131,10 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
+    public String getAddress() {
+        return mAddress.toString();
+    }
+
     public static boolean validateAddress(String address) {
         if(address == null) {
             Log.w(TAG, "Network host address not set (it's " + address + ")");
@@ -147,9 +142,9 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
 
         try {
-            URI uri = new URI(address);
-            return uri.isAbsolute();
-        } catch(java.net.URISyntaxException e) {
+            uriFromString(address);
+            return true;
+        } catch(DataSourceException e) {
             return false;
         }
     }
@@ -260,7 +255,9 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         if(mSocket == null) {
             mSocket = new Socket();
             try {
-                mSocket.connect(mAddress, SOCKET_TIMEOUT);
+                mSocket.connect(new InetSocketAddress(
+                            InetAddress.getByName(mAddress.getHost()),
+                            mAddress.getPort()), SOCKET_TIMEOUT);
             } catch(IOException e) {
                 String message = "Error opening streams";
                 Log.e(TAG, message, e);

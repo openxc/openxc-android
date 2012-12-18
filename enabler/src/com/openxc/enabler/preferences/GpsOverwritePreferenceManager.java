@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
-import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.MockedLocationSink;
 
 public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
@@ -23,11 +22,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
      * @see MockedLocationSink#setOverwritingStatus
      *
      * @param enabled true if native GPS should be overwritte.
-     * @throws VehicleServiceException if GPS overwriting status is unable to be
-     *      set - an exceptional situation that shouldn't occur.
      */
-    public void setNativeGpsOverwriteStatus(boolean enabled)
-            throws VehicleServiceException {
+    public void setNativeGpsOverwriteStatus(boolean enabled) {
         Log.i(TAG, "Setting native GPS overwriting to " + enabled);
         if(mMockedLocationSink == null) {
             mMockedLocationSink = new MockedLocationSink(getContext());
@@ -60,13 +56,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
 
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
-            try {
-                if(key.equals(getString(R.string.gps_overwrite_checkbox_key))) {
-                    setNativeGpsOverwriteStatus(preferences.getBoolean(key, false));
-                }
-            } catch(VehicleServiceException e) {
-                Log.w(TAG, "Unable to update vehicle service when preference \""
-                        + key + "\" changed", e);
+            if(key.equals(getString(R.string.gps_overwrite_checkbox_key))) {
+                setNativeGpsOverwriteStatus(preferences.getBoolean(key, false));
             }
         }
     }

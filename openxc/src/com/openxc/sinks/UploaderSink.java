@@ -3,9 +3,7 @@ package com.openxc.sinks;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-
 import java.net.URI;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
@@ -14,30 +12,24 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.entity.ByteArrayEntity;
-
-import org.apache.http.client.methods.HttpPost;
-
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.message.BasicHeader;
-
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import com.google.common.base.Objects;
-
-import com.openxc.remote.RawMeasurement;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.google.common.base.Objects;
+import com.openxc.remote.RawMeasurement;
 
 public class UploaderSink extends ContextualVehicleDataSink {
     private final static String TAG = "UploaderSink";
@@ -62,9 +54,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
         mUploader.start();
     }
 
-    public UploaderSink(Context context, String path)
-            throws java.net.URISyntaxException {
-        this(context, new URI(path));
+    public UploaderSink(Context context, String path) throws DataSinkException {
+        this(context, uriFromString(path));
     }
 
     public void stop() {
@@ -82,6 +73,15 @@ public class UploaderSink extends ContextualVehicleDataSink {
         }
     }
 
+    private static URI uriFromString(String path) throws DataSinkException {
+        try {
+            return new URI(path);
+        } catch(java.net.URISyntaxException e) {
+            throw new UploaderException(
+                "Uploading path in wrong format -- expected: ip:port");
+        }
+    }
+
     public static boolean validatePath(String path) {
         if(path == null) {
             Log.w(TAG, "Uploading path not set (it's " + path + ")");
@@ -89,14 +89,20 @@ public class UploaderSink extends ContextualVehicleDataSink {
         }
 
         try {
-            URI uri = new URI(path);
-            return uri.isAbsolute();
-        } catch(java.net.URISyntaxException e) {
+            uriFromString(path);
+            return true;
+        } catch(DataSinkException e) {
             return false;
         }
     }
 
-    private class UploaderException extends Exception { }
+    private static class UploaderException extends DataSinkException {
+        public UploaderException() { }
+
+        public UploaderException(String message) {
+            super(message);
+        }
+    }
 
     private class UploaderThread extends Thread {
         private boolean mRunning = true;

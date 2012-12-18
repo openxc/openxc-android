@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.openxc.VehicleManager;
 import com.openxc.enabler.R;
-import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
 
@@ -28,12 +26,8 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
      * Enable or disable receiving vehicle data from a Bluetooth CAN device.
      *
      * @param enabled true if bluetooth should be enabled
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional
-     *      situation that shouldn't occur.
      */
-    private synchronized void setBluetoothSourceStatus(boolean enabled)
-            throws VehicleServiceException {
+    private synchronized void setBluetoothSourceStatus(boolean enabled) {
         Log.i(TAG, "Setting bluetooth data source to " + enabled);
         if(enabled) {
             String deviceAddress = getPreferenceString(
@@ -91,15 +85,10 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
 
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
-            try {
-                if(key.equals(getString(R.string.bluetooth_checkbox_key))
-                        || key.equals(getString(R.string.bluetooth_mac_key))) {
-                    setBluetoothSourceStatus(preferences.getBoolean(
-                            getString(R.string.bluetooth_checkbox_key), false));
-                }
-            } catch(VehicleServiceException e) {
-                Log.w(TAG, "Unable to update vehicle service when preference \""
-                        + key + "\" changed", e);
+            if(key.equals(getString(R.string.bluetooth_checkbox_key))
+                    || key.equals(getString(R.string.bluetooth_mac_key))) {
+                setBluetoothSourceStatus(preferences.getBoolean(
+                        getString(R.string.bluetooth_checkbox_key), false));
             }
         }
     }

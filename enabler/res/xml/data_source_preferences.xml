@@ -26,7 +26,6 @@
         <EditTextPreference
                 android:key="@string/network_host_key"
                 android:title="@string/network_host_title"
-                android:defaultValue="http://"
                 android:inputType="textUri" />
     </PreferenceCategory>
 </PreferenceScreen>

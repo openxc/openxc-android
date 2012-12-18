@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
-import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -24,12 +23,8 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
      * Enable or disable recording of a trace file.
      *
      * @param enabled true if recording should be enabled
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional
-     *      situation that shouldn't occur.
      */
-    private void setFileRecordingStatus(boolean enabled)
-            throws VehicleServiceException {
+    private void setFileRecordingStatus(boolean enabled) {
         Log.i(TAG, "Setting recording to " + enabled);
         if(enabled) {
             String directory = getPreferenceString(R.string.recording_directory_key);
@@ -84,12 +79,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
             if(key.equals(getString(R.string.recording_checkbox_key))) {
-                try {
-                    setFileRecordingStatus(preferences.getBoolean(key, false));
-                } catch(VehicleServiceException e) {
-                    Log.w(TAG, "Unable to update vehicle service when preference \""
-                            + key + "\" changed", e);
-                }
+                setFileRecordingStatus(preferences.getBoolean(key, false));
             }
         }
     }

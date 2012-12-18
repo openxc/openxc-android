@@ -267,10 +267,9 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
             String address = (String) newValue;
+            Log.d(TAG, "FOO");
             if(!NetworkVehicleDataSource.validateAddress(address)) {
-                String error = "Invalid host URL \"" + address +
-                    "\" -- must be an absolute URL " +
-                    "with http:// prefix";
+                String error = "Invalid host URL \"" + address;
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);

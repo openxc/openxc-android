@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.openxc.enabler.R;
-import com.openxc.remote.VehicleServiceException;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
 
@@ -25,18 +25,14 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
      * preferences.
      *
      * @param enabled true if uploading should be enabled
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
      */
-    public void setUploadingStatus(boolean enabled)
-            throws VehicleServiceException {
+    public void setUploadingStatus(boolean enabled) {
         Log.i(TAG, "Setting uploading to " + enabled);
         if(enabled) {
             String path = getPreferenceString(R.string.uploading_path_key);
-            String error = "Target URL in preferences not valid " +
-                    "-- not starting uploading a trace";
             if(!UploaderSink.validatePath(path)) {
+                String error = "Target URL in preferences not valid " +
+                        "-- not starting uploading a trace";
                 Log.w(TAG, error);
                 Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editor = getPreferences().edit();
@@ -50,10 +46,11 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
 
                 try {
                     mUploader = new UploaderSink(getContext(), path);
-                    getVehicleManager().addSink(mUploader);
-                } catch(java.net.URISyntaxException e) {
-                    Log.w(TAG, error, e);
+                } catch(DataSinkException e) {
+                    Log.w(TAG, "Unable to add uploader sink", e);
+                    return;
                 }
+                getVehicleManager().addSink(mUploader);
             }
         } else {
             stopUploading();
@@ -90,13 +87,8 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
                 String key) {
             if(key.equals(getString(R.string.uploading_checkbox_key))
                         || key.equals(getString(R.string.uploading_path_key))) {
-                try {
-                    setUploadingStatus(preferences.getBoolean(getString(
-                                    R.string.uploading_checkbox_key), false));
-                } catch(VehicleServiceException e) {
-                    Log.w(TAG, "Unable to update vehicle service when preference \""
-                            + key + "\" changed", e);
-                }
+                setUploadingStatus(preferences.getBoolean(getString(
+                                R.string.uploading_checkbox_key), false));
             }
         }
     }
