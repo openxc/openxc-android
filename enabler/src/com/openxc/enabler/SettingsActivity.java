@@ -5,73 +5,82 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import com.openxc.sinks.UploaderSink;
-
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-
-import android.os.Build;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-
 import android.preference.Preference.OnPreferenceChangeListener;
 
-import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.sinks.UploaderSink;
+
+@TargetApi(12)
 public class SettingsActivity extends PreferenceActivity {
     private static String TAG = "SettingsActivity";
+    private final static String RECORDING_PREFERENCE =
+            "com.openxc.enabler.preferences.RECORDING";
+    private final static String DATA_SOURCE_PREFERENCE =
+            "com.openxc.enabler.preferences.DATA_SOURCE";
+    private final static String OUTPUT_PREFERENCE =
+            "com.openxc.enabler.preferences.OUTPUT";
 
-    private PreferenceListener mPreferenceListener;
-    private SharedPreferences mPreferences;
     private BluetoothAdapter mBluetoothAdapter;
     private ListPreference mBluetoothDeviceListPreference;
+    private CheckBoxPreference mUploadingPreference;
     private EditTextPreference mEthernetConnectionPreference;
+    private Preference mUploadingPathPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mPreferenceListener = new PreferenceListener();
+        String action = getIntent().getAction();
+        if(action != null) {
+            if(action.equals(RECORDING_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.recording_preferences);
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            addPreferencesFromResource(R.xml.recording_preferences);
-            addPreferencesFromResource(R.xml.data_source_preferences);
-            addPreferencesFromResource(R.xml.output_preferences);
-            mBluetoothDeviceListPreference = (ListPreference)
-                    findPreference(getString(R.string.bluetooth_mac_key));
-            mEthernetConnectionPreference = (EditTextPreference)
-                    findPreference(getString(R.string.ethernet_connection_key));
-            initializeBluetooth(mBluetoothDeviceListPreference,
-                    findPreference(getString(R.string.bluetooth_checkbox_key)));
+                mUploadingPreference = (CheckBoxPreference) findPreference(
+                        getString(R.string.uploading_checkbox_key));
+                mUploadingPathPreference = (EditTextPreference) findPreference(
+                        getString(R.string.uploading_path_key));
+                initializeUploadingPreferences(mUploadingPreference,
+                        mUploadingPathPreference);
+
+            } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.data_source_preferences);
+
+                mBluetoothDeviceListPreference = (ListPreference)
+                        findPreference(getString(R.string.bluetooth_mac_key));
+                initializeBluetoothPreferences(mBluetoothDeviceListPreference,
+                        findPreference(getString(R.string.bluetooth_checkbox_key)));
+
+                mEthernetConnectionPreference = (EditTextPreference)
+                        findPreference(getString(R.string.ethernet_connection_key));
+                initializeEthernet((EditTextPreference) findPreference(
+                        getString(R.string.ethernet_connection_key)),
+                        findPreference(getString(R.string.ethernet_checkbox_key)));
+            } else if(action.equals(OUTPUT_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.output_preferences);
+            }
+        } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            addPreferencesFromResource(R.xml.preference_headers_legacy);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPreferences.registerOnSharedPreferenceChangeListener(
-                mPreferenceListener);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPreferences.unregisterOnSharedPreferenceChangeListener(
-                mPreferenceListener);
     }
 
     @Override
@@ -95,6 +104,9 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.recording_preferences);
+            ((SettingsActivity)getActivity()).initializeUploadingPreferences(
+                findPreference(getString(R.string.uploading_checkbox_key)),
+                findPreference(getString(R.string.uploading_path_key)));
         }
     }
 
@@ -111,7 +123,7 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.data_source_preferences);
-            ((SettingsActivity)getActivity()).initializeBluetooth(
+            ((SettingsActivity)getActivity()).initializeBluetoothPreferences(
                 (ListPreference)
                 findPreference(getString(R.string.bluetooth_mac_key)),
                 findPreference(getString(R.string.bluetooth_checkbox_key)));
@@ -122,7 +134,18 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    protected void initializeBluetooth(ListPreference listPreference,
+    protected void initializeUploadingPreferences(Preference uploadingPreference,
+            Preference uploadingPathPreference) {
+        mUploadingPreference = (CheckBoxPreference) uploadingPreference;
+        mUploadingPathPreference = uploadingPathPreference;
+
+        mUploadingPreference.setOnPreferenceChangeListener(
+                mUploadingPreferenceListener);
+        mUploadingPathPreference.setOnPreferenceChangeListener(
+                mUploadingPathPreferenceListener);
+    }
+
+    protected void initializeBluetoothPreferences(ListPreference listPreference,
             Preference checkboxPreference) {
         mBluetoothDeviceListPreference = listPreference;
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
@@ -272,24 +295,30 @@ public class SettingsActivity extends PreferenceActivity {
             }
         };
 
+    private OnPreferenceChangeListener mUploadingPreferenceListener =
+        new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference,
+                    Object newValue) {
+                mUploadingPreference.setChecked((Boolean)newValue);
+                return true;
+            }
+        };
 
-    private class PreferenceListener implements
-        SharedPreferences.OnSharedPreferenceChangeListener {
-            public void onSharedPreferenceChanged(SharedPreferences preferences,
-                    String key) {
-                if(key.equals(getString(R.string.uploading_path_key))) {
-                    String path = preferences.getString(key, null);
-                    if(path != null && key.equals(getString(
-                                    R.string.uploading_path_key))
-                            && !UploaderSink.validatePath(path)) {
-                        String error = "Invalid target URL \"" + path +
-                            "\" -- must be an absolute URL " +
-                            "with http:// prefix";
-                        Toast.makeText(getApplicationContext(), error,
-                                Toast.LENGTH_SHORT).show();
-                        Log.w(TAG, error);
-                            }
+    private OnPreferenceChangeListener mUploadingPathPreferenceListener =
+        new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference,
+                    Object newValue) {
+                String path = (String) newValue;
+                if(!UploaderSink.validatePath(path)) {
+                    String error = "Invalid target URL \"" + path +
+                        "\" -- must be an absolute URL " +
+                        "with http:// prefix";
+                    Toast.makeText(getApplicationContext(), error,
+                            Toast.LENGTH_SHORT).show();
+                    Log.w(TAG, error);
+                    mUploadingPreference.setChecked(false);
                 }
+                return true;
             }
         };
 }

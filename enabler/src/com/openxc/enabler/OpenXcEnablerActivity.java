@@ -1,32 +1,33 @@
 package com.openxc.enabler;
 
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
-
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-
 import android.os.Bundle;
 import android.os.IBinder;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuInflater;
-
 import android.util.Log;
-
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.openxc.enabler.R;
 import com.openxc.VehicleManager;
+import com.openxc.enabler.preferences.BluetoothSourcePreferenceManager;
+import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
+import com.openxc.enabler.preferences.GpsOverwritePreferenceManager;
+import com.openxc.enabler.preferences.NativeGpsSourcePreferenceManager;
+import com.openxc.enabler.preferences.UploadingPreferenceManager;
+import com.openxc.enabler.preferences.VehiclePreferenceManager;
 
 public class OpenXcEnablerActivity extends Activity {
-
     private static String TAG = "OpenXcEnablerActivity";
 
     private TextView mVehicleManagerStatusView;
@@ -37,6 +38,8 @@ public class OpenXcEnablerActivity extends Activity {
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
     private VehicleManager mVehicleManager;
+    private List<VehiclePreferenceManager> mPreferenceManagers =
+            new ArrayList<VehiclePreferenceManager>();
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -55,6 +58,10 @@ public class OpenXcEnablerActivity extends Activity {
                     });
                 }
             }).start();
+
+            for(VehiclePreferenceManager manager : mPreferenceManagers) {
+                manager.setVehicleManager(mVehicleManager);
+            }
 
             mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
                     OpenXcEnablerActivity.this, mMessageCountView);
@@ -91,12 +98,23 @@ public class OpenXcEnablerActivity extends Activity {
         mSourceListView = (ListView) findViewById(R.id.source_list);
         mSinkListView = (ListView) findViewById(R.id.sink_list);
 
+        mPreferenceManagers = new ArrayList<VehiclePreferenceManager>();
+        mPreferenceManagers.add(new BluetoothSourcePreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new FileRecordingPreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new GpsOverwritePreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new NativeGpsSourcePreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new UploadingPreferenceManager(
+                    OpenXcEnablerActivity.this));
+
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 mVehicleManagerStatusView.setText("Not running");
             }
         });
-
     }
 
     @Override
@@ -112,6 +130,18 @@ public class OpenXcEnablerActivity extends Activity {
         super.onPause();
         if(mConnection != null) {
             unbindService(mConnection);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        closePreferenceManagers();
+    }
+
+    private void closePreferenceManagers() {
+        for(VehiclePreferenceManager manager : mPreferenceManagers) {
+            manager.close();
         }
     }
 

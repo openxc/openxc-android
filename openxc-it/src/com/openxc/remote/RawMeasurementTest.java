@@ -1,16 +1,15 @@
 package com.openxc.remote;
 
-import com.openxc.TestUtils;
-import com.openxc.remote.RawMeasurement;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import com.openxc.TestUtils;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class RawMeasurementTest extends TestCase {
     RawMeasurement measurement;
     final static String measurementName = "measurement_type";
-    final static Double measurementValue = new Double(42.0);
+    final static Double measurementValue = Double.valueOf(42.0);
 
     public void testValue() {
         measurement = new RawMeasurement(measurementName, measurementValue);
@@ -26,6 +25,13 @@ public class RawMeasurementTest extends TestCase {
         double timestamp = measurement.getTimestamp();
         TestUtils.pause(10);
         assertEquals(timestamp, measurement.getTimestamp(), 0);
+    }
+
+    public void testInvalidTimestampGetsTimestampped() {
+        measurement = new RawMeasurement(measurementName, measurementValue,
+                null, 0);
+        assertTrue(measurement.isTimestamped());
+        assertFalse(0 == measurement.getTimestamp());
     }
 
     public void testUntimestamp() {

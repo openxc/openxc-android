@@ -11,7 +11,6 @@ import com.google.common.base.Objects;
 import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-import com.openxc.sources.SourceLogger;
 
 import com.openxc.sources.usb.UsbDeviceException;
 
@@ -228,7 +227,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
                         bytes.length, 0);
                 if(received > 0) {
                     mBuffer.receive(bytes, received);
-                    for(String record : mBuffer.parse()) {
+                    for(String record : mBuffer.readLines()) {
                         handleMessage(record);
                     }
                 }

@@ -10,8 +10,6 @@ import com.openxc.remote.RawMeasurement;
 
 import com.openxc.sources.SourceCallback;
 
-import android.util.Log;
-
 /**
  * A common parent for all vehicle data sources.
  *

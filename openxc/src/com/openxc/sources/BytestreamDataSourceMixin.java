@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
-
 /**
  * A "mixin" of sorts to be used with object composition, this contains
  * functionality common to data sources that received streams of bytes.
@@ -44,7 +42,7 @@ public class BytestreamDataSourceMixin {
      * @returns A list of messages parsed and subsequently removed from the
      * buffer, if any.
      */
-    public List<String> parse() {
+    public List<String> readLines() {
         List<String> result;
         if(mBuffer.indexOf("\n") != -1) {
             String[] records = mBuffer.toString().split("\n", -1);
