@@ -40,17 +40,23 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
         if(enabled) {
             String deviceAddress = getPreferenceString(
                     R.string.bluetooth_mac_key);
-            if(deviceAddress != null) {
-                stopBluetooth();
+            if(deviceAddress != null ) {
+                if(mBluetoothSource == null ||
+                        !mBluetoothSource.getAddress().equals(deviceAddress)) {
+                    stopBluetooth();
 
-                try {
-                    mBluetoothSource = new BluetoothVehicleDataSource(
-                            getContext(), deviceAddress);
-                } catch(DataSourceException e) {
-                    Log.w(TAG, "Unable to add Bluetooth source", e);
-                    return;
+                    try {
+                        mBluetoothSource = new BluetoothVehicleDataSource(
+                                getContext(), deviceAddress);
+                    } catch(DataSourceException e) {
+                        Log.w(TAG, "Unable to add Bluetooth source", e);
+                        return;
+                    }
+                    getVehicleManager().addSource(mBluetoothSource);
+                } else {
+                    Log.d(TAG, "Bluetooth connection to address " + deviceAddress
+                            + " already running");
                 }
-                getVehicleManager().addSource(mBluetoothSource);
             } else {
                 Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
                         "), not starting source");

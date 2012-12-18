@@ -128,6 +128,10 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
+    public String getAddress() {
+        return mAddress;
+    }
+
     protected void disconnect() {
         if(mSocket == null) {
             Log.w(TAG, "Unable to disconnect -- not connected");
