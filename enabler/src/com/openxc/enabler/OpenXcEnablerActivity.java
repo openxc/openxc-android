@@ -139,12 +139,6 @@ public class OpenXcEnablerActivity extends Activity {
         closePreferenceManagers();
     }
 
-    private void closePreferenceManagers() {
-        for(VehiclePreferenceManager manager : mPreferenceManagers) {
-            manager.close();
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -162,4 +156,11 @@ public class OpenXcEnablerActivity extends Activity {
         inflater.inflate(R.menu.main, menu);
         return true;
     }
+
+    private void closePreferenceManagers() {
+        for(VehiclePreferenceManager manager : mPreferenceManagers) {
+            manager.close();
+        }
+    }
+
 }

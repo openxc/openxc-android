@@ -135,8 +135,6 @@ public class SettingsActivity extends PreferenceActivity {
         mUploadingPreference = (CheckBoxPreference) uploadingPreference;
         mUploadingPathPreference = uploadingPathPreference;
 
-        mUploadingPreference.setOnPreferenceChangeListener(
-                mUploadingPreferenceListener);
         mUploadingPathPreference.setOnPreferenceChangeListener(
                 mUploadingPathPreferenceListener);
     }
@@ -270,9 +268,7 @@ public class SettingsActivity extends PreferenceActivity {
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            Boolean enable = (Boolean) newValue;
-            mEthernetConnectionPreference.setEnabled(enable);
-
+            mEthernetConnectionPreference.setEnabled((Boolean)newValue);
             return true;
         }
     };
@@ -291,15 +287,6 @@ public class SettingsActivity extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference,
                     Object newValue) {
                 mBluetoothDeviceListPreference.setEnabled((Boolean)newValue);
-                return true;
-            }
-        };
-
-    private OnPreferenceChangeListener mUploadingPreferenceListener =
-        new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference,
-                    Object newValue) {
-                mUploadingPreference.setChecked((Boolean)newValue);
                 return true;
             }
         };
