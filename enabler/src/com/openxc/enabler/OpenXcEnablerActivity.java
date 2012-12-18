@@ -29,7 +29,7 @@ public class OpenXcEnablerActivity extends Activity {
 
     private static String TAG = "OpenXcEnablerActivity";
 
-    private TextView mVehicleManagerStatusView;;
+    private TextView mVehicleManagerStatusView;
     private TextView mMessageCountView;
     private ListView mSourceListView;
     private ListView mSinkListView;

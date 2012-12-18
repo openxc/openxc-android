@@ -1,5 +1,6 @@
 package com.openxc;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -43,6 +44,7 @@ import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.usb.UsbVehicleDataSource;
+import com.openxc.sources.ethernet.EthernetVehicleDataSource;
 import com.openxc.util.AndroidFileOpener;
 
 import android.widget.Toast;
@@ -96,6 +98,7 @@ public class VehicleManager extends Service implements SourceCallback {
     private VehicleDataSink mFileRecorder;
     private VehicleDataSource mNativeLocationSource;
     private BluetoothVehicleDataSource mBluetoothSource;
+    private EthernetVehicleDataSource mEthernetSource;
     private MockedLocationSink mMockedLocationSink;
     private VehicleDataSink mUploader;
     private MeasurementListenerSink mNotifier;
@@ -187,6 +190,10 @@ public class VehicleManager extends Service implements SourceCallback {
         if(mBluetoothSource != null) {
             mBluetoothSource.close();
         }
+        if (mEthernetSource != null)
+        {
+            mEthernetSource.stop();
+        }
         unwatchPreferences(mPreferences, mPreferenceListener);
         unbindRemote();
     }
@@ -255,6 +262,10 @@ public class VehicleManager extends Service implements SourceCallback {
             Log.d(TAG, "Sending " + rawCommand + " over Bluetooth to " +
                     mBluetoothSource);
             mBluetoothSource.set(rawCommand);
+        } else if (mEthernetSource != null)
+        {
+            Log.d(TAG, "Sending " + rawCommand + " over Ethernet to " + mEthernetSource);
+            mEthernetSource.set(rawCommand);
         } else {
             if(mRemoteService == null) {
                 Log.w(TAG, "Not connected to the VehicleService");
@@ -552,7 +563,62 @@ public class VehicleManager extends Service implements SourceCallback {
         }
     }
 
+    /**
+     * Enable or disable receiving vehicle data from a Ethernet device
+     *
+     * @param enabled
+     *            true if ethernet should be enabled
+     * @throws VehicleServiceException
+     *             if the listener is unable to be unregistered with the library
+     *             internals - an exceptional situation that shouldn't occur.
+     */
+    public void setEthernetSourceStatus(boolean enabled)
+            throws VehicleServiceException {
+        Log.i(TAG, "Setting ethernet data source to " + enabled);
+        if(enabled) {
+            String deviceAddress = mPreferences.getString(
+                    getString(R.string.ethernet_connection_key), null);
 
+            InetSocketAddress ethernetAddr;
+            String addressSplit[] = deviceAddress.split(":");
+            if(addressSplit.length != 2) {
+                throw new VehicleServiceException(
+                    "Device address in wrong format! Expected: ip:port");
+            } else {
+                Integer port = new Integer(addressSplit[1]);
+
+                String host = addressSplit[0];
+                ethernetAddr = new InetSocketAddress(host, port.intValue());
+            }
+
+            if(deviceAddress != null) {
+                removeSource(mEthernetSource);
+                if(mEthernetSource != null) {
+                    mEthernetSource.stop();
+                }
+
+                try {
+                    mEthernetSource = new EthernetVehicleDataSource(
+                            ethernetAddr, this);
+                    mEthernetSource.start();
+                } catch (DataSourceException e) {
+                    Log.w(TAG, "Unable to add Ethernet source", e);
+                    return;
+                }
+                addSource(mEthernetSource);
+            }
+            else {
+                Log.d(TAG, "No ethernet address set yet (" + deviceAddress +
+                        "), not starting source");
+            }
+        }
+        else {
+            removeSource(mEthernetSource);
+            if(mEthernetSource != null) {
+                mEthernetSource.stop();
+            }
+        }
+    }
     /**
      * Enable or disable recording of a trace file.
      *
@@ -747,6 +813,8 @@ public class VehicleManager extends Service implements SourceCallback {
                             getString(R.string.uploading_checkbox_key), false));
                 setBluetoothSourceStatus(mPreferences.getBoolean(
                             getString(R.string.bluetooth_checkbox_key), false));
+                setEthernetSourceStatus(mPreferences.getBoolean(
+                            getString(R.string.ethernet_checkbox_key), false));
             } catch(VehicleServiceException e) {
                 Log.w(TAG, "Unable to initialize vehicle service with stored "
                         + "preferences", e);
@@ -768,7 +836,11 @@ public class VehicleManager extends Service implements SourceCallback {
                             || key.equals(getString(R.string.bluetooth_mac_key))) {
                     setBluetoothSourceStatus(preferences.getBoolean(
                                 getString(R.string.bluetooth_checkbox_key), false));
+                } else if (key.equals(getString(R.string.ethernet_checkbox_key))
+                        || key.equals(getString(R.string.ethernet_connection_key))) {
+                    setEthernetSourceStatus(preferences.getBoolean(getString(R.string.ethernet_checkbox_key), false));
                 }
+
             } catch(VehicleServiceException e) {
                 Log.w(TAG, "Unable to update vehicle service when preference \""
                         + key + "\" changed", e);

@@ -23,6 +23,7 @@ import android.preference.Preference;
 
 import android.preference.Preference.OnPreferenceChangeListener;
 
+import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -36,6 +37,7 @@ public class SettingsActivity extends PreferenceActivity {
     private SharedPreferences mPreferences;
     private BluetoothAdapter mBluetoothAdapter;
     private ListPreference mBluetoothDeviceListPreference;
+    private EditTextPreference mEthernetConnectionPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -51,7 +53,9 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.output_preferences);
             mBluetoothDeviceListPreference = (ListPreference)
                     findPreference(getString(R.string.bluetooth_mac_key));
-            initialize(mBluetoothDeviceListPreference,
+            mEthernetConnectionPreference = (EditTextPreference)
+                    findPreference(getString(R.string.ethernet_connection_key));
+            initializeBluetooth(mBluetoothDeviceListPreference,
                     findPreference(getString(R.string.bluetooth_checkbox_key)));
         }
     }
@@ -107,14 +111,18 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.data_source_preferences);
-            ((SettingsActivity)getActivity()).initialize(
+            ((SettingsActivity)getActivity()).initializeBluetooth(
                 (ListPreference)
                 findPreference(getString(R.string.bluetooth_mac_key)),
                 findPreference(getString(R.string.bluetooth_checkbox_key)));
+            ((SettingsActivity) getActivity()).initializeEthernet(
+                    (EditTextPreference) findPreference(getString(
+                            R.string.ethernet_connection_key)),
+                    findPreference(getString(R.string.ethernet_checkbox_key)));
         }
     }
 
-    protected void initialize(ListPreference listPreference,
+    protected void initializeBluetooth(ListPreference listPreference,
             Preference checkboxPreference) {
         mBluetoothDeviceListPreference = listPreference;
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
@@ -127,7 +135,7 @@ public class SettingsActivity extends PreferenceActivity {
             Log.w(TAG, message);
         }
 
-        fillDeviceList(mBluetoothDeviceListPreference);
+        fillBluetoothDeviceList(mBluetoothDeviceListPreference);
 
         checkboxPreference.setOnPreferenceChangeListener(
                 mBluetoothCheckboxListener);
@@ -148,7 +156,28 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setSummary(summary);
     }
 
-    private void fillDeviceList(final ListPreference preference) {
+    protected void initializeEthernet(EditTextPreference editPreference,
+        Preference checkboxPreference) {
+        mEthernetConnectionPreference = editPreference;
+        mEthernetConnectionPreference.setOnPreferenceChangeListener(mEthernetConnectionListener);
+
+        checkboxPreference.setOnPreferenceChangeListener(mEthernetCheckboxListener);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEthernetConnectionPreference.setEnabled(preferences.getBoolean(getString(R.string.ethernet_checkbox_key),
+                false));
+
+        String currentConnection = preferences.getString(getString(R.string.ethernet_connection_key), null);
+        String summary = null;
+        if(currentConnection != null) {
+            summary = "Currently using host " + currentConnection;
+        } else {
+            summary = "No device selected";
+        }
+        mEthernetConnectionPreference.setSummary(summary);
+    }
+
+    private void fillBluetoothDeviceList(final ListPreference preference) {
         ArrayList<String> entries = new ArrayList<String>();
         ArrayList<String> values = new ArrayList<String>();
         if(mBluetoothAdapter != null) {
@@ -204,6 +233,26 @@ public class SettingsActivity extends PreferenceActivity {
             mBluetoothAdapter.startDiscovery();
         }
     }
+
+    private OnPreferenceChangeListener mEthernetConnectionListener =
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference,
+                Object newValue) {
+            preference.setSummary("Currently using " + newValue);
+            return true;
+        }
+    };
+
+    private OnPreferenceChangeListener mEthernetCheckboxListener =
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference,
+                Object newValue) {
+            Boolean enable = (Boolean) newValue;
+            mEthernetConnectionPreference.setEnabled(enable);
+
+            return true;
+        }
+    };
 
     private OnPreferenceChangeListener mBluetoothDeviceListener =
         new OnPreferenceChangeListener() {

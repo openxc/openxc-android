@@ -15,5 +15,14 @@
         <ListPreference
                 android:key="@string/bluetooth_mac_key"
                 android:title="@string/bluetooth_mac_title"/>
+        <CheckBoxPreference
+                android:key="@string/ethernet_checkbox_key"
+                android:title="@string/ethernet_checkbox_title"
+                android:summary="@string/ethernet_checkbox_summary"
+                android:defaultValue="false" />
+        <EditTextPreference
+                android:key="@string/ethernet_connection_key"
+                android:title="@string/ethernet_connection_title"
+                android:defaultValue="192.168.0.6:10001"/>
     </PreferenceCategory>
 </PreferenceScreen>
