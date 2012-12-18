@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.openxc.VehicleManager;
 import com.openxc.enabler.R;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.MockedLocationSink;
@@ -13,8 +12,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "GpsOverwritePreferenceManager";
     private MockedLocationSink mMockedLocationSink;
 
-    public GpsOverwritePreferenceManager(Context context, VehicleManager vehicle) {
-        super(context, vehicle);
+    public GpsOverwritePreferenceManager(Context context) {
+        super(context);
     }
 
     /**

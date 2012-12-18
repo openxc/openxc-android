@@ -12,13 +12,20 @@ public abstract class VehiclePreferenceManager {
     private SharedPreferences mPreferences;
     private VehicleManager mVehicle;
 
-    public VehiclePreferenceManager(Context context, VehicleManager vehicle) {
+    public VehiclePreferenceManager(Context context) {
         mContext = context;
-        mVehicle = vehicle;
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+    }
+
+    public void setVehicleManager(VehicleManager vehicle) {
+        mVehicle = vehicle;
         mPreferenceListener = watchPreferences(mPreferences);
         mPreferenceListener.readStoredPreferences();
+    }
+
+    public void close() {
+        unwatchPreferences(mPreferences, mPreferenceListener);
     }
 
     protected SharedPreferences getPreferences() {
@@ -41,8 +48,17 @@ public abstract class VehiclePreferenceManager {
         return mVehicle;
     }
 
-    public void close() {
-        unwatchPreferences(mPreferences, mPreferenceListener);
+    protected abstract PreferenceListener createPreferenceListener(
+            SharedPreferences preferences);
+
+    protected abstract class PreferenceListener implements SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences mPreferences;
+
+        public PreferenceListener(SharedPreferences preferences) {
+            mPreferences = preferences;
+        }
+
+        public abstract void readStoredPreferences();
     }
 
     private void unwatchPreferences(SharedPreferences preferences,
@@ -59,18 +75,5 @@ public abstract class VehiclePreferenceManager {
             return listener;
         }
         return null;
-    }
-
-    protected abstract PreferenceListener createPreferenceListener(
-            SharedPreferences preferences);
-
-    protected abstract class PreferenceListener implements SharedPreferences.OnSharedPreferenceChangeListener {
-        SharedPreferences mPreferences;
-
-        public PreferenceListener(SharedPreferences preferences) {
-            mPreferences = preferences;
-        }
-
-        public abstract void readStoredPreferences();
     }
 }

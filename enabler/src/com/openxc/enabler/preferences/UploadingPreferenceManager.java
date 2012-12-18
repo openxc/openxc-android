@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openxc.VehicleManager;
 import com.openxc.enabler.R;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
@@ -15,8 +14,8 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "UploadingPreferenceManager";
     private VehicleDataSink mUploader;
 
-    public UploadingPreferenceManager(Context context, VehicleManager vehicle) {
-        super(context, vehicle);
+    public UploadingPreferenceManager(Context context) {
+        super(context);
     }
 
     /**

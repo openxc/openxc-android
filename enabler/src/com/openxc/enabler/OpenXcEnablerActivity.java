@@ -59,18 +59,9 @@ public class OpenXcEnablerActivity extends Activity {
                 }
             }).start();
 
-            closePreferenceManagers();
-            mPreferenceManagers = new ArrayList<VehiclePreferenceManager>();
-            mPreferenceManagers.add(new BluetoothSourcePreferenceManager(
-                        OpenXcEnablerActivity.this, mVehicleManager));
-            mPreferenceManagers.add(new FileRecordingPreferenceManager(
-                        OpenXcEnablerActivity.this, mVehicleManager));
-            mPreferenceManagers.add(new GpsOverwritePreferenceManager(
-                        OpenXcEnablerActivity.this, mVehicleManager));
-            mPreferenceManagers.add(new NativeGpsSourcePreferenceManager(
-                        OpenXcEnablerActivity.this, mVehicleManager));
-            mPreferenceManagers.add(new UploadingPreferenceManager(
-                        OpenXcEnablerActivity.this, mVehicleManager));
+            for(VehiclePreferenceManager manager : mPreferenceManagers) {
+                manager.setVehicleManager(mVehicleManager);
+            }
 
             mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
                     OpenXcEnablerActivity.this, mMessageCountView);
@@ -107,12 +98,23 @@ public class OpenXcEnablerActivity extends Activity {
         mSourceListView = (ListView) findViewById(R.id.source_list);
         mSinkListView = (ListView) findViewById(R.id.sink_list);
 
+        mPreferenceManagers = new ArrayList<VehiclePreferenceManager>();
+        mPreferenceManagers.add(new BluetoothSourcePreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new FileRecordingPreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new GpsOverwritePreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new NativeGpsSourcePreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new UploadingPreferenceManager(
+                    OpenXcEnablerActivity.this));
+
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 mVehicleManagerStatusView.setText("Not running");
             }
         });
-
     }
 
     @Override

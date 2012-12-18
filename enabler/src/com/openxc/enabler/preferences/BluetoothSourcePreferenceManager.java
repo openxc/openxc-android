@@ -15,10 +15,8 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
 
     private BluetoothVehicleDataSource mBluetoothSource;
 
-    public BluetoothSourcePreferenceManager(Context context,
-            VehicleManager vehicle) {
-        super(context, vehicle);
-        Log.d(TAG, "Created new " + TAG);
+    public BluetoothSourcePreferenceManager(Context context) {
+        super(context);
     }
 
     public void close() {
@@ -34,7 +32,7 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
      *      unregistered with the library internals - an exceptional
      *      situation that shouldn't occur.
      */
-    public synchronized void setBluetoothSourceStatus(boolean enabled)
+    private synchronized void setBluetoothSourceStatus(boolean enabled)
             throws VehicleServiceException {
         Log.i(TAG, "Setting bluetooth data source to " + enabled);
         if(enabled) {

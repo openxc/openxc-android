@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.openxc.VehicleManager;
 import com.openxc.enabler.R;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.DataSinkException;
@@ -15,9 +14,10 @@ import com.openxc.util.AndroidFileOpener;
 public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "FileRecordingPreferenceManager";
     private VehicleDataSink mFileRecorder;
+    private String mCurrentDirectory;
 
-    public FileRecordingPreferenceManager(Context context, VehicleManager vehicle) {
-        super(context, vehicle);
+    public FileRecordingPreferenceManager(Context context) {
+        super(context);
     }
 
     /**
@@ -28,22 +28,30 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
      *      unregistered with the library internals - an exceptional
      *      situation that shouldn't occur.
      */
-    public void setFileRecordingStatus(boolean enabled)
+    private void setFileRecordingStatus(boolean enabled)
             throws VehicleServiceException {
         Log.i(TAG, "Setting recording to " + enabled);
         if(enabled) {
             String directory = getPreferenceString(R.string.recording_directory_key);
-            try {
-                mFileRecorder = new FileRecorderSink(
-                        new AndroidFileOpener(getContext(), directory));
-                getVehicleManager().addSink(mFileRecorder);
-            } catch(DataSinkException e) {
-                Log.w(TAG, "Unable to start trace recording", e);
+            if(directory != null) {
+                if(mFileRecorder == null || !mCurrentDirectory.equals(directory)) {
+                    mCurrentDirectory = directory;
+                    stopRecording();
+
+                    try {
+                        mFileRecorder = new FileRecorderSink(
+                                new AndroidFileOpener(getContext(), directory));
+                    } catch(DataSinkException e) {
+                        Log.w(TAG, "Unable to start trace recording", e);
+                    }
+                    getVehicleManager().addSink(mFileRecorder);
+                }
+            } else {
+                Log.d(TAG, "No recording base directory set (" + directory +
+                        "), not starting recorder");
             }
-        }
-        else {
+        } else {
             stopRecording();
-            getVehicleManager().removeSink(mFileRecorder);
         }
     }
 

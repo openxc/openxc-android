@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.openxc.VehicleManager;
 import com.openxc.enabler.R;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.NativeLocationSource;
@@ -15,32 +14,8 @@ public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
 
     private VehicleDataSource mNativeLocationSource;
 
-    public NativeGpsSourcePreferenceManager(Context context, VehicleManager vehicle) {
-        super(context, vehicle);
-    }
-
-    /**
-     * Enable or disable reading GPS from the native Android stack.
-     *
-     * @param enabled true if native GPS should be passed through
-     * @throws VehicleServiceException if native GPS status is unable to be set
-     *      - an exceptional situation that shouldn't occur.
-     */
-    public void setNativeGpsStatus(boolean enabled)
-            throws VehicleServiceException {
-        Log.i(TAG, "Setting native GPS to " + enabled);
-        if(enabled) {
-            mNativeLocationSource = new NativeLocationSource(getContext());
-            getVehicleManager().addSource(mNativeLocationSource);
-        } else if(mNativeLocationSource != null) {
-            getVehicleManager().removeSource(mNativeLocationSource);
-            mNativeLocationSource = null;
-        }
-    }
-
-    private void stopNativeGps() {
-        getVehicleManager().removeSource(mNativeLocationSource);
-        mNativeLocationSource = null;
+    public NativeGpsSourcePreferenceManager(Context context) {
+        super(context);
     }
 
     public void close() {
@@ -51,6 +26,29 @@ public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
     protected PreferenceListener createPreferenceListener(
             SharedPreferences preferences) {
         return new NativeGpsSourcePreferenceListener(preferences);
+    }
+
+    /**
+     * Enable or disable reading GPS from the native Android stack.
+     *
+     * @param enabled true if native GPS should be passed through
+     * @throws VehicleServiceException if native GPS status is unable to be set
+     *      - an exceptional situation that shouldn't occur.
+     */
+    private void setNativeGpsStatus(boolean enabled)
+            throws VehicleServiceException {
+        Log.i(TAG, "Setting native GPS to " + enabled);
+        if(enabled && mNativeLocationSource == null) {
+            mNativeLocationSource = new NativeLocationSource(getContext());
+            getVehicleManager().addSource(mNativeLocationSource);
+        } else if(!enabled) {
+            stopNativeGps();
+        }
+    }
+
+    private void stopNativeGps() {
+        getVehicleManager().removeSource(mNativeLocationSource);
+        mNativeLocationSource = null;
     }
 
     private class NativeGpsSourcePreferenceListener extends PreferenceListener {
