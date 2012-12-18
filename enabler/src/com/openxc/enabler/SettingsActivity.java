@@ -20,7 +20,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -49,32 +48,30 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeLegacyLayout();
+    }
 
+    @SuppressWarnings("deprecation")
+    private void initializeLegacyLayout() {
         String action = getIntent().getAction();
         if(action != null) {
             if(action.equals(RECORDING_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.recording_preferences);
 
-                mUploadingPreference = (CheckBoxPreference) findPreference(
-                        getString(R.string.uploading_checkbox_key));
-                mUploadingPathPreference = (EditTextPreference) findPreference(
-                        getString(R.string.uploading_path_key));
-                initializeUploadingPreferences(mUploadingPreference,
-                        mUploadingPathPreference);
+                initializeUploadingPreferences(
+                    findPreference(getString(R.string.uploading_checkbox_key)),
+                    findPreference(getString(R.string.uploading_path_key)));
 
             } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.data_source_preferences);
 
-                mBluetoothDeviceListPreference = (ListPreference)
-                        findPreference(getString(R.string.bluetooth_mac_key));
-                initializeBluetoothPreferences(mBluetoothDeviceListPreference,
-                        findPreference(getString(R.string.bluetooth_checkbox_key)));
+                initializeBluetoothPreferences(
+                    findPreference(getString(R.string.bluetooth_mac_key)),
+                    findPreference(getString(R.string.bluetooth_checkbox_key)));
 
-                mEthernetConnectionPreference = (EditTextPreference)
-                        findPreference(getString(R.string.ethernet_connection_key));
-                initializeEthernet((EditTextPreference) findPreference(
-                        getString(R.string.ethernet_connection_key)),
-                        findPreference(getString(R.string.ethernet_checkbox_key)));
+                initializeEthernet(
+                    findPreference(getString(R.string.ethernet_connection_key)),
+                    findPreference(getString(R.string.ethernet_checkbox_key)));
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             }
@@ -124,17 +121,16 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.data_source_preferences);
             ((SettingsActivity)getActivity()).initializeBluetoothPreferences(
-                (ListPreference)
                 findPreference(getString(R.string.bluetooth_mac_key)),
                 findPreference(getString(R.string.bluetooth_checkbox_key)));
             ((SettingsActivity) getActivity()).initializeEthernet(
-                    (EditTextPreference) findPreference(getString(
-                            R.string.ethernet_connection_key)),
+                    findPreference(getString(R.string.ethernet_connection_key)),
                     findPreference(getString(R.string.ethernet_checkbox_key)));
         }
     }
 
-    protected void initializeUploadingPreferences(Preference uploadingPreference,
+    protected void initializeUploadingPreferences(
+            Preference uploadingPreference,
             Preference uploadingPathPreference) {
         mUploadingPreference = (CheckBoxPreference) uploadingPreference;
         mUploadingPathPreference = uploadingPathPreference;
@@ -145,9 +141,9 @@ public class SettingsActivity extends PreferenceActivity {
                 mUploadingPathPreferenceListener);
     }
 
-    protected void initializeBluetoothPreferences(ListPreference listPreference,
+    protected void initializeBluetoothPreferences(Preference listPreference,
             Preference checkboxPreference) {
-        mBluetoothDeviceListPreference = listPreference;
+        mBluetoothDeviceListPreference = (ListPreference) listPreference;
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
                 mBluetoothDeviceListener);
 
@@ -179,18 +175,22 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setSummary(summary);
     }
 
-    protected void initializeEthernet(EditTextPreference editPreference,
+    protected void initializeEthernet(Preference editPreference,
         Preference checkboxPreference) {
-        mEthernetConnectionPreference = editPreference;
-        mEthernetConnectionPreference.setOnPreferenceChangeListener(mEthernetConnectionListener);
+        mEthernetConnectionPreference = (EditTextPreference) editPreference;
+        mEthernetConnectionPreference.setOnPreferenceChangeListener(
+                mEthernetConnectionListener);
 
-        checkboxPreference.setOnPreferenceChangeListener(mEthernetCheckboxListener);
+        checkboxPreference.setOnPreferenceChangeListener(
+                mEthernetCheckboxListener);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEthernetConnectionPreference.setEnabled(preferences.getBoolean(getString(R.string.ethernet_checkbox_key),
-                false));
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        mEthernetConnectionPreference.setEnabled(preferences.getBoolean(
+                    getString(R.string.ethernet_checkbox_key), false));
 
-        String currentConnection = preferences.getString(getString(R.string.ethernet_connection_key), null);
+        String currentConnection = preferences.getString(getString(
+                    R.string.ethernet_connection_key), null);
         String summary = null;
         if(currentConnection != null) {
             summary = "Currently using host " + currentConnection;
