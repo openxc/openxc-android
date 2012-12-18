@@ -1,4 +1,4 @@
-package com.openxc.sources.ethernet;
+package com.openxc.sources.network;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.URI;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,15 +20,15 @@ import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
 
 /**
- * A vehicle data source reading measurements from an OpenXC Ethernet device.
+ * A vehicle data source reading measurements from an OpenXC Network device.
  *
- * This class looks for a Ethernet device and expects to read OpenXC-compatible,
- * newline separated JSON messages in Ethernet frames.
+ * This class looks for a Network device and expects to read OpenXC-compatible,
+ * newline separated JSON messages in Network frames.
  *
  */
-public class EthernetVehicleDataSource extends ContextualVehicleDataSource
+public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         implements Runnable, VehicleController {
-    private static final String TAG = "EthernetVehicleDataSource";
+    private static final String TAG = "NetworkVehicleDataSource";
     private static final int SOCKET_TIMEOUT = 10000;
     private static final int FRAME_LENGTH = 128;
 
@@ -38,37 +39,36 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
     private SocketAddress mAddress = null;
 
     /**
-     * Construct an instance of EthernetVehicleDataSource with a receiver
+     * Construct an instance of NetworkVehicleDataSource with a receiver
      * callback and custom device URI.
      *
      * If the device cannot be found at initialization, the object will block
      * waiting for a signal to check again.
      *
      *
+     * @param address
+     *            A network host address.
      * @param context
      *            The Activity or Service context, used to get access to the
-     *            Android EthernetManager.
+     *            Android NetworkManager.
      * @param callback
      *            An object implementing the SourceCallback that should receive
      *            data as it is received and parsed.
-     * @param device
-     *            a Ethernet device URI (see {@link EthernetDeviceUtilities} for
-     *            the format) to look for.
      * @throws DataSourceException
      *             If no connection could be established
      */
-    public EthernetVehicleDataSource(InetSocketAddress address,
+    public NetworkVehicleDataSource(InetSocketAddress address,
             SourceCallback callback, Context context) throws DataSourceException {
         super(callback, context);
 
         if(address == null) {
-            throw new EthernetDeviceException("Invalid address: " + address);
+            throw new NetworkSourceException("Invalid address: " + address);
         }
         mAddress = address;
         start();
     }
 
-    public EthernetVehicleDataSource(String address, SourceCallback callback,
+    public NetworkVehicleDataSource(String address, SourceCallback callback,
             Context context) throws DataSourceException {
         this(socketAddressFromString(address), callback, context);
     }
@@ -92,12 +92,12 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
         return new InetSocketAddress(addressSplit[0], port);
     }
 
-    public EthernetVehicleDataSource(InetSocketAddress address, Context context)
+    public NetworkVehicleDataSource(InetSocketAddress address, Context context)
             throws DataSourceException {
         this(address, null, context);
     }
 
-    public EthernetVehicleDataSource(String address, Context context)
+    public NetworkVehicleDataSource(String address, Context context)
             throws DataSourceException {
         this(address, null, context);
     }
@@ -115,14 +115,14 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
     }
 
     /**
-     * Quits the running connections and closes the ethernet socket.
+     * Quits the running connections and closes the network socket.
      *
      * This should be called before the object is given up to the garbage
      * collector to avoid leaking a receiver in the Android framework.
      */
     public void stop() {
         super.stop();
-        Log.d(TAG, "Stopping ethernet listener");
+        Log.d(TAG, "Stopping network listener");
 
         if(mSocket != null) {
             try {
@@ -141,23 +141,28 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
     }
 
     public static boolean validateAddress(String address) {
-        try {
-            socketAddressFromString(address);
-        } catch(DataSourceException e) {
+        if(address == null) {
+            Log.w(TAG, "Network host address not set (it's " + address + ")");
             return false;
         }
-        return true;
+
+        try {
+            URI uri = new URI(address);
+            return uri.isAbsolute();
+        } catch(java.net.URISyntaxException e) {
+            return false;
+        }
     }
 
-    private void connectStreams() throws EthernetDeviceException {
+    private void connectStreams() throws NetworkSourceException {
         try {
             mInStream = mSocket.getInputStream();
             mOutStream = mSocket.getOutputStream();
         } catch(IOException e) {
-            String message = "Error opening Ethernet socket streams";
+            String message = "Error opening Network socket streams";
             Log.e(TAG, message, e);
             disconnected();
-            throw new EthernetDeviceException(message);
+            throw new NetworkSourceException(message);
         }
         Log.i(TAG, "Socket created, streams assigned");
     }
@@ -205,7 +210,7 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
         while(mRunning) {
             try {
                 waitForDeviceConnection();
-            } catch(EthernetDeviceException e) {
+            } catch(NetworkSourceException e) {
                 Log.i(TAG, "Unable to connect to target IP address -- " +
                         "sleeping for awhile before trying again");
                 try {
@@ -226,7 +231,7 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
             }
 
             if(received == -1) {
-                Log.w(TAG, "Lost connection to Ethernet stream");
+                Log.w(TAG, "Lost connection to Network stream");
                 break;
             }
 
@@ -246,12 +251,12 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
 
     public void set(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
-        Log.d(TAG, "Writing message to Ethernet: " + message);
+        Log.d(TAG, "Writing message to Network: " + message);
         byte[] bytes = message.getBytes();
         write(bytes);
     }
 
-    private void waitForDeviceConnection() throws EthernetDeviceException {
+    private void waitForDeviceConnection() throws NetworkSourceException {
         if(mSocket == null) {
             mSocket = new Socket();
             try {
@@ -260,12 +265,12 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
                 String message = "Error opening streams";
                 Log.e(TAG, message, e);
                 disconnect();
-                throw new EthernetDeviceException(message, e);
+                throw new NetworkSourceException(message, e);
             }
 
             if(!mSocket.isConnected()) {
                 disconnect();
-                throw new EthernetDeviceException("Could not connect to server!");
+                throw new NetworkSourceException("Could not connect to server!");
             }
 
             connected();
@@ -285,7 +290,7 @@ public class EthernetVehicleDataSource extends ContextualVehicleDataSource
             try {
                 mOutStream.write(bytes);
             } catch (Exception e) {
-                Log.w(TAG, "Unable to write CAN message to Ethernet. Error: " + e.toString());
+                Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
             }
         } else {
             Log.w(TAG, "No connection established, could not send anything.");

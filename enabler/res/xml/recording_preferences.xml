@@ -24,6 +24,7 @@
             android:key="@string/uploading_path_key"
             android:title="@string/uploading_path_title"
             android:summary="@string/uploading_path_summary"
+            android:defaultValue="http://"
             android:inputType="textUri" />
 
     </PreferenceCategory>

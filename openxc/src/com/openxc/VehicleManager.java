@@ -230,7 +230,7 @@ public class VehicleManager extends Service implements SourceCallback {
                     // mBluetoothSource);
             // mBluetoothSource.set(rawCommand);
         // } else {
-        // TODO handle ethernet, too
+        // TODO handle network, too
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the VehicleService");
             return;

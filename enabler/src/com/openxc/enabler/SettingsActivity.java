@@ -27,6 +27,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.openxc.sinks.UploaderSink;
+import com.openxc.sources.network.NetworkVehicleDataSource;
 
 @TargetApi(12)
 public class SettingsActivity extends PreferenceActivity {
@@ -41,7 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
-    private EditTextPreference mEthernetConnectionPreference;
+    private EditTextPreference mNetworkConnectionPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -68,9 +69,9 @@ public class SettingsActivity extends PreferenceActivity {
                     findPreference(getString(R.string.bluetooth_mac_key)),
                     findPreference(getString(R.string.bluetooth_checkbox_key)));
 
-                initializeEthernet(
-                    findPreference(getString(R.string.ethernet_connection_key)),
-                    findPreference(getString(R.string.ethernet_checkbox_key)));
+                initializeNetwork(
+                    findPreference(getString(R.string.network_host_key)),
+                    findPreference(getString(R.string.network_checkbox_key)));
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             }
@@ -122,9 +123,9 @@ public class SettingsActivity extends PreferenceActivity {
             ((SettingsActivity)getActivity()).initializeBluetoothPreferences(
                 findPreference(getString(R.string.bluetooth_mac_key)),
                 findPreference(getString(R.string.bluetooth_checkbox_key)));
-            ((SettingsActivity) getActivity()).initializeEthernet(
-                    findPreference(getString(R.string.ethernet_connection_key)),
-                    findPreference(getString(R.string.ethernet_checkbox_key)));
+            ((SettingsActivity) getActivity()).initializeNetwork(
+                    findPreference(getString(R.string.network_host_key)),
+                    findPreference(getString(R.string.network_checkbox_key)));
         }
     }
 
@@ -170,29 +171,29 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setSummary(summary);
     }
 
-    protected void initializeEthernet(Preference editPreference,
+    protected void initializeNetwork(Preference editPreference,
             Preference checkboxPreference) {
-        mEthernetConnectionPreference = (EditTextPreference) editPreference;
-        mEthernetConnectionPreference.setOnPreferenceChangeListener(
-                mEthernetConnectionListener);
+        mNetworkConnectionPreference = (EditTextPreference) editPreference;
+        mNetworkConnectionPreference.setOnPreferenceChangeListener(
+                mNetworkConnectionListener);
 
         checkboxPreference.setOnPreferenceChangeListener(
-                mEthernetCheckboxListener);
+                mNetworkCheckboxListener);
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
-        mEthernetConnectionPreference.setEnabled(preferences.getBoolean(
-                    getString(R.string.ethernet_checkbox_key), false));
+        mNetworkConnectionPreference.setEnabled(preferences.getBoolean(
+                    getString(R.string.network_checkbox_key), false));
 
-        String currentConnection = preferences.getString(getString(
-                    R.string.ethernet_connection_key), null);
+        String currentHost = preferences.getString(getString(
+                    R.string.network_host_key), null);
         String summary = null;
-        if(currentConnection != null) {
-            summary = "Currently using host " + currentConnection;
+        if(currentHost != null) {
+            summary = "Currently using host " + currentHost;
         } else {
             summary = "No server specified";
         }
-        mEthernetConnectionPreference.setSummary(summary);
+        mNetworkConnectionPreference.setSummary(summary);
     }
 
     private void fillBluetoothDeviceList(final ListPreference preference) {
@@ -249,20 +250,31 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    private OnPreferenceChangeListener mEthernetConnectionListener =
+    private OnPreferenceChangeListener mNetworkConnectionListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            preference.setSummary("Currently using " + newValue);
+            String address = (String) newValue;
+            if(!NetworkVehicleDataSource.validateAddress(address)) {
+                String error = "Invalid host URL \"" + address +
+                    "\" -- must be an absolute URL " +
+                    "with http:// prefix";
+                Toast.makeText(getApplicationContext(), error,
+                        Toast.LENGTH_SHORT).show();
+                Log.w(TAG, error);
+                mUploadingPreference.setChecked(false);
+            } else {
+                preference.setSummary("Currently using " + newValue);
+            }
             return true;
         }
     };
 
-    private OnPreferenceChangeListener mEthernetCheckboxListener =
+    private OnPreferenceChangeListener mNetworkCheckboxListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            mEthernetConnectionPreference.setEnabled((Boolean)newValue);
+            mNetworkConnectionPreference.setEnabled((Boolean)newValue);
             return true;
         }
     };

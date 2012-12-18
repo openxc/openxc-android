@@ -25,9 +25,9 @@
     <string name="bluetooth_checkbox_title">Use a Bluetooth CAN translator</string>
     <string name="bluetooth_checkbox_summary">Read vehicle data from a CAN translator connected wirelessly via Bluetooth</string>
     <string name="bluetooth_mac_title">Bluetooth Device</string>
-    <string name="ethernet_checkbox_title">Use a Ethernet device</string>
-    <string name="ethernet_checkbox_summary">Read vehicle data from a regular Ethernet device such as LAN or WLAN</string>
-    <string name="ethernet_connection_title">Select IP and Port</string>
+    <string name="network_checkbox_title">Use an network device</string>
+    <string name="network_checkbox_summary">Read vehicle data from the network</string>
+    <string name="network_host_title">Network host address</string>
     <string name="source_list_label">Data Sources</string>
     <string name="sink_list_label">Data Sinks</string>
 </resources>
