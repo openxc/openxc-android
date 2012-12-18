@@ -42,7 +42,7 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
                 editor.putBoolean(getString(R.string.uploading_checkbox_key),
                         false);
                 editor.commit();
-            } else if(address != null) {
+            } else {
                 if(mNetworkSource == null ||
                         !mNetworkSource.getAddress().equals(address)) {
                     stopNetwork();
@@ -59,9 +59,6 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
                     Log.d(TAG, "Network connection to address " + address
                             + " already running");
                 }
-            } else {
-                Log.d(TAG, "No network host address set yet (" + address +
-                        "), not starting source");
             }
         } else {
             stopNetwork();
