@@ -135,6 +135,18 @@ public class SettingsActivity extends PreferenceActivity {
         mUploadingPreference = (CheckBoxPreference) uploadingPreference;
         uploadingPathPreference.setOnPreferenceChangeListener(
                 mUploadingPathPreferenceListener);
+
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        String currentAddress = preferences.getString(
+                getString(R.string.uploading_path_key), null);
+        String summary = null;
+        if(currentAddress != null) {
+            summary = "Currently using " + currentAddress;
+        } else {
+            summary = "No host address specified";
+        }
+        uploadingPathPreference.setSummary(summary);
     }
 
     protected void initializeBluetoothPreferences(Preference listPreference,
