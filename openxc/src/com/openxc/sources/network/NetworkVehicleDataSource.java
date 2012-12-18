@@ -22,8 +22,8 @@ import com.openxc.sources.SourceCallback;
 /**
  * A vehicle data source reading measurements from an OpenXC Network device.
  *
- * This class looks for a Network device and expects to read OpenXC-compatible,
- * newline separated JSON messages in Network frames.
+ * This class looks for a network device and expects to read OpenXC-compatible,
+ * newline separated JSON messages in network frames.
  *
  */
 public class NetworkVehicleDataSource extends ContextualVehicleDataSource
@@ -49,7 +49,9 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
      *
      *
      * @param address
-     *            A network host address.
+     *            The network host address.
+     * @param port
+     *            The network host port.
      * @param context
      *            The Activity or Service context, used to get access to the
      *            Android NetworkManager.
@@ -65,7 +67,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         super(callback, context);
 
         if(address == null) {
-            throw new NetworkSourceException("Invalid address: " + address);
+            throw new NetworkSourceException("Address cannot be null");
         }
         mStringAddress = address;
         mPort = createPort(port);
@@ -77,11 +79,6 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         this(address, port, null, context);
     }
 
-    /**
-     * Opens an input stream as well as an output stream on the given socket. On
-     * success the running flag will be set to true and the thread will be
-     * launched.
-     */
     public synchronized void start() {
         if(!mRunning) {
             mRunning = true;
@@ -89,12 +86,6 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    /**
-     * Quits the running connections and closes the network socket.
-     *
-     * This should be called before the object is given up to the garbage
-     * collector to avoid leaking a receiver in the Android framework.
-     */
     public void stop() {
         super.stop();
         Log.d(TAG, "Stopping network listener");
@@ -115,6 +106,12 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
+    /**
+     * Return true if the given address and port match those currently in use by
+     * the network data source.
+     *
+     * @return true if the address and port match the current in-use values.
+     */
     public boolean sameAddress(String address, String port) {
         try {
             return mAddress.equals(createAddress(address))
@@ -124,10 +121,20 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
+    /**
+     * Return true if the address and port are valid.
+     *
+     * @return true if the address and port are valid.
+     */
     public static boolean validate(String address, String port) {
         return validatePort(port) && validateAddress(address);
     }
 
+    /**
+     * Returns true if the port is a valid network port.
+     *
+     * @return true if the port is a valid network port.
+     */
     public static boolean validatePort(String portString) {
         try {
             Integer port = createPort(portString);
@@ -137,80 +144,17 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
+    /**
+     * Return true if the address is a valid IP address or hostname.
+     *
+     * Basically if it's not null, it's valid right now.
+     */
     public static boolean validateAddress(String address) {
         if(address == null) {
             Log.w(TAG, "Network host address not set (it's " + address + ")");
             return false;
         }
         return true;
-    }
-
-    private static int createPort(String port) throws DataSourceException {
-        try {
-            return Integer.valueOf(port);
-        } catch(NumberFormatException e) {
-            throw new DataSourceException(
-                    "Target network port is invalid (" + port + ")", e);
-        }
-    }
-
-    private static InetAddress createAddress(String address)
-            throws DataSourceException {
-        try {
-            return InetAddress.getByName(address);
-        } catch(UnknownHostException e) {
-            throw new DataSourceException(
-                    "Target network host is unreachable", e);
-        }
-    }
-
-    private void connectStreams() throws NetworkSourceException {
-        try {
-            mInStream = mSocket.getInputStream();
-            mOutStream = mSocket.getOutputStream();
-        } catch(IOException e) {
-            String message = "Error opening Network socket streams";
-            Log.e(TAG, message, e);
-            disconnected();
-            throw new NetworkSourceException(message);
-        }
-        Log.i(TAG, "Socket created, streams assigned");
-    }
-
-    protected String getTag() {
-        return TAG;
-    }
-
-    protected void disconnect() {
-        if(mSocket == null) {
-            Log.w(TAG, "Unable to disconnect -- not connected");
-            return;
-        }
-
-        Log.d(TAG, "Disconnecting from the socket " + mSocket);
-        try {
-            if(mOutStream != null) {
-                mOutStream.close();
-            }
-
-            if(mInStream != null) {
-                mInStream.close();
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the input stream", e);
-        }
-
-        if(mSocket != null) {
-            try {
-                mSocket.close();
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the socket", e);
-            }
-        }
-        mSocket = null;
-
-        disconnected();
-        Log.d(TAG, "Disconnected from the socket");
     }
 
     public void run() {
@@ -266,6 +210,42 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         write(bytes);
     }
 
+    protected String getTag() {
+        return TAG;
+    }
+
+    protected void disconnect() {
+        if(mSocket == null) {
+            Log.w(TAG, "Unable to disconnect -- not connected");
+            return;
+        }
+
+        Log.d(TAG, "Disconnecting from the socket " + mSocket);
+        try {
+            if(mOutStream != null) {
+                mOutStream.close();
+            }
+
+            if(mInStream != null) {
+                mInStream.close();
+            }
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the input stream", e);
+        }
+
+        if(mSocket != null) {
+            try {
+                mSocket.close();
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the socket", e);
+            }
+        }
+        mSocket = null;
+
+        disconnected();
+        Log.d(TAG, "Disconnected from the socket");
+    }
+
     private void waitForDeviceConnection() throws DataSourceException {
         if(mAddress == null) {
             mAddress = createAddress(mStringAddress);
@@ -310,5 +290,37 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         } else {
             Log.w(TAG, "No connection established, could not send anything.");
         }
+    }
+
+    private static int createPort(String port) throws DataSourceException {
+        try {
+            return Integer.valueOf(port);
+        } catch(NumberFormatException e) {
+            throw new DataSourceException(
+                    "Target network port is invalid (" + port + ")", e);
+        }
+    }
+
+    private static InetAddress createAddress(String address)
+            throws DataSourceException {
+        try {
+            return InetAddress.getByName(address);
+        } catch(UnknownHostException e) {
+            throw new DataSourceException(
+                    "Target network host is unreachable", e);
+        }
+    }
+
+    private void connectStreams() throws NetworkSourceException {
+        try {
+            mInStream = mSocket.getInputStream();
+            mOutStream = mSocket.getOutputStream();
+        } catch(IOException e) {
+            String message = "Error opening Network socket streams";
+            Log.e(TAG, message, e);
+            disconnected();
+            throw new NetworkSourceException(message);
+        }
+        Log.i(TAG, "Socket created, streams assigned");
     }
 }
