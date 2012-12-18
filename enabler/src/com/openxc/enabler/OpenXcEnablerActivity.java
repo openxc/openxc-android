@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.BluetoothSourcePreferenceManager;
+import com.openxc.enabler.preferences.EthernetPreferenceManager;
 import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.enabler.preferences.GpsOverwritePreferenceManager;
 import com.openxc.enabler.preferences.NativeGpsSourcePreferenceManager;
@@ -108,6 +109,8 @@ public class OpenXcEnablerActivity extends Activity {
         mPreferenceManagers.add(new NativeGpsSourcePreferenceManager(
                     OpenXcEnablerActivity.this));
         mPreferenceManagers.add(new UploadingPreferenceManager(
+                    OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new EthernetPreferenceManager(
                     OpenXcEnablerActivity.this));
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {

@@ -298,6 +298,8 @@ public class SettingsActivity extends PreferenceActivity {
                             Toast.LENGTH_SHORT).show();
                     Log.w(TAG, error);
                     mUploadingPreference.setChecked(false);
+                } else {
+                    preference.setSummary("Currently using " + newValue);
                 }
                 return true;
             }

@@ -36,48 +36,29 @@ public class EthernetPreferenceManager extends VehiclePreferenceManager {
     private void setEthernetSourceStatus(boolean enabled)
             throws VehicleServiceException {
         Log.i(TAG, "Setting ethernet data source to " + enabled);
-        // TODO if the address hasn't changed, don't re-initialize
         if(enabled) {
-            String deviceAddress = getPreferenceString(
+            String address = getPreferenceString(
                     R.string.ethernet_connection_key);
 
-            InetSocketAddress ethernetAddr;
-            String addressSplit[] = deviceAddress.split(":");
-            if(addressSplit.length != 2) {
-                throw new VehicleServiceException(
-                    "Device address in wrong format! Expected: ip:port");
-            } else {
-                Integer port = new Integer(addressSplit[1]);
-
-                String host = addressSplit[0];
-                ethernetAddr = new InetSocketAddress(host, port.intValue());
-            }
-
-            if(deviceAddress != null) {
-                getVehicleManager().removeSource(mEthernetSource);
-                if(mEthernetSource != null) {
-                    mEthernetSource.stop();
-                }
+            if(address != null) {
+                // TODO if the address hasn't changed, don't re-initialize
+                stopEthernet();
 
                 try {
-                    mEthernetSource = new EthernetVehicleDataSource(
-                            ethernetAddr, getContext());
-                    mEthernetSource.start();
+                    mEthernetSource = new EthernetVehicleDataSource(address,
+                            getContext());
                 } catch (DataSourceException e) {
                     Log.w(TAG, "Unable to add Ethernet source", e);
                     return;
                 }
+
                 getVehicleManager().addSource(mEthernetSource);
             } else {
-                Log.d(TAG, "No ethernet address set yet (" + deviceAddress +
+                Log.d(TAG, "No ethernet address set yet (" + address +
                         "), not starting source");
             }
-        }
-        else {
-            getVehicleManager().removeSource(mEthernetSource);
-            if(mEthernetSource != null) {
-                mEthernetSource.stop();
-            }
+        } else {
+            stopEthernet();
         }
     }
 
