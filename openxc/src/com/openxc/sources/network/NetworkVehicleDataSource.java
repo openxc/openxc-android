@@ -145,6 +145,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
             URI uri = uriFromString(address);
             return uri.getPort() != -1 && uri.getHost() != null;
         } catch(DataSourceException e) {
+            Log.w(TAG, "Network host address invalid", e);
             return false;
         }
     }

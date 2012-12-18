@@ -42,6 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private CheckBoxPreference mNetworkSourcePreference;
     private EditTextPreference mNetworkConnectionPreference;
     private BroadcastReceiver mReceiver;
 
@@ -185,11 +186,12 @@ public class SettingsActivity extends PreferenceActivity {
 
     protected void initializeNetwork(Preference editPreference,
             Preference checkboxPreference) {
+        mNetworkSourcePreference = (CheckBoxPreference) checkboxPreference;
         mNetworkConnectionPreference = (EditTextPreference) editPreference;
         mNetworkConnectionPreference.setOnPreferenceChangeListener(
                 mNetworkConnectionListener);
 
-        checkboxPreference.setOnPreferenceChangeListener(
+        mNetworkSourcePreference.setOnPreferenceChangeListener(
                 mNetworkCheckboxListener);
 
         SharedPreferences preferences =
@@ -267,13 +269,12 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
             String address = (String) newValue;
-            Log.d(TAG, "FOO");
             if(!NetworkVehicleDataSource.validateAddress(address)) {
-                String error = "Invalid host URL \"" + address;
+                String error = "Invalid host URL \"" + address + "\"";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
-                mUploadingPreference.setChecked(false);
+                mNetworkSourcePreference.setChecked(false);
             } else {
                 preference.setSummary("Currently using " + newValue);
             }
