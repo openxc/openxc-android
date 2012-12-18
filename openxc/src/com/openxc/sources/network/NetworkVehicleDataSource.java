@@ -142,8 +142,8 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
 
         try {
-            uriFromString(address);
-            return true;
+            URI uri = uriFromString(address);
+            return uri.getPort() != -1 && uri.getHost() != null;
         } catch(DataSourceException e) {
             return false;
         }
