@@ -43,7 +43,8 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
     private CheckBoxPreference mNetworkSourcePreference;
-    private EditTextPreference mNetworkConnectionPreference;
+    private EditTextPreference mNetworkHostPreference;
+    private EditTextPreference mNetworkPortPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -72,6 +73,7 @@ public class SettingsActivity extends PreferenceActivity {
 
                 initializeNetwork(
                     findPreference(getString(R.string.network_host_key)),
+                    findPreference(getString(R.string.network_port_key)),
                     findPreference(getString(R.string.network_checkbox_key)));
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
@@ -126,6 +128,7 @@ public class SettingsActivity extends PreferenceActivity {
                 findPreference(getString(R.string.bluetooth_checkbox_key)));
             ((SettingsActivity) getActivity()).initializeNetwork(
                     findPreference(getString(R.string.network_host_key)),
+                    findPreference(getString(R.string.network_port_key)),
                     findPreference(getString(R.string.network_checkbox_key)));
         }
     }
@@ -139,15 +142,19 @@ public class SettingsActivity extends PreferenceActivity {
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
-        String currentAddress = preferences.getString(
-                getString(R.string.uploading_path_key), null);
+        updateSummary(uploadingPathPreference,
+                preferences.getString(
+                    getString(R.string.uploading_path_key), null));
+    }
+
+    protected void updateSummary(Preference preference, Object currentValue) {
         String summary = null;
-        if(currentAddress != null) {
-            summary = "Currently using " + currentAddress;
+        if(currentValue != null) {
+            summary = currentValue.toString();
         } else {
-            summary = "No host address specified";
+            summary = "No value set";
         }
-        uploadingPathPreference.setSummary(summary);
+        preference.setSummary(summary);
     }
 
     protected void initializeBluetoothPreferences(Preference listPreference,
@@ -173,41 +180,42 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
                     getString(R.string.bluetooth_checkbox_key), false));
 
-        String currentDevice = preferences.getString(
-                getString(R.string.bluetooth_mac_key), null);
-        String summary = null;
-        if(currentDevice != null) {
-            summary = "Currently using " + currentDevice;
-        } else {
-            summary = "No device selected";
-        }
-        mBluetoothDeviceListPreference.setSummary(summary);
+        updateSummary(mBluetoothDeviceListPreference,
+                preferences.getString(getString(
+                        R.string.bluetooth_mac_key), null));
     }
 
-    protected void initializeNetwork(Preference editPreference,
+    protected void initializeNetwork(Preference hostPreference,
+            Preference portPreference,
             Preference checkboxPreference) {
         mNetworkSourcePreference = (CheckBoxPreference) checkboxPreference;
-        mNetworkConnectionPreference = (EditTextPreference) editPreference;
-        mNetworkConnectionPreference.setOnPreferenceChangeListener(
-                mNetworkConnectionListener);
-
         mNetworkSourcePreference.setOnPreferenceChangeListener(
                 mNetworkCheckboxListener);
 
+        mNetworkHostPreference = (EditTextPreference) hostPreference;
+        mNetworkHostPreference.setOnPreferenceChangeListener(
+                mNetworkAddressListener);
+
+        mNetworkPortPreference = (EditTextPreference) portPreference;
+
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
-        mNetworkConnectionPreference.setEnabled(preferences.getBoolean(
+        mNetworkHostPreference.setEnabled(preferences.getBoolean(
+                    getString(R.string.network_checkbox_key), false));
+        mNetworkPortPreference.setEnabled(preferences.getBoolean(
                     getString(R.string.network_checkbox_key), false));
 
-        String currentHost = preferences.getString(getString(
-                    R.string.network_host_key), null);
-        String summary = null;
-        if(currentHost != null) {
-            summary = "Currently using host " + currentHost;
-        } else {
-            summary = "No server specified";
+        updateSummary(mNetworkHostPreference,
+                preferences.getString(getString(
+                        R.string.network_host_key), null));
+
+
+        Integer currentPort = preferences.getInt(getString(
+                    R.string.network_port_key), -1);
+        if(currentPort == -1) {
+            currentPort = null;
         }
-        mNetworkConnectionPreference.setSummary(summary);
+        updateSummary(mNetworkPortPreference, currentPort);
     }
 
     private void fillBluetoothDeviceList(final ListPreference preference) {
@@ -264,7 +272,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    private OnPreferenceChangeListener mNetworkConnectionListener =
+    private OnPreferenceChangeListener mNetworkAddressListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
@@ -276,7 +284,7 @@ public class SettingsActivity extends PreferenceActivity {
                 Log.w(TAG, error);
                 mNetworkSourcePreference.setChecked(false);
             } else {
-                preference.setSummary("Currently using " + newValue);
+                updateSummary(preference, newValue);
             }
             return true;
         }
@@ -286,7 +294,8 @@ public class SettingsActivity extends PreferenceActivity {
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            mNetworkConnectionPreference.setEnabled((Boolean)newValue);
+            mNetworkHostPreference.setEnabled((Boolean)newValue);
+            mNetworkPortPreference.setEnabled((Boolean)newValue);
             return true;
         }
     };
@@ -295,7 +304,7 @@ public class SettingsActivity extends PreferenceActivity {
         new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference,
                     Object newValue) {
-                preference.setSummary("Currently using " + newValue);
+                updateSummary(preference, newValue);
                 return true;
             }
         };
@@ -323,7 +332,7 @@ public class SettingsActivity extends PreferenceActivity {
                     Log.w(TAG, error);
                     mUploadingPreference.setChecked(false);
                 } else {
-                    preference.setSummary("Currently using " + newValue);
+                    updateSummary(preference, newValue);
                 }
                 return true;
             }

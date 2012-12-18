@@ -10,4 +10,5 @@
     <string name="bluetooth_mac_key">bluetooth_mac</string>
     <string name="network_checkbox_key">network_checkbox</string>
     <string name="network_host_key">network_host</string>
+    <string name="network_port_key">network_port</string>
 </resources>

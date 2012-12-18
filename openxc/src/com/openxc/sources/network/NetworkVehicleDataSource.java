@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URI;
+import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.util.Log;
@@ -36,7 +36,8 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
     private Socket mSocket;
     private InputStream mInStream;
     private OutputStream mOutStream;
-    private URI mAddress = null;
+    private InetAddress mAddress;
+    private int mPort;
 
     /**
      * Construct an instance of NetworkVehicleDataSource with a receiver
@@ -57,40 +58,33 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
      * @throws DataSourceException
      *             If no connection could be established
      */
-    public NetworkVehicleDataSource(URI address, SourceCallback callback,
-            Context context) throws DataSourceException {
+    public NetworkVehicleDataSource(InetAddress address, int port,
+            SourceCallback callback, Context context)
+            throws DataSourceException {
         super(callback, context);
 
         if(address == null) {
             throw new NetworkSourceException("Invalid address: " + address);
         }
         mAddress = address;
+        mPort = port;
         start();
     }
 
-    public NetworkVehicleDataSource(String address, SourceCallback callback,
+    public NetworkVehicleDataSource(String address, int port,
+            SourceCallback callback, Context context)
+            throws DataSourceException {
+        this(createAddress(address), port, callback, context);
+    }
+
+    public NetworkVehicleDataSource(InetAddress address, int port,
             Context context) throws DataSourceException {
-        this(uriFromString(address), callback, context);
+        this(address, port, null, context);
     }
 
-    private static URI uriFromString(String address)
+    public NetworkVehicleDataSource(String address, int port, Context context)
             throws DataSourceException {
-        try {
-            return new URI(address);
-        } catch(java.net.URISyntaxException e) {
-            throw new DataSourceException(
-                "Device address in wrong format -- expected: ip:port");
-        }
-    }
-
-    public NetworkVehicleDataSource(URI address, Context context)
-            throws DataSourceException {
-        this(address, null, context);
-    }
-
-    public NetworkVehicleDataSource(String address, Context context)
-            throws DataSourceException {
-        this(address, null, context);
+        this(address, port, null, context);
     }
 
     /**
@@ -131,22 +125,45 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    public String getAddress() {
-        return mAddress.toString();
+    public boolean sameAddress(String address, int port) {
+        try {
+            return mAddress.equals(createAddress(address)) && mPort == port;
+        } catch(DataSourceException e) {
+            return false;
+        }
     }
 
     public static boolean validateAddress(String address) {
+        return validateAddress(address, 80);
+    }
+
+    public static boolean validateAddress(String address, int port) {
         if(address == null) {
             Log.w(TAG, "Network host address not set (it's " + address + ")");
             return false;
         }
 
+        if(port <= 0) {
+            Log.w(TAG, "Network host port of " + port + " isn't valid");
+            return false;
+        }
+
         try {
-            URI uri = uriFromString(address);
-            return uri.getPort() != -1 && uri.getHost() != null;
+            createAddress(address);
+            return true;
         } catch(DataSourceException e) {
             Log.w(TAG, "Network host address invalid", e);
             return false;
+        }
+    }
+
+    private static InetAddress createAddress(String address)
+            throws DataSourceException {
+        try {
+            return InetAddress.getByName(address);
+        } catch(UnknownHostException e) {
+            throw new DataSourceException(
+                    "Target network host is unreachable", e);
         }
     }
 
@@ -256,9 +273,8 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         if(mSocket == null) {
             mSocket = new Socket();
             try {
-                mSocket.connect(new InetSocketAddress(
-                            InetAddress.getByName(mAddress.getHost()),
-                            mAddress.getPort()), SOCKET_TIMEOUT);
+                mSocket.connect(new InetSocketAddress(mAddress, mPort),
+                        SOCKET_TIMEOUT);
             } catch(IOException e) {
                 String message = "Error opening streams";
                 Log.e(TAG, message, e);

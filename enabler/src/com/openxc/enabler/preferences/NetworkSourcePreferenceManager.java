@@ -32,8 +32,9 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
         Log.i(TAG, "Setting network data source to " + enabled);
         if(enabled) {
             String address = getPreferenceString(R.string.network_host_key);
+            int port = Integer.valueOf(getPreferenceString(R.string.network_port_key));
 
-            if(!NetworkVehicleDataSource.validateAddress(address)) {
+            if(!NetworkVehicleDataSource.validateAddress(address, port)) {
                 String error = "Network host address (" + address +
                     ") not valid -- not starting network data source";
                 Log.w(TAG, error);
@@ -44,11 +45,11 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
                 editor.commit();
             } else {
                 if(mNetworkSource == null ||
-                        !mNetworkSource.getAddress().equals(address)) {
+                        !mNetworkSource.sameAddress(address, port)) {
                     stopNetwork();
                     try {
-                        mNetworkSource = new NetworkVehicleDataSource(address,
-                                getContext());
+                        mNetworkSource = new NetworkVehicleDataSource(
+                                address, port, getContext());
                     } catch (DataSourceException e) {
                         Log.w(TAG, "Unable to add network source", e);
                         return;

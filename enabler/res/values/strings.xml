@@ -28,6 +28,7 @@
     <string name="network_checkbox_title">Use an network device</string>
     <string name="network_checkbox_summary">Read vehicle data from the network</string>
     <string name="network_host_title">Network host address</string>
+    <string name="network_port_title">Network port</string>
     <string name="source_list_label">Data Sources</string>
     <string name="sink_list_label">Data Sinks</string>
 </resources>

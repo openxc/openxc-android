@@ -27,5 +27,9 @@
                 android:key="@string/network_host_key"
                 android:title="@string/network_host_title"
                 android:inputType="textUri" />
+        <EditTextPreference
+                android:key="@string/network_port_key"
+                android:title="@string/network_port_title"
+                android:inputType="number" />
     </PreferenceCategory>
 </PreferenceScreen>
