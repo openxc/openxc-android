@@ -130,12 +130,13 @@ public class VehicleService extends Service {
             }
 
             // TODO should set use a CommandInterface instead of Measurement?
-            public void set(RawMeasurement measurement) {
+            public boolean set(RawMeasurement measurement) {
                 if(mController != null) {
-                    mController.set(measurement);
+                    return mController.set(measurement);
                 } else {
                     Log.w(TAG, "Unable to set value -- controller is "
                             + mController);
+                    return false;
                 }
             }
 

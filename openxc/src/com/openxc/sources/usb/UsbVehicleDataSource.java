@@ -247,11 +247,11 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             .toString();
     }
 
-    public void set(RawMeasurement command) {
+    public boolean set(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         Log.d(TAG, "Writing message to USB: " + message);
         byte[] bytes = message.getBytes();
-        write(bytes);
+        return write(bytes);
     }
 
     protected String getTag() {
@@ -267,7 +267,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    private void write(byte[] bytes) {
+    private boolean write(byte[] bytes) {
         if(mConnection != null && mOutEndpoint != null) {
             Log.d(TAG, "Writing bytes to USB: " + bytes);
             int transferred = mConnection.bulkTransfer(
@@ -275,11 +275,14 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             if(transferred < 0) {
                 Log.w(TAG, "Unable to write CAN message to USB endpoint, error "
                         + transferred);
+                return false;
             }
         } else {
             Log.w(TAG, "No OUT endpoint available on USB device, " +
                     "can't send write command");
+            return false;
         }
+        return true;
     }
 
     /* You must have the mDeviceConnectionLock locked before calling this

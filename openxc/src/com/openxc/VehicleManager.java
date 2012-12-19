@@ -225,13 +225,18 @@ public class VehicleManager extends Service implements SourceCallback {
         Log.d(TAG, "Sending command " + command);
         RawMeasurement rawCommand = command.toRaw();
 
+        boolean sent = false;
         for(VehicleController controller : mControllers) {
-            Log.d(TAG, "Sending " + rawCommand + " using controller " +
-                    controller);
-            // TODO change API to have set reutrn a boolean so we keep trying
-            // until one responds strue
-            controller.set(rawCommand);
-            return;
+            if(controller.set(rawCommand)) {
+                Log.d(TAG, "Sent " + rawCommand + " using controller " +
+                        controller);
+                sent = true;
+                break;
+            }
+        }
+
+        if(!sent) {
+            Log.d(TAG, "No controllers able to send " + rawCommand);
         }
     }
 

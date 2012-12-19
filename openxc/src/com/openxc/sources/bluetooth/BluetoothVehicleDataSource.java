@@ -117,14 +117,10 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Stopped Bluetooth listener");
     }
 
-    public void set(RawMeasurement command) {
+    public boolean set(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         Log.d(TAG, "Writing message to Bluetooth: " + message);
-        try {
-            write(message);
-        } catch(BluetoothException e) {
-            Log.w(TAG, "Unable to write message", e);
-        }
+        return write(message);
     }
 
     public String getAddress() {
@@ -162,18 +158,22 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         return TAG;
     }
 
-    private synchronized void write(String message) throws BluetoothException {
+    private synchronized boolean write(String message) {
         if(mSocket == null) {
             Log.w(TAG, "Unable to write -- not connected");
-            throw new BluetoothException();
+            return false;
         }
 
         try {
             mOutStream.write(message);
+            // TODO what if we didn't flush every time? might be faster for
+            // sustained writes.
             mOutStream.flush();
         } catch(IOException e) {
             Log.d(TAG, "Error writing to stream", e);
+            return false;
         }
+        return true;
     }
 
     private void waitForDeviceConnection() throws BluetoothException {

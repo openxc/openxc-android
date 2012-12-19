@@ -86,7 +86,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         }
     }
 
-    public void stop() {
+    public synchronized void stop() {
         super.stop();
         Log.d(TAG, "Stopping network listener");
 
@@ -105,6 +105,9 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
             mRunning = false;
         }
     }
+    // TODO do we need to override close? yes i think, we need to close the
+    // socket and such
+
 
     /**
      * Return true if the given address and port match those currently in use by
@@ -206,11 +209,11 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
             .toString();
     }
 
-    public void set(RawMeasurement command) {
+    public boolean set(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
-        Log.d(TAG, "Writing message to Network: " + message);
+        Log.d(TAG, "Writing message to network: " + message);
         byte[] bytes = message.getBytes();
-        write(bytes);
+        return write(bytes);
     }
 
     protected String getTag() {
@@ -279,20 +282,23 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
     /**
      * Writes given data to the socket.
      *
-     * @param bytes
-     *            will be written to the socket
+     * @param bytes data to write to the socket.
+     * @return true if the data was written successfully.
      */
-    private void write(byte[] bytes) {
+    private synchronized boolean write(byte[] bytes) {
         if(mSocket != null && mSocket.isConnected()) {
             Log.d(TAG, "Writing bytes to socket: " + bytes);
             try {
                 mOutStream.write(bytes);
-            } catch (Exception e) {
+            } catch(IOException e) {
                 Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
+                return false;
             }
         } else {
             Log.w(TAG, "No connection established, could not send anything.");
+            return false;
         }
+        return true;
     }
 
     private static int createPort(String port) throws DataSourceException {

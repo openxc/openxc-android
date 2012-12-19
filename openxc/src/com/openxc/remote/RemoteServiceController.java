@@ -25,16 +25,18 @@ public class RemoteServiceController implements VehicleController {
         mRemoteService = remoteService;
     }
 
-    public void set(RawMeasurement command) {
+    public boolean set(RawMeasurement command) {
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the VehicleService");
-        } else {
-            try {
-                mRemoteService.set(command);
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to send command to remote vehicle service",
-                        e);
-            }
+            return false;
+        }
+
+        try {
+            return mRemoteService.set(command);
+        } catch(RemoteException e) {
+            Log.w(TAG, "Unable to send command to remote vehicle service",
+                    e);
+            return false;
         }
     }
 }
