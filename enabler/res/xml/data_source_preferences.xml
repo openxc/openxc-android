@@ -18,6 +18,9 @@
         <ListPreference
                 android:key="@string/bluetooth_mac_key"
                 android:title="@string/bluetooth_mac_title"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="@string/network_settings">
         <CheckBoxPreference
                 android:key="@string/network_checkbox_key"
                 android:title="@string/network_checkbox_title"
