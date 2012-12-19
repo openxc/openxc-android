@@ -21,10 +21,11 @@ import android.widget.TextView;
 
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.BluetoothSourcePreferenceManager;
-import com.openxc.enabler.preferences.NetworkSourcePreferenceManager;
 import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.enabler.preferences.GpsOverwritePreferenceManager;
 import com.openxc.enabler.preferences.NativeGpsSourcePreferenceManager;
+import com.openxc.enabler.preferences.NetworkSourcePreferenceManager;
+import com.openxc.enabler.preferences.TraceSourcePreferenceManager;
 import com.openxc.enabler.preferences.UploadingPreferenceManager;
 import com.openxc.enabler.preferences.VehiclePreferenceManager;
 
@@ -112,6 +113,8 @@ public class OpenXcEnablerActivity extends Activity {
                     OpenXcEnablerActivity.this));
         mPreferenceManagers.add(new NetworkSourcePreferenceManager(
                     OpenXcEnablerActivity.this));
+        mPreferenceManagers.add(new TraceSourcePreferenceManager(
+                    OpenXcEnablerActivity.this));
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
@@ -139,7 +142,9 @@ public class OpenXcEnablerActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        closePreferenceManagers();
+        for(VehiclePreferenceManager manager : mPreferenceManagers) {
+            manager.close();
+        }
     }
 
     @Override
@@ -159,11 +164,4 @@ public class OpenXcEnablerActivity extends Activity {
         inflater.inflate(R.menu.main, menu);
         return true;
     }
-
-    private void closePreferenceManagers() {
-        for(VehiclePreferenceManager manager : mPreferenceManagers) {
-            manager.close();
-        }
-    }
-
 }

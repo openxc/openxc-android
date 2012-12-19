@@ -46,10 +46,10 @@ import android.util.Log;
  * {"timestamp": 1351176963.438318, "name": "transmission_gear_position", "value": "second"}
  *
  * The trace file to use is specified via the constructor as an Android-style
- * resource URI, e.g. "resource://42" or a plain file path
- * (e.g. "file:///sdcard/com.openxc/trace.json" ). When using resources, the ID
- * for the resource is accessed through the generated "R.java" file. For
- * example:
+ * resource URI, e.g. "resource://42", "file:///storage/traces/trace.json" or a
+ * plain file path (e.g. "/sdcard/com.openxc/trace.json" ). When using
+ * resources, the ID for the resource is accessed through the generated "R.java"
+ * file. For example:
  *
  *      URI resource = new URI("resource://" + R.raw.trace)
  *
@@ -112,6 +112,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     public TraceVehicleDataSource(Context context, URI filename)
             throws DataSourceException {
         this(null, context, filename);
+    }
+
+    public TraceVehicleDataSource(Context context, String filename)
+            throws DataSourceException {
+        this(null, context, uriFromString(filename));
     }
 
     public TraceVehicleDataSource(Context context, URI filename, boolean loop)
@@ -204,8 +209,26 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
 
-    protected String getTag() {
-        return TAG;
+    private static URI uriFromString(String path) throws DataSourceException {
+        try {
+            return new URI(path);
+        } catch(java.net.URISyntaxException e) {
+            throw new DataSourceException("Trace file path not valid", e);
+        }
+    }
+
+    public static boolean validatePath(String path) {
+        if(path == null) {
+            Log.w(TAG, "Trace file path not set (it's " + path + ")");
+            return false;
+        }
+
+        try {
+            uriFromString(path);
+            return true;
+        } catch(DataSourceException e) {
+            return false;
+        }
     }
 
     @Override
@@ -213,6 +236,19 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         return Objects.toStringHelper(this)
             .add("filename", mFilename)
             .toString();
+    }
+
+    public boolean sameFilename(String filename) {
+        try {
+            return mFilename.equals(uriFromString(filename));
+        } catch(DataSourceException e) {
+            return false;
+        }
+
+    }
+
+    protected String getTag() {
+        return TAG;
     }
 
     private void waitForNextRecord(long startingTime, double timestampSeconds) {
@@ -249,11 +285,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             throws DataSourceException {
         FileInputStream stream;
         try {
-            stream = new FileInputStream(filename.toURL().getFile());
+            stream = new FileInputStream(filename.getPath());
         } catch(FileNotFoundException e) {
-            throw new DataSourceException(
-                "Couldn't open the trace file " + filename, e);
-        } catch(MalformedURLException e) {
             throw new DataSourceException(
                 "Couldn't open the trace file " + filename, e);
         }
@@ -268,7 +301,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
     private BufferedReader openFile(URI filename)
             throws DataSourceException {
-        if(filename.getScheme().equals("resource")) {
+        String scheme = filename.getScheme();
+        if(scheme != null && scheme.equals("resource")) {
             return openResourceFile(filename);
         } else {
             return openRegularFile(filename);
