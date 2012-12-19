@@ -177,7 +177,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
 
             int received = 0;
             try {
-                mInStream.read(frame, 0, FRAME_LENGTH);
+                received = mInStream.read(frame, 0, FRAME_LENGTH);
             } catch(IOException e) {
                 Log.e(TAG, "Unable to read response");
                 disconnect();
@@ -191,6 +191,9 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
 
             if(received > 0) {
                 buffer.receive(frame, received);
+                for(String record : buffer.readLines()) {
+                    handleMessage(record);
+                }
             }
         }
     }
