@@ -130,7 +130,9 @@ public class UploaderSink extends ContextualVehicleDataSink {
     }
 
     private static class UploaderException extends DataSinkException {
-        public UploaderException() { }
+		private static final long serialVersionUID = 7436279598279767619L;
+
+		public UploaderException() { }
 
         public UploaderException(String message) {
             super(message);

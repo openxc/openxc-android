@@ -1,7 +1,9 @@
 package com.openxc.sources.bluetooth;
 
 public class BluetoothException extends Exception {
-    public BluetoothException() { }
+	private static final long serialVersionUID = 3052740555319473882L;
+
+	public BluetoothException() { }
 
     public BluetoothException(String message) {
         super(message);
