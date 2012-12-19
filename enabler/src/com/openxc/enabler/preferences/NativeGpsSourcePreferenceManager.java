@@ -1,7 +1,6 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
@@ -22,9 +21,21 @@ public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
         stopNativeGps();
     }
 
-    protected PreferenceListener createPreferenceListener(
-            SharedPreferences preferences) {
-        return new NativeGpsSourcePreferenceListener(preferences);
+    protected PreferenceListener createPreferenceListener() {
+        return new PreferenceListener() {
+            private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.native_gps_checkbox_key,
+            };
+
+            protected int[] getWatchedPreferenceKeyIds() {
+                return WATCHED_PREFERENCE_KEY_IDS;
+            }
+
+            public void readStoredPreferences() {
+                setNativeGpsStatus(getPreferences().getBoolean(
+                            getString(R.string.native_gps_checkbox_key), false));
+            }
+        };
     }
 
     /**
@@ -45,24 +56,5 @@ public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
     private void stopNativeGps() {
         getVehicleManager().removeSource(mNativeLocationSource);
         mNativeLocationSource = null;
-    }
-
-    private class NativeGpsSourcePreferenceListener extends PreferenceListener {
-
-        public NativeGpsSourcePreferenceListener(SharedPreferences preferences) {
-            super(preferences);
-        }
-
-        public void readStoredPreferences() {
-            onSharedPreferenceChanged(mPreferences,
-                        getString(R.string.native_gps_checkbox_key));
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.native_gps_checkbox_key))) {
-                setNativeGpsStatus(preferences.getBoolean(key, false));
-            }
-        }
     }
 }

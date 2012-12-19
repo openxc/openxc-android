@@ -1,7 +1,6 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
@@ -20,6 +19,24 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
     public void close() {
         super.close();
         stopBluetooth();
+    }
+
+    protected PreferenceListener createPreferenceListener() {
+        return new PreferenceListener() {
+            private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.bluetooth_checkbox_key,
+                R.string.bluetooth_mac_key,
+            };
+
+            protected int[] getWatchedPreferenceKeyIds() {
+                return WATCHED_PREFERENCE_KEY_IDS;
+            }
+
+            public void readStoredPreferences() {
+                setBluetoothSourceStatus(getPreferences().getBoolean(
+                            getString(R.string.bluetooth_checkbox_key), false));
+            }
+        };
     }
 
     /**
@@ -63,33 +80,6 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
         if(mBluetoothSource != null) {
             mBluetoothSource.close();
             mBluetoothSource = null;
-        }
-    }
-
-    protected PreferenceListener createPreferenceListener(
-            SharedPreferences preferences) {
-        return new BluetoothSourcePreferenceListener(preferences);
-    }
-
-    private class BluetoothSourcePreferenceListener extends PreferenceListener {
-
-        public BluetoothSourcePreferenceListener(
-                SharedPreferences preferences) {
-            super(preferences);
-        }
-
-        public void readStoredPreferences() {
-            onSharedPreferenceChanged(mPreferences,
-                        getString(R.string.bluetooth_checkbox_key));
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.bluetooth_checkbox_key))
-                    || key.equals(getString(R.string.bluetooth_mac_key))) {
-                setBluetoothSourceStatus(preferences.getBoolean(
-                        getString(R.string.bluetooth_checkbox_key), false));
-            }
         }
     }
 }

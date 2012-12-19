@@ -3,8 +3,6 @@ package com.openxc.util;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.util.Log;
-
 import com.google.common.base.Objects;
 import com.openxc.units.Unit;
 

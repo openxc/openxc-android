@@ -18,6 +18,29 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
         super(context);
     }
 
+    public void close() {
+        super.close();
+        stopUploading();
+    }
+
+    protected PreferenceListener createPreferenceListener() {
+        return new PreferenceListener() {
+            private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.uploading_checkbox_key,
+                R.string.uploading_path_key,
+            };
+
+            protected int[] getWatchedPreferenceKeyIds() {
+                return WATCHED_PREFERENCE_KEY_IDS;
+            }
+
+            public void readStoredPreferences() {
+                setUploadingStatus(getPreferences().getBoolean(getString(
+                                R.string.uploading_checkbox_key), false));
+            }
+        };
+    }
+
     /**
      * Enable or disable uploading of a vehicle trace to a remote web server.
      *
@@ -26,7 +49,7 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
      *
      * @param enabled true if uploading should be enabled
      */
-    public void setUploadingStatus(boolean enabled) {
+    private void setUploadingStatus(boolean enabled) {
         Log.i(TAG, "Setting uploading to " + enabled);
         if(enabled) {
             String path = getPreferenceString(R.string.uploading_path_key);
@@ -57,39 +80,8 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
         }
     }
 
-    protected PreferenceListener createPreferenceListener(
-            SharedPreferences preferences) {
-        return new UploadingPreferenceListener(preferences);
-    }
-
-    public void close() {
-        super.close();
-        stopUploading();
-    }
-
     private void stopUploading() {
         getVehicleManager().removeSink(mUploader);
         mUploader = null;
-    }
-
-    private class UploadingPreferenceListener extends PreferenceListener {
-
-        public UploadingPreferenceListener(SharedPreferences preferences) {
-            super(preferences);
-        }
-
-        public void readStoredPreferences() {
-            onSharedPreferenceChanged(mPreferences,
-                        getString(R.string.uploading_checkbox_key));
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.uploading_checkbox_key))
-                        || key.equals(getString(R.string.uploading_path_key))) {
-                setUploadingStatus(preferences.getBoolean(getString(
-                                R.string.uploading_checkbox_key), false));
-            }
-        }
     }
 }

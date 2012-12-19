@@ -1,7 +1,6 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
@@ -20,6 +19,24 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     public void close() {
         super.close();
         stopTrace();
+    }
+
+    protected PreferenceListener createPreferenceListener() {
+        return new PreferenceListener() {
+            private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.trace_source_checkbox_key,
+                R.string.trace_source_file_key,
+            };
+
+            protected int[] getWatchedPreferenceKeyIds() {
+                return WATCHED_PREFERENCE_KEY_IDS;
+            }
+
+            public void readStoredPreferences() {
+                setTraceSourceStatus(getPreferences().getBoolean(
+                        getString(R.string.trace_source_checkbox_key), false));
+            }
+        };
     }
 
     /**
@@ -59,34 +76,6 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
 
     private synchronized void stopTrace() {
         getVehicleManager().removeSource(mTraceSource);
-        if(mTraceSource != null) {
-            mTraceSource.stop();
-            mTraceSource = null;
-        }
-    }
-
-    protected PreferenceListener createPreferenceListener(
-            SharedPreferences preferences) {
-        return new TraceSourcePreferenceListener(preferences);
-    }
-
-    private class TraceSourcePreferenceListener extends PreferenceListener {
-
-        public TraceSourcePreferenceListener(SharedPreferences preferences) {
-            super(preferences);
-        }
-
-        public void readStoredPreferences() {
-            setTraceSourceStatus(getPreferences().getBoolean(
-                    getString(R.string.trace_source_checkbox_key), false));
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.trace_source_checkbox_key))
-                    || key.equals(getString(R.string.trace_source_file_key))) {
-                readStoredPreferences();
-            }
-        }
+        mTraceSource = null;
     }
 }

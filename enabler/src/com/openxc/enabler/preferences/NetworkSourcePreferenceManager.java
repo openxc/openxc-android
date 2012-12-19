@@ -17,9 +17,28 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
         super(context);
     }
 
-    protected PreferenceListener createPreferenceListener(
-            SharedPreferences preferences) {
-        return new NetworkSourcePreferenceListener(preferences);
+    public void close() {
+        super.close();
+        stopNetwork();
+    }
+
+    protected PreferenceListener createPreferenceListener() {
+        return new PreferenceListener() {
+            private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.network_checkbox_key,
+                R.string.network_host_key,
+                R.string.network_port_key,
+            };
+
+            protected int[] getWatchedPreferenceKeyIds() {
+                return WATCHED_PREFERENCE_KEY_IDS;
+
+            }
+            public void readStoredPreferences() {
+                setNetworkSourceStatus(getPreferences().getBoolean(getString(
+                                R.string.network_checkbox_key), false));
+            }
+        };
     }
 
     /**
@@ -66,34 +85,8 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
         }
     }
 
-    public void close() {
-        super.close();
-        stopNetwork();
-    }
-
     private void stopNetwork() {
         getVehicleManager().removeSource(mNetworkSource);
         mNetworkSource = null;
-    }
-
-    private class NetworkSourcePreferenceListener extends PreferenceListener {
-
-        public NetworkSourcePreferenceListener(SharedPreferences preferences) {
-            super(preferences);
-        }
-
-        public void readStoredPreferences() {
-            onSharedPreferenceChanged(mPreferences,
-                        getString(R.string.network_checkbox_key));
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.network_checkbox_key))
-                        || key.equals(getString(R.string.network_host_key))) {
-                setNetworkSourceStatus(preferences.getBoolean(getString(
-                                R.string.network_checkbox_key), false));
-            }
-        }
     }
 }

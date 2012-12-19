@@ -14,18 +14,17 @@ public abstract class VehiclePreferenceManager {
 
     public VehiclePreferenceManager(Context context) {
         mContext = context;
-
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     public void setVehicleManager(VehicleManager vehicle) {
         mVehicle = vehicle;
-        mPreferenceListener = watchPreferences(mPreferences);
+        mPreferenceListener = watchPreferences(getPreferences());
         mPreferenceListener.readStoredPreferences();
     }
 
     public void close() {
-        unwatchPreferences(mPreferences, mPreferenceListener);
+        unwatchPreferences(getPreferences(), mPreferenceListener);
     }
 
     protected SharedPreferences getPreferences() {
@@ -33,7 +32,7 @@ public abstract class VehiclePreferenceManager {
     }
 
     protected String getPreferenceString(int id) {
-        return mPreferences.getString(mContext.getString(id), null);
+        return getPreferences().getString(mContext.getString(id), null);
     }
 
     protected String getString(int id) {
@@ -48,17 +47,24 @@ public abstract class VehiclePreferenceManager {
         return mVehicle;
     }
 
-    protected abstract PreferenceListener createPreferenceListener(
-            SharedPreferences preferences);
+    protected abstract PreferenceListener createPreferenceListener();
 
-    protected abstract class PreferenceListener implements SharedPreferences.OnSharedPreferenceChangeListener {
-        SharedPreferences mPreferences;
+    protected abstract class PreferenceListener implements
+            SharedPreferences.OnSharedPreferenceChangeListener {
 
-        public PreferenceListener(SharedPreferences preferences) {
-            mPreferences = preferences;
+        protected abstract void readStoredPreferences();
+
+        protected abstract int[] getWatchedPreferenceKeyIds();
+
+        public void onSharedPreferenceChanged(SharedPreferences preferences,
+                String key) {
+            for(int watchedKeyId : getWatchedPreferenceKeyIds()) {
+                if(key.equals(getString(watchedKeyId))) {
+                    readStoredPreferences();
+                    break;
+                }
+            }
         }
-
-        public abstract void readStoredPreferences();
     }
 
     private void unwatchPreferences(SharedPreferences preferences,
@@ -70,7 +76,7 @@ public abstract class VehiclePreferenceManager {
 
     private PreferenceListener watchPreferences(SharedPreferences preferences) {
         if(preferences != null) {
-            PreferenceListener listener = createPreferenceListener(preferences);
+            PreferenceListener listener = createPreferenceListener();
             preferences.registerOnSharedPreferenceChangeListener(listener);
             return listener;
         }

@@ -1,7 +1,6 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
@@ -17,6 +16,28 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
 
     public FileRecordingPreferenceManager(Context context) {
         super(context);
+    }
+
+    public void close() {
+        super.close();
+        stopRecording();
+    }
+
+    protected PreferenceListener createPreferenceListener() {
+        return new PreferenceListener() {
+            private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.recording_checkbox_key,
+            };
+
+            protected int[] getWatchedPreferenceKeyIds() {
+                return WATCHED_PREFERENCE_KEY_IDS;
+            }
+
+            public void readStoredPreferences() {
+                setFileRecordingStatus(getPreferences().getBoolean(
+                            getString(R.string.recording_checkbox_key), false));
+            }
+        };
     }
 
     /**
@@ -53,34 +74,5 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     private void stopRecording() {
         getVehicleManager().removeSink(mFileRecorder);
         mFileRecorder = null;
-    }
-
-    public void close() {
-        super.close();
-        stopRecording();
-    }
-
-    protected PreferenceListener createPreferenceListener(
-            SharedPreferences preferences) {
-        return new FileRecordingPreferenceListener(preferences);
-    }
-
-    private class FileRecordingPreferenceListener extends PreferenceListener {
-
-        public FileRecordingPreferenceListener(SharedPreferences preferences) {
-            super(preferences);
-        }
-
-        public void readStoredPreferences() {
-            onSharedPreferenceChanged(mPreferences,
-                        getString(R.string.recording_checkbox_key));
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            if(key.equals(getString(R.string.recording_checkbox_key))) {
-                setFileRecordingStatus(preferences.getBoolean(key, false));
-            }
-        }
     }
 }
