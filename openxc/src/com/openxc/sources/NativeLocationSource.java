@@ -47,7 +47,7 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     }
 
     public void run() {
-        Looper.myLooper().prepare();
+        Looper.prepare();
 
         // try to grab a rough location from the network provider before
         // registering for GPS, which may take a while to initialize
@@ -67,7 +67,7 @@ public class NativeLocationSource extends ContextualVehicleDataSource
         } catch(IllegalArgumentException e) {
             Log.w(TAG, "GPS location provider is unavailable");
         }
-        Looper.myLooper().loop();
+        Looper.loop();
     }
 
     public void stop() {
