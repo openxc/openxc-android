@@ -19,10 +19,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Objects;
+import com.openxc.controllers.VehicleController;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.remote.RawMeasurement;
+import com.openxc.remote.RemoteServiceController;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.sinks.MeasurementListenerSink;
@@ -77,6 +79,8 @@ public class VehicleManager extends Service implements SourceCallback {
     private VehicleServiceInterface mRemoteService;
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
+    private CopyOnWriteArrayList<VehicleController> mControllers;
+    private VehicleController mRemoteController;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
     // RemoteListenerSource that receives measurements from the
@@ -143,6 +147,7 @@ public class VehicleManager extends Service implements SourceCallback {
         mPipeline = new DataPipeline();
         initializeDefaultSinks(mPipeline);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
+        mControllers = new CopyOnWriteArrayList<VehicleController>();
         bindRemote();
     }
 
@@ -218,28 +223,15 @@ public class VehicleManager extends Service implements SourceCallback {
     public void set(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
         Log.d(TAG, "Sending command " + command);
-
         RawMeasurement rawCommand = command.toRaw();
-        // prefer the Bluetooth controller, if connected
-        // TODO since we now manage the bluetooth source in the enabler, the
-        // VehicleManager should instead look through all existing data sources
-        // to see if any are writeable
-        // if(mBluetoothSource != null) {
-            // Log.d(TAG, "Sending " + rawCommand + " over Bluetooth to " +
-                    // mBluetoothSource);
-            // mBluetoothSource.set(rawCommand);
-        // } else {
-        // TODO handle network, too
-        if(mRemoteService == null) {
-            Log.w(TAG, "Not connected to the VehicleService");
-            return;
-        }
 
-        try {
-            mRemoteService.set(rawCommand);
-        } catch(RemoteException e) {
-            Log.w(TAG, "Unable to send command to remote vehicle service",
-                    e);
+        for(VehicleController controller : mControllers) {
+            Log.d(TAG, "Sending " + rawCommand + " using controller " +
+                    controller);
+            // TODO change API to have set reutrn a boolean so we keep trying
+            // until one responds strue
+            controller.set(rawCommand);
+            return;
         }
     }
 
@@ -359,6 +351,26 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
+     * Add a new vehicle controller to the service.
+     *
+     * For example, to use a Bluetooth CAN translator as a vehicle controller in
+     * additional to a vehicle data source, call the addController method after
+     * binding with VehicleManager:
+     *
+     *      service.addController(mBluetoothSource);
+     *
+     * The {@link UsbVehicleDataSource} is initialized as a controller by
+     * default, the same as it is a data source. The USB data source will be
+     * used as a controller only if no other VehicleControllers are availab.e
+     *
+     * @param controller an instance of a VehicleController
+     */
+    public void addController(VehicleController controller) {
+        Log.i(TAG, "Adding controller: " + controller);
+        mControllers.add(controller);
+    }
+
+    /**
      * Return a list of all sources active in the system, suitable for
      * displaying in a status view.
      *
@@ -420,6 +432,15 @@ public class VehicleManager extends Service implements SourceCallback {
         if(source != null) {
             mSources.remove(source);
             source.stop();
+        }
+    }
+
+    /**
+     * Remove a previously registered controller from the service.
+     */
+    public void removeController(VehicleController controller) {
+        if(controller != null) {
+            mControllers.remove(controller);
         }
     }
 
@@ -495,6 +516,8 @@ public class VehicleManager extends Service implements SourceCallback {
             Log.i(TAG, "Bound to VehicleService");
             mRemoteService = VehicleServiceInterface.Stub.asInterface(
                     service);
+            mRemoteController = new RemoteServiceController(mRemoteService);
+            mControllers.add(mRemoteController);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mPipeline.addSource(mRemoteSource);
@@ -507,6 +530,7 @@ public class VehicleManager extends Service implements SourceCallback {
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
+            mControllers.remove(mRemoteController);
             mRemoteService = null;
             mIsBound = false;
             mPipeline.removeSource(mRemoteSource);

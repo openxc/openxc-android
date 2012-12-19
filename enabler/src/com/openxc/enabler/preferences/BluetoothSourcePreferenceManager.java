@@ -60,6 +60,7 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
                         return;
                     }
                     getVehicleManager().addSource(mBluetoothSource);
+                    getVehicleManager().addController(mBluetoothSource);
                 } else {
                     Log.d(TAG, "Bluetooth connection to address " + deviceAddress
                             + " already running");
@@ -75,6 +76,7 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
 
     private synchronized void stopBluetooth() {
         getVehicleManager().removeSource(mBluetoothSource);
+        getVehicleManager().removeController(mBluetoothSource);
         if(mBluetoothSource != null) {
             mBluetoothSource.close();
             mBluetoothSource = null;

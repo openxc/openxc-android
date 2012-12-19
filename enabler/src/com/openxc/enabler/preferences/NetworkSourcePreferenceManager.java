@@ -72,6 +72,7 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
                     }
 
                     getVehicleManager().addSource(mNetworkSource);
+                    getVehicleManager().addController(mNetworkSource);
                 } else {
                     Log.d(TAG, "Network connection to address " + address
                             + " already running");
@@ -84,6 +85,7 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
 
     private void stopNetwork() {
         getVehicleManager().removeSource(mNetworkSource);
+        getVehicleManager().removeController(mNetworkSource);
         mNetworkSource = null;
     }
 }
