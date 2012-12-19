@@ -2,27 +2,22 @@ package com.openxc.remote;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
 
 import com.openxc.DataPipeline;
-
-import com.openxc.remote.VehicleServiceListener;
-
+import com.openxc.interfaces.VehicleInterface;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
-
 import com.openxc.sources.DataSourceException;
-import com.openxc.sources.usb.UsbVehicleDataSource;
 import com.openxc.sources.VehicleDataSource;
-import android.app.Service;
-
-import android.content.Intent;
-
-import android.os.IBinder;
-
-import com.openxc.controllers.VehicleController;
-
-import android.util.Log;
+import com.openxc.sources.usb.UsbVehicleDataSource;
 
 /**
  * The VehicleService is the centralized source of all vehicle data.
@@ -56,7 +51,7 @@ public class VehicleService extends Service {
     private RemoteCallbackSink mNotifier;
     private ApplicationSource mApplicationSource;
     private UsbVehicleDataSource mUsbDevice;
-    private VehicleController mController;
+    private CopyOnWriteArrayList<VehicleInterface> mInterfaces;
 
     @Override
     public void onCreate() {
@@ -64,6 +59,7 @@ public class VehicleService extends Service {
         Log.i(TAG, "Service starting");
         mPipeline = new DataPipeline();
         mApplicationSource = new ApplicationSource();
+        mInterfaces = new CopyOnWriteArrayList<VehicleInterface>();
     }
 
     /**
@@ -117,7 +113,7 @@ public class VehicleService extends Service {
         try {
             mUsbDevice = new UsbVehicleDataSource(this);
             mPipeline.addSource(mUsbDevice);
-            mController = mUsbDevice;
+            mInterfaces.add(mUsbDevice);
         } catch(DataSourceException e) {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
@@ -129,15 +125,25 @@ public class VehicleService extends Service {
                 return mPipeline.get(measurementId);
             }
 
-            // TODO should set use a CommandInterface instead of Measurement?
-            public boolean set(RawMeasurement measurement) {
-                if(mController != null) {
-                    return mController.set(measurement);
-                } else {
-                    Log.w(TAG, "Unable to set value -- controller is "
-                            + mController);
-                    return false;
+            public boolean send(RawMeasurement command) {
+                boolean sent = false;
+                for(VehicleInterface vehicleInterface : mInterfaces) {
+                    try {
+                        if(vehicleInterface.receive(command)) {
+                            Log.d(TAG, "Sent " + command + " using interface " +
+                                    vehicleInterface);
+                            sent = true;
+                            break;
+                        }
+                    } catch(DataSinkException e) {
+                        continue;
+                    }
                 }
+
+                if(!sent) {
+                    Log.d(TAG, "No interfaces able to send " + command);
+                }
+                return sent;
             }
 
             public void receive(RawMeasurement measurement) {

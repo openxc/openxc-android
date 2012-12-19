@@ -42,7 +42,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     /**
      * Record a message to a file, selected by the current time.
      */
-    public synchronized void receive(RawMeasurement measurement)
+    public synchronized boolean receive(RawMeasurement measurement)
             throws DataSinkException {
         if(mWriter != null) {
             Calendar calendar = GregorianCalendar.getInstance();
@@ -62,10 +62,13 @@ public class FileRecorderSink extends BaseVehicleDataSink {
                 mWriter.newLine();
             } catch(IOException e) {
                 Log.w(TAG, "Unable to write measurement to file", e);
+                return false;
             }
         } else {
             Log.w(TAG, "No valid writer - not recording trace line");
+            return false;
         }
+        return true;
     }
 
     public synchronized void stop() {

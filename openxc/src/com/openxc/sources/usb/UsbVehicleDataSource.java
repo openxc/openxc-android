@@ -32,7 +32,7 @@ import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 
-import com.openxc.controllers.VehicleController;
+import com.openxc.interfaces.VehicleInterface;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -55,7 +55,7 @@ import android.util.Log;
  */
 @TargetApi(12)
 public class UsbVehicleDataSource extends ContextualVehicleDataSource
-        implements Runnable, VehicleController {
+        implements Runnable, VehicleInterface {
     private static final String TAG = "UsbVehicleDataSource";
     private static final int ENDPOINT_COUNT = 2;
     public static final String ACTION_USB_PERMISSION =
@@ -247,7 +247,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
             .toString();
     }
 
-    public boolean set(RawMeasurement command) {
+    public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         Log.d(TAG, "Writing message to USB: " + message);
         byte[] bytes = message.getBytes();

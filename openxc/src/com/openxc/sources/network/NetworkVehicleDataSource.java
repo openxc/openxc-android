@@ -12,7 +12,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.controllers.VehicleController;
+import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
@@ -27,7 +27,7 @@ import com.openxc.sources.SourceCallback;
  *
  */
 public class NetworkVehicleDataSource extends ContextualVehicleDataSource
-        implements Runnable, VehicleController {
+        implements Runnable, VehicleInterface {
     private static final String TAG = "NetworkVehicleDataSource";
     private static final int SOCKET_TIMEOUT = 10000;
     private static final int FRAME_LENGTH = 128;
@@ -209,7 +209,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
             .toString();
     }
 
-    public boolean set(RawMeasurement command) {
+    public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         Log.d(TAG, "Writing message to network: " + message);
         byte[] bytes = message.getBytes();

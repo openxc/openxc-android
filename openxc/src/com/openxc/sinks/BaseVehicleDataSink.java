@@ -26,8 +26,9 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * Children of this class can call super.receive() if they need to store
      * copies of received measurements to access via the get(String) method.
      */
-    public void receive(RawMeasurement measurement) throws DataSinkException {
+    public boolean receive(RawMeasurement measurement) throws DataSinkException {
         mMeasurements.put(measurement.getName(), measurement);
+        return true;
     }
 
     public boolean containsMeasurement(String measurementId) {

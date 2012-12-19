@@ -81,7 +81,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
         mUploader.done();
     }
 
-    public void receive(RawMeasurement measurement) {
+    public boolean receive(RawMeasurement measurement) {
         String data = measurement.serialize(true);
         mRecordQueue.offer(data);
         if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
@@ -89,6 +89,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
             mRecordsQueuedSignal.signal();
             mQueueLock.unlock();
         }
+        return true;
     }
 
     /**

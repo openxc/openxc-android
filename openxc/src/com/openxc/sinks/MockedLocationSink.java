@@ -46,12 +46,14 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         setupMockLocations();
     }
 
-    public void receive(RawMeasurement measurement) throws DataSinkException {
+    public boolean receive(RawMeasurement measurement) throws DataSinkException {
         super.receive(measurement);
         if(measurement.getName().equals(Latitude.ID) ||
                 measurement.getName().equals(Longitude.ID)) {
             updateLocation();
+            return true;
         }
+        return false;
     }
 
     /**

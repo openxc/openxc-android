@@ -19,14 +19,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Objects;
-import com.openxc.controllers.VehicleController;
+import com.openxc.interfaces.VehicleInterface;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteServiceController;
+import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -79,8 +80,8 @@ public class VehicleManager extends Service implements SourceCallback {
     private VehicleServiceInterface mRemoteService;
     private DataPipeline mPipeline;
     private RemoteListenerSource mRemoteSource;
-    private CopyOnWriteArrayList<VehicleController> mControllers;
-    private VehicleController mRemoteController;
+    private CopyOnWriteArrayList<VehicleInterface> mInterfaces;
+    private VehicleInterface mRemoteController;
     private MeasurementListenerSink mNotifier;
     // The DataPipeline in this class must only have 1 source - the special
     // RemoteListenerSource that receives measurements from the
@@ -147,7 +148,7 @@ public class VehicleManager extends Service implements SourceCallback {
         mPipeline = new DataPipeline();
         initializeDefaultSinks(mPipeline);
         mSources = new CopyOnWriteArrayList<VehicleDataSource>();
-        mControllers = new CopyOnWriteArrayList<VehicleController>();
+        mInterfaces = new CopyOnWriteArrayList<VehicleInterface>();
         bindRemote();
     }
 
@@ -220,24 +221,29 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * @param command The desired command to send to the vehicle.
      */
-    public void set(Measurement command) throws
+    public boolean set(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
         Log.d(TAG, "Sending command " + command);
         RawMeasurement rawCommand = command.toRaw();
 
         boolean sent = false;
-        for(VehicleController controller : mControllers) {
-            if(controller.set(rawCommand)) {
-                Log.d(TAG, "Sent " + rawCommand + " using controller " +
-                        controller);
-                sent = true;
-                break;
+        for(VehicleInterface vehicleInterface : mInterfaces) {
+            try {
+                if(vehicleInterface.receive(rawCommand)) {
+                    Log.d(TAG, "Sent " + rawCommand + " using interface " +
+                            vehicleInterface);
+                    sent = true;
+                    break;
+                }
+            } catch(DataSinkException e) {
+                continue;
             }
         }
 
         if(!sent) {
-            Log.d(TAG, "No controllers able to send " + rawCommand);
+            Log.d(TAG, "No interfaces able to send " + rawCommand);
         }
+        return sent;
     }
 
     /**
@@ -366,13 +372,13 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * The {@link UsbVehicleDataSource} is initialized as a controller by
      * default, the same as it is a data source. The USB data source will be
-     * used as a controller only if no other VehicleControllers are availab.e
+     * used as a controller only if no other VehicleInterfaces are availab.e
      *
-     * @param controller an instance of a VehicleController
+     * @param controller an instance of a VehicleInterface
      */
-    public void addController(VehicleController controller) {
+    public void addController(VehicleInterface controller) {
         Log.i(TAG, "Adding controller: " + controller);
-        mControllers.add(controller);
+        mInterfaces.add(controller);
     }
 
     /**
@@ -443,9 +449,9 @@ public class VehicleManager extends Service implements SourceCallback {
     /**
      * Remove a previously registered controller from the service.
      */
-    public void removeController(VehicleController controller) {
+    public void removeController(VehicleInterface controller) {
         if(controller != null) {
-            mControllers.remove(controller);
+            mInterfaces.remove(controller);
         }
     }
 
@@ -521,8 +527,8 @@ public class VehicleManager extends Service implements SourceCallback {
             Log.i(TAG, "Bound to VehicleService");
             mRemoteService = VehicleServiceInterface.Stub.asInterface(
                     service);
-            mRemoteController = new RemoteServiceController(mRemoteService);
-            mControllers.add(mRemoteController);
+            mRemoteController = new RemoteServiceVehicleInterface(mRemoteService);
+            mInterfaces.add(mRemoteController);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mPipeline.addSource(mRemoteSource);
@@ -535,7 +541,7 @@ public class VehicleManager extends Service implements SourceCallback {
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
-            mControllers.remove(mRemoteController);
+            mInterfaces.remove(mRemoteController);
             mRemoteService = null;
             mIsBound = false;
             mPipeline.removeSource(mRemoteSource);

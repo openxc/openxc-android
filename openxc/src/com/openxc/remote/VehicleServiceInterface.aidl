@@ -30,7 +30,7 @@ interface VehicleServiceInterface {
      *
      * @param measurement The measurement to set on the vehicle.
      */
-    boolean set(in RawMeasurement measurement);
+    boolean send(in RawMeasurement measurement);
 
     /**
      * Register to receive asynchronous updates when measurements are received.

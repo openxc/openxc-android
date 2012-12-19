@@ -49,13 +49,14 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         }
     }
 
-    public void receive(RawMeasurement rawMeasurement)
+    public boolean receive(RawMeasurement rawMeasurement)
             throws DataSinkException {
         super.receive(rawMeasurement);
         mNotificationsLock.lock();
         mNotifications.put(rawMeasurement.getName(), rawMeasurement);
         mNotificationReceived.signal();
         mNotificationsLock.unlock();
+        return true;
     }
 
     private class NotificationThread extends Thread {

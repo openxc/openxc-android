@@ -10,7 +10,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.controllers.VehicleController;
+import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
@@ -29,7 +29,7 @@ import com.openxc.sources.SourceCallback;
  * android.permission.BLUETOOTH_ADMIN permissions.
  */
 public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
-        implements Runnable, VehicleController {
+        implements Runnable, VehicleInterface {
     private static final String TAG = "BluetoothVehicleDataSource";
 
     private boolean mRunning = false;
@@ -117,7 +117,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Stopped Bluetooth listener");
     }
 
-    public boolean set(RawMeasurement command) {
+    public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         Log.d(TAG, "Writing message to Bluetooth: " + message);
         return write(message);
