@@ -7,6 +7,9 @@ import com.openxc.enabler.R;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
 
+/**
+ * Enable or disable receiving vehicle data from a Bluetooth CAN device.
+ */
 public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothSourcePreferenceManager";
 
@@ -39,11 +42,6 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable receiving vehicle data from a Bluetooth CAN device.
-     *
-     * @param enabled true if bluetooth should be enabled
-     */
     private synchronized void setBluetoothSourceStatus(boolean enabled) {
         Log.i(TAG, "Setting bluetooth data source to " + enabled);
         if(enabled) {

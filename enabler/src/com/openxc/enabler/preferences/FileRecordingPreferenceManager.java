@@ -9,6 +9,9 @@ import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.util.AndroidFileOpener;
 
+/**
+ * Enable or disable recording of a trace file.
+ */
 public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "FileRecordingPreferenceManager";
     private VehicleDataSink mFileRecorder;
@@ -40,11 +43,6 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable recording of a trace file.
-     *
-     * @param enabled true if recording should be enabled
-     */
     private void setFileRecordingStatus(boolean enabled) {
         Log.i(TAG, "Setting recording to " + enabled);
         if(enabled) {

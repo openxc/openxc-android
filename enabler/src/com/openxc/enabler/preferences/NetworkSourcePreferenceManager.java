@@ -9,6 +9,9 @@ import com.openxc.enabler.R;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.network.NetworkVehicleDataSource;
 
+/**
+ * Enable or disable receiving vehicle data from a Network device
+ */
 public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
     private NetworkVehicleDataSource mNetworkSource;
     private final static String TAG = "NetworkSourcePreferenceManager";
@@ -41,12 +44,6 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable receiving vehicle data from a Network device
-     *
-     * @param enabled
-     *            true if network should be enabled
-     */
     private void setNetworkSourceStatus(boolean enabled) {
         Log.i(TAG, "Setting network data source to " + enabled);
         if(enabled) {

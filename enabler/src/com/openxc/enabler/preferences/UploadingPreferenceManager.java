@@ -10,6 +10,12 @@ import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
 
+/**
+ * Enable or disable uploading of a vehicle trace to a remote web server.
+ *
+ * The URL of the web server to upload the trace to is read from the shared
+ * preferences.
+ */
 public class UploadingPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "UploadingPreferenceManager";
     private VehicleDataSink mUploader;
@@ -41,14 +47,6 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable uploading of a vehicle trace to a remote web server.
-     *
-     * The URL of the web server to upload the trace to is read from the shared
-     * preferences.
-     *
-     * @param enabled true if uploading should be enabled
-     */
     private void setUploadingStatus(boolean enabled) {
         Log.i(TAG, "Setting uploading to " + enabled);
         if(enabled) {

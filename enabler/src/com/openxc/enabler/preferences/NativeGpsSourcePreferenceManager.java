@@ -7,6 +7,9 @@ import com.openxc.enabler.R;
 import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.VehicleDataSource;
 
+/**
+ * Enable or disable reading GPS from the native Android stack.
+ */
 public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "NativeGpsSourcePreferenceManager";
 
@@ -38,11 +41,6 @@ public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable reading GPS from the native Android stack.
-     *
-     * @param enabled true if native GPS should be passed through
-     */
     private void setNativeGpsStatus(boolean enabled) {
         Log.i(TAG, "Setting native GPS to " + enabled);
         if(enabled && mNativeLocationSource == null) {

@@ -6,6 +6,13 @@ import android.preference.PreferenceManager;
 
 import com.openxc.VehicleManager;
 
+/**
+ * Abstract base class that collects functionality common to watching shared
+ * preferences for changes and altering running services as a result.
+ *
+ * The preference listeners for each specific group of preferences can be
+ * contained in a subclass, instead of all cluttering up the main activity.
+ */
 public abstract class VehiclePreferenceManager {
     private Context mContext;
     private PreferenceListener mPreferenceListener;
@@ -17,12 +24,18 @@ public abstract class VehiclePreferenceManager {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
+    /**
+     * Give the instance a reference to an active VehicleManager.
+     */
     public void setVehicleManager(VehicleManager vehicle) {
         mVehicle = vehicle;
         mPreferenceListener = watchPreferences(getPreferences());
         mPreferenceListener.readStoredPreferences();
     }
 
+    /**
+     * Shutdown any running services and stop watching the shared preferences.
+     */
     public void close() {
         unwatchPreferences(getPreferences(), mPreferenceListener);
     }
@@ -47,15 +60,33 @@ public abstract class VehiclePreferenceManager {
         return mVehicle;
     }
 
+    /**
+     * Return an instance of a PreferenceListener implementation, defined by the
+     * subclass.
+     */
     protected abstract PreferenceListener createPreferenceListener();
 
     protected abstract class PreferenceListener implements
             SharedPreferences.OnSharedPreferenceChangeListener {
 
+        /**
+         * Re-read shared preferences and update any running services.
+         *
+         * This method will be called whenever the value of any of this
+         * PreferenceListener's watched preferences changes.
+         */
         protected abstract void readStoredPreferences();
 
+        /**
+         * Return an array of string resource IDs that correspond to the
+         * preference keys that should be monitored for changes.
+         */
         protected abstract int[] getWatchedPreferenceKeyIds();
 
+        /**
+         * If any of the watched preference keys changed, trigger a refresh of
+         * the service.
+         */
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
             for(int watchedKeyId : getWatchedPreferenceKeyIds()) {

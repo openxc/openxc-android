@@ -6,6 +6,12 @@ import android.util.Log;
 import com.openxc.enabler.R;
 import com.openxc.sinks.MockedLocationSink;
 
+/**
+ * Enable or disable overwriting native GPS measurements with those from the
+ * vehicle.
+ *
+ * @see MockedLocationSink#setOverwritingStatus
+ */
 public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "GpsOverwritePreferenceManager";
     private MockedLocationSink mMockedLocationSink;
@@ -37,14 +43,6 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable overwriting native GPS measurements with those from the
-     * vehicle.
-     *
-     * @see MockedLocationSink#setOverwritingStatus
-     *
-     * @param enabled true if native GPS should be overwritte.
-     */
     private void setNativeGpsOverwriteStatus(boolean enabled) {
         Log.i(TAG, "Setting native GPS overwriting to " + enabled);
         if(mMockedLocationSink == null) {

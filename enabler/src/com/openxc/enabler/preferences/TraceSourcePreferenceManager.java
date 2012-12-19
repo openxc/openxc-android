@@ -7,6 +7,9 @@ import com.openxc.enabler.R;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.trace.TraceVehicleDataSource;
 
+/**
+ * Enable or disable receiving vehicle data from a pre-recorded trace file.
+ */
 public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "TraceSourcePreferenceManager";
 
@@ -39,11 +42,6 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
         };
     }
 
-    /**
-     * Enable or disable receiving vehicle data from a Trace CAN device.
-     *
-     * @param enabled true if trace source should be enabled
-     */
     private synchronized void setTraceSourceStatus(boolean enabled) {
         Log.i(TAG, "Setting trace data source to " + enabled);
         if(enabled) {
