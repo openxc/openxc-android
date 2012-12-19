@@ -31,6 +31,20 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.google.common.base.Objects;
 import com.openxc.remote.RawMeasurement;
 
+/**
+ * Upload a stream of all incoming vehicle data to a remote HTTP server.
+ *
+ * The remote HTTP server specified should be expecting POST requests with the
+ * data being a JSON array of OpenXC JSON message objects, e.g.:
+ *
+ *      [{"name": "steering_wheel_angle", "value": 42},
+ *          {"name": "parking_brake_status", "value": false}]
+ *
+ * The UploaderSink has a small buffer to preserve records across short network
+ * outages, but do not expect it to be especially reliable. No guarantee is
+ * provided about the preservation of records - to do that, a subclass would
+ * need to write the data to a file when no network connection is available.
+ */
 public class UploaderSink extends ContextualVehicleDataSink {
     private final static String TAG = "UploaderSink";
     private final static int UPLOAD_BATCH_SIZE = 25;
@@ -43,11 +57,15 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private Condition mRecordsQueuedSignal;
     private UploaderThread mUploader;
 
+    /**
+     * Initialize and start a new UploaderSink immediately.
+     *
+     * @param uri the URI to send HTTP POST requests to with the JSON data.
+     */
     public UploaderSink(Context context, URI uri) {
         super(context);
         mUri = uri;
-        mRecordQueue = new LinkedBlockingQueue<String>(
-                MAXIMUM_QUEUED_RECORDS);
+        mRecordQueue = new LinkedBlockingQueue<String>(MAXIMUM_QUEUED_RECORDS);
         mQueueLock = new ReentrantLock();
         mRecordsQueuedSignal = mQueueLock.newCondition();
         mUploader = new UploaderThread();
@@ -73,15 +91,13 @@ public class UploaderSink extends ContextualVehicleDataSink {
         }
     }
 
-    private static URI uriFromString(String path) throws DataSinkException {
-        try {
-            return new URI(path);
-        } catch(java.net.URISyntaxException e) {
-            throw new UploaderException(
-                "Uploading path in wrong format -- expected: ip:port");
-        }
-    }
-
+    /**
+     * Returns true if the path is not null and if it is a valid URI.
+     *
+     * @param path a URI to validate
+     * @return true if path is a valid URI.
+     *
+     */
     public static boolean validatePath(String path) {
         if(path == null) {
             Log.w(TAG, "Uploading path not set (it's " + path + ")");
@@ -96,6 +112,23 @@ public class UploaderSink extends ContextualVehicleDataSink {
         }
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("uri", mUri)
+            .add("queuedRecords", mRecordQueue.size())
+            .toString();
+    }
+
+    private static URI uriFromString(String path) throws DataSinkException {
+        try {
+            return new URI(path);
+        } catch(java.net.URISyntaxException e) {
+            throw new UploaderException(
+                "Uploading path in wrong format -- expected: ip:port");
+        }
+    }
+
     private static class UploaderException extends DataSinkException {
         public UploaderException() { }
 
@@ -106,6 +139,22 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
     private class UploaderThread extends Thread {
         private boolean mRunning = true;
+
+        public void run() {
+            while(mRunning) {
+                try {
+                    ArrayList<String> records = getRecords();
+                    String data = constructRequestData(records);
+                    HttpPost request = constructRequest(data);
+                    makeRequest(request);
+                } catch(UploaderException e) {
+                    Log.w(TAG, "Problem uploading the record", e);
+                } catch(InterruptedException e) {
+                    Log.w(TAG, "Uploader was interrupted", e);
+                    break;
+                }
+            }
+        }
 
         public void done() {
             mRunning = false;
@@ -143,7 +192,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
                 throws UploaderException {
             HttpPost request = new HttpPost(mUri);
             try {
-                ByteArrayEntity entity = new ByteArrayEntity(data.getBytes("UTF8"));
+                ByteArrayEntity entity = new ByteArrayEntity(
+                        data.getBytes("UTF8"));
                 entity.setContentEncoding(
                         new BasicHeader("Content-Type", "application/json"));
                 request.setEntity(entity);
@@ -191,29 +241,6 @@ public class UploaderSink extends ContextualVehicleDataSink {
             mQueueLock.unlock();
             return records;
         }
-
-        public void run() {
-            while(mRunning) {
-                try {
-                    ArrayList<String> records = getRecords();
-                    String data = constructRequestData(records);
-                    HttpPost request = constructRequest(data);
-                    makeRequest(request);
-                } catch(UploaderException e) {
-                    Log.w(TAG, "Problem uploading the record", e);
-                } catch(InterruptedException e) {
-                    Log.w(TAG, "Uploader was interrupted", e);
-                    break;
-                }
-            }
-        }
     }
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("uri", mUri)
-            .add("queuedRecords", mRecordQueue.size())
-            .toString();
-    }
 }
