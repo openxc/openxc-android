@@ -29,6 +29,13 @@ import android.widget.Toast;
 import com.openxc.sinks.UploaderSink;
 import com.openxc.sources.network.NetworkVehicleDataSource;
 
+/**
+ * Initialize and display all preferences for the OpenXC Enabler application.
+ *
+ * In order to select a trace file to use as a data source, the device must have
+ * a file manager application installed that responds to the GET_CONTENT intent,
+ * e.g. OI File Manager.
+ */
 @TargetApi(12)
 public class SettingsActivity extends PreferenceActivity {
     private static String TAG = "SettingsActivity";
