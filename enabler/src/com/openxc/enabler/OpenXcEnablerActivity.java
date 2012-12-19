@@ -29,6 +29,25 @@ import com.openxc.enabler.preferences.TraceSourcePreferenceManager;
 import com.openxc.enabler.preferences.UploadingPreferenceManager;
 import com.openxc.enabler.preferences.VehiclePreferenceManager;
 
+/** The OpenXC Enabler app is primarily for convenience, but it also increases
+ * the reliability of OpenXC by handling background tasks on behalf of client
+ * applications.
+ *
+ * The Enabler provides a common location to control which data sources and
+ * sinks are active, e.g. if the a trace file should be played back or recorded.
+ * It's preferable to be able to change the data source on the fly, and not have
+ * to programmatically load a trace file in any application under test.
+ *
+ * With the Enabler installed, the {@link com.openxc.remote.VehicleService} is
+ * also started automatically when the Android device boots up. A simple data
+ * sink like a trace file uploader can start immediately without any user
+ * interaction.
+ *
+ * As a developer, you can also appreciate that because the Enabler takes care
+ * of starting the {@link com.openxc.remote.VehicleService}, you don't need to
+ * add much to your application's AndroidManifest.xml - just the
+ * {@link com.openxc.VehicleManager} service.
+*/
 public class OpenXcEnablerActivity extends Activity {
     private static String TAG = "OpenXcEnablerActivity";
 
