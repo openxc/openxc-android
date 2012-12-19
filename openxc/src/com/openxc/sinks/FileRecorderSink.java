@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.util.Log;
@@ -25,7 +27,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             new SimpleDateFormat("yyyy-MM-dd-HH", Locale.US);
 
     private BufferedWriter mWriter;
-    private Date mLastFileCreated;
+    private Calendar mLastFileCreated;
     private FileOpener mFileOpener;
 
     public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
@@ -43,8 +45,10 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     public synchronized void receive(RawMeasurement measurement)
             throws DataSinkException {
         if(mWriter != null) {
-            if((new Date()).getHours() != mLastFileCreated.getHours()) {
-                // flip to a new file every hour
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(new Date());
+            if(calendar.get(Calendar.HOUR) !=
+                    mLastFileCreated.get(Calendar.HOUR)) {
                 try {
                     openTimestampedFile();
                 } catch(IOException e) {
@@ -105,8 +109,10 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     }
 
     private synchronized void openTimestampedFile() throws IOException {
-        mLastFileCreated = new Date();
-        String filename = sDateFormatter.format(mLastFileCreated) + ".json";
+        mLastFileCreated = GregorianCalendar.getInstance();
+        mLastFileCreated.setTime(new Date());
+        String filename = sDateFormatter.format(
+                mLastFileCreated.getTime()) + ".json";
         mWriter = mFileOpener.openForWriting(filename);
         Log.i(TAG, "Opened trace file " + filename + " for writing");
     }
