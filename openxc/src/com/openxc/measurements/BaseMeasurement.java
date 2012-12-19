@@ -186,12 +186,12 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor = null;
         if(rawMeasurement != null && rawMeasurement.getValue() != null) {
-            Class valueClass = rawMeasurement.getValue().getClass();
+            Class<?> valueClass = rawMeasurement.getValue().getClass();
             if(valueClass == Double.class || valueClass == Integer.class) {
                 valueClass = Number.class;
             }
 
-            Class eventClass = rawMeasurement.hasEvent() ?
+            Class<?> eventClass = rawMeasurement.hasEvent() ?
                                 rawMeasurement.getEvent().getClass()
                                 : null;
             if(eventClass == Double.class || eventClass == Integer.class) {

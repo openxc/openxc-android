@@ -25,10 +25,10 @@ public class PipelineStatusUpdateTask extends TimerTask {
     public void run() {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                mSourceListView.setAdapter(new ArrayAdapter(mActivity,
+                mSourceListView.setAdapter(new ArrayAdapter<Object>(mActivity,
                             android.R.layout.simple_list_item_1,
                             mVehicleManager.getSourceSummaries().toArray()));
-                mSinkListView.setAdapter(new ArrayAdapter(mActivity,
+                mSinkListView.setAdapter(new ArrayAdapter<Object>(mActivity,
                             android.R.layout.simple_list_item_1,
                             mVehicleManager.getSinkSummaries().toArray()));
             }
