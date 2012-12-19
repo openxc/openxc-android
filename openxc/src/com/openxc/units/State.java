@@ -25,7 +25,8 @@ public class State<T extends Enum<?>> extends Unit {
             return false;
         }
 
-        final State<T> other = (State<T>) obj;
+        @SuppressWarnings("unchecked")
+		final State<T> other = (State<T>) obj;
         return mValue.equals(other.mValue);
     }
 

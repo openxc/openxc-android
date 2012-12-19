@@ -257,7 +257,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             return false;
         }
 
-        final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
+        @SuppressWarnings("unchecked")
+		final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
         if(!other.getValue().equals(getValue())) {
             return false;
         }

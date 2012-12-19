@@ -27,7 +27,8 @@ public abstract class Quantity<T extends Number> extends Unit {
             return false;
         }
 
-        final Quantity<T> other = (Quantity<T>) obj;
+        @SuppressWarnings("unchecked")
+		final Quantity<T> other = (Quantity<T>) obj;
         return mValue.equals(other.mValue);
     }
 

@@ -62,7 +62,8 @@ public class VehicleButtonEvent
                 ButtonAction.valueOf(event.toUpperCase(Locale.US)));
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public State<ButtonAction> getEvent() {
         return (State<ButtonAction>) super.getEvent();
     }
