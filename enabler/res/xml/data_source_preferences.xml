@@ -35,4 +35,15 @@
                 android:title="@string/network_port_title"
                 android:inputType="number" />
     </PreferenceCategory>
+    <PreferenceCategory
+            android:title="@string/trace_source_settings">
+        <CheckBoxPreference
+                android:key="@string/trace_source_checkbox_key"
+                android:title="@string/trace_source_checkbox_title"
+                android:summary="@string/trace_source_checkbox_summary"
+                android:defaultValue="false" />
+        <Preference
+                android:key="@string/trace_source_file_key"
+                android:title="@string/trace_source_file_title" />
+    </PreferenceCategory>
 </PreferenceScreen>

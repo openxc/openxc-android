@@ -38,10 +38,13 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.DATA_SOURCE";
     private final static String OUTPUT_PREFERENCE =
             "com.openxc.enabler.preferences.OUTPUT";
+    private final static int FILE_SELECTOR_RESULT = 100;
 
     private BluetoothAdapter mBluetoothAdapter;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private Preference mTraceFilePreference;
+    private CheckBoxPreference mTraceEnabledPreference;
     private CheckBoxPreference mNetworkSourcePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
@@ -80,6 +83,19 @@ public class SettingsActivity extends PreferenceActivity {
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == FILE_SELECTOR_RESULT && resultCode == RESULT_OK) {
+            String newValue = data.getData().getPath();
+            SharedPreferences.Editor editor =
+                    PreferenceManager.getDefaultSharedPreferences(this).edit();
+            editor.putString(getString(R.string.trace_source_file_key), newValue);
+            editor.commit();
+
+            updateSummary(mTraceFilePreference, newValue);
         }
     }
 
@@ -130,7 +146,31 @@ public class SettingsActivity extends PreferenceActivity {
                     findPreference(getString(R.string.network_host_key)),
                     findPreference(getString(R.string.network_port_key)),
                     findPreference(getString(R.string.network_checkbox_key)));
+            ((SettingsActivity)getActivity()).initializeTracePreferences(
+                findPreference(getString(R.string.trace_source_checkbox_key)),
+                findPreference(getString(R.string.trace_source_file_key)));
         }
+    }
+
+    protected void initializeTracePreferences(Preference traceEnabledPreference,
+            Preference traceFilePreference) {
+        mTraceEnabledPreference = (CheckBoxPreference) traceEnabledPreference;
+        mTraceFilePreference = traceFilePreference;
+        mTraceFilePreference.setOnPreferenceClickListener(
+                mTraceFileClickListener);
+        mTraceFilePreference.setOnPreferenceChangeListener(
+                mTraceFileChangeListener);
+        mTraceEnabledPreference.setOnPreferenceChangeListener(
+                mTraceCheckboxListener);
+
+
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+        mTraceFilePreference.setEnabled(preferences.getBoolean(
+                    getString(R.string.trace_source_checkbox_key), false));
+        updateSummary(mTraceFilePreference,
+                preferences.getString(
+                    getString(R.string.trace_source_file_key), null));
     }
 
     protected void initializeUploadingPreferences(
@@ -352,4 +392,32 @@ public class SettingsActivity extends PreferenceActivity {
                 return true;
             }
         };
+
+    private OnPreferenceChangeListener mTraceCheckboxListener =
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference,
+                Object newValue) {
+            mTraceFilePreference.setEnabled((Boolean)newValue);
+            return true;
+        }
+    };
+
+    private Preference.OnPreferenceClickListener mTraceFileClickListener =
+            new Preference.OnPreferenceClickListener() {
+        public boolean onPreferenceClick(Preference preference) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(intent, FILE_SELECTOR_RESULT);
+            return true;
+        }
+    };
+
+    private OnPreferenceChangeListener mTraceFileChangeListener =
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference,
+                Object newValue) {
+            updateSummary(preference, newValue);
+            return true;
+        }
+    };
 }

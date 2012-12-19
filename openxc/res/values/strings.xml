@@ -11,4 +11,6 @@
     <string name="network_checkbox_key">network_checkbox</string>
     <string name="network_host_key">network_host</string>
     <string name="network_port_key">network_port</string>
+    <string name="trace_source_checkbox_key">playback_trace_enabled</string>
+    <string name="trace_source_file_key">playback_trace_file</string>
 </resources>

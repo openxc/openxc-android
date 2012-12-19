@@ -7,6 +7,7 @@
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
+    <string name="data_source_preferences">Data Sources</string>
     <string name="gps_settings">GPS</string>
     <string name="output_preferences">Output</string>
     <string name="bluetooth_settings">Bluetooth</string>
@@ -30,6 +31,11 @@
     <string name="network_checkbox_summary">Read vehicle data from the network</string>
     <string name="network_host_title">Network host address</string>
     <string name="network_port_title">Network port</string>
+    <string name="trace_source_settings">Trace file playback</string>
+    <string name="trace_source_checkbox_title">Playback trace file</string>
+    <string name="trace_source_checkbox_summary">Use a previously recorded OpenXC trace file as the source</string>
+    <string name="trace_source_file_title">Trace file</string>
+    <string name="trace_source_file_summary">Select an existing trace file</string>
     <string name="source_list_label">Data Sources</string>
     <string name="sink_list_label">Data Sinks</string>
 </resources>
