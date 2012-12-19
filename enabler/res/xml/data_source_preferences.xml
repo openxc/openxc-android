@@ -1,7 +1,7 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-            android:title="@string/data_source_preferences">
+            android:title="@string/gps_settings">
         <CheckBoxPreference
                 android:key="@string/native_gps_checkbox_key"
                 android:title="@string/native_gps_checkbox_title"

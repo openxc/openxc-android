@@ -7,7 +7,7 @@
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
-    <string name="data_source_preferences">Data Source</string>
+    <string name="gps_settings">GPS</string>
     <string name="output_preferences">Output</string>
     <string name="bluetooth_settings">Bluetooth</string>
     <string name="recording_checkbox_title">Record Trace</string>
