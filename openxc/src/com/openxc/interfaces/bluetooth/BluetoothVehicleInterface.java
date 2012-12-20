@@ -115,7 +115,6 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
 
     public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
-        Log.d(TAG, "Writing message to Bluetooth: " + message);
         return write(message);
     }
 
@@ -161,6 +160,7 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
         }
 
         try {
+            Log.d(TAG, "Writing message to Bluetooth: " + message);
             mOutStream.write(message);
             // TODO what if we didn't flush every time? might be faster for
             // sustained writes.

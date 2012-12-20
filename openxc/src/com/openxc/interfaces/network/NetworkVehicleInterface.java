@@ -166,7 +166,6 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
 
     public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
-        Log.d(TAG, "Writing message to network: " + message);
         byte[] bytes = message.getBytes();
         return write(bytes);
     }

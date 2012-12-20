@@ -240,7 +240,6 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
 
     public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
-        Log.d(TAG, "Writing message to USB: " + message);
         byte[] bytes = message.getBytes();
         return write(bytes);
     }
