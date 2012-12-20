@@ -187,7 +187,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
 
     @MediumTest
     public void testWrite() throws UnrecognizedMeasurementTypeException {
-        service.set(new TurnSignalStatus(
+        service.send(new TurnSignalStatus(
                     TurnSignalStatus.TurnSignalPosition.LEFT));
         // TODO how can we actually test that it gets written? might need to do
         // smaller unit tests.

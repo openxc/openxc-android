@@ -486,7 +486,7 @@ public class VehicleDashboardActivity extends Activity {
             command = new TurnSignalStatus(
                     TurnSignalStatus.TurnSignalPosition.LEFT);
             try {
-                mVehicleManager.set(command);
+                mVehicleManager.send(command);
             } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Unable to send turn signal command", e);
             }
@@ -495,7 +495,7 @@ public class VehicleDashboardActivity extends Activity {
             command = new TurnSignalStatus(
                     TurnSignalStatus.TurnSignalPosition.RIGHT);
             try {
-                mVehicleManager.set(command);
+                mVehicleManager.send(command);
             } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Unable to send turn signal command", e);
             }

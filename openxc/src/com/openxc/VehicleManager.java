@@ -60,13 +60,7 @@ import com.openxc.sources.VehicleDataSource;
  * (which streams the raw data to a web application). Other possible sources
  * include the {@link com.openxc.sources.trace.TraceVehicleDataSource} which
  * reads a previously recorded vehicle data trace file and plays back the
- * measurements
- * in real-time.
- *
- * One small inconsistency is that if a Bluetooth data source is added, any
- * calls to set() will be sent to that device. If no Belutooth data source is
- * in the pipeline, the standard USB device will be used instead. There is
- * currently no way to modify this behavior.
+ * measurements in real-time.
  */
 public class VehicleManager extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
@@ -216,34 +210,27 @@ public class VehicleManager extends Service implements SourceCallback {
     /**
      * Send a command back to the vehicle.
      *
-     * This fails silently if it is unable to connect to the remote vehicle
-     * service.
-     *
      * @param command The desired command to send to the vehicle.
+     * @return true if the message was sent succesfully
      */
-    public boolean set(Measurement command) throws
+    public boolean send(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
         Log.d(TAG, "Sending command " + command);
         RawMeasurement rawCommand = command.toRaw();
 
-        boolean sent = false;
         for(VehicleInterface vehicleInterface : mInterfaces) {
             try {
                 if(vehicleInterface.receive(rawCommand)) {
                     Log.d(TAG, "Sent " + rawCommand + " using interface " +
                             vehicleInterface);
-                    sent = true;
-                    break;
+                    return true;
                 }
             } catch(DataSinkException e) {
                 continue;
             }
         }
-
-        if(!sent) {
-            Log.d(TAG, "No interfaces able to send " + rawCommand);
-        }
-        return sent;
+        Log.d(TAG, "No interfaces able to send " + rawCommand);
+        return false;
     }
 
     /**
