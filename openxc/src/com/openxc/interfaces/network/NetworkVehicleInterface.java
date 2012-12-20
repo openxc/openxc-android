@@ -103,7 +103,8 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
      * @return true if the address and port match the current in-use values.
      */
     public boolean sameResource(String otherResource) {
-        return UriBasedVehicleInterfaceMixin.sameResource(mUri, otherResource);
+        return UriBasedVehicleInterfaceMixin.sameResource(mUri,
+                "//" + otherResource);
     }
 
     /**

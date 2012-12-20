@@ -114,8 +114,8 @@ public class VehicleService extends Service {
 
         try {
             mUsbDevice = new UsbVehicleInterface(this);
-            mPipeline.addSource(mUsbDevice);
             mInterfaces.add(mUsbDevice);
+            mPipeline.addSource(mUsbDevice);
         } catch(DataSourceException e) {
             Log.w(TAG, "Unable to add default USB data source", e);
         }
@@ -233,15 +233,15 @@ public class VehicleService extends Service {
             }
     };
 
-
     private void removeVehicleInterface(VehicleInterface vehicleInterface) {
-        mInterfaces.remove(vehicleInterface);
         vehicleInterface.stop();
+        mInterfaces.remove(vehicleInterface);
+        mPipeline.removeSource(vehicleInterface);
     }
 
     private VehicleInterface findActiveVehicleInterface(String interfaceName) {
         for(VehicleInterface vehicleInterface : mInterfaces) {
-            if(vehicleInterface.getClass().getName().equals(interfaceName)) {
+            if(vehicleInterface.getClass().getCanonicalName().equals(interfaceName)) {
                 return vehicleInterface;
             }
         }
