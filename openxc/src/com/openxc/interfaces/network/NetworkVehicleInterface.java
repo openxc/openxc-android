@@ -1,4 +1,4 @@
-package com.openxc.sources.network;
+package com.openxc.interfaces.network;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +26,9 @@ import com.openxc.sources.SourceCallback;
  * newline separated JSON messages in network frames.
  *
  */
-public class NetworkVehicleDataSource extends ContextualVehicleDataSource
+public class NetworkVehicleInterface extends ContextualVehicleDataSource
         implements Runnable, VehicleInterface {
-    private static final String TAG = "NetworkVehicleDataSource";
+    private static final String TAG = "NetworkVehicleInterface";
     private static final int SOCKET_TIMEOUT = 10000;
     private static final int FRAME_LENGTH = 128;
 
@@ -41,7 +41,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
     private int mPort;
 
     /**
-     * Construct an instance of NetworkVehicleDataSource with a receiver
+     * Construct an instance of NetworkVehicleInterface with a receiver
      * callback and custom device URI.
      *
      * If the device cannot be found at initialization, the object will block
@@ -61,7 +61,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
      * @throws DataSourceException
      *             If no connection could be established
      */
-    public NetworkVehicleDataSource(String address, String port,
+    public NetworkVehicleInterface(String address, String port,
             SourceCallback callback, Context context)
             throws DataSourceException {
         super(callback, context);
@@ -74,7 +74,7 @@ public class NetworkVehicleDataSource extends ContextualVehicleDataSource
         start();
     }
 
-    public NetworkVehicleDataSource(String address, String port, Context context)
+    public NetworkVehicleInterface(String address, String port, Context context)
             throws DataSourceException {
         this(address, port, null, context);
     }

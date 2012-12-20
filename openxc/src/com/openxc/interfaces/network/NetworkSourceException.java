@@ -1,4 +1,4 @@
-package com.openxc.sources.network;
+package com.openxc.interfaces.network;
 
 import com.openxc.sources.DataSourceException;
 

@@ -1,4 +1,4 @@
-package com.openxc.sources.bluetooth;
+package com.openxc.interfaces.bluetooth;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -28,9 +28,9 @@ import com.openxc.sources.SourceCallback;
  * This class requires both the android.permission.BLUETOOTH and
  * android.permission.BLUETOOTH_ADMIN permissions.
  */
-public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
+public class BluetoothVehicleInterface extends ContextualVehicleDataSource
         implements Runnable, VehicleInterface {
-    private static final String TAG = "BluetoothVehicleDataSource";
+    private static final String TAG = "BluetoothVehicleInterface";
 
     private boolean mRunning = false;
     private DeviceManager mDeviceManager;
@@ -39,7 +39,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
     private BluetoothSocket mSocket;
     private String mAddress;
 
-    public BluetoothVehicleDataSource(SourceCallback callback, Context context,
+    public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {
         super(callback, context);
         try {
@@ -52,7 +52,7 @@ public class BluetoothVehicleDataSource extends ContextualVehicleDataSource
         start();
     }
 
-    public BluetoothVehicleDataSource(Context context, String address)
+    public BluetoothVehicleInterface(Context context, String address)
             throws DataSourceException {
         this(null, context, address);
     }

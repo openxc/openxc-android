@@ -1,42 +1,32 @@
-package com.openxc.sources.usb;
+package com.openxc.interfaces.usb;
 
 import java.net.URI;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.google.common.base.Objects;
-
-import com.openxc.sources.BytestreamDataSourceMixin;
-import com.openxc.sources.ContextualVehicleDataSource;
-import com.openxc.sources.SourceCallback;
-
-import com.openxc.sources.usb.UsbDeviceException;
-
-import com.openxc.sources.DataSourceException;
-import com.openxc.sources.DataSourceResourceException;
-
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-
 import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
-
-import com.openxc.interfaces.VehicleInterface;
-
-import com.openxc.remote.RawMeasurement;
-
 import android.util.Log;
+
+import com.google.common.base.Objects;
+import com.openxc.interfaces.VehicleInterface;
+import com.openxc.remote.RawMeasurement;
+import com.openxc.sources.BytestreamDataSourceMixin;
+import com.openxc.sources.ContextualVehicleDataSource;
+import com.openxc.sources.DataSourceException;
+import com.openxc.sources.DataSourceResourceException;
+import com.openxc.sources.SourceCallback;
 
 /**
  * A vehicle data source reading measurements from an OpenXC USB device.
@@ -54,9 +44,9 @@ import android.util.Log;
  * become active.
  */
 @TargetApi(12)
-public class UsbVehicleDataSource extends ContextualVehicleDataSource
+public class UsbVehicleInterface extends ContextualVehicleDataSource
         implements Runnable, VehicleInterface {
-    private static final String TAG = "UsbVehicleDataSource";
+    private static final String TAG = "UsbVehicleInterface";
     private static final int ENDPOINT_COUNT = 2;
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
@@ -78,7 +68,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     private int mProductId;
 
     /**
-     * Construct an instance of UsbVehicleDataSource with a receiver callback
+     * Construct an instance of UsbVehicleInterface with a receiver callback
      * and custom device URI.
      *
      * If the device cannot be found at initialization, the object will block
@@ -86,7 +76,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
      *
      * TODO Do we ever send such a signal? Or did I delete that because in order
      * to have that signal sent, we have to shut down the VehicleService
-     * (and thus this UsbVehicleDataSource) anyway?
+     * (and thus this UsbVehicleInterface) anyway?
      *
      * @param context The Activity or Service context, used to get access to the
      *      Android UsbManager.
@@ -98,7 +88,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
      * @throws DataSourceException  If the URI doesn't have the correct
      *          format
      */
-    public UsbVehicleDataSource(SourceCallback callback, Context context,
+    public UsbVehicleInterface(SourceCallback callback, Context context,
             URI device) throws DataSourceException {
         super(callback, context);
         if(device == null) {
@@ -147,7 +137,7 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
     }
 
     /**
-     * Construct an instance of UsbVehicleDataSource with a receiver callback
+     * Construct an instance of UsbVehicleInterface with a receiver callback
      * and the default device URI.
      *
      * The default device URI is specified in {@link UsbDeviceUtilities}.
@@ -160,12 +150,12 @@ public class UsbVehicleDataSource extends ContextualVehicleDataSource
      * @throws DataSourceException  in exceptional circumstances, i.e.
      *      only if the default device URI is malformed.
      */
-    public UsbVehicleDataSource(SourceCallback callback, Context context)
+    public UsbVehicleInterface(SourceCallback callback, Context context)
             throws DataSourceException {
         this(callback, context, null);
     }
 
-    public UsbVehicleDataSource(Context context) throws DataSourceException {
+    public UsbVehicleInterface(Context context) throws DataSourceException {
         this(null, context);
     }
 

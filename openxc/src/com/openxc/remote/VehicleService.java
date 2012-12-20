@@ -16,13 +16,13 @@ import android.util.Log;
 
 import com.openxc.DataPipeline;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
-import com.openxc.sources.usb.UsbVehicleDataSource;
 
 /**
  * The VehicleService is the centralized source of all vehicle data.
@@ -55,7 +55,7 @@ public class VehicleService extends Service {
     private DataPipeline mPipeline;
     private RemoteCallbackSink mNotifier;
     private ApplicationSource mApplicationSource;
-    private UsbVehicleDataSource mUsbDevice;
+    private UsbVehicleInterface mUsbDevice;
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces;
 
     @Override
@@ -116,7 +116,7 @@ public class VehicleService extends Service {
         mPipeline.addSource(mApplicationSource);
 
         try {
-            mUsbDevice = new UsbVehicleDataSource(this);
+            mUsbDevice = new UsbVehicleInterface(this);
             mPipeline.addSource(mUsbDevice);
             mInterfaces.add(mUsbDevice);
         } catch(DataSourceException e) {

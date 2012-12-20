@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.openxc.enabler.R;
+import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.sources.DataSourceException;
-import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth CAN device.
@@ -13,7 +13,7 @@ import com.openxc.sources.bluetooth.BluetoothVehicleDataSource;
 public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothSourcePreferenceManager";
 
-    private BluetoothVehicleDataSource mBluetoothSource;
+    private BluetoothVehicleInterface mBluetoothSource;
 
     public BluetoothSourcePreferenceManager(Context context) {
         super(context);
@@ -53,7 +53,7 @@ public class BluetoothSourcePreferenceManager extends VehiclePreferenceManager {
                     stopBluetooth();
 
                     try {
-                        mBluetoothSource = new BluetoothVehicleDataSource(
+                        mBluetoothSource = new BluetoothVehicleInterface(
                                 getContext(), deviceAddress);
                     } catch(DataSourceException e) {
                         Log.w(TAG, "Unable to add Bluetooth source", e);

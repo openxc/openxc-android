@@ -116,8 +116,9 @@ public class DataPipelineTest extends TestCase {
     private class TestSink extends BaseVehicleDataSink {
         public boolean received = false;
 
-        public void receive(RawMeasurement measurement) {
+        public boolean receive(RawMeasurement measurement) {
             received = true;
+            return true;
         }
     }
 }

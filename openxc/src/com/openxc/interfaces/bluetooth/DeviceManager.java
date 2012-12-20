@@ -1,4 +1,4 @@
-package com.openxc.sources.bluetooth;
+package com.openxc.interfaces.bluetooth;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.Set;
 import java.util.UUID;
 
-import com.openxc.sources.bluetooth.BluetoothException;
+import com.openxc.interfaces.bluetooth.BluetoothException;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

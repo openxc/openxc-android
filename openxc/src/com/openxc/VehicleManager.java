@@ -34,7 +34,6 @@ import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
-import com.openxc.sources.usb.UsbVehicleDataSource;
 
 /**
  * The VehicleManager is an in-process Android service and the primary entry
@@ -348,7 +347,7 @@ public class VehicleManager extends Service implements SourceCallback {
      *      service.addSource(new TraceVehicleDataSource(
      *                  new URI("/sdcard/openxc/trace.json"))));
      *
-     * The {@link UsbVehicleDataSource} exists by default with the default USB
+     * The {@link UsbVehicleInterface} exists by default with the default USB
      * device ID. To clear all existing sources, use the {@link #clearSources()}
      * method. To revert back to the default set of sources, use
      * {@link #initializeDefaultSources}.
@@ -370,7 +369,7 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      *      service.addController(mBluetoothSource);
      *
-     * The {@link UsbVehicleDataSource} is initialized as a controller by
+     * The {@link UsbVehicleInterface} is initialized as a controller by
      * default, the same as it is a data source. The USB data source will be
      * used as a controller only if no other VehicleInterfaces are availab.e
      *

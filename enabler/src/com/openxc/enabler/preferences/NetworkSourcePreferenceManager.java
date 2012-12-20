@@ -6,14 +6,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.openxc.enabler.R;
+import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.sources.DataSourceException;
-import com.openxc.sources.network.NetworkVehicleDataSource;
 
 /**
  * Enable or disable receiving vehicle data from a Network device
  */
 public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
-    private NetworkVehicleDataSource mNetworkSource;
+    private NetworkVehicleInterface mNetworkSource;
     private final static String TAG = "NetworkSourcePreferenceManager";
 
     public NetworkSourcePreferenceManager(Context context) {
@@ -50,7 +50,7 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
             String address = getPreferenceString(R.string.network_host_key);
             String port = getPreferenceString(R.string.network_port_key);
 
-            if(!NetworkVehicleDataSource.validate(address, port)) {
+            if(!NetworkVehicleInterface.validate(address, port)) {
                 String error = "Network host address (" + address +
                     ") not valid -- not starting network data source";
                 Log.w(TAG, error);
@@ -64,7 +64,7 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
                         !mNetworkSource.sameAddress(address, port)) {
                     stopNetwork();
                     try {
-                        mNetworkSource = new NetworkVehicleDataSource(
+                        mNetworkSource = new NetworkVehicleInterface(
                                 address, port, getContext());
                     } catch (DataSourceException e) {
                         Log.w(TAG, "Unable to add network source", e);

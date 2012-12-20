@@ -1,4 +1,4 @@
-package com.openxc.sources.usb;
+package com.openxc.interfaces.usb;
 
 import android.app.Activity;
 
@@ -16,7 +16,7 @@ import android.util.Log;
  * Android unfortunately doesn't provide a way to specify USB device filters for
  * the ATTACHED intent programatically - it must be in the AndroidManifest. This
  * means we have no way to link the correct device filters with the actual
- * instance of the BroadcastReceiver (an object inside of UsbVehicleDataSource),
+ * instance of the BroadcastReceiver (an object inside of UsbVehicleInterface),
  * since we are doing something besides just starting an activity based on the
  * intent.
  *
@@ -46,7 +46,7 @@ public class UsbDeviceAttachmentActivity extends Activity {
 
         if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
             Intent refreshDeviceIntent = new Intent(
-                    UsbVehicleDataSource.ACTION_USB_DEVICE_ATTACHED);
+                    UsbVehicleInterface.ACTION_USB_DEVICE_ATTACHED);
             sendBroadcast(refreshDeviceIntent);
         }
 

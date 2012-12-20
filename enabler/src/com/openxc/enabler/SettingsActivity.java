@@ -26,8 +26,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.sinks.UploaderSink;
-import com.openxc.sources.network.NetworkVehicleDataSource;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
@@ -322,7 +322,7 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
             String address = (String) newValue;
-            if(!NetworkVehicleDataSource.validateAddress(address)) {
+            if(!NetworkVehicleInterface.validateAddress(address)) {
                 String error = "Invalid host URL \"" + address + "\"";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
@@ -339,7 +339,7 @@ public class SettingsActivity extends PreferenceActivity {
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            if(!NetworkVehicleDataSource.validatePort((String)newValue)) {
+            if(!NetworkVehicleInterface.validatePort((String)newValue)) {
                 String error = "Invalid host port \"" + newValue + "\"";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();

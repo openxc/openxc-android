@@ -1,4 +1,4 @@
-package com.openxc.sources.usb;
+package com.openxc.interfaces.usb;
 
 import com.openxc.sources.DataSourceException;
 
