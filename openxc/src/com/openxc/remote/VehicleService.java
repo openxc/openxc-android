@@ -1,10 +1,15 @@
 package com.openxc.remote;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -176,6 +181,48 @@ public class VehicleService extends Service {
                 return VehicleService.this.getMessageCount();
             }
 
+            public void addVehicleInterface(String interfaceName,
+                    String resource) {
+                Class<? extends VehicleInterface> interfaceType;
+                try {
+                    interfaceType = Class.forName(interfaceName).asSubclass(
+                            VehicleInterface.class);
+                } catch(ClassNotFoundException e) {
+                    Log.w(TAG, "Couldn't find vehicle interface type " +
+                            interfaceName, e);
+                    return;
+                }
+
+                Constructor<? extends VehicleInterface> constructor;
+                try {
+                    constructor = interfaceType.getConstructor(
+                            Context.class, URI.class);
+                } catch(NoSuchMethodException e) {
+                    Log.w(TAG, interfaceType + " doesn't have a proper constructor");
+                    return;
+                }
+
+                URI resourceUri = uriFromResourceString(resource);
+
+                VehicleInterface vehicleInterface = null;
+                try {
+                    vehicleInterface = constructor.newInstance(this,
+                            resourceUri);
+                } catch(InstantiationException e) {
+                    Log.w(TAG, "Couldn't instantiate vehicle interface "
+                            + interfaceType, e);
+                } catch(IllegalAccessException e) {
+                    Log.w(TAG, "Default constructor is not accessible on " +
+                            interfaceType, e);
+                } catch(InvocationTargetException e) {
+                    Log.w(TAG, interfaceType + "'s constructor threw an exception",
+                            e);
+                }
+
+                Log.i(TAG, "Adding vehicle interface  " + vehicleInterface);
+                mInterfaces.add(vehicleInterface);
+            }
+
             public List<String> getSourceSummaries() {
                 ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
@@ -197,4 +244,15 @@ public class VehicleService extends Service {
         return mPipeline.getMessageCount();
     }
 
+    private URI uriFromResourceString(String resource) {
+        URI resourceUri = null;
+        if(resource != null) {
+            try {
+                resourceUri = new URI(resource);
+            } catch(URISyntaxException e) {
+                Log.w(TAG, "Unable to parse resource as URI " + resource);
+            }
+        }
+        return resourceUri;
+    }
 }
