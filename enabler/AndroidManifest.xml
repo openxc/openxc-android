@@ -32,7 +32,7 @@
 
       <activity android:name=".SettingsActivity" />
 
-      <activity android:name="com.openxc.sources.usb.UsbDeviceAttachmentActivity">
+      <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
