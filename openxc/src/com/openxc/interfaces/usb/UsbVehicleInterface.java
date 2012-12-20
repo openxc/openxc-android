@@ -20,6 +20,7 @@ import android.hardware.usb.UsbManager;
 import android.util.Log;
 
 import com.google.common.base.Objects;
+import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSourceMixin;
@@ -242,6 +243,11 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
         Log.d(TAG, "Writing message to USB: " + message);
         byte[] bytes = message.getBytes();
         return write(bytes);
+    }
+
+    public boolean sameResource(String otherUri) {
+        return UriBasedVehicleInterfaceMixin.sameResource(mDeviceUri,
+                otherUri);
     }
 
     protected String getTag() {

@@ -42,10 +42,11 @@ public class RemoteServiceVehicleInterface implements VehicleInterface {
         }
     }
 
-    // TODO seems odd to have to implement these methods. I know this is a
-    // special case, but perhaps the VehicleManager could have an API for adding
-    // just a data sink implementing vehicle interface?
     public void stop() { }
 
     public void setCallback(SourceCallback callback) { }
+
+    public boolean sameResource(String other) {
+        return true;
+    }
 }

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -361,23 +362,57 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Add a new vehicle controller to the service.
+     * Add a new vehicle interface to the service.
      *
-     * For example, to use a Bluetooth CAN translator as a vehicle controller in
-     * additional to a vehicle data source, call the addController method after
-     * binding with VehicleManager:
+     * For example, to use a Bluetooth CAN translator as a vehicle interface in
+     * additional to a vehicle data source, call the addVehicleInterface method
+     * after binding with VehicleManager:
      *
-     *      service.addController(mBluetoothSource);
+     *      service.addVehicleInterface(BluetoothVehicleInterface.class,
+     *              new URI(""));
      *
-     * The {@link UsbVehicleInterface} is initialized as a controller by
-     * default, the same as it is a data source. The USB data source will be
-     * used as a controller only if no other VehicleInterfaces are availab.e
+     * The only valid VehicleInteface types are those included with the library
+     * - the vehicle service running in a remote process is the one to actually
+     *   instantiate the interfaces.
      *
-     * @param controller an instance of a VehicleInterface
+     * The {@link UsbVehicleInterface} is initialized by default.
+     *
+     * @param interface an instance of a VehicleInterface
      */
-    public void addController(VehicleInterface controller) {
-        Log.i(TAG, "Adding controller: " + controller);
-        mInterfaces.add(controller);
+    public void addVehicleInterface(
+            Class<? extends VehicleInterface> vehicleInterfaceType,
+            String resource) {
+        Log.i(TAG, "Adding interface: " + vehicleInterfaceType);
+
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.addVehicleInterface(
+                        vehicleInterfaceType.getName(), resource);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to add vehicle interface", e);
+            }
+
+        } else {
+            Log.w(TAG, "Can't add vehicle interface, not connected to the " +
+                    "VehicleService");
+        }
+    }
+
+    public void removeVehicleInterface(
+            Class<? extends VehicleInterface> vehicleInterfaceType) {
+        Log.i(TAG, "Removing interface: " + vehicleInterfaceType);
+
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.removeVehicleInterface(
+                        vehicleInterfaceType.getName());
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to remove vehicle interface", e);
+            }
+        } else {
+            Log.w(TAG, "Can't remove vehicle interface, not connected to the " +
+                    "VehicleService");
+        }
     }
 
     /**

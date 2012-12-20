@@ -66,17 +66,13 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
 
     public synchronized void stop() {
         super.stop();
+        disconnect();
         if(!mRunning) {
             Log.d(TAG, "Already stopped.");
             return;
         }
         Log.d(TAG, "Stopping Bluetooth source");
         mRunning = false;
-    }
-
-    public synchronized void close() {
-        stop();
-        disconnect();
     }
 
     // TODO this could be made generic so we could use any standard serial
@@ -123,8 +119,8 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
         return write(message);
     }
 
-    public String getAddress() {
-        return mAddress;
+    public boolean sameResource(String otherAddress) {
+        return otherAddress != null && otherAddress.equals(mAddress);
     }
 
     protected void disconnect() {

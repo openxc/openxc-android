@@ -3,15 +3,15 @@ package com.openxc.interfaces.network;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.URI;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.google.common.base.Objects;
+import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSourceMixin;
@@ -36,9 +36,7 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
     private Socket mSocket;
     private InputStream mInStream;
     private OutputStream mOutStream;
-    private String mStringAddress;
-    private InetAddress mAddress;
-    private int mPort;
+    private URI mUri;
 
     /**
      * Construct an instance of NetworkVehicleInterface with a receiver
@@ -48,35 +46,36 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
      * waiting for a signal to check again.
      *
      *
-     * @param address
-     *            The network host address.
-     * @param port
-     *            The network host port.
      * @param context
      *            The Activity or Service context, used to get access to the
      *            Android NetworkManager.
      * @param callback
      *            An object implementing the SourceCallback that should receive
      *            data as it is received and parsed.
+     * @param uri
+     *            The network host's address.
      * @throws DataSourceException
      *             If no connection could be established
      */
-    public NetworkVehicleInterface(String address, String port,
-            SourceCallback callback, Context context)
-            throws DataSourceException {
+    public NetworkVehicleInterface(SourceCallback callback, Context context,
+            URI uri) throws DataSourceException {
         super(callback, context);
 
-        if(address == null) {
-            throw new NetworkSourceException("Address cannot be null");
+        if(uri == null) {
+            throw new NetworkSourceException("URI cannot be null");
         }
-        mStringAddress = address;
-        mPort = createPort(port);
+        mUri = uri;
         start();
     }
 
-    public NetworkVehicleInterface(String address, String port, Context context)
+    public NetworkVehicleInterface(Context context, URI uri)
             throws DataSourceException {
-        this(address, port, null, context);
+        this(null, context, uri);
+    }
+
+    public NetworkVehicleInterface(Context context, String uriString)
+            throws DataSourceException {
+        this(context, UriBasedVehicleInterfaceMixin.createUri("//" + uriString));
     }
 
     public synchronized void start() {
@@ -88,26 +87,14 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
 
     public synchronized void stop() {
         super.stop();
-        Log.d(TAG, "Stopping network listener");
-
-        if(mSocket != null) {
-            try {
-                mSocket.close();
-            } catch (Exception e) {
-                Log.w(TAG, "Couldn't close socket. Quit.");
-            }
-        }
-
         if(!mRunning) {
             Log.d(TAG, "Already stopped.");
         }
-        else {
-            mRunning = false;
-        }
-    }
-    // TODO do we need to override close? yes i think, we need to close the
-    // socket and such
 
+        Log.d(TAG, "Stopping network listener");
+        disconnect();
+        mRunning = false;
+    }
 
     /**
      * Return true if the given address and port match those currently in use by
@@ -115,13 +102,8 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
      *
      * @return true if the address and port match the current in-use values.
      */
-    public boolean sameAddress(String address, String port) {
-        try {
-            return mAddress.equals(createAddress(address))
-                && mPort == createPort(port);
-        } catch(DataSourceException e) {
-            return false;
-        }
+    public boolean sameResource(String otherResource) {
+        return UriBasedVehicleInterfaceMixin.sameResource(mUri, otherResource);
     }
 
     /**
@@ -129,35 +111,8 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
      *
      * @return true if the address and port are valid.
      */
-    public static boolean validate(String address, String port) {
-        return validatePort(port) && validateAddress(address);
-    }
-
-    /**
-     * Returns true if the port is a valid network port.
-     *
-     * @return true if the port is a valid network port.
-     */
-    public static boolean validatePort(String portString) {
-        try {
-            Integer port = createPort(portString);
-            return port > 0;
-        } catch(DataSourceException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Return true if the address is a valid IP address or hostname.
-     *
-     * Basically if it's not null, it's valid right now.
-     */
-    public static boolean validateAddress(String address) {
-        if(address == null) {
-            Log.w(TAG, "Network host address not set (it's " + address + ")");
-            return false;
-        }
-        return true;
+    public static boolean validateResource(String uriString) {
+        return UriBasedVehicleInterfaceMixin.validateResource("//" + uriString);
     }
 
     public void run() {
@@ -204,8 +159,7 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("address", mAddress)
-            .add("socket", mSocket)
+            .add("uri", mUri)
             .toString();
     }
 
@@ -222,7 +176,6 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
 
     protected void disconnect() {
         if(mSocket == null) {
-            Log.w(TAG, "Unable to disconnect -- not connected");
             return;
         }
 
@@ -231,10 +184,12 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
             if(mOutStream != null) {
                 mOutStream.close();
             }
+            mOutStream = null;
 
             if(mInStream != null) {
                 mInStream.close();
             }
+            mInStream = null;
         } catch(IOException e) {
             Log.w(TAG, "Unable to close the input stream", e);
         }
@@ -245,23 +200,19 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
             } catch(IOException e) {
                 Log.w(TAG, "Unable to close the socket", e);
             }
+            mSocket = null;
         }
-        mSocket = null;
 
         disconnected();
         Log.d(TAG, "Disconnected from the socket");
     }
 
     private void waitForDeviceConnection() throws DataSourceException {
-        if(mAddress == null) {
-            mAddress = createAddress(mStringAddress);
-        }
-
         if(mSocket == null) {
             mSocket = new Socket();
             try {
-                mSocket.connect(new InetSocketAddress(mAddress, mPort),
-                        SOCKET_TIMEOUT);
+                mSocket.connect(new InetSocketAddress(mUri.getHost(),
+                            mUri.getPort()), SOCKET_TIMEOUT);
             } catch(IOException e) {
                 String message = "Error opening streams";
                 Log.e(TAG, message, e);
@@ -299,25 +250,6 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
             return false;
         }
         return true;
-    }
-
-    private static int createPort(String port) throws DataSourceException {
-        try {
-            return Integer.valueOf(port);
-        } catch(NumberFormatException e) {
-            throw new DataSourceException(
-                    "Target network port is invalid (" + port + ")", e);
-        }
-    }
-
-    private static InetAddress createAddress(String address)
-            throws DataSourceException {
-        try {
-            return InetAddress.getByName(address);
-        } catch(UnknownHostException e) {
-            throw new DataSourceException(
-                    "Target network host is unreachable", e);
-        }
     }
 
     private void connectStreams() throws NetworkSourceException {

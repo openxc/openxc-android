@@ -81,6 +81,9 @@ interface VehicleServiceInterface {
      */
     int getMessageCount();
 
+    void addVehicleInterface(String interfaceName, String resource);
+    void removeVehicleInterface(String interfaceName);
+
     List<String> getSourceSummaries();
     List<String> getSinkSummaries();
 }

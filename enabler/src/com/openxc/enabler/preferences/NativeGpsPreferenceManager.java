@@ -10,12 +10,12 @@ import com.openxc.sources.VehicleDataSource;
 /**
  * Enable or disable reading GPS from the native Android stack.
  */
-public class NativeGpsSourcePreferenceManager extends VehiclePreferenceManager {
-    private final static String TAG = "NativeGpsSourcePreferenceManager";
+public class NativeGpsPreferenceManager extends VehiclePreferenceManager {
+    private final static String TAG = "NativeGpsPreferenceManager";
 
     private VehicleDataSource mNativeLocationSource;
 
-    public NativeGpsSourcePreferenceManager(Context context) {
+    public NativeGpsPreferenceManager(Context context) {
         super(context);
     }
 

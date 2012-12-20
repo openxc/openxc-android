@@ -322,15 +322,14 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
             String address = (String) newValue;
-            if(!NetworkVehicleInterface.validateAddress(address)) {
-                String error = "Invalid host URL \"" + address + "\"";
+            if(!NetworkVehicleInterface.validateResource(address)) {
+                String error = "Invalid host address \"" + address + "\"";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
                 mNetworkSourcePreference.setChecked(false);
-            } else {
-                updateSummary(preference, newValue);
             }
+            updateSummary(preference, newValue);
             return true;
         }
     };
@@ -339,15 +338,16 @@ public class SettingsActivity extends PreferenceActivity {
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            if(!NetworkVehicleInterface.validatePort((String)newValue)) {
+            try {
+                Integer.valueOf((String)newValue);
+            } catch(NumberFormatException e) {
                 String error = "Invalid host port \"" + newValue + "\"";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
                 mNetworkSourcePreference.setChecked(false);
-            } else {
-                updateSummary(preference, newValue);
             }
+            updateSummary(preference, newValue);
             return true;
         }
     };

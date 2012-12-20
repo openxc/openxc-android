@@ -7,22 +7,20 @@ import android.widget.Toast;
 
 import com.openxc.enabler.R;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
-import com.openxc.sources.DataSourceException;
 
 /**
  * Enable or disable receiving vehicle data from a Network device
  */
-public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
-    private NetworkVehicleInterface mNetworkSource;
-    private final static String TAG = "NetworkSourcePreferenceManager";
+public class NetworkPreferenceManager extends VehiclePreferenceManager {
+    private final static String TAG = "NetworkPreferenceManager";
 
-    public NetworkSourcePreferenceManager(Context context) {
+    public NetworkPreferenceManager(Context context) {
         super(context);
     }
 
     public void close() {
         super.close();
-        stopNetwork();
+        stop();
     }
 
     protected PreferenceListener createPreferenceListener() {
@@ -38,20 +36,23 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
 
             }
             public void readStoredPreferences() {
-                setNetworkSourceStatus(getPreferences().getBoolean(getString(
+                setNetworkStatus(getPreferences().getBoolean(getString(
                                 R.string.network_checkbox_key), false));
             }
         };
     }
 
-    private void setNetworkSourceStatus(boolean enabled) {
+    private void setNetworkStatus(boolean enabled) {
         Log.i(TAG, "Setting network data source to " + enabled);
         if(enabled) {
             String address = getPreferenceString(R.string.network_host_key);
             String port = getPreferenceString(R.string.network_port_key);
+            String combinedAddress = address + ":" + port;
 
-            if(!NetworkVehicleInterface.validate(address, port)) {
-                String error = "Network host address (" + address +
+            if(address == null || port == null ||
+                    !NetworkVehicleInterface.validateResource(
+                        combinedAddress)) {
+                String error = "Network host URI (" + combinedAddress +
                     ") not valid -- not starting network data source";
                 Log.w(TAG, error);
                 Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
@@ -60,32 +61,16 @@ public class NetworkSourcePreferenceManager extends VehiclePreferenceManager {
                         false);
                 editor.commit();
             } else {
-                if(mNetworkSource == null ||
-                        !mNetworkSource.sameAddress(address, port)) {
-                    stopNetwork();
-                    try {
-                        mNetworkSource = new NetworkVehicleInterface(
-                                address, port, getContext());
-                    } catch (DataSourceException e) {
-                        Log.w(TAG, "Unable to add network source", e);
-                        return;
-                    }
-
-                    getVehicleManager().addSource(mNetworkSource);
-                    getVehicleManager().addController(mNetworkSource);
-                } else {
-                    Log.d(TAG, "Network connection to address " + address
-                            + " already running");
-                }
+                getVehicleManager().addVehicleInterface(
+                        NetworkVehicleInterface.class, combinedAddress);
             }
         } else {
-            stopNetwork();
+            stop();
         }
     }
 
-    private void stopNetwork() {
-        getVehicleManager().removeSource(mNetworkSource);
-        getVehicleManager().removeController(mNetworkSource);
-        mNetworkSource = null;
+    private void stop() {
+        getVehicleManager().removeVehicleInterface(
+                NetworkVehicleInterface.class);
     }
 }

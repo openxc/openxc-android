@@ -1,21 +1,18 @@
 package com.openxc.remote;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.openxc.DataPipeline;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.VehicleInterfaceException;
+import com.openxc.interfaces.VehicleInterfaceFactory;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.RemoteCallbackSink;
@@ -183,44 +180,40 @@ public class VehicleService extends Service {
 
             public void addVehicleInterface(String interfaceName,
                     String resource) {
-                Class<? extends VehicleInterface> interfaceType;
-                try {
-                    interfaceType = Class.forName(interfaceName).asSubclass(
-                            VehicleInterface.class);
-                } catch(ClassNotFoundException e) {
-                    Log.w(TAG, "Couldn't find vehicle interface type " +
-                            interfaceName, e);
-                    return;
+                VehicleInterface vehicleInterface =
+                    findActiveVehicleInterface(interfaceName);
+
+                if(vehicleInterface == null ||
+                        !vehicleInterface.sameResource(resource)) {
+                    if(vehicleInterface != null) {
+                        VehicleService.this.removeVehicleInterface(
+                                vehicleInterface);
+                    }
+
+                    try {
+                        vehicleInterface = VehicleInterfaceFactory.build(
+                                VehicleService.this, interfaceName, resource);
+                    } catch(VehicleInterfaceException e) {
+                        Log.w(TAG, "Unable to add vehicle interface", e);
+                        return;
+                    }
+
+                    mInterfaces.add(vehicleInterface);
+                    mPipeline.addSource(vehicleInterface);
+                } else {
+                    Log.d(TAG, "Vehicle interface " + vehicleInterface
+                            + " already running");
                 }
+                Log.i(TAG, "Added vehicle interface  " + vehicleInterface);
+            }
 
-                Constructor<? extends VehicleInterface> constructor;
-                try {
-                    constructor = interfaceType.getConstructor(
-                            Context.class, URI.class);
-                } catch(NoSuchMethodException e) {
-                    Log.w(TAG, interfaceType + " doesn't have a proper constructor");
-                    return;
+            public void removeVehicleInterface(String interfaceName) {
+                VehicleInterface vehicleInterface = findActiveVehicleInterface(
+                        interfaceName);
+                if(vehicleInterface != null) {
+                    VehicleService.this.removeVehicleInterface(
+                            vehicleInterface);
                 }
-
-                URI resourceUri = uriFromResourceString(resource);
-
-                VehicleInterface vehicleInterface = null;
-                try {
-                    vehicleInterface = constructor.newInstance(this,
-                            resourceUri);
-                } catch(InstantiationException e) {
-                    Log.w(TAG, "Couldn't instantiate vehicle interface "
-                            + interfaceType, e);
-                } catch(IllegalAccessException e) {
-                    Log.w(TAG, "Default constructor is not accessible on " +
-                            interfaceType, e);
-                } catch(InvocationTargetException e) {
-                    Log.w(TAG, interfaceType + "'s constructor threw an exception",
-                            e);
-                }
-
-                Log.i(TAG, "Adding vehicle interface  " + vehicleInterface);
-                mInterfaces.add(vehicleInterface);
             }
 
             public List<String> getSourceSummaries() {
@@ -240,19 +233,22 @@ public class VehicleService extends Service {
             }
     };
 
-    private int getMessageCount() {
-        return mPipeline.getMessageCount();
+
+    private void removeVehicleInterface(VehicleInterface vehicleInterface) {
+        mInterfaces.remove(vehicleInterface);
+        vehicleInterface.stop();
     }
 
-    private URI uriFromResourceString(String resource) {
-        URI resourceUri = null;
-        if(resource != null) {
-            try {
-                resourceUri = new URI(resource);
-            } catch(URISyntaxException e) {
-                Log.w(TAG, "Unable to parse resource as URI " + resource);
+    private VehicleInterface findActiveVehicleInterface(String interfaceName) {
+        for(VehicleInterface vehicleInterface : mInterfaces) {
+            if(vehicleInterface.getClass().getName().equals(interfaceName)) {
+                return vehicleInterface;
             }
         }
-        return resourceUri;
+        return null;
+    }
+
+    private int getMessageCount() {
+        return mPipeline.getMessageCount();
     }
 }

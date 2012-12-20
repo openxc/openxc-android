@@ -20,11 +20,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.openxc.VehicleManager;
-import com.openxc.enabler.preferences.BluetoothSourcePreferenceManager;
+import com.openxc.enabler.preferences.BluetoothPreferenceManager;
 import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.enabler.preferences.GpsOverwritePreferenceManager;
-import com.openxc.enabler.preferences.NativeGpsSourcePreferenceManager;
-import com.openxc.enabler.preferences.NetworkSourcePreferenceManager;
+import com.openxc.enabler.preferences.NativeGpsPreferenceManager;
+import com.openxc.enabler.preferences.NetworkPreferenceManager;
 import com.openxc.enabler.preferences.TraceSourcePreferenceManager;
 import com.openxc.enabler.preferences.UploadingPreferenceManager;
 import com.openxc.enabler.preferences.VehiclePreferenceManager;
@@ -120,17 +120,17 @@ public class OpenXcEnablerActivity extends Activity {
         mSinkListView = (ListView) findViewById(R.id.sink_list);
 
         mPreferenceManagers = new ArrayList<VehiclePreferenceManager>();
-        mPreferenceManagers.add(new BluetoothSourcePreferenceManager(
+        mPreferenceManagers.add(new BluetoothPreferenceManager(
                     OpenXcEnablerActivity.this));
         mPreferenceManagers.add(new FileRecordingPreferenceManager(
                     OpenXcEnablerActivity.this));
         mPreferenceManagers.add(new GpsOverwritePreferenceManager(
                     OpenXcEnablerActivity.this));
-        mPreferenceManagers.add(new NativeGpsSourcePreferenceManager(
+        mPreferenceManagers.add(new NativeGpsPreferenceManager(
                     OpenXcEnablerActivity.this));
         mPreferenceManagers.add(new UploadingPreferenceManager(
                     OpenXcEnablerActivity.this));
-        mPreferenceManagers.add(new NetworkSourcePreferenceManager(
+        mPreferenceManagers.add(new NetworkPreferenceManager(
                     OpenXcEnablerActivity.this));
         mPreferenceManagers.add(new TraceSourcePreferenceManager(
                     OpenXcEnablerActivity.this));
