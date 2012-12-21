@@ -163,6 +163,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     public synchronized void start() {
         super.start();
+        initializeDevice();
         primeOutput();
     }
 
