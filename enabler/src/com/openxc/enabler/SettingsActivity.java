@@ -166,7 +166,7 @@ public class SettingsActivity extends PreferenceActivity {
         mTraceFilePreference.setOnPreferenceClickListener(
                 mTraceFileClickListener);
         mTraceFilePreference.setOnPreferenceChangeListener(
-                mTraceFileChangeListener);
+                mUpdateSummaryListener);
         mTraceEnabledPreference.setOnPreferenceChangeListener(
                 mTraceCheckboxListener);
 
@@ -208,7 +208,7 @@ public class SettingsActivity extends PreferenceActivity {
             Preference checkboxPreference) {
         mBluetoothDeviceListPreference = (ListPreference) listPreference;
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
-                mBluetoothDeviceListener);
+                mUpdateSummaryListener);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null) {
@@ -241,11 +241,11 @@ public class SettingsActivity extends PreferenceActivity {
 
         mNetworkHostPreference = (EditTextPreference) hostPreference;
         mNetworkHostPreference.setOnPreferenceChangeListener(
-                mNetworkAddressListener);
+                mUpdateSummaryListener);
 
         mNetworkPortPreference = (EditTextPreference) portPreference;
         mNetworkPortPreference.setOnPreferenceChangeListener(
-                mNetworkPortListener);
+                mUpdateSummaryListener);
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
@@ -317,37 +317,11 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    private OnPreferenceChangeListener mNetworkAddressListener =
+    private OnPreferenceChangeListener mNetworkPrefernceListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            String address = (String) newValue;
-            if(!NetworkVehicleInterface.validateResource(address)) {
-                String error = "Invalid host address \"" + address + "\"";
-                Toast.makeText(getApplicationContext(), error,
-                        Toast.LENGTH_SHORT).show();
-                Log.w(TAG, error);
-                mNetworkSourcePreference.setChecked(false);
-            }
-            updateSummary(preference, newValue);
-            return true;
-        }
-    };
-
-    private OnPreferenceChangeListener mNetworkPortListener =
-            new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference,
-                Object newValue) {
-            try {
-                Integer.valueOf((String)newValue);
-            } catch(NumberFormatException e) {
-                String error = "Invalid host port \"" + newValue + "\"";
-                Toast.makeText(getApplicationContext(), error,
-                        Toast.LENGTH_SHORT).show();
-                Log.w(TAG, error);
-                mNetworkSourcePreference.setChecked(false);
-            }
-            updateSummary(preference, newValue);
+            updateSummary(preference, (String) newValue);
             return true;
         }
     };
@@ -362,7 +336,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
     };
 
-    private OnPreferenceChangeListener mBluetoothDeviceListener =
+    private OnPreferenceChangeListener mUpdateSummaryListener =
         new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference,
                     Object newValue) {
@@ -393,9 +367,8 @@ public class SettingsActivity extends PreferenceActivity {
                             Toast.LENGTH_SHORT).show();
                     Log.w(TAG, error);
                     mUploadingPreference.setChecked(false);
-                } else {
-                    updateSummary(preference, newValue);
                 }
+                updateSummary(preference, newValue);
                 return true;
             }
         };
@@ -415,15 +388,6 @@ public class SettingsActivity extends PreferenceActivity {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             startActivityForResult(intent, FILE_SELECTOR_RESULT);
-            return true;
-        }
-    };
-
-    private OnPreferenceChangeListener mTraceFileChangeListener =
-            new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference,
-                Object newValue) {
-            updateSummary(preference, newValue);
             return true;
         }
     };
