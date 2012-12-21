@@ -35,12 +35,15 @@ public class UriBasedVehicleInterfaceMixin {
         }
 
         try {
-            createUri(uriString);
-            return true;
+            return validateResource(createUri(uriString));
         } catch(DataSourceException e) {
             Log.d(TAG, "URI is not valid", e);
             return false;
         }
+    }
+
+    public static boolean validateResource(URI uri) {
+        return uri != null && uri.getPort() != -1 && uri.getHost() != null;
     }
 
     public static URI createUri(String uriString) throws DataSourceException {

@@ -17,6 +17,7 @@ import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSourceMixin;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.DataSourceException;
+import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
 
 /**
@@ -31,6 +32,7 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
     private static final String TAG = "NetworkVehicleInterface";
     private static final int SOCKET_TIMEOUT = 10000;
     private static final int FRAME_LENGTH = 128;
+    private static final String SCHEMA_SPECIFIC_PREFIX = "//";
 
     private boolean mRunning;
     private Socket mSocket;
@@ -61,9 +63,10 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
             URI uri) throws DataSourceException {
         super(callback, context);
 
-        if(uri == null) {
-            throw new NetworkSourceException("URI cannot be null");
+        if(uri == null || !UriBasedVehicleInterfaceMixin.validateResource(uri)) {
+            throw new DataSourceResourceException("URI is not valid");
         }
+
         mUri = uri;
         start();
     }
@@ -75,7 +78,8 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
 
     public NetworkVehicleInterface(Context context, String uriString)
             throws DataSourceException {
-        this(context, UriBasedVehicleInterfaceMixin.createUri("//" + uriString));
+        this(context, UriBasedVehicleInterfaceMixin.createUri(
+                    massageUri(uriString)));
     }
 
     public synchronized void start() {
@@ -104,7 +108,7 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
      */
     public boolean sameResource(String otherResource) {
         return UriBasedVehicleInterfaceMixin.sameResource(mUri,
-                "//" + otherResource);
+                massageUri(otherResource));
     }
 
     /**
@@ -113,7 +117,8 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
      * @return true if the address and port are valid.
      */
     public static boolean validateResource(String uriString) {
-        return UriBasedVehicleInterfaceMixin.validateResource("//" + uriString);
+        return UriBasedVehicleInterfaceMixin.validateResource(
+                massageUri(uriString));
     }
 
     public void run() {
@@ -263,5 +268,15 @@ public class NetworkVehicleInterface extends ContextualVehicleDataSource
             throw new NetworkSourceException(message);
         }
         Log.i(TAG, "Socket created, streams assigned");
+    }
+
+    /**
+     * Add the prefix reuqired to parse with URI if it's not already there.
+     */
+    private static String massageUri(String uriString) {
+        if(!uriString.startsWith(SCHEMA_SPECIFIC_PREFIX)) {
+            uriString = SCHEMA_SPECIFIC_PREFIX + uriString;
+        }
+        return uriString;
     }
 }

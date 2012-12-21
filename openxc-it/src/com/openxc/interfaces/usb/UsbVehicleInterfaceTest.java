@@ -20,7 +20,6 @@ public class UsbVehicleInterfaceTest extends AndroidTestCase {
     URI incorrectSchemeUri;
     UsbVehicleInterface source;
     SourceCallback callback;
-    Thread thread;
 
     @Override
     protected void setUp() {
@@ -42,11 +41,6 @@ public class UsbVehicleInterfaceTest extends AndroidTestCase {
     protected void tearDown() throws Exception {
         if(source != null) {
             source.stop();
-        }
-        if(thread != null) {
-            try {
-                thread.join();
-            } catch(InterruptedException e) {}
         }
         super.tearDown();
     }
