@@ -2,8 +2,6 @@ package com.openxc.sources;
 
 import com.openxc.sources.SourceCallback;
 
-import com.openxc.VehicleDataEndpoint;
-
 /**
  * The interface for all sources of raw vehicle measurements.
  *
@@ -11,7 +9,7 @@ import com.openxc.VehicleDataEndpoint;
  * implements the DataPipeline - its receive() methods are
  * passed values from the data source.
  */
-public interface VehicleDataSource extends VehicleDataEndpoint {
+public interface VehicleDataSource {
     /**
      * Set the callback for receiving raw measurements as they are received.
      *
@@ -20,4 +18,10 @@ public interface VehicleDataSource extends VehicleDataEndpoint {
      * directed to a single, central collector.
      */
     public void setCallback(SourceCallback callback);
+
+    /**
+     * Release any acquired resources and either stop sending measurements (if a
+     * source) or stop expecting to receive them (if a sink).
+     */
+    public void stop();
 }

@@ -2,8 +2,6 @@ package com.openxc.sinks;
 
 import com.openxc.remote.RawMeasurement;
 
-import com.openxc.VehicleDataEndpoint;
-
 /**
  * The interface for all vehicle data destination endpoints.
  *
@@ -15,7 +13,7 @@ import com.openxc.VehicleDataEndpoint;
  * applications of this class are trace file recording, web streaming or custom
  * CAN message handling.
  */
-public interface VehicleDataSink extends VehicleDataEndpoint {
+public interface VehicleDataSink {
     /**
      * Receive a data point with a name, a value and a event value.
      *
@@ -26,4 +24,10 @@ public interface VehicleDataSink extends VehicleDataEndpoint {
      * @param measurement The new measurement.
      */
     public boolean receive(RawMeasurement measurement) throws DataSinkException;
+
+    /**
+     * Release any acquired resources and either stop sending measurements (if a
+     * source) or stop expecting to receive them (if a sink).
+     */
+    public void stop();
 }
