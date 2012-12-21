@@ -54,7 +54,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
 
                     try {
                         mFileRecorder = new FileRecorderSink(
-                                new AndroidFileOpener(getContext(), directory));
+                                new AndroidFileOpener(directory));
                     } catch(DataSinkException e) {
                         Log.w(TAG, "Unable to start trace recording", e);
                     }
