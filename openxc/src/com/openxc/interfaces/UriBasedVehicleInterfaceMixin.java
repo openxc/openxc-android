@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import android.util.Log;
 
 import com.openxc.sources.DataSourceException;
+import com.openxc.sources.DataSourceResourceException;
 
 public class UriBasedVehicleInterfaceMixin {
     private final static String TAG = "UriBasedVehicleInterfaceMixin";
@@ -50,7 +51,8 @@ public class UriBasedVehicleInterfaceMixin {
         try {
             return new URI(uriString);
         } catch(URISyntaxException e) {
-            throw new DataSourceException("Not a valid URI: " + uriString, e);
+            throw new DataSourceResourceException("Not a valid URI: " +
+                    uriString, e);
         }
     }
 

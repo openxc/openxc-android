@@ -90,20 +90,20 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
      *          format
      */
     public UsbVehicleInterface(SourceCallback callback, Context context,
-            URI device) throws DataSourceException {
+            URI deviceUri) throws DataSourceException {
         super(callback, context);
-        if(device == null) {
-            device = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
+        if(deviceUri == null) {
+            deviceUri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
             Log.i(TAG, "No USB device specified -- using default " +
-                    device);
+                    deviceUri);
         }
 
-        if(device.getScheme() == null || !device.getScheme().equals("usb")) {
+        if(deviceUri == null || !validateResource(deviceUri)) {
             throw new DataSourceResourceException(
                     "USB device URI must have the usb:// scheme");
         }
 
-        mDeviceUri = device;
+        mDeviceUri = deviceUri;
         mDeviceConnectionLock = new ReentrantLock();
         mDeviceChanged = mDeviceConnectionLock.newCondition();
 
@@ -129,12 +129,16 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
-        mVendorId = UsbDeviceUtilities.vendorFromUri(device);
-        mProductId = UsbDeviceUtilities.productFromUri(device);
+        mVendorId = UsbDeviceUtilities.vendorFromUri(mDeviceUri);
+        mProductId = UsbDeviceUtilities.productFromUri(mDeviceUri);
 
         mBuffer = new BytestreamDataSourceMixin();
 
         start();
+    }
+
+    public static boolean validateResource(URI uri) {
+        return uri.getScheme() != null && uri.getScheme().equals("usb");
     }
 
     /**
@@ -158,6 +162,11 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
 
     public UsbVehicleInterface(Context context) throws DataSourceException {
         this(null, context);
+    }
+
+    public UsbVehicleInterface(Context context, String uriString)
+            throws DataSourceException {
+        this(null, context, UriBasedVehicleInterfaceMixin.createUri(uriString));
     }
 
     public synchronized void start() {
