@@ -59,24 +59,6 @@ interface VehicleServiceInterface {
     void receive(in RawMeasurement measurement);
 
     /**
-     * Re-initialize the list of sources back to the defaults.
-     *
-     * The default sources are the USB device source and a source that listens
-     * for application-generated updates via the
-     * {@link #receive(RawMeasurement)} method.
-     */
-    void initializeDefaultSources();
-
-    /**
-     * Remove all existing data sources from the pipeline.
-     *
-     * No further measurements will be received after this method is called
-     * until either the default sources are re-initialized using
-     * {@link #initializeDefaultSources}.
-     */
-    void clearSources();
-
-    /**
      * @return number of messages received since instantiation.
      */
     int getMessageCount();

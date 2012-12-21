@@ -64,12 +64,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
 
     @Override
     protected void tearDown() throws Exception {
-        if(source != null) {
-            source.stop();
-        }
-        if(service != null)  {
-            service.initializeDefaultSources();
-        }
+        service.removeSource(source);
         super.tearDown();
     }
 

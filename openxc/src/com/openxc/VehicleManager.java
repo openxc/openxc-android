@@ -277,53 +277,6 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Reset vehicle service to use only the default vehicle sources.
-     *
-     * The default vehicle data source is USB. If a USB CAN translator is not
-     * connected, there will be no more data.
-     *
-     * TODO consider getting rid of this since now you can disable the USB
-     * source with removeVehicleInterface
-     *
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
-     */
-    public void initializeDefaultSources()
-            throws VehicleServiceException {
-        Log.i(TAG, "Resetting data sources");
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.initializeDefaultSources();
-            } catch(RemoteException e) {
-                throw new VehicleServiceException(
-                        "Unable to reset data sources");
-            }
-        } else {
-            Log.w(TAG, "Can't reset data sources -- " +
-                    "not connected to remote service yet");
-        }
-    }
-
-    // TODO consider getting rid of this, may not be necessary with new
-    // VehicleInterface stuff
-    public void clearSources() throws VehicleServiceException {
-        Log.i(TAG, "Clearing all data sources");
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.clearSources();
-            } catch(RemoteException e) {
-                throw new VehicleServiceException(
-                        "Unable to clear data sources");
-            }
-        } else {
-            Log.w(TAG, "Can't clear all data sources -- " +
-                    "not connected to remote service yet");
-        }
-        mSources.clear();
-    }
-
-    /**
      * Unregister a previously reigstered Measurement.Listener instance.
      *
      * When an application is no longer interested in received measurement
@@ -356,12 +309,6 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      *      service.addSource(new TraceVehicleDataSource(
      *                  new URI("/sdcard/openxc/trace.json"))));
-     *
-     * The {@link com.openxc.interfaces.usb.UsbVehicleInterface} exists by
-     * default with the default USB device ID. To clear all existing sources,
-     * use the {@link #clearSources()} method. To revert back to the default set
-     * of sources, use
-     * {@link #initializeDefaultSources}.
      *
      * @param source an instance of a VehicleDataSource
      */

@@ -100,7 +100,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         TestUtils.pause(100);
         // kill the incoming data stream
-        service.clearSources();
+        service.removeSource(source);
         service.addListener(VehicleSpeed.class, speedListener);
         TestUtils.pause(20);
         assertNotNull(speedReceived);
@@ -176,7 +176,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             throws UnrecognizedMeasurementTypeException,
             NoValueException, VehicleServiceException {
         TestUtils.pause(150);
-        service.clearSources();
+        service.removeSource(source);
         TestUtils.pause(150);
         Measurement measurement = service.get(VehicleSpeed.class);
         double age = measurement.getAge();

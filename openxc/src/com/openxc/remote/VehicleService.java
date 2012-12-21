@@ -90,26 +90,12 @@ public class VehicleService extends Service {
         return mBinder;
     }
 
-    /**
-     * Reset the data source to the default when all clients disconnect.
-     *
-     * Since normal service users that want the default (i.e. USB device) don't
-     * usually set a new data source, they get could stuck in a situation where
-     * a trace file is being used if we don't reset it.
-     */
-    @Override
-    public boolean onUnbind(Intent intent) {
-        initializeDefaultSources();
-        return false;
-    }
-
     private void initializeDefaultSinks(DataPipeline pipeline) {
         mNotifier = new RemoteCallbackSink();
         pipeline.addSink(mNotifier);
     }
 
     private void initializeDefaultSources() {
-        mPipeline.clearSources();
         mPipeline.addSource(mApplicationSource);
 
         try {
@@ -160,18 +146,6 @@ public class VehicleService extends Service {
             public void unregister(VehicleServiceListener listener) {
                 Log.i(TAG, "Removing listener " + listener);
                 mNotifier.unregister(listener);
-            }
-
-            public void initializeDefaultSources() {
-                VehicleService.this.initializeDefaultSources();
-            }
-
-            public void clearSources() {
-                mPipeline.clearSources();
-                // the application source is a bit special and always needs to
-                // be there, otherwise an application developer will never be
-                // able to remove the USB source but still add their own source.
-                mPipeline.addSource(mApplicationSource);
             }
 
             public int getMessageCount() {
