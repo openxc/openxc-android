@@ -5,12 +5,12 @@ import java.util.List;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-public class BytestreamDataSourceTest extends AndroidTestCase {
-    BytestreamDataSourceMixin buffer;
+public class BytestreamBufferTest extends AndroidTestCase {
+    BytestreamBuffer buffer;
 
     @Override
     public void setUp() {
-        buffer = new BytestreamDataSourceMixin();
+        buffer = new BytestreamBuffer();
     }
 
     @SmallTest

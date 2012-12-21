@@ -1,9 +1,8 @@
 package com.openxc.interfaces.usb;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -23,8 +22,7 @@ import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
-import com.openxc.sources.BytestreamDataSourceMixin;
-import com.openxc.sources.ContextualVehicleDataSource;
+import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
@@ -45,8 +43,8 @@ import com.openxc.sources.SourceCallback;
  * become active.
  */
 @TargetApi(12)
-public class UsbVehicleInterface extends ContextualVehicleDataSource
-        implements Runnable, VehicleInterface {
+public class UsbVehicleInterface extends BytestreamDataSource
+        implements VehicleInterface {
     private static final String TAG = "UsbVehicleInterface";
     private static final int ENDPOINT_COUNT = 2;
     public static final String ACTION_USB_PERMISSION =
@@ -54,16 +52,13 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
     public static final String ACTION_USB_DEVICE_ATTACHED =
             "com.ford.openxc.USB_DEVICE_ATTACHED";
 
-    private boolean mRunning;
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
     private UsbInterface mInterface;
     private UsbEndpoint mInEndpoint;
     private UsbEndpoint mOutEndpoint;
     private PendingIntent mPermissionIntent;
-    private BytestreamDataSourceMixin mBuffer;
     private final URI mDeviceUri;
-    private final Lock mDeviceConnectionLock;
     private final Condition mDeviceChanged;
     private int mVendorId;
     private int mProductId;
@@ -104,8 +99,7 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
         }
 
         mDeviceUri = deviceUri;
-        mDeviceConnectionLock = new ReentrantLock();
-        mDeviceChanged = mDeviceConnectionLock.newCondition();
+        mDeviceChanged = createCondition();
 
         try {
             mManager = (UsbManager) getContext().getSystemService(
@@ -131,8 +125,6 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
 
         mVendorId = UsbDeviceUtilities.vendorFromUri(mDeviceUri);
         mProductId = UsbDeviceUtilities.productFromUri(mDeviceUri);
-
-        mBuffer = new BytestreamDataSourceMixin();
 
         start();
     }
@@ -170,12 +162,8 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
     }
 
     public synchronized void start() {
-        if(!mRunning) {
-            initializeDevice();
-            primeOutput();
-            mRunning = true;
-            new Thread(this).start();
-        }
+        super.start();
+        primeOutput();
     }
 
     /**
@@ -187,54 +175,11 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
      */
     public void stop() {
         super.stop();
-        Log.d(TAG, "Stopping USB listener");
-
-        disconnectDevice();
         getContext().unregisterReceiver(mBroadcastReceiver);
-
-        if(!mRunning) {
-            Log.d(TAG, "Already stopped.");
-            return;
-        }
-        mRunning = false;
     }
 
-    /**
-     * Continuously read JSON messages from an attached USB device, or wait for
-     * a connection.
-     *
-     * This loop will only exit if {@link #stop()} is called - otherwise it
-     * either waits for a new device connection or reads USB packets.
-     */
-    public void run() {
-        byte[] bytes = new byte[128];
-        while(mRunning) {
-            mDeviceConnectionLock.lock();
-
-            try {
-                waitForDeviceConnection();
-            } catch(InterruptedException e) {
-                Log.d(TAG, "Interrupted while waiting for a device");
-                break;
-            }
-
-            // TODO when there haven't been any USB transfers for a long time,
-            // we can get stuck here. do we need a timeout so it retries after
-            // USB wakes backup? Why does USB seem to go to sleep in the first
-            // place?
-            if(mConnection != null) {
-                int received = mConnection.bulkTransfer(mInEndpoint, bytes,
-                        bytes.length, 0);
-                if(received > 0) {
-                    mBuffer.receive(bytes, received);
-                    for(String record : mBuffer.readLines()) {
-                        handleMessage(record);
-                    }
-                }
-            }
-            mDeviceConnectionLock.unlock();
-        }
-        Log.d(TAG, "Stopped USB listener");
+    protected int read(byte[] bytes) throws IOException {
+        return mConnection.bulkTransfer(mInEndpoint, bytes, bytes.length, 0);
     }
 
     @Override
@@ -260,6 +205,16 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
 
     protected String getTag() {
         return TAG;
+    }
+
+    /* You must have the mConnectionLock locked before calling this
+     * function.
+     */
+    protected void waitForConnection() throws InterruptedException {
+        while(isRunning() && mConnection == null) {
+            Log.d(TAG, "Still no device available");
+            mDeviceChanged.await();
+        }
     }
 
     private void initializeDevice() {
@@ -289,22 +244,12 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
         return true;
     }
 
-    /* You must have the mDeviceConnectionLock locked before calling this
-     * function.
-     */
-    private void waitForDeviceConnection() throws InterruptedException {
-        while(mRunning && mConnection == null) {
-            Log.d(TAG, "Still no device available");
-            mDeviceChanged.await();
-        }
-    }
-
     private void connectToDevice(UsbManager manager, int vendorId,
             int productId) throws DataSourceResourceException {
         UsbDevice device = findDevice(manager, vendorId, productId);
         if(manager.hasPermission(device)) {
             Log.d(TAG, "Already have permission to use " + device);
-            openDeviceConnection(device);
+            openConnection(device);
         } else {
             Log.d(TAG, "Requesting permission for " + device);
             manager.requestPermission(device, mPermissionIntent);
@@ -392,9 +337,9 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
         write(new String("prime\u0000").getBytes());
     }
 
-    private void openDeviceConnection(UsbDevice device) {
+    private void openConnection(UsbDevice device) {
         if (device != null) {
-            mDeviceConnectionLock.lock();
+            lockConnection();
             try {
                 mConnection = setupDevice(mManager, device);
                 connected();
@@ -404,25 +349,25 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
                 Log.w("Couldn't open USB device", e);
             } finally {
                 mDeviceChanged.signal();
-                mDeviceConnectionLock.unlock();
+                unlockConnection();
             }
         } else {
             Log.d(TAG, "Permission denied for device " + device);
         }
     }
 
-    private void disconnectDevice() {
+    protected void disconnect() {
         if(mConnection != null) {
             Log.d(TAG, "Closing connection " + mConnection +
                     " with USB device");
-            mDeviceConnectionLock.lock();
+            lockConnection();
             mDeviceChanged.signal();
             mConnection.close();
             mConnection = null;
             mInEndpoint = null;
             mOutEndpoint = null;
             mInterface = null;
-            mDeviceConnectionLock.unlock();
+            unlockConnection();
             disconnected();
         }
     }
@@ -437,7 +382,7 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
 
                 if(intent.getBooleanExtra(
                             UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                    openDeviceConnection(device);
+                    openConnection(device);
                 } else {
                     Log.i(TAG, "User declined permission for device " +
                             device);
@@ -452,7 +397,7 @@ public class UsbVehicleInterface extends ContextualVehicleDataSource
                 }
             } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
                 Log.d(TAG, "Device detached");
-                disconnectDevice();
+                disconnect();
             }
         }
     };

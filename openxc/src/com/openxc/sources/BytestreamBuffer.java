@@ -8,8 +8,8 @@ import java.util.List;
  * A "mixin" of sorts to be used with object composition, this contains
  * functionality common to data sources that received streams of bytes.
  */
-public class BytestreamDataSourceMixin {
-    private final static String TAG = "BytestreamDataSourceMixin";
+public class BytestreamBuffer {
+    private final static String TAG = "BytestreamBuffer";
     private final static int BUFFER_SIZE = 512;
     private StringBuilder mBuffer = new StringBuilder(BUFFER_SIZE);
     private double mBytesReceived = 0;

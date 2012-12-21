@@ -12,8 +12,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
-import com.openxc.sources.BytestreamDataSourceMixin;
-import com.openxc.sources.ContextualVehicleDataSource;
+import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
 
@@ -28,11 +27,10 @@ import com.openxc.sources.SourceCallback;
  * This class requires both the android.permission.BLUETOOTH and
  * android.permission.BLUETOOTH_ADMIN permissions.
  */
-public class BluetoothVehicleInterface extends ContextualVehicleDataSource
-        implements Runnable, VehicleInterface {
+public class BluetoothVehicleInterface extends BytestreamDataSource
+        implements VehicleInterface {
     private static final String TAG = "BluetoothVehicleInterface";
 
-    private boolean mRunning = false;
     private DeviceManager mDeviceManager;
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
@@ -57,60 +55,8 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
         this(null, context, address);
     }
 
-    public synchronized void start() {
-        if(!mRunning) {
-            mRunning = true;
-            new Thread(this).start();
-        }
-    }
-
-    public synchronized void stop() {
-        super.stop();
-        disconnect();
-        if(!mRunning) {
-            Log.d(TAG, "Already stopped.");
-            return;
-        }
-        Log.d(TAG, "Stopping Bluetooth source");
-        mRunning = false;
-    }
-
-    // TODO this could be made generic so we could use any standard serial
-    // device, e.g. xbee or FTDI
-    public void run() {
-        BytestreamDataSourceMixin buffer = new BytestreamDataSourceMixin();
-        while(mRunning) {
-            try {
-                waitForDeviceConnection();
-            } catch(BluetoothException e) {
-                Log.i(TAG, "Unable to connect to target device -- " +
-                        "sleeping for awhile before trying again");
-                try {
-                    Thread.sleep(5000);
-                } catch(InterruptedException e2){
-                    stop();
-                }
-                continue;
-            }
-
-            int received;
-            byte[] bytes = new byte[512];
-            try {
-                received = mInStream.read(bytes, 0, bytes.length);
-            } catch(IOException e) {
-                Log.e(TAG, "Unable to read response");
-                disconnect();
-                continue;
-            }
-
-            if(received > 0) {
-                buffer.receive(bytes, received);
-                for(String record : buffer.readLines()) {
-                    handleMessage(record);
-                }
-            }
-        }
-        Log.d(TAG, "Stopped Bluetooth listener");
+    protected int read(byte[] bytes) throws IOException {
+        return mInStream.read(bytes, 0, bytes.length);
     }
 
     public boolean receive(RawMeasurement command) {
@@ -161,6 +107,21 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
         return TAG;
     }
 
+    protected void waitForConnection() throws DataSourceException {
+        if(mSocket == null) {
+            try {
+                mSocket = mDeviceManager.connect(mAddress);
+                connected();
+                connectStreams();
+            } catch(BluetoothException e) {
+                String message = "Unable to connect to device at address "
+                    + mAddress;
+                Log.w(TAG, message, e);
+                throw new DataSourceException(message, e);
+            }
+        }
+    }
+
     private synchronized boolean write(String message) {
         if(mSocket == null) {
             Log.w(TAG, "Unable to write -- not connected");
@@ -178,20 +139,6 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
             return false;
         }
         return true;
-    }
-
-    private void waitForDeviceConnection() throws BluetoothException {
-        if(mSocket == null) {
-            try {
-                mSocket = mDeviceManager.connect(mAddress);
-                connected();
-                connectStreams();
-            } catch(BluetoothException e) {
-                Log.w(TAG, "Unable to connect to device at address " +
-                        mAddress, e);
-                throw e;
-            }
-        }
     }
 
     private void connectStreams() throws BluetoothException {
