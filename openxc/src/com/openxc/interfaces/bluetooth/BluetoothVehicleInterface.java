@@ -122,6 +122,14 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
         return otherAddress != null && otherAddress.equals(mAddress);
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("deviceAddress", mAddress)
+            .add("socket", mSocket)
+            .toString();
+    }
+
     protected void disconnect() {
         if(mSocket == null) {
             Log.w(TAG, "Unable to disconnect -- not connected");
@@ -198,13 +206,5 @@ public class BluetoothVehicleInterface extends ContextualVehicleDataSource
             disconnected();
             throw new BluetoothException();
         }
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("deviceAddress", mAddress)
-            .add("socket", mSocket)
-            .toString();
     }
 }
