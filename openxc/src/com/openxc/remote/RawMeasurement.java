@@ -221,7 +221,6 @@ public class RawMeasurement implements Parcelable {
 
     private RawMeasurement(Parcel in)
             throws UnrecognizedMeasurementTypeException {
-        this();
         readFromParcel(in);
         timestamp();
     }
