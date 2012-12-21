@@ -1,21 +1,16 @@
 package com.openxc;
 
 import java.util.ArrayList;
-
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ConcurrentHashMap;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.google.common.base.Objects;
-
 import com.openxc.remote.RawMeasurement;
-
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.VehicleDataSink;
-
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 
@@ -30,15 +25,12 @@ import com.openxc.sources.VehicleDataSource;
  */
 public class DataPipeline implements SourceCallback {
     private int mMessagesReceived = 0;
-    private Map<String, RawMeasurement> mMeasurements;
-    private CopyOnWriteArrayList<VehicleDataSink> mSinks;
-    private CopyOnWriteArrayList<VehicleDataSource> mSources;
-
-    public DataPipeline() {
-        mMeasurements = new ConcurrentHashMap<String, RawMeasurement>();
-        mSinks = new CopyOnWriteArrayList<VehicleDataSink>();
-        mSources = new CopyOnWriteArrayList<VehicleDataSource>();
-    }
+    private Map<String, RawMeasurement> mMeasurements =
+            new ConcurrentHashMap<String, RawMeasurement>();
+    private CopyOnWriteArrayList<VehicleDataSink> mSinks =
+            new CopyOnWriteArrayList<VehicleDataSink>();
+    private CopyOnWriteArrayList<VehicleDataSource> mSources =
+            new CopyOnWriteArrayList<VehicleDataSource>();
 
     /**
      * Accept new values from data sources and send it out to all registered

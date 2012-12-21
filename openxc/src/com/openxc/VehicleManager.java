@@ -20,12 +20,12 @@ import android.widget.Toast;
 
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.RemoteServiceVehicleInterface;
+import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.sinks.DataSinkException;
@@ -45,38 +45,63 @@ import com.openxc.sources.VehicleDataSource;
  * will shut down when no more clients are bound to it.
  *
  * Synchronous measurements are obtained by passing the type of the desired
- * measurement to the get method. Asynchronous measurements are obtained by
- * defining a Measurement.Listener object and passing it to the service via the
- * addListener method.
+ * measurement to the {@link #get(Class)} method.
+ * Asynchronous measurements are obtained by defining a Measurement.Listener
+ * object and passing it to the service via the addListener method.
  *
- * The sources of data and any post-processing that happens is controlled by
- * modifying a list of "sources" and "sinks". When a message is received from a
- * data source, it is passed to any and all registered message "sinks" - these
- * receivers conform to the {@link com.openxc.sinks.VehicleDataSink}.
- * There will always be at least one sink that stores the latest messages and
- * handles passing on data to users of the VehicleManager class. Other possible
- * sinks include the {@link com.openxc.sinks.FileRecorderSink} which records a
- * trace of the raw OpenXC measurements to a file and a web streaming sink
- * (which streams the raw data to a web application). Other possible sources
- * include the {@link com.openxc.sources.trace.TraceVehicleDataSource} which
- * reads a previously recorded vehicle data trace file and plays back the
- * measurements in real-time.
+ *
+ * There are three major components in the VehicleManager:
+ * {@link com.openxc.sources.VehicleDataSource},
+ * {@link com.openxc.sinks.VehicleDataSink} and
+ * {@link com.openxc.interfaces.VehicleInterface}.
+ *
+ * The list of {@link com.openxc.interfaces.VehicleInterface} is perhaps the
+ * most important. These instances represent actual physical connections to the
+ * vehicle, and are bi-directional - they can both provide data to an
+ * application and optionally send data back to the vehicle. In most cases,
+ * these should not be instantiated by applications; the
+ * {@link #addVehicleInterface(Class, String)} and
+ * {@link #removeVehicleInterface(Class)} methods
+ * take enough metadata from the remote {@link com.openxc.remote.VehicleService}
+ * to instantiate the interface in a remove process. That way a single USB or
+ * Bluetooth connection can be shared among many applications. If an application
+ * really needs to use a custom VehicleInterface implementation and does not
+ * mind if access to its write interface will be accessible only in the local
+ * app process, the {@link #addLocalVehicleInterface(VehicleInterface)} and
+ * {@link #removeLocalVehicleInterface(VehicleInterface)} can let you do that.
+ *
+ * The list of active data sources (e.g.
+ * {@link com.openxc.sources.trace.TraceVehicleDataSource}) can be controlled
+ * with the {@link #addSource(VehicleDataSource)} and
+ * {@link #removeSource(VehicleDataSource)} methods. Each active
+ * {@link com.openxc.interfaces.VehicleInterface} is also an active data source,
+ * so there is no need to add them twice. Even though data sources are
+ * instantiated by the application (and thus can be entirely customized), their
+ * data is still shared among all OpenXC applications using the same remove
+ * process {@link com.openxc.remote.VehicleService}
+ *
+ * The list of active data sinks (e.g.
+ * {@link com.openxc.sinks.FileRecorderSink}) can be controlled with the
+ * {@link #addSink(VehicleDataSink)} and {@link #removeSink(VehicleDataSink)}
+ * methods.
+ *
+ * When a message is received from a
+ * {@link com.openxc.sources.VehicleDataSource}, it is passed to all active
+ * {@link com.openxc.sinks.VehicleDataSink}s. There will always be at
+ * least one sink that stores the latest messages and handles passing on data to
+ * users of this service.
  */
 public class VehicleManager extends Service implements SourceCallback {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
-    private boolean mIsBound;
-    private Lock mRemoteBoundLock;
-    private Condition mRemoteBoundCondition;
-
+    private Lock mRemoteBoundLock = new ReentrantLock();
+    private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
-    private VehicleServiceInterface mRemoteService;
-    private DataPipeline mPipeline;
-    private RemoteListenerSource mRemoteSource;
-    private CopyOnWriteArrayList<VehicleInterface> mInterfaces;
-    private VehicleInterface mRemoteController;
-    private MeasurementListenerSink mNotifier;
+    private DataPipeline mPipeline = new DataPipeline();
+    private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
+            new CopyOnWriteArrayList<VehicleInterface>();
+
     // The DataPipeline in this class must only have 1 source - the special
     // RemoteListenerSource that receives measurements from the
     // VehicleService and propagates them to all of the user-registered
@@ -86,23 +111,25 @@ public class VehicleManager extends Service implements SourceCallback {
     // other applications could receive updates from that source). For most
     // applications that might be fine, but since we want to control trace
     // playback from the Enabler, it needs to be able to inject those into the
-    // RVS. TODO actually, maybe that's the only case. If there are no other
-    // cases where a user application should be able to inject source data for
-    // all other apps to share, we should reconsider this and special case the
-    // trace source.
-    private CopyOnWriteArrayList<VehicleDataSource> mSources;
+    // RVS.
+    private CopyOnWriteArrayList<VehicleDataSource> mSources =
+            new CopyOnWriteArrayList<VehicleDataSource>();
+
+    private VehicleServiceInterface mRemoteService;
+    private RemoteListenerSource mRemoteSource;
+    private VehicleInterface mRemoteController;
+    private MeasurementListenerSink mNotifier;
 
     /**
      * Binder to connect IBinder in a ServiceConnection with the VehicleManager.
      *
      * This class is used in the onServiceConnected method of a
      * ServiceConnection in a client of this service - the IBinder given to the
-     * application can be cast to the VehicleBinder to retrieve the
-     * actual service instance. This is required to actaully call any of its
-     * methods.
+     * application can be cast to the VehicleBinder to retrieve the actual
+     * service instance. This is required to actaully call any of its methods.
      */
     public class VehicleBinder extends Binder {
-        /*
+        /**
          * Return this Binder's parent VehicleManager instance.
          *
          * @return an instance of VehicleManager.
@@ -110,6 +137,30 @@ public class VehicleManager extends Service implements SourceCallback {
         public VehicleManager getService() {
             return VehicleManager.this;
         }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "Service starting");
+
+        initializeDefaultSinks(mPipeline);
+        bindRemote();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "Service being destroyed");
+        mPipeline.stop();
+        unbindRemote();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.i(TAG, "Service binding in response to " + intent);
+        bindRemote();
+        return mBinder;
     }
 
     /**
@@ -122,50 +173,13 @@ public class VehicleManager extends Service implements SourceCallback {
     public void waitUntilBound() {
         mRemoteBoundLock.lock();
         Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
-        while(!mIsBound) {
+        while(mRemoteService == null) {
             try {
                 mRemoteBoundCondition.await();
             } catch(InterruptedException e) {}
         }
         Log.i(TAG, mRemoteService + " is now bound");
         mRemoteBoundLock.unlock();
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.i(TAG, "Service starting");
-
-        mRemoteBoundLock = new ReentrantLock();
-        mRemoteBoundCondition = mRemoteBoundLock.newCondition();
-
-        mPipeline = new DataPipeline();
-        initializeDefaultSinks(mPipeline);
-        mSources = new CopyOnWriteArrayList<VehicleDataSource>();
-        mInterfaces = new CopyOnWriteArrayList<VehicleInterface>();
-        bindRemote();
-    }
-
-    private void initializeDefaultSinks(DataPipeline pipeline) {
-        mNotifier = new MeasurementListenerSink();
-        pipeline.addSink(mNotifier);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "Service being destroyed");
-        if(mPipeline != null) {
-            mPipeline.stop();
-        }
-        unbindRemote();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.i(TAG, "Service binding in response to " + intent);
-        bindRemote();
-        return mBinder;
     }
 
     /**
@@ -208,10 +222,15 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Send a command back to the vehicle.
+     * Send a command to the vehicle through the first available active
+     * {@link com.openxc.interfaces.VehicleInterface}.
+     *
+     * This will attempt to send the message over all of the registered vehicle
+     * interfaces until one returns successfully. There is no guarantee about
+     * the order that the interfaces are attempted.
      *
      * @param command The desired command to send to the vehicle.
-     * @return true if the message was sent succesfully
+     * @return true if the message was sent successfully
      */
     public boolean send(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
@@ -234,7 +253,7 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Register to receive async updates for a specific Measurement type.
+     * Register to receive asynchronous updates for a specific Measurement type.
      *
      * Use this method to register an object implementing the
      * Measurement.Listener interface to receive real-time updates
@@ -250,11 +269,9 @@ public class VehicleManager extends Service implements SourceCallback {
      * @throws UnrecognizedMeasurementTypeException if passed a measurementType
      *      not extend Measurement
      */
-    public void addListener(
-            Class<? extends Measurement> measurementType,
-            Measurement.Listener listener)
-            throws VehicleServiceException,
-            UnrecognizedMeasurementTypeException {
+    public void addListener(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener) throws VehicleServiceException,
+                UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         mNotifier.register(measurementType, listener);
     }
@@ -264,6 +281,9 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * The default vehicle data source is USB. If a USB CAN translator is not
      * connected, there will be no more data.
+     *
+     * TODO consider getting rid of this since now you can disable the USB
+     * source with removeVehicleInterface
      *
      * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
@@ -285,6 +305,8 @@ public class VehicleManager extends Service implements SourceCallback {
         }
     }
 
+    // TODO consider getting rid of this, may not be necessary with new
+    // VehicleInterface stuff
     public void clearSources() throws VehicleServiceException {
         Log.i(TAG, "Clearing all data sources");
         if(mRemoteService != null) {
@@ -335,9 +357,10 @@ public class VehicleManager extends Service implements SourceCallback {
      *      service.addSource(new TraceVehicleDataSource(
      *                  new URI("/sdcard/openxc/trace.json"))));
      *
-     * The {@link UsbVehicleInterface} exists by default with the default USB
-     * device ID. To clear all existing sources, use the {@link #clearSources()}
-     * method. To revert back to the default set of sources, use
+     * The {@link com.openxc.interfaces.usb.UsbVehicleInterface} exists by
+     * default with the default USB device ID. To clear all existing sources,
+     * use the {@link #clearSources()} method. To revert back to the default set
+     * of sources, use
      * {@link #initializeDefaultSources}.
      *
      * @param source an instance of a VehicleDataSource
@@ -349,7 +372,46 @@ public class VehicleManager extends Service implements SourceCallback {
     }
 
     /**
-     * Add a new vehicle interface to the service.
+     * Remove a previously registered source from the data pipeline.
+     */
+    public void removeSource(VehicleDataSource source) {
+        if(source != null) {
+            mSources.remove(source);
+            source.stop();
+        }
+    }
+
+    /**
+     * Add a new data sink to the vehicle service.
+     *
+     * A data sink added with this method will receive all new measurements as
+     * they arrive from registered data sources.  For example, to use the trace
+     * file recorder sink, call the addSink method after binding with
+     * VehicleManager:
+     *
+     *      service.addSink(new FileRecorderSink(
+     *              new AndroidFileOpener("openxc", this)));
+     *
+     * @param sink an instance of a VehicleDataSink
+     */
+    public void addSink(VehicleDataSink sink) {
+        Log.i(TAG, "Adding data sink " + sink);
+        mPipeline.addSink(sink);
+    }
+
+    /**
+     * Remove a previously registered sink from the data pipeline.
+     */
+    public void removeSink(VehicleDataSink sink) {
+        if(sink != null) {
+            mPipeline.removeSink(sink);
+            sink.stop();
+        }
+    }
+
+    /**
+     * Activate a vehicle interface for both receiving data and sending commands
+     * to the vehicle.
      *
      * For example, to use a Bluetooth CAN translator as a vehicle interface in
      * additional to a vehicle data source, call the addVehicleInterface method
@@ -360,11 +422,23 @@ public class VehicleManager extends Service implements SourceCallback {
      *
      * The only valid VehicleInteface types are those included with the library
      * - the vehicle service running in a remote process is the one to actually
-     *   instantiate the interfaces.
+     * instantiate the interfaces. Interfaces added with this method will be
+     * available for all other OpenXC applications running in the system. To use
+     * custom implementations of {@link com.openxc.interfaces.VehicleInterface},
+     * see {@link #addLocalVehicleInterface(VehicleInterface)} (but beware of
+     * the caveats described with that method - interfaces added "locally" do
+     * not support bidirectional communication for any other applications
+     * besides the one that instantiated the interface).
      *
-     * The {@link UsbVehicleInterface} is initialized by default.
+     * The {@link com.openxc.interfaces.usb.UsbVehicleInterface} is initialized
+     * by default when the remote service starts, but it can be disabled with
+     * {@link #removeVehicleInterface(Class)}.
      *
-     * @param interface an instance of a VehicleInterface
+     * @param vehicleInterfaceType A class implementing VehicleInterface that is
+     *      included in the OpenXC library
+     * @param resource A descriptor or a resource necessary to initialize the
+     *      interface. See the specific implementation of {@link VehicleService}
+     *      to find the required format of this parameter.
      */
     public void addVehicleInterface(
             Class<? extends VehicleInterface> vehicleInterfaceType,
@@ -378,13 +452,18 @@ public class VehicleManager extends Service implements SourceCallback {
             } catch(RemoteException e) {
                 Log.w(TAG, "Unable to add vehicle interface", e);
             }
-
         } else {
             Log.w(TAG, "Can't add vehicle interface, not connected to the " +
                     "VehicleService");
         }
     }
 
+    /**
+     * Disable a vehicle interface, stopping data flow in both directions.
+     *
+     * @param vehicleInterfaceType A class implementing VehicleInterface that is
+     *      included in the OpenXC library, should have been previously added.
+     */
     public void removeVehicleInterface(
             Class<? extends VehicleInterface> vehicleInterfaceType) {
         Log.i(TAG, "Removing interface: " + vehicleInterfaceType);
@@ -437,7 +516,8 @@ public class VehicleManager extends Service implements SourceCallback {
     /**
      * Return a list of all sinks active in the system.
      *
-     * The motivation for this method is the same as {@link #getSources}.
+     * The motivation for this method is the same as
+     * {@link #getSinkSummaries()}.
      *
      * @return A list of the names and status of all sinks.
      */
@@ -455,53 +535,6 @@ public class VehicleManager extends Service implements SourceCallback {
             }
         }
         return sinks;
-    }
-
-    /**
-     * Remove a previously registered source from the data pipeline.
-     */
-    public void removeSource(VehicleDataSource source) {
-        if(source != null) {
-            mSources.remove(source);
-            source.stop();
-        }
-    }
-
-    /**
-     * Remove a previously registered controller from the service.
-     */
-    public void removeController(VehicleInterface controller) {
-        if(controller != null) {
-            mInterfaces.remove(controller);
-        }
-    }
-
-    /**
-     * Add a new data sink to the vehicle service.
-     *
-     * A data sink added with this method will receive all new measurements as
-     * they arrive from registered data sources.  For example, to use the trace
-     * file recorder sink, call the addSink method after binding with
-     * VehicleManager:
-     *
-     *      service.addSink(new FileRecorderSink(
-     *              new AndroidFileOpener("openxc", this)));
-     *
-     * @param sink an instance of a VehicleDataSink
-     */
-    public void addSink(VehicleDataSink sink) {
-        Log.i(TAG, "Adding data sink " + sink);
-        mPipeline.addSink(sink);
-    }
-
-    /**
-     * Remove a previously registered sink from the data pipeline.
-     */
-    public void removeSink(VehicleDataSink sink) {
-        if(sink != null) {
-            mPipeline.removeSink(sink);
-            sink.stop();
-        }
     }
 
     /**
@@ -525,13 +558,62 @@ public class VehicleManager extends Service implements SourceCallback {
         }
     }
 
+    /**
+     * Add a new local vehicle interface to the service.
+     *
+     * This method will accept any implementation of {@link VehicleInterface},
+     * so completely custom implementations are possible beyond the few built-in
+     * to the OpenXC library.
+     *
+     * However, interfaces added with this method cannot
+     * be used to send commands to the vehicle by any other active OpenXC
+     * application besides the one that instantiates the
+     * {@link VehicleInterface} object.
+     *
+     * That limitation does not apply to data received from the VehicleInterface
+     * - it will be propagated to all other applications, although there is an
+     * additional performance hit when compared to the built-in VehicleInterface
+     * types because Android's AIDL barrier must be crossed twice instead of
+     * once to communicate with the remote {@link VehicleService}.
+     *
+     * @param vehicleInterface an instance of a VehicleInteface
+     */
+    public void addLocalVehicleInterface(VehicleInterface vehicleInterface) {
+        if(vehicleInterface != null) {
+            Log.i(TAG, "Adding local vehicle interface " + vehicleInterface);
+            mInterfaces.add(vehicleInterface);
+            mPipeline.addSource(vehicleInterface);
+        }
+    }
+
+    /**
+     * Remove a previously registered local vehicle interface from the
+     * service.
+     *
+     * Data from the {@link VehicleInterface} will no longer be propagated to
+     * applications, and it will no longer be available for sending commands to
+     * the vehicle.
+     */
+    public void removeLocalVehicleInterface(VehicleInterface vehicleInterface) {
+        if(vehicleInterface != null) {
+            mInterfaces.remove(vehicleInterface);
+            mPipeline.removeSource(vehicleInterface);
+        }
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("bound", mIsBound)
+            .add("remoteService", mRemoteService)
             .toString();
     }
 
+    /**
+     * Not part of the public API for VehicleManager.
+     *
+     * This method is required to be public to implement the SourceCallback
+     * interface, but it should not be used by applications.
+     */
     public void receive(RawMeasurement measurement) {
         if(mRemoteService != null) {
             try {
@@ -540,6 +622,11 @@ public class VehicleManager extends Service implements SourceCallback {
                 Log.d(TAG, "Unable to send message to remote service", e);
             }
         }
+    }
+
+    private void initializeDefaultSinks(DataPipeline pipeline) {
+        mNotifier = new MeasurementListenerSink();
+        pipeline.addSink(mNotifier);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -555,7 +642,6 @@ public class VehicleManager extends Service implements SourceCallback {
             mPipeline.addSource(mRemoteSource);
 
             mRemoteBoundLock.lock();
-            mIsBound = true;
             mRemoteBoundCondition.signal();
             mRemoteBoundLock.unlock();
         }
@@ -564,7 +650,6 @@ public class VehicleManager extends Service implements SourceCallback {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
             mInterfaces.remove(mRemoteController);
             mRemoteService = null;
-            mIsBound = false;
             mPipeline.removeSource(mRemoteSource);
         }
     };
@@ -589,10 +674,11 @@ public class VehicleManager extends Service implements SourceCallback {
             mRemoteBoundLock.lock();
         }
 
-        if(mIsBound) {
+        if(mRemoteService != null) {
             Log.i(TAG, "Unbinding from VehicleService");
             unbindService(mConnection);
-            mIsBound = false;
+            mRemoteService = null;
+            mConnection = null;
         }
 
         if(mRemoteBoundLock != null) {

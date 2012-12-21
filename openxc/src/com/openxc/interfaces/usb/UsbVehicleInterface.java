@@ -79,7 +79,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
      * @param callback An object implementing the
      *      SourceCallback that should receive data as it is
      *      received and parsed.
-     * @param device a USB device URI (see {@link UsbDeviceUtilities} for the
+     * @param deviceUri a USB device URI (see {@link UsbDeviceUtilities} for the
      *      format) to look for.
      * @throws DataSourceException  If the URI doesn't have the correct
      *          format

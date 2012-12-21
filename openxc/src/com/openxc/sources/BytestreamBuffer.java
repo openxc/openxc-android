@@ -39,8 +39,8 @@ public class BytestreamBuffer {
      * Parse the current byte buffer to find messages. Any messages found in the
      * buffer are removed and returned.
      *
-     * @returns A list of messages parsed and subsequently removed from the
-     * buffer, if any.
+     * @return A list of messages parsed and subsequently removed from the
+     *      buffer, if any.
      */
     public List<String> readLines() {
         List<String> result;
