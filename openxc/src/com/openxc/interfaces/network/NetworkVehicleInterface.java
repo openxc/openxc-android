@@ -30,7 +30,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
     private static final String TAG = "NetworkVehicleInterface";
     private static final int SOCKET_TIMEOUT = 10000;
-    private static final int FRAME_LENGTH = 128;
     private static final String SCHEMA_SPECIFIC_PREFIX = "//";
 
     private Socket mSocket;

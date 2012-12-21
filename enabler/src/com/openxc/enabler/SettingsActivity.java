@@ -26,7 +26,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.sinks.UploaderSink;
 
 /**
@@ -316,15 +315,6 @@ public class SettingsActivity extends PreferenceActivity {
             mBluetoothAdapter.startDiscovery();
         }
     }
-
-    private OnPreferenceChangeListener mNetworkPrefernceListener =
-            new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference,
-                Object newValue) {
-            updateSummary(preference, (String) newValue);
-            return true;
-        }
-    };
 
     private OnPreferenceChangeListener mNetworkCheckboxListener =
             new OnPreferenceChangeListener() {

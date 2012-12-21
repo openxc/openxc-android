@@ -20,7 +20,6 @@ import com.openxc.sinks.VehicleDataSink;
 
 import com.openxc.VehicleManager;
 
-
 import android.content.Intent;
 
 import android.test.ServiceTestCase;

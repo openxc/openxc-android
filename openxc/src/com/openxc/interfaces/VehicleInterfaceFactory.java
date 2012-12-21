@@ -2,8 +2,6 @@ package com.openxc.interfaces;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-
 import android.content.Context;
 import android.util.Log;
 
