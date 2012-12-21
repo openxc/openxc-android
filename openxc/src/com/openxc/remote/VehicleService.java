@@ -13,8 +13,8 @@ import com.openxc.DataPipeline;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
+import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
@@ -24,9 +24,9 @@ import com.openxc.sources.VehicleDataSource;
 /**
  * The VehicleService is the centralized source of all vehicle data.
  *
- * To minimize overhead, only one object connects to the current vehicle data
- * source (e.g. a CAN translator or trace file being played back) and all
- * application requests are eventually propagated back to this service.
+ * This server is intended to be a singleton on an Android device. All OpenXC
+ * applciations funnel data to and from this service so they can share sources,
+ * sinks and vehicle interfaces.
  *
  * Applications should not use this service directly, but should bind to the
  * in-process {@link com.openxc.VehicleManager} instead - that has an interface
@@ -34,11 +34,10 @@ import com.openxc.sources.VehicleDataSource;
  * VehicleService is purposefully primative as there are a small set of
  * objects that can be natively marshalled through an AIDL interface.
  *
- * By default, the only source of vehicle data is an OpenXC USB device. Other
- * data sources can be instantiated by applications and given the
- * VehicleService as their callback - data will flow backwards from the
- * application process to the remote service and be indistinguishable from local
- * data sources.
+ * By default, the {@link UsbVehicleInterface} is activated as a
+ * {@link VehicleInterface}. Other vehicle interfaces can be activated with the
+ * {@link #addVehicleInterface(Class, String)} method and they can removed with
+ * {@link #removeVehicleInterface(Class)}.
  *
  * This service uses the same {@link com.openxc.DataPipeline} as the
  * {@link com.openxc.VehicleManager} to move data from sources to sinks, but it
@@ -114,24 +113,7 @@ public class VehicleService extends Service {
             }
 
             public boolean send(RawMeasurement command) {
-                boolean sent = false;
-                for(VehicleInterface vehicleInterface : mInterfaces) {
-                    try {
-                        if(vehicleInterface.receive(command)) {
-                            Log.d(TAG, "Sent " + command + " using interface " +
-                                    vehicleInterface);
-                            sent = true;
-                            break;
-                        }
-                    } catch(DataSinkException e) {
-                        continue;
-                    }
-                }
-
-                if(!sent) {
-                    Log.d(TAG, "No interfaces able to send " + command);
-                }
-                return sent;
+                return VehicleInterfaceManagerUtils.send(mInterfaces, command);
             }
 
             public void receive(RawMeasurement measurement) {
@@ -149,7 +131,7 @@ public class VehicleService extends Service {
             }
 
             public int getMessageCount() {
-                return VehicleService.this.getMessageCount();
+                return VehicleService.this.mPipeline.getMessageCount();
             }
 
             public void addVehicleInterface(String interfaceName,
@@ -220,9 +202,5 @@ public class VehicleService extends Service {
             }
         }
         return null;
-    }
-
-    private int getMessageCount() {
-        return mPipeline.getMessageCount();
     }
 }

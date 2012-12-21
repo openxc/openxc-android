@@ -2,20 +2,17 @@ package com.openxc.remote;
 
 import java.io.IOException;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-
 import com.google.common.base.Objects;
-
-import com.openxc.measurements.serializers.JsonSerializer;
-
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+import com.openxc.measurements.serializers.JsonSerializer;
 
 /**
  * An untyped measurement used only for the AIDL VehicleService interface.
@@ -126,6 +123,9 @@ public class RawMeasurement implements Parcelable {
         return mEvent;
     }
 
+    /**
+     * @return true if the measurement has a valid timestamp.
+     */
     public boolean isTimestamped() {
         return getTimestamp() != null && !Double.isNaN(getTimestamp())
             && getTimestamp() != 0;
@@ -135,6 +135,10 @@ public class RawMeasurement implements Parcelable {
         return mTimestamp;
     }
 
+    /**
+     * Make the measurement's timestamp invalid so it won't end up in the
+     * serialized version.
+     */
     public void untimestamp() {
     	mTimestamp = Double.NaN;
     }
