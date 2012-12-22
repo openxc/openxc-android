@@ -166,7 +166,7 @@ public class VehicleService extends Service {
 
             try {
                 vehicleInterface = VehicleInterfaceFactory.build(
-                        VehicleService.this, interfaceType, resource);
+                        interfaceType, VehicleService.this, resource);
             } catch(VehicleInterfaceException e) {
                 Log.w(TAG, "Unable to add vehicle interface", e);
                 return;

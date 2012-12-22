@@ -42,14 +42,34 @@ public class VehicleInterfaceFactory {
         return interfaceType;
     }
 
-    public static VehicleInterface build(Context context, String interfaceName,
-            String resource) throws VehicleInterfaceException {
-        return build(context, findClass(interfaceName), resource);
+    /**
+     * Retrieve the Class for a given name and construct an instance of it.
+     *
+     * @throws VehicleInterfaceException If the named interfaced could not be
+     *      found or if its constructor threw an exception.
+     * @see #build(Class, Context, String)
+     */
+    public static VehicleInterface build(String interfaceName,
+            Context context, String resource) throws VehicleInterfaceException {
+        return build(findClass(interfaceName), context, resource);
     }
 
-    public static VehicleInterface build(Context context,
+    /**
+     * Retrieve the Class for a given name and construct an instance of it.
+     *
+     * @param interfaceType the desired class to load and instantiate.
+     * @param context The Android application or service context to be passed to
+     *      the new instance of the VehicleInterface.
+     * @param resource A reference to a resource the new instance should use -
+     *      see the specific implementation of {@link VehicleInterface} for its
+     *      requirements.
+     * @return A new instance of the class given in interfaceType.
+     * @throws VehicleInterfaceException If the class' constructor threw an
+     *      exception.
+     */
+    public static VehicleInterface build(
             Class<? extends VehicleInterface> interfaceType,
-            String resource) throws VehicleInterfaceException {
+            Context context, String resource) throws VehicleInterfaceException {
         Log.d(TAG, "Constructing new instance of " + interfaceType
                 + " with resource " + resource);
         Constructor<? extends VehicleInterface> constructor;
@@ -63,20 +83,23 @@ public class VehicleInterfaceFactory {
             throw new VehicleInterfaceException(message, e);
         }
 
+        String message;
+        Exception error;
         try {
             return constructor.newInstance(context, resource);
         } catch(InstantiationException e) {
-            String error = "Couldn't instantiate vehicle interface " + interfaceType;
-            Log.w(TAG, error, e);
-            throw new VehicleInterfaceException(error);
+            message = "Couldn't instantiate vehicle interface " +
+                interfaceType;
+            error = e;
         } catch(IllegalAccessException e) {
-            String error = "Default constructor is not accessible on " + interfaceType;
-            Log.w(TAG, error, e);
-            throw new VehicleInterfaceException(error);
+            message = "Default constructor is not accessible on " +
+                interfaceType;
+            error = e;
         } catch(InvocationTargetException e) {
-            String error = interfaceType + "'s constructor threw an exception";
-            Log.w(TAG, error, e);
-            throw new VehicleInterfaceException(error);
+            message = interfaceType + "'s constructor threw an exception";
+            error = e;
         }
+        Log.w(TAG, message, error);
+        throw new VehicleInterfaceException(message);
     }
 }
