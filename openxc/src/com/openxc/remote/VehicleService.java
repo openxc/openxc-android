@@ -47,18 +47,16 @@ import com.openxc.sources.VehicleDataSource;
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";
 
-    private DataPipeline mPipeline;
-    private RemoteCallbackSink mNotifier;
-    private ApplicationSource mApplicationSource;
-    private CopyOnWriteArrayList<VehicleInterface> mInterfaces;
+    private DataPipeline mPipeline = new DataPipeline();
+    private ApplicationSource mApplicationSource = new ApplicationSource();
+    private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
+            new CopyOnWriteArrayList<VehicleInterface>();
+    private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
-        mPipeline = new DataPipeline();
-        mApplicationSource = new ApplicationSource();
-        mInterfaces = new CopyOnWriteArrayList<VehicleInterface>();
     }
 
     /**
@@ -70,9 +68,7 @@ public class VehicleService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG, "Service being destroyed");
-        if(mPipeline != null) {
-            mPipeline.stop();
-        }
+        mPipeline.stop();
     }
 
     /**
@@ -88,7 +84,6 @@ public class VehicleService extends Service {
     }
 
     private void initializeDefaultSinks(DataPipeline pipeline) {
-        mNotifier = new RemoteCallbackSink();
         pipeline.addSink(mNotifier);
     }
 
