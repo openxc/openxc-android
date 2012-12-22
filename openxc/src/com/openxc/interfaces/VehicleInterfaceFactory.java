@@ -5,9 +5,26 @@ import java.lang.reflect.InvocationTargetException;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * A factory that uses reflection to create instance of VehicleInterface
+ * implementations.
+ */
 public class VehicleInterfaceFactory {
     private static final String TAG = "VehicleInterfaceFactory";
 
+    /**
+     * Obtain the Class object for a given VehicleInterface class name.
+     *
+     * The class must be in the classpath of the process' context, or an
+     * exception will be thrown.
+     *
+     * @param interfaceName the canonical name of class implementing
+     *      {@link VehicleInterface}
+     * @return the Class object, if found.
+     * @throws VehicleInterfaceException if the named class could not be found
+     *      or loaded.
+     *
+     */
     public static Class<? extends VehicleInterface> findClass(
             String interfaceName) throws VehicleInterfaceException {
         Log.d(TAG, "Looking up class for name " + interfaceName);
