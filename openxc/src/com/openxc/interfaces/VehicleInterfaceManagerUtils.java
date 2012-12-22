@@ -12,9 +12,8 @@ public class VehicleInterfaceManagerUtils {
     private static final String TAG = "VehicleInterfaceManagerUtils";
 
     /**
-     *
-     * Converts the command to a RawMeasurement before calling
-     * {@link #send(List, RawMeasurement)}.
+     * Attempt to send the command on every VehicleInterface in the list until
+     * at most one succeeds.
      *
      * @see send(List, RawMeasurement)
      */
