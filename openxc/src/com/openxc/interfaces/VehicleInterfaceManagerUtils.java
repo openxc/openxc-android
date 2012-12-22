@@ -14,7 +14,7 @@ public class VehicleInterfaceManagerUtils {
     /**
      *
      * Converts the command to a RawMeasurement before calling
-     * {@link send(List, * RawMeasurement)}.
+     * {@link #send(List, RawMeasurement)}.
      *
      * @see send(List, RawMeasurement)
      */

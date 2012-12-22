@@ -200,8 +200,9 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     public boolean sameResource(String otherUri) {
-        return UriBasedVehicleInterfaceMixin.sameResource(mDeviceUri,
-                otherUri);
+        return (mDeviceUri == UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI
+                    && otherUri == null) ||
+            UriBasedVehicleInterfaceMixin.sameResource(mDeviceUri, otherUri);
     }
 
     protected String getTag() {

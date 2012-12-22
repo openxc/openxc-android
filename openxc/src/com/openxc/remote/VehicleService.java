@@ -18,7 +18,6 @@ import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
-import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
 
 /**
@@ -51,7 +50,6 @@ public class VehicleService extends Service {
     private DataPipeline mPipeline;
     private RemoteCallbackSink mNotifier;
     private ApplicationSource mApplicationSource;
-    private UsbVehicleInterface mUsbDevice;
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces;
 
     @Override
@@ -96,14 +94,7 @@ public class VehicleService extends Service {
 
     private void initializeDefaultSources() {
         mPipeline.addSource(mApplicationSource);
-
-        try {
-            mUsbDevice = new UsbVehicleInterface(this);
-            mInterfaces.add(mUsbDevice);
-            mPipeline.addSource(mUsbDevice);
-        } catch(DataSourceException e) {
-            Log.w(TAG, "Unable to add default USB data source", e);
-        }
+        addVehicleInterface(UsbVehicleInterface.class);
     }
 
     private final VehicleServiceInterface.Stub mBinder =
@@ -136,40 +127,12 @@ public class VehicleService extends Service {
 
             public void addVehicleInterface(String interfaceName,
                     String resource) {
-                VehicleInterface vehicleInterface =
-                    findActiveVehicleInterface(interfaceName);
-
-                if(vehicleInterface == null ||
-                        !vehicleInterface.sameResource(resource)) {
-                    if(vehicleInterface != null) {
-                        VehicleService.this.removeVehicleInterface(
-                                vehicleInterface);
-                    }
-
-                    try {
-                        vehicleInterface = VehicleInterfaceFactory.build(
-                                VehicleService.this, interfaceName, resource);
-                    } catch(VehicleInterfaceException e) {
-                        Log.w(TAG, "Unable to add vehicle interface", e);
-                        return;
-                    }
-
-                    mInterfaces.add(vehicleInterface);
-                    mPipeline.addSource(vehicleInterface);
-                } else {
-                    Log.d(TAG, "Vehicle interface " + vehicleInterface
-                            + " already running");
-                }
-                Log.i(TAG, "Added vehicle interface  " + vehicleInterface);
+                VehicleService.this.addVehicleInterface(
+                        interfaceName, resource);
             }
 
             public void removeVehicleInterface(String interfaceName) {
-                VehicleInterface vehicleInterface = findActiveVehicleInterface(
-                        interfaceName);
-                if(vehicleInterface != null) {
-                    VehicleService.this.removeVehicleInterface(
-                            vehicleInterface);
-                }
+                VehicleService.this.removeVehicleInterface(interfaceName);
             }
 
             public List<String> getSourceSummaries() {
@@ -189,18 +152,77 @@ public class VehicleService extends Service {
             }
     };
 
-    private void removeVehicleInterface(VehicleInterface vehicleInterface) {
-        vehicleInterface.stop();
-        mInterfaces.remove(vehicleInterface);
-        mPipeline.removeSource(vehicleInterface);
+    private void addVehicleInterface(
+            Class<? extends VehicleInterface> interfaceType) {
+        addVehicleInterface(interfaceType, null);
     }
 
-    private VehicleInterface findActiveVehicleInterface(String interfaceName) {
+    private void addVehicleInterface(
+            Class<? extends VehicleInterface> interfaceType,
+            String resource) {
+        VehicleInterface vehicleInterface =
+            findActiveVehicleInterface(interfaceType);
+
+        if(vehicleInterface == null ||
+                !vehicleInterface.sameResource(resource)) {
+            if(vehicleInterface != null) {
+                removeVehicleInterface(vehicleInterface);
+            }
+
+            try {
+                vehicleInterface = VehicleInterfaceFactory.build(
+                        VehicleService.this, interfaceType, resource);
+            } catch(VehicleInterfaceException e) {
+                Log.w(TAG, "Unable to add vehicle interface", e);
+                return;
+            }
+
+            mInterfaces.add(vehicleInterface);
+            mPipeline.addSource(vehicleInterface);
+        } else {
+            Log.d(TAG, "Vehicle interface " + vehicleInterface
+                    + " already running");
+        }
+        Log.i(TAG, "Added vehicle interface  " + vehicleInterface);
+    }
+
+    private void addVehicleInterface(String interfaceName, String resource) {
+        try {
+            addVehicleInterface(
+                    VehicleInterfaceFactory.findClass(interfaceName), resource);
+        } catch(VehicleInterfaceException e) {
+            Log.w(TAG, "Unable to add vehicle interface", e);
+        }
+    }
+
+    private void removeVehicleInterface(String interfaceName) {
+        removeVehicleInterface(findActiveVehicleInterface(interfaceName));
+    }
+
+    private void removeVehicleInterface(VehicleInterface vehicleInterface) {
+        if(vehicleInterface != null) {
+            vehicleInterface.stop();
+            mInterfaces.remove(vehicleInterface);
+            mPipeline.removeSource(vehicleInterface);
+        }
+    }
+
+    private VehicleInterface findActiveVehicleInterface(
+            Class<? extends VehicleInterface> interfaceType) {
         for(VehicleInterface vehicleInterface : mInterfaces) {
-            if(vehicleInterface.getClass().getCanonicalName().equals(interfaceName)) {
+            if(vehicleInterface.getClass().equals(interfaceType)) {
                 return vehicleInterface;
             }
         }
         return null;
+    }
+
+    private VehicleInterface findActiveVehicleInterface(String interfaceName) {
+        try {
+            return findActiveVehicleInterface(
+                    VehicleInterfaceFactory.findClass(interfaceName));
+        } catch(VehicleInterfaceException e) {
+            return null;
+        }
     }
 }

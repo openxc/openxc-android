@@ -51,4 +51,10 @@ public class UsbVehicleInterfaceTest extends AndroidTestCase {
         }
         Assert.fail("Expected a DataSourceResourceException");
     }
+
+    @SmallTest
+    public void testResourceMatchingDefault() throws DataSourceException {
+        source = new UsbVehicleInterface(getContext());
+        assertTrue(source.sameResource(null));
+    }
 }

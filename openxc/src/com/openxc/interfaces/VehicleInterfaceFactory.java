@@ -8,8 +8,8 @@ import android.util.Log;
 public class VehicleInterfaceFactory {
     private static final String TAG = "VehicleInterfaceFactory";
 
-    public static VehicleInterface build(Context context, String interfaceName,
-            String resource) throws VehicleInterfaceException {
+    public static Class<? extends VehicleInterface> findClass(
+            String interfaceName) throws VehicleInterfaceException {
         Log.d(TAG, "Looking up class for name " + interfaceName);
         Class<? extends VehicleInterface> interfaceType;
         try {
@@ -22,8 +22,12 @@ public class VehicleInterfaceFactory {
             Log.w(TAG, message, e);
             throw new VehicleInterfaceException(message, e);
         }
+        return interfaceType;
+    }
 
-        return build(context, interfaceType, resource);
+    public static VehicleInterface build(Context context, String interfaceName,
+            String resource) throws VehicleInterfaceException {
+        return build(context, findClass(interfaceName), resource);
     }
 
     public static VehicleInterface build(Context context,
