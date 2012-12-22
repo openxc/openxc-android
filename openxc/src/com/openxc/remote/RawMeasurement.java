@@ -202,7 +202,6 @@ public class RawMeasurement implements Parcelable {
         measurement.mCachedSerialization = measurementString;
     }
 
-
     private static Object parseUnknownType(JsonParser parser) {
         Object value = null;
         try {
