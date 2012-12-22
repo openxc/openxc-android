@@ -8,12 +8,18 @@ import android.util.Log;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 
+/**
+ * A collection of utilites for vehicle interfaces that reference a physical
+ * device with a URI.
+ */
 public class UriBasedVehicleInterfaceMixin {
     private final static String TAG = "UriBasedVehicleInterfaceMixin";
 
     /**
-     * Return true if the given address and port match those currently in use by
-     * the network data source.
+     * Determine if two URIs refer to the same resource.
+     *
+     * The function safely attempts to convert the otherResource parameter to a
+     * URI object before comparing.
      *
      * @return true if the address and port match the current in-use values.
      */
@@ -26,7 +32,8 @@ public class UriBasedVehicleInterfaceMixin {
     }
 
     /**
-     * Return true if the address and port are valid.
+     * Convert the parameter to a URI and validate the correctness of its host
+     * and port.
      *
      * @return true if the address and port are valid.
      */
@@ -43,10 +50,21 @@ public class UriBasedVehicleInterfaceMixin {
         }
     }
 
+    /**
+     * Validate the correctness of the host and port in a given URI.
+     *
+     * @return true if the address and port are valid.
+     */
     public static boolean validateResource(URI uri) {
         return uri != null && uri.getPort() != -1 && uri.getHost() != null;
     }
 
+    /**
+     * Attempt to construct an instance of URI from the given String.
+     *
+     * @param uriString the String representation of the possible URI.
+     * @throws DataSourceException if the parameter is not a valid URI.
+     */
     public static URI createUri(String uriString) throws DataSourceException {
         try {
             return new URI(uriString);
@@ -55,5 +73,4 @@ public class UriBasedVehicleInterfaceMixin {
                     uriString, e);
         }
     }
-
 }
