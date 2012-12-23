@@ -418,6 +418,10 @@ public class UsbVehicleInterface extends BytestreamDataSource
                     "USB device URI must have the usb:// scheme");
         }
 
+        // will throw an exception if not in the correct format
+        UsbDeviceUtilities.vendorFromUri(uri);
+        UsbDeviceUtilities.productFromUri(uri);
+
         return uri;
     }
 
