@@ -52,10 +52,11 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private final static int HTTP_TIMEOUT = 5000;
 
     private URI mUri;
-    private BlockingQueue<String> mRecordQueue;
-    private Lock mQueueLock;
-    private Condition mRecordsQueuedSignal;
-    private UploaderThread mUploader;
+    private BlockingQueue<String> mRecordQueue =
+            new LinkedBlockingQueue<String>(MAXIMUM_QUEUED_RECORDS);
+    private Lock mQueueLock = new ReentrantLock();
+    private Condition mRecordsQueued = mQueueLock.newCondition();
+    private UploaderThread mUploader = new UploaderThread();
 
     /**
      * Initialize and start a new UploaderSink immediately.
@@ -65,17 +66,13 @@ public class UploaderSink extends ContextualVehicleDataSink {
     public UploaderSink(Context context, URI uri) {
         super(context);
         mUri = uri;
-        mRecordQueue = new LinkedBlockingQueue<String>(MAXIMUM_QUEUED_RECORDS);
-        mQueueLock = new ReentrantLock();
-        mRecordsQueuedSignal = mQueueLock.newCondition();
-        mUploader = new UploaderThread();
-        mUploader.start();
     }
 
     public UploaderSink(Context context, String path) throws DataSinkException {
         this(context, uriFromString(path));
     }
 
+    @Override
     public void stop() {
         super.stop();
         mUploader.done();
@@ -86,7 +83,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
         mRecordQueue.offer(data);
         if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
             mQueueLock.lock();
-            mRecordsQueuedSignal.signal();
+            mRecordsQueued.signal();
             mQueueLock.unlock();
         }
         return true;
@@ -142,6 +139,10 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
     private class UploaderThread extends Thread {
         private boolean mRunning = true;
+
+        public UploaderThread() {
+            start();
+        }
 
         public void run() {
             while(mRunning) {
@@ -235,7 +236,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
                 // the queue is already thread safe, but we use this lock to get
                 // a condition variable we can use to signal when a batch has
                 // been queued.
-                mRecordsQueuedSignal.await();
+                mRecordsQueued.await();
             }
 
             ArrayList<String> records = new ArrayList<String>();

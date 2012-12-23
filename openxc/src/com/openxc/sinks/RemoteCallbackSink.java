@@ -2,16 +2,13 @@ package com.openxc.sinks;
 
 import java.util.Map;
 
-import com.google.common.base.Objects;
-
-import com.openxc.remote.RawMeasurement;
-
-import com.openxc.remote.VehicleServiceListener;
-
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-
 import android.util.Log;
+
+import com.google.common.base.Objects;
+import com.openxc.remote.RawMeasurement;
+import com.openxc.remote.VehicleServiceListener;
 
 /**
  * A data sink that sends new measurements through an AIDL interface.
@@ -25,16 +22,10 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "RemoteCallbackSink";
 
     private int mListenerCount;
-    private RemoteCallbackList<VehicleServiceListener>
-            mListeners;
+    private RemoteCallbackList<VehicleServiceListener> mListeners =
+            new RemoteCallbackList<VehicleServiceListener>();
 
-    public RemoteCallbackSink() {
-        super();
-        mListeners = new RemoteCallbackList<VehicleServiceListener>();
-    }
-
-    public synchronized void register(
-            VehicleServiceListener listener) {
+    public synchronized void register(VehicleServiceListener listener) {
         synchronized(mListeners) {
             if(mListeners.register(listener)) {
                 ++mListenerCount;
@@ -65,6 +56,12 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
         return mListenerCount;
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("numListeners", getListenerCount())
+            .toString();
+    }
 
     protected void propagateMeasurement(String measurementId,
             RawMeasurement measurement) {
@@ -81,12 +78,5 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
             }
             mListeners.finishBroadcast();
         }
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("numListeners", getListenerCount())
-            .toString();
     }
 };

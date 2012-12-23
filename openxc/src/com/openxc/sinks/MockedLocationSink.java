@@ -2,20 +2,16 @@ package com.openxc.sinks;
 
 import java.lang.reflect.Method;
 
-import com.google.common.base.Objects;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
 
+import com.google.common.base.Objects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
-
 import com.openxc.remote.RawMeasurement;
-
-import android.content.Context;
-
-import android.location.Location;
-import android.location.LocationManager;
-
-import android.util.Log;
 
 /**
  * Propagate vehicle location updates through the Android location interface.
@@ -41,8 +37,6 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         super(context);
         mLocationManager = (LocationManager) getContext().getSystemService(
                 Context.LOCATION_SERVICE);
-        mOverwriteNativeStatus = false;
-        mNativeGpsOverridden = false;
         setupMockLocations();
     }
 

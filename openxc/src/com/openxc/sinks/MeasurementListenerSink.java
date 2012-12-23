@@ -1,19 +1,16 @@
 package com.openxc.sinks;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Multimap;
+import android.util.Log;
 
 import com.google.common.base.Objects;
-
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.openxc.NoValueException;
+import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.BaseMeasurement;
-
-import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
-
-import android.util.Log;
 
 /**
  * A data sink that sends new measurements of specific types to listeners.
@@ -25,7 +22,7 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MeasurementListenerSink";
 
     private Multimap<Class<? extends Measurement>,
-            Measurement.Listener> mListeners;
+            Measurement.Listener> mListeners = HashMultimap.create();
 
     public MeasurementListenerSink() {
         mListeners = HashMultimap.create();
@@ -53,6 +50,13 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         mListeners.remove(measurementType, listener);
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("numListeners", mListeners.size())
+            .toString();
+    }
+
     protected void propagateMeasurement(String measurementId,
             RawMeasurement rawMeasurement) {
         try {
@@ -69,12 +73,5 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
         } catch(NoValueException e) {
             Log.w(TAG, "Received notification for a blank measurement", e);
         }
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("numListeners", mListeners.size())
-            .toString();
     }
 }
