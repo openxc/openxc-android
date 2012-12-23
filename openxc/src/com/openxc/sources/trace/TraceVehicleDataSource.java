@@ -140,10 +140,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      * thread will die a quick death.
      */
     public void run() {
-        waitForCallbackInitialization();
-        Log.d(TAG, "Starting the trace playback because we have valid " +
-                "callback " + getCallback());
-
         while(mRunning) {
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader;

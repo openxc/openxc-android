@@ -22,13 +22,10 @@ import com.openxc.sources.SourceCallback;
 public class BaseVehicleDataSource implements VehicleDataSource {
     private final static String TAG = "BaseVehicleDataSource";
     private SourceCallback mCallback;
-    private final Lock mCallbackLock;
-    private final Condition mCallbackChanged;
+    private final Lock mCallbackLock = new ReentrantLock();
+    private final Condition mCallbackChanged = mCallbackLock.newCondition();
 
-    public BaseVehicleDataSource() {
-        mCallbackLock = new ReentrantLock();
-        mCallbackChanged = mCallbackLock.newCondition();
-    }
+    public BaseVehicleDataSource() { }
 
     /**
      * Construct a new instance and set the callback.
@@ -38,7 +35,6 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      *      source.
      */
     public BaseVehicleDataSource(SourceCallback callback) {
-        this();
         setCallback(callback);
     }
 
@@ -83,30 +79,10 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         }
     }
 
-    protected SourceCallback getCallback() {
-        return mCallback;
-    }
-
     /**
      * Return a string suitable as a tag for logging.
      */
     protected String getTag() {
       return TAG;
-    }
-
-    /**
-     * Block the current thread until the callback is not null.
-     *
-     * This is useful if the data source's collection process is expensive and
-     * should not be started until absolutely necessary.
-     */
-    protected void waitForCallbackInitialization() {
-        mCallbackLock.lock();
-        while(getCallback() == null) {
-            try {
-                mCallbackChanged.await();
-            } catch(InterruptedException e) { }
-        }
-        mCallbackLock.unlock();
     }
 }
