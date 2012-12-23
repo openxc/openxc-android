@@ -61,9 +61,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 } catch(InterruptedException e2){
                     stop();
                 }
+                mConnectionLock.unlock();
                 continue;
             } catch(InterruptedException e) {
                 stop();
+                mConnectionLock.unlock();
                 continue;
             }
 
