@@ -99,35 +99,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         start();
     }
 
-    private static URI createUri(String uriString) throws DataSourceException {
-        URI uri;
-        if(uriString == null) {
-            uri = null;
-        } else {
-            uri = UriBasedVehicleInterfaceMixin.createUri(uriString);
-        }
-        return createUri(uri);
-    }
-
-    private static URI createUri(URI uri) throws DataSourceResourceException {
-        if(uri == null) {
-            uri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
-            Log.i(TAG, "No USB device specified -- using default " +
-                    uri);
-        }
-
-        if(!validateResource(uri)) {
-            throw new DataSourceResourceException(
-                    "USB device URI must have the usb:// scheme");
-        }
-
-        return uri;
-    }
-
-    public static boolean validateResource(URI uri) {
-        return uri.getScheme() != null && uri.getScheme().equals("usb");
-    }
-
     /**
      * Construct an instance of UsbVehicleInterface with a receiver callback
      * and the default device URI.
@@ -186,20 +157,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
-    protected int read(byte[] bytes) throws IOException {
-        return mConnection.bulkTransfer(mInEndpoint, bytes, bytes.length, 0);
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("device", mDeviceUri)
-            .add("connection", mConnection)
-            .add("in_endpoint", mInEndpoint)
-            .add("out_endpoint", mOutEndpoint)
-            .toString();
-    }
-
     public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         byte[] bytes = message.getBytes();
@@ -217,6 +174,20 @@ public class UsbVehicleInterface extends BytestreamDataSource
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("device", mDeviceUri)
+            .add("connection", mConnection)
+            .add("in_endpoint", mInEndpoint)
+            .add("out_endpoint", mOutEndpoint)
+            .toString();
+    }
+
+    protected int read(byte[] bytes) throws IOException {
+        return mConnection.bulkTransfer(mInEndpoint, bytes, bytes.length, 0);
     }
 
     protected String getTag() {
@@ -424,4 +395,33 @@ public class UsbVehicleInterface extends BytestreamDataSource
             }
         }
     };
+
+    private static URI createUri(String uriString) throws DataSourceException {
+        URI uri;
+        if(uriString == null) {
+            uri = null;
+        } else {
+            uri = UriBasedVehicleInterfaceMixin.createUri(uriString);
+        }
+        return createUri(uri);
+    }
+
+    private static URI createUri(URI uri) throws DataSourceResourceException {
+        if(uri == null) {
+            uri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
+            Log.i(TAG, "No USB device specified -- using default " +
+                    uri);
+        }
+
+        if(!validateResource(uri)) {
+            throw new DataSourceResourceException(
+                    "USB device URI must have the usb:// scheme");
+        }
+
+        return uri;
+    }
+
+    private static boolean validateResource(URI uri) {
+        return uri.getScheme() != null && uri.getScheme().equals("usb");
+    }
 }

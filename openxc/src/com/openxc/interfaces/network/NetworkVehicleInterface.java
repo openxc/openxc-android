@@ -20,11 +20,10 @@ import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
 
 /**
- * A vehicle data source reading measurements from an OpenXC Network device.
+ * A vehicle data source reading measurements from an OpenXC network device.
  *
  * This class looks for a network device and expects to read OpenXC-compatible,
- * newline separated JSON messages in network frames.
- *
+ * newline separated JSON messages.
  */
 public class NetworkVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
@@ -74,12 +73,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                     massageUri(uriString)));
     }
 
-    /**
-     * Return true if the given address and port match those currently in use by
-     * the network data source.
-     *
-     * @return true if the address and port match the current in-use values.
-     */
     public boolean setResource(String otherResource) throws DataSourceException {
         if(!UriBasedVehicleInterfaceMixin.sameResource(mUri,
                 massageUri(otherResource))) {
@@ -99,7 +92,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         mOutStream = null;
     }
 
-
     /**
      * Return true if the address and port are valid.
      *
@@ -117,14 +109,14 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
-    protected int read(byte[] bytes) throws IOException {
-        return mInStream.read(bytes, 0, bytes.length);
-    }
-
     public boolean receive(RawMeasurement command) {
         String message = command.serialize() + "\u0000";
         byte[] bytes = message.getBytes();
         return write(bytes);
+    }
+
+    protected int read(byte[] bytes) throws IOException {
+        return mInStream.read(bytes, 0, bytes.length);
     }
 
     protected String getTag() {

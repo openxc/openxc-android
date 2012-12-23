@@ -1,23 +1,17 @@
 package com.openxc.interfaces.bluetooth;
 
 import java.io.IOException;
-
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import java.util.Set;
-import java.util.UUID;
-
-import com.openxc.interfaces.bluetooth.BluetoothException;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
-
 import android.util.Log;
 
 /**

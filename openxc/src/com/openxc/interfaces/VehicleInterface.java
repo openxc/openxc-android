@@ -12,7 +12,7 @@ import com.openxc.sources.VehicleDataSource;
  * interface capable of full duplex communication.
  *
  * The methods of {@link VehicleDataSource} are used to receive data from the
- * vehicle, and the methods of {@link VechileDataSink} are used to send data
+ * vehicle, and the methods of {@link VehicleDataSink} are used to send data
  * back to the vehicle.
  *
  * Implementation of this interface are expected to have a constructor that

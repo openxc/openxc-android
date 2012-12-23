@@ -46,6 +46,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             throw new DataSourceException(
                     "Unable to open Bluetooth device manager", e);
         }
+
         setAddress(address);
         start();
     }
@@ -53,10 +54,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public BluetoothVehicleInterface(Context context, String address)
             throws DataSourceException {
         this(null, context, address);
-    }
-
-    protected int read(byte[] bytes) throws IOException {
-        return mInStream.read(bytes, 0, bytes.length);
     }
 
     public boolean receive(RawMeasurement command) {
@@ -82,21 +79,16 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         mOutStream = null;
     }
 
-    private void setAddress(String address) {
-        // TODO verify this is a valid MAC address
-        mAddress = address;
-    }
-
-    private static boolean sameResource(String address, String otherAddress) {
-        return otherAddress != null && otherAddress.equals(address);
-    }
-
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("deviceAddress", mAddress)
             .add("socket", mSocket)
             .toString();
+    }
+
+    protected int read(byte[] bytes) throws IOException {
+        return mInStream.read(bytes, 0, bytes.length);
     }
 
     protected void disconnect() {
@@ -176,5 +168,14 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             disconnected();
             throw new BluetoothException();
         }
+    }
+
+    private void setAddress(String address) {
+        // TODO verify this is a valid MAC address
+        mAddress = address;
+    }
+
+    private static boolean sameResource(String address, String otherAddress) {
+        return otherAddress != null && otherAddress.equals(address);
     }
 }

@@ -8,6 +8,13 @@ import com.openxc.measurements.Measurement;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sinks.DataSinkException;
 
+/**
+ * Utilities for interacting with a number of VehicleInterface objects.
+ *
+ * These functions are shared by the {@link com.openxc.VehicleManager} an
+ * {@link com.openxc.remote.VehicleService} which do not share a common
+ * ancestor, so they are encapsulated in this mixin.
+ */
 public class VehicleInterfaceManagerUtils {
     private static final String TAG = "VehicleInterfaceManagerUtils";
 

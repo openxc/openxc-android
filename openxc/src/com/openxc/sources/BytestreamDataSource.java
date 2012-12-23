@@ -8,7 +8,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import android.content.Context;
 import android.util.Log;
 
-public abstract class BytestreamDataSource extends ContextualVehicleDataSource implements Runnable {
+/**
+ * Common functionality for data sources that read a stream of newline-separated
+ * messages in a separate thread from the main activity.
+ */
+public abstract class BytestreamDataSource extends ContextualVehicleDataSource
+        implements Runnable {
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 128;
     private boolean mRunning = false;
@@ -101,8 +106,32 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource i
         return mConnectionLock.newCondition();
     }
 
+    /**
+     * Read data from the source into the given array.
+     *
+     * No more than bytes.length bytes will be read, and there is no guarantee
+     * that any bytes will be read at all.
+     *
+     * @param bytes the destination array for bytes from the data source.
+     * @return the number of bytes that were actually copied into bytes.
+     * @throws IOException if the source is unexpectedly closed or returns an
+     *      error.
+     */
     protected abstract int read(byte[] bytes) throws IOException;
+
+    /**
+     * If not already connected to the data source, initiate the connection and
+     * block until ready to be read.
+     *
+     * @throws DataSourceException The connection is still alive, but it
+     *      returned an unexpected result that cannot be handled.
+     * @throws InterruptedException if the interrupted while blocked -- probably
+     *      shutting down.
+     */
     protected abstract void waitForConnection() throws DataSourceException, InterruptedException;
 
+    /**
+     * Perform any cleanup necessary to disconnect from the interface.
+     */
     protected abstract void disconnect();
 };
