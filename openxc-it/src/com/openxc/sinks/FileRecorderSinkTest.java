@@ -85,10 +85,21 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     }
 
     @SmallTest
-    public void testStop() {
-        assertTrue(sink.isRunning());
+    public void testStop() throws DataSinkException {
+        RawMeasurement measurement = new RawMeasurement("first", true);
+        assertTrue(sink.receive(measurement));
+
+        measurement = new RawMeasurement("second", false);
+        assertTrue(sink.receive(measurement));
         sink.stop();
-        assertFalse(sink.isRunning());
+
+        measurement = new RawMeasurement("third", true);
+        assertFalse(sink.receive(measurement));
+
+        String[] records = outputString.toString().split("\n");
+        assertEquals(2, records.length);
+        assertTrue(records[0].indexOf("first") != -1);
+        assertTrue(records[1].indexOf("second") != -1);
     }
 
     private class MockFileOpener implements FileOpener {

@@ -1,16 +1,14 @@
 package com.openxc.sinks;
 
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import java.util.Iterator;
+import android.util.Log;
 
 import com.openxc.remote.RawMeasurement;
-
-import android.util.Log;
 
 /**
  * Functionality to notify multiple clients asynchronously of new measurements.
@@ -27,26 +25,18 @@ import android.util.Log;
 public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private final static String TAG = "AbstractQueuedCallbackSink";
 
-    private NotificationThread mNotificationThread;
-    private Lock mNotificationsLock;
-    private Condition mNotificationReceived;
-    private ConcurrentHashMap<String, RawMeasurement> mNotifications;
+    private NotificationThread mNotificationThread = new NotificationThread();
+    private Lock mNotificationsLock = new ReentrantLock();
+    private Condition mNotificationReceived = mNotificationsLock.newCondition();
+    private ConcurrentHashMap<String, RawMeasurement> mNotifications =
+            new ConcurrentHashMap<String, RawMeasurement>(32);
 
     public AbstractQueuedCallbackSink() {
-        mNotifications = new ConcurrentHashMap<String, RawMeasurement>(32);
-        mNotificationsLock = new ReentrantLock();
-        mNotificationReceived = mNotificationsLock.newCondition();
-        mNotificationThread = new NotificationThread();
         mNotificationThread.start();
     }
 
-    abstract protected void propagateMeasurement(String measurementId,
-            RawMeasurement measurement);
-
     public synchronized void stop() {
-        if(mNotificationThread != null) {
-            mNotificationThread.done();
-        }
+        mNotificationThread.done();
     }
 
     public boolean receive(RawMeasurement rawMeasurement)
@@ -58,6 +48,9 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         mNotificationsLock.unlock();
         return true;
     }
+
+    abstract protected void propagateMeasurement(String measurementId,
+            RawMeasurement measurement);
 
     private class NotificationThread extends Thread {
         private boolean mRunning = true;

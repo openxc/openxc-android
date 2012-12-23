@@ -1,8 +1,8 @@
 package com.openxc.sinks;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.openxc.remote.RawMeasurement;
 
@@ -14,11 +14,8 @@ import com.openxc.remote.RawMeasurement;
  * measurements data structure and query it for values.
  */
 public class BaseVehicleDataSink implements VehicleDataSink {
-    private Map<String, RawMeasurement> mMeasurements;
-
-    public BaseVehicleDataSink() {
-        mMeasurements = new ConcurrentHashMap<String, RawMeasurement>();
-    }
+    private Map<String, RawMeasurement> mMeasurements =
+            new ConcurrentHashMap<String, RawMeasurement>();
 
     /**
      * Receive a raw measurement, deserialized to primatives.

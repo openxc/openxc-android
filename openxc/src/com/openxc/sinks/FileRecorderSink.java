@@ -2,7 +2,6 @@ package com.openxc.sinks;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,9 +25,9 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     private static SimpleDateFormat sDateFormatter =
             new SimpleDateFormat("yyyy-MM-dd-HH", Locale.US);
 
+    private FileOpener mFileOpener;
     private BufferedWriter mWriter;
     private Calendar mLastFileCreated;
-    private FileOpener mFileOpener;
 
     public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
         mFileOpener = fileOpener;
@@ -83,31 +82,13 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         Log.i(TAG, "Shutting down");
     }
 
-    public synchronized boolean isRunning() {
-        return mWriter != null;
-    }
-
     public synchronized void flush() {
-        if(isRunning()) {
+        if(mWriter != null) {
             try {
                 mWriter.flush();
             } catch(IOException e) {
                 Log.w(TAG, "Unable to flush writer", e);
             }
-        }
-    }
-
-    public static boolean validatePath(String path) {
-        if(path == null) {
-            Log.w(TAG, "Recording path not set (it's " + path + ")");
-            return false;
-        }
-
-        try {
-            URI uri = new URI(path);
-            return uri.isAbsolute();
-        } catch(java.net.URISyntaxException e) {
-            return false;
         }
     }
 
