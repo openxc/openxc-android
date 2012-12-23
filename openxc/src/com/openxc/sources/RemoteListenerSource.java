@@ -1,16 +1,12 @@
 package com.openxc.sources;
 
-import com.google.common.base.Objects;
+import android.os.RemoteException;
+import android.util.Log;
 
+import com.google.common.base.Objects;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListener;
-
-import com.openxc.sources.BaseVehicleDataSource;
-
-import android.os.RemoteException;
-
-import android.util.Log;
 
 /**
  * Pass measurements from a VehicleService to an in-process callback.
@@ -31,7 +27,6 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
      * Registers a measurement listener with the remote service.
      */
     public RemoteListenerSource(VehicleServiceInterface service) {
-        super();
         mService = service;
 
         try {

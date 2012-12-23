@@ -1,22 +1,17 @@
 package com.openxc.sources;
 
-import com.google.common.base.Objects;
-
-import com.openxc.measurements.Latitude;
-import com.openxc.measurements.Longitude;
-
-import com.openxc.remote.RawMeasurement;
-
 import android.content.Context;
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-
 import android.os.Bundle;
 import android.os.Looper;
-
 import android.util.Log;
+
+import com.google.common.base.Objects;
+import com.openxc.measurements.Latitude;
+import com.openxc.measurements.Longitude;
+import com.openxc.remote.RawMeasurement;
 
 /**
  * Generate location measurements based on native GPS updates.
@@ -35,15 +30,15 @@ public class NativeLocationSource extends ContextualVehicleDataSource
 
     private LocationManager mLocationManager;
 
-    public NativeLocationSource(Context context) {
-        this(null, context);
-    }
-
     public NativeLocationSource(SourceCallback callback, Context context) {
         super(callback, context);
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
         new Thread(this).start();
+    }
+
+    public NativeLocationSource(Context context) {
+        this(null, context);
     }
 
     public void run() {
