@@ -59,12 +59,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     public NetworkVehicleInterface(SourceCallback callback, Context context,
             URI uri) throws DataSourceException {
         super(callback, context);
-
-        if(uri == null || !UriBasedVehicleInterfaceMixin.validateResource(uri)) {
-            throw new DataSourceResourceException("URI is not valid");
-        }
-
-        mUri = uri;
+        setUri(uri);
         start();
     }
 
@@ -85,10 +80,25 @@ public class NetworkVehicleInterface extends BytestreamDataSource
      *
      * @return true if the address and port match the current in-use values.
      */
-    public boolean sameResource(String otherResource) {
-        return UriBasedVehicleInterfaceMixin.sameResource(mUri,
-                massageUri(otherResource));
+    public boolean setResource(String otherResource) throws DataSourceException {
+        if(!UriBasedVehicleInterfaceMixin.sameResource(mUri,
+                massageUri(otherResource))) {
+            setUri(otherResource);
+            stop();
+            start();
+            return true;
+        }
+        return false;
     }
+
+    @Override
+    public void stop() {
+        super.stop();
+        mSocket = null;
+        mInStream = null;
+        mOutStream = null;
+    }
+
 
     /**
      * Return true if the address and port are valid.
@@ -225,5 +235,17 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             uriString = SCHEMA_SPECIFIC_PREFIX + uriString;
         }
         return uriString;
+    }
+
+    private void setUri(String uri) throws DataSourceException {
+        setUri(UriBasedVehicleInterfaceMixin.createUri(massageUri(uri)));
+    }
+
+    private void setUri(URI uri) throws DataSourceResourceException {
+        if(uri == null || !UriBasedVehicleInterfaceMixin.validateResource(uri)) {
+            throw new DataSourceResourceException("URI is not valid");
+        }
+
+        mUri = uri;
     }
 }

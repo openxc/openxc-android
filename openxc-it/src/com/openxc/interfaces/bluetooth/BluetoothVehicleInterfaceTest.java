@@ -25,6 +25,13 @@ public class BluetoothVehicleInterfaceTest extends AndroidTestCase {
     @SmallTest
     public void testResourceMatching() throws DataSourceException {
         source = new BluetoothVehicleInterface(getContext(), macAddress);
-        assertTrue(source.sameResource(macAddress));
+        assertFalse(source.setResource(macAddress));
+    }
+
+    @SmallTest
+    public void testResourceDifferent() throws DataSourceException {
+        String anotherMac = "01:00:00:00:00:00";
+        source = new BluetoothVehicleInterface(getContext(), macAddress);
+        assertTrue(source.setResource(anotherMac));
     }
 }

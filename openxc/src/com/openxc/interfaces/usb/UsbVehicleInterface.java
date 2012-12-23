@@ -58,10 +58,8 @@ public class UsbVehicleInterface extends BytestreamDataSource
     private UsbEndpoint mInEndpoint;
     private UsbEndpoint mOutEndpoint;
     private PendingIntent mPermissionIntent;
-    private final URI mDeviceUri;
+    private URI mDeviceUri;
     private final Condition mDeviceChanged;
-    private int mVendorId;
-    private int mProductId;
 
     /**
      * Construct an instance of UsbVehicleInterface with a receiver callback
@@ -69,10 +67,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
      *
      * If the device cannot be found at initialization, the object will block
      * waiting for a signal to check again.
-     *
-     * TODO Do we ever send such a signal? Or did I delete that because in order
-     * to have that signal sent, we have to shut down the VehicleService
-     * (and thus this UsbVehicleInterface) anyway?
      *
      * @param context The Activity or Service context, used to get access to the
      *      Android UsbManager.
@@ -87,18 +81,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
     public UsbVehicleInterface(SourceCallback callback, Context context,
             URI deviceUri) throws DataSourceException {
         super(callback, context);
-        if(deviceUri == null) {
-            deviceUri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
-            Log.i(TAG, "No USB device specified -- using default " +
-                    deviceUri);
-        }
-
-        if(deviceUri == null || !validateResource(deviceUri)) {
-            throw new DataSourceResourceException(
-                    "USB device URI must have the usb:// scheme");
-        }
-
-        mDeviceUri = deviceUri;
+        mDeviceUri = createUri(deviceUri);
         mDeviceChanged = createCondition();
 
         try {
@@ -112,21 +95,33 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
-        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-        getContext().registerReceiver(mBroadcastReceiver, filter);
-
-        filter = new IntentFilter();
-        filter.addAction(ACTION_USB_DEVICE_ATTACHED);
-        getContext().registerReceiver(mBroadcastReceiver, filter);
-
-        filter = new IntentFilter();
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        getContext().registerReceiver(mBroadcastReceiver, filter);
-
-        mVendorId = UsbDeviceUtilities.vendorFromUri(mDeviceUri);
-        mProductId = UsbDeviceUtilities.productFromUri(mDeviceUri);
 
         start();
+    }
+
+    private static URI createUri(String uriString) throws DataSourceException {
+        URI uri;
+        if(uriString == null) {
+            uri = null;
+        } else {
+            uri = UriBasedVehicleInterfaceMixin.createUri(uriString);
+        }
+        return createUri(uri);
+    }
+
+    private static URI createUri(URI uri) throws DataSourceResourceException {
+        if(uri == null) {
+            uri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
+            Log.i(TAG, "No USB device specified -- using default " +
+                    uri);
+        }
+
+        if(!validateResource(uri)) {
+            throw new DataSourceResourceException(
+                    "USB device URI must have the usb:// scheme");
+        }
+
+        return uri;
     }
 
     public static boolean validateResource(URI uri) {
@@ -158,11 +153,22 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     public UsbVehicleInterface(Context context, String uriString)
             throws DataSourceException {
-        this(null, context, UriBasedVehicleInterfaceMixin.createUri(uriString));
+        this(null, context, createUri(uriString));
     }
 
     public synchronized void start() {
         super.start();
+        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
+
+        filter = new IntentFilter();
+        filter.addAction(ACTION_USB_DEVICE_ATTACHED);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
+
+        filter = new IntentFilter();
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
+
         initializeDevice();
         primeOutput();
     }
@@ -174,6 +180,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
      * This should be called before the object is given up to the garbage
      * collector to avoid leaking a receiver in the Android framework.
      */
+    @Override
     public void stop() {
         super.stop();
         getContext().unregisterReceiver(mBroadcastReceiver);
@@ -199,10 +206,17 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return write(bytes);
     }
 
-    public boolean sameResource(String otherUri) {
-        return (mDeviceUri == UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI
-                    && otherUri == null) ||
-            UriBasedVehicleInterfaceMixin.sameResource(mDeviceUri, otherUri);
+    public boolean setResource(String otherUri) throws DataSourceException {
+        if(mDeviceUri == UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI
+                    && otherUri != null &&
+                !UriBasedVehicleInterfaceMixin.sameResource(mDeviceUri,
+                    otherUri)) {
+            mDeviceUri = createUri(otherUri);
+            stop();
+            start();
+            return true;
+        }
+        return false;
     }
 
     protected String getTag() {
@@ -221,7 +235,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     private void initializeDevice() {
         try {
-            connectToDevice(mManager, mVendorId, mProductId);
+            connectToDevice(mManager, mDeviceUri);
         } catch(DataSourceException e) {
             Log.i(TAG, "Unable to load USB device -- " +
                     "waiting for it to appear", e);
@@ -244,6 +258,13 @@ public class UsbVehicleInterface extends BytestreamDataSource
             return false;
         }
         return true;
+    }
+
+    private void connectToDevice(UsbManager manager, URI deviceUri)
+            throws DataSourceResourceException {
+        connectToDevice(manager,
+                UsbDeviceUtilities.vendorFromUri(mDeviceUri),
+                UsbDeviceUtilities.productFromUri(mDeviceUri));
     }
 
     private void connectToDevice(UsbManager manager, int vendorId,
@@ -392,7 +413,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
             } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
                 Log.d(TAG, "Device attached");
                 try {
-                    connectToDevice(mManager, mVendorId, mProductId);
+                    connectToDevice(mManager, mDeviceUri);
                 } catch(DataSourceException e) {
                     Log.i(TAG, "Unable to load USB device -- waiting for it " +
                             "to appear", e);

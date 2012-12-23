@@ -18,6 +18,7 @@ import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
+import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
 
 /**
@@ -158,12 +159,7 @@ public class VehicleService extends Service {
         VehicleInterface vehicleInterface =
             findActiveVehicleInterface(interfaceType);
 
-        if(vehicleInterface == null ||
-                !vehicleInterface.sameResource(resource)) {
-            if(vehicleInterface != null) {
-                removeVehicleInterface(vehicleInterface);
-            }
-
+        if(vehicleInterface == null) {
             try {
                 vehicleInterface = VehicleInterfaceFactory.build(
                         interfaceType, VehicleService.this, resource);
@@ -175,8 +171,18 @@ public class VehicleService extends Service {
             mInterfaces.add(vehicleInterface);
             mPipeline.addSource(vehicleInterface);
         } else {
-            Log.d(TAG, "Vehicle interface " + vehicleInterface
-                    + " already running");
+            try {
+                if(vehicleInterface.setResource(resource)) {
+                    Log.d(TAG, "Changed resource of already active interface " +
+                            vehicleInterface);
+                } else {
+                    Log.d(TAG, "Interface " + vehicleInterface +
+                            " already had same active resource " + resource +
+                            " -- not restarting");
+                }
+            } catch(DataSourceException e) {
+                Log.w(TAG, "Unable to change resource", e);
+            }
         }
         Log.i(TAG, "Added vehicle interface  " + vehicleInterface);
     }

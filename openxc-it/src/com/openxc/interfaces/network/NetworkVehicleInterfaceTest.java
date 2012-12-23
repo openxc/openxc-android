@@ -12,7 +12,7 @@ public class NetworkVehicleInterfaceTest extends AndroidTestCase {
     String goodUri = "//192.168.1.1:4000";
     String missingPortUri = "//192.168.1.1";
     String incorrectSchemeUri = "file://192.168.1.1:4000";
-    String missingPrefixUri = "192.168.1.1:4000";
+    String missingPrefixUri = "192.168.2.2:5000";
     NetworkVehicleInterface source;
 
     @Override
@@ -39,13 +39,19 @@ public class NetworkVehicleInterfaceTest extends AndroidTestCase {
     @SmallTest
     public void testResourceMatching() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), goodUri);
-        assertTrue(source.sameResource(goodUri));
+        assertFalse(source.setResource(goodUri));
     }
 
     @SmallTest
     public void testResourceMatchingMassaged() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
-        assertTrue(source.sameResource(missingPrefixUri));
+        assertFalse(source.setResource(missingPrefixUri));
+    }
+
+    @SmallTest
+    public void testResourceChanged() throws DataSourceException {
+        source = new NetworkVehicleInterface(getContext(), goodUri);
+        assertTrue(source.setResource(missingPrefixUri));
     }
 
     @SmallTest

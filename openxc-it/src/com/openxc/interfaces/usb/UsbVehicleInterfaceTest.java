@@ -55,6 +55,6 @@ public class UsbVehicleInterfaceTest extends AndroidTestCase {
     @SmallTest
     public void testResourceMatchingDefault() throws DataSourceException {
         source = new UsbVehicleInterface(getContext());
-        assertTrue(source.sameResource(null));
+        assertFalse(source.setResource(null));
     }
 }

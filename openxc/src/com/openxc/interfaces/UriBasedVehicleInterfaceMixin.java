@@ -66,6 +66,10 @@ public class UriBasedVehicleInterfaceMixin {
      * @throws DataSourceException if the parameter is not a valid URI.
      */
     public static URI createUri(String uriString) throws DataSourceException {
+        if(uriString == null) {
+            throw new DataSourceResourceException("URI string is null");
+        }
+
         try {
             return new URI(uriString);
         } catch(URISyntaxException e) {

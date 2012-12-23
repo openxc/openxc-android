@@ -32,10 +32,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private static final String TAG = "BluetoothVehicleInterface";
 
     private DeviceManager mDeviceManager;
+    private String mAddress;
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
-    private String mAddress;
 
     public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {
@@ -46,7 +46,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             throw new DataSourceException(
                     "Unable to open Bluetooth device manager", e);
         }
-        mAddress = address;
+        setAddress(address);
         start();
     }
 
@@ -64,8 +64,31 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return write(message);
     }
 
-    public boolean sameResource(String otherAddress) {
-        return otherAddress != null && otherAddress.equals(mAddress);
+    public boolean setResource(String otherAddress) throws DataSourceException {
+        if(!sameResource(mAddress, otherAddress)) {
+            setAddress(otherAddress);
+            stop();
+            start();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        mSocket = null;
+        mInStream = null;
+        mOutStream = null;
+    }
+
+    private void setAddress(String address) {
+        // TODO verify this is a valid MAC address
+        mAddress = address;
+    }
+
+    private static boolean sameResource(String address, String otherAddress) {
+        return otherAddress != null && otherAddress.equals(address);
     }
 
     @Override

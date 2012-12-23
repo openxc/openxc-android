@@ -46,7 +46,5 @@ public class RemoteServiceVehicleInterface implements VehicleInterface {
 
     public void setCallback(SourceCallback callback) { }
 
-    public boolean sameResource(String other) {
-        return true;
-    }
+    public boolean setResource(String other) { return false; }
 }
