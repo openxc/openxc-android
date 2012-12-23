@@ -5,10 +5,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 import com.openxc.remote.RawMeasurement;
-
-import com.openxc.sources.SourceCallback;
 
 /**
  * A common parent for all vehicle data sources.

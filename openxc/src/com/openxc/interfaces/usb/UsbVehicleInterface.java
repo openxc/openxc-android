@@ -2,7 +2,6 @@ package com.openxc.interfaces.usb;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.concurrent.locks.Condition;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -59,7 +58,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
     private UsbEndpoint mOutEndpoint;
     private PendingIntent mPermissionIntent;
     private URI mDeviceUri;
-    private final Condition mDeviceChanged;
 
     /**
      * Construct an instance of UsbVehicleInterface with a receiver callback
@@ -82,7 +80,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
             URI deviceUri) throws DataSourceException {
         super(callback, context);
         mDeviceUri = createUri(deviceUri);
-        mDeviceChanged = createCondition();
 
         try {
             mManager = (UsbManager) getContext().getSystemService(

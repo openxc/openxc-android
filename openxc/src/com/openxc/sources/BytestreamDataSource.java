@@ -17,11 +17,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 128;
     private boolean mRunning = false;
-    private final Lock mConnectionLock;
+    private final Lock mConnectionLock = new ReentrantLock();
+    protected final Condition mDeviceChanged = mConnectionLock.newCondition();
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
-        mConnectionLock = new ReentrantLock();
     }
 
     public BytestreamDataSource(Context context) {
