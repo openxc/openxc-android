@@ -10,7 +10,8 @@
 
     <artifactId>openxc-it</artifactId>
     <packaging>apk</packaging>
-    <name>OpenXC - Integration Tests</name>
+    <name>OpenXC - Instrumentation Tests</name>
+    <description>Instrumentation test suite for OpenXC library</description>
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>

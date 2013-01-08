@@ -11,6 +11,7 @@
     <artifactId>openxc</artifactId>
     <packaging>apklib</packaging>
     <name>OpenXC Android Library</name>
+    <description>Android library for the OpenXC Platform</description>
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>

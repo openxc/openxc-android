@@ -11,6 +11,7 @@
     <artifactId>openxc-enabler</artifactId>
     <packaging>apk</packaging>
     <name>OpenXC - Enabler App</name>
+    <description>Enabler Android application for OpenXC</description>
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>

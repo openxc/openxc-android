@@ -11,6 +11,7 @@
     <artifactId>openxc-examples</artifactId>
     <packaging>apk</packaging>
     <name>OpenXC - Examples</name>
+    <description>Example Vehicle Dashboard application using OpenXC</description>
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>
