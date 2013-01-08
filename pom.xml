@@ -12,6 +12,7 @@
 
     <scm>
         <url>https://github.com/openxc/openxc-android</url>
+        <connection>scm:git:https://github.com/openxc/openxc-android</connection>
     </scm>
 
     <modules>
