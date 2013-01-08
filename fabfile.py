@@ -85,6 +85,10 @@ def release():
     upload_release("%(root_dir)s/enabler/target/openxc-enabler.apk" % env,
             "openxc-enabler-%s.apk" % env.release)
 
+@task
+def snapshot():
+    local("mvn clean deploy -pl openxc -am")
+
 
 def upload_release(target_file, s3_key):
     conn = boto.s3.connection.S3Connection(env.aws_access_key,
