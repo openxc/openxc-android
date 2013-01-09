@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  com.openxc.sources.usb
+  com.openxc.interfaces.network
 
 
 | OpenXC Android Library
@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="selected api apilevel-">
-  <a href="../../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -177,9 +179,7 @@
               
     <li><h2>Classes</h2>
       <ul>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></li>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></li>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></li>
+        <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a></li>
       </ul>
     </li>
               
@@ -187,7 +187,7 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceException.html">UsbDeviceException</a></li>
+        <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/network/NetworkSourceException.html">NetworkSourceException</a></li>
       </ul>
     </li>
               
@@ -237,7 +237,7 @@
 
 <div id="jd-header">
   package
-  <h1>com.openxc.sources.usb</h1>
+  <h1>com.openxc.interfaces.network</h1>
 </div><!-- end header -->
 
 <div id="naMessage"></div>
@@ -246,8 +246,7 @@
 
 
   <div class="jd-descr">
-    Contains a vehicle data source that connects to a vehicle interface via USB.
- This is the default vehicle data source.
+    Contains a vehicle data source that connects to a vehicle interface via a network.
 
   </div>
 
@@ -264,16 +263,8 @@
     
   <table class="jd-sumtable-expando">
         <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/openxc/sources/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></td>
-              <td class="jd-descrcol" width="100%">The UsbDeviceActivity is a proxy to listen for USB_DEVICE_ATTACHED intents.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></td>
-              <td class="jd-descrcol" width="100%">Stateless utilities for finding and opening USB devices.&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></td>
-              <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC USB device.&nbsp;</td>
+              <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a></td>
+              <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC network device.&nbsp;</td>
           </tr>
   </table>
     </div>
@@ -289,7 +280,7 @@
     
   <table class="jd-sumtable-expando">
         <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/openxc/sources/usb/UsbDeviceException.html">UsbDeviceException</a></td>
+              <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/network/NetworkSourceException.html">NetworkSourceException</a></td>
               <td class="jd-descrcol" width="100%">&nbsp;</td>
           </tr>
   </table>

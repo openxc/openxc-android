@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="selected api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -185,7 +187,8 @@
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSourceMixin.html">BytestreamDataSourceMixin</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></li>
@@ -240,13 +243,6 @@
 
 
 
-  
-   
-  
-  
-  
-  
-
 
 <div class="sum-details-links">
 
@@ -267,8 +263,6 @@ Summary:
   
 
 
-
-  &#124; <a href="#inhmethods">Inherited Methods</a>
 
 &#124; <a href="#" onclick="return toggleAllClassInherited()" id="toggleAllClassInherited">[Expand All]</a>
 
@@ -297,11 +291,6 @@ Summary:
 
 
   
-  
-      implements 
-      
-        <a href="../../../com/openxc/VehicleDataEndpoint.html">VehicleDataEndpoint</a> 
-      
   
   
 
@@ -345,17 +334,25 @@ Summary:
             
               <a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a>,
             
-              <a href="../../../com/openxc/sources/bluetooth/BluetoothVehicleDataSource.html">BluetoothVehicleDataSource</a>,
+              <a href="../../../com/openxc/interfaces/bluetooth/BluetoothVehicleInterface.html">BluetoothVehicleInterface</a>,
+            
+              <a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a>,
             
               <a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a>,
             
               <a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a>,
             
+              <a href="../../../com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a>,
+            
               <a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a>,
+            
+              <a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a>,
             
               <a href="../../../com/openxc/sources/trace/TraceVehicleDataSource.html">TraceVehicleDataSource</a>,
             
-              <a href="../../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a>
+              <a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a>,
+            
+              <a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>
             
           
       </div>
@@ -372,29 +369,48 @@ Summary:
               <td class="jd-descrcol" width="100%">A common parent for all vehicle data sources.&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sources/bluetooth/BluetoothVehicleDataSource.html">BluetoothVehicleDataSource</a></td>
+              <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/bluetooth/BluetoothVehicleInterface.html">BluetoothVehicleInterface</a></td>
               <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an Bluetooth-enabled
  OpenXC device.&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></td>
+              <td class="jd-descrcol" width="100%">Common functionality for data sources that read a stream of newline-separated
+ messages in a separate thread from the main activity.&nbsp;</td>
+          </tr>
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></td>
               <td class="jd-descrcol" width="100%">A parent class for data sources that require access to an Android context.&nbsp;</td>
           </tr>
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></td>
               <td class="jd-descrcol" width="100%">Generate location measurements based on native GPS updates.&nbsp;</td>
+          </tr>
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a></td>
+              <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC network device.&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></td>
               <td class="jd-descrcol" width="100%">Pass measurements from a VehicleService to an in-process callback.&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></td>
+              <td class="jd-descrcol" width="100%">A VehicleInterface that sends commands to a VehicleService operating in a
+ remote process.&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/trace/TraceVehicleDataSource.html">TraceVehicleDataSource</a></td>
               <td class="jd-descrcol" width="100%">A vehicle data source that reads measurements from a pre-recorded trace file.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></td>
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></td>
               <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC USB device.&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></td>
+              <td class="jd-descrcol" width="100%">A connection to a physical vehicle interface that is capable of full duplex
+ communication.&nbsp;</td>
           </tr>
   </table>
       </div>
@@ -488,42 +504,8 @@ Summary:
   </td></tr>
 
 
-
-</table>
-
-
-
-
-
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="inhmethods" class="jd-sumtable"><tr><th>
-  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
-  <div style="clear:left;">Inherited Methods</div></th></tr>
-
-
-<tr class="api apilevel-" >
-<td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.VehicleDataEndpoint" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.VehicleDataEndpoint-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>
-From interface
-
-  <a href="../../../com/openxc/VehicleDataEndpoint.html">com.openxc.VehicleDataEndpoint</a>
-
-<div id="inherited-methods-com.openxc.VehicleDataEndpoint">
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-list"
-        class="jd-inheritedlinks">
-  </div>
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-summary" style="display: none;">
-    <table class="jd-sumtable-expando">
-    
-
-
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -533,7 +515,7 @@ From interface
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/VehicleDataEndpoint.html#stop()">stop</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/VehicleDataSource.html#stop()">stop</a></span>()</nobr>
         
         <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
  source) or stop expecting to receive them (if a sink).</div>
@@ -541,13 +523,13 @@ From interface
   </td></tr>
 
 
-</table>
-  </div>
-</div>
-</td></tr>
-
 
 </table>
+
+
+
+
+
 
 
 </div><!-- jd-descr (summary) -->
@@ -619,6 +601,39 @@ From interface
  Vehicle data sources only need to support a single callback, and in fact
  should not support more than one - all vehicle measurements should be
  directed to a single, central collector.
+</p></div>
+
+    </div>
+</div>
+
+
+<A NAME="stop()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+        abstract 
+         
+        void
+      </span>
+      <span class="sympad">stop</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Release any acquired resources and either stop sending measurements (if a
+ source) or stop expecting to receive them (if a sink).
 </p></div>
 
     </div>

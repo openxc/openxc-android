@@ -275,6 +275,39 @@
  visibility="public"
 >
 </field>
+<field name="network_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837512"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="network_host_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837513"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="network_port_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837514"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="recording_checkbox_key"
  type="int"
  transient="false"
@@ -291,6 +324,28 @@
  transient="false"
  volatile="false"
  value="2130837507"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="trace_source_checkbox_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837515"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="trace_source_file_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837516"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -320,25 +375,6 @@
 >
 </field>
 </class>
-<interface name="VehicleDataEndpoint"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<method name="stop"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-</interface>
 <class name="VehicleManager"
  extends="android.app.Service"
  abstract="false"
@@ -376,6 +412,19 @@
 <exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
 </exception>
 </method>
+<method name="addLocalVehicleInterface"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="vehicleInterface" type="com.openxc.interfaces.VehicleInterface">
+</parameter>
+</method>
 <method name="addSink"
  return="void"
  abstract="false"
@@ -402,7 +451,7 @@
 <parameter name="source" type="com.openxc.sources.VehicleDataSource">
 </parameter>
 </method>
-<method name="clearSources"
+<method name="addVehicleInterface"
  return="void"
  abstract="false"
  native="false"
@@ -412,8 +461,10 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
+<parameter name="vehicleInterfaceType" type="java.lang.Class&lt;? extends com.openxc.interfaces.VehicleInterface&gt;">
+</parameter>
+<parameter name="resource" type="java.lang.String">
+</parameter>
 </method>
 <method name="get"
  return="com.openxc.measurements.Measurement"
@@ -467,19 +518,6 @@
  visibility="public"
 >
 </method>
-<method name="initializeDefaultSources"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
 <method name="onBind"
  return="android.os.IBinder"
  abstract="false"
@@ -523,6 +561,19 @@
 <exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
 </exception>
 </method>
+<method name="removeLocalVehicleInterface"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="vehicleInterface" type="com.openxc.interfaces.VehicleInterface">
+</parameter>
+</method>
 <method name="removeSink"
  return="void"
  abstract="false"
@@ -549,8 +600,21 @@
 <parameter name="source" type="com.openxc.sources.VehicleDataSource">
 </parameter>
 </method>
-<method name="set"
+<method name="removeVehicleInterface"
  return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="vehicleInterfaceType" type="java.lang.Class&lt;? extends com.openxc.interfaces.VehicleInterface&gt;">
+</parameter>
+</method>
+<method name="send"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -562,81 +626,6 @@
 <parameter name="command" type="com.openxc.measurements.Measurement">
 </parameter>
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
-</exception>
-</method>
-<method name="setBluetoothSourceStatus"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="setFileRecordingStatus"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="setNativeGpsOverwriteStatus"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="setNativeGpsStatus"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
-</exception>
-</method>
-<method name="setUploadingStatus"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enabled" type="boolean">
-</parameter>
-<exception name="VehicleServiceException" type="com.openxc.remote.VehicleServiceException">
 </exception>
 </method>
 <method name="waitUntilBound"
@@ -691,18 +680,375 @@
 </method>
 </class>
 </package>
-<package name="com.openxc.controllers"
+<package name="com.openxc.interfaces"
 >
-<interface name="VehicleController"
+<class name="UriBasedVehicleInterfaceMixin"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UriBasedVehicleInterfaceMixin"
+ type="com.openxc.interfaces.UriBasedVehicleInterfaceMixin"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="createUri"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uriString" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+<method name="sameResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="otherResource" type="java.lang.String">
+</parameter>
+</method>
+<method name="validateResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uriString" type="java.lang.String">
+</parameter>
+</method>
+<method name="validateResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+</class>
+<interface name="VehicleInterface"
  abstract="true"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<method name="set"
- return="void"
+<implements name="com.openxc.sinks.VehicleDataSink">
+</implements>
+<implements name="com.openxc.sources.VehicleDataSource">
+</implements>
+<method name="setResource"
+ return="boolean"
  abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="resource" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+</interface>
+<class name="VehicleInterfaceException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleInterfaceException"
+ type="com.openxc.interfaces.VehicleInterfaceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="VehicleInterfaceException"
+ type="com.openxc.interfaces.VehicleInterfaceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="VehicleInterfaceException"
+ type="com.openxc.interfaces.VehicleInterfaceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="VehicleInterfaceFactory"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleInterfaceFactory"
+ type="com.openxc.interfaces.VehicleInterfaceFactory"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="build"
+ return="com.openxc.interfaces.VehicleInterface"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="interfaceName" type="java.lang.String">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="resource" type="java.lang.String">
+</parameter>
+<exception name="VehicleInterfaceException" type="com.openxc.interfaces.VehicleInterfaceException">
+</exception>
+</method>
+<method name="build"
+ return="com.openxc.interfaces.VehicleInterface"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="interfaceType" type="java.lang.Class&lt;? extends com.openxc.interfaces.VehicleInterface&gt;">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="resource" type="java.lang.String">
+</parameter>
+<exception name="VehicleInterfaceException" type="com.openxc.interfaces.VehicleInterfaceException">
+</exception>
+</method>
+<method name="findClass"
+ return="java.lang.Class&lt;? extends com.openxc.interfaces.VehicleInterface&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="interfaceName" type="java.lang.String">
+</parameter>
+<exception name="VehicleInterfaceException" type="com.openxc.interfaces.VehicleInterfaceException">
+</exception>
+</method>
+</class>
+<class name="VehicleInterfaceManagerUtils"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VehicleInterfaceManagerUtils"
+ type="com.openxc.interfaces.VehicleInterfaceManagerUtils"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="send"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="interfaces" type="java.util.List&lt;com.openxc.interfaces.VehicleInterface&gt;">
+</parameter>
+<parameter name="command" type="com.openxc.measurements.Measurement">
+</parameter>
+</method>
+<method name="send"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="interfaces" type="java.util.List&lt;com.openxc.interfaces.VehicleInterface&gt;">
+</parameter>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+</class>
+</package>
+<package name="com.openxc.interfaces.bluetooth"
+>
+<class name="BluetoothException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BluetoothException"
+ type="com.openxc.interfaces.bluetooth.BluetoothException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="BluetoothException"
+ type="com.openxc.interfaces.bluetooth.BluetoothException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="BluetoothException"
+ type="com.openxc.interfaces.bluetooth.BluetoothException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="BluetoothVehicleInterface"
+ extends="com.openxc.sources.BytestreamDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.interfaces.VehicleInterface">
+</implements>
+<constructor name="BluetoothVehicleInterface"
+ type="com.openxc.interfaces.bluetooth.BluetoothVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="address" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="BluetoothVehicleInterface"
+ type="com.openxc.interfaces.bluetooth.BluetoothVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="address" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<method name="disconnect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="read"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="bytes" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="receive"
+ return="boolean"
+ abstract="false"
  native="false"
  synchronized="false"
  static="false"
@@ -713,7 +1059,507 @@
 <parameter name="command" type="com.openxc.remote.RawMeasurement">
 </parameter>
 </method>
-</interface>
+<method name="setResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="otherAddress" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+<method name="waitForConnection"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+</class>
+<class name="DeviceManager"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DeviceManager"
+ type="com.openxc.interfaces.bluetooth.DeviceManager"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<exception name="BluetoothException" type="com.openxc.interfaces.bluetooth.BluetoothException">
+</exception>
+</constructor>
+<method name="connect"
+ return="android.bluetooth.BluetoothSocket"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="targetAddress" type="java.lang.String">
+</parameter>
+<exception name="BluetoothException" type="com.openxc.interfaces.bluetooth.BluetoothException">
+</exception>
+</method>
+</class>
+</package>
+<package name="com.openxc.interfaces.network"
+>
+<class name="NetworkSourceException"
+ extends="com.openxc.sources.DataSourceException"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="NetworkSourceException"
+ type="com.openxc.interfaces.network.NetworkSourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+<constructor name="NetworkSourceException"
+ type="com.openxc.interfaces.network.NetworkSourceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="NetworkVehicleInterface"
+ extends="com.openxc.sources.BytestreamDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.interfaces.VehicleInterface">
+</implements>
+<constructor name="NetworkVehicleInterface"
+ type="com.openxc.interfaces.network.NetworkVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="NetworkVehicleInterface"
+ type="com.openxc.interfaces.network.NetworkVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="NetworkVehicleInterface"
+ type="com.openxc.interfaces.network.NetworkVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="uriString" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<method name="disconnect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="read"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="bytes" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="receive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="setResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="otherResource" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+<method name="validateResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uriString" type="java.lang.String">
+</parameter>
+</method>
+<method name="waitForConnection"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+</class>
+</package>
+<package name="com.openxc.interfaces.usb"
+>
+<class name="UsbDeviceAttachmentActivity"
+ extends="android.app.Activity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UsbDeviceAttachmentActivity"
+ type="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onResume"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="UsbDeviceException"
+ extends="com.openxc.sources.DataSourceException"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UsbDeviceException"
+ type="com.openxc.interfaces.usb.UsbDeviceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+<constructor name="UsbDeviceException"
+ type="com.openxc.interfaces.usb.UsbDeviceException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="UsbDeviceUtilities"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="productFromUri"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceResourceException" type="com.openxc.sources.DataSourceResourceException">
+</exception>
+</method>
+<method name="vendorFromUri"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceResourceException" type="com.openxc.sources.DataSourceResourceException">
+</exception>
+</method>
+<field name="DEFAULT_USB_DEVICE_URI"
+ type="java.net.URI"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="UsbVehicleInterface"
+ extends="com.openxc.sources.BytestreamDataSource"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.interfaces.VehicleInterface">
+</implements>
+<constructor name="UsbVehicleInterface"
+ type="com.openxc.interfaces.usb.UsbVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="deviceUri" type="java.net.URI">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="UsbVehicleInterface"
+ type="com.openxc.interfaces.usb.UsbVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="UsbVehicleInterface"
+ type="com.openxc.interfaces.usb.UsbVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="UsbVehicleInterface"
+ type="com.openxc.interfaces.usb.UsbVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="uriString" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<method name="disconnect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="read"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="bytes" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="receive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="setResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="otherUri" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
+<method name="waitForConnection"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="InterruptedException" type="java.lang.InterruptedException">
+</exception>
+</method>
+<field name="ACTION_USB_DEVICE_ATTACHED"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;com.ford.openxc.USB_DEVICE_ATTACHED&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ACTION_USB_PERMISSION"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;com.ford.openxc.USB_PERMISSION&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 </package>
 <package name="com.openxc.measurements"
 >
@@ -2568,17 +3414,6 @@
 <parameter name="reserialize" type="boolean">
 </parameter>
 </method>
-<method name="timestamp"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
 <method name="untimestamp"
  return="void"
  abstract="false"
@@ -2646,6 +3481,77 @@
 <parameter name="message" type="java.lang.String">
 </parameter>
 </constructor>
+</class>
+<class name="RemoteServiceVehicleInterface"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.interfaces.VehicleInterface">
+</implements>
+<constructor name="RemoteServiceVehicleInterface"
+ type="com.openxc.remote.RemoteServiceVehicleInterface"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="remoteService" type="com.openxc.remote.VehicleServiceInterface">
+</parameter>
+</constructor>
+<method name="receive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="command" type="com.openxc.remote.RawMeasurement">
+</parameter>
+</method>
+<method name="setCallback"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+</method>
+<method name="setResource"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="java.lang.String">
+</parameter>
+</method>
+<method name="stop"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 </class>
 <class name="VehicleService"
  extends="android.app.Service"
@@ -2717,7 +3623,7 @@
 >
 <implements name="android.os.IInterface">
 </implements>
-<method name="clearSources"
+<method name="addVehicleInterface"
  return="void"
  abstract="true"
  native="false"
@@ -2727,6 +3633,10 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="interfaceName" type="java.lang.String">
+</parameter>
+<parameter name="resource" type="java.lang.String">
+</parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
@@ -2784,19 +3694,6 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
-<method name="initializeDefaultSources"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
 <method name="receive"
  return="void"
  abstract="true"
@@ -2827,8 +3724,23 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
-<method name="set"
+<method name="removeVehicleInterface"
  return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="interfaceName" type="java.lang.String">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="send"
+ return="boolean"
  abstract="true"
  native="false"
  synchronized="false"
@@ -3102,7 +4014,7 @@
 >
 </method>
 <method name="receive"
- return="void"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -3227,30 +4139,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-</method>
-<method name="isRunning"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="validatePath"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="path" type="java.lang.String">
-</parameter>
 </method>
 </class>
 <class name="MeasurementListenerSink"
@@ -3471,7 +4359,7 @@
 </parameter>
 <parameter name="path" type="java.lang.String">
 </parameter>
-<exception name="URISyntaxException" type="java.net.URISyntaxException">
+<exception name="DataSinkException" type="com.openxc.sinks.DataSinkException">
 </exception>
 </constructor>
 <method name="validatePath"
@@ -3495,10 +4383,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="com.openxc.VehicleDataEndpoint">
-</implements>
 <method name="receive"
- return="void"
+ return="boolean"
  abstract="true"
  native="false"
  synchronized="false"
@@ -3511,6 +4397,17 @@
 </parameter>
 <exception name="DataSinkException" type="com.openxc.sinks.DataSinkException">
 </exception>
+</method>
+<method name="stop"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 </interface>
 </package>
@@ -3574,17 +4471,6 @@
 <parameter name="callback" type="com.openxc.sources.SourceCallback">
 </parameter>
 </constructor>
-<method name="getCallback"
- return="com.openxc.sources.SourceCallback"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
 <method name="getTag"
  return="java.lang.String"
  abstract="false"
@@ -3646,19 +4532,8 @@
  visibility="public"
 >
 </method>
-<method name="waitForCallbackInitialization"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
 </class>
-<class name="BytestreamDataSourceMixin"
+<class name="BytestreamBuffer"
  extends="java.lang.Object"
  abstract="false"
  static="false"
@@ -3666,15 +4541,15 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="BytestreamDataSourceMixin"
- type="com.openxc.sources.BytestreamDataSourceMixin"
+<constructor name="BytestreamBuffer"
+ type="com.openxc.sources.BytestreamBuffer"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
 </constructor>
-<method name="parse"
+<method name="readLines"
  return="java.util.List&lt;java.lang.String&gt;"
  abstract="false"
  native="false"
@@ -3700,6 +4575,156 @@
 <parameter name="length" type="int">
 </parameter>
 </method>
+</class>
+<class name="BytestreamDataSource"
+ extends="com.openxc.sources.ContextualVehicleDataSource"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.lang.Runnable">
+</implements>
+<constructor name="BytestreamDataSource"
+ type="com.openxc.sources.BytestreamDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<constructor name="BytestreamDataSource"
+ type="com.openxc.sources.BytestreamDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<method name="createCondition"
+ return="java.util.concurrent.locks.Condition"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="disconnect"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isRunning"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="lockConnection"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="read"
+ return="int"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="bytes" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="run"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="start"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="unlockConnection"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="waitForConnection"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+<exception name="InterruptedException" type="java.lang.InterruptedException">
+</exception>
+</method>
+<field name="mDeviceChanged"
+ type="java.util.concurrent.locks.Condition"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
 </class>
 <class name="ContextualVehicleDataSource"
  extends="com.openxc.sources.BaseVehicleDataSource"
@@ -3852,6 +4877,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="callback" type="com.openxc.sources.SourceCallback">
+</parameter>
 <parameter name="context" type="android.content.Context">
 </parameter>
 </constructor>
@@ -3862,8 +4889,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="callback" type="com.openxc.sources.SourceCallback">
-</parameter>
 <parameter name="context" type="android.content.Context">
 </parameter>
 </constructor>
@@ -4018,8 +5043,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="com.openxc.VehicleDataEndpoint">
-</implements>
 <method name="setCallback"
  return="void"
  abstract="true"
@@ -4032,6 +5055,17 @@
 >
 <parameter name="callback" type="com.openxc.sources.SourceCallback">
 </parameter>
+</method>
+<method name="stop"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 </interface>
 <class name="WakeLockManager"
@@ -4075,184 +5109,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-</method>
-</class>
-</package>
-<package name="com.openxc.sources.bluetooth"
->
-<class name="BluetoothException"
- extends="java.lang.Exception"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="BluetoothException"
- type="com.openxc.sources.bluetooth.BluetoothException"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<constructor name="BluetoothException"
- type="com.openxc.sources.bluetooth.BluetoothException"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="message" type="java.lang.String">
-</parameter>
-</constructor>
-<constructor name="BluetoothException"
- type="com.openxc.sources.bluetooth.BluetoothException"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="message" type="java.lang.String">
-</parameter>
-<parameter name="cause" type="java.lang.Throwable">
-</parameter>
-</constructor>
-</class>
-<class name="BluetoothVehicleDataSource"
- extends="com.openxc.sources.ContextualVehicleDataSource"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="java.lang.Runnable">
-</implements>
-<implements name="com.openxc.controllers.VehicleController">
-</implements>
-<constructor name="BluetoothVehicleDataSource"
- type="com.openxc.sources.bluetooth.BluetoothVehicleDataSource"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="callback" type="com.openxc.sources.SourceCallback">
-</parameter>
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="address" type="java.lang.String">
-</parameter>
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</constructor>
-<constructor name="BluetoothVehicleDataSource"
- type="com.openxc.sources.bluetooth.BluetoothVehicleDataSource"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="address" type="java.lang.String">
-</parameter>
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</constructor>
-<method name="close"
- return="void"
- abstract="false"
- native="false"
- synchronized="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="disconnect"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
-<method name="run"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="set"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="command" type="com.openxc.remote.RawMeasurement">
-</parameter>
-</method>
-<method name="start"
- return="void"
- abstract="false"
- native="false"
- synchronized="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-</class>
-<class name="DeviceManager"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="DeviceManager"
- type="com.openxc.sources.bluetooth.DeviceManager"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-<exception name="BluetoothException" type="com.openxc.sources.bluetooth.BluetoothException">
-</exception>
-</constructor>
-<method name="connect"
- return="android.bluetooth.BluetoothSocket"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="targetAddress" type="java.lang.String">
-</parameter>
-<exception name="BluetoothException" type="com.openxc.sources.bluetooth.BluetoothException">
-</exception>
 </method>
 </class>
 </package>
@@ -4325,6 +5181,20 @@
 >
 <parameter name="context" type="android.content.Context">
 </parameter>
+<parameter name="filename" type="java.lang.String">
+</parameter>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</constructor>
+<constructor name="TraceVehicleDataSource"
+ type="com.openxc.sources.trace.TraceVehicleDataSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
 <parameter name="filename" type="java.net.URI">
 </parameter>
 <parameter name="loop" type="boolean">
@@ -4343,28 +5213,8 @@
  visibility="public"
 >
 </method>
-</class>
-</package>
-<package name="com.openxc.sources.usb"
->
-<class name="UsbDeviceAttachmentActivity"
- extends="android.app.Activity"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="UsbDeviceAttachmentActivity"
- type="com.openxc.sources.usb.UsbDeviceAttachmentActivity"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="onResume"
- return="void"
+<method name="sameFilename"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -4373,49 +5223,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="filename" type="java.lang.String">
+</parameter>
 </method>
-</class>
-<class name="UsbDeviceException"
- extends="com.openxc.sources.DataSourceException"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="UsbDeviceException"
- type="com.openxc.sources.usb.UsbDeviceException"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="message" type="java.lang.String">
-</parameter>
-<parameter name="cause" type="java.lang.Throwable">
-</parameter>
-</constructor>
-<constructor name="UsbDeviceException"
- type="com.openxc.sources.usb.UsbDeviceException"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="message" type="java.lang.String">
-</parameter>
-</constructor>
-</class>
-<class name="UsbDeviceUtilities"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<method name="productFromUri"
- return="int"
+<method name="validatePath"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -4424,148 +5236,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="uri" type="java.net.URI">
-</parameter>
-<exception name="DataSourceResourceException" type="com.openxc.sources.DataSourceResourceException">
-</exception>
-</method>
-<method name="vendorFromUri"
- return="int"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="uri" type="java.net.URI">
-</parameter>
-<exception name="DataSourceResourceException" type="com.openxc.sources.DataSourceResourceException">
-</exception>
-</method>
-<field name="DEFAULT_USB_DEVICE_URI"
- type="java.net.URI"
- transient="false"
- volatile="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
-<class name="UsbVehicleDataSource"
- extends="com.openxc.sources.ContextualVehicleDataSource"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="java.lang.Runnable">
-</implements>
-<implements name="com.openxc.controllers.VehicleController">
-</implements>
-<constructor name="UsbVehicleDataSource"
- type="com.openxc.sources.usb.UsbVehicleDataSource"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="callback" type="com.openxc.sources.SourceCallback">
-</parameter>
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="device" type="java.net.URI">
-</parameter>
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</constructor>
-<constructor name="UsbVehicleDataSource"
- type="com.openxc.sources.usb.UsbVehicleDataSource"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="callback" type="com.openxc.sources.SourceCallback">
-</parameter>
-<parameter name="context" type="android.content.Context">
-</parameter>
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</constructor>
-<constructor name="UsbVehicleDataSource"
- type="com.openxc.sources.usb.UsbVehicleDataSource"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</constructor>
-<method name="run"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="set"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="command" type="com.openxc.remote.RawMeasurement">
+<parameter name="path" type="java.lang.String">
 </parameter>
 </method>
-<method name="start"
- return="void"
- abstract="false"
- native="false"
- synchronized="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<field name="ACTION_USB_DEVICE_ATTACHED"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;com.ford.openxc.USB_DEVICE_ATTACHED&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ACTION_USB_PERMISSION"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;com.ford.openxc.USB_PERMISSION&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 </class>
 </package>
 <package name="com.openxc.units"
@@ -5029,22 +5702,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="android.content.Context">
-</parameter>
 <parameter name="directory" type="java.lang.String">
 </parameter>
 </constructor>
-<method name="getContext"
- return="android.content.Context"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
 <method name="openForWriting"
  return="java.io.BufferedWriter"
  abstract="false"

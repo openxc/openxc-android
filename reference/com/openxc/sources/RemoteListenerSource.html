@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="selected api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -185,7 +187,8 @@
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSourceMixin.html">BytestreamDataSourceMixin</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></li>
@@ -239,13 +242,6 @@
 <div id="api-info-block">
 
 
-
-  
-   
-  
-  
-  
-  
 
   
    
@@ -550,22 +546,6 @@ From class
             
             
             
-            <a href="../../../com/openxc/sources/SourceCallback.html">SourceCallback</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#getCallback()">getCallback</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -577,7 +557,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -595,7 +575,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -611,7 +591,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -629,7 +609,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -642,24 +622,6 @@ From class
         <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#stop()">stop</a></span>()</nobr>
         
         <div class="jd-descrdiv">Clear the callback so no further updates are sent.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#waitForCallbackInitialization()">waitForCallbackInitialization</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Block the current thread until the callback is not null.</div>
   
   </td></tr>
 
@@ -875,51 +837,6 @@ From class
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.VehicleDataEndpoint" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.VehicleDataEndpoint-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>
-From interface
-
-  <a href="../../../com/openxc/VehicleDataEndpoint.html">com.openxc.VehicleDataEndpoint</a>
-
-<div id="inherited-methods-com.openxc.VehicleDataEndpoint">
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-list"
-        class="jd-inheritedlinks">
-  </div>
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-summary" style="display: none;">
-    <table class="jd-sumtable-expando">
-    
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/VehicleDataEndpoint.html#stop()">stop</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
-  
-  </td></tr>
-
-
-</table>
-  </div>
-</div>
-</td></tr>
-
-
-
-<tr class="api apilevel-" >
-<td colspan="12">
   <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sources.VehicleDataSource" class="jd-expando-trigger closed"
           ><img id="inherited-methods-com.openxc.sources.VehicleDataSource-trigger"
           src="../../../../assets/images/triangle-closed.png"
@@ -951,6 +868,25 @@ From interface
         <span class="sympad"><a href="../../../com/openxc/sources/VehicleDataSource.html#setCallback(com.openxc.sources.SourceCallback)">setCallback</a></span>(<a href="../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback)</nobr>
         
         <div class="jd-descrdiv">Set the callback for receiving raw measurements as they are received.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/VehicleDataSource.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
+ source) or stop expecting to receive them (if a sink).</div>
   
   </td></tr>
 

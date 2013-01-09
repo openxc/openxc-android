@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -237,13 +239,6 @@
 <div id="api-info-block">
 
 
-
-  
-   
-  
-  
-  
-  
 
   
    
@@ -399,6 +394,21 @@ Summary:
 <div class="jd-descr">
 
 
+<h2>Class Overview</h2>
+<p>Upload a stream of all incoming vehicle data to a remote HTTP server.
+
+ The remote HTTP server specified should be expecting POST requests with the
+ data being a JSON array of OpenXC JSON message objects, e.g.:
+
+      [{"name": "steering_wheel_angle", "value": 42},
+          {"name": "parking_brake_status", "value": false}]
+
+ The UploaderSink has a small buffer to preserve records across short network
+ outages, but do not expect it to be especially reliable. No guarantee is
+ provided about the preservation of records - to do that, a subclass would
+ need to write the data to a file when no network connection is available.
+</p>
+
 
 
 
@@ -465,6 +475,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sinks/UploaderSink.html#UploaderSink(android.content.Context, java.net.URI)">UploaderSink</a></span>(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> uri)</nobr>
         
+        <div class="jd-descrdiv">Initialize and start a new UploaderSink immediately.</div>
+  
   </td></tr>
 
 
@@ -505,7 +517,7 @@ Summary:
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sinks/UploaderSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
@@ -563,6 +575,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sinks/UploaderSink.html#validatePath(java.lang.String)">validatePath</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> path)</nobr>
         
+        <div class="jd-descrdiv">Returns true if the path is not null and if it is a valid URI.</div>
+  
   </td></tr>
 
 
@@ -698,7 +712,7 @@ From class
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
@@ -938,51 +952,6 @@ From class
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.VehicleDataEndpoint" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.VehicleDataEndpoint-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>
-From interface
-
-  <a href="../../../com/openxc/VehicleDataEndpoint.html">com.openxc.VehicleDataEndpoint</a>
-
-<div id="inherited-methods-com.openxc.VehicleDataEndpoint">
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-list"
-        class="jd-inheritedlinks">
-  </div>
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-summary" style="display: none;">
-    <table class="jd-sumtable-expando">
-    
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/VehicleDataEndpoint.html#stop()">stop</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
-  
-  </td></tr>
-
-
-</table>
-  </div>
-</div>
-</td></tr>
-
-
-
-<tr class="api apilevel-" >
-<td colspan="12">
   <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sinks.VehicleDataSink" class="jd-expando-trigger closed"
           ><img id="inherited-methods-com.openxc.sinks.VehicleDataSink-trigger"
           src="../../../../assets/images/triangle-closed.png"
@@ -1008,12 +977,31 @@ From interface
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
         <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
+ source) or stop expecting to receive them (if a sink).</div>
   
   </td></tr>
 
@@ -1083,7 +1071,17 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Initialize and start a new UploaderSink immediately.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>uri</td>
+          <td>the URI to send HTTP POST requests to with the JSON data.
+</td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>
@@ -1119,7 +1117,7 @@ From interface
       <h5 class="jd-tagtitle">Throws</h5>
       <table class="jd-tagtable">  
         <tr>
-            <th><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URISyntaxException.html">URISyntaxException</a></td>
+            <th><a href="../../../com/openxc/sinks/DataSinkException.html">DataSinkException</a></td>
             <td></td>
         </tr>
       </table>
@@ -1154,7 +1152,7 @@ From interface
          
          
          
-        void
+        boolean
       </span>
       <span class="sympad">receive</span>
       <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
@@ -1278,7 +1276,22 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Returns true if the path is not null and if it is a valid URI.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>path</td>
+          <td>a URI to validate</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if path is a valid URI.
+
+</li></ul>
+  </div>
 
     </div>
 </div>

@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="./com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="./com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="./com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="./com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="./com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="./com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="./com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="./com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="./com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -238,33 +240,54 @@
     <tr class="alt-color api apilevel-" >
         <td class="jd-linkcol">
   <a href="./com/openxc/package-summary.html">com.openxc</a></td>
-        <td class="jd-descrcol" width="100%">This is the top-level package for using OpenXC vehicle data in Android.</td>
+        <td class="jd-descrcol" width="100%">This is the top-level package of the OpenXC library.</td>
     </tr>
 
 
     <tr class=" api apilevel-" >
         <td class="jd-linkcol">
-  <a href="./com/openxc/controllers/package-summary.html">com.openxc.controllers</a></td>
-        <td class="jd-descrcol" width="100%">The interfaces and implementation of vehicle controllers, capable of sending
+  <a href="./com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></td>
+        <td class="jd-descrcol" width="100%">The interfaces and implementation of vehicle interfaces, capable of sending
  data from an application to the vehicle.</td>
     </tr>
 
 
     <tr class="alt-color api apilevel-" >
         <td class="jd-linkcol">
+  <a href="./com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></td>
+        <td class="jd-descrcol" width="100%">Contains the classes for connecting to a vehicle interface via Bluetooth.</td>
+    </tr>
+
+
+    <tr class=" api apilevel-" >
+        <td class="jd-linkcol">
+  <a href="./com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></td>
+        <td class="jd-descrcol" width="100%">Contains a vehicle data source that connects to a vehicle interface via a network.</td>
+    </tr>
+
+
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-linkcol">
+  <a href="./com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></td>
+        <td class="jd-descrcol" width="100%">Contains a vehicle data source that connects to a vehicle interface via USB.</td>
+    </tr>
+
+
+    <tr class=" api apilevel-" >
+        <td class="jd-linkcol">
   <a href="./com/openxc/measurements/package-summary.html">com.openxc.measurements</a></td>
         <td class="jd-descrcol" width="100%">All possible types of measurements that can be obtained from a vehicle.</td>
     </tr>
 
 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-linkcol">
   <a href="./com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></td>
         <td class="jd-descrcol" width="100%">Classes capable of serializing Measurement objects to another format.</td>
     </tr>
 
 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-linkcol">
   <a href="./com/openxc/remote/package-summary.html">com.openxc.remote</a></td>
         <td class="jd-descrcol" width="100%">Provides a centralized process, exposed as an Android service, to control
@@ -272,7 +295,7 @@
     </tr>
 
 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-linkcol">
   <a href="./com/openxc/sinks/package-summary.html">com.openxc.sinks</a></td>
         <td class="jd-descrcol" width="100%">Contains classes that can perform some function on all vehicle measurements
@@ -280,18 +303,11 @@
     </tr>
 
 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-linkcol">
   <a href="./com/openxc/sources/package-summary.html">com.openxc.sources</a></td>
         <td class="jd-descrcol" width="100%">Contains classes that generate new vehicle measurements (from USB, Serial, a
  trace file, etc.).</td>
-    </tr>
-
-
-    <tr class=" api apilevel-" >
-        <td class="jd-linkcol">
-  <a href="./com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></td>
-        <td class="jd-descrcol" width="100%">Contains the classes for connecting to a vehicle interface via Bluetooth.</td>
     </tr>
 
 
@@ -305,20 +321,13 @@
 
     <tr class=" api apilevel-" >
         <td class="jd-linkcol">
-  <a href="./com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></td>
-        <td class="jd-descrcol" width="100%">Contains a vehicle data source that connects to a vehicle interface via USB.</td>
-    </tr>
-
-
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-linkcol">
   <a href="./com/openxc/units/package-summary.html">com.openxc.units</a></td>
         <td class="jd-descrcol" width="100%">A collection of unit classes used to avoid making false assumptions about
  the unit of values received from the vehicle.</td>
     </tr>
 
 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-linkcol">
   <a href="./com/openxc/util/package-summary.html">com.openxc.util</a></td>
         <td class="jd-descrcol" width="100%">Provides common utilities such as data aging and file manipulation.</td>

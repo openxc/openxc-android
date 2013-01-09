@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -184,6 +186,7 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="selected api apilevel-"><a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleService.html">VehicleService</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html">VehicleServiceInterface.Stub</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.Stub.html">VehicleServiceListener.Stub</a></li>
@@ -746,22 +749,6 @@ android.os.Parcelable
             
             
             
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/RawMeasurement.html#timestamp()">timestamp</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -771,7 +758,7 @@ android.os.Parcelable
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -783,11 +770,14 @@ android.os.Parcelable
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/remote/RawMeasurement.html#untimestamp()">untimestamp</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Make the measurement's timestamp invalid so it won't end up in the
+ serialized version.</div>
+  
   </td></tr>
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1507,6 +1497,11 @@ From interface
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the measurement has a valid timestamp.
+</li></ul>
+  </div>
 
     </div>
 </div>
@@ -1605,37 +1600,6 @@ From interface
 </div>
 
 
-<A NAME="timestamp()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">timestamp</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
 <A NAME="toString()"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1692,7 +1656,9 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Make the measurement's timestamp invalid so it won't end up in the
+ serialized version.
+</p></div>
 
     </div>
 </div>

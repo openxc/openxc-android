@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -184,6 +186,7 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleService.html">VehicleService</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html">VehicleServiceInterface.Stub</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.Stub.html">VehicleServiceListener.Stub</a></li>
@@ -461,10 +464,8 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#clearSources()">clearSources</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#addVehicleInterface(java.lang.String, java.lang.String)">addVehicleInterface</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> interfaceName, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> resource)</nobr>
         
-        <div class="jd-descrdiv">Remove all existing data sources from the pipeline.</div>
-  
   </td></tr>
 
 
@@ -545,24 +546,6 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#initializeDefaultSources()">initializeDefaultSources</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Re-initialize the list of sources back to the defaults.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
         <div class="jd-descrdiv">Receive a new measurement that originates from an application.</div>
@@ -571,7 +554,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -589,7 +572,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -599,7 +582,23 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#set(com.openxc.remote.RawMeasurement)">set</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#removeVehicleInterface(java.lang.String)">removeVehicleInterface</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> interfaceName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#send(com.openxc.remote.RawMeasurement)">send</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
         <div class="jd-descrdiv">Set a new value for the measurement class on the vehicle.</div>
   
@@ -722,7 +721,7 @@ From interface
 
 
 
-<A NAME="clearSources()"></A>
+<A NAME="addVehicleInterface(java.lang.String, java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -734,8 +733,8 @@ From interface
          
         void
       </span>
-      <span class="sympad">clearSources</span>
-      <span class="normal">()</span>
+      <span class="sympad">addVehicleInterface</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> interfaceName, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> resource)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -747,12 +746,7 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Remove all existing data sources from the pipeline.
-
- No further measurements will be received after this method is called
- until either the default sources are re-initialized using
- <code><a href="../../../com/openxc/remote/VehicleServiceInterface.html#initializeDefaultSources()">initializeDefaultSources()</a></code>.
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Throws</h5>
       <table class="jd-tagtable">  
@@ -948,51 +942,6 @@ From interface
 </div>
 
 
-<A NAME="initializeDefaultSources()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-        abstract 
-         
-        void
-      </span>
-      <span class="sympad">initializeDefaultSources</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Re-initialize the list of sources back to the defaults.
-
- The default sources are the USB device source and a source that listens
- for application-generated updates via the
- <code><a href="../../../com/openxc/remote/VehicleServiceInterface.html#receive(com.openxc.remote.RawMeasurement)">receive(RawMeasurement)</a></code> method.
-</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th>RemoteException</td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
 <A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1083,7 +1032,7 @@ From interface
 </div>
 
 
-<A NAME="set(com.openxc.remote.RawMeasurement)"></A>
+<A NAME="removeVehicleInterface(java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1095,7 +1044,47 @@ From interface
          
         void
       </span>
-      <span class="sympad">set</span>
+      <span class="sympad">removeVehicleInterface</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> interfaceName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>RemoteException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="send(com.openxc.remote.RawMeasurement)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+        abstract 
+         
+        boolean
+      </span>
+      <span class="sympad">send</span>
       <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
     </h4>
       <div class="api-level">

@@ -147,7 +147,13 @@
     <li class="selected api apilevel-">
   <a href="../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -174,11 +176,6 @@
           <div id="classes-nav">
             <ul>
               
-    <li><h2>Interfaces</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../com/openxc/VehicleDataEndpoint.html">VehicleDataEndpoint</a></li>
-      </ul>
-    </li>
               
     <li><h2>Classes</h2>
       <ul>
@@ -377,9 +374,8 @@ Summary:
 
  This class is used in the onServiceConnected method of a
  ServiceConnection in a client of this service - the IBinder given to the
- application can be cast to the VehicleBinder to retrieve the
- actual service instance. This is required to actaully call any of its
- methods.
+ application can be cast to the VehicleBinder to retrieve the actual
+ service instance. This is required to actaully call any of its methods.
 </p>
 
 
@@ -569,6 +565,8 @@ android.os.IBinder
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../com/openxc/VehicleManager.VehicleBinder.html#getService()">getService</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Return this Binder's parent VehicleManager instance.</div>
+  
   </td></tr>
 
 
@@ -1393,7 +1391,12 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Return this Binder's parent VehicleManager instance.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>an instance of VehicleManager.
+</li></ul>
+  </div>
 
     </div>
 </div>

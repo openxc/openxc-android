@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="selected api apilevel-">
-  <a href="../../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -177,9 +179,9 @@
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="selected api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></li>
-          <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></li>
-          <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></li>
+          <li class="selected api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></li>
+          <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></li>
+          <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></li>
       </ul>
     </li>
               
@@ -187,7 +189,7 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceException.html">UsbDeviceException</a></li>
+          <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceException.html">UsbDeviceException</a></li>
       </ul>
     </li>
               
@@ -475,7 +477,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.sources.usb.UsbDeviceAttachmentActivity</td>
+        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.interfaces.usb.UsbDeviceAttachmentActivity</td>
     </tr>
     
 
@@ -496,7 +498,7 @@ Summary:
  Android unfortunately doesn't provide a way to specify USB device filters for
  the ATTACHED intent programatically - it must be in the AndroidManifest. This
  means we have no way to link the correct device filters with the actual
- instance of the BroadcastReceiver (an object inside of UsbVehicleDataSource),
+ instance of the BroadcastReceiver (an object inside of UsbVehicleInterface),
  since we are doing something besides just starting an activity based on the
  intent.
 
@@ -1188,7 +1190,7 @@ android.app.Activity
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbDeviceAttachmentActivity.html#UsbDeviceAttachmentActivity()">UsbDeviceAttachmentActivity</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html#UsbDeviceAttachmentActivity()">UsbDeviceAttachmentActivity</a></span>()</nobr>
         
   </td></tr>
 
@@ -1217,7 +1219,7 @@ android.app.Activity
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbDeviceAttachmentActivity.html#onResume()">onResume</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html#onResume()">onResume</a></span>()</nobr>
         
   </td></tr>
 

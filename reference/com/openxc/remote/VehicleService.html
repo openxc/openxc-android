@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -184,6 +186,7 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/remote/VehicleService.html">VehicleService</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html">VehicleServiceInterface.Stub</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.Stub.html">VehicleServiceListener.Stub</a></li>
@@ -434,9 +437,9 @@ Summary:
 <h2>Class Overview</h2>
 <p>The VehicleService is the centralized source of all vehicle data.
 
- To minimize overhead, only one object connects to the current vehicle data
- source (e.g. a CAN translator or trace file being played back) and all
- application requests are eventually propagated back to this service.
+ This server is intended to be a singleton on an Android device. All OpenXC
+ applciations funnel data to and from this service so they can share sources,
+ sinks and vehicle interfaces.
 
  Applications should not use this service directly, but should bind to the
  in-process <code><a href="../../../com/openxc/VehicleManager.html">VehicleManager</a></code> instead - that has an interface
@@ -444,11 +447,10 @@ Summary:
  VehicleService is purposefully primative as there are a small set of
  objects that can be natively marshalled through an AIDL interface.
 
- By default, the only source of vehicle data is an OpenXC USB device. Other
- data sources can be instantiated by applications and given the
- VehicleService as their callback - data will flow backwards from the
- application process to the remote service and be indistinguishable from local
- data sources.
+ By default, the <code><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></code> is activated as a
+ <code><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>. Other vehicle interfaces can be activated with the
+ #addVehicleInterface(Class, String) method and they can removed with
+ #removeVehicleInterface(Class).
 
  This service uses the same <code><a href="../../../com/openxc/DataPipeline.html">DataPipeline</a></code> as the
  <code><a href="../../../com/openxc/VehicleManager.html">VehicleManager</a></code> to move data from sources to sinks, but it
@@ -1114,24 +1116,6 @@ android.content.ComponentCallbacks2
         <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onDestroy()">onDestroy</a></span>()</nobr>
         
         <div class="jd-descrdiv">Shut down any associated services when this service is about to die.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onUnbind(android.content.Intent)">onUnbind</a></span>(Intent intent)</nobr>
-        
-        <div class="jd-descrdiv">Reset the data source to the default when all clients disconnect.</div>
   
   </td></tr>
 
@@ -4630,42 +4614,6 @@ From interface
 
  This stops the data source (e.g. stops trace playback) and kills the
  thread used for notifying measurement listeners.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="onUnbind(android.content.Intent)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        boolean
-      </span>
-      <span class="sympad">onUnbind</span>
-      <span class="normal">(Intent intent)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Reset the data source to the default when all clients disconnect.
-
- Since normal service users that want the default (i.e. USB device) don't
- usually set a new data source, they get could stuck in a situation where
- a trace file is being used if we don't reset it.
 </p></div>
 
     </div>

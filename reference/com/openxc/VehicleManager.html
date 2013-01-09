@@ -147,7 +147,13 @@
     <li class="selected api apilevel-">
   <a href="../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -174,11 +176,6 @@
           <div id="classes-nav">
             <ul>
               
-    <li><h2>Interfaces</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../com/openxc/VehicleDataEndpoint.html">VehicleDataEndpoint</a></li>
-      </ul>
-    </li>
               
     <li><h2>Classes</h2>
       <ul>
@@ -458,28 +455,51 @@ Summary:
  will shut down when no more clients are bound to it.
 
  Synchronous measurements are obtained by passing the type of the desired
- measurement to the get method. Asynchronous measurements are obtained by
- defining a Measurement.Listener object and passing it to the service via the
- addListener method.
+ measurement to the <code><a href="../../com/openxc/VehicleManager.html#get(java.lang.Class<? extends com.openxc.measurements.Measurement>)">get(Class)</a></code> method.
+ Asynchronous measurements are obtained by defining a Measurement.Listener
+ object and passing it to the service via the addListener method.
 
- The sources of data and any post-processing that happens is controlled by
- modifying a list of "sources" and "sinks". When a message is received from a
- data source, it is passed to any and all registered message "sinks" - these
- receivers conform to the <code><a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a></code>.
- There will always be at least one sink that stores the latest messages and
- handles passing on data to users of the VehicleManager class. Other possible
- sinks include the <code><a href="../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></code> which records a
- trace of the raw OpenXC measurements to a file and a web streaming sink
- (which streams the raw data to a web application). Other possible sources
- include the <code><a href="../../com/openxc/sources/trace/TraceVehicleDataSource.html">TraceVehicleDataSource</a></code> which
- reads a previously recorded vehicle data trace file and plays back the
- measurements
- in real-time.
 
- One small inconsistency is that if a Bluetooth data source is added, any
- calls to set() will be sent to that device. If no Belutooth data source is
- in the pipeline, the standard USB device will be used instead. There is
- currently no way to modify this behavior.
+ There are three major components in the VehicleManager:
+ <code><a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a></code>,
+ <code><a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a></code> and
+ <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>.
+
+ The list of <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code> is perhaps the
+ most important. These instances represent actual physical connections to the
+ vehicle, and are bi-directional - they can both provide data to an
+ application and optionally send data back to the vehicle. In most cases,
+ these should not be instantiated by applications; the
+ <code><a href="../../com/openxc/VehicleManager.html#addVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>, java.lang.String)">addVehicleInterface(Class, String)</a></code> and
+ <code><a href="../../com/openxc/VehicleManager.html#removeVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>)">removeVehicleInterface(Class)</a></code> methods
+ take enough metadata from the remote <code><a href="../../com/openxc/remote/VehicleService.html">VehicleService</a></code>
+ to instantiate the interface in a remove process. That way a single USB or
+ Bluetooth connection can be shared among many applications. If an application
+ really needs to use a custom VehicleInterface implementation and does not
+ mind if access to its write interface will be accessible only in the local
+ app process, the <code><a href="../../com/openxc/VehicleManager.html#addLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)">addLocalVehicleInterface(VehicleInterface)</a></code> and
+ <code><a href="../../com/openxc/VehicleManager.html#removeLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)">removeLocalVehicleInterface(VehicleInterface)</a></code> can let you do that.
+
+ The list of active data sources (e.g.
+ <code><a href="../../com/openxc/sources/trace/TraceVehicleDataSource.html">TraceVehicleDataSource</a></code>) can be controlled
+ with the <code><a href="../../com/openxc/VehicleManager.html#addSource(com.openxc.sources.VehicleDataSource)">addSource(VehicleDataSource)</a></code> and
+ <code><a href="../../com/openxc/VehicleManager.html#removeSource(com.openxc.sources.VehicleDataSource)">removeSource(VehicleDataSource)</a></code> methods. Each active
+ <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code> is also an active data source,
+ so there is no need to add them twice. Even though data sources are
+ instantiated by the application (and thus can be entirely customized), their
+ data is still shared among all OpenXC applications using the same remove
+ process <code><a href="../../com/openxc/remote/VehicleService.html">VehicleService</a></code>
+
+ The list of active data sinks (e.g.
+ <code><a href="../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></code>) can be controlled with the
+ <code><a href="../../com/openxc/VehicleManager.html#addSink(com.openxc.sinks.VehicleDataSink)">addSink(VehicleDataSink)</a></code> and <code><a href="../../com/openxc/VehicleManager.html#removeSink(com.openxc.sinks.VehicleDataSink)">removeSink(VehicleDataSink)</a></code>
+ methods.
+
+ When a message is received from a
+ <code><a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a></code>, it is passed to all active
+ <code><a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a></code>s. There will always be at
+ least one sink that stores the latest messages and handles passing on data to
+ users of this service.
 </p>
 
 
@@ -1142,13 +1162,31 @@ android.content.ComponentCallbacks2
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.measurements.Measurement.Listener)">addListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../com/openxc/measurements/Measurement.Listener.html">Measurement.Listener</a> listener)</nobr>
         
-        <div class="jd-descrdiv">Register to receive async updates for a specific Measurement type.</div>
+        <div class="jd-descrdiv">Register to receive asynchronous updates for a specific Measurement type.</div>
   
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)">addLocalVehicleInterface</a></span>(<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a> vehicleInterface)</nobr>
+        
+        <div class="jd-descrdiv">Add a new local vehicle interface to the service.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1166,7 +1204,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1184,7 +1222,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1194,13 +1232,16 @@ android.content.ComponentCallbacks2
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#clearSources()">clearSources</a></span>()</nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>, java.lang.String)">addVehicleInterface</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; vehicleInterfaceType, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> resource)</nobr>
         
+        <div class="jd-descrdiv">Activate a vehicle interface for both receiving data and sending commands
+ to the vehicle.</div>
+  
   </td></tr>
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1218,7 +1259,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1236,7 +1277,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1254,7 +1295,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1268,24 +1309,6 @@ android.content.ComponentCallbacks2
         
         <div class="jd-descrdiv">Return a list of all sources active in the system, suitable for
  displaying in a status view.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#initializeDefaultSources()">initializeDefaultSources</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Reset vehicle service to use only the default vehicle sources.</div>
   
   </td></tr>
 
@@ -1351,7 +1374,7 @@ android.content.ComponentCallbacks2
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../com/openxc/VehicleManager.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
-        <div class="jd-descrdiv">Receive a new measurement with at least a value and optionally an event.</div>
+        <div class="jd-descrdiv">Not part of the public API for VehicleManager.</div>
   
   </td></tr>
 
@@ -1385,6 +1408,25 @@ android.content.ComponentCallbacks2
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)">removeLocalVehicleInterface</a></span>(<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a> vehicleInterface)</nobr>
+        
+        <div class="jd-descrdiv">Remove a previously registered local vehicle interface from the
+ service.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeSink(com.openxc.sinks.VehicleDataSink)">removeSink</a></span>(<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> sink)</nobr>
         
         <div class="jd-descrdiv">Remove a previously registered sink from the data pipeline.</div>
@@ -1393,7 +1435,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1411,24 +1453,6 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#set(com.openxc.measurements.Measurement)">set</a></span>(<a href="../../com/openxc/measurements/Measurement.html">Measurement</a> command)</nobr>
-        
-        <div class="jd-descrdiv">Send a command back to the vehicle.</div>
-  
-  </td></tr>
-
-
-	 
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
@@ -1439,9 +1463,9 @@ android.content.ComponentCallbacks2
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setBluetoothSourceStatus(boolean)">setBluetoothSourceStatus</a></span>(boolean enabled)</nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>)">removeVehicleInterface</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; vehicleInterfaceType)</nobr>
         
-        <div class="jd-descrdiv">Enable or disable receiving vehicle data from a Bluetooth CAN device.</div>
+        <div class="jd-descrdiv">Disable a vehicle interface, stopping data flow in both directions.</div>
   
   </td></tr>
 
@@ -1454,73 +1478,19 @@ android.content.ComponentCallbacks2
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setFileRecordingStatus(boolean)">setFileRecordingStatus</a></span>(boolean enabled)</nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#send(com.openxc.measurements.Measurement)">send</a></span>(<a href="../../com/openxc/measurements/Measurement.html">Measurement</a> command)</nobr>
         
-        <div class="jd-descrdiv">Enable or disable recording of a trace file.</div>
+        <div class="jd-descrdiv">Send a command to the vehicle through the first available active
+ <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>.</div>
   
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setNativeGpsOverwriteStatus(boolean)">setNativeGpsOverwriteStatus</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable overwriting native GPS measurements with those from the
- vehicle.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setNativeGpsStatus(boolean)">setNativeGpsStatus</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable reading GPS from the native Android stack.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#setUploadingStatus(boolean)">setUploadingStatus</a></span>(boolean enabled)</nobr>
-        
-        <div class="jd-descrdiv">Enable or disable uploading of a vehicle trace to a remote web server.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1536,7 +1506,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -5070,7 +5040,7 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Register to receive async updates for a specific Measurement type.
+  <div class="jd-tagdata jd-tagdescr"><p>Register to receive asynchronous updates for a specific Measurement type.
 
  Use this method to register an object implementing the
  Measurement.Listener interface to receive real-time updates
@@ -5103,6 +5073,62 @@ From interface
             <th><a href="../../com/openxc/measurements/UnrecognizedMeasurementTypeException.html">UnrecognizedMeasurementTypeException</a></td>
             <td>if passed a measurementType
       not extend Measurement
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="addLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">addLocalVehicleInterface</span>
+      <span class="normal">(<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a> vehicleInterface)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Add a new local vehicle interface to the service.
+
+ This method will accept any implementation of <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>,
+ so completely custom implementations are possible beyond the few built-in
+ to the OpenXC library.
+
+ However, interfaces added with this method cannot
+ be used to send commands to the vehicle by any other active OpenXC
+ application besides the one that instantiates the
+ <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code> object.
+
+ That limitation does not apply to data received from the VehicleInterface
+ - it will be propagated to all other applications, although there is an
+ additional performance hit when compared to the built-in VehicleInterface
+ types because Android's AIDL barrier must be crossed twice instead of
+ once to communicate with the remote <code><a href="../../com/openxc/remote/VehicleService.html">VehicleService</a></code>.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>vehicleInterface</td>
+          <td>an instance of a VehicleInteface
 </td>
         </tr>
       </table>
@@ -5192,12 +5218,7 @@ From interface
  the addSource method after binding with VehicleManager:
 
       service.addSource(new TraceVehicleDataSource(
-                  new URI("/sdcard/openxc/trace.json"))));
-
- The <code><a href="../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></code> exists by default with the default USB
- device ID. To clear all existing sources, use the <code><a href="../../com/openxc/VehicleManager.html#clearSources()">clearSources()</a></code>
- method. To revert back to the default set of sources, use
- <code><a href="../../com/openxc/VehicleManager.html#initializeDefaultSources()">initializeDefaultSources()</a></code>.</p></div>
+                  new URI("/sdcard/openxc/trace.json"))));</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
@@ -5213,7 +5234,7 @@ From interface
 </div>
 
 
-<A NAME="clearSources()"></A>
+<A NAME="addVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>, java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -5225,8 +5246,8 @@ From interface
          
         void
       </span>
-      <span class="sympad">clearSources</span>
-      <span class="normal">()</span>
+      <span class="sympad">addVehicleInterface</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; vehicleInterfaceType, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> resource)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -5238,13 +5259,43 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Activate a vehicle interface for both receiving data and sending commands
+ to the vehicle.
+
+ For example, to use a Bluetooth CAN translator as a vehicle interface in
+ additional to a vehicle data source, call the addVehicleInterface method
+ after binding with VehicleManager:
+
+      service.addVehicleInterface(BluetoothVehicleInterface.class,
+              new URI(""));
+
+ The only valid VehicleInteface types are those included with the library
+ - the vehicle service running in a remote process is the one to actually
+ instantiate the interfaces. Interfaces added with this method will be
+ available for all other OpenXC applications running in the system. To use
+ custom implementations of <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>,
+ see <code><a href="../../com/openxc/VehicleManager.html#addLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)">addLocalVehicleInterface(VehicleInterface)</a></code> (but beware of
+ the caveats described with that method - interfaces added "locally" do
+ not support bidirectional communication for any other applications
+ besides the one that instantiated the interface).
+
+ The <code><a href="../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></code> is initialized
+ by default when the remote service starts, but it can be disabled with
+ <code><a href="../../com/openxc/VehicleManager.html#removeVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>)">removeVehicleInterface(Class)</a></code>.</p></div>
   <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
         <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td></td>
+          <th>vehicleInterfaceType</td>
+          <td>A class implementing VehicleInterface that is
+      included in the OpenXC library</td>
+        </tr>
+        <tr>
+          <th>resource</td>
+          <td>A descriptor or a resource necessary to initialize the
+      interface. See the specific implementation of <code><a href="../../com/openxc/remote/VehicleService.html">VehicleService</a></code>
+      to find the required format of this parameter.
+</td>
         </tr>
       </table>
   </div>
@@ -5393,7 +5444,8 @@ From interface
       
   <div class="jd-tagdata jd-tagdescr"><p>Return a list of all sinks active in the system.
 
- The motivation for this method is the same as #getSources.</p></div>
+ The motivation for this method is the same as
+ <code><a href="../../com/openxc/VehicleManager.html#getSinkSummaries()">getSinkSummaries()</a></code>.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Returns</h5>
       <ul class="nolist"><li>A list of the names and status of all sinks.
@@ -5440,52 +5492,6 @@ From interface
       <h5 class="jd-tagtitle">Returns</h5>
       <ul class="nolist"><li>A list of the names and status of all sources.
 </li></ul>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="initializeDefaultSources()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">initializeDefaultSources</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Reset vehicle service to use only the default vehicle sources.
-
- The default vehicle data source is USB. If a USB CAN translator is not
- connected, there will be no more data.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional situation
-      that shouldn't occur.
-</td>
-        </tr>
-      </table>
   </div>
 
     </div>
@@ -5610,7 +5616,11 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Receive a new measurement with at least a value and optionally an event.</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Not part of the public API for VehicleManager.
+
+ This method is required to be public to implement the SourceCallback
+ interface, but it should not be used by applications.
+</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
@@ -5693,6 +5703,43 @@ From interface
 </div>
 
 
+<A NAME="removeLocalVehicleInterface(com.openxc.interfaces.VehicleInterface)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">removeLocalVehicleInterface</span>
+      <span class="normal">(<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a> vehicleInterface)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Remove a previously registered local vehicle interface from the
+ service.
+
+ Data from the <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code> will no longer be propagated to
+ applications, and it will no longer be available for sending commands to
+ the vehicle.
+</p></div>
+
+    </div>
+</div>
+
+
 <A NAME="removeSink(com.openxc.sinks.VehicleDataSink)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -5757,7 +5804,7 @@ From interface
 </div>
 
 
-<A NAME="set(com.openxc.measurements.Measurement)"></A>
+<A NAME="removeVehicleInterface(java.lang.Class<? extends com.openxc.interfaces.VehicleInterface>)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -5769,7 +5816,49 @@ From interface
          
         void
       </span>
-      <span class="sympad">set</span>
+      <span class="sympad">removeVehicleInterface</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; vehicleInterfaceType)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Disable a vehicle interface, stopping data flow in both directions.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>vehicleInterfaceType</td>
+          <td>A class implementing VehicleInterface that is
+      included in the OpenXC library, should have been previously added.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="send(com.openxc.measurements.Measurement)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">send</span>
       <span class="normal">(<a href="../../com/openxc/measurements/Measurement.html">Measurement</a> command)</span>
     </h4>
       <div class="api-level">
@@ -5782,19 +5871,25 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Send a command back to the vehicle.
+  <div class="jd-tagdata jd-tagdescr"><p>Send a command to the vehicle through the first available active
+ <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>.
 
- This fails silently if it is unable to connect to the remote vehicle
- service.</p></div>
+ This will attempt to send the message over all of the registered vehicle
+ interfaces until one returns successfully. There is no guarantee about
+ the order that the interfaces are attempted.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
           <th>command</td>
-          <td>The desired command to send to the vehicle.
-</td>
+          <td>The desired command to send to the vehicle.</td>
         </tr>
       </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the message was sent successfully
+</li></ul>
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Throws</h5>
@@ -5802,273 +5897,6 @@ From interface
         <tr>
             <th><a href="../../com/openxc/measurements/UnrecognizedMeasurementTypeException.html">UnrecognizedMeasurementTypeException</a></td>
             <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="setBluetoothSourceStatus(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">setBluetoothSourceStatus</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable receiving vehicle data from a Bluetooth CAN device.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if bluetooth should be enabled</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional
-      situation that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="setFileRecordingStatus(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">setFileRecordingStatus</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable recording of a trace file.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if recording should be enabled</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional
-      situation that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="setNativeGpsOverwriteStatus(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">setNativeGpsOverwriteStatus</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable overwriting native GPS measurements with those from the
- vehicle.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if native GPS should be overwritte.</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if GPS overwriting status is unable to be
-      set - an exceptional situation that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li><code><a href="../../com/openxc/sinks/MockedLocationSink.html#setOverwritingStatus(boolean)">setOverwritingStatus(boolean)</a></code></li>
-      </ul>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="setNativeGpsStatus(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">setNativeGpsStatus</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable reading GPS from the native Android stack.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if native GPS should be passed through</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if native GPS status is unable to be set
-      - an exceptional situation that shouldn't occur.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="setUploadingStatus(boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">setUploadingStatus</span>
-      <span class="normal">(boolean enabled)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Enable or disable uploading of a vehicle trace to a remote web server.
-
- The URL of the web server to upload the trace to is read from the shared
- preferences.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>enabled</td>
-          <td>true if uploading should be enabled</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></td>
-            <td>if the listener is unable to be
-      unregistered with the library internals - an exceptional situation
-      that shouldn't occur.
-</td>
         </tr>
       </table>
   </div>

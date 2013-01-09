@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  UsbVehicleDataSource
+  UsbVehicleInterface
 
 
 | OpenXC Android Library
@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -159,11 +165,7 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="selected api apilevel-">
-  <a href="../../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -177,9 +179,9 @@
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></li>
-          <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></li>
-          <li class="selected api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></li>
+          <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></li>
+          <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></li>
+          <li class="selected api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></li>
       </ul>
     </li>
               
@@ -187,7 +189,7 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../com/openxc/sources/usb/UsbDeviceException.html">UsbDeviceException</a></li>
+          <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceException.html">UsbDeviceException</a></li>
       </ul>
     </li>
               
@@ -227,6 +229,15 @@
 <div id="api-info-block">
 
 
+
+  
+   
+  
+  
+  
+   
+  
+  
 
   
    
@@ -293,6 +304,9 @@ Summary:
 
 
 
+  &#124; <a href="#inhfields">Inherited Fields</a>
+  
+
 
   &#124; <a href="#pubctors">Ctors</a>
   
@@ -331,7 +345,7 @@ Summary:
      
     
     class
-<h1>UsbVehicleDataSource</h1>
+<h1>UsbVehicleInterface</h1>
 
 
 
@@ -344,7 +358,11 @@ Summary:
   
 
   
-    extends <a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a><br/>
+  
+  
+
+  
+    extends <a href="../../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a><br/>
   
   
   
@@ -353,9 +371,7 @@ Summary:
   
       implements 
       
-        <a href="../../../../com/openxc/controllers/VehicleController.html">VehicleController</a> 
-      
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Runnable.html">Runnable</a> 
+        <a href="../../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a> 
       
   
   
@@ -371,7 +387,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="4" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="5" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -379,7 +395,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="3" class="jd-inheritance-class-cell"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html">com.openxc.sources.BaseVehicleDataSource</a></td>
+        <td colspan="4" class="jd-inheritance-class-cell"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html">com.openxc.sources.BaseVehicleDataSource</a></td>
     </tr>
     
 
@@ -389,7 +405,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html">com.openxc.sources.ContextualVehicleDataSource</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html">com.openxc.sources.ContextualVehicleDataSource</a></td>
     </tr>
     
 
@@ -401,7 +417,21 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.sources.usb.UsbVehicleDataSource</td>
+        <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../../com/openxc/sources/BytestreamDataSource.html">com.openxc.sources.BytestreamDataSource</a></td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+         	
+        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.interfaces.usb.UsbVehicleInterface</td>
     </tr>
     
 
@@ -424,7 +454,7 @@ Summary:
 
  The device used (if different from the default) can be specified by passing
  an custom URI to the constructor. The expected format of this URI is defined
- in <code><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></code>.
+ in <code><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></code>.
 
  According to Android's USB device usage requirements, this class requests
  permission for the USB device from the user before accessing it. This may
@@ -477,14 +507,14 @@ Summary:
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
-        <td class="jd-linkcol"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#ACTION_USB_DEVICE_ATTACHED">ACTION_USB_DEVICE_ATTACHED</a></td>
+        <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#ACTION_USB_DEVICE_ATTACHED">ACTION_USB_DEVICE_ATTACHED</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
-        <td class="jd-linkcol"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#ACTION_USB_PERMISSION">ACTION_USB_PERMISSION</a></td>
+        <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#ACTION_USB_PERMISSION">ACTION_USB_PERMISSION</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -499,6 +529,63 @@ Summary:
 
 
 
+
+
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="inhfields" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Fields</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-com.openxc.sources.BytestreamDataSource" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-com.openxc.sources.BytestreamDataSource-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../com/openxc/sources/BytestreamDataSource.html">com.openxc.sources.BytestreamDataSource</a>
+<div id="inherited-fields-com.openxc.sources.BytestreamDataSource">
+  <div id="inherited-fields-com.openxc.sources.BytestreamDataSource-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-com.openxc.sources.BytestreamDataSource-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/Condition.html">Condition</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mDeviceChanged">mDeviceChanged</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
 
 
 
@@ -519,9 +606,9 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#UsbVehicleDataSource(com.openxc.sources.SourceCallback, android.content.Context, java.net.URI)">UsbVehicleDataSource</a></span>(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> device)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#UsbVehicleInterface(com.openxc.sources.SourceCallback, android.content.Context, java.net.URI)">UsbVehicleInterface</a></span>(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> deviceUri)</nobr>
         
-        <div class="jd-descrdiv">Construct an instance of UsbVehicleDataSource with a receiver callback
+        <div class="jd-descrdiv">Construct an instance of UsbVehicleInterface with a receiver callback
  and custom device URI.</div>
   
   </td></tr>
@@ -538,9 +625,9 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#UsbVehicleDataSource(com.openxc.sources.SourceCallback, android.content.Context)">UsbVehicleDataSource</a></span>(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#UsbVehicleInterface(com.openxc.sources.SourceCallback, android.content.Context)">UsbVehicleInterface</a></span>(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context)</nobr>
         
-        <div class="jd-descrdiv">Construct an instance of UsbVehicleDataSource with a receiver callback
+        <div class="jd-descrdiv">Construct an instance of UsbVehicleInterface with a receiver callback
  and the default device URI.</div>
   
   </td></tr>
@@ -557,7 +644,23 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#UsbVehicleDataSource(android.content.Context)">UsbVehicleDataSource</a></span>(Context context)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#UsbVehicleInterface(android.content.Context)">UsbVehicleInterface</a></span>(Context context)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#UsbVehicleInterface(android.content.Context, java.lang.String)">UsbVehicleInterface</a></span>(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> uriString)</nobr>
         
   </td></tr>
 
@@ -583,13 +686,12 @@ Summary:
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#run()">run</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
         
-        <div class="jd-descrdiv">Continuously read JSON messages from an attached USB device, or wait for
- a connection.</div>
+        <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
   
   </td></tr>
 
@@ -602,11 +704,14 @@ Summary:
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#set(com.openxc.remote.RawMeasurement)">set</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#setResource(java.lang.String)">setResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> otherUri)</nobr>
         
+        <div class="jd-descrdiv">Change the resource used by the instance to connect to the interface,
+ restarting any neccessary services.</div>
+  
   </td></tr>
 
 
@@ -621,7 +726,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#start()">start</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#start()">start</a></span>()</nobr>
         
   </td></tr>
 
@@ -637,7 +742,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#stop()">stop</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#stop()">stop</a></span>()</nobr>
         
         <div class="jd-descrdiv">Unregister USB device intent broadcast receivers and stop waiting for a
  connection.</div>
@@ -656,7 +761,7 @@ Summary:
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#toString()">toString</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#toString()">toString</a></span>()</nobr>
         
   </td></tr>
 
@@ -680,12 +785,67 @@ Summary:
             
             
             
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#disconnect()">disconnect</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Perform any cleanup necessary to disconnect from the interface.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#getTag()">getTag</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#getTag()">getTag</a></span>()</nobr>
         
         <div class="jd-descrdiv">Return a string suitable as a tag for logging.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#read(byte[])">read</a></span>(byte[] bytes)</nobr>
+        
+        <div class="jd-descrdiv">Read data from the source into the given array.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html#waitForConnection()">waitForConnection</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">If not already connected to the data source, initiate the connection and
+ block until ready to be read.</div>
   
   </td></tr>
 
@@ -701,6 +861,201 @@ Summary:
 <table id="inhmethods" class="jd-sumtable"><tr><th>
   <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
   <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sources.BytestreamDataSource" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.openxc.sources.BytestreamDataSource-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="../../../../com/openxc/sources/BytestreamDataSource.html">com.openxc.sources.BytestreamDataSource</a>
+
+<div id="inherited-methods-com.openxc.sources.BytestreamDataSource">
+  <div id="inherited-methods-com.openxc.sources.BytestreamDataSource-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-com.openxc.sources.BytestreamDataSource-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/Condition.html">Condition</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#createCondition()">createCondition</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#disconnect()">disconnect</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Perform any cleanup necessary to disconnect from the interface.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#isRunning()">isRunning</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#lockConnection()">lockConnection</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#read(byte[])">read</a></span>(byte[] bytes)</nobr>
+        
+        <div class="jd-descrdiv">Read data from the source into the given array.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#run()">run</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#start()">start</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Clear the callback so no further updates are sent.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#unlockConnection()">unlockConnection</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#waitForConnection()">waitForConnection</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">If not already connected to the data source, initiate the connection and
+ block until ready to be read.</div>
+  
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
 
 
 <tr class="api apilevel-" >
@@ -809,22 +1164,6 @@ From class
             
             
             
-            <a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#getCallback()">getCallback</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -836,7 +1175,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -854,7 +1193,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -870,7 +1209,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -888,7 +1227,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -901,24 +1240,6 @@ From class
         <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#stop()">stop</a></span>()</nobr>
         
         <div class="jd-descrdiv">Clear the callback so no further updates are sent.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#waitForCallbackInitialization()">waitForCallbackInitialization</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Block the current thread until the callback is not null.</div>
   
   </td></tr>
 
@@ -1134,19 +1455,19 @@ From class
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.VehicleDataEndpoint" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.VehicleDataEndpoint-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.interfaces.VehicleInterface" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.openxc.interfaces.VehicleInterface-trigger"
           src="../../../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From interface
 
-  <a href="../../../../com/openxc/VehicleDataEndpoint.html">com.openxc.VehicleDataEndpoint</a>
+  <a href="../../../../com/openxc/interfaces/VehicleInterface.html">com.openxc.interfaces.VehicleInterface</a>
 
-<div id="inherited-methods-com.openxc.VehicleDataEndpoint">
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-list"
+<div id="inherited-methods-com.openxc.interfaces.VehicleInterface">
+  <div id="inherited-methods-com.openxc.interfaces.VehicleInterface-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-summary" style="display: none;">
+  <div id="inherited-methods-com.openxc.interfaces.VehicleInterface-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -1159,13 +1480,13 @@ From interface
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/VehicleDataEndpoint.html#stop()">stop</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/VehicleInterface.html#setResource(java.lang.String)">setResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> resource)</nobr>
         
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
+        <div class="jd-descrdiv">Change the resource used by the instance to connect to the interface,
+ restarting any neccessary services.</div>
   
   </td></tr>
 
@@ -1179,19 +1500,19 @@ From interface
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.controllers.VehicleController" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.controllers.VehicleController-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sinks.VehicleDataSink" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.openxc.sinks.VehicleDataSink-trigger"
           src="../../../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From interface
 
-  <a href="../../../../com/openxc/controllers/VehicleController.html">com.openxc.controllers.VehicleController</a>
+  <a href="../../../../com/openxc/sinks/VehicleDataSink.html">com.openxc.sinks.VehicleDataSink</a>
 
-<div id="inherited-methods-com.openxc.controllers.VehicleController">
-  <div id="inherited-methods-com.openxc.controllers.VehicleController-list"
+<div id="inherited-methods-com.openxc.sinks.VehicleDataSink">
+  <div id="inherited-methods-com.openxc.sinks.VehicleDataSink-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-com.openxc.controllers.VehicleController-summary" style="display: none;">
+  <div id="inherited-methods-com.openxc.sinks.VehicleDataSink-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -1204,11 +1525,32 @@ From interface
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        
+        <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/controllers/VehicleController.html#set(com.openxc.remote.RawMeasurement)">set</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
+ source) or stop expecting to receive them (if a sink).</div>
+  
   </td></tr>
 
 
@@ -1252,6 +1594,25 @@ From interface
         <span class="sympad"><a href="../../../../com/openxc/sources/VehicleDataSource.html#setCallback(com.openxc.sources.SourceCallback)">setCallback</a></span>(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback)</nobr>
         
         <div class="jd-descrdiv">Set the callback for receiving raw measurements as they are received.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/VehicleDataSource.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
+ source) or stop expecting to receive them (if a sink).</div>
   
   </td></tr>
 
@@ -1423,7 +1784,7 @@ From interface
 
 
 
-<A NAME="UsbVehicleDataSource(com.openxc.sources.SourceCallback, android.content.Context, java.net.URI)"></A>
+<A NAME="UsbVehicleInterface(com.openxc.sources.SourceCallback, android.content.Context, java.net.URI)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1435,8 +1796,8 @@ From interface
          
         
       </span>
-      <span class="sympad">UsbVehicleDataSource</span>
-      <span class="normal">(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> device)</span>
+      <span class="sympad">UsbVehicleInterface</span>
+      <span class="normal">(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> deviceUri)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1448,15 +1809,11 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Construct an instance of UsbVehicleDataSource with a receiver callback
+  <div class="jd-tagdata jd-tagdescr"><p>Construct an instance of UsbVehicleInterface with a receiver callback
  and custom device URI.
 
  If the device cannot be found at initialization, the object will block
- waiting for a signal to check again.
-
- TODO Do we ever send such a signal? Or did I delete that because in order
- to have that signal sent, we have to shut down the VehicleService
- (and thus this UsbVehicleDataSource) anyway?</p></div>
+ waiting for a signal to check again.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
@@ -1472,8 +1829,8 @@ From interface
       Android UsbManager.</td>
         </tr>
         <tr>
-          <th>device</td>
-          <td>a USB device URI (see <code><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></code> for the
+          <th>deviceUri</td>
+          <td>a USB device URI (see <code><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></code> for the
       format) to look for.</td>
         </tr>
       </table>
@@ -1494,7 +1851,7 @@ From interface
 </div>
 
 
-<A NAME="UsbVehicleDataSource(com.openxc.sources.SourceCallback, android.content.Context)"></A>
+<A NAME="UsbVehicleInterface(com.openxc.sources.SourceCallback, android.content.Context)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1506,7 +1863,7 @@ From interface
          
         
       </span>
-      <span class="sympad">UsbVehicleDataSource</span>
+      <span class="sympad">UsbVehicleInterface</span>
       <span class="normal">(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback, Context context)</span>
     </h4>
       <div class="api-level">
@@ -1519,10 +1876,10 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Construct an instance of UsbVehicleDataSource with a receiver callback
+  <div class="jd-tagdata jd-tagdescr"><p>Construct an instance of UsbVehicleInterface with a receiver callback
  and the default device URI.
 
- The default device URI is specified in <code><a href="../../../../com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></code>.</p></div>
+ The default device URI is specified in <code><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></code>.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
@@ -1555,7 +1912,7 @@ From interface
 </div>
 
 
-<A NAME="UsbVehicleDataSource(android.content.Context)"></A>
+<A NAME="UsbVehicleInterface(android.content.Context)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1567,8 +1924,48 @@ From interface
          
         
       </span>
-      <span class="sympad">UsbVehicleDataSource</span>
+      <span class="sympad">UsbVehicleInterface</span>
       <span class="normal">(Context context)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../../../com/openxc/sources/DataSourceException.html">DataSourceException</a></td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="UsbVehicleInterface(android.content.Context, java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">UsbVehicleInterface</span>
+      <span class="normal">(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> uriString)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1610,7 +2007,7 @@ From interface
 
 
 
-<A NAME="run()"></A>
+<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1620,45 +2017,9 @@ From interface
          
          
          
-        void
+        boolean
       </span>
-      <span class="sympad">run</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Continuously read JSON messages from an attached USB device, or wait for
- a connection.
-
- This loop will only exit if <code><a href="../../../../com/openxc/sources/usb/UsbVehicleDataSource.html#stop()">stop()</a></code> is called - otherwise it
- either waits for a new device connection or reads USB packets.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="set(com.openxc.remote.RawMeasurement)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">set</span>
+      <span class="sympad">receive</span>
       <span class="normal">(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</span>
     </h4>
       <div class="api-level">
@@ -1671,7 +2032,77 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Receive a data point with a name, a value and a event value.
+
+ The implementation of this method should not block, lest the vehicle data
+ source get behind in processing data from a source potentially external
+ to the system.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>command</td>
+          <td>The new measurement.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setResource(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">setResource</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> otherUri)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Change the resource used by the instance to connect to the interface,
+ restarting any neccessary services.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>otherUri</td>
+          <td>The new resource to use for the interface.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the resource was different and the interface was
+      restarted.
+</li></ul>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../../../com/openxc/sources/DataSourceException.html">DataSourceException</a></td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>
@@ -1784,6 +2215,38 @@ From interface
 
 
 
+<A NAME="disconnect()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">disconnect</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Perform any cleanup necessary to disconnect from the interface.
+</p></div>
+
+    </div>
+</div>
+
+
 <A NAME="getTag()"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1811,6 +2274,103 @@ From interface
       
   <div class="jd-tagdata jd-tagdescr"><p>Return a string suitable as a tag for logging.
 </p></div>
+
+    </div>
+</div>
+
+
+<A NAME="read(byte[])"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        int
+      </span>
+      <span class="sympad">read</span>
+      <span class="normal">(byte[] bytes)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Read data from the source into the given array.
+
+ No more than bytes.length bytes will be read, and there is no guarantee
+ that any bytes will be read at all.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>bytes</td>
+          <td>the destination array for bytes from the data source.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the number of bytes that were actually copied into bytes.</li></ul>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/IOException.html">IOException</a></td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="waitForConnection()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">waitForConnection</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>If not already connected to the data source, initiate the connection and
+ block until ready to be read.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/InterruptedException.html">InterruptedException</a></td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>

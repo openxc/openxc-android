@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -158,12 +164,8 @@
   <a href="../../../../com/openxc/sinks/package-summary.html">com.openxc.sinks</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -220,13 +222,6 @@
 <div id="api-info-block">
 
 
-
-  
-   
-  
-  
-  
-  
 
   
    
@@ -414,10 +409,10 @@ Summary:
  {"timestamp": 1351176963.438318, "name": "transmission_gear_position", "value": "second"}
 
  The trace file to use is specified via the constructor as an Android-style
- resource URI, e.g. "resource://42" or a plain file path
- (e.g. "file:///sdcard/com.openxc/trace.json" ). When using resources, the ID
- for the resource is accessed through the generated "R.java" file. For
- example:
+ resource URI, e.g. "resource://42", "file:///storage/traces/trace.json" or a
+ plain file path (e.g. "/sdcard/com.openxc/trace.json" ). When using
+ resources, the ID for the resource is accessed through the generated "R.java"
+ file. For example:
 
       URI resource = new URI("resource://" + R.raw.trace)
 
@@ -551,6 +546,22 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#TraceVehicleDataSource(android.content.Context, java.lang.String)">TraceVehicleDataSource</a></span>(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> filename)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#TraceVehicleDataSource(android.content.Context, java.net.URI, boolean)">TraceVehicleDataSource</a></span>(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> filename, boolean loop)</nobr>
         
   </td></tr>
@@ -596,13 +607,11 @@ Summary:
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#stop()">stop</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#sameFilename(java.lang.String)">sameFilename</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> filename)</nobr>
         
-        <div class="jd-descrdiv">Stop trace file playback and the playback thread.</div>
-  
   </td></tr>
 
 
@@ -614,10 +623,44 @@ Summary:
             
             
             
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Stop trace file playback and the playback thread.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#toString()">toString</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            static
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#validatePath(java.lang.String)">validatePath</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> path)</nobr>
         
   </td></tr>
 
@@ -770,22 +813,6 @@ From class
             
             
             
-            <a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#getCallback()">getCallback</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -797,7 +824,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -815,7 +842,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -831,7 +858,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -849,7 +876,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -862,24 +889,6 @@ From class
         <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#stop()">stop</a></span>()</nobr>
         
         <div class="jd-descrdiv">Clear the callback so no further updates are sent.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#waitForCallbackInitialization()">waitForCallbackInitialization</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Block the current thread until the callback is not null.</div>
   
   </td></tr>
 
@@ -1095,51 +1104,6 @@ From class
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.VehicleDataEndpoint" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.VehicleDataEndpoint-trigger"
-          src="../../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>
-From interface
-
-  <a href="../../../../com/openxc/VehicleDataEndpoint.html">com.openxc.VehicleDataEndpoint</a>
-
-<div id="inherited-methods-com.openxc.VehicleDataEndpoint">
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-list"
-        class="jd-inheritedlinks">
-  </div>
-  <div id="inherited-methods-com.openxc.VehicleDataEndpoint-summary" style="display: none;">
-    <table class="jd-sumtable-expando">
-    
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/VehicleDataEndpoint.html#stop()">stop</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
-  
-  </td></tr>
-
-
-</table>
-  </div>
-</div>
-</td></tr>
-
-
-
-<tr class="api apilevel-" >
-<td colspan="12">
   <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sources.VehicleDataSource" class="jd-expando-trigger closed"
           ><img id="inherited-methods-com.openxc.sources.VehicleDataSource-trigger"
           src="../../../../../assets/images/triangle-closed.png"
@@ -1171,6 +1135,25 @@ From interface
         <span class="sympad"><a href="../../../../com/openxc/sources/VehicleDataSource.html#setCallback(com.openxc.sources.SourceCallback)">setCallback</a></span>(<a href="../../../../com/openxc/sources/SourceCallback.html">SourceCallback</a> callback)</nobr>
         
         <div class="jd-descrdiv">Set the callback for receiving raw measurements as they are received.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/VehicleDataSource.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
+ source) or stop expecting to receive them (if a sink).</div>
   
   </td></tr>
 
@@ -1401,6 +1384,46 @@ From interface
 </div>
 
 
+<A NAME="TraceVehicleDataSource(android.content.Context, java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">TraceVehicleDataSource</span>
+      <span class="normal">(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> filename)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../../../com/openxc/sources/DataSourceException.html">DataSourceException</a></td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
 <A NAME="TraceVehicleDataSource(android.content.Context, java.net.URI, boolean)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1492,6 +1515,37 @@ From interface
 </div>
 
 
+<A NAME="sameFilename(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">sameFilename</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> filename)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
 <A NAME="stop()"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1538,6 +1592,37 @@ From interface
       </span>
       <span class="sympad">toString</span>
       <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="validatePath(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">validatePath</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> path)</span>
     </h4>
       <div class="api-level">
         <div>

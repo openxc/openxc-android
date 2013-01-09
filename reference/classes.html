@@ -146,7 +146,13 @@
     <li class="api apilevel-">
   <a href="./com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="./com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="./com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="./com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -158,11 +164,7 @@
     <li class="api apilevel-">
   <a href="./com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
-  <a href="./com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
-    <li class="api apilevel-">
   <a href="./com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="./com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="./com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -302,13 +304,13 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/bluetooth/BluetoothException.html">BluetoothException</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/bluetooth/BluetoothException.html">BluetoothException</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/bluetooth/BluetoothVehicleDataSource.html">BluetoothVehicleDataSource</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/bluetooth/BluetoothVehicleInterface.html">BluetoothVehicleInterface</a></td>
             <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an Bluetooth-enabled
  OpenXC device.&nbsp;</td>
         </tr>
@@ -327,9 +329,16 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/BytestreamDataSourceMixin.html">BytestreamDataSourceMixin</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></td>
             <td class="jd-descrcol" width="100%">A "mixin" of sorts to be used with object composition, this contains
  functionality common to data sources that received streams of bytes.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></td>
+            <td class="jd-descrcol" width="100%">Common functionality for data sources that read a stream of newline-separated
+ messages in a separate thread from the main activity.&nbsp;</td>
         </tr>
     
     
@@ -390,7 +399,7 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/bluetooth/DeviceManager.html">DeviceManager</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/bluetooth/DeviceManager.html">DeviceManager</a></td>
             <td class="jd-descrcol" width="100%">The DeviceManager collects the functions required to discover and open a
  socket to the Bluetooth device.&nbsp;</td>
         </tr>
@@ -618,6 +627,18 @@
     
     
         <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/network/NetworkSourceException.html">NetworkSourceException</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a></td>
+            <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC network device.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/units/NewtonMeter.html">NewtonMeter</a></td>
             <td class="jd-descrcol" width="100%">A NewtonMeter is a unit of torque.&nbsp;</td>
         </tr>
@@ -736,6 +757,13 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></td>
+            <td class="jd-descrcol" width="100%">A VehicleInterface that sends commands to a VehicleService operating in a
+ remote process.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/units/RotationsPerMinute.html">RotationsPerMinute</a></td>
             <td class="jd-descrcol" width="100%">RotationsPerMinute is a measure of the frequency of a rotation.&nbsp;</td>
         </tr>
@@ -837,30 +865,37 @@
     
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sinks/UploaderSink.html">UploaderSink</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
+            <td class="jd-descrcol" width="100%">Upload a stream of all incoming vehicle data to a remote HTTP server.&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html">UriBasedVehicleInterfaceMixin</a></td>
+            <td class="jd-descrcol" width="100%">A collection of utilites for vehicle interfaces that reference a physical
+ device with a URI.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></td>
             <td class="jd-descrcol" width="100%">The UsbDeviceActivity is a proxy to listen for USB_DEVICE_ATTACHED intents.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/usb/UsbDeviceException.html">UsbDeviceException</a></td>
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbDeviceException.html">UsbDeviceException</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></td>
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></td>
             <td class="jd-descrcol" width="100%">Stateless utilities for finding and opening USB devices.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/usb/UsbVehicleDataSource.html">UsbVehicleDataSource</a></td>
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></td>
             <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC USB device.&nbsp;</td>
         </tr>
     
@@ -892,18 +927,6 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/controllers/VehicleController.html">VehicleController</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/VehicleDataEndpoint.html">VehicleDataEndpoint</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
-        </tr>
-    
-    
-        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a></td>
             <td class="jd-descrcol" width="100%">The interface for all vehicle data destination endpoints.&nbsp;</td>
         </tr>
@@ -924,6 +947,32 @@
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/VehicleDoorStatus.DoorId.html">VehicleDoorStatus.DoorId</a></td>
             <td class="jd-descrcol" width="100%">The DoorId is the specific door of the vehicle.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></td>
+            <td class="jd-descrcol" width="100%">A connection to a physical vehicle interface that is capable of full duplex
+ communication.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceException.html">VehicleInterfaceException</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceFactory.html">VehicleInterfaceFactory</a></td>
+            <td class="jd-descrcol" width="100%">A factory that uses reflection to create instance of VehicleInterface
+ implementations.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceManagerUtils.html">VehicleInterfaceManagerUtils</a></td>
+            <td class="jd-descrcol" width="100%">Utilities for interacting with a number of VehicleInterface objects.&nbsp;</td>
         </tr>
     
     

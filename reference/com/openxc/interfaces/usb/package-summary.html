@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  com.openxc.sources.bluetooth Details
+  com.openxc.interfaces.usb
 
 
 | OpenXC Android Library
@@ -147,7 +147,13 @@
     <li class="api apilevel-">
   <a href="../../../../com/openxc/package-summary.html">com.openxc</a></li>
     <li class="api apilevel-">
-  <a href="../../../../com/openxc/controllers/package-summary.html">com.openxc.controllers</a></li>
+  <a href="../../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../com/openxc/interfaces/network/package-summary.html">com.openxc.interfaces.network</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../com/openxc/interfaces/usb/package-summary.html">com.openxc.interfaces.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
@@ -158,12 +164,8 @@
   <a href="../../../../com/openxc/sinks/package-summary.html">com.openxc.sinks</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
-    <li class="selected api apilevel-">
-  <a href="../../../../com/openxc/sources/bluetooth/package-summary.html">com.openxc.sources.bluetooth</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../com/openxc/sources/usb/package-summary.html">com.openxc.sources.usb</a></li>
     <li class="api apilevel-">
   <a href="../../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
     <li class="api apilevel-">
@@ -177,8 +179,9 @@
               
     <li><h2>Classes</h2>
       <ul>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/bluetooth/BluetoothVehicleDataSource.html">BluetoothVehicleDataSource</a></li>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/bluetooth/DeviceManager.html">DeviceManager</a></li>
+        <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></li>
+        <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></li>
+        <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></li>
       </ul>
     </li>
               
@@ -186,7 +189,7 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-        <li class="api apilevel-"><a href="../../../../com/openxc/sources/bluetooth/BluetoothException.html">BluetoothException</a></li>
+        <li class="api apilevel-"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceException.html">UsbDeviceException</a></li>
       </ul>
     </li>
               
@@ -236,26 +239,75 @@
 
 <div id="jd-header">
   package
-  <h1>com.openxc.sources.bluetooth</b></h1>
-  <div class="jd-nav">
-      <a class="jd-navlink" href="package-summary.html">Classes</a> | Description
-  </div>
+  <h1>com.openxc.interfaces.usb</h1>
 </div><!-- end header -->
 
 <div id="naMessage"></div>
 
 <div id="jd-content" class="api apilevel-">
-<div class="jd-descr">
-<p>Contains the classes for connecting to a vehicle interface via Bluetooth.
-</p>
-</div>
+
+
+  <div class="jd-descr">
+    Contains a vehicle data source that connects to a vehicle interface via USB.
+ This is the default vehicle data source.
+
+  </div>
+
+
+
+
+
+  
+
+
+  
+    <h2>Classes</h2>
+    <div class="jd-sumtable">
+    
+  <table class="jd-sumtable-expando">
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></td>
+              <td class="jd-descrcol" width="100%">The UsbDeviceActivity is a proxy to listen for USB_DEVICE_ATTACHED intents.&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></td>
+              <td class="jd-descrcol" width="100%">Stateless utilities for finding and opening USB devices.&nbsp;</td>
+          </tr>
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></td>
+              <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC USB device.&nbsp;</td>
+          </tr>
+  </table>
+    </div>
+  
+
+
+  
+
+
+  
+    <h2>Exceptions</h2>
+    <div class="jd-sumtable">
+    
+  <table class="jd-sumtable-expando">
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/openxc/interfaces/usb/UsbDeviceException.html">UsbDeviceException</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
+          </tr>
+  </table>
+    </div>
+  
+
+
+  
+
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end footer -->
 
 </div><!-- end jd-content -->
-</div> <!-- end doc-content -->
+</div><!-- doc-content -->
 
 </div> <!-- end body-content --> 
 
