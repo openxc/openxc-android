@@ -68,9 +68,9 @@ def make_tag():
     if confirm(yellow("Tag this release?"), default=True):
         print(green("The last 5 tags were: "))
         tags = local('git tag | tail -n 20', capture=True)
-        pp(sorted(tags.split('\n'), utils.compare_versions, reverse=True))
+        pp(sorted(tags.split('\n'), compare_versions, reverse=True))
         prompt("New release tag in the format vX.Y[.Z]?", 'tag',
-                validate=env.version_pattern)
+                validate=VERSION_PATTERN)
         local('git tag -as %(tag)s' % env)
         local('git push --tags origin', capture=True)
         local('git fetch --tags origin', capture=True)
