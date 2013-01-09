@@ -55,11 +55,11 @@ to deploy the enabler and examples to an attached device:
 
 ## Contributing
 
-Please see our [Contibution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
+Please see our [Contribution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
 
 ## License
 
-Copyright (c) 2011-2012 Ford Motor Company
+Copyright (c) 2011-2013 Ford Motor Company
 Licensed under the BSD license.
 
 [binding]: http://developer.android.com/guide/topics/fundamentals/bound-services.html#Binding)
