@@ -4,7 +4,6 @@ gen
 .DS_Store
 /com/
 reference
-.classpath
 .settings
 local.properites
 *.asc
