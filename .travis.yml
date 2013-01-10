@@ -12,3 +12,8 @@ before_install:
   - android update sdk --filter 1,2,3 --no-ui --force
 install:
   - mvn install -DskipTests=true
+notifications:
+  hipchat: <%= ENV['HIPCHAT_TOKEN'] %>@Ford
+env:
+  global:
+    secure: "iotiUK43hkNVsFw2WnL3DuvQTLnPj5vkYQ+R/L6I73rX/J2dMyMrjW3VPxA/\nj0cMgpMv1WCrt15qYfuuLO/kCPwedT6oD+zhAdM6REsy/Te0/4Hg5IPS3Lvd\nZ096QEg88wXbcJGaC7uVQ1nX1phIUBhu6LV37vBzOYChQIEwatE="
