@@ -15,17 +15,17 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 
 ## Building from Eclipse
 
-Before importing the projects, make sure Eclipse is set to use the Java 1.6
-compliler compliance level at `Windows -> Preferences -> Java -> Compiler`.
+After cloning the `openxc-android` repository to your local disk, open Eclipse
+and go to `File -> New -> Other -> Android -> Android Project from Existing
+Source`. Browse to the `openxc-android` folder and it should detect the 4
+Android projects within the repository. At the minimum, add the `openxc` project
+(the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
+required to run OpenXC applications).
 
-Next, go to `File -> Import -> General -> Existing Projects into
-Workspace` and browse to the `openxc-android` repository. At the minimum, import
-the `openxc` folder (the Android library itself) and `openxc-enabler` (the
-Enabler app, required to run OpenXC applications).
-
-You can optionally import the `openxc-examples` project to see an example
-vehicle dashboard OpenXC application, and also the `openxc-it` which contains a
-test suite for the library and instrumentation tests that run on the device.
+You can optionally add the `VehicleDashboardActivity` project to see an example
+vehicle dashboard OpenXC application, and also the `openxc-it` project which
+contains a test suite for the library and instrumentation tests that run on the
+device.
 
 ## Building from Command Line
 
