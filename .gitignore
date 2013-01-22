@@ -7,5 +7,4 @@ reference
 *.asc
 .settings
 .project
-*.properties
 .classpath
