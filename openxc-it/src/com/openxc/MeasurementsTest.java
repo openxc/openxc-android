@@ -11,7 +11,6 @@ import com.openxc.measurements.HighBeamStatus;
 import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.FuelConsumed;
 import com.openxc.measurements.Odometer;
-import com.openxc.measurements.FineOdometer;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.NoValueException;
@@ -108,16 +107,6 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         Odometer measurement = (Odometer) service.get(Odometer.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 124141.0);
-    }
-
-    @MediumTest
-    public void testGetFineOdometer()
-            throws UnrecognizedMeasurementTypeException, NoValueException,
-            RemoteException, InterruptedException {
-        FineOdometer measurement = (FineOdometer) service.get(
-                FineOdometer.class);
-        checkReceivedMeasurement(measurement);
-        assertEquals(measurement.getValue().doubleValue(), 142.312423);
     }
 
     @MediumTest

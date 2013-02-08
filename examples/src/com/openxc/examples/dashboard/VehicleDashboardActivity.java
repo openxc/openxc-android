@@ -41,7 +41,6 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.FuelConsumed;
 import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.Odometer;
-import com.openxc.measurements.FineOdometer;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.VehicleServiceException;
 
@@ -57,7 +56,6 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mFuelConsumedView;
     private TextView mFuelLevelView;
     private TextView mOdometerView;
-    private TextView mFineOdometerView;
     private TextView mVehicleBrakeStatusView;
     private TextView mParkingBrakeStatusView;
     private TextView mVehicleEngineSpeedView;
@@ -131,18 +129,6 @@ public class VehicleDashboardActivity extends Activity {
             mHandler.post(new Runnable() {
                 public void run() {
                     mOdometerView.setText(
-                        "" + odometer.getValue().doubleValue());
-                }
-            });
-        }
-    };
-
-    FineOdometer.Listener mFineOdometerListener = new FineOdometer.Listener() {
-        public void receive(Measurement measurement) {
-            final FineOdometer odometer = (FineOdometer) measurement;
-            mHandler.post(new Runnable() {
-                public void run() {
-                    mFineOdometerView.setText(
                         "" + odometer.getValue().doubleValue());
                 }
             });
@@ -356,8 +342,6 @@ public class VehicleDashboardActivity extends Activity {
                         mFuelLevelListener);
                 mVehicleManager.addListener(Odometer.class,
                         mOdometerListener);
-                mVehicleManager.addListener(FineOdometer.class,
-                        mFineOdometerListener);
                 mVehicleManager.addListener(WindshieldWiperStatus.class,
                         mWiperListener);
                 mVehicleManager.addListener(BrakePedalStatus.class,
@@ -416,8 +400,6 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.fuel_level);
         mOdometerView = (TextView) findViewById(
                 R.id.odometer);
-        mFineOdometerView = (TextView) findViewById(
-                R.id.fine_odometer);
         mWiperStatusView = (TextView) findViewById(
                 R.id.wiper_status);
         mVehicleBrakeStatusView = (TextView) findViewById(
