@@ -16,4 +16,4 @@ install:
   - mvn install -DskipTests=true
 notifications:
   hipchat:
-    - secure: "Qi99dMt+44DuIdcvkgps4V/SFbot5Sew7Jz1wkDKSzbTPDZsV2cPyRCdqKMD\nOmb1/2Q9Zyud1RYEUNvNWLpP2WspeM7bfO5ZboM3qh+wh16/pOECM4+RMAeQ\nsOAoBFMwqlzK9lgG3CgBhL+VpsWltf/Kd5/E4bft4g6E16vQQjQ="
+    - secure: "SYNsoAV2/tvC7l4IdJxBHjczthLuuOCJ3zruu55MN3EYomf25tlRed8msuVU\nv7n8sYWcPjiUI5lbHzQTKU0PT1+arlBMwRhPMG719ID3BcmufXqVys4yzn+K\nAL3YaDONClJRaNbuaqVpz7l97jvsN/VGYbKCGvymiGf6sKu6T4Y="
