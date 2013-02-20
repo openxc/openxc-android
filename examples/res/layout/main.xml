@@ -56,15 +56,6 @@
             style="@style/DefaultFont" />
 
         <TextView
-            android:id="@+id/fine_odometer_label"
-            style="@style/DefaultFont"
-            android:text="@string/fine_odometer_label" />
-
-        <TextView
-            android:id="@+id/fine_odometer"
-            style="@style/DefaultFont" />
-
-        <TextView
             android:id="@+id/wiper_status_label"
             style="@style/DefaultFont"
             android:text="@string/wiper_status_label" />
@@ -198,7 +189,7 @@
         <TextView
             android:id="@+id/door_status"
             style="@style/DefaultFont" />
-        
+
     </LinearLayout>
 
 </ScrollView>

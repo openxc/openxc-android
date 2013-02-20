@@ -6,7 +6,6 @@
     <string name="fuel_consumed_label">Fuel Consumed</string>
     <string name="fuel_level_label">Fuel Level</string>
     <string name="odometer_label">Odometer</string>
-    <string name="fine_odometer_label">Fine Odometer</string>
     <string name="wiper_status_label">Windshield Wiper Status</string>
     <string name="brake_pedal_status_label">Brake Pedal Status</string>
     <string name="headlamp_status_label">Headlamp Status</string>
