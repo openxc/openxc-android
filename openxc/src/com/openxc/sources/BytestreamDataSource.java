@@ -15,7 +15,7 @@ import android.util.Log;
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     // TODO could let subclasses override this
-    private final static int READ_BATCH_SIZE = 128;
+    private final static int READ_BATCH_SIZE = 512;
     private boolean mRunning = false;
     private final Lock mConnectionLock = new ReentrantLock();
     protected final Condition mDeviceChanged = mConnectionLock.newCondition();
