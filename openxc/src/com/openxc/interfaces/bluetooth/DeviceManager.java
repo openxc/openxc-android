@@ -15,8 +15,11 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * The DeviceManager collects the functions required to discover and open a
+ * The DeviceManager collects the functions required to connect to and open a
  * socket to the Bluetooth device.
+ *
+ * The device must be previously bonded, as this class does not initiate
+ * discovery.
  */
 public class DeviceManager {
     private final static String TAG = "DeviceManager";
@@ -47,14 +50,14 @@ public class DeviceManager {
     }
 
     /**
-     * Discover and connect to the target device. This method will block while
-     * waiting for the device.
+     * Connect to the target device and open a socket. This method will block
+     * while waiting for the device.
      *
      * Returns a socket connected to the device.
      */
     public BluetoothSocket connect(String targetAddress)
             throws BluetoothException {
-        discoverDevices(targetAddress);
+        connectDevice(targetAddress);
         mDeviceLock.lock();
         while(mTargetDevice == null) {
             try {
@@ -69,8 +72,8 @@ public class DeviceManager {
     /**
      * Open an RFCOMM socket to the connected Bluetooth device.
      *
-     * The DeviceManager must already have a device connected, so
-     * discoverDevices needs to be called.
+     * The DeviceManager must already have a device connected, so connectDevice
+     * needs to be called.
      */
     private BluetoothSocket setupSocket(BluetoothDevice device)
             throws BluetoothException {
@@ -79,7 +82,9 @@ public class DeviceManager {
             throw new BluetoothException();
         }
 
-        mBluetoothAdapter.cancelDiscovery();
+        if(mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.cancelDiscovery();
+        }
 
         Log.d(TAG, "Scanning services on " + device);
         BluetoothSocket socket = null;
@@ -113,11 +118,21 @@ public class DeviceManager {
 
         if(mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
-            mBluetoothAdapter.cancelDiscovery();
+            if(mBluetoothAdapter.isDiscovering()) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
         }
     }
 
-    private boolean deviceDiscovered(BluetoothDevice device,
+    /** Check if a Bluetooth device matches the target address we're looking
+     * for.
+     *
+     * @param device candidate Bluetooth device that's been previously bonded
+     * @param targetAddress Bluetooth MAC addres we're looking for
+     *
+     * @return true if the address matches the candidate device
+     */
+    private boolean checkCandidateDevice(BluetoothDevice device,
             String targetAddress) {
         Log.d(TAG, "Found Bluetooth device: " + device);
         if(device.getAddress().equals(targetAddress)) {
@@ -138,13 +153,13 @@ public class DeviceManager {
      * hard-coded target address, you'll need to have previously paired the
      * device.
      */
-    private void discoverDevices(final String targetAddress) {
-        Log.d(TAG, "Starting device discovery");
+    private void connectDevice(final String targetAddress) {
+        Log.d(TAG, "Starting device enumeration");
         Set<BluetoothDevice> pairedDevices =
             mBluetoothAdapter.getBondedDevices();
         for(BluetoothDevice device : pairedDevices) {
             Log.d(TAG, "Found already paired device: " + device);
-            if(deviceDiscovered(device, targetAddress)) {
+            if(checkCandidateDevice(device, targetAddress)) {
                 captureDevice(device);
                 return;
             }

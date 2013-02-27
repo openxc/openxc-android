@@ -304,8 +304,7 @@ public class SettingsActivity extends PreferenceActivity {
             }
         };
 
-        IntentFilter filter = new IntentFilter(
-                BluetoothDevice.ACTION_FOUND);
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
 
         if(mBluetoothAdapter != null) {
