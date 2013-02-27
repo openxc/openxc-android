@@ -74,7 +74,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             try {
                 received = read(bytes);
             } catch(IOException e) {
-                Log.e(getTag(), "Unable to read response");
+                Log.e(getTag(), "Unable to read response", e);
                 mConnectionLock.unlock();
                 disconnect();
                 continue;
