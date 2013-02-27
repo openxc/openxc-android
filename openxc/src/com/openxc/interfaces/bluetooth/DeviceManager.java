@@ -100,7 +100,8 @@ public class DeviceManager {
         try {
             socket.connect();
         } catch(IOException e) {
-            String error = "Could connect socket to SPP service on " + device;
+            String error = "Could not connect socket to SPP service on " +
+                device;
             Log.e(TAG, error);
             try {
                 socket.close();
