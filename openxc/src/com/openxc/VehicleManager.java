@@ -588,7 +588,7 @@ public class VehicleManager extends Service implements SourceCallback {
             mPipeline.addSource(mRemoteSource);
 
             mRemoteBoundLock.lock();
-            mRemoteBoundCondition.signal();
+            mRemoteBoundCondition.signalAll();
             mRemoteBoundLock.unlock();
         }
 
