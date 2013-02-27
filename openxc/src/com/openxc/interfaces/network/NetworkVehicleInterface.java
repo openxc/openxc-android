@@ -86,10 +86,8 @@ public class NetworkVehicleInterface extends BytestreamDataSource
 
     @Override
     public void stop() {
+        disconnect();
         super.stop();
-        mSocket = null;
-        mInStream = null;
-        mOutStream = null;
     }
 
     /**
@@ -130,18 +128,23 @@ public class NetworkVehicleInterface extends BytestreamDataSource
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
         try {
-            if(mOutStream != null) {
-                mOutStream.close();
-            }
-            mOutStream = null;
-
             if(mInStream != null) {
                 mInStream.close();
+                mInStream = null;
             }
-            mInStream = null;
         } catch(IOException e) {
             Log.w(TAG, "Unable to close the input stream", e);
         }
+
+        try {
+            if(mOutStream != null) {
+                mOutStream.close();
+                mOutStream = null;
+            }
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the output stream", e);
+        }
+
 
         if(mSocket != null) {
             try {

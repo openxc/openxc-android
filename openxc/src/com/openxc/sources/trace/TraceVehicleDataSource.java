@@ -127,9 +127,9 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      * Stop trace file playback and the playback thread.
      */
     public void stop() {
-        super.stop();
         Log.d(TAG, "Stopping trace playback");
         mRunning = false;
+        super.stop();
     }
 
     /**

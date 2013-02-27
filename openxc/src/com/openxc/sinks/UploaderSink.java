@@ -74,8 +74,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
     @Override
     public void stop() {
-        super.stop();
         mUploader.done();
+        super.stop();
     }
 
     public boolean receive(RawMeasurement measurement) {

@@ -150,8 +150,8 @@ public class UsbVehicleInterface extends BytestreamDataSource
      */
     @Override
     public void stop() {
-        super.stop();
         getContext().unregisterReceiver(mBroadcastReceiver);
+        super.stop();
     }
 
     public boolean receive(RawMeasurement command) {
