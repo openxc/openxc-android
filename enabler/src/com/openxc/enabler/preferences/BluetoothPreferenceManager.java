@@ -16,11 +16,6 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         super(context);
     }
 
-    public void close() {
-        super.close();
-        stop();
-    }
-
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
@@ -52,12 +47,8 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                         "), not starting source");
             }
         } else {
-            stop();
+            getVehicleManager().removeVehicleInterface(
+                    BluetoothVehicleInterface.class);
         }
-    }
-
-    private void stop() {
-        getVehicleManager().removeVehicleInterface(
-                BluetoothVehicleInterface.class);
     }
 }

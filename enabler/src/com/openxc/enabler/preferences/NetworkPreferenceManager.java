@@ -18,11 +18,6 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
         super(context);
     }
 
-    public void close() {
-        super.close();
-        stop();
-    }
-
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
@@ -65,12 +60,8 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                         NetworkVehicleInterface.class, combinedAddress);
             }
         } else {
-            stop();
+            getVehicleManager().removeVehicleInterface(
+                    NetworkVehicleInterface.class);
         }
-    }
-
-    private void stop() {
-        getVehicleManager().removeVehicleInterface(
-                NetworkVehicleInterface.class);
     }
 }
