@@ -136,12 +136,13 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         if(mSocket == null) {
             try {
                 mSocket = mDeviceManager.connect(mAddress);
-                connected();
                 connectStreams();
+                connected();
             } catch(BluetoothException e) {
                 String message = "Unable to connect to device at address "
                     + mAddress;
                 Log.w(TAG, message, e);
+                disconnected();
                 throw new DataSourceException(message, e);
             }
         }

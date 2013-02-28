@@ -97,16 +97,20 @@ public class DeviceManager {
             throw new BluetoothException(error, e);
         }
 
-        try {
-            socket.connect();
-        } catch(IOException e) {
-            String error = "Could not connect socket to SPP service on " +
-                device;
-            Log.e(TAG, error);
+        if(!socket.isConnected()) {
             try {
-                socket.close();
-            } catch(IOException e2) {}
-            throw new BluetoothException(error, e);
+                socket.connect();
+            } catch(IOException e) {
+                String error = "Could not connect socket to SPP service on " +
+                    device;
+                Log.e(TAG, error);
+                try {
+                    socket.close();
+                } catch(IOException e2) {}
+                throw new BluetoothException(error, e);
+            }
+        } else {
+            Log.d(TAG, "Bluetooth socket already connected");
         }
         return socket;
     }
