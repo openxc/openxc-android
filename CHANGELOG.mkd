@@ -1,5 +1,14 @@
 # OpenXC Android Library Changelog
 
+## v4.0
+
+* BREAKING CHANGE: Combine `Odometer` and `FineOdometer` into a
+  single high-precision measurement, `Odometer`. There is no more
+  `FineOdometer` measurement, but `Odometer` is a drop-in replacement.
+* Bluetooth and file recording now more reliable - will remain running even if
+  you leave the Enabler activity.
+* Improved USB throughput by using larger bulk transfer sizes.
+
 ## v3.0
 
 * Add support for network-based CAN translator (thanks Ewgenij Sokolovski and
@@ -9,9 +18,6 @@
   back to the vehicle.
 * Refactor message writing API - VehicleManager.set(RawMeasurement) is now
   send(RawMeasurement).
-
-## v3.0
-
 * Fix build error in Eclipse, hopefully once and for all.
 
 ## v2.1.2

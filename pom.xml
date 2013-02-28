@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.openxcplatform</groupId>
     <artifactId>openxc-parent</artifactId>
-    <version>3.0</version>
+    <version>4.0</version>
     <packaging>pom</packaging>
     <name>OpenXC - Parent</name>
     <description>Android library and example applications for the OpenXC Platform</description>
