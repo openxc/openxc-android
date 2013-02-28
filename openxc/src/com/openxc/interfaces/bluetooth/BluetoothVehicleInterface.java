@@ -98,15 +98,19 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
         try {
-            mInStream.close();
-            mInStream = null;
+            if(mInStream != null) {
+                mInStream.close();
+                mInStream = null;
+            }
         } catch(IOException e) {
             Log.w(TAG, "Unable to close the input stream", e);
         }
 
         try {
-            mOutStream.close();
-            mOutStream = null;
+            if(mOutStream != null) {
+                mOutStream.close();
+                mOutStream = null;
+            }
         } catch(IOException e) {
             Log.w(TAG, "Unable to close the output stream", e);
         }
