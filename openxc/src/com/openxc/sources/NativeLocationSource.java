@@ -66,9 +66,9 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     }
 
     public void stop() {
+        super.stop();
         Log.i(TAG, "Disabled native GPS passthrough");
         mLocationManager.removeUpdates(this);
-        super.stop();
     }
 
     public void onLocationChanged(final Location location) {

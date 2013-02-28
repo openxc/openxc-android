@@ -38,13 +38,13 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
     }
 
     public void stop() {
+        super.stop();
         try {
             mService.unregister(mRemoteListener);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to register to receive " +
                     "measurement callbacks", e);
         }
-        super.stop();
     }
 
     @Override
