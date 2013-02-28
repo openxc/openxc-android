@@ -333,8 +333,11 @@ Summary:
 
 
 <h2>Class Overview</h2>
-<p>The DeviceManager collects the functions required to discover and open a
+<p>The DeviceManager collects the functions required to connect to and open a
  socket to the Bluetooth device.
+
+ The device must be previously bonded, as this class does not initiate
+ discovery.
 </p>
 
 
@@ -435,7 +438,7 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/interfaces/bluetooth/DeviceManager.html#connect(java.lang.String)">connect</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> targetAddress)</nobr>
         
-        <div class="jd-descrdiv">Discover and connect to the target device.</div>
+        <div class="jd-descrdiv">Connect to the target device and open a socket.</div>
   
   </td></tr>
 
@@ -772,8 +775,8 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Discover and connect to the target device. This method will block while
- waiting for the device.
+  <div class="jd-tagdata jd-tagdescr"><p>Connect to the target device and open a socket. This method will block
+ while waiting for the device.
 
  Returns a socket connected to the device.
 </p></div>

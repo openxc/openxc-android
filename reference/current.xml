@@ -1947,46 +1947,6 @@
 >
 </field>
 </class>
-<class name="FineOdometer"
- extends="com.openxc.measurements.BaseMeasurement"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="FineOdometer"
- type="com.openxc.measurements.FineOdometer"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="value" type="java.lang.Number">
-</parameter>
-</constructor>
-<constructor name="FineOdometer"
- type="com.openxc.measurements.FineOdometer"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="value" type="com.openxc.units.Kilometer">
-</parameter>
-</constructor>
-<field name="ID"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;fine_odometer_since_restart&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
 <class name="FuelConsumed"
  extends="com.openxc.measurements.BaseMeasurement"
  abstract="false"
