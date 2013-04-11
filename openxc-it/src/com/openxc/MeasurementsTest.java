@@ -1,39 +1,31 @@
 package com.openxc;
 
-import java.lang.InterruptedException;
-
 import java.net.URI;
+
+import android.content.Intent;
+import android.os.RemoteException;
+import android.test.ServiceTestCase;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import com.openxc.measurements.AcceleratorPedalPosition;
 import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.FuelConsumed;
+import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.HeadlampStatus;
 import com.openxc.measurements.HighBeamStatus;
-import com.openxc.measurements.FuelLevel;
-import com.openxc.measurements.FuelConsumed;
-import com.openxc.measurements.Odometer;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.NoValueException;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.Odometer;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.TransmissionGearPosition;
-import com.openxc.measurements.VehicleButtonEvent;
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleButtonEvent;
+import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
-
 import com.openxc.sources.trace.TraceVehicleDataSource;
-
-import com.openxc.VehicleManager;
-
-import android.content.Intent;
-
-import android.os.RemoteException;
-
-import android.test.ServiceTestCase;
-
-import android.test.suitebuilder.annotation.MediumTest;
 
 public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
@@ -217,6 +209,18 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
                 VehicleButtonEvent.ButtonId.OK);
         assertEquals(event.getEvent().enumValue(),
                 VehicleButtonEvent.ButtonAction.PRESSED);
+    }
+
+    @MediumTest
+    public void testGetVehicleDoorStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        VehicleDoorStatus event = (VehicleDoorStatus)
+                service.get(VehicleDoorStatus.class);
+        checkReceivedMeasurement(event);
+        assertEquals(event.getValue().enumValue(),
+                VehicleDoorStatus.DoorId.DRIVER);
+        assertEquals(event.getEvent().booleanValue(), true);
     }
 }
 
