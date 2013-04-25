@@ -97,20 +97,18 @@ public class DeviceManager {
             throw new BluetoothException(error, e);
         }
 
-        if(!socket.isConnected()) {
+        // TODO hotfix for TechShop workshop - no isConnected in Android 3.1 or
+        // below!
+        try {
+            socket.connect();
+        } catch(IOException e) {
+            String error = "Could not connect socket to SPP service on " +
+                device;
+            Log.e(TAG, error);
             try {
-                socket.connect();
-            } catch(IOException e) {
-                String error = "Could not connect socket to SPP service on " +
-                    device;
-                Log.e(TAG, error);
-                try {
-                    socket.close();
-                } catch(IOException e2) {}
-                throw new BluetoothException(error, e);
-            }
-        } else {
-            Log.d(TAG, "Bluetooth socket already connected");
+                socket.close();
+            } catch(IOException e2) {}
+            throw new BluetoothException(error, e);
         }
         return socket;
     }
