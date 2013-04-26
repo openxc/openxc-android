@@ -97,8 +97,6 @@ public class DeviceManager {
             throw new BluetoothException(error, e);
         }
 
-        // TODO hotfix for TechShop workshop - no isConnected in Android 3.1 or
-        // below!
         try {
             socket.connect();
         } catch(IOException e) {
