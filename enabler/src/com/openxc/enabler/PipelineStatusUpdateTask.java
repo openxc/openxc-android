@@ -36,13 +36,18 @@ public class PipelineStatusUpdateTask extends TimerTask {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mSourceListAdapter.clear();
-                mSourceListAdapter.addAll(
-                    mVehicleManager.getSourceSummaries().toArray());
+                // ArrayAdapter has a nice addAll method, but it's only
+                // supported in API 11 and greater (i.e. not 2.3).
+                for(String summary : mVehicleManager.getSourceSummaries()) {
+                    mSourceListAdapter.add(summary);
+                }
                 mSourceListAdapter.notifyDataSetChanged();
 
                 mSinkListAdapter.clear();
-                mSinkListAdapter.addAll(
-                    mVehicleManager.getSinkSummaries().toArray());
+                // See about RE: addAll
+                for(String summary : mVehicleManager.getSinkSummaries()) {
+                    mSinkListAdapter.add(summary);
+                }
                 mSinkListAdapter.notifyDataSetChanged();
             }
         });
