@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import android.os.Looper;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -40,6 +41,9 @@ public class DeviceManager {
      */
     public DeviceManager(Context context) throws BluetoothException {
         mContext = context;
+        // work around an Android bug, requires that this is called before
+        // getting the default adapter
+        Looper.prepare();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null) {
             String message = "This device most likely does not have " +
