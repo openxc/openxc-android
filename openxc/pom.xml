@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.openxcplatform</groupId>
         <artifactId>openxc-parent</artifactId>
-        <version>4.0</version>
+        <version>4.0.1</version>
     </parent>
 
     <artifactId>openxc</artifactId>

@@ -1,5 +1,10 @@
 # OpenXC Android Library Changelog
 
+## v4.0.1
+
+* Fix a regression for Android 2.3 and 3.0/3.1 devices. Library and Enabler now
+  work without USB support, as they should.
+
 ## v4.0
 
 * BREAKING CHANGE: Combine `Odometer` and `FineOdometer` into a
