@@ -43,7 +43,9 @@ public class DeviceManager {
         mContext = context;
         // work around an Android bug, requires that this is called before
         // getting the default adapter
-        Looper.prepare();
+        if(Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null) {
             String message = "This device most likely does not have " +
