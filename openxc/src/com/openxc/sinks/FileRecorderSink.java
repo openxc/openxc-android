@@ -40,33 +40,17 @@ public class FileRecorderSink extends BaseVehicleDataSink {
 
     public synchronized boolean receive(RawMeasurement measurement)
             throws DataSinkException {
-        if(mLastMessageReceived == null ||
-                    GregorianCalendar.getInstance().getTimeInMillis()
-                    - mLastMessageReceived.getTimeInMillis()
-                > INTER_TRIP_THRESHOLD_MINUTES * 60 * 1000) {
-            Log.i(TAG, "Detected a new trip, splitting recorded trace file");
+        if(shouldStartNewTrip()) {
             try {
-                openTimestampedFile();
+                handleNewTrip(GregorianCalendar.getInstance());
             } catch(IOException e) {
                 throw new DataSinkException(
                         "Unable to open file for recording", e);
             }
         }
 
-        if(mWriter == null) {
-            throw new DataSinkException(
-                    "No valid writer - not recording trace line");
-        }
-
         mLastMessageReceived = GregorianCalendar.getInstance();
-        try {
-            mWriter.write(measurement.serialize());
-            mWriter.newLine();
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to write measurement to file", e);
-            return false;
-        }
-        return true;
+        return storeRecord(measurement);
     }
 
     public synchronized void stop() {
@@ -84,6 +68,47 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         }
     }
 
+    protected boolean shouldStartNewTrip() {
+        return mLastMessageReceived == null ||
+                GregorianCalendar.getInstance().getTimeInMillis()
+                        - mLastMessageReceived.getTimeInMillis()
+                    > INTER_TRIP_THRESHOLD_MINUTES * 60 * 1000;
+    }
+
+    protected void handleNewTrip(Calendar calendar) throws IOException {
+        Log.i(TAG, "Detected a new trip at " + calendar +
+                ", splitting recorded trace file");
+        if(mWriter != null) {
+            close();
+        }
+        mWriter = mFileOpener.openForWriting(getFilename(calendar));
+        Log.i(TAG, "Opened trace file " + getFilename(calendar) +
+                " for writing");
+    }
+
+    protected String getFilename(Calendar calendar) {
+        // TODO move the directory from the file opener up to this level, if we
+        // can
+        return sDateFormatter.format(calendar.getTime()) + ".json";
+    }
+
+    protected boolean storeRecord(RawMeasurement measurement)
+            throws DataSinkException {
+        if(mWriter == null) {
+            throw new DataSinkException(
+                    "No valid writer - not recording trace line");
+        }
+
+        try {
+            mWriter.write(measurement.serialize());
+            mWriter.newLine();
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to write measurement to file", e);
+            return false;
+        }
+        return true;
+    }
+
     private synchronized void close() {
         if(mWriter != null) {
             try {
@@ -93,17 +118,5 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             }
             mWriter = null;
         }
-    }
-
-    private synchronized Calendar openTimestampedFile() throws IOException {
-        Calendar calendar = GregorianCalendar.getInstance();
-        String filename = sDateFormatter.format(
-                calendar.getTime()) + ".json";
-        if(mWriter != null) {
-            close();
-        }
-        mWriter = mFileOpener.openForWriting(filename);
-        Log.i(TAG, "Opened trace file " + filename + " for writing");
-        return calendar;
     }
 }
