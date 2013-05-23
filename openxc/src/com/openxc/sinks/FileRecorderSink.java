@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -17,68 +16,61 @@ import com.openxc.util.FileOpener;
  * Record raw vehicle measurements to a file as JSON.
  *
  * This data sink is a simple passthrough that records every raw vehicle
- * measurement as it arrives to a file on the device. It splits the stream to a
- * different file every hour.
+ * measurement as it arrives to a file on the device. It uses a heuristic to
+ * detect different "trips" in the vehicle, and splits the recorded trace by
+ * trip.
+ *
+ * The heuristic is very simple: if we haven't received any new data in a while,
+ * consider the previous trip to have ended. When activity resumes, start a new
+ * trip.
  */
 public class FileRecorderSink extends BaseVehicleDataSink {
     private final static String TAG = "FileRecorderSink";
+    private final static int INTER_TRIP_THRESHOLD_MINUTES = 5;
     private static SimpleDateFormat sDateFormatter =
-            new SimpleDateFormat("yyyy-MM-dd-HH", Locale.US);
+            new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
 
     private FileOpener mFileOpener;
     private BufferedWriter mWriter;
-    private Calendar mLastFileCreated;
+    private Calendar mLastMessageReceived;
 
     public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
         mFileOpener = fileOpener;
-        try {
-            openTimestampedFile();
-        } catch(IOException e) {
-            throw new DataSinkException("Unable to open file for recording", e);
-        }
     }
 
-    /**
-     * Record a message to a file, selected by the current time.
-     */
     public synchronized boolean receive(RawMeasurement measurement)
             throws DataSinkException {
-        if(mWriter != null) {
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.setTime(new Date());
-            if(calendar.get(Calendar.HOUR) !=
-                    mLastFileCreated.get(Calendar.HOUR)) {
-                try {
-                    openTimestampedFile();
-                } catch(IOException e) {
-                    throw new DataSinkException(
-                            "Unable to open file for recording", e);
-                }
-            }
-
+        if(mLastMessageReceived == null ||
+                    GregorianCalendar.getInstance().getTimeInMillis()
+                    - mLastMessageReceived.getTimeInMillis()
+                > INTER_TRIP_THRESHOLD_MINUTES * 60 * 1000) {
+            Log.i(TAG, "Detected a new trip, splitting recorded trace file");
             try {
-                mWriter.write(measurement.serialize());
-                mWriter.newLine();
+                openTimestampedFile();
             } catch(IOException e) {
-                Log.w(TAG, "Unable to write measurement to file", e);
-                return false;
+                throw new DataSinkException(
+                        "Unable to open file for recording", e);
             }
-        } else {
-            Log.w(TAG, "No valid writer - not recording trace line");
+        }
+
+        if(mWriter == null) {
+            throw new DataSinkException(
+                    "No valid writer - not recording trace line");
+        }
+
+        mLastMessageReceived = GregorianCalendar.getInstance();
+        try {
+            mWriter.write(measurement.serialize());
+            mWriter.newLine();
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to write measurement to file", e);
             return false;
         }
         return true;
     }
 
     public synchronized void stop() {
-        if(mWriter != null) {
-            try {
-                mWriter.close();
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close output file", e);
-            }
-            mWriter = null;
-        }
+        close();
         Log.i(TAG, "Shutting down");
     }
 
@@ -92,12 +84,26 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         }
     }
 
-    private synchronized void openTimestampedFile() throws IOException {
-        mLastFileCreated = GregorianCalendar.getInstance();
-        mLastFileCreated.setTime(new Date());
+    private synchronized void close() {
+        if(mWriter != null) {
+            try {
+                mWriter.close();
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close output file", e);
+            }
+            mWriter = null;
+        }
+    }
+
+    private synchronized Calendar openTimestampedFile() throws IOException {
+        Calendar calendar = GregorianCalendar.getInstance();
         String filename = sDateFormatter.format(
-                mLastFileCreated.getTime()) + ".json";
+                calendar.getTime()) + ".json";
+        if(mWriter != null) {
+            close();
+        }
         mWriter = mFileOpener.openForWriting(filename);
         Log.i(TAG, "Opened trace file " + filename + " for writing");
+        return calendar;
     }
 }
