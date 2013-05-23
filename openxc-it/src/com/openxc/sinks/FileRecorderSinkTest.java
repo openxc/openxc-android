@@ -4,15 +4,16 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import junit.framework.Assert;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.openxc.remote.RawMeasurement;
-
-import com.openxc.util.FileOpener;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
+
+import com.openxc.remote.RawMeasurement;
+import com.openxc.util.FileOpener;
 
 public class FileRecorderSinkTest extends AndroidTestCase {
     FileRecorderSink sink;
@@ -94,7 +95,11 @@ public class FileRecorderSinkTest extends AndroidTestCase {
         sink.stop();
 
         measurement = new RawMeasurement("third", true);
-        assertFalse(sink.receive(measurement));
+        try {
+            sink.receive(measurement);
+            Assert.fail("Expected a DataSinkException");
+        } catch(DataSinkException e) {
+        }
 
         String[] records = outputString.toString().split("\n");
         assertEquals(2, records.length);
