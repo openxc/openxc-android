@@ -56,7 +56,7 @@ public class DataPipeline implements SourceCallback {
                 // that to be the only com.android import.
                 System.out.println(this.getClass().getName() + ": The sink " +
                         sink + " exploded when we sent a new message " +
-                        "-- removing it from the pipeline");
+                        "-- removing it from the pipeline: " + e);
                 deadSinks.add(sink);
             }
         }
