@@ -1,6 +1,34 @@
 <api>
 <package name="com.openxc"
 >
+<class name="BuildConfig"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BuildConfig"
+ type="com.openxc.BuildConfig"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="DEBUG"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ value="true"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 <class name="DataPipeline"
  extends="java.lang.Object"
  abstract="false"
@@ -235,9 +263,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837510"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -246,9 +273,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837511"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -257,9 +283,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837505"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -268,9 +293,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837504"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -279,9 +303,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837512"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -290,9 +313,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837513"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -301,9 +323,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837514"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -312,9 +333,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837506"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -323,9 +343,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837507"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -334,9 +353,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837515"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -345,9 +363,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837516"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -356,9 +373,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837508"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -367,9 +383,8 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837509"
  static="true"
- final="true"
+ final="false"
  deprecated="not deprecated"
  visibility="public"
 >

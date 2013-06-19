@@ -375,8 +375,13 @@ Summary:
 <p>Record raw vehicle measurements to a file as JSON.
 
  This data sink is a simple passthrough that records every raw vehicle
- measurement as it arrives to a file on the device. It splits the stream to a
- different file every hour.
+ measurement as it arrives to a file on the device. It uses a heuristic to
+ detect different "trips" in the vehicle, and splits the recorded trace by
+ trip.
+
+ The heuristic is very simple: if we haven't received any new data in a while,
+ consider the previous trip to have ended. When activity resumes, start a new
+ trip.
 </p>
 
 
@@ -490,7 +495,7 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sinks/FileRecorderSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
-        <div class="jd-descrdiv">Record a message to a file, selected by the current time.</div>
+        <div class="jd-descrdiv">Receive a raw measurement, deserialized to primatives.</div>
   
   </td></tr>
 
@@ -1049,7 +1054,10 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Record a message to a file, selected by the current time.
+  <div class="jd-tagdata jd-tagdescr"><p>Receive a raw measurement, deserialized to primatives.
+
+ Children of this class can call super.receive() if they need to store
+ copies of received measurements to access via the get(String) method.
 </p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>

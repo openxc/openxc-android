@@ -447,8 +447,9 @@ Summary:
  VehicleService is purposefully primative as there are a small set of
  objects that can be natively marshalled through an AIDL interface.
 
- By default, the <code><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></code> is activated as a
- <code><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>. Other vehicle interfaces can be activated with the
+ By default, if the Android device supports uSB, the
+ <code><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></code> is activated as a <code><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>. Other
+ vehicle interfaces can be activated with the
  #addVehicleInterface(Class, String) method and they can removed with
  #removeVehicleInterface(Class).
 

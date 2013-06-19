@@ -1,5 +1,5 @@
 var NAVTREE_DATA =
-[ [ "com.openxc", "com/openxc/package-summary.html", [ [ "Classes", null, [ [ "DataPipeline", "com/openxc/DataPipeline.html", null, "" ], [ "R", "com/openxc/R.html", null, "" ], [ "R.attr", "com/openxc/R.attr.html", null, "" ], [ "R.string", "com/openxc/R.string.html", null, "" ], [ "VehicleManager", "com/openxc/VehicleManager.html", null, "" ], [ "VehicleManager.VehicleBinder", "com/openxc/VehicleManager.VehicleBinder.html", null, "" ] ]
+[ [ "com.openxc", "com/openxc/package-summary.html", [ [ "Classes", null, [ [ "BuildConfig", "com/openxc/BuildConfig.html", null, "" ], [ "DataPipeline", "com/openxc/DataPipeline.html", null, "" ], [ "R", "com/openxc/R.html", null, "" ], [ "R.attr", "com/openxc/R.attr.html", null, "" ], [ "R.string", "com/openxc/R.string.html", null, "" ], [ "VehicleManager", "com/openxc/VehicleManager.html", null, "" ], [ "VehicleManager.VehicleBinder", "com/openxc/VehicleManager.VehicleBinder.html", null, "" ] ]
 , "" ], [ "Exceptions", null, [ [ "NoValueException", "com/openxc/NoValueException.html", null, "" ] ]
 , "" ] ]
 , "" ], [ "com.openxc.interfaces", "com/openxc/interfaces/package-summary.html", [ [ "Interfaces", null, [ [ "VehicleInterface", "com/openxc/interfaces/VehicleInterface.html", null, "" ] ]
