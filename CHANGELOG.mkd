@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v4.0.3-SNAPSHOT
+
 ## v4.0.2
 
 * Fix build with Eclipse and the latest version of Maven plugins.
