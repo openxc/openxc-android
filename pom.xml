@@ -43,7 +43,7 @@
         <android.platform>17</android.platform>
 
         <java.version>1.6</java.version>
-        <android-maven.version>3.5.3</android-maven.version>
+        <android-maven.version>3.6.0</android-maven.version>
     </properties>
 
     <dependencyManagement>
