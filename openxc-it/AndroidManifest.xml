@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.openxc" android:versionCode="1" android:versionName="1.0-SNAPSHOT">
+    package="com.openxc" android:versionCode="13" android:versionName="4.0.2">
 
   <supports-screens android:largeScreens="true" android:xlargeScreens="true"
           android:anyDensity="true" />

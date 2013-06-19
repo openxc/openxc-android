@@ -1,5 +1,12 @@
 # OpenXC Android Library Changelog
 
+## v4.0.2
+
+* Fix build with Eclipse and the latest version of Maven plugins.
+* Increase logging verbosity for debugging VehicleDataSinks.
+* Split trips in trace file recorder based on data received, not just time.
+* Protect against a race condition in the Bluetooth and Network interfaces.
+
 ## v4.0.1
 
 * Fix a regression for Android 2.3 and 3.0/3.1 devices. Library and Enabler now
