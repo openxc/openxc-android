@@ -129,7 +129,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         if(mSocket == null) {
             return;
         }
-        
+
         lockConnection();
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);

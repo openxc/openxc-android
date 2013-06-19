@@ -95,7 +95,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             Log.w(TAG, "Unable to disconnect -- not connected");
             return;
         }
-        
+
         lockConnection();
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
@@ -128,7 +128,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         disconnected();
         Log.d(TAG, "Disconnected from the socket");
-        
+
         unlockConnection();
     }
 
