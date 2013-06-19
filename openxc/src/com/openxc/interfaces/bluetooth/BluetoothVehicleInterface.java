@@ -95,6 +95,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             Log.w(TAG, "Unable to disconnect -- not connected");
             return;
         }
+        
+        lockConnection();
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
         try {
@@ -126,6 +128,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         disconnected();
         Log.d(TAG, "Disconnected from the socket");
+        
+        unlockConnection();
     }
 
     protected String getTag() {
@@ -168,6 +172,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     private void connectStreams() throws BluetoothException {
+    	lockConnection();
         try {
             mOutStream = new BufferedWriter(new OutputStreamWriter(
                         mSocket.getOutputStream()));
@@ -178,6 +183,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             mSocket = null;
             disconnected();
             throw new BluetoothException();
+        } finally {
+        	unlockConnection();
         }
     }
 

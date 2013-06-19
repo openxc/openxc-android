@@ -114,6 +114,10 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     }
 
     protected int read(byte[] bytes) throws IOException {
+    	if (mInStream == null) {
+    		Log.e(TAG, "mInStream == null in read().");
+    		return 0;
+    	}
         return mInStream.read(bytes, 0, bytes.length);
     }
 
@@ -125,6 +129,8 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         if(mSocket == null) {
             return;
         }
+        
+        lockConnection();
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
         try {
@@ -146,6 +152,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         }
 
         disconnected();
+        unlockConnection();
         Log.d(TAG, "Disconnected from the socket");
     }
 
@@ -200,6 +207,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     }
 
     private void connectStreams() throws NetworkSourceException {
+    	lockConnection();
         try {
             mInStream = mSocket.getInputStream();
             mOutStream = mSocket.getOutputStream();
@@ -208,6 +216,8 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             Log.e(TAG, message, e);
             disconnected();
             throw new NetworkSourceException(message);
+        } finally {
+        	unlockConnection();
         }
         Log.i(TAG, "Socket created, streams assigned");
     }
