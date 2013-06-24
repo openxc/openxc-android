@@ -11,7 +11,7 @@ Visit the [OpenXC][] project page for
 [installation
 instructions](http://openxcplatform.com/getting-started/library-installation.html),
 [usage details](http://openxcplatform.com/android/api-guide.html) and the
-[source code documentation](http://openxcplatform.com/openxc-android).
+[source code documentation](http://android.openxcplatform.com).
 
 ## Building from Eclipse
 
