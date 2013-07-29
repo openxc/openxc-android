@@ -98,7 +98,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testListenerGetsLastKnownValue()
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         // kill the incoming data stream
         service.removeSource(source);
         service.addListener(VehicleSpeed.class, speedListener);
@@ -111,7 +111,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         assertNotNull(speedReceived);
     }
 
@@ -119,11 +119,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testCustomSink() {
         assertNull(receivedMeasurementId);
         service.addSink(mCustomSink);
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         assertNotNull(receivedMeasurementId);
         service.removeSink(mCustomSink);
         receivedMeasurementId = null;
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         assertNull(receivedMeasurementId);
     }
 
@@ -134,7 +134,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         // let some measurements flow through the system
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         assertNotNull(steeringAngleReceived);
         assertNotNull(speedReceived);
     }
@@ -144,10 +144,10 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         // let some measurements flow through the system
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         assertNull(speedReceived);
     }
 
@@ -164,10 +164,10 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             UnrecognizedMeasurementTypeException {
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        TestUtils.pause(100);
+        TestUtils.pause(150);
         assertNull(speedReceived);
     }
 

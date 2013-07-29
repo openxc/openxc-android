@@ -115,6 +115,7 @@ public class VehicleManager extends Service implements SourceCallback {
     private CopyOnWriteArrayList<VehicleDataSource> mSources =
             new CopyOnWriteArrayList<VehicleDataSource>();
 
+    private boolean mIsBound;
     private VehicleServiceInterface mRemoteService;
     private RemoteListenerSource mRemoteSource;
     private VehicleInterface mRemoteController;
@@ -579,9 +580,9 @@ public class VehicleManager extends Service implements SourceCallback {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
-            mRemoteService = VehicleServiceInterface.Stub.asInterface(
-                    service);
-            mRemoteController = new RemoteServiceVehicleInterface(mRemoteService);
+            mRemoteService = VehicleServiceInterface.Stub.asInterface(service);
+            mRemoteController = new RemoteServiceVehicleInterface(
+                    mRemoteService);
             mInterfaces.add(mRemoteController);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
@@ -602,10 +603,10 @@ public class VehicleManager extends Service implements SourceCallback {
 
     private void bindRemote() {
         Log.i(TAG, "Binding to VehicleService");
-        Intent intent = new Intent(
-                VehicleServiceInterface.class.getName());
+        Intent intent = new Intent(VehicleServiceInterface.class.getName());
         try {
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+            mIsBound = true;
         } catch(SecurityException e) {
             Log.e(TAG, "Unable to bind with remote service, it's not exported "
                     + "-- is the instrumentation tests package installed?", e);
@@ -620,11 +621,11 @@ public class VehicleManager extends Service implements SourceCallback {
             mRemoteBoundLock.lock();
         }
 
-        if(mRemoteService != null) {
+        if(mIsBound) {
             Log.i(TAG, "Unbinding from VehicleService");
             unbindService(mConnection);
             mRemoteService = null;
-            mConnection = null;
+            mIsBound = false;
         }
 
         if(mRemoteBoundLock != null) {
