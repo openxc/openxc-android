@@ -37,6 +37,7 @@ public class VehicleInterfaceManagerUtils {
      */
     public static boolean send(List<VehicleInterface> interfaces,
             RawMeasurement command) {
+        command.untimestamp();
         for(VehicleInterface vehicleInterface : interfaces) {
             try {
                 if(vehicleInterface.receive(command)) {
