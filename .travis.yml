@@ -7,7 +7,6 @@ before_install:
   - tar xzf android-sdk_r22.0.5-linux.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-  - android update sdk --filter 1,2,3,4 --no-ui --force
   - echo yes | android update sdk --filter platform-tools --no-ui --force > /dev/null
   - echo yes | android update sdk --filter android-18 --no-ui --force > /dev/null
 install:
