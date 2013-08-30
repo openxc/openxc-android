@@ -8,3 +8,5 @@ reference
 .settings
 .project
 .classpath
+*.releaseBackup
+release.properties
