@@ -1,6 +1,10 @@
 # OpenXC Android Library Changelog
 
-## v4.0.3-SNAPSHOT
+## v4.0.3
+
+* Building with Android API level 18
+* Don't send timestamps with commands to the vehicle.
+* Fix possible deadlock in network data source
 
 ## v4.0.2
 
