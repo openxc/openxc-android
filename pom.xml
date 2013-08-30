@@ -12,8 +12,8 @@
     <scm>
         <url>https://github.com/openxc/openxc-android</url>
         <connection>scm:git:https://github.com/openxc/openxc-android</connection>
-        <developerConnection>scm:git:https://github.com/openxc/openxc-android</developerConnection>
-    </scm>
+        <developerConnection>scm:git:git@github.com:openxc/openxc-android</developerConnection>
+  </scm>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
