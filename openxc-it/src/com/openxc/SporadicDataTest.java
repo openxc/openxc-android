@@ -97,12 +97,5 @@ public class SporadicDataTest extends ServiceTestCase<VehicleManager> {
         }
         super.tearDown();
     }
-
-    @MediumTest
-    public void testSlowSends() {
-        TestUtils.pause(800);
-        assertEquals(headlampStatusCount, 2);
-        assertEquals(parkingBrakeStatusCount, 1);
-    }
 }
 
