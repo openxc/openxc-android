@@ -3,15 +3,12 @@ before_install:
   # download the latest android sdk and unzip
   - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
-  - wget http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
-  - tar -zxf android-sdk_r21.0.1-linux.tgz
-  # setup your ANDROID_HOME and PATH environment variables
-  # use ~/builds/[Github username]/[project]/android-sdk-linux
-  - export ANDROID_HOME=`pwd`/android-sdk-linux
+  - wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz
+  - tar xzf android-sdk_r22.0.5-linux.tgz
+  - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-  # only update the sdk for the tools and platform-tools (1,2) and whatever api level
-  # you are building for android (run "android list sdk" to get the full list.  9 = 2.3.3 or API level 10
-  - android update sdk --filter 1,2,3,4 --no-ui --force
+  - echo yes | android update sdk --filter platform-tools --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter android-18 --no-ui --force > /dev/null
 install:
   - mvn install -DskipTests=true
 notifications:
