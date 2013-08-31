@@ -42,7 +42,7 @@ public class AgingData<TheUnit extends Unit> {
     /**
      * Retrieve the age of this piece of data.
      *
-     * @return the age of the data in seconds.
+     * @return the age of the data in milliseconds.
      */
     public double getAge() {
         return (new Date()).getTime() - mBirthdate.getTime();

@@ -19,13 +19,14 @@ public interface Measurement {
     /**
      * Retreive the age of this measurement.
      *
-     * @return the age of the data in seconds.
+     * @return the age of the data in milliseconds.
      */
     public double getAge();
 
     /**
      * Set the birth timestamp for this measurement.
      *
+     * @param timestamp the new timestamp, in milliseconds since the epoch.
      */
     public void setTimestamp(double timestamp);
 
@@ -55,6 +56,12 @@ public interface Measurement {
 
     public RawMeasurement toRaw();
 
+    /**
+     * Return the creation time of this measurement;
+     *
+     * @return the creation time in milliseconds since the epoch of this
+     * measurement.
+     */
     public double getBirthtime();
 
     public String getGenericName();

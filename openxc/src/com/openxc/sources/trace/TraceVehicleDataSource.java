@@ -246,9 +246,17 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         return TAG;
     }
 
-    private void waitForNextRecord(long startingTime, double timestampSeconds) {
+    /**
+     * Using the startingTime as the relatiev starting point, sleep this thread
+     * until the next timestamp would occur.
+     *
+     * @param startingTime the relative starting time in nanoseconds
+     * @param timestamp the timestamp to wait for in milliseconds since the
+     * epoch
+     */
+    private void waitForNextRecord(long startingTime, long timestamp) {
         long timestamp = TimeUnit.NANOSECONDS.convert(
-                (long)(timestampSeconds * 1000), TimeUnit.MILLISECONDS);
+                timestamp, TimeUnit.MILLISECONDS);
         if(mFirstTimestamp == null) {
             mFirstTimestamp = Long.valueOf(timestamp);
             Log.d(TAG, "Storing " + mFirstTimestamp + " as the first " +
