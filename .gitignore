@@ -10,3 +10,18 @@ reference
 .classpath
 *.releaseBackup
 release.properties
+
+# IntelliJ IDEA
+.idea
+*.iml
+*.ipr
+*.iws
+classes
+gen-external-apklibs
+
+# Gradle
+.gradle
+build
+gradlew
+gradlew.bat
+gradle
