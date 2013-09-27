@@ -1,9 +1,15 @@
 # OpenXC Android Library Changelog
 
+## v5.0.0
+
+* Add OpenXC icon to Enabler
+* Don't send timestamps with commands to the vehicle.
+* BREAKING CHANGE: Store timestamps as milliseconds in Java code, and as
+  seconds (with fractions) in serialized measurements (#47 at GitHub)
+
 ## v4.0.3
 
 * Building with Android API level 18
-* Don't send timestamps with commands to the vehicle.
 * Fix possible deadlock in network data source
 
 ## v4.0.2
