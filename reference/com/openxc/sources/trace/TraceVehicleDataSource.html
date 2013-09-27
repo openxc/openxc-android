@@ -401,7 +401,8 @@ Summary:
  operating in a live vehicle.
 
  The trace file format is simply a plain text file of OpenXC JSON messages with
- an additional timestamp field, separated by newlines:
+ an additional timestamp field (in seconds with decimal parts), separated by
+ newlines:
 
  {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
  {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}

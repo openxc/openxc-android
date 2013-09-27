@@ -1680,7 +1680,7 @@
 </exception>
 </method>
 <method name="getAge"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -1691,7 +1691,7 @@
 >
 </method>
 <method name="getBirthtime"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -1867,7 +1867,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 <method name="toRaw"
@@ -2293,7 +2293,7 @@
  visibility="public"
 >
 <method name="getAge"
- return="double"
+ return="long"
  abstract="true"
  native="false"
  synchronized="false"
@@ -2304,7 +2304,7 @@
 >
 </method>
 <method name="getBirthtime"
- return="double"
+ return="long"
  abstract="true"
  native="false"
  synchronized="false"
@@ -2414,7 +2414,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 <method name="toRaw"
@@ -3152,7 +3152,7 @@
 </parameter>
 <parameter name="event" type="java.lang.Object">
 </parameter>
-<parameter name="timestamp" type="java.lang.Double">
+<parameter name="timestamp" type="java.lang.Long">
 </parameter>
 </method>
 <field name="EVENT_FIELD"
@@ -3260,7 +3260,7 @@
 </parameter>
 <parameter name="event" type="java.lang.Object">
 </parameter>
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </constructor>
 <constructor name="RawMeasurement"
@@ -3309,7 +3309,7 @@
 >
 </method>
 <method name="getTimestamp"
- return="java.lang.Double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -5614,7 +5614,7 @@
 </parameter>
 </constructor>
 <method name="getAge"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -5625,7 +5625,7 @@
 >
 </method>
 <method name="getTimestamp"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -5656,7 +5656,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 </class>
