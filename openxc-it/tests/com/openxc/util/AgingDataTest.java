@@ -1,6 +1,5 @@
 package com.openxc.util;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import com.openxc.TestUtils;
@@ -20,21 +19,20 @@ public class AgingDataTest extends TestCase {
     public void testBornNow() {
         data = new AgingData<Degree>(value);
         TestUtils.pause(10);
-        assertThat(data.getAge(), greaterThan(0.0));
+        assertThat(data.getAge(), greaterThan(Long.valueOf(0)));
     }
 
     public void testBornEarlier() {
         data = new AgingData<Degree>(value);
-        Calendar otherTime = Calendar.getInstance();
-        otherTime.setTimeInMillis((long)(data.getAge() + 100) * 1000);
-        data = new AgingData<Degree>(otherTime.getTime(), value);
-        assertThat(data.getAge(), greaterThanOrEqualTo(100.0));
+        Date otherTime = new Date(data.getAge() + 100);
+        data = new AgingData<Degree>(otherTime, value);
+        assertThat(data.getAge(), greaterThanOrEqualTo(Long.valueOf(100)));
     }
 
     public void testSetOverride() {
         data = new AgingData<Degree>(value);
-        assertThat(data.getAge(), lessThanOrEqualTo(1.0));
+        assertThat(data.getAge(), lessThanOrEqualTo(Long.valueOf(1)));
         data.setTimestamp(data.getAge() + 100);
-        assertThat(data.getAge(), greaterThanOrEqualTo(100.0));
+        assertThat(data.getAge(), greaterThanOrEqualTo(Long.valueOf(100)));
     }
 }

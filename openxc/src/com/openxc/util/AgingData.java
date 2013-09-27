@@ -1,6 +1,5 @@
 package com.openxc.util;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import com.google.common.base.Objects;
@@ -44,19 +43,17 @@ public class AgingData<TheUnit extends Unit> {
      *
      * @return the age of the data in milliseconds.
      */
-    public double getAge() {
+    public long getAge() {
         return (new Date()).getTime() - mBirthdate.getTime();
     }
 
-    public double getTimestamp() {
+    public long getTimestamp() {
         return mBirthdate.getTime();
     }
 
-    public void setTimestamp(double timestamp) {
+    public void setTimestamp(long timestamp) {
         if(timestamp != 0) {
-            Calendar otherTime = Calendar.getInstance();
-            otherTime.setTimeInMillis(Double.valueOf(timestamp * 1000).longValue());
-            mBirthdate = otherTime.getTime();
+            mBirthdate = new Date(timestamp);
         }
     }
 

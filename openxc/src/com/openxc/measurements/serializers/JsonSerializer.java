@@ -20,7 +20,7 @@ public class JsonSerializer implements MeasurementSerializer {
             new DecimalFormat("##########.000000");
 
     public static String serialize(String name, Object value, Object event,
-            Double timestamp) {
+            Long timestamp) {
         StringWriter buffer = new StringWriter(64);
         JsonFactory jsonFactory = new JsonFactory();
         try {
@@ -39,7 +39,9 @@ public class JsonSerializer implements MeasurementSerializer {
 
             if(timestamp != null) {
                 gen.writeFieldName(TIMESTAMP_FIELD);
-                gen.writeRawValue(sTimestampFormatter.format(timestamp));
+                // serialized measurements represent the timestamp as seconds
+                // with a fracitonal part
+                gen.writeRawValue(sTimestampFormatter.format(timestamp / 1000));
             }
 
             gen.writeEndObject();

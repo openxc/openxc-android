@@ -21,14 +21,14 @@ public interface Measurement {
      *
      * @return the age of the data in milliseconds.
      */
-    public double getAge();
+    public long getAge();
 
     /**
      * Set the birth timestamp for this measurement.
      *
      * @param timestamp the new timestamp, in milliseconds since the epoch.
      */
-    public void setTimestamp(double timestamp);
+    public void setTimestamp(long timestamp);
 
     /**
      * Determine if this measurement has a valid range.
@@ -62,7 +62,7 @@ public interface Measurement {
      * @return the creation time in milliseconds since the epoch of this
      * measurement.
      */
-    public double getBirthtime();
+    public long getBirthtime();
 
     public String getGenericName();
 

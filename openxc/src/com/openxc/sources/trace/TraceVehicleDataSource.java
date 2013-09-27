@@ -37,7 +37,8 @@ import android.util.Log;
  * operating in a live vehicle.
  *
  * The trace file format is simply a plain text file of OpenXC JSON messages with
- * an additional timestamp field, separated by newlines:
+ * an additional timestamp field (in seconds with decimal parts), separated by
+ * newlines:
  *
  * {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
  * {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}
@@ -70,7 +71,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
-    private Long mFirstTimestamp;
+    private long mFirstTimestamp = 0;
     private boolean mRunning = true;
     private boolean mLoop = true;
     private URI mFilename;
@@ -247,7 +248,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     }
 
     /**
-     * Using the startingTime as the relatiev starting point, sleep this thread
+     * Using the startingTime as the relative starting point, sleep this thread
      * until the next timestamp would occur.
      *
      * @param startingTime the relative starting time in nanoseconds
@@ -255,14 +256,18 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      * epoch
      */
     private void waitForNextRecord(long startingTime, long timestamp) {
-        long timestamp = TimeUnit.NANOSECONDS.convert(
+        // TODO is all of this nanosecond conversion necessary? the original
+        // motivation was to get the most accurate time from the system, but i"m
+        // not really sure it matters if the records are only timestamped at
+        // the ms level.
+        long timestampNanoseconds = TimeUnit.NANOSECONDS.convert(
                 timestamp, TimeUnit.MILLISECONDS);
-        if(mFirstTimestamp == null) {
-            mFirstTimestamp = Long.valueOf(timestamp);
-            Log.d(TAG, "Storing " + mFirstTimestamp + " as the first " +
+        if(mFirstTimestamp == 0) {
+            mFirstTimestamp = timestampNanoseconds;
+            Log.d(TAG, "Storing " + timestamp + " as the first " +
                     "timestamp of the trace file");
         }
-        long targetTime = startingTime + (timestamp - mFirstTimestamp);
+        long targetTime = startingTime + (timestampNanoseconds - mFirstTimestamp);
         long sleepDuration = TimeUnit.MILLISECONDS.convert(
                 targetTime - System.nanoTime(), TimeUnit.NANOSECONDS);
         sleepDuration = Math.max(sleepDuration, 0);

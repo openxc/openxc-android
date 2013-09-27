@@ -179,9 +179,9 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service.removeSource(source);
         TestUtils.pause(150);
         Measurement measurement = service.get(VehicleSpeed.class);
-        double age = measurement.getAge();
-        assertTrue("Measurement age (" + age + ") should be > 0.05",
-                age > .05);
+        long age = measurement.getAge();
+        assertTrue("Measurement age (" + age + ") should be > 5ms",
+                age > 5);
     }
 
     @MediumTest

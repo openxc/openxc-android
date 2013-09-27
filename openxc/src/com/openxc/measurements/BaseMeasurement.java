@@ -71,15 +71,15 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         mRange = range;
     }
 
-    public void setTimestamp(double timestamp) {
+    public void setTimestamp(long timestamp) {
         mValue.setTimestamp(timestamp);
     }
 
-    public double getAge() {
+    public long getAge() {
         return mValue.getAge();
     }
 
-    public double getBirthtime() {
+    public long getBirthtime() {
         return mValue.getTimestamp();
     }
 

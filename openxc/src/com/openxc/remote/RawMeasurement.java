@@ -36,7 +36,7 @@ public class RawMeasurement implements Parcelable {
     private static final String TAG = "RawMeasurement";
 
     private String mCachedSerialization;
-    private double mTimestamp;
+    private long mTimestamp;
     private String mName;
     private Object mValue;
     private Object mEvent;
@@ -53,7 +53,7 @@ public class RawMeasurement implements Parcelable {
     }
 
     public RawMeasurement(String name, Object value, Object event,
-            double timestamp) {
+            long timestamp) {
         this(name, value, event);
         mTimestamp = timestamp;
         timestamp();
@@ -67,14 +67,14 @@ public class RawMeasurement implements Parcelable {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(getName());
-        out.writeDouble(getTimestamp());
+        out.writeLong(getTimestamp());
         out.writeValue(getValue());
         out.writeValue(getEvent());
     }
 
     public void readFromParcel(Parcel in) {
         mName = in.readString();
-        mTimestamp = in.readDouble();
+        mTimestamp = in.readLong();
         mValue = in.readValue(null);
         mEvent = in.readValue(null);
     }
@@ -100,9 +100,8 @@ public class RawMeasurement implements Parcelable {
 
     public String serialize(boolean reserialize) {
         if(reserialize || mCachedSerialization == null) {
-            Double timestamp = isTimestamped() ? getTimestamp() : null;
             mCachedSerialization = JsonSerializer.serialize(getName(),
-                    getValue(), getEvent(), timestamp);
+                    getValue(), getEvent(), getTimestamp());
         }
         return mCachedSerialization;
     }
@@ -127,11 +126,10 @@ public class RawMeasurement implements Parcelable {
      * @return true if the measurement has a valid timestamp.
      */
     public boolean isTimestamped() {
-        return getTimestamp() != null && !Double.isNaN(getTimestamp())
-            && getTimestamp() != 0;
+        return getTimestamp() != 0;
     }
 
-    public Double getTimestamp() {
+    public long getTimestamp() {
         return mTimestamp;
     }
 
@@ -140,7 +138,7 @@ public class RawMeasurement implements Parcelable {
      * serialized version.
      */
     public void untimestamp() {
-    	mTimestamp = Double.NaN;
+    	mTimestamp = 0;
     }
 
     public int describeContents() {
@@ -180,8 +178,11 @@ public class RawMeasurement implements Parcelable {
                 } else if(JsonSerializer.EVENT_FIELD.equals(field)) {
                     measurement.mEvent = parseUnknownType(parser);
                 } else if(JsonSerializer.TIMESTAMP_FIELD.equals(field)) {
+                    // serialized measurements record the timestamp in seconds
+                    // with fractional parts - we multiply to get pure
+                    // milliseconds and then chop off anything more precise.
                     measurement.mTimestamp =
-                        parser.getNumberValue().doubleValue();
+                        (long) (parser.getNumberValue().doubleValue() * 1000);
                 }
             }
 
@@ -235,7 +236,7 @@ public class RawMeasurement implements Parcelable {
 
     private void timestamp() {
         if(!isTimestamped()) {
-            mTimestamp = System.currentTimeMillis() / 1000.0;
+            mTimestamp = System.currentTimeMillis();
         }
     }
 }

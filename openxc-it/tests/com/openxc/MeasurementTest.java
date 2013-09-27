@@ -49,7 +49,7 @@ public class MeasurementTest extends TestCase {
 
     public void testAgeIsPositive() {
         TestUtils.pause(10);
-        assertThat(measurement.getAge(), greaterThan(0.0));
+        assertThat(measurement.getAge(), greaterThan(Long.valueOf(0)));
     }
 
     public void testEquality() {
