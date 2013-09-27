@@ -35,7 +35,6 @@ def release():
 def snapshot():
     local("mvn clean deploy -pl openxc -am")
 
-
 def upload_release(target_file, s3_key):
     conn = boto.s3.connection.S3Connection(env.aws_access_key,
             env.aws_secret_key, proxy=env.http_proxy,
@@ -47,6 +46,7 @@ def upload_release(target_file, s3_key):
     key.make_public()
     print ("Uploaded release as public to http://s3.amazonaws.com/%s/%s" %
             (bucket.name, s3_key))
+
 def release_descriptor(path):
     with lcd(path):
         return local('git describe HEAD', capture=True).rstrip("\n")
