@@ -236,6 +236,7 @@ public class VehicleManager extends Service implements SourceCallback {
                 UnrecognizedMeasurementTypeException {
         Log.d(TAG, "Sending command " + command);
         RawMeasurement rawCommand = command.toRaw();
+        rawCommand.untimestamp();
 
         for(VehicleInterface vehicleInterface : mInterfaces) {
             try {
