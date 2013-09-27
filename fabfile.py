@@ -4,6 +4,7 @@ import os
 import boto.s3.key
 import boto.s3.connection
 from fabric.api import *
+from fabric.colors import green
 
 env.aws_access_key = os.environ['AWS_ACCESS_KEY_ID']
 env.aws_secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
