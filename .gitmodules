@@ -1,0 +1,3 @@
+[submodule "openxc/proto"]
+	path = openxc/proto
+	url = https://github.com/openxc/openxc-message-format

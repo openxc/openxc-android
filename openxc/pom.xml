@@ -11,6 +11,14 @@
     <packaging>apklib</packaging>
     <name>OpenXC Android Library</name>
     <description>Android library for the OpenXC Platform</description>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>protoc-plugin</id>
+            <url>http://sergei-ivanov.github.com/maven-protoc-plugin/repo/releases/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -27,7 +35,13 @@
             <artifactId>jackson-core</artifactId>
             <version>2.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -60,6 +74,22 @@
                     </additionalparam>
                     <useStandardDocletOptions>false</useStandardDocletOptions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.protobuf.tools</groupId>
+                <artifactId>maven-protoc-plugin</artifactId>
+                <version>0.3.1</version>
+                <configuration>
+                    <protoSourceRoot>proto</protoSourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
