@@ -163,6 +163,12 @@ public class VehicleManager extends Service implements SourceCallback {
         bindRemote();
         return mBinder;
     }
+    
+    @Override
+    public boolean onUnbind(Intent intent){
+    	Log.i(TAG, "Service unbinding in response to " + intent);
+    	return true;
+    }
 
     /**
      * Block until the VehicleManager is alive and can return measurements.

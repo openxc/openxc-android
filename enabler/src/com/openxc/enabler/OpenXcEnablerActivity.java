@@ -131,6 +131,8 @@ public class OpenXcEnablerActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopService(new Intent(this, PreferenceManagerService.class));
+        stopService(new Intent(this, VehicleManager.class));
         Log.d(TAG, "Destroying Enabler activity");
     }
 
