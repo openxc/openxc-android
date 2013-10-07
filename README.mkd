@@ -4,7 +4,7 @@ OpenXC Android Library
 This library is a part of the [OpenXC][] project.
 
 This Android library contains the tools required to read vehicle data from the
-vehicle's CAN bus through the OpenXC CAN translation module in any Android
+vehicle's CAN bus through the OpenXC vehicle interface in any Android
 application.
 
 Visit the [OpenXC][] project page for

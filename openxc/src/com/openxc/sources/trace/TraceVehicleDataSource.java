@@ -32,7 +32,7 @@ import android.util.Log;
  * A vehicle data source that reads measurements from a pre-recorded trace file.
  *
  * This class is primarily for testing - a pre-recorded trace of the output from
- * an OpenXC CAN translator is played back line by line into the library.
+ * an OpenXC vehicle interface is played back line by line into the library.
  * Everything from the VehicleService on up the chain is identical to when
  * operating in a live vehicle.
  *

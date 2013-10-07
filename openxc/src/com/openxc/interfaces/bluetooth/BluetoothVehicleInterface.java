@@ -172,7 +172,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             mOutStream = new BufferedWriter(new OutputStreamWriter(
                         mSocket.getOutputStream()));
             mInStream = new BufferedInputStream(mSocket.getInputStream());
-            Log.i(TAG, "Socket stream to CAN translator opened successfully");
+            Log.i(TAG, "Socket stream to vehicle interface opened successfully");
         } catch(IOException e) {
             Log.e(TAG, "Error opening streams ", e);
             mSocket = null;

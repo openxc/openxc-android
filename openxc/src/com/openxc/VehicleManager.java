@@ -361,9 +361,9 @@ public class VehicleManager extends Service implements SourceCallback {
      * Activate a vehicle interface for both receiving data and sending commands
      * to the vehicle.
      *
-     * For example, to use a Bluetooth CAN translator as a vehicle interface in
-     * additional to a vehicle data source, call the addVehicleInterface method
-     * after binding with VehicleManager:
+     * For example, to use a Bluetooth vehicle interface in addition to a
+     * vehicle data source, call the addVehicleInterface method after binding
+     * with VehicleManager:
      *
      *      service.addVehicleInterface(BluetoothVehicleInterface.class,
      *              new URI(""));
