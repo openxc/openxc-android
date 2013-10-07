@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.openxc.DataPipeline;
+import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
@@ -48,7 +51,9 @@ import com.openxc.sources.VehicleDataSource;
  */
 public class VehicleService extends Service {
     private final static String TAG = "VehicleService";
-
+    
+    private final static int SERVICE_NOTIFICATION_ID = 1000;
+    
     private DataPipeline mPipeline = new DataPipeline();
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
@@ -59,6 +64,11 @@ public class VehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
+    }
+    
+    @Override
+    public void onTrimMemory(int level){
+    	Log.d(TAG, "Trim memory level: " + level);
     }
 
     /**
@@ -79,10 +89,62 @@ public class VehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-
+        
+        moveToForeground();
+        
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;
+    }
+    
+    @Override
+    public void onRebind(Intent intent){
+    	Log.i(TAG, "Service rebinding in response to " + intent);
+    	
+    	moveToForeground();
+    }
+    
+    @Override 
+    public boolean onUnbind(Intent intent){
+    	Log.i(TAG, "Service unbound in response to " + intent);
+        
+        removeFromForeground();
+    	
+    	return true;	// Do call onRebind when rebinding
+    }
+    
+    @SuppressWarnings("rawtypes")
+	private void moveToForeground(){
+    	Log.i(TAG, "Moving service to foreground.");
+    	
+    	// The enabler app activity class
+    	Class enablerAppActivityClass;
+		try {
+			enablerAppActivityClass = Class.forName("com.openxc.enabler.OpenXcEnablerActivity");
+			
+			// The intent to launch when the user clicks the expanded notification
+	    	Intent intent = new Intent(this, enablerAppActivityClass);
+	    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+	    	
+	    	NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+	    	notificationBuilder.setContentTitle(getString(R.string.openxc_name))
+	    					   .setContentInfo(getString(R.string.notification_content))
+	    					   .setSmallIcon(R.drawable.open_xc_launcher_icon_black)
+	    					   .setContentIntent(pendingIntent);
+	    	
+	    	startForeground(SERVICE_NOTIFICATION_ID, notificationBuilder.build());
+		} catch (ClassNotFoundException e) {
+			// TODO Special action if enabler is not installed
+			
+			Log.e(TAG, "Could not find OpenXcEnablerActivity class.", e);
+		}
+    }
+    
+    private void removeFromForeground(){
+    	Log.i(TAG, "Removing service from foreground.");
+    	
+    	stopForeground(true);
     }
 
     private void initializeDefaultSinks(DataPipeline pipeline) {
