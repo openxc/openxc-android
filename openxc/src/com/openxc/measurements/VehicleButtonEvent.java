@@ -63,7 +63,7 @@ public class VehicleButtonEvent
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public State<ButtonAction> getEvent() {
         return (State<ButtonAction>) super.getEvent();
     }

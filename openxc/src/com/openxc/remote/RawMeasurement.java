@@ -138,7 +138,7 @@ public class RawMeasurement implements Parcelable {
      * serialized version.
      */
     public void untimestamp() {
-    	mTimestamp = 0;
+        mTimestamp = 0;
     }
 
     public int describeContents() {

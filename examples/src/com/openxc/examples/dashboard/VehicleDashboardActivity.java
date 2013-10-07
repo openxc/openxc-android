@@ -150,8 +150,8 @@ public class VehicleDashboardActivity extends Activity {
 
     ParkingBrakeStatus.Listener mParkingBrakeStatus =
             new ParkingBrakeStatus.Listener() {
-    	public void receive(Measurement measurement) {
-	    final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
+        public void receive(Measurement measurement) {
+        final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
                     mParkingBrakeStatusView.setText(

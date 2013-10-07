@@ -166,8 +166,8 @@ public class VehicleManager extends Service implements SourceCallback {
     
     @Override
     public boolean onUnbind(Intent intent){
-    	Log.i(TAG, "Service unbinding in response to " + intent);
-    	return true;
+        Log.i(TAG, "Service unbinding in response to " + intent);
+        return true;
     }
 
     /**
