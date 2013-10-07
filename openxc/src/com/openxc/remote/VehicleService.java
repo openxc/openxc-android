@@ -53,8 +53,6 @@ public class VehicleService extends Service {
     private final static String TAG = "VehicleService";
     
     private final static int SERVICE_NOTIFICATION_ID = 1000;
-
-    private int mNumCurrentBindings = 0;
     
     private DataPipeline mPipeline = new DataPipeline();
     private ApplicationSource mApplicationSource = new ApplicationSource();
@@ -66,6 +64,11 @@ public class VehicleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
+    }
+    
+    @Override
+    public void onTrimMemory(int level){
+    	Log.d(TAG, "Trim memory level: " + level);
     }
 
     /**
@@ -87,13 +90,7 @@ public class VehicleService extends Service {
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
         
-        if(mNumCurrentBindings <= 0){
-        	// Move to foreground
-        	moveToForeground();
-        }
-
-        mNumCurrentBindings++;
-        Log.i(TAG, "Current number of bindings: " + mNumCurrentBindings);
+        moveToForeground();
         
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
@@ -104,25 +101,14 @@ public class VehicleService extends Service {
     public void onRebind(Intent intent){
     	Log.i(TAG, "Service rebinding in response to " + intent);
     	
-    	if(mNumCurrentBindings <= 0){
-        	// Move to foreground
-        	moveToForeground();
-        }
-    	
-    	mNumCurrentBindings++;
-        Log.i(TAG, "Current number of bindings: " + mNumCurrentBindings);
+    	moveToForeground();
     }
     
     @Override 
     public boolean onUnbind(Intent intent){
     	Log.i(TAG, "Service unbound in response to " + intent);
-    	
-    	mNumCurrentBindings--;
-        Log.i(TAG, "Current number of bindings: " + mNumCurrentBindings);
         
-        if(mNumCurrentBindings <= 0){
-        	removeFromForeground();
-        }
+        removeFromForeground();
     	
     	return true;	// Do call onRebind when rebinding
     }
