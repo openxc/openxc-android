@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.openxc.DataPipeline;
@@ -127,7 +127,7 @@ public class VehicleService extends Service {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+            Notification.Builder notificationBuilder = new Notification.Builder(this);
             notificationBuilder.setContentTitle(getString(R.string.openxc_name))
                                .setContentInfo(getString(R.string.notification_content))
                                .setSmallIcon(R.drawable.open_xc_launcher_icon_black)
