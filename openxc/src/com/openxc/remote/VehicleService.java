@@ -110,30 +110,30 @@ public class VehicleService extends Service {
 
         removeFromForeground();
 
-        return true;    // Do call onRebind when rebinding
+        // Do call onRebind when rebinding
+        return true;
     }
 
     @SuppressWarnings("rawtypes")
     private void moveToForeground(){
         Log.i(TAG, "Moving service to foreground.");
 
-        // The enabler app activity class
-        Class enablerAppActivityClass;
         try {
-            enablerAppActivityClass = Class.forName("com.openxc.enabler.OpenXcEnablerActivity");
-
-            // The intent to launch when the user clicks the expanded notification
-            Intent intent = new Intent(this, enablerAppActivityClass);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            Intent intent = new Intent(this,
+                    Class.forName("com.openxc.enabler.OpenXcEnablerActivity"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, 0, intent, 0);
 
             Notification.Builder notificationBuilder = new Notification.Builder(this);
             notificationBuilder.setContentTitle(getString(R.string.openxc_name))
-                               .setContentInfo(getString(R.string.notification_content))
-                               .setSmallIcon(R.drawable.open_xc_launcher_icon_black)
-                               .setContentIntent(pendingIntent);
+                    .setContentInfo(getString(R.string.notification_content))
+                    .setSmallIcon(R.drawable.open_xc_launcher_icon_black)
+                    .setContentIntent(pendingIntent);
 
-            startForeground(SERVICE_NOTIFICATION_ID, notificationBuilder.build());
+            startForeground(SERVICE_NOTIFICATION_ID,
+                    notificationBuilder.build());
         } catch (ClassNotFoundException e) {
             // TODO Special action if enabler is not installed
 
