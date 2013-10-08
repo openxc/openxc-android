@@ -94,6 +94,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             return;
         }
 
+        lockConnection();
+
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
         try {
             if(mInStream != null) {
@@ -124,6 +126,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         disconnected();
         Log.d(TAG, "Disconnected from the socket");
+        unlockConnection();
     }
 
     protected String getTag() {
@@ -131,17 +134,22 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     protected void waitForConnection() throws DataSourceException {
-        if(mSocket == null) {
+        if(isRunning()) {
             try {
-                mSocket = mDeviceManager.connect(mAddress);
-                connectStreams();
-                connected();
+                lockConnection();
+                if(mSocket == null) {
+                    mSocket = mDeviceManager.connect(mAddress);
+                    connectStreams();
+                    connected();
+                }
             } catch(BluetoothException e) {
                 String message = "Unable to connect to device at address "
                     + mAddress;
                 Log.w(TAG, message, e);
                 disconnected();
                 throw new DataSourceException(message, e);
+            } finally {
+                unlockConnection();
             }
         }
     }

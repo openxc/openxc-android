@@ -29,21 +29,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     }
 
     public synchronized void start() {
-        if(!mRunning) {
+        if(!isRunning()) {
             mRunning = true;
             new Thread(this).start();
         }
     }
 
-    @Override
-    public boolean isConnected() {
-        return mRunning;
-    }
-
     public synchronized void stop() {
         disconnect();
         super.stop();
-        if(!mRunning) {
+        if(!isRunning()) {
             Log.d(getTag(), "Already stopped.");
             return;
         }
@@ -53,8 +48,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     public void run() {
         BytestreamBuffer buffer = new BytestreamBuffer();
-        while(mRunning) {
-            mConnectionLock.lock();
+        while(isRunning()) {
+            lockConnection();
 
             try {
                 waitForConnection();
@@ -66,12 +61,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 } catch(InterruptedException e2){
                     stop();
                 }
-                mConnectionLock.unlock();
+                unlockConnection();
                 continue;
             } catch(InterruptedException e) {
                 stop();
-                mConnectionLock.unlock();
+                unlockConnection();
                 continue;
+            }
+
+            if(!isRunning()) {
+                break;
             }
 
             int received;
@@ -80,7 +79,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 received = read(bytes);
             } catch(IOException e) {
                 Log.e(getTag(), "Unable to read response", e);
-                mConnectionLock.unlock();
+                unlockConnection();
                 disconnect();
                 continue;
             }
@@ -92,12 +91,23 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 }
             }
 
-            mConnectionLock.unlock();
+            unlockConnection();
         }
         Log.d(getTag(), "Stopped " + getTag());
     }
 
-    protected boolean isRunning() {
+    @Override
+    public synchronized boolean isConnected() {
+        return mRunning;
+    }
+
+    /**
+     * Returns true if this source should be running, or if it should die.
+     *
+     * This is different than isConnected - they just happen to return the same
+     * thing in this base data source.
+     */
+    protected synchronized boolean isRunning() {
         return mRunning;
     }
 
@@ -107,10 +117,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     protected void unlockConnection() {
         mConnectionLock.unlock();
-    }
-
-    protected Condition createCondition() {
-        return mConnectionLock.newCondition();
     }
 
     /**
@@ -135,7 +141,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      * @throws InterruptedException if the interrupted while blocked -- probably
      *      shutting down.
      */
-    protected abstract void waitForConnection() throws DataSourceException, InterruptedException;
+    protected abstract void waitForConnection() throws DataSourceException,
+              InterruptedException;
 
     /**
      * Perform any cleanup necessary to disconnect from the interface.
