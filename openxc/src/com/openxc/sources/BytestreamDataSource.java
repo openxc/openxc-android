@@ -37,7 +37,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     @Override
     public boolean isConnected() {
-        return mRunning && super.isConnected();
+        return mRunning;
     }
 
     public synchronized void stop() {

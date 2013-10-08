@@ -61,7 +61,14 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     }
 
     public boolean isConnected() {
-        return true;
+        // TODO this is kind of weird, and probably says that this API needs
+        // refactoring - we don't want to keep the Pipeline awake because it
+        // thinks the sources like the RemoteListenerSource and
+        // ApplicationSource (which are always in the pipeline) are "connected"
+        // to a vehicle. maybe this isConnected method should only apply to the
+        // VehicleInterface type of sources, but we don't currently track those
+        // separately.
+        return false;
     }
 
     /**
