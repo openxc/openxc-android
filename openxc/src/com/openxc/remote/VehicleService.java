@@ -119,7 +119,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             notificationBuilder.setContentTitle(getString(R.string.openxc_name))
                     .setContentInfo(getString(R.string.notification_content))
                     .setSmallIcon(R.drawable.openxc_notification_icon_small_white)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.open_xc_launcher_icon_black))
                     .setContentIntent(pendingIntent);
 
             startForeground(SERVICE_NOTIFICATION_ID,
