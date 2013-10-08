@@ -16,7 +16,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
-    private boolean mRunning = false;
+    private AtomicBoolean mRunning = new AtomicBoolean(false);
     private final Lock mConnectionLock = new ReentrantLock();
     protected final Condition mDeviceChanged = mConnectionLock.newCondition();
 
@@ -28,22 +28,19 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         this(null, context);
     }
 
-    public synchronized void start() {
-        if(!isRunning()) {
-            mRunning = true;
+    public void start() {
+        if(mRunning.compareAndSet(false, true)) {
             new Thread(this).start();
         }
     }
 
-    public synchronized void stop() {
+    public void stop() {
         disconnect();
         super.stop();
-        if(!isRunning()) {
-            Log.d(getTag(), "Already stopped.");
-            return;
+
+        if(mRunning.compareAndSet(true, false)) {
+            Log.d(getTag(), "Stopped " + getTag() + " source");
         }
-        Log.d(getTag(), "Stopping " + getTag() + " source");
-        mRunning = false;
     }
 
     public void run() {
@@ -67,10 +64,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 stop();
                 unlockConnection();
                 continue;
-            }
-
-            if(!isRunning()) {
-                break;
             }
 
             int received;
@@ -97,8 +90,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     }
 
     @Override
-    public synchronized boolean isConnected() {
-        return mRunning;
+    public boolean isConnected() {
+        return isRunning();
     }
 
     /**
@@ -107,8 +100,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      * This is different than isConnected - they just happen to return the same
      * thing in this base data source.
      */
-    protected synchronized boolean isRunning() {
-        return mRunning;
+    protected boolean isRunning() {
+        return mRunning.get();
     }
 
     protected void lockConnection() {
