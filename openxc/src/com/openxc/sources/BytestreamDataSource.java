@@ -17,6 +17,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
+    private static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
+
     private AtomicBoolean mRunning = new AtomicBoolean(false);
     private final Lock mConnectionLock = new ReentrantLock();
     private Thread mThread;
@@ -53,9 +55,10 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 waitForConnection();
             } catch(DataSourceException e) {
                 Log.i(getTag(), "Unable to connect to target device -- " +
-                        "sleeping for awhile before trying again");
+                        "sleeping for " + RECONNECTION_ATTEMPT_WAIT_TIME_S +
+                        "s before trying again");
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
                 } catch(InterruptedException e2){
                     stop();
                 }
