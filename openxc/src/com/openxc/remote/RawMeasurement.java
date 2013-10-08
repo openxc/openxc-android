@@ -183,6 +183,9 @@ public class RawMeasurement implements Parcelable {
                     // milliseconds and then chop off anything more precise.
                     measurement.mTimestamp =
                         (long) (parser.getNumberValue().doubleValue() * 1000);
+                } else {
+                    throw new UnrecognizedMeasurementTypeException(
+                            "Bad field in: " + measurementString);
                 }
             }
 
