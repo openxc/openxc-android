@@ -22,6 +22,7 @@ public class VehicleServiceTest
         super.setUp();
         startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleServiceInterface.class);
+        VehicleService.sIsUnderTest = true;
     }
 
     @SmallTest

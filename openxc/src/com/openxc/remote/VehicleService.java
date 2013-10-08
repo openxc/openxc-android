@@ -54,6 +54,10 @@ public class VehicleService extends Service {
 
     private final static int SERVICE_NOTIFICATION_ID = 1000;
 
+    // Work around an issue with instruemtnation tests and foreground services
+    // https://code.google.com/p/android/issues/detail?id=12122
+    public static boolean sIsUnderTest = false;
+
     private DataPipeline mPipeline = new DataPipeline();
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
@@ -144,7 +148,9 @@ public class VehicleService extends Service {
     private void removeFromForeground(){
         Log.i(TAG, "Removing service from foreground.");
 
-        stopForeground(true);
+        if(!sIsUnderTest) {
+            stopForeground(true);
+        }
     }
 
     private void initializeDefaultSinks(DataPipeline pipeline) {
