@@ -126,7 +126,8 @@ public class VehicleService extends Service {
             PendingIntent pendingIntent = PendingIntent.getActivity(
                     this, 0, intent, 0);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this);
             notificationBuilder.setContentTitle(getString(R.string.openxc_name))
                     .setContentInfo(getString(R.string.notification_content))
                     .setSmallIcon(R.drawable.open_xc_launcher_icon_black)
