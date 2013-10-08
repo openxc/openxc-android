@@ -34,6 +34,7 @@ public class DeviceManager {
     private final Condition mDeviceChangedCondition =
             mDeviceLock.newCondition();
     private BroadcastReceiver mReceiver;
+    private BluetoothSocket mSocket;
 
     /**
      * The DeviceManager requires an Android Context in order to send the intent
@@ -70,9 +71,40 @@ public class DeviceManager {
                 mDeviceChangedCondition.await();
             } catch(InterruptedException e) {}
         }
-        BluetoothSocket socket = setupSocket(mTargetDevice);
+        mSocket = setupSocket(mTargetDevice);
+        connectToSocket(mSocket);
+
         mDeviceLock.unlock();
-        return socket;
+        return mSocket;
+    }
+
+    private void connectToSocket(BluetoothSocket socket) throws BluetoothException {
+        try {
+            socket.connect();
+        } catch(IOException e) {
+            String error = "Could not connect socket to SPP service on " +
+                mTargetDevice;
+            Log.e(TAG, error);
+            try {
+                socket.close();
+            } catch(IOException e2) {}
+            throw new BluetoothException(error, e);
+        }
+    }
+
+    /**
+     * Immediately cancel any pending Bluetooth operations.
+     *
+     * The BluetoothSocket.connect() function blocks while waiting for a
+     * connection, but it's thread safe and we can cancel that by calling
+     * close() on it at any time.
+     */
+    public void stop() {
+        if(mSocket != null) {
+            try {
+                mSocket.close();
+            } catch(IOException e) { }
+        }
     }
 
     /**
@@ -100,18 +132,6 @@ public class DeviceManager {
         } catch(IOException e) {
             String error = "Unable to open a socket to device " + device;
             Log.w(TAG, error);
-            throw new BluetoothException(error, e);
-        }
-
-        try {
-            socket.connect();
-        } catch(IOException e) {
-            String error = "Could not connect socket to SPP service on " +
-                device;
-            Log.e(TAG, error);
-            try {
-                socket.close();
-            } catch(IOException e2) {}
             throw new BluetoothException(error, e);
         }
         return socket;

@@ -80,6 +80,12 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     @Override
+    public void stop() {
+        mDeviceManager.stop();
+        super.stop();
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("deviceAddress", mAddress)
