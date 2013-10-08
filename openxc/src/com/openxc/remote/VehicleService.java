@@ -98,6 +98,8 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
 
+        moveToForeground();
+        
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;
