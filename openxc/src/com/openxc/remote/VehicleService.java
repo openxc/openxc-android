@@ -97,28 +97,9 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
 
-        moveToForeground();
-
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;
-    }
-
-    @Override
-    public void onRebind(Intent intent){
-        Log.i(TAG, "Service rebinding in response to " + intent);
-
-        moveToForeground();
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent){
-        Log.i(TAG, "Service unbound in response to " + intent);
-
-        removeFromForeground();
-
-        // Do call onRebind when rebinding
-        return true;
     }
 
     private void moveToForeground(){
@@ -304,9 +285,11 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
     public void onPipelineActivated() {
         mWakeLocker.acquireWakeLock();
+        moveToForeground();
     }
 
     public void onPipelineDeactivated() {
         mWakeLocker.releaseWakeLock();
+        removeFromForeground();
     }
 }
