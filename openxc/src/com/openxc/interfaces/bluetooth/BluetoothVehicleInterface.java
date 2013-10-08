@@ -77,13 +77,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     @Override
-    public void stop() {
-        super.stop();
-        Log.d(TAG, "Stopping Bluetooth interface");
-        disconnect();
-    }
-
-    @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("deviceAddress", mAddress)
