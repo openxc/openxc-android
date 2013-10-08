@@ -19,6 +19,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private final static int READ_BATCH_SIZE = 512;
     private AtomicBoolean mRunning = new AtomicBoolean(false);
     private final Lock mConnectionLock = new ReentrantLock();
+    private Thread mThread;
     protected final Condition mDeviceChanged = mConnectionLock.newCondition();
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
@@ -31,17 +32,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     public void start() {
         if(mRunning.compareAndSet(false, true)) {
-            new Thread(this).start();
+            mThread = new Thread(this);
+            mThread.start();
         }
     }
 
     public void stop() {
-        disconnect();
-        super.stop();
-
         if(mRunning.compareAndSet(true, false)) {
-            Log.d(getTag(), "Stopped " + getTag() + " source");
+            Log.d(getTag(), "Stopping " + getTag() + " source");
         }
+        mThread.interrupt();
     }
 
     public void run() {
@@ -67,6 +67,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 continue;
             }
 
+            if(!isConnected()) {
+                unlockConnection();
+                continue;
+            }
+
             int received;
             byte[] bytes = new byte[READ_BATCH_SIZE];
             try {
@@ -87,6 +92,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
             unlockConnection();
         }
+        disconnect();
+        super.stop();
         Log.d(getTag(), "Stopped " + getTag());
     }
 
