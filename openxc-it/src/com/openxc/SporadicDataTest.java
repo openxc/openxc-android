@@ -2,30 +2,21 @@ package com.openxc;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import junit.framework.Assert;
+
 import org.apache.commons.io.FileUtils;
 
-import com.openxc.measurements.HeadlampStatus;
-import com.openxc.measurements.ParkingBrakeStatus;
-import com.openxc.measurements.Measurement;
-
-import com.openxc.remote.VehicleService;
-
-import com.openxc.sources.trace.TraceVehicleDataSource;
-
-import com.openxc.VehicleManager;
-
-
 import android.content.Intent;
-
 import android.test.ServiceTestCase;
 
-import android.test.suitebuilder.annotation.MediumTest;
-
-import junit.framework.Assert;
+import com.openxc.measurements.HeadlampStatus;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.ParkingBrakeStatus;
+import com.openxc.remote.VehicleService;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 public class SporadicDataTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
