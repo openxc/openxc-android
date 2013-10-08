@@ -114,7 +114,6 @@ public class VehicleService extends Service {
         return true;
     }
 
-    @SuppressWarnings("rawtypes")
     private void moveToForeground(){
         Log.i(TAG, "Moving service to foreground.");
 
