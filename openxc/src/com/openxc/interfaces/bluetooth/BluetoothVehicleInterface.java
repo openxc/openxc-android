@@ -72,7 +72,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     @Override
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return mSocket != null && super.isConnected();
     }
 
@@ -89,43 +89,42 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     protected void disconnect() {
-        if(mSocket == null) {
-            Log.w(TAG, "Unable to disconnect -- not connected");
-            return;
-        }
-
         lockConnection();
 
-        Log.d(TAG, "Disconnecting from the socket " + mSocket);
-        try {
-            if(mInStream != null) {
-                mInStream.close();
-                mInStream = null;
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the input stream", e);
-        }
-
-        try {
-            if(mOutStream != null) {
-                mOutStream.close();
-                mOutStream = null;
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the output stream", e);
-        }
-
-        if(mSocket != null) {
+        if(isConnected()) {
+            Log.w(TAG, "Unable to disconnect -- not connected");
+        } else {
+            Log.d(TAG, "Disconnecting from the socket " + mSocket);
             try {
-                mSocket.close();
+                if(mInStream != null) {
+                    mInStream.close();
+                    mInStream = null;
+                }
             } catch(IOException e) {
-                Log.w(TAG, "Unable to close the socket", e);
+                Log.w(TAG, "Unable to close the input stream", e);
             }
-        }
-        mSocket = null;
 
-        disconnected();
-        Log.d(TAG, "Disconnected from the socket");
+            try {
+                if(mOutStream != null) {
+                    mOutStream.close();
+                    mOutStream = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the output stream", e);
+            }
+
+            if(isConnected()) {
+                try {
+                    mSocket.close();
+                } catch(IOException e) {
+                    Log.w(TAG, "Unable to close the socket", e);
+                }
+            }
+            mSocket = null;
+
+            disconnected();
+            Log.d(TAG, "Disconnected from the socket");
+        }
         unlockConnection();
     }
 
@@ -137,7 +136,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         if(isRunning()) {
             try {
                 lockConnection();
-                if(mSocket == null) {
+                if(!isConnected()) {
                     mSocket = mDeviceManager.connect(mAddress);
                     connectStreams();
                     connected();
@@ -155,7 +154,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     private synchronized boolean write(String message) {
-        if(mSocket == null) {
+        if(!isConnected()) {
             Log.w(TAG, "Unable to write -- not connected");
             return false;
         }
