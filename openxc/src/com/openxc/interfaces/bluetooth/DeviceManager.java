@@ -3,16 +3,17 @@ package com.openxc.interfaces.bluetooth;
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import android.os.Looper;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.os.Looper;
 import android.util.Log;
 
 /**
@@ -35,6 +36,7 @@ public class DeviceManager {
             mDeviceLock.newCondition();
     private BroadcastReceiver mReceiver;
     private BluetoothSocket mSocket;
+    private AtomicBoolean mSocketConnecting = new AtomicBoolean(false);
 
     /**
      * The DeviceManager requires an Android Context in order to send the intent
@@ -79,6 +81,7 @@ public class DeviceManager {
     }
 
     private void connectToSocket(BluetoothSocket socket) throws BluetoothException {
+        mSocketConnecting.set(true);
         try {
             socket.connect();
         } catch(IOException e) {
@@ -89,6 +92,8 @@ public class DeviceManager {
                 socket.close();
             } catch(IOException e2) {}
             throw new BluetoothException(error, e);
+        } finally {
+            mSocketConnecting.set(false);
         }
     }
 
@@ -98,9 +103,15 @@ public class DeviceManager {
      * The BluetoothSocket.connect() function blocks while waiting for a
      * connection, but it's thread safe and we can cancel that by calling
      * close() on it at any time.
+     *
+     * Importantly we don't want to close the socket any other time, becauase we
+     * want to leave that up to the user of the socket - if you call close()
+     * twice, or close Input/Ouput streams associated with the socket
+     * simultaneously, it can cause a segfault due to a bug in some Android
+     * Bluetooth stacks. Awesome!
      */
     public void stop() {
-        if(mSocket != null) {
+        if(mSocketConnecting.get() && mSocket != null) {
             try {
                 mSocket.close();
             } catch(IOException e) { }

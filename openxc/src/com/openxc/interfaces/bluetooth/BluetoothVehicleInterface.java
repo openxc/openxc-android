@@ -106,43 +106,38 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     protected void disconnect() {
         lockConnection();
 
-        if(isConnected()) {
-            Log.d(TAG, "Disconnecting from the socket " + mSocket);
-            try {
-                if(mInStream != null) {
-                    mInStream.close();
-                }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the input stream", e);
-            } finally {
-                mInStream = null;
+        Log.d(TAG, "Disconnecting from the socket " + mSocket);
+        try {
+            if(mInStream != null) {
+                mInStream.close();
             }
-
-            try {
-                if(mOutStream != null) {
-                    mOutStream.close();
-                }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the output stream", e);
-            } finally {
-                mOutStream = null;
-            }
-
-            try {
-                if(mSocket != null) {
-                    mSocket.close();
-                }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the socket", e);
-            } finally {
-                mSocket = null;
-            }
-
-            Log.d(TAG, "Disconnected from the socket");
-        } else {
-            Log.w(TAG, "Unable to disconnect -- not connected");
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the input stream", e);
+        } finally {
+            mInStream = null;
         }
 
+        try {
+            if(mOutStream != null) {
+                mOutStream.close();
+            }
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the output stream", e);
+        } finally {
+            mOutStream = null;
+        }
+
+        try {
+            if(mSocket != null) {
+                mSocket.close();
+            }
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the socket", e);
+        } finally {
+            mSocket = null;
+        }
+
+        Log.d(TAG, "Disconnected from the socket");
         disconnected();
         unlockConnection();
     }
