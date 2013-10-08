@@ -1,15 +1,14 @@
 package com.openxc;
 
-import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
+import junit.framework.TestCase;
+
 import com.openxc.remote.RawMeasurement;
-
 import com.openxc.sinks.BaseVehicleDataSink;
-
+import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-import com.openxc.sources.VehicleDataSource;
 
 public class DataPipelineTest extends TestCase {
     DataPipeline pipeline;
@@ -94,7 +93,7 @@ public class DataPipelineTest extends TestCase {
         assertFalse(sink.received);
     }
 
-    private class TestSource implements VehicleDataSource {
+    private class TestSource extends BaseVehicleDataSource {
         private SourceCallback callback;
 
         public void sendTestMessage() {

@@ -72,6 +72,11 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     @Override
+    public boolean isConnected() {
+        return mSocket != null && super.isConnected();
+    }
+
+    @Override
     public void stop() {
         super.stop();
         Log.d(TAG, "Stopping Bluetooth interface");

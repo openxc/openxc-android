@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
+import com.openxc.R;
 import com.openxc.measurements.HeadlampStatus;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.ParkingBrakeStatus;

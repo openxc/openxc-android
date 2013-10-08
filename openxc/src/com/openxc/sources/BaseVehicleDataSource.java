@@ -48,6 +48,22 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         mCallbackLock.unlock();
     }
 
+    protected void disconnected() {
+        if(mCallback != null) {
+            mCallback.sourceDisconnected(this);
+        }
+    }
+
+    protected void connected() {
+        if(mCallback != null) {
+            mCallback.sourceConnected(this);
+        }
+    }
+
+    public boolean isConnected() {
+        return true;
+    }
+
     /**
      * Clear the callback so no further updates are sent.
      *

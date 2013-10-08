@@ -23,6 +23,7 @@ import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
+import com.openxc.sources.WakeLockManager;
 
 /**
  * The VehicleService is the centralized source of all vehicle data.
@@ -49,7 +50,7 @@ import com.openxc.sources.VehicleDataSource;
  * pass running sources through the AIDL interface. The same style is used here
  * for clarity and in order to share code.
  */
-public class VehicleService extends Service {
+public class VehicleService extends Service implements DataPipeline.Operator {
     private final static String TAG = "VehicleService";
 
     private final static int SERVICE_NOTIFICATION_ID = 1000;
@@ -58,16 +59,18 @@ public class VehicleService extends Service {
     // https://code.google.com/p/android/issues/detail?id=12122
     public static boolean sIsUnderTest = false;
 
-    private DataPipeline mPipeline = new DataPipeline();
+    private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
             new CopyOnWriteArrayList<VehicleInterface>();
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
+    private WakeLockManager mWakeLocker;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
+        mWakeLocker = new WakeLockManager(this, TAG);
     }
 
     @Override
@@ -297,5 +300,13 @@ public class VehicleService extends Service {
         } catch(VehicleInterfaceException e) {
             return null;
         }
+    }
+
+    public void onPipelineActivated() {
+        mWakeLocker.acquireWakeLock();
+    }
+
+    public void onPipelineDeactivated() {
+        mWakeLocker.releaseWakeLock();
     }
 }

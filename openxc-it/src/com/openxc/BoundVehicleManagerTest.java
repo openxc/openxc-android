@@ -2,31 +2,24 @@ package com.openxc;
 
 import java.net.URI;
 
-import com.openxc.measurements.EngineSpeed;
-import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.VehicleSpeed;
-import com.openxc.measurements.TurnSignalStatus;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
-import com.openxc.NoValueException;
-import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.VehicleServiceException;
-import com.openxc.remote.VehicleService;
-
-import com.openxc.sources.trace.TraceVehicleDataSource;
-import com.openxc.sinks.BaseVehicleDataSink;
-import com.openxc.sinks.VehicleDataSink;
-
-import com.openxc.VehicleManager;
+import junit.framework.Assert;
 
 import android.content.Intent;
-
 import android.test.ServiceTestCase;
-
 import android.test.suitebuilder.annotation.MediumTest;
 
-import junit.framework.Assert;
+import com.openxc.measurements.EngineSpeed;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.TurnSignalStatus;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleSpeed;
+import com.openxc.remote.RawMeasurement;
+import com.openxc.remote.VehicleService;
+import com.openxc.remote.VehicleServiceException;
+import com.openxc.sinks.BaseVehicleDataSink;
+import com.openxc.sinks.VehicleDataSink;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;

@@ -141,6 +141,11 @@ public class UsbVehicleInterface extends BytestreamDataSource
         primeOutput();
     }
 
+    @Override
+    public boolean isConnected() {
+        return mConnection != null && super.isConnected();
+    }
+
     /**
      * Unregister USB device intent broadcast receivers and stop waiting for a
      * connection.

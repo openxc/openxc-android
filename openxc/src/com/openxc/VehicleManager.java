@@ -163,7 +163,7 @@ public class VehicleManager extends Service implements SourceCallback {
         bindRemote();
         return mBinder;
     }
-    
+
     @Override
     public boolean onUnbind(Intent intent){
         Log.i(TAG, "Service unbinding in response to " + intent);
@@ -576,6 +576,14 @@ public class VehicleManager extends Service implements SourceCallback {
                 Log.d(TAG, "Unable to send message to remote service", e);
             }
         }
+    }
+
+    public void sourceDisconnected(VehicleDataSource source) {
+        Log.d(TAG, source + " disconnected");
+    }
+
+    public void sourceConnected(VehicleDataSource source) {
+        Log.d(TAG, source + " connected");
     }
 
     private void initializeDefaultSinks(DataPipeline pipeline) {

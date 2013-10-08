@@ -124,6 +124,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         this(null, context, filename, loop);
     }
 
+    @Override
+    public boolean isConnected() {
+        return mRunning && super.isConnected();
+    }
+
     /**
      * Stop trace file playback and the playback thread.
      */
@@ -202,6 +207,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 Thread.sleep(1000);
             } catch(InterruptedException e) {}
         }
+        mRunning = false;
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
 
