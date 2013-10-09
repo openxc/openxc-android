@@ -45,7 +45,7 @@ to get it in your local Maven repo:
     $ mvn clean install -N
     $ cd extras
     $ mvn clean install -N
-    $ cd compatibility-v4
+    $ cd compatibility-v13
     $ mvn clean install
 
 After satisfying those requirements, the build is pretty simple:
