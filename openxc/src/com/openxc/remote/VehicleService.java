@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -96,7 +97,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-
+        
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;
@@ -117,7 +118,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                     new NotificationCompat.Builder(this);
             notificationBuilder.setContentTitle(getString(R.string.openxc_name))
                     .setContentInfo(getString(R.string.notification_content))
-                    .setSmallIcon(R.drawable.open_xc_launcher_icon_black)
+                    .setSmallIcon(R.drawable.openxc_notification_icon_small_white)
                     .setContentIntent(pendingIntent);
 
             startForeground(SERVICE_NOTIFICATION_ID,
