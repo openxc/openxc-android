@@ -9,6 +9,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import android.content.Context;
 import android.util.Log;
 
+import com.openxc.BinaryMessages;
+
 /**
  * Common functionality for data sources that read a stream of newline-separated
  * messages in a separate thread from the main activity.
@@ -88,8 +90,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
             if(received > 0) {
                 buffer.receive(bytes, received);
-                for(String record : buffer.readLines()) {
-                    handleMessage(record);
+                if(false) {
+                    // JSON
+                    for(String record : buffer.readLines()) {
+                        handleMessage(record);
+                    }
+                } else {
+                    BinaryMessages.VehicleMessage message = null;
+                    while((message = buffer.readBinaryMessage()) != null) {
+                        handleMessage(message);
+                    }
                 }
             }
 
