@@ -85,6 +85,10 @@
                 <version>0.3.1</version>
                 <configuration>
                     <protoSourceRoot>proto</protoSourceRoot>
+                    <checkStaleness>true</checkStaleness>
+                    <includes>
+                        <param>openxc.proto</param>
+                    </includes>
                 </configuration>
                 <executions>
                     <execution>

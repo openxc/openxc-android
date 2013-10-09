@@ -14,8 +14,7 @@ import com.google.common.base.Objects;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.serializers.JsonSerializer;
 
-// TODO fix the package name
-import openxc.Openxc.VehicleMessage;
+import com.openxc.BinaryMessages;
 
 /**
  * An untyped measurement used only for the AIDL VehicleService interface.
@@ -159,9 +158,8 @@ public class RawMeasurement implements Parcelable {
     private static void deserializeProtobuf(String measurementString,
             RawMeasurement measurement)
             throws UnrecognizedMeasurementTypeException {
-        VehicleMessage message = VehicleMessage.parseDelimitedFrom(
-                measurementString);
-        // TODO
+        BinaryMessages.VehicleMessage message =
+            BinaryMessages.VehicleMessage.parseDelimitedFrom(measurementString);
     }
 
     private static void deserialize(String measurementString,
