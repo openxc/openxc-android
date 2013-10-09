@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="openxc_name">OpenXC</string>
+    <string name="notification_content">Receiving vehicle data</string>
+
     <string name="native_gps_checkbox_key">use_native_gps</string>
     <string name="gps_overwrite_checkbox_key">overwrite_native_gps</string>
     <string name="recording_checkbox_key">recording_enabled</string>

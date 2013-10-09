@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.openxc.DataPipeline;
+import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
@@ -20,6 +24,7 @@ import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
+import com.openxc.sources.WakeLockManager;
 
 /**
  * The VehicleService is the centralized source of all vehicle data.
@@ -46,19 +51,32 @@ import com.openxc.sources.VehicleDataSource;
  * pass running sources through the AIDL interface. The same style is used here
  * for clarity and in order to share code.
  */
-public class VehicleService extends Service {
+public class VehicleService extends Service implements DataPipeline.Operator {
     private final static String TAG = "VehicleService";
 
-    private DataPipeline mPipeline = new DataPipeline();
+    private final static int SERVICE_NOTIFICATION_ID = 1000;
+
+    // Work around an issue with instruemtnation tests and foreground services
+    // https://code.google.com/p/android/issues/detail?id=12122
+    public static boolean sIsUnderTest = false;
+
+    private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
             new CopyOnWriteArrayList<VehicleInterface>();
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
+    private WakeLockManager mWakeLocker;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service starting");
+        mWakeLocker = new WakeLockManager(this, TAG);
+    }
+
+    @Override
+    public void onTrimMemory(int level){
+        Log.d(TAG, "Trim memory level: " + level);
     }
 
     /**
@@ -79,10 +97,45 @@ public class VehicleService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-
+        
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;
+    }
+
+    private void moveToForeground(){
+        Log.i(TAG, "Moving service to foreground.");
+
+        try {
+            Intent intent = new Intent(this,
+                    Class.forName("com.openxc.enabler.OpenXcEnablerActivity"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, 0, intent, 0);
+
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this);
+            notificationBuilder.setContentTitle(getString(R.string.openxc_name))
+                    .setContentInfo(getString(R.string.notification_content))
+                    .setSmallIcon(R.drawable.openxc_notification_icon_small_white)
+                    .setContentIntent(pendingIntent);
+
+            startForeground(SERVICE_NOTIFICATION_ID,
+                    notificationBuilder.build());
+        } catch (ClassNotFoundException e) {
+            // TODO Special action if enabler is not installed
+
+            Log.e(TAG, "Could not find OpenXcEnablerActivity class.", e);
+        }
+    }
+
+    private void removeFromForeground(){
+        Log.i(TAG, "Removing service from foreground.");
+
+        if(!sIsUnderTest) {
+            stopForeground(true);
+        }
     }
 
     private void initializeDefaultSinks(DataPipeline pipeline) {
@@ -229,5 +282,15 @@ public class VehicleService extends Service {
         } catch(VehicleInterfaceException e) {
             return null;
         }
+    }
+
+    public void onPipelineActivated() {
+        mWakeLocker.acquireWakeLock();
+        moveToForeground();
+    }
+
+    public void onPipelineDeactivated() {
+        mWakeLocker.releaseWakeLock();
+        removeFromForeground();
     }
 }

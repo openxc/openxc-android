@@ -4,7 +4,7 @@ OpenXC Android Library
 This library is a part of the [OpenXC][] project.
 
 This Android library contains the tools required to read vehicle data from the
-vehicle's CAN bus through the OpenXC CAN translation module in any Android
+vehicle's CAN bus through the OpenXC vehicle interface in any Android
 application.
 
 Visit the [OpenXC][] project page for
@@ -35,6 +35,18 @@ to be installed in your development environment. In addition you'll need to set
 the `ANDROID_HOME` environment variable to the location of your SDK:
 
     export ANDROID_HOME=/opt/tools/android-sdk
+
+You also need the Android support library, but unfortunately Google doesn't
+consistently deploy this to the Central Maven repository. You can use teh
+[maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer)
+to get it in your local Maven repo:
+
+    $ git clone https://github.com/mosabua/maven-android-sdk-deployer
+    $ mvn clean install -N
+    $ cd extras
+    $ mvn clean install -N
+    $ cd compatibility-v4
+    $ mvn clean install
 
 After satisfying those requirements, the build is pretty simple:
 

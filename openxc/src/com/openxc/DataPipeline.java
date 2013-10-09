@@ -22,8 +22,13 @@ import com.openxc.sources.VehicleDataSource;
  * {@link #receive(RawMeasurement)} method on the this class when new
  * values arrive. The DataPipeline then passes this value on to all currently
  * registered data sinks.
+ *
+ * The Pipeline can have an optional Operator, which implements a few callbacks
+ * to check the status of the pipeline - e.g. if some source in the pipeline is
+ * active.
  */
 public class DataPipeline implements SourceCallback {
+    private Operator mOperator;
     private int mMessagesReceived = 0;
     private Map<String, RawMeasurement> mMeasurements =
             new ConcurrentHashMap<String, RawMeasurement>();
@@ -31,6 +36,19 @@ public class DataPipeline implements SourceCallback {
             new CopyOnWriteArrayList<VehicleDataSink>();
     private CopyOnWriteArrayList<VehicleDataSource> mSources =
             new CopyOnWriteArrayList<VehicleDataSource>();
+
+    public interface Operator {
+        public void onPipelineDeactivated();
+        public void onPipelineActivated();
+    }
+
+    public DataPipeline() {
+        this(null);
+    }
+
+    public DataPipeline(Operator operator) {
+        mOperator = operator;
+    }
 
     /**
      * Accept new values from data sources and send it out to all registered
@@ -167,6 +185,29 @@ public class DataPipeline implements SourceCallback {
      */
     public int getMessageCount() {
         return mMessagesReceived;
+    }
+
+    /**
+     * At least one source is not active - if all sources are inactive, notify
+     * the operator.
+     */
+    public void sourceDisconnected(VehicleDataSource source) {
+        if(mOperator != null) {
+            boolean connected = false;
+            for(VehicleDataSource s : mSources) {
+                connected = connected || s.isConnected();
+            }
+            mOperator.onPipelineDeactivated();
+        }
+    }
+
+    /**
+     * At least one source is active - notify the operator.
+     */
+    public void sourceConnected(VehicleDataSource source) {
+        if(mOperator != null) {
+            mOperator.onPipelineActivated();
+        }
     }
 
     @Override

@@ -20,6 +20,15 @@ public interface VehicleDataSource {
     public void setCallback(SourceCallback callback);
 
     /**
+     * Return true if the data source is actively connected to its target, be it
+     * a USB endpoint, a Bluetooth channel, a trace file, etc. The source is
+     * capable of providing new vehicle data.
+     *
+     * Returns true if connected, false otherwise.
+     */
+    public boolean isConnected();
+
+    /**
      * Release any acquired resources and either stop sending measurements (if a
      * source) or stop expecting to receive them (if a sink).
      */

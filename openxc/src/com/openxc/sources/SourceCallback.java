@@ -16,4 +16,15 @@ public interface SourceCallback {
      * @param measurement the new measurement.
      */
     public void receive(RawMeasurement measurement);
+
+    /**
+     * The data source is connected, so if necessary, keep the device awake.
+     */
+    public void sourceConnected(VehicleDataSource source);
+
+    /**
+     * The data source is connected, so if necessary, let the device go to
+     * sleep.
+     */
+    public void sourceDisconnected(VehicleDataSource source);
 }

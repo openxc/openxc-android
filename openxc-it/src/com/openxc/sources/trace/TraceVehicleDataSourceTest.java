@@ -1,24 +1,19 @@
 package com.openxc.sources.trace;
 
-import java.lang.InterruptedException;
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import com.openxc.remote.RawMeasurement;
-
-import com.openxc.sources.SourceCallback;
-import com.openxc.sources.DataSourceException;
-
-import com.openxc.TestUtils;
-
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.openxc.R;
-
-import android.test.suitebuilder.annotation.SmallTest;
+import com.openxc.TestUtils;
+import com.openxc.remote.RawMeasurement;
+import com.openxc.sources.DataSourceException;
+import com.openxc.sources.SourceCallback;
+import com.openxc.sources.VehicleDataSource;
 
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
     URI traceUri;
@@ -43,6 +38,10 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
                     receivedNumericalCallback = true;
                 }
             }
+
+            public void sourceDisconnected(VehicleDataSource source) { }
+
+            public void sourceConnected(VehicleDataSource source) { }
         };
     }
 

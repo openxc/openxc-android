@@ -72,10 +72,17 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     @Override
+    public boolean isConnected() {
+        lockConnection();
+        boolean connected = mSocket != null && super.isConnected();
+        unlockConnection();
+        return connected;
+    }
+
+    @Override
     public void stop() {
+        mDeviceManager.stop();
         super.stop();
-        Log.d(TAG, "Stopping Bluetooth interface");
-        disconnect();
     }
 
     @Override
@@ -87,45 +94,52 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     protected int read(byte[] bytes) throws IOException {
-        return mInStream.read(bytes, 0, bytes.length);
+        lockConnection();
+        int bytesRead = 0;
+        if(isConnected()) {
+            bytesRead = mInStream.read(bytes, 0, bytes.length);
+        }
+        unlockConnection();
+        return bytesRead;
     }
 
     protected void disconnect() {
-        if(mSocket == null) {
-            Log.w(TAG, "Unable to disconnect -- not connected");
-            return;
-        }
+        lockConnection();
 
         Log.d(TAG, "Disconnecting from the socket " + mSocket);
         try {
             if(mInStream != null) {
                 mInStream.close();
-                mInStream = null;
             }
         } catch(IOException e) {
             Log.w(TAG, "Unable to close the input stream", e);
+        } finally {
+            mInStream = null;
         }
 
         try {
             if(mOutStream != null) {
                 mOutStream.close();
-                mOutStream = null;
             }
         } catch(IOException e) {
             Log.w(TAG, "Unable to close the output stream", e);
+        } finally {
+            mOutStream = null;
         }
 
-        if(mSocket != null) {
-            try {
+        try {
+            if(mSocket != null) {
                 mSocket.close();
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the socket", e);
             }
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the socket", e);
+        } finally {
+            mSocket = null;
         }
-        mSocket = null;
 
-        disconnected();
         Log.d(TAG, "Disconnected from the socket");
+        disconnected();
+        unlockConnection();
     }
 
     protected String getTag() {
@@ -133,46 +147,57 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     protected void waitForConnection() throws DataSourceException {
-        if(mSocket == null) {
+        if(isRunning()) {
             try {
-                mSocket = mDeviceManager.connect(mAddress);
-                connectStreams();
-                connected();
+                lockConnection();
+                if(!isConnected()) {
+                    mSocket = mDeviceManager.connect(mAddress);
+                    connectStreams();
+                    connected();
+                }
             } catch(BluetoothException e) {
                 String message = "Unable to connect to device at address "
                     + mAddress;
                 Log.w(TAG, message, e);
                 disconnected();
                 throw new DataSourceException(message, e);
+            } finally {
+                unlockConnection();
             }
         }
     }
 
-    private synchronized boolean write(String message) {
-        if(mSocket == null) {
+    private boolean write(String message) {
+        lockConnection();
+        boolean success = false;
+        if(isConnected()) {
+            try {
+                Log.d(TAG, "Writing message to Bluetooth: " + message);
+                mOutStream.write(message);
+                // TODO what if we didn't flush every time? might be faster for
+                // sustained writes.
+                mOutStream.flush();
+                success = true;
+            } catch(IOException e) {
+                Log.d(TAG, "Error writing to stream", e);
+            }
+        } else {
             Log.w(TAG, "Unable to write -- not connected");
-            return false;
         }
-
-        try {
-            Log.d(TAG, "Writing message to Bluetooth: " + message);
-            mOutStream.write(message);
-            // TODO what if we didn't flush every time? might be faster for
-            // sustained writes.
-            mOutStream.flush();
-        } catch(IOException e) {
-            Log.d(TAG, "Error writing to stream", e);
-            return false;
-        }
-        return true;
+        unlockConnection();
+        return success;
     }
 
+    /**
+     * You must have call lockConnection before using this function - this
+     * method is private so we're letting the caller handle it.
+     */
     private void connectStreams() throws BluetoothException {
         try {
             mOutStream = new BufferedWriter(new OutputStreamWriter(
                         mSocket.getOutputStream()));
             mInStream = new BufferedInputStream(mSocket.getInputStream());
-            Log.i(TAG, "Socket stream to CAN translator opened successfully");
+            Log.i(TAG, "Socket stream to vehicle interface opened successfully");
         } catch(IOException e) {
             Log.e(TAG, "Error opening streams ", e);
             mSocket = null;

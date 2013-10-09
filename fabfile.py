@@ -24,6 +24,7 @@ def release():
     local("mvn release:prepare")
     local("mvn release:perform")
     local("mvn package -pl enabler -am")
+    local("mvn package -pl examples -am")
 
     env.release = release_descriptor(env.root_dir)
     upload_release("%(root_dir)s/enabler/target/openxc-enabler.apk" % env,
@@ -37,6 +38,8 @@ def snapshot():
     local("mvn clean deploy -pl openxc -am")
 
 def upload_release(target_file, s3_key):
+    # TODO when GitHub moves the Releases API out of preview, create a new
+    # release and upload the apk
     conn = boto.s3.connection.S3Connection(env.aws_access_key,
             env.aws_secret_key, proxy=env.http_proxy,
             proxy_port=env.http_proxy_port)

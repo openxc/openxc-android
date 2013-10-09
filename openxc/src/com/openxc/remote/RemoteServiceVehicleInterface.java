@@ -28,7 +28,7 @@ public class RemoteServiceVehicleInterface implements VehicleInterface {
     }
 
     public boolean receive(RawMeasurement command) {
-        if(mRemoteService == null) {
+        if(!isConnected()) {
             Log.w(TAG, "Not connected to the VehicleService");
             return false;
         }
@@ -40,6 +40,10 @@ public class RemoteServiceVehicleInterface implements VehicleInterface {
                     e);
             return false;
         }
+    }
+
+    public boolean isConnected() {
+        return mRemoteService != null;
     }
 
     public void stop() { }

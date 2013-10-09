@@ -23,8 +23,8 @@
     <string name="native_gps_checkbox_summary">For vehicles without a GPS receiver, send the host\'s built-in GPS location instead</string>
     <string name="gps_overwrite_checkbox_title">Overwrite Native GPS</string>
     <string name="gps_overwrite_checkbox_summary">Overwrite Android native GPS values with those from the vehicle (if available)</string>
-    <string name="bluetooth_checkbox_title">Use a Bluetooth CAN translator</string>
-    <string name="bluetooth_checkbox_summary">Read vehicle data from a CAN translator connected wirelessly via Bluetooth</string>
+    <string name="bluetooth_checkbox_title">Use a Bluetooth vehicle interface</string>
+    <string name="bluetooth_checkbox_summary">Read vehicle data from a vehicle interface connected wirelessly via Bluetooth</string>
     <string name="bluetooth_mac_title">Bluetooth Device</string>
     <string name="network_settings">Network</string>
     <string name="network_checkbox_title">Use a network device</string>
