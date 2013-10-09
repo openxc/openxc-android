@@ -1,8 +1,13 @@
 package com.openxc.sources;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import android.util.Log;
 
 /**
  * A "mixin" of sorts to be used with object composition, this contains
@@ -10,8 +15,8 @@ import java.util.List;
  */
 public class BytestreamBuffer {
     private final static String TAG = "BytestreamBuffer";
-    private final static int BUFFER_SIZE = 512;
-    private StringBuilder mBuffer = new StringBuilder(BUFFER_SIZE);
+
+    private OutputStream mBuffer = new ByteArrayOutputStream();
     private double mBytesReceived = 0;
     private double mLastLoggedTransferStatsAtByte = 0;
     private final long mStartTime = System.nanoTime();
@@ -24,13 +29,12 @@ public class BytestreamBuffer {
      *      be read from the array.
      */
     public void receive(byte[] bytes, int length) {
-        // Creating a new String object for each message causes the
-        // GC to go a little crazy, but I don't see another obvious way
-        // of converting the byte[] to something the StringBuilder can
-        // accept (either char[] or String). See #151.
-        String data = new String(bytes, 0, length);
-        mBuffer.append(data);
-        mBytesReceived += length;
+        try {
+            mBuffer.write(bytes, 0, length);
+            mBytesReceived += length;
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to buffer fresh bytes", e);
+        }
 
         logTransferStats();
     }
@@ -44,16 +48,22 @@ public class BytestreamBuffer {
      */
     public List<String> readLines() {
         List<String> result;
-        if(mBuffer.indexOf("\n") != -1) {
-            String[] records = mBuffer.toString().split("\n", -1);
+        String bufferedString = mBuffer.toString();
+        if(bufferedString.indexOf("\n") != -1) {
+            String[] records = bufferedString.toString().split("\n", -1);
 
-            mBuffer = new StringBuilder(BUFFER_SIZE);
+            mBuffer = new ByteArrayOutputStream();
             result = Arrays.asList(records).subList(0, records.length - 1);
 
             // Preserve any remaining, trailing incomplete messages in the
             // buffer
             if(records[records.length - 1].length() > 0) {
-                mBuffer.append(records[records.length - 1]);
+                byte[] remainingData = records[records.length - 1].getBytes();
+                try {
+                    mBuffer.write(remainingData, 0, remainingData.length);
+                } catch(IOException e) {
+                    Log.w(TAG, "Unable to preserve remaining data in buffer", e);
+                }
             }
         } else {
             result = new ArrayList<String>();
