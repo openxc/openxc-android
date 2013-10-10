@@ -45,7 +45,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         if(mRunning.compareAndSet(true, false)) {
             Log.d(getTag(), "Stopping " + getTag() + " source");
         }
-        mThread.interrupt();
         disconnect();
     }
 
@@ -55,59 +54,56 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             lockConnection();
 
             try {
-                waitForConnection();
-            } catch(DataSourceException e) {
-                Log.i(getTag(), "Unable to connect to target device -- " +
-                        "sleeping for " + RECONNECTION_ATTEMPT_WAIT_TIME_S +
-                        "s before trying again");
                 try {
-                    Thread.sleep(RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
-                } catch(InterruptedException e2){
+                    waitForConnection();
+                } catch(DataSourceException e) {
+                    Log.i(getTag(), "Unable to connect to target device -- " +
+                            "sleeping for " + RECONNECTION_ATTEMPT_WAIT_TIME_S +
+                            "s before trying again");
+                    try {
+                        Thread.sleep(RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
+                    } catch(InterruptedException e2){
+                        Log.w(getTag(), "Interrupted, stopping the source");
+                        stop();
+                    }
+                    continue;
+                } catch(InterruptedException e) {
                     Log.w(getTag(), "Interrupted, stopping the source");
                     stop();
+                    continue;
                 }
-                unlockConnection();
-                continue;
-            } catch(InterruptedException e) {
-                Log.w(getTag(), "Interrupted, stopping the source");
-                stop();
-                unlockConnection();
-                continue;
-            }
 
-            if(!isConnected()) {
-                unlockConnection();
-                continue;
-            }
+                if(!isConnected()) {
+                    continue;
+                }
 
-            int received;
-            byte[] bytes = new byte[READ_BATCH_SIZE];
-            try {
-                received = read(bytes);
-            } catch(IOException e) {
-                Log.e(getTag(), "Unable to read response", e);
-                unlockConnection();
-                disconnect();
-                continue;
-            }
+                int received;
+                byte[] bytes = new byte[READ_BATCH_SIZE];
+                try {
+                    received = read(bytes);
+                } catch(IOException e) {
+                    Log.e(getTag(), "Unable to read response", e);
+                    disconnect();
+                    continue;
+                }
 
-            if(received > 0) {
-                buffer.receive(bytes, received);
-                if(buffer.containsJson()) {
-                    for(String record : buffer.readLines()) {
-                        handleMessage(record);
-                    }
-                } else {
-                    BinaryMessages.VehicleMessage message = null;
-                    while((message = buffer.readBinaryMessage()) != null) {
-                        handleMessage(message);
+                if(received > 0) {
+                    buffer.receive(bytes, received);
+                    if(buffer.containsJson()) {
+                        for(String record : buffer.readLines()) {
+                            handleMessage(record);
+                        }
+                    } else {
+                        BinaryMessages.VehicleMessage message = null;
+                        while((message = buffer.readBinaryMessage()) != null) {
+                            handleMessage(message);
+                        }
                     }
                 }
+            } finally {
+                unlockConnection();
             }
-
-            unlockConnection();
         }
-        disconnect();
         Log.d(getTag(), "Stopped " + getTag());
     }
 
