@@ -120,8 +120,9 @@ public class BytestreamBuffer {
      * protobuf).
      */
     public boolean containsJson() {
-        return CharMatcher.ASCII.and(CharMatcher.JAVA_ISO_CONTROL.negate()
-                ).matchesAllOf(mBuffer.toString());
+        return CharMatcher.ASCII.and(
+                CharMatcher.JAVA_ISO_CONTROL.and(CharMatcher.WHITESPACE.negate()).negate()
+                    ).matchesAllOf(mBuffer.toString());
     }
 
     private void logTransferStats() {
