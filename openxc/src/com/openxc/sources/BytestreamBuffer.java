@@ -68,6 +68,18 @@ public class BytestreamBuffer {
         return result;
     }
 
+    private static boolean validateProtobuf(BinaryMessages.VehicleMessage message) {
+        return (message.hasTranslatedMessage() || message.hasRawMessage())
+                && ((message.hasTranslatedMessage() &&
+                        message.getTranslatedMessage().hasName() && (
+                            message.getTranslatedMessage().hasNumericalValue() ||
+                            message.getTranslatedMessage().hasStringValue() ||
+                            message.getTranslatedMessage().hasBooleanValue()))
+                || (message.hasRawMessage() &&
+                        message.getRawMessage().hasMessageId() &&
+                        message.getRawMessage().hasData()));
+    }
+
     public BinaryMessages.VehicleMessage readBinaryMessage() {
         // TODO we could move this to a separate thread and use a
         // piped input stream, where it would block on the
@@ -88,13 +100,7 @@ public class BytestreamBuffer {
                 message = BinaryMessages.VehicleMessage.parseFrom(
                         new LimitInputStream(input, size));
 
-                if(message != null && ((!message.hasTranslatedMessage() && !message.hasRawMessage())
-                        || (message.hasTranslatedMessage() && (
-                            !message.getTranslatedMessage().hasName() ||
-                            (!message.getTranslatedMessage().hasNumericalValue() &&
-                            !message.getTranslatedMessage().hasStringValue() &&
-                            !message.getTranslatedMessage().hasBooleanValue())
-                            )))) {
+                if(message != null && !validateProtobuf(message)) {
                     message = null;
                 } else {
                     mBuffer = new ByteArrayOutputStream();
