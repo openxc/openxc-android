@@ -44,6 +44,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             Log.d(getTag(), "Stopping " + getTag() + " source");
         }
         mThread.interrupt();
+        disconnect();
     }
 
     public void run() {
@@ -98,7 +99,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             unlockConnection();
         }
         disconnect();
-        super.stop();
         Log.d(getTag(), "Stopped " + getTag());
     }
 
