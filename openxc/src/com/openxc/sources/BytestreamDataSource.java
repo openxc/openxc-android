@@ -93,8 +93,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
             if(received > 0) {
                 buffer.receive(bytes, received);
-                if(false) {
-                    // JSON
+                if(buffer.containsJson()) {
                     for(String record : buffer.readLines()) {
                         handleMessage(record);
                     }

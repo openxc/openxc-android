@@ -8,11 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
-
+import com.google.common.base.CharMatcher;
 import com.google.common.io.LimitInputStream;
 import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.openxc.BinaryMessages;
 
 /**
@@ -105,12 +103,19 @@ public class BytestreamBuffer {
                         mBuffer.write(remainingByte);
                     }
                 }
-            } catch(IOException e) {
-                // Log.d(TAG, "Unable to parse protobuf", e);
-            }
+            } catch(IOException e) { }
 
         }
         return message;
+    }
+
+    /**
+     * Return true if the buffer *most likely* contains JSON (as opposed to a
+     * protobuf).
+     */
+    public boolean containsJson() {
+        return CharMatcher.ASCII.and(CharMatcher.JAVA_ISO_CONTROL.negate()
+                ).matchesAllOf(mBuffer.toString());
     }
 
     private void logTransferStats() {
