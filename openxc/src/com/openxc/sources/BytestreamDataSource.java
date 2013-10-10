@@ -104,6 +104,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 unlockConnection();
             }
         }
+        disconnect();
         Log.d(getTag(), "Stopped " + getTag());
     }
 
