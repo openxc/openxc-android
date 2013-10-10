@@ -74,11 +74,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         mWakeLocker = new WakeLockManager(this, TAG);
     }
 
-    @Override
-    public void onTrimMemory(int level){
-        Log.d(TAG, "Trim memory level: " + level);
-    }
-
     /**
      * Shut down any associated services when this service is about to die.
      *
@@ -97,7 +92,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        
+
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;
