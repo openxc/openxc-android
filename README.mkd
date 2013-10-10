@@ -13,6 +13,13 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 [usage details](http://openxcplatform.com/android/api-guide.html) and the
 [source code documentation](http://android.openxcplatform.com).
 
+## Setup
+
+The binary message format is defined in a Git submodule, so you must initialize
+it:
+
+    $ git submodule update --init
+
 ## Building from Eclipse
 
 After cloning the `openxc-android` repository to your local disk, open Eclipse
