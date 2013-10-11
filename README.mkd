@@ -20,19 +20,29 @@ it:
 
     $ git submodule update --init
 
+This project also requires a development version of the Paho MQTT library:
+
+    openxc-android $ cd ..
+    $ git clone https://github.com/ndeverge/paho.mqtt.java
+    $ cd paho.mqtt.java
+    paho.mqtt.java/ $ git checkout mavenize
+    paho.mqtt.java/ $ mvn install
+
+
 ## Building from Eclipse
 
-After cloning the `openxc-android` repository to your local disk, open Eclipse
-and go to `File -> New -> Other -> Android -> Android Project from Existing
-Source`. Browse to the `openxc-android` folder and it should detect the 4
-Android projects within the repository. At the minimum, add the `openxc` project
-(the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
-required to run OpenXC applications).
+It's also possible to build this project with Eclipse although it is *not
+recommended* as it is difficult to keep Eclipse's build setup stable.
 
-You can optionally add the `VehicleDashboardActivity` project to see an example
-vehicle dashboard OpenXC application, and also the `openxc-it` project which
-contains a test suite for the library and instrumentation tests that run on the
-device.
+* Install the ADT from Google, which includes Eclipse Juno
+* Install the Maven plugin for Eclipse (Help -> Install new software -> search
+  for Maven), restart Eclipse
+* Select "Import an Existing Maven project", point it at the
+  openxc-android folder and hit import
+    * This should prompt you to install a few more things like the
+      android-maven-eclipse connector.
+* Clean the project, update maven dependences, refresh - do the cycle until it
+  builds cleanly.
 
 ## Building from Command Line
 
@@ -57,20 +67,26 @@ to get it in your local Maven repo:
 
 After satisfying those requirements, the build is pretty simple:
 
-* Run `mvn clean install -pl openxc -am` from the root directory to build the OpenXC
-  library APK only.
+To compile the OpenXC library as an APKLIB and install it to your local
+Maven repository:
+
+    $ mvn install -pl openxc -am
+
+To compile and build and APK for the Enabler app (that uses the OpenXC
+library):
+
+    $ mvn package -pl enabler
+
+Finally, to deploy the packaged APK to an attached Android device and run it:
+
+    $ mvn android:deploy android:run -pl enabler
+
 * Run `mvn clean install -pl openxc,openxc-it -am` from the root directory to build and run
   the library and test suite. This requires that an Android device is attached or an
   emulator is running.
 
 If you want the tests to wait for a debugger to attach, change the `testDebug`
 setting in `openxc-android/pom.xml` to `true`.
-
-After the library is installed (run `mvn clean install -pl openxc`), run this
-to deploy the enabler and examples to an attached device:
-
-    $ mvn clean package android:deploy -pl enabler,examples
-    $ mvn android:run -pl examples
 
 ## Contributing
 
