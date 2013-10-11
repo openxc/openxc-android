@@ -59,6 +59,7 @@ consistently deploy this to the Central Maven repository. You can use teh
 to get it in your local Maven repo:
 
     $ git clone https://github.com/mosabua/maven-android-sdk-deployer
+    $ cd maven-android-sdk-deployer
     $ mvn clean install -N
     $ cd extras
     $ mvn clean install -N
