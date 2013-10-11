@@ -20,14 +20,7 @@ it:
 
     $ git submodule update --init
 
-This project also requires a development version of the Paho MQTT library:
-
-    openxc-android $ cd ..
-    $ git clone https://github.com/ndeverge/paho.mqtt.java
-    $ cd paho.mqtt.java
-    paho.mqtt.java/ $ git checkout mavenize
-    paho.mqtt.java/ $ mvn install
-
+You will also need the Protocol Buffer compiler v2.5.0 or greater.
 
 ## Building from Eclipse
 
