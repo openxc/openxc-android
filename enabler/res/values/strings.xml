@@ -8,6 +8,7 @@
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
     <string name="data_source_preferences">Data Sources</string>
+    <string name="about_preferences">About</string>
     <string name="gps_settings">GPS</string>
     <string name="output_preferences">Output</string>
     <string name="bluetooth_settings">Bluetooth</string>
@@ -38,4 +39,8 @@
     <string name="trace_source_file_summary">Select an existing trace file</string>
     <string name="source_list_label">Data Sources</string>
     <string name="sink_list_label">Data Sinks</string>
+    <string name="about_summary">About OpenXCEnabler</string>
+    <string name="application_version_title">Version</string>
+    <string name="application_version_summary">Version Number</string>
+    <string name="application_version_key">application_version</string>
 </resources>

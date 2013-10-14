@@ -20,4 +20,11 @@
             android:targetClass="com.openxc.enabler.SettingsActivity"
             android:action="com.openxc.enabler.preferences.OUTPUT" />
     </Preference>
+    <Preference 
+        	android:title="@string/about_preferences">
+    	<intent
+    	    android:targetPackage="com.openxc.enabler"
+    	    android:targetClass="com.openxc.enabler.SettingsActivity"
+    	    android:action="com.openxc.enabler.preference.ABOUT" />
+    </Preference>
 </PreferenceScreen>
