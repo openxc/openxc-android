@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">OpenXC Enabler</string>
-    <string name="vehicle_service_status_label">Vehicle Service Status</string>
-    <string name="recording_status_label">Recording Status</string>
-    <string name="message_count_label">Messages Received</string>
+    <string name="status_label">Status</string>
+    <string name="vehicle_service_status_label">Vehicle Service: </string>
+    <string name="recording_status_label">Recording Status: </string>
+    <string name="message_count_label">Messages Received: </string>
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
