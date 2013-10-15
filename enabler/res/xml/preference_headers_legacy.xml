@@ -25,6 +25,6 @@
     	<intent
     	    android:targetPackage="com.openxc.enabler"
     	    android:targetClass="com.openxc.enabler.SettingsActivity"
-    	    android:action="com.openxc.enabler.preference.ABOUT" />
+    	    android:action="com.openxc.enabler.preferences.ABOUT" />
     </Preference>
 </PreferenceScreen>

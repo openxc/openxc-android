@@ -57,6 +57,7 @@ public class SettingsActivity extends PreferenceActivity {
     private CheckBoxPreference mNetworkSourcePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
+    private Preference mAboutVersionPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -90,11 +91,10 @@ public class SettingsActivity extends PreferenceActivity {
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             } else if(action.equals(ABOUT_PREFERENCE)) {
+            	addPreferencesFromResource(R.xml.about_preferences);
             	
             	initializeAboutPreferences(
         			findPreference(getString(R.string.application_version_key)));
-            	
-            	addPreferencesFromResource(R.xml.about_preferences);
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
@@ -282,15 +282,19 @@ public class SettingsActivity extends PreferenceActivity {
                         R.string.network_port_key), null));
     }
     
-    protected void initializeAboutPreferences(Preference aboutVersionPreference){
+    protected void initializeAboutPreferences(
+    		Preference aboutVersionPreference){
     	try {
-			String versionNumber = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+    		mAboutVersionPreference = aboutVersionPreference;
+    		
+			String versionNumber = getPackageManager().getPackageInfo(
+				getPackageName(), 0).versionName;
 			
-			updateSummary(aboutVersionPreference,
+			updateSummary(mAboutVersionPreference,
 					versionNumber);
 			
 		} catch (NameNotFoundException e) {
-			Log.e(TAG, "Could not get application version. Package name not found.", e);
+			Log.e(TAG, "Could not get application version.", e);
 		}
     }
 
