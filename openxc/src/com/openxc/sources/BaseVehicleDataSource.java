@@ -78,6 +78,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * updates when killed by a user.
      */
     public void stop() {
+        disconnected();
         setCallback(null);
     }
 

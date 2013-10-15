@@ -7,7 +7,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -74,11 +73,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         mWakeLocker = new WakeLockManager(this, TAG);
     }
 
-    @Override
-    public void onTrimMemory(int level){
-        Log.d(TAG, "Trim memory level: " + level);
-    }
-
     /**
      * Shut down any associated services when this service is about to die.
      *
@@ -97,7 +91,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service binding in response to " + intent);
-        
+
         initializeDefaultSources();
         initializeDefaultSinks(mPipeline);
         return mBinder;

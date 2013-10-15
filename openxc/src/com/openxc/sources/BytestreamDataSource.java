@@ -1,6 +1,7 @@
 package com.openxc.sources;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -16,8 +17,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
-    private boolean mRunning = false;
+    private static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
+
+    private AtomicBoolean mRunning = new AtomicBoolean(false);
     private final Lock mConnectionLock = new ReentrantLock();
+    private Thread mThread;
     protected final Condition mDeviceChanged = mConnectionLock.newCondition();
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
@@ -28,77 +32,86 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         this(null, context);
     }
 
-    public synchronized void start() {
-        if(!mRunning) {
-            mRunning = true;
-            new Thread(this).start();
+    public void start() {
+        if(mRunning.compareAndSet(false, true)) {
+            mThread = new Thread(this);
+            mThread.start();
         }
     }
 
-    @Override
-    public boolean isConnected() {
-        return mRunning;
-    }
-
-    public synchronized void stop() {
+    public void stop() {
+        if(mRunning.compareAndSet(true, false)) {
+            Log.d(getTag(), "Stopping " + getTag() + " source");
+        }
         disconnect();
-        super.stop();
-        if(!mRunning) {
-            Log.d(getTag(), "Already stopped.");
-            return;
-        }
-        Log.d(getTag(), "Stopping " + getTag() + " source");
-        mRunning = false;
     }
 
     public void run() {
         BytestreamBuffer buffer = new BytestreamBuffer();
-        while(mRunning) {
-            mConnectionLock.lock();
+        while(isRunning()) {
+            lockConnection();
 
             try {
-                waitForConnection();
-            } catch(DataSourceException e) {
-                Log.i(getTag(), "Unable to connect to target device -- " +
-                        "sleeping for awhile before trying again");
                 try {
-                    Thread.sleep(5000);
-                } catch(InterruptedException e2){
+                    waitForConnection();
+                } catch(DataSourceException e) {
+                    Log.i(getTag(), "Unable to connect to target device -- " +
+                            "sleeping for " + RECONNECTION_ATTEMPT_WAIT_TIME_S +
+                            "s before trying again");
+                    try {
+                        Thread.sleep(RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
+                    } catch(InterruptedException e2){
+                        Log.w(getTag(), "Interrupted, stopping the source");
+                        stop();
+                    }
+                    continue;
+                } catch(InterruptedException e) {
+                    Log.w(getTag(), "Interrupted, stopping the source");
                     stop();
+                    continue;
                 }
-                mConnectionLock.unlock();
-                continue;
-            } catch(InterruptedException e) {
-                stop();
-                mConnectionLock.unlock();
-                continue;
-            }
 
-            int received;
-            byte[] bytes = new byte[READ_BATCH_SIZE];
-            try {
-                received = read(bytes);
-            } catch(IOException e) {
-                Log.e(getTag(), "Unable to read response", e);
-                mConnectionLock.unlock();
-                disconnect();
-                continue;
-            }
-
-            if(received > 0) {
-                buffer.receive(bytes, received);
-                for(String record : buffer.readLines()) {
-                    handleMessage(record);
+                if(!isConnected()) {
+                    continue;
                 }
-            }
 
-            mConnectionLock.unlock();
+                int received;
+                byte[] bytes = new byte[READ_BATCH_SIZE];
+                try {
+                    received = read(bytes);
+                } catch(IOException e) {
+                    Log.e(getTag(), "Unable to read response", e);
+                    disconnect();
+                    continue;
+                }
+
+                if(received > 0) {
+                    buffer.receive(bytes, received);
+                    for(String record : buffer.readLines()) {
+                        handleMessage(record);
+                    }
+                }
+            } finally {
+                unlockConnection();
+            }
         }
+        disconnect();
         Log.d(getTag(), "Stopped " + getTag());
     }
 
+    @Override
+    public boolean isConnected() {
+        return isRunning();
+    }
+
+    /**
+     * Returns true if this source should be running, or if it should die.
+     *
+     * This is different than isConnected - they just happen to return the same
+     * thing in this base data source.
+     */
     protected boolean isRunning() {
-        return mRunning;
+        return mRunning.get();
     }
 
     protected void lockConnection() {
@@ -107,10 +120,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     protected void unlockConnection() {
         mConnectionLock.unlock();
-    }
-
-    protected Condition createCondition() {
-        return mConnectionLock.newCondition();
     }
 
     /**
@@ -135,7 +144,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      * @throws InterruptedException if the interrupted while blocked -- probably
      *      shutting down.
      */
-    protected abstract void waitForConnection() throws DataSourceException, InterruptedException;
+    protected abstract void waitForConnection() throws DataSourceException,
+              InterruptedException;
 
     /**
      * Perform any cleanup necessary to disconnect from the interface.

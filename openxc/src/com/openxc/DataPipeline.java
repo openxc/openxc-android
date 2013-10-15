@@ -195,7 +195,9 @@ public class DataPipeline implements SourceCallback {
         if(mOperator != null) {
             boolean connected = false;
             for(VehicleDataSource s : mSources) {
-                connected = connected || s.isConnected();
+                if(s != source) {
+                    connected = connected || s.isConnected();
+                }
             }
             mOperator.onPipelineDeactivated();
         }

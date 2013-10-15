@@ -156,7 +156,11 @@ public class UsbVehicleInterface extends BytestreamDataSource
     @Override
     public void stop() {
         super.stop();
-        getContext().unregisterReceiver(mBroadcastReceiver);
+        try {
+            getContext().unregisterReceiver(mBroadcastReceiver);
+        } catch(IllegalArgumentException e) {
+            Log.d(TAG, "Unable to unregster receiver when stopping, probably not registered");
+        }
     }
 
     public boolean receive(RawMeasurement command) {
