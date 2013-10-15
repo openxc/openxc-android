@@ -63,6 +63,12 @@ public class DataPipeline implements SourceCallback {
         if(measurement == null) {
             return;
         }
+
+        if(measurement.getName() == null) {
+            Log.d(TAG, "Measurement's name was null - that shouldn't have made it this far");
+            return;
+        }
+
         mMeasurements.put(measurement.getName(), measurement);
         List<VehicleDataSink> deadSinks = new ArrayList<VehicleDataSink>();
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
