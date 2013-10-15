@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -44,6 +45,8 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.DATA_SOURCE";
     private final static String OUTPUT_PREFERENCE =
             "com.openxc.enabler.preferences.OUTPUT";
+    private final static String ABOUT_PREFERENCE =
+    		"com.openxc.enabler.preferences.ABOUT";
     private final static int FILE_SELECTOR_RESULT = 100;
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -54,6 +57,7 @@ public class SettingsActivity extends PreferenceActivity {
     private CheckBoxPreference mNetworkSourcePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
+    private Preference mAboutVersionPreference;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -86,6 +90,11 @@ public class SettingsActivity extends PreferenceActivity {
                     findPreference(getString(R.string.network_checkbox_key)));
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
+            } else if(action.equals(ABOUT_PREFERENCE)) {
+            	addPreferencesFromResource(R.xml.about_preferences);
+            	
+            	initializeAboutPreferences(
+        			findPreference(getString(R.string.application_version_key)));
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
@@ -156,6 +165,17 @@ public class SettingsActivity extends PreferenceActivity {
                 findPreference(getString(R.string.trace_source_checkbox_key)),
                 findPreference(getString(R.string.trace_source_file_key)));
         }
+    }
+    
+    public static class AboutPreferences extends PreferenceFragment {
+    	@Override
+    	public void onCreate(Bundle savedInstanceState){
+    		super.onCreate(savedInstanceState);
+    		addPreferencesFromResource(R.xml.about_preferences);
+    		
+    		 ((SettingsActivity)getActivity()).initializeAboutPreferences(
+    				 findPreference(getString(R.string.application_version_key)));
+    	}
     }
 
     protected void initializeTracePreferences(Preference traceEnabledPreference,
@@ -260,6 +280,22 @@ public class SettingsActivity extends PreferenceActivity {
         updateSummary(mNetworkPortPreference,
                 preferences.getString(getString(
                         R.string.network_port_key), null));
+    }
+    
+    protected void initializeAboutPreferences(
+    		Preference aboutVersionPreference){
+    	try {
+    		mAboutVersionPreference = aboutVersionPreference;
+    		
+			String versionNumber = getPackageManager().getPackageInfo(
+				getPackageName(), 0).versionName;
+			
+			updateSummary(mAboutVersionPreference,
+					versionNumber);
+			
+		} catch (NameNotFoundException e) {
+			Log.e(TAG, "Could not get application version.", e);
+		}
     }
 
     private void fillBluetoothDeviceList(final ListPreference preference) {

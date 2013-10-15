@@ -7,4 +7,6 @@
             android:title="@string/data_source_preferences" />
     <header android:fragment="com.openxc.enabler.SettingsActivity$OutputPreferences"
             android:title="@string/output_preferences" />
+    <header android:fragment="com.openxc.enabler.SettingsActivity$AboutPreferences"
+        	android:title="@string/about_preferences"/>
 </preference-headers>
