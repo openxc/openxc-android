@@ -28,7 +28,7 @@ public class MessageCountTask extends TimerTask {
             messageCount = 0;
         }
 
-        final String messageText = messageCount + " messages";
+        final String messageText = Integer.toString(messageCount);
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mMessageCountView.setText(messageText);
