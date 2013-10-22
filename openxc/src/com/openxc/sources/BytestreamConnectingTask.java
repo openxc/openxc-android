@@ -13,7 +13,7 @@ public class BytestreamConnectingTask extends TimerTask {
 
     public BytestreamConnectingTask(BytestreamDataSource source) {
         mSource = source;
-        mTimer.schedule(this, RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
+        mTimer.schedule(this, 0, RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
     }
 
     public void run() {
@@ -25,14 +25,12 @@ public class BytestreamConnectingTask extends TimerTask {
             mSource.connect();
         } catch(DataSourceException e) {
             Log.i(mSource.toString(), "Unable to connect to source, trying again in " +
-                    RECONNECTION_ATTEMPT_WAIT_TIME_S + "s", e);
+                    RECONNECTION_ATTEMPT_WAIT_TIME_S + "s");
+            Log.d(mSource.toString(), "Unable to connect because of exception", e);
         }
 
-        if(!mSource.isConnected()) {
-            mTimer.schedule(this, RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
-        } else {
+        if(mSource.isConnected()) {
             mTimer.cancel();
-            mTimer = new Timer();
         }
     }
 }

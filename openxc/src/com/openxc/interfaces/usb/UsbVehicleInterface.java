@@ -138,7 +138,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         initializeDevice();
-        primeOutput();
     }
 
     @Override
@@ -346,15 +345,12 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
-    protected void connect() throws DataSourceException {
-        // TODO this isn't really applicable for the USB interface - it gets a
-        // callback from Android when a new device is attached, we don't have to
-        // poll for devices. maybe we need a...brace for
-        // it...PollingBytestreamDataSource class or some sort of mixin.
-        try {
-            waitForConnection();
-        } catch(InterruptedException e) { }
+    protected void connected() {
+        super.connected();
+        primeOutput();
     }
+
+    protected void connect() throws DataSourceException { }
 
     protected void disconnect() {
         if(mConnection != null) {
@@ -366,8 +362,8 @@ public class UsbVehicleInterface extends BytestreamDataSource
             mInEndpoint = null;
             mOutEndpoint = null;
             mInterface = null;
-            unlockConnection();
             disconnected();
+            unlockConnection();
         }
     }
 

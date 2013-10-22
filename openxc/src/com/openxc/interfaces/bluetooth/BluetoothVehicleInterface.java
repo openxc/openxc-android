@@ -12,6 +12,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
+import com.openxc.sources.BytestreamConnectingTask;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
@@ -36,6 +37,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
+    private BytestreamConnectingTask mConnectionCheckTask;
 
     public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {
@@ -63,9 +65,14 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     public boolean setResource(String otherAddress) throws DataSourceException {
         if(!sameResource(mAddress, otherAddress)) {
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                }
+            } catch(IOException e) {
+            }
+
             setAddress(otherAddress);
-            stop();
-            start();
             return true;
         }
         return false;
@@ -115,7 +122,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
-
     protected int read(byte[] bytes) throws IOException {
         lockConnection();
         int bytesRead = 0;
@@ -153,39 +159,43 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     // for the lock if BT is going down
     protected void disconnect() {
         try {
-            if(mInStream != null) {
-                mInStream.close();
-                Log.d(TAG, "Disconnected from the input stream");
+            lockConnection();
+            try {
+                if(mInStream != null) {
+                    mInStream.close();
+                    Log.d(TAG, "Disconnected from the input stream");
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the input stream", e);
+            } finally {
+                mInStream = null;
             }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the input stream", e);
-        } finally {
-            mInStream = null;
-        }
 
-        try {
-            if(mOutStream != null) {
-                mOutStream.close();
-                Log.d(TAG, "Disconnected from the output stream");
+            try {
+                if(mOutStream != null) {
+                    mOutStream.close();
+                    Log.d(TAG, "Disconnected from the output stream");
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the output stream", e);
+            } finally {
+                mOutStream = null;
             }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the output stream", e);
-        } finally {
-            mOutStream = null;
-        }
 
-        try {
-            if(mSocket != null) {
-                mSocket.close();
-                Log.d(TAG, "Disconnected from the socket");
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                    Log.d(TAG, "Disconnected from the socket");
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the socket", e);
+            } finally {
+                mSocket = null;
             }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the socket", e);
+            disconnected();
         } finally {
-            mSocket = null;
+            unlockConnection();
         }
-
-        disconnected();
     }
 
     protected String getTag() {

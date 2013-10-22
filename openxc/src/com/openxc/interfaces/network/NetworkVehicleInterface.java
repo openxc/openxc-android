@@ -14,6 +14,7 @@ import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
+import com.openxc.sources.BytestreamConnectingTask;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -120,6 +121,10 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         int bytesRead = 0;
         if(isConnected()) {
             bytesRead = mInStream.read(bytes, 0, bytes.length);
+            if(bytesRead == -1) {
+                Log.i(TAG, "Lost connection to network server");
+                disconnect();
+            }
         }
         unlockConnection();
         return bytesRead;
@@ -162,26 +167,39 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             return;
         }
 
-        Log.d(TAG, "Disconnecting from the socket " + mSocket);
+        lockConnection();
         try {
-            if(mInStream != null) {
-                mInStream.close();
-                mInStream = null;
+            Log.d(TAG, "Disconnecting from the socket " + mSocket);
+            try {
+                if(mInStream != null) {
+                    mInStream.close();
+                    mInStream = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the input stream", e);
             }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the input stream", e);
-        }
 
-        try {
-            if(mOutStream != null) {
-                mOutStream.close();
-                mOutStream = null;
+            try {
+                if(mOutStream != null) {
+                    mOutStream.close();
+                    mOutStream = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the output stream", e);
             }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the output stream", e);
-        }
 
-        disconnected();
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                    mSocket = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the socket", e);
+            }
+            disconnected();
+        } finally {
+            unlockConnection();
+        }
         Log.d(TAG, "Disconnected from the socket");
     }
 

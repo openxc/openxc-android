@@ -22,6 +22,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private final Lock mConnectionLock = new ReentrantLock();
     private final Condition mDeviceChanged = mConnectionLock.newCondition();
     private Thread mThread;
+    private BytestreamConnectingTask mConnectionCheckTask;
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
@@ -33,6 +34,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     public void start() {
         if(mRunning.compareAndSet(false, true)) {
+            Log.d(getTag(), "Starting " + getTag() + " source");
             mThread = new Thread(this);
             mThread.start();
         }
@@ -52,18 +54,22 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      * You must have the mConnectionLock locked before calling this
      * function.
      *
-     *
      * @throws DataSourceException The connection is still alive, but it
      *      returned an unexpected result that cannot be handled.
      * @throws InterruptedException if the interrupted while blocked -- probably
      *      shutting down.
      */
     protected void waitForConnection() throws InterruptedException {
-        new BytestreamConnectingTask(this);
+        if(!isConnected() && mConnectionCheckTask == null) {
+            mConnectionCheckTask = new BytestreamConnectingTask(this);
+        }
+
         while(isRunning() && !isConnected()) {
             Log.d(getTag(), "Still no device available");
             mDeviceChanged.await();
         }
+
+        mConnectionCheckTask = null;
     }
 
     public void run() {
@@ -72,34 +78,35 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             try {
                 mConnectionLock.lockInterruptibly();
                 try {
-                    waitForConnection();
-                } catch(InterruptedException e) {
-                    Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
-                    stop();
-                    break;
-                }
-
-                int received;
-                byte[] bytes = new byte[READ_BATCH_SIZE];
-                try {
-                    received = read(bytes);
-                } catch(IOException e) {
-                    Log.e(getTag(), "Unable to read response", e);
-                    disconnect();
-                    continue;
-                }
-
-                if(received > 0) {
-                    buffer.receive(bytes, received);
-                    for(String record : buffer.readLines()) {
-                        handleMessage(record);
+                    try {
+                        waitForConnection();
+                    } catch(InterruptedException e) {
+                        Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
+                        stop();
+                        break;
                     }
+
+                    int received;
+                    byte[] bytes = new byte[READ_BATCH_SIZE];
+                    try {
+                        received = read(bytes);
+                    } catch(IOException e) {
+                        Log.e(getTag(), "Unable to read response", e);
+                        disconnect();
+                        continue;
+                    }
+
+                    if(received > 0) {
+                        buffer.receive(bytes, received);
+                        for(String record : buffer.readLines()) {
+                            handleMessage(record);
+                        }
+                    }
+                } finally {
+                    unlockConnection();
                 }
             } catch(InterruptedException e) {
                 Log.i(getTag(), "Interrupted");
-
-            } finally {
-                unlockConnection();
             }
         }
         disconnect();
@@ -111,11 +118,17 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         return isRunning();
     }
 
+    /**
+     * Must have the connection lock before calling this function
+     */
     protected void disconnected() {
         mDeviceChanged.signal();
         super.disconnected();
     }
 
+    /**
+     * Must have the connection lock before calling this function
+     */
     protected void connected() {
         mDeviceChanged.signal();
         super.connected();
