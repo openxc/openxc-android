@@ -65,14 +65,13 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     public boolean setResource(String otherAddress) throws DataSourceException {
         if(!sameResource(mAddress, otherAddress)) {
+            setAddress(otherAddress);
             try {
                 if(mSocket != null) {
                     mSocket.close();
                 }
             } catch(IOException e) {
             }
-
-            setAddress(otherAddress);
             return true;
         }
         return false;

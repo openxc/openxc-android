@@ -78,8 +78,12 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         if(!UriBasedVehicleInterfaceMixin.sameResource(mUri,
                 massageUri(otherResource))) {
             setUri(otherResource);
-            stop();
-            start();
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                }
+            } catch(IOException e) {
+            }
             return true;
         }
         return false;
