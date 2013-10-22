@@ -58,7 +58,9 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                             "sleeping for " + RECONNECTION_ATTEMPT_WAIT_TIME_S +
                             "s before trying again");
                     try {
+                        unlockConnection();
                         Thread.sleep(RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
+                        lockConnection();
                     } catch(InterruptedException e2){
                         Log.w(getTag(), "Interrupted, stopping the source");
                         stop();
