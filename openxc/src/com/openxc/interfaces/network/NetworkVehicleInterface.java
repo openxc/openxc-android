@@ -113,8 +113,22 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return write(bytes);
     }
 
+    @Override
+    public boolean isConnected() {
+        lockConnection();
+        boolean connected = mSocket != null && mSocket.isConnected() && super.isConnected();
+        unlockConnection();
+        return connected;
+    }
+
     protected int read(byte[] bytes) throws IOException {
-        return mInStream.read(bytes, 0, bytes.length);
+        lockConnection();
+        int bytesRead = 0;
+        if(isConnected()) {
+            bytesRead = mInStream.read(bytes, 0, bytes.length);
+        }
+        unlockConnection();
+        return bytesRead;
     }
 
     protected String getTag() {
@@ -122,7 +136,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     }
 
     protected void disconnect() {
-        if(mSocket == null) {
+        if(!isConnected()) {
             return;
         }
 
@@ -150,11 +164,22 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     }
 
     protected void waitForConnection() throws DataSourceException {
-        if(mSocket == null) {
-            mSocket = new Socket();
+        if(isRunning()) {
+            lockConnection();
             try {
-                mSocket.connect(new InetSocketAddress(mUri.getHost(),
-                            mUri.getPort()), SOCKET_TIMEOUT);
+                if(!isConnected()) {
+                    mSocket = new Socket();
+                    mSocket.connect(new InetSocketAddress(mUri.getHost(),
+                                mUri.getPort()), SOCKET_TIMEOUT);
+                    if(!isConnected()) {
+                        disconnect();
+                        throw new NetworkSourceException(
+                                "Could not connect to server");
+                    } else {
+                        connected();
+                        connectStreams();
+                    }
+                }
             } catch(IOException e) {
                 String message = "Error opening streams";
                 Log.e(TAG, message, e);
@@ -165,15 +190,9 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                 Log.e(TAG, message, e);
                 disconnect();
                 throw new NetworkSourceException(message, e);
+            } finally {
+                unlockConnection();
             }
-
-            if(!mSocket.isConnected()) {
-                disconnect();
-                throw new NetworkSourceException("Could not connect to server!");
-            }
-
-            connected();
-            connectStreams();
         }
     }
 
@@ -184,21 +203,29 @@ public class NetworkVehicleInterface extends BytestreamDataSource
      * @return true if the data was written successfully.
      */
     private synchronized boolean write(byte[] bytes) {
-        if(mSocket != null && mSocket.isConnected()) {
-            Log.d(TAG, "Writing bytes to socket: " + bytes);
-            try {
+        lockConnection();
+        boolean success = true;
+        try {
+            if(isConnected()) {
+                Log.d(TAG, "Writing bytes to socket: " + bytes);
                 mOutStream.write(bytes);
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
-                return false;
+            } else {
+                Log.w(TAG, "No connection established, could not send anything.");
+                success = false;
             }
-        } else {
-            Log.w(TAG, "No connection established, could not send anything.");
-            return false;
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
+            success = false;
+        } finally {
+            unlockConnection();
         }
-        return true;
+        return success;
     }
 
+    /**
+     * You must have call lockConnection before using this function - this
+     * method is private so we're letting the caller handle it.
+     */
     private void connectStreams() throws NetworkSourceException {
         try {
             mInStream = mSocket.getInputStream();

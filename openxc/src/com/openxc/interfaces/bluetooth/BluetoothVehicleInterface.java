@@ -173,19 +173,17 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         boolean success = false;
         try {
             if(isConnected()) {
-                try {
-                    Log.d(TAG, "Writing message to Bluetooth: " + message);
-                    mOutStream.write(message);
-                    // TODO what if we didn't flush every time? might be faster for
-                    // sustained writes.
-                    mOutStream.flush();
-                    success = true;
-                } catch(IOException e) {
-                    Log.d(TAG, "Error writing to stream", e);
-                }
+                Log.d(TAG, "Writing message to Bluetooth: " + message);
+                mOutStream.write(message);
+                // TODO what if we didn't flush every time? might be faster for
+                // sustained writes.
+                mOutStream.flush();
+                success = true;
             } else {
                 Log.w(TAG, "Unable to write -- not connected");
             }
+        } catch(IOException e) {
+            Log.d(TAG, "Error writing to stream", e);
         } finally {
             unlockConnection();
         }
