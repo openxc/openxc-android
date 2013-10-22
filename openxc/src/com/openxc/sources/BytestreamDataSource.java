@@ -50,7 +50,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         BytestreamBuffer buffer = new BytestreamBuffer();
         while(isRunning()) {
             lockConnection();
-
             try {
                 try {
                     waitForConnection();

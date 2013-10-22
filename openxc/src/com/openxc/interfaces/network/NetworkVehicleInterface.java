@@ -84,12 +84,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return false;
     }
 
-    @Override
-    public void stop() {
-        super.stop();
-        disconnect();
-    }
-
     /**
      * Return true if the address and port are valid.
      *
