@@ -17,12 +17,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
-    private static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
 
     private AtomicBoolean mRunning = new AtomicBoolean(false);
     private final Lock mConnectionLock = new ReentrantLock();
+    private final Condition mDeviceChanged = mConnectionLock.newCondition();
     private Thread mThread;
-    protected final Condition mDeviceChanged = mConnectionLock.newCondition();
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
@@ -42,38 +41,42 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     public void stop() {
         if(mRunning.compareAndSet(true, false)) {
             Log.d(getTag(), "Stopping " + getTag() + " source");
+            mThread.interrupt();
         }
-        disconnect();
+    }
+
+    /**
+     * If not already connected to the data source, initiate the connection and
+     * block until ready to be read.
+     *
+     * You must have the mConnectionLock locked before calling this
+     * function.
+     *
+     *
+     * @throws DataSourceException The connection is still alive, but it
+     *      returned an unexpected result that cannot be handled.
+     * @throws InterruptedException if the interrupted while blocked -- probably
+     *      shutting down.
+     */
+    protected void waitForConnection() throws InterruptedException {
+        new BytestreamConnectingTask(this);
+        while(isRunning() && !isConnected()) {
+            Log.d(getTag(), "Still no device available");
+            mDeviceChanged.await();
+        }
     }
 
     public void run() {
         BytestreamBuffer buffer = new BytestreamBuffer();
         while(isRunning()) {
-            lockConnection();
             try {
+                mConnectionLock.lockInterruptibly();
                 try {
                     waitForConnection();
-                } catch(DataSourceException e) {
-                    Log.i(getTag(), "Unable to connect to target device -- " +
-                            "sleeping for " + RECONNECTION_ATTEMPT_WAIT_TIME_S +
-                            "s before trying again");
-                    try {
-                        unlockConnection();
-                        Thread.sleep(RECONNECTION_ATTEMPT_WAIT_TIME_S * 1000);
-                        lockConnection();
-                    } catch(InterruptedException e2){
-                        Log.w(getTag(), "Interrupted, stopping the source");
-                        stop();
-                    }
-                    continue;
                 } catch(InterruptedException e) {
-                    Log.w(getTag(), "Interrupted, stopping the source");
+                    Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
                     stop();
-                    continue;
-                }
-
-                if(!isConnected()) {
-                    continue;
+                    break;
                 }
 
                 int received;
@@ -92,6 +95,9 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                         handleMessage(record);
                     }
                 }
+            } catch(InterruptedException e) {
+                Log.i(getTag(), "Interrupted");
+
             } finally {
                 unlockConnection();
             }
@@ -103,6 +109,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     @Override
     public boolean isConnected() {
         return isRunning();
+    }
+
+    protected void disconnected() {
+        mDeviceChanged.signal();
+        super.disconnected();
+    }
+
+    protected void connected() {
+        mDeviceChanged.signal();
+        super.connected();
     }
 
     /**
@@ -137,19 +153,10 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     protected abstract int read(byte[] bytes) throws IOException;
 
     /**
-     * If not already connected to the data source, initiate the connection and
-     * block until ready to be read.
-     *
-     * @throws DataSourceException The connection is still alive, but it
-     *      returned an unexpected result that cannot be handled.
-     * @throws InterruptedException if the interrupted while blocked -- probably
-     *      shutting down.
-     */
-    protected abstract void waitForConnection() throws DataSourceException,
-              InterruptedException;
-
-    /**
      * Perform any cleanup necessary to disconnect from the interface.
      */
     protected abstract void disconnect();
+
+    /** Initiate a connection to the vehicle interface. */
+    protected abstract void connect() throws DataSourceException;
 };

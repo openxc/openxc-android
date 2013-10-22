@@ -201,16 +201,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return TAG;
     }
 
-    /* You must have the mConnectionLock locked before calling this
-     * function.
-     */
-    protected void waitForConnection() throws InterruptedException {
-        while(isRunning() && mConnection == null) {
-            Log.d(TAG, "Still no device available");
-            mDeviceChanged.await();
-        }
-    }
-
     private void initializeDevice() {
         try {
             connectToDevice(mManager, mDeviceUri);
@@ -349,7 +339,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
-                mDeviceChanged.signal();
                 unlockConnection();
             }
         } else {
@@ -357,12 +346,21 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
+    protected void connect() throws DataSourceException {
+        // TODO this isn't really applicable for the USB interface - it gets a
+        // callback from Android when a new device is attached, we don't have to
+        // poll for devices. maybe we need a...brace for
+        // it...PollingBytestreamDataSource class or some sort of mixin.
+        try {
+            waitForConnection();
+        } catch(InterruptedException e) { }
+    }
+
     protected void disconnect() {
         if(mConnection != null) {
             Log.d(TAG, "Closing connection " + mConnection +
                     " with USB device");
             lockConnection();
-            mDeviceChanged.signal();
             mConnection.close();
             mConnection = null;
             mInEndpoint = null;

@@ -125,8 +125,36 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
-    protected String getTag() {
-        return TAG;
+    protected void connect() throws NetworkSourceException {
+        if(!isRunning()) {
+            return;
+        }
+
+        lockConnection();
+        try {
+            mSocket = new Socket();
+            mSocket.connect(new InetSocketAddress(mUri.getHost(),
+                        mUri.getPort()), SOCKET_TIMEOUT);
+            if(!isConnected()) {
+                Log.d(TAG, "Could not connect to server");
+                disconnected();
+            } else {
+                connected();
+                connectStreams();
+            }
+        } catch(IOException e) {
+            String message = "Error opening streams";
+            Log.e(TAG, message, e);
+            disconnect();
+            throw new NetworkSourceException(message, e);
+        } catch(AssertionError e) {
+            String message = "Error opening streams";
+            Log.e(TAG, message, e);
+            disconnect();
+            throw new NetworkSourceException(message, e);
+        } finally {
+            unlockConnection();
+        }
     }
 
     protected void disconnect() {
@@ -157,39 +185,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         Log.d(TAG, "Disconnected from the socket");
     }
 
-    protected void waitForConnection() throws DataSourceException {
-        if(isRunning()) {
-            lockConnection();
-            try {
-                if(!isConnected()) {
-                    mSocket = new Socket();
-                    mSocket.connect(new InetSocketAddress(mUri.getHost(),
-                                mUri.getPort()), SOCKET_TIMEOUT);
-                    if(!isConnected()) {
-                        disconnect();
-                        throw new NetworkSourceException(
-                                "Could not connect to server");
-                    } else {
-                        connected();
-                        connectStreams();
-                    }
-                }
-            } catch(IOException e) {
-                String message = "Error opening streams";
-                Log.e(TAG, message, e);
-                disconnect();
-                throw new NetworkSourceException(message, e);
-            } catch(AssertionError e) {
-                String message = "Error opening streams";
-                Log.e(TAG, message, e);
-                disconnect();
-                throw new NetworkSourceException(message, e);
-            } finally {
-                unlockConnection();
-            }
-        }
-    }
-
     /**
      * Writes given data to the socket.
      *
@@ -214,6 +209,10 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             unlockConnection();
         }
         return success;
+    }
+
+    protected String getTag() {
+        return TAG;
     }
 
     /**
