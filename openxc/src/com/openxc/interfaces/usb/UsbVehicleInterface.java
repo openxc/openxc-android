@@ -163,10 +163,13 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     public boolean receive(RawMeasurement command) {
-        String message = command.serialize() + "\u0000";
-        Log.d(TAG, "Writing string to USB: " + message);
-        byte[] bytes = message.getBytes();
-        return write(bytes);
+        if(isConnected()) {
+            String message = command.serialize() + "\u0000";
+            Log.d(TAG, "Writing string to USB: " + message);
+            byte[] bytes = message.getBytes();
+            return write(bytes);
+        }
+        return false;
     }
 
     public boolean setResource(String otherUri) throws DataSourceException {
