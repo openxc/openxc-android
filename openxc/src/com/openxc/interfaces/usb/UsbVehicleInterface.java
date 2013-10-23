@@ -210,18 +210,22 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     private boolean write(byte[] bytes) {
-        if(mConnection != null && mOutEndpoint != null) {
-            Log.d(TAG, "Writing bytes to USB: " + bytes);
-            int transferred = mConnection.bulkTransfer(
-                    mOutEndpoint, bytes, bytes.length, 0);
-            if(transferred < 0) {
-                Log.w(TAG, "Unable to write CAN message to USB endpoint, error "
-                        + transferred);
+        if(mConnection != null) {
+            if(mOutEndpoint != null) {
+                Log.d(TAG, "Writing bytes to USB: " + bytes);
+                int transferred = mConnection.bulkTransfer(
+                        mOutEndpoint, bytes, bytes.length, 0);
+                if(transferred < 0) {
+                    Log.w(TAG, "Unable to write CAN message to USB endpoint, error "
+                            + transferred);
+                    return false;
+                }
+            } else {
+                Log.w(TAG, "No OUT endpoint available on USB device, " +
+                        "can't send write command");
                 return false;
             }
         } else {
-            Log.w(TAG, "No OUT endpoint available on USB device, " +
-                    "can't send write command");
             return false;
         }
         return true;
