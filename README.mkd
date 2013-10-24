@@ -13,29 +13,19 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 [usage details](http://openxcplatform.com/android/api-guide.html) and the
 [source code documentation](http://android.openxcplatform.com).
 
-## Setup
-
-The binary message format is defined in a Git submodule, so you must initialize
-it:
-
-    $ git submodule update --init
-
-You will also need the Protocol Buffer compiler v2.5.0 or greater.
-
 ## Building from Eclipse
 
-It's also possible to build this project with Eclipse although it is *not
-recommended* as it is difficult to keep Eclipse's build setup stable.
+After cloning the `openxc-android` repository to your local disk, open Eclipse
+and go to `File -> New -> Other -> Android -> Android Project from Existing
+Source`. Browse to the `openxc-android` folder and it should detect the 4
+Android projects within the repository. At the minimum, add the `openxc` project
+(the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
+required to run OpenXC applications).
 
-* Install the ADT from Google, which includes Eclipse Juno
-* Install the Maven plugin for Eclipse (Help -> Install new software -> search
-  for Maven), restart Eclipse
-* Select "Import an Existing Maven project", point it at the
-  openxc-android folder and hit import
-    * This should prompt you to install a few more things like the
-      android-maven-eclipse connector.
-* Clean the project, update maven dependences, refresh - do the cycle until it
-  builds cleanly.
+You can optionally add the `VehicleDashboardActivity` project to see an example
+vehicle dashboard OpenXC application, and also the `openxc-it` project which
+contains a test suite for the library and instrumentation tests that run on the
+device.
 
 ## Building from Command Line
 
