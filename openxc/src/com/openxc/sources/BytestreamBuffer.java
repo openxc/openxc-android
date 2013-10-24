@@ -71,7 +71,7 @@ public class BytestreamBuffer {
     private static boolean validateProtobuf(BinaryMessages.VehicleMessage message) {
         return (message.hasTranslatedMessage() &&
                         message.getTranslatedMessage().hasName() && (
-                            message.getTranslatedMessage().hasNumericalValue() ||
+                            message.getTranslatedMessage().hasNumericValue() ||
                             message.getTranslatedMessage().hasStringValue() ||
                             message.getTranslatedMessage().hasBooleanValue()))
             // TODO raw messages aren't supported upstream in the library at the

@@ -173,8 +173,8 @@ public class RawMeasurement implements Parcelable {
                         "Binary message is missing name");
             }
 
-            if(translatedMessage.hasNumericalValue()) {
-                measurement.mValue = translatedMessage.getNumericalValue();
+            if(translatedMessage.hasNumericValue()) {
+                measurement.mValue = translatedMessage.getNumericValue();
             } else if(translatedMessage.hasBooleanValue()) {
                 measurement.mValue = translatedMessage.getBooleanValue();
             } else if(translatedMessage.hasStringValue()) {
@@ -184,8 +184,8 @@ public class RawMeasurement implements Parcelable {
                         "Binary message had no value");
             }
 
-            if(translatedMessage.hasNumericalEvent()) {
-                measurement.mEvent = translatedMessage.getNumericalEvent();
+            if(translatedMessage.hasNumericEvent()) {
+                measurement.mEvent = translatedMessage.getNumericEvent();
             } else if(translatedMessage.hasBooleanEvent()) {
                 measurement.mEvent = translatedMessage.getBooleanEvent();
             } else if(translatedMessage.hasStringEvent()) {

@@ -12,13 +12,6 @@
     <name>OpenXC Android Library</name>
     <description>Android library for the OpenXC Platform</description>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>protoc-plugin</id>
-            <url>http://sergei-ivanov.github.com/maven-protoc-plugin/repo/releases/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -77,26 +70,6 @@
                     </additionalparam>
                     <useStandardDocletOptions>false</useStandardDocletOptions>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.google.protobuf.tools</groupId>
-                <artifactId>maven-protoc-plugin</artifactId>
-                <version>0.3.1</version>
-                <configuration>
-                    <protoSourceRoot>proto</protoSourceRoot>
-                    <checkStaleness>true</checkStaleness>
-                    <includes>
-                        <param>openxc.proto</param>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
