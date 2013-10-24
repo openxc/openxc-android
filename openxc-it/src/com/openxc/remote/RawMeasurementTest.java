@@ -41,6 +41,13 @@ public class RawMeasurementTest extends TestCase {
         assertFalse(measurement.isTimestamped());
     }
 
+    public void testSerializeWithoutTimestamp() {
+        measurement = new RawMeasurement(measurementName, measurementValue);
+        measurement.untimestamp();
+        String serialized = measurement.serialize();
+        assertFalse(serialized.contains("timestamp"));
+    }
+
     public void testDeserialize() {
         try {
             measurement = new RawMeasurement(

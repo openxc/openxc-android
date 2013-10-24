@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -28,7 +29,6 @@ import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -240,23 +240,7 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public boolean send(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
-        Log.d(TAG, "Sending command " + command);
-        RawMeasurement rawCommand = command.toRaw();
-        rawCommand.untimestamp();
-
-        for(VehicleInterface vehicleInterface : mInterfaces) {
-            try {
-                if(vehicleInterface.receive(rawCommand)) {
-                    Log.d(TAG, "Sent " + rawCommand + " using interface " +
-                            vehicleInterface);
-                    return true;
-                }
-            } catch(DataSinkException e) {
-                continue;
-            }
-        }
-        Log.d(TAG, "No interfaces able to send " + rawCommand);
-        return false;
+        return VehicleInterfaceManagerUtils.send(mInterfaces, command);
     }
 
     /**
