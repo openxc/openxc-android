@@ -197,7 +197,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     protected int read(byte[] bytes) throws IOException {
         lockConnection();
-        int bytesRead = -1;
+        int bytesRead = 0;
         try {
             if(isConnected()) {
                 bytesRead = mConnection.bulkTransfer(mInEndpoint, bytes, bytes.length, 0);
@@ -205,7 +205,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         } finally {
             unlockConnection();
         }
-        return -1;
+        return bytesRead;
     }
 
     protected String getTag() {
