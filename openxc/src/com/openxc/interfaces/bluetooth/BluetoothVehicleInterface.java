@@ -121,11 +121,14 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     protected int read(byte[] bytes) throws IOException {
         lockConnection();
-        int bytesRead = 0;
-        if(isConnected()) {
-            bytesRead = mInStream.read(bytes, 0, bytes.length);
+        int bytesRead = -1;
+        try {
+            if(isConnected()) {
+                bytesRead = mInStream.read(bytes, 0, bytes.length);
+            }
+        } finally {
+            unlockConnection();
         }
-        unlockConnection();
         return bytesRead;
     }
 

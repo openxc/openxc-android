@@ -98,6 +98,12 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                         continue;
                     }
 
+                    if(received == -1) {
+                        Log.e(getTag(), "Error on read - returned -1");
+                        disconnect();
+                        continue;
+                    }
+
                     if(received > 0) {
                         buffer.receive(bytes, received);
                         if(buffer.containsJson()) {

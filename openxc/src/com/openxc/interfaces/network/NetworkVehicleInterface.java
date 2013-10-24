@@ -122,15 +122,14 @@ public class NetworkVehicleInterface extends BytestreamDataSource
 
     protected int read(byte[] bytes) throws IOException {
         lockConnection();
-        int bytesRead = 0;
-        if(isConnected()) {
-            bytesRead = mInStream.read(bytes, 0, bytes.length);
-            if(bytesRead == -1) {
-                Log.i(TAG, "Lost connection to network server");
-                disconnect();
+        int bytesRead = -1;
+        try {
+            if(isConnected()) {
+                bytesRead = mInStream.read(bytes, 0, bytes.length);
             }
+        } finally {
+            unlockConnection();
         }
-        unlockConnection();
         return bytesRead;
     }
 
