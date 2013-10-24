@@ -14,6 +14,7 @@ import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
+import com.openxc.sources.BytestreamConnectingTask;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -77,17 +78,15 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         if(!UriBasedVehicleInterfaceMixin.sameResource(mUri,
                 massageUri(otherResource))) {
             setUri(otherResource);
-            stop();
-            start();
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                }
+            } catch(IOException e) {
+            }
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        disconnect();
     }
 
     /**
@@ -113,68 +112,99 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return write(bytes);
     }
 
+    @Override
+    public boolean isConnected() {
+        lockConnection();
+        boolean connected = mSocket != null && mSocket.isConnected() && super.isConnected();
+        unlockConnection();
+        return connected;
+    }
+
     protected int read(byte[] bytes) throws IOException {
-        return mInStream.read(bytes, 0, bytes.length);
+        lockConnection();
+        int bytesRead = 0;
+        if(isConnected()) {
+            bytesRead = mInStream.read(bytes, 0, bytes.length);
+            if(bytesRead == -1) {
+                Log.i(TAG, "Lost connection to network server");
+                disconnect();
+            }
+        }
+        unlockConnection();
+        return bytesRead;
     }
 
-    protected String getTag() {
-        return TAG;
-    }
-
-    protected void disconnect() {
-        if(mSocket == null) {
+    protected void connect() throws NetworkSourceException {
+        if(!isRunning()) {
             return;
         }
 
-        Log.d(TAG, "Disconnecting from the socket " + mSocket);
+        lockConnection();
         try {
-            if(mInStream != null) {
-                mInStream.close();
-                mInStream = null;
+            mSocket = new Socket();
+            mSocket.connect(new InetSocketAddress(mUri.getHost(),
+                        mUri.getPort()), SOCKET_TIMEOUT);
+            if(!isConnected()) {
+                Log.d(TAG, "Could not connect to server");
+                disconnected();
+            } else {
+                connected();
+                connectStreams();
             }
         } catch(IOException e) {
-            Log.w(TAG, "Unable to close the input stream", e);
+            String message = "Error opening streams";
+            Log.e(TAG, message, e);
+            disconnect();
+            throw new NetworkSourceException(message, e);
+        } catch(AssertionError e) {
+            String message = "Error opening streams";
+            Log.e(TAG, message, e);
+            disconnect();
+            throw new NetworkSourceException(message, e);
+        } finally {
+            unlockConnection();
         }
-
-        try {
-            if(mOutStream != null) {
-                mOutStream.close();
-                mOutStream = null;
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the output stream", e);
-        }
-
-        disconnected();
-        Log.d(TAG, "Disconnected from the socket");
     }
 
-    protected void waitForConnection() throws DataSourceException {
-        if(mSocket == null) {
-            mSocket = new Socket();
-            try {
-                mSocket.connect(new InetSocketAddress(mUri.getHost(),
-                            mUri.getPort()), SOCKET_TIMEOUT);
-            } catch(IOException e) {
-                String message = "Error opening streams";
-                Log.e(TAG, message, e);
-                disconnect();
-                throw new NetworkSourceException(message, e);
-            } catch(AssertionError e) {
-                String message = "Error opening streams";
-                Log.e(TAG, message, e);
-                disconnect();
-                throw new NetworkSourceException(message, e);
-            }
-
-            if(!mSocket.isConnected()) {
-                disconnect();
-                throw new NetworkSourceException("Could not connect to server!");
-            }
-
-            connected();
-            connectStreams();
+    protected void disconnect() {
+        if(!isConnected()) {
+            return;
         }
+
+        lockConnection();
+        try {
+            Log.d(TAG, "Disconnecting from the socket " + mSocket);
+            try {
+                if(mInStream != null) {
+                    mInStream.close();
+                    mInStream = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the input stream", e);
+            }
+
+            try {
+                if(mOutStream != null) {
+                    mOutStream.close();
+                    mOutStream = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the output stream", e);
+            }
+
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                    mSocket = null;
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the socket", e);
+            }
+            disconnected();
+        } finally {
+            unlockConnection();
+        }
+        Log.d(TAG, "Disconnected from the socket");
     }
 
     /**
@@ -184,21 +214,33 @@ public class NetworkVehicleInterface extends BytestreamDataSource
      * @return true if the data was written successfully.
      */
     private synchronized boolean write(byte[] bytes) {
-        if(mSocket != null && mSocket.isConnected()) {
-            Log.d(TAG, "Writing bytes to socket: " + bytes);
-            try {
+        lockConnection();
+        boolean success = true;
+        try {
+            if(isConnected()) {
+                Log.d(TAG, "Writing bytes to socket: " + bytes);
                 mOutStream.write(bytes);
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
-                return false;
+            } else {
+                Log.w(TAG, "No connection established, could not send anything.");
+                success = false;
             }
-        } else {
-            Log.w(TAG, "No connection established, could not send anything.");
-            return false;
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
+            success = false;
+        } finally {
+            unlockConnection();
         }
-        return true;
+        return success;
     }
 
+    protected String getTag() {
+        return TAG;
+    }
+
+    /**
+     * You must have call lockConnection before using this function - this
+     * method is private so we're letting the caller handle it.
+     */
     private void connectStreams() throws NetworkSourceException {
         try {
             mInStream = mSocket.getInputStream();

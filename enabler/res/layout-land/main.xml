@@ -31,22 +31,29 @@
             style="@style/ItemData"/>
     </LinearLayout>
     
-    <LinearLayout 
-        style="@style/VerticallyStackedScroller">        
-	    <TextView 
-	        style="@style/SectionHeader"
-	        android:text="@string/source_list_label"/>
-	    <ListView 
-	        android:id="@+id/source_list" 
-	        style="@style/DefaultFont" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <LinearLayout 
+	        style="@style/HorizontallyStackedScroller">        
+		    <TextView 
+		        style="@style/SectionHeader"
+		        android:text="@string/source_list_label"/>
+		    <ListView 
+		        android:id="@+id/source_list" 
+		        style="@style/DefaultFont" />
+	    </LinearLayout>
+	    <LinearLayout 
+	        style="@style/HorizontallyStackedScroller"> 
+		    <TextView 
+		       	style="@style/SectionHeader"
+		        android:text="@string/sink_list_label" />
+		    <ListView 
+		        android:id="@+id/sink_list" 
+		        style="@style/DefaultFont" />  
+		</LinearLayout>  
     </LinearLayout>
-    <LinearLayout 
-        style="@style/VerticallyStackedScroller"> 
-	    <TextView 
-	       	style="@style/SectionHeader"
-	        android:text="@string/sink_list_label" />
-	    <ListView 
-	        android:id="@+id/sink_list" 
-	        style="@style/DefaultFont" />  
-	</LinearLayout>  
+    
 </LinearLayout>

@@ -64,8 +64,12 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public boolean setResource(String otherAddress) throws DataSourceException {
         if(!sameResource(mAddress, otherAddress)) {
             setAddress(otherAddress);
-            stop();
-            start();
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                }
+            } catch(IOException e) {
+            }
             return true;
         }
         return false;
@@ -93,6 +97,28 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
+    protected void connect() {
+        if(!isRunning()) {
+            return;
+        }
+
+        lockConnection();
+        try {
+            if(!isConnected()) {
+                mSocket = mDeviceManager.connect(mAddress);
+                connectStreams();
+                connected();
+            }
+        } catch(BluetoothException e) {
+            String message = "Unable to connect to device at address "
+                + mAddress;
+            Log.w(TAG, message, e);
+            disconnected();
+        } finally {
+            unlockConnection();
+        }
+    }
+
     protected int read(byte[] bytes) throws IOException {
         lockConnection();
         int bytesRead = 0;
@@ -103,93 +129,74 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
-    // the Bluetooth socket is thread safe, so we don't grab the connection lock
-    // - we also want to forcefully break the connection NOW instead of waiting
-    // for the lock if BT is going down
-    protected void disconnect() {
-        try {
-            if(mInStream != null) {
-                mInStream.close();
-                Log.d(TAG, "Disconnected from the input stream");
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the input stream", e);
-        } finally {
-            mInStream = null;
-        }
-
-        try {
-            if(mOutStream != null) {
-                mOutStream.close();
-                Log.d(TAG, "Disconnected from the output stream");
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the output stream", e);
-        } finally {
-            mOutStream = null;
-        }
-
-        try {
-            if(mSocket != null) {
-                mSocket.close();
-                Log.d(TAG, "Disconnected from the socket");
-            }
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to close the socket", e);
-        } finally {
-            mSocket = null;
-        }
-
-        disconnected();
-    }
-
-    protected String getTag() {
-        return TAG;
-    }
-
-    protected void waitForConnection() throws DataSourceException {
-        if(isRunning()) {
-            lockConnection();
-            try {
-                if(!isConnected()) {
-                    mSocket = mDeviceManager.connect(mAddress);
-                    connectStreams();
-                    connected();
-                }
-            } catch(BluetoothException e) {
-                String message = "Unable to connect to device at address "
-                    + mAddress;
-                Log.w(TAG, message, e);
-                disconnect();
-                throw new DataSourceException(message, e);
-            } finally {
-                unlockConnection();
-            }
-        }
-    }
-
     private boolean write(String message) {
         lockConnection();
         boolean success = false;
         try {
             if(isConnected()) {
-                try {
-                    Log.d(TAG, "Writing message to Bluetooth: " + message);
-                    mOutStream.write(message);
-                    // TODO what if we didn't flush every time? might be faster for
-                    // sustained writes.
-                    mOutStream.flush();
-                    success = true;
-                } catch(IOException e) {
-                    Log.d(TAG, "Error writing to stream", e);
-                }
+                Log.d(TAG, "Writing message to Bluetooth: " + message);
+                mOutStream.write(message);
+                // TODO what if we didn't flush every time? might be faster for
+                // sustained writes.
+                mOutStream.flush();
+                success = true;
             } else {
                 Log.w(TAG, "Unable to write -- not connected");
             }
+        } catch(IOException e) {
+            Log.d(TAG, "Error writing to stream", e);
         } finally {
             unlockConnection();
         }
         return success;
+    }
+
+    // the Bluetooth socket is thread safe, so we don't grab the connection lock
+    // - we also want to forcefully break the connection NOW instead of waiting
+    // for the lock if BT is going down
+    protected void disconnect() {
+        try {
+            lockConnection();
+            try {
+                if(mInStream != null) {
+                    mInStream.close();
+                    Log.d(TAG, "Disconnected from the input stream");
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the input stream", e);
+            } finally {
+                mInStream = null;
+            }
+
+            try {
+                if(mOutStream != null) {
+                    mOutStream.close();
+                    Log.d(TAG, "Disconnected from the output stream");
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the output stream", e);
+            } finally {
+                mOutStream = null;
+            }
+
+            try {
+                if(mSocket != null) {
+                    mSocket.close();
+                    Log.d(TAG, "Disconnected from the socket");
+                }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to close the socket", e);
+            } finally {
+                mSocket = null;
+            }
+            disconnected();
+        } finally {
+            unlockConnection();
+        }
+    }
+
+    protected String getTag() {
+        return TAG;
     }
 
     /**

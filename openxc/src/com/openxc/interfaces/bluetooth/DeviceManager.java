@@ -68,15 +68,17 @@ public class DeviceManager {
             throws BluetoothException {
         connectDevice(targetAddress);
         mDeviceLock.lock();
-        while(mTargetDevice == null) {
-            try {
-                mDeviceChangedCondition.await();
-            } catch(InterruptedException e) {}
+        try {
+            while(mTargetDevice == null) {
+                try {
+                    mDeviceChangedCondition.await();
+                } catch(InterruptedException e) {}
+            }
+            mSocket = setupSocket(mTargetDevice);
+            connectToSocket(mSocket);
+        } finally {
+            mDeviceLock.unlock();
         }
-        mSocket = setupSocket(mTargetDevice);
-        connectToSocket(mSocket);
-
-        mDeviceLock.unlock();
         return mSocket;
     }
 
@@ -150,9 +152,12 @@ public class DeviceManager {
 
     private void captureDevice(BluetoothDevice device) {
         mDeviceLock.lock();
-        mTargetDevice = device;
-        mDeviceChangedCondition.signal();
-        mDeviceLock.unlock();
+        try {
+            mTargetDevice = device;
+            mDeviceChangedCondition.signal();
+        } finally {
+            mDeviceLock.unlock();
+        }
 
         if(mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);

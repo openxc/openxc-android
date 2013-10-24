@@ -613,6 +613,7 @@ public class VehicleManager extends Service implements SourceCallback {
             mInterfaces.remove(mRemoteController);
             mRemoteService = null;
             mPipeline.removeSource(mRemoteSource);
+            bindRemote();
         }
     };
 
