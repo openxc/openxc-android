@@ -164,142 +164,38 @@ public class RawMeasurement implements Parcelable {
     private static void deserialize(BinaryMessages.VehicleMessage message,
             RawMeasurement measurement)
             throws UnrecognizedMeasurementTypeException {
-        switch(message.getType()) {
-            case RAW: {
-                // TODO
-                break;
-            }
-            case STRING: {
-                BinaryMessages.StringMessage packedMessage = message.getStringMessage();
-                if(packedMessage.hasName()) {
-                    measurement.mName = packedMessage.getName();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message is missing name");
-                }
-
-                if(packedMessage.hasValue()) {
-                    measurement.mValue = packedMessage.getValue();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no value");
-                }
-                break;
-            }
-            case NUM: {
-                BinaryMessages.NumericMessage packedMessage = message.getNumericMessage();
-                // TODO this is duplciated over and over - unfortunately the
-                // message types don't have a common parent, even though they
-                // all have the same methods...what can we do short of
-                // metaprogramming?
-                if(packedMessage.hasName()) {
-                    measurement.mName = packedMessage.getName();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message is missing name");
-                }
-
-                if(packedMessage.hasValue()) {
-                    measurement.mValue = packedMessage.getValue();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no value");
-                }
-                break;
-            }
-            case BOOL: {
-                BinaryMessages.BooleanMessage packedMessage = message.getBooleanMessage();
-                if(packedMessage.hasName()) {
-                    measurement.mName = packedMessage.getName();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message is missing name");
-                }
-
-                if(packedMessage.hasValue()) {
-                    measurement.mValue = packedMessage.getValue();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no value");
-                }
-                break;
-            }
-            case EVENTED_NUM: {
-                BinaryMessages.EventedNumericMessage packedMessage = message.getEventedNumericMessage();
-                if(packedMessage.hasName()) {
-                    measurement.mName = packedMessage.getName();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message is missing name");
-                }
-
-                if(packedMessage.hasValue()) {
-                    measurement.mValue = packedMessage.getValue();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no value");
-                }
-
-                if(packedMessage.hasEvent()) {
-                    measurement.mEvent = packedMessage.getEvent();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no event");
-                }
-                break;
-            }
-            case EVENTED_BOOL: {
-                BinaryMessages.EventedBooleanMessage packedMessage = message.getEventedBooleanMessage();
-                if(packedMessage.hasName()) {
-                    measurement.mName = packedMessage.getName();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message is missing name");
-                }
-
-                if(packedMessage.hasValue()) {
-                    measurement.mValue = packedMessage.getValue();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no value");
-                }
-
-                if(packedMessage.hasEvent()) {
-                    measurement.mEvent = packedMessage.getEvent();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no event");
-                }
-                break;
-            }
-            case EVENTED_STRING: {
-                BinaryMessages.EventedStringMessage packedMessage = message.getEventedStringMessage();
-                if(packedMessage.hasName()) {
-                    measurement.mName = packedMessage.getName();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message is missing name");
-                }
-
-                if(packedMessage.hasValue()) {
-                    measurement.mValue = packedMessage.getValue();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no value");
-                }
-
-                if(packedMessage.hasEvent()) {
-                    measurement.mEvent = packedMessage.getEvent();
-                } else {
-                    throw new UnrecognizedMeasurementTypeException(
-                            "Binary message had no event");
-                }
-                break;
-            }
-            default: {
+        if(message.hasTranslatedMessage()) {
+            BinaryMessages.TranslatedMessage translatedMessage = message.getTranslatedMessage();
+            if(translatedMessage.hasName()) {
+                measurement.mName = translatedMessage.getName();
+            } else {
                 throw new UnrecognizedMeasurementTypeException(
-                        "Binary message type not recognized");
+                        "Binary message is missing name");
             }
+
+            if(translatedMessage.hasNumericalValue()) {
+                measurement.mValue = translatedMessage.getNumericalValue();
+            } else if(translatedMessage.hasBooleanValue()) {
+                measurement.mValue = translatedMessage.getBooleanValue();
+            } else if(translatedMessage.hasStringValue()) {
+                measurement.mValue = translatedMessage.getStringValue();
+            } else {
+                throw new UnrecognizedMeasurementTypeException(
+                        "Binary message had no value");
+            }
+
+            if(translatedMessage.hasNumericalEvent()) {
+                measurement.mEvent = translatedMessage.getNumericalEvent();
+            } else if(translatedMessage.hasBooleanEvent()) {
+                measurement.mEvent = translatedMessage.getBooleanEvent();
+            } else if(translatedMessage.hasStringEvent()) {
+                measurement.mEvent = translatedMessage.getStringEvent();
+            }
+        } else if(message.hasRawMessage()) {
+            // TODO
+        } else {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Binary message type not recognized");
         }
     }
 
