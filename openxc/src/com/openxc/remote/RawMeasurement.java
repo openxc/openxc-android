@@ -11,8 +11,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.google.common.base.Objects;
+import com.openxc.BinaryMessages;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.serializers.JsonSerializer;
+
 
 /**
  * An untyped measurement used only for the AIDL VehicleService interface.
@@ -62,6 +64,12 @@ public class RawMeasurement implements Parcelable {
     public RawMeasurement(String serialized)
             throws UnrecognizedMeasurementTypeException {
         deserialize(serialized, this);
+        timestamp();
+    }
+
+    public RawMeasurement(BinaryMessages.VehicleMessage message)
+            throws UnrecognizedMeasurementTypeException {
+        deserialize(message, this);
         timestamp();
     }
 
@@ -151,6 +159,44 @@ public class RawMeasurement implements Parcelable {
             .add("value", getValue())
             .add("event", getEvent())
             .toString();
+    }
+
+    private static void deserialize(BinaryMessages.VehicleMessage message,
+            RawMeasurement measurement)
+            throws UnrecognizedMeasurementTypeException {
+        if(message.hasTranslatedMessage()) {
+            BinaryMessages.TranslatedMessage translatedMessage = message.getTranslatedMessage();
+            if(translatedMessage.hasName()) {
+                measurement.mName = translatedMessage.getName();
+            } else {
+                throw new UnrecognizedMeasurementTypeException(
+                        "Binary message is missing name");
+            }
+
+            if(translatedMessage.hasNumericValue()) {
+                measurement.mValue = translatedMessage.getNumericValue();
+            } else if(translatedMessage.hasBooleanValue()) {
+                measurement.mValue = translatedMessage.getBooleanValue();
+            } else if(translatedMessage.hasStringValue()) {
+                measurement.mValue = translatedMessage.getStringValue();
+            } else {
+                throw new UnrecognizedMeasurementTypeException(
+                        "Binary message had no value");
+            }
+
+            if(translatedMessage.hasNumericEvent()) {
+                measurement.mEvent = translatedMessage.getNumericEvent();
+            } else if(translatedMessage.hasBooleanEvent()) {
+                measurement.mEvent = translatedMessage.getBooleanEvent();
+            } else if(translatedMessage.hasStringEvent()) {
+                measurement.mEvent = translatedMessage.getStringEvent();
+            }
+        } else if(message.hasRawMessage()) {
+            // TODO
+        } else {
+            throw new UnrecognizedMeasurementTypeException(
+                    "Binary message type not recognized");
+        }
     }
 
     private static void deserialize(String measurementString,

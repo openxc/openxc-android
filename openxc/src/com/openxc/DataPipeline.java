@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import android.util.Log;
+
 import com.google.common.base.Objects;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sinks.DataSinkException;
@@ -28,6 +30,8 @@ import com.openxc.sources.VehicleDataSource;
  * active.
  */
 public class DataPipeline implements SourceCallback {
+    private static final String TAG = "DataPipeline";
+
     private Operator mOperator;
     private int mMessagesReceived = 0;
     private Map<String, RawMeasurement> mMeasurements =
@@ -63,6 +67,12 @@ public class DataPipeline implements SourceCallback {
         if(measurement == null) {
             return;
         }
+
+        if(measurement.getName() == null) {
+            Log.d(TAG, "Measurement's name was null - that shouldn't have made it this far");
+            return;
+        }
+
         mMeasurements.put(measurement.getName(), measurement);
         List<VehicleDataSink> deadSinks = new ArrayList<VehicleDataSink>();
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {

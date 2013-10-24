@@ -12,7 +12,6 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
-import com.openxc.sources.BytestreamConnectingTask;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
@@ -37,7 +36,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
-    private BytestreamConnectingTask mConnectionCheckTask;
 
     public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {

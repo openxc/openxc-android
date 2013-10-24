@@ -11,6 +11,7 @@
     <packaging>apklib</packaging>
     <name>OpenXC Android Library</name>
     <description>Android library for the OpenXC Platform</description>
+
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -30,7 +31,13 @@
             <artifactId>jackson-core</artifactId>
             <version>2.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>

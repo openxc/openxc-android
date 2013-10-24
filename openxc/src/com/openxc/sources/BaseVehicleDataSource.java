@@ -4,6 +4,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import android.util.Log;
+
+import com.openxc.BinaryMessages;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.remote.RawMeasurement;
 
@@ -97,6 +100,14 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         try {
           handleMessage(new RawMeasurement(serializedMeasurement));
         } catch(UnrecognizedMeasurementTypeException e) {
+        }
+    }
+
+    protected void handleMessage(BinaryMessages.VehicleMessage message) {
+        try {
+          handleMessage(new RawMeasurement(message));
+        } catch(UnrecognizedMeasurementTypeException e) {
+            Log.d(TAG, "Unable to handle binary message", e);
         }
     }
 

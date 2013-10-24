@@ -1,13 +1,17 @@
 package com.openxc.sources;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
+import com.google.common.base.CharMatcher;
+import com.google.common.io.LimitInputStream;
+import com.google.protobuf.CodedInputStream;
+import com.openxc.BinaryMessages;
 
 /**
  * A "mixin" of sorts to be used with object composition, this contains
@@ -16,7 +20,7 @@ import android.util.Log;
 public class BytestreamBuffer {
     private final static String TAG = "BytestreamBuffer";
 
-    private OutputStream mBuffer = new ByteArrayOutputStream();
+    private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
     private double mBytesReceived = 0;
     private double mLastLoggedTransferStatsAtByte = 0;
     private final long mStartTime = System.nanoTime();
@@ -29,12 +33,8 @@ public class BytestreamBuffer {
      *      be read from the array.
      */
     public void receive(byte[] bytes, int length) {
-        try {
-            mBuffer.write(bytes, 0, length);
-            mBytesReceived += length;
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to buffer fresh bytes", e);
-        }
+        mBuffer.write(bytes, 0, length);
+        mBytesReceived += length;
 
         logTransferStats();
     }
@@ -59,17 +59,71 @@ public class BytestreamBuffer {
             // buffer
             if(records[records.length - 1].length() > 0) {
                 byte[] remainingData = records[records.length - 1].getBytes();
-                try {
-                    mBuffer.write(remainingData, 0, remainingData.length);
-                } catch(IOException e) {
-                    Log.w(TAG, "Unable to preserve remaining data in buffer", e);
-                }
+                mBuffer.write(remainingData, 0, remainingData.length);
             }
         } else {
             result = new ArrayList<String>();
         }
 
         return result;
+    }
+
+    private static boolean validateProtobuf(BinaryMessages.VehicleMessage message) {
+        return (message.hasTranslatedMessage() &&
+                        message.getTranslatedMessage().hasName() && (
+                            message.getTranslatedMessage().hasNumericValue() ||
+                            message.getTranslatedMessage().hasStringValue() ||
+                            message.getTranslatedMessage().hasBooleanValue()))
+            // TODO raw messages aren't supported upstream in the library at the
+            // moment so we forcefully reject it here
+                || (false && message.hasRawMessage() &&
+                        message.getRawMessage().hasMessageId() &&
+                        message.getRawMessage().hasData());
+    }
+
+    public BinaryMessages.VehicleMessage readBinaryMessage() {
+        // TODO we could move this to a separate thread and use a
+        // piped input stream, where it would block on the
+        // bytestream until more data was available - but that might
+        // be messy rather than this approach, which is just
+        // inefficient
+        InputStream input = new ByteArrayInputStream(
+                mBuffer.toByteArray());
+        BinaryMessages.VehicleMessage message = null;
+        while(message == null) {
+            try {
+                int firstByte = input.read();
+                if (firstByte == -1) {
+                    return null;
+                }
+
+                int size = CodedInputStream.readRawVarint32(firstByte, input);
+                message = BinaryMessages.VehicleMessage.parseFrom(
+                        new LimitInputStream(input, size));
+
+                if(message != null && !validateProtobuf(message)) {
+                    message = null;
+                } else {
+                    mBuffer = new ByteArrayOutputStream();
+                    int remainingByte;
+                    while((remainingByte = input.read()) != -1) {
+                        mBuffer.write(remainingByte);
+                    }
+                }
+            } catch(IOException e) { }
+
+        }
+        return message;
+    }
+
+    /**
+     * Return true if the buffer *most likely* contains JSON (as opposed to a
+     * protobuf).
+     */
+    public boolean containsJson() {
+        return CharMatcher.ASCII.and(
+                CharMatcher.JAVA_ISO_CONTROL.and(CharMatcher.WHITESPACE.negate()).negate()
+                    ).matchesAllOf(mBuffer.toString());
     }
 
     private void logTransferStats() {

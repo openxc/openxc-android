@@ -42,6 +42,7 @@ consistently deploy this to the Central Maven repository. You can use teh
 to get it in your local Maven repo:
 
     $ git clone https://github.com/mosabua/maven-android-sdk-deployer
+    $ cd maven-android-sdk-deployer
     $ mvn clean install -N
     $ cd extras
     $ mvn clean install -N
@@ -50,20 +51,26 @@ to get it in your local Maven repo:
 
 After satisfying those requirements, the build is pretty simple:
 
-* Run `mvn clean install -pl openxc -am` from the root directory to build the OpenXC
-  library APK only.
+To compile the OpenXC library as an APKLIB and install it to your local
+Maven repository:
+
+    $ mvn install -pl openxc -am
+
+To compile and build and APK for the Enabler app (that uses the OpenXC
+library):
+
+    $ mvn package -pl enabler
+
+Finally, to deploy the packaged APK to an attached Android device and run it:
+
+    $ mvn android:deploy android:run -pl enabler
+
 * Run `mvn clean install -pl openxc,openxc-it -am` from the root directory to build and run
   the library and test suite. This requires that an Android device is attached or an
   emulator is running.
 
 If you want the tests to wait for a debugger to attach, change the `testDebug`
 setting in `openxc-android/pom.xml` to `true`.
-
-After the library is installed (run `mvn clean install -pl openxc`), run this
-to deploy the enabler and examples to an attached device:
-
-    $ mvn clean package android:deploy -pl enabler,examples
-    $ mvn android:run -pl examples
 
 ## Contributing
 
