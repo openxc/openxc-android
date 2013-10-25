@@ -77,9 +77,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     @Override
     public boolean isConnected() {
-        lockConnection();
-        boolean connected = mSocket != null && super.isConnected();
-        unlockConnection();
+        mConnectionLock.readLock().lock();
+            boolean connected = mSocket != null && mSocket.isConnected() &&
+            super.isConnected();
+        mConnectionLock.readLock().unlock();
         return connected;
     }
 
@@ -102,7 +103,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             return;
         }
 
-        lockConnection();
+        mConnectionLock.writeLock().lock();
         try {
             if(!isConnected()) {
                 mSocket = mDeviceManager.connect(mAddress);
@@ -115,25 +116,25 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             Log.w(TAG, message, e);
             disconnected();
         } finally {
-            unlockConnection();
+            mConnectionLock.writeLock().unlock();
         }
     }
 
     protected int read(byte[] bytes) throws IOException {
-        lockConnection();
+        mConnectionLock.readLock().lock();
         int bytesRead = -1;
         try {
             if(isConnected()) {
                 bytesRead = mInStream.read(bytes, 0, bytes.length);
             }
         } finally {
-            unlockConnection();
+            mConnectionLock.readLock().unlock();
         }
         return bytesRead;
     }
 
     private boolean write(String message) {
-        lockConnection();
+        mConnectionLock.readLock().lock();
         boolean success = false;
         try {
             if(isConnected()) {
@@ -149,17 +150,28 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         } catch(IOException e) {
             Log.d(TAG, "Error writing to stream", e);
         } finally {
-            unlockConnection();
+            mConnectionLock.readLock().unlock();
         }
         return success;
     }
 
-    // the Bluetooth socket is thread safe, so we don't grab the connection lock
-    // - we also want to forcefully break the connection NOW instead of waiting
-    // for the lock if BT is going down
     protected void disconnect() {
+        // The Bluetooth socket is thread safe, so we don't grab the connection
+        // lock - we also want to forcefully break the connection NOW instead of
+        // waiting for the lock if BT is going down
         try {
-            lockConnection();
+            if(mSocket != null) {
+                mSocket.close();
+                Log.d(TAG, "Disconnected from the socket");
+            }
+        } catch(IOException e) {
+            Log.w(TAG, "Unable to close the socket", e);
+        } finally {
+            mSocket = null;
+        }
+
+        mConnectionLock.writeLock().lock();
+        try {
             try {
                 if(mInStream != null) {
                     mInStream.close();
@@ -182,19 +194,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 mOutStream = null;
             }
 
-            try {
-                if(mSocket != null) {
-                    mSocket.close();
-                    Log.d(TAG, "Disconnected from the socket");
-                }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the socket", e);
-            } finally {
-                mSocket = null;
-            }
             disconnected();
         } finally {
-            unlockConnection();
+            mConnectionLock.writeLock().unlock();
         }
     }
 
@@ -202,20 +204,21 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return TAG;
     }
 
-    /**
-     * You must have call lockConnection before using this function - this
-     * method is private so we're letting the caller handle it.
-     */
     private void connectStreams() throws BluetoothException {
+        mConnectionLock.writeLock().lock();
         try {
-            mOutStream = new BufferedWriter(new OutputStreamWriter(
-                        mSocket.getOutputStream()));
-            mInStream = new BufferedInputStream(mSocket.getInputStream());
-            Log.i(TAG, "Socket stream to vehicle interface opened successfully");
-        } catch(IOException e) {
-            Log.e(TAG, "Error opening streams ", e);
-            disconnect();
-            throw new BluetoothException();
+            try {
+                mOutStream = new BufferedWriter(new OutputStreamWriter(
+                            mSocket.getOutputStream()));
+                mInStream = new BufferedInputStream(mSocket.getInputStream());
+                Log.i(TAG, "Socket stream to vehicle interface opened successfully");
+            } catch(IOException e) {
+                Log.e(TAG, "Error opening streams ", e);
+                disconnect();
+                throw new BluetoothException();
+            }
+        } finally {
+            mConnectionLock.writeLock().unlock();
         }
     }
 

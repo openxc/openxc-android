@@ -196,14 +196,14 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     protected int read(byte[] bytes) throws IOException {
-        lockConnection();
+        mConnectionLock.readLock().lock();
         int bytesRead = 0;
         try {
             if(isConnected()) {
                 bytesRead = mConnection.bulkTransfer(mInEndpoint, bytes, bytes.length, 0);
             }
         } finally {
-            unlockConnection();
+            mConnectionLock.readLock().unlock();
         }
         return bytesRead;
     }
@@ -345,7 +345,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     private void openConnection(UsbDevice device) {
         if (device != null) {
-            lockConnection();
+            mConnectionLock.writeLock().lock();
             try {
                 mConnection = setupDevice(mManager, device);
                 connected();
@@ -354,7 +354,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
             } catch(UsbDeviceException e) {
                 Log.w("Couldn't open USB device", e);
             } finally {
-                unlockConnection();
+                mConnectionLock.writeLock().unlock();
             }
         } else {
             Log.d(TAG, "Permission denied for device " + device);
@@ -369,17 +369,22 @@ public class UsbVehicleInterface extends BytestreamDataSource
     protected void connect() throws DataSourceException { }
 
     protected void disconnect() {
-        if(mConnection != null) {
-            Log.d(TAG, "Closing connection " + mConnection +
-                    " with USB device");
-            lockConnection();
+        if(!isConnected()) {
+            return;
+        }
+
+        Log.d(TAG, "Closing connection " + mConnection +
+                " with USB device");
+        mConnectionLock.writeLock().lock();
+        try {
             mConnection.close();
             mConnection = null;
             mInEndpoint = null;
             mOutEndpoint = null;
             mInterface = null;
             disconnected();
-            unlockConnection();
+        } finally {
+            mConnectionLock.writeLock().unlock();
         }
     }
 

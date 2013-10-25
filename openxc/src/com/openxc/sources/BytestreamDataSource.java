@@ -3,8 +3,8 @@ package com.openxc.sources;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,8 +21,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private final static int READ_BATCH_SIZE = 512;
 
     private AtomicBoolean mRunning = new AtomicBoolean(false);
-    private final Lock mConnectionLock = new ReentrantLock();
-    private final Condition mDeviceChanged = mConnectionLock.newCondition();
+    protected final ReadWriteLock mConnectionLock = new ReentrantReadWriteLock();
+    private final Condition mDeviceChanged = mConnectionLock.writeLock().newCondition();
     private Thread mThread;
     private BytestreamConnectingTask mConnectionCheckTask;
 
@@ -67,8 +67,15 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         }
 
         while(isRunning() && !isConnected()) {
-            Log.d(getTag(), "Still no device available");
-            mDeviceChanged.await();
+            mConnectionLock.readLock().unlock();
+            mConnectionLock.writeLock().lock();
+            try {
+                Log.d(getTag(), "Still no device available");
+                mDeviceChanged.await();
+            } finally {
+                mConnectionLock.writeLock().unlock();
+                mConnectionLock.readLock().lock();
+            }
         }
 
         mConnectionCheckTask = null;
@@ -78,7 +85,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         BytestreamBuffer buffer = new BytestreamBuffer();
         while(isRunning()) {
             try {
-                mConnectionLock.lockInterruptibly();
+                mConnectionLock.readLock().lockInterruptibly();
                 try {
                     try {
                         waitForConnection();
@@ -118,7 +125,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                         }
                     }
                 } finally {
-                    unlockConnection();
+                    mConnectionLock.readLock().unlock();
                 }
             } catch(InterruptedException e) {
                 Log.i(getTag(), "Interrupted");
@@ -157,14 +164,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      */
     protected boolean isRunning() {
         return mRunning.get();
-    }
-
-    protected void lockConnection() {
-        mConnectionLock.lock();
-    }
-
-    protected void unlockConnection() {
-        mConnectionLock.unlock();
     }
 
     /**
