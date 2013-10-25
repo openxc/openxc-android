@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.CharMatcher;
-import com.google.common.io.LimitInputStream;
+import com.google.common.io.ByteStreams;
 import com.google.protobuf.CodedInputStream;
 import com.openxc.BinaryMessages;
 
@@ -99,7 +99,7 @@ public class BytestreamBuffer {
 
                 int size = CodedInputStream.readRawVarint32(firstByte, input);
                 message = BinaryMessages.VehicleMessage.parseFrom(
-                        new LimitInputStream(input, size));
+                        ByteStreams.limit(input, size));
 
                 if(message != null && !validateProtobuf(message)) {
                     message = null;
