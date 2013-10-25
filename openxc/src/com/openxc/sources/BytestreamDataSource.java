@@ -67,14 +67,12 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         }
 
         while(isRunning() && !isConnected()) {
-            mConnectionLock.readLock().unlock();
             mConnectionLock.writeLock().lock();
             try {
                 Log.d(getTag(), "Still no device available");
                 mDeviceChanged.await();
             } finally {
                 mConnectionLock.writeLock().unlock();
-                mConnectionLock.readLock().lock();
             }
         }
 
@@ -85,50 +83,41 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         BytestreamBuffer buffer = new BytestreamBuffer();
         while(isRunning()) {
             try {
-                mConnectionLock.readLock().lockInterruptibly();
-                try {
-                    try {
-                        waitForConnection();
-                    } catch(InterruptedException e) {
-                        Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
-                        stop();
-                        break;
-                    }
-
-                    int received;
-                    byte[] bytes = new byte[READ_BATCH_SIZE];
-                    try {
-                        received = read(bytes);
-                    } catch(IOException e) {
-                        Log.e(getTag(), "Unable to read response", e);
-                        disconnect();
-                        continue;
-                    }
-
-                    if(received == -1) {
-                        Log.e(getTag(), "Error on read - returned -1");
-                        disconnect();
-                        continue;
-                    }
-
-                    if(received > 0) {
-                        buffer.receive(bytes, received);
-                        if(buffer.containsJson()) {
-                            for(String record : buffer.readLines()) {
-                                handleMessage(record);
-                            }
-                        } else {
-                            BinaryMessages.VehicleMessage message = null;
-                            while((message = buffer.readBinaryMessage()) != null) {
-                                handleMessage(message);
-                            }
-                        }
-                    }
-                } finally {
-                    mConnectionLock.readLock().unlock();
-                }
+                waitForConnection();
             } catch(InterruptedException e) {
-                Log.i(getTag(), "Interrupted");
+                Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
+                stop();
+                break;
+            }
+
+            int received;
+            byte[] bytes = new byte[READ_BATCH_SIZE];
+            try {
+                received = read(bytes);
+            } catch(IOException e) {
+                Log.e(getTag(), "Unable to read response", e);
+                disconnect();
+                continue;
+            }
+
+            if(received == -1) {
+                Log.e(getTag(), "Error on read - returned -1");
+                disconnect();
+                continue;
+            }
+
+            if(received > 0) {
+                buffer.receive(bytes, received);
+                if(buffer.containsJson()) {
+                    for(String record : buffer.readLines()) {
+                        handleMessage(record);
+                    }
+                } else {
+                    BinaryMessages.VehicleMessage message = null;
+                    while((message = buffer.readBinaryMessage()) != null) {
+                        handleMessage(message);
+                    }
+                }
             }
         }
         disconnect();
