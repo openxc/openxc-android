@@ -98,8 +98,10 @@ public class BytestreamBuffer {
                 }
 
                 int size = CodedInputStream.readRawVarint32(firstByte, input);
-                message = BinaryMessages.VehicleMessage.parseFrom(
-                        ByteStreams.limit(input, size));
+                if(size > 0) {
+                    message = BinaryMessages.VehicleMessage.parseFrom(
+                            ByteStreams.limit(input, size));
+                }
 
                 if(message != null && !validateProtobuf(message)) {
                     message = null;
