@@ -24,7 +24,7 @@ public class JsonSerializer implements MeasurementSerializer {
         StringWriter buffer = new StringWriter(64);
         JsonFactory jsonFactory = new JsonFactory();
         try {
-            JsonGenerator gen = jsonFactory.createJsonGenerator(buffer);
+            JsonGenerator gen = jsonFactory.createGenerator(buffer);
 
             gen.writeStartObject();
             gen.writeStringField(NAME_FIELD, name);

@@ -169,7 +169,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
             StringWriter buffer = new StringWriter(512);
             JsonFactory jsonFactory = new JsonFactory();
             try {
-                JsonGenerator gen = jsonFactory.createJsonGenerator(buffer);
+                JsonGenerator gen = jsonFactory.createGenerator(buffer);
 
                 gen.writeStartObject();
                 gen.writeArrayFieldStart("records");
