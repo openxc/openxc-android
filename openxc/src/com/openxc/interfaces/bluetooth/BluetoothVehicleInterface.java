@@ -87,6 +87,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     @Override
     public void stop() {
         mDeviceManager.stop();
+        closeSocket();
         super.stop();
     }
 
@@ -155,7 +156,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return success;
     }
 
-    protected void disconnect() {
+    private synchronized void closeSocket() {
         // The Bluetooth socket is thread safe, so we don't grab the connection
         // lock - we also want to forcefully break the connection NOW instead of
         // waiting for the lock if BT is going down
@@ -169,7 +170,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         } finally {
             mSocket = null;
         }
+    }
 
+    protected void disconnect() {
+        closeSocket();
         mConnectionLock.writeLock().lock();
         try {
             try {
