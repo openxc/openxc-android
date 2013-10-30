@@ -1,5 +1,17 @@
 # OpenXC Android Library Changelog
 
+## v5.1
+
+* Run OpenXC VehicleService in the foreground (including an Android
+  notification) when connected to a vehicle interface.
+* Fix possible concurrency problems with USB, Bluetooth and network vehicle
+  interface sources.
+* Fix UI blocking when changing network vehicle interface URL.
+* Decode binary output from a vehicle interface (experimental)
+* Display app version in an 'About' page in Enabler.
+* Re-styled Enabler to better fit on small screens.
+* Update a few dependencies, leading lower CPU overhead in normal operation.
+
 ## v5.0.0
 
 * Add OpenXC icon to Enabler
