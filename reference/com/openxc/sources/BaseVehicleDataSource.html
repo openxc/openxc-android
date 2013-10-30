@@ -188,6 +188,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
@@ -585,6 +586,25 @@ Summary:
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -596,7 +616,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -622,6 +642,38 @@ Summary:
 <!-- ========== METHOD SUMMARY =========== -->
 <table id="promethods" class="jd-sumtable"><tr><th colspan="12">Protected Methods</th></tr>
 
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#connected()">connected</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#disconnected()">disconnected</a></span>()</nobr>
+        
+  </td></tr>
 
 
 	 
@@ -672,6 +724,22 @@ Summary:
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(java.lang.String)">handleMessage</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> serializedMeasurement)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
         
   </td></tr>
 
@@ -918,6 +986,25 @@ From interface
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/VehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -929,7 +1016,7 @@ From interface
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -1076,6 +1163,42 @@ From interface
 
 
 
+<A NAME="isConnected()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">isConnected</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc. The source is
+ capable of providing new vehicle data.
+
+ Returns true if connected, false otherwise.
+</p></div>
+
+    </div>
+</div>
+
+
 <A NAME="setCallback(com.openxc.sources.SourceCallback)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1160,6 +1283,68 @@ From interface
 
 <h2>Protected Methods</h2>
 
+
+
+<A NAME="connected()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">connected</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="disconnected()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">disconnected</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
 
 
 <A NAME="getTag()"></A>
@@ -1249,6 +1434,37 @@ From interface
       </span>
       <span class="sympad">handleMessage</span>
       <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> serializedMeasurement)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="handleMessage(com.openxc.BinaryMessages.VehicleMessage)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">handleMessage</span>
+      <span class="normal">(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</span>
     </h4>
       <div class="api-level">
         <div>

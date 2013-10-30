@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../favicon.ico" />
 <title>
 
-  DataPipeline
+  BinaryMessages.TranslatedMessage.Type
 
 
 | OpenXC Android Library
@@ -195,7 +195,7 @@
           <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessage.Builder.html">BinaryMessages.VehicleMessage.Builder</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/BuildConfig.html">BuildConfig</a></li>
-          <li class="selected api apilevel-"><a href="../../com/openxc/DataPipeline.html">DataPipeline</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/DataPipeline.html">DataPipeline</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/R.html">R</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/R.attr.html">R.attr</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/R.drawable.html">R.drawable</a></li>
@@ -208,7 +208,7 @@
               
     <li><h2>Enums</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></li>
+          <li class="selected api apilevel-"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessage.Type.html">BinaryMessages.VehicleMessage.Type</a></li>
       </ul>
     </li>
@@ -270,25 +270,51 @@
   
   
 
+  
+   
+  
+  
+  
+  
+
+  
+   
+  
+  
+  
+  
+
+  
+  
+  
+  
+
+  
+   
+  
+  
+  
+  
+
 
 <div class="sum-details-links">
 
 
 Summary:
 
-  <a href="#nestedclasses">Nested Classes</a>
+
+
+
+  <a href="#enumconstants">Enums</a>
+  
+
+
+  &#124; <a href="#constants">Constants</a>
   
 
 
 
 
-
-
-
-
-
-  &#124; <a href="#pubctors">Ctors</a>
-  
 
 
 
@@ -317,16 +343,20 @@ Summary:
 
 <div id="jd-header">
     public
-     
-     
+    static 
+    final 
     
-    class
-<h1>DataPipeline</h1>
+    enum
+<h1>BinaryMessages.TranslatedMessage.Type</h1>
 
 
 
   
-    extends <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a><br/>
+  
+  
+
+  
+    extends <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">Enum</a>&lt;E&nbsp;extends&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">Enum</a>&lt;E&gt;&gt;<br/>
   
   
   
@@ -335,7 +365,7 @@ Summary:
   
       implements 
       
-        <a href="../../com/openxc/sources/SourceCallback.html">SourceCallback</a> 
+        ProtocolMessageEnum 
       
   
   
@@ -351,7 +381,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="2" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -359,7 +389,17 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.DataPipeline</td>
+        <td colspan="2" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">java.lang.Enum</a>&lt;E&nbsp;extends&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">java.lang.Enum</a>&lt;E&gt;&gt;</td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+         	
+        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.BinaryMessages.TranslatedMessage.Type</td>
     </tr>
     
 
@@ -375,17 +415,7 @@ Summary:
 
 
 <h2>Class Overview</h2>
-<p>A pipeline that ferries data from VehicleDataSources to VehicleDataSinks.
-
- A DataPipeline accepts two types of components - sources and sinks. The
- sources (implementing <code><a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a></code> call the
- <code><a href="../../com/openxc/DataPipeline.html#receive(com.openxc.remote.RawMeasurement)">receive(RawMeasurement)</a></code> method on the this class when new
- values arrive. The DataPipeline then passes this value on to all currently
- registered data sinks.
-
- The Pipeline can have an optional Operator, which implements a few callbacks
- to check the status of the pipeline - e.g. if some source in the pipeline is
- active.
+<p>Protobuf enum <code>openxc.TranslatedMessage.Type</code>
 </p>
 
 
@@ -416,20 +446,63 @@ Summary:
 
 
 
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<table id="nestedclasses" class="jd-sumtable"><tr><th colspan="12">Nested Classes</th></tr>
 
 
-  
+
+
+
+
+
+
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<table id="enumconstants" class="jd-sumtable"><tr><th colspan="12">Enum Values</th></tr>
+
+    
     <tr class="alt-color api apilevel-" >
-      <td class="jd-typecol"><nobr>
-        
-         
-         
-        
-        interface</nobr></td>
-      <td class="jd-linkcol"><a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a></td>
-      <td class="jd-descrcol" width="100%">&nbsp;</td>
+        <td class="jd-descrcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&nbsp;</td>
+        <td class="jd-linkcol">BOOL&nbsp;</td>
+        <td class="jd-descrcol" width="100%"><code>BOOL = 3;</code>
+&nbsp;</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-descrcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&nbsp;</td>
+        <td class="jd-linkcol">EVENTED_BOOL&nbsp;</td>
+        <td class="jd-descrcol" width="100%"><code>EVENTED_BOOL = 6;</code>
+&nbsp;</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-descrcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&nbsp;</td>
+        <td class="jd-linkcol">EVENTED_NUM&nbsp;</td>
+        <td class="jd-descrcol" width="100%"><code>EVENTED_NUM = 5;</code>
+&nbsp;</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-descrcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&nbsp;</td>
+        <td class="jd-linkcol">EVENTED_STRING&nbsp;</td>
+        <td class="jd-descrcol" width="100%"><code>EVENTED_STRING = 4;</code>
+&nbsp;</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-descrcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&nbsp;</td>
+        <td class="jd-linkcol">NUM&nbsp;</td>
+        <td class="jd-descrcol" width="100%"><code>NUM = 2;</code>
+&nbsp;</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-descrcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&nbsp;</td>
+        <td class="jd-linkcol">STRING&nbsp;</td>
+        <td class="jd-descrcol" width="100%"><code>STRING = 1;</code>
+&nbsp;</td>
     </tr>
     
     
@@ -437,64 +510,71 @@ Summary:
 
 
 
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<table id="constants" class="jd-sumtable"><tr><th colspan="12">Constants</th></tr>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<table id="pubctors" class="jd-sumtable"><tr><th colspan="12">Public Constructors</th></tr>
-
-
-
-	 
+    
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            </nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#DataPipeline()">DataPipeline</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#BOOL_VALUE">BOOL_VALUE</a></td>
+        <td class="jd-descrcol" width="100%"><code>BOOL = 3;</code>
+</td>
+    </tr>
+    
+    
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            </nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#DataPipeline(com.openxc.DataPipeline.Operator)">DataPipeline</a></span>(<a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a> operator)</nobr>
-        
-  </td></tr>
-
-
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#EVENTED_BOOL_VALUE">EVENTED_BOOL_VALUE</a></td>
+        <td class="jd-descrcol" width="100%"><code>EVENTED_BOOL = 6;</code>
+</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#EVENTED_NUM_VALUE">EVENTED_NUM_VALUE</a></td>
+        <td class="jd-descrcol" width="100%"><code>EVENTED_NUM = 5;</code>
+</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#EVENTED_STRING_VALUE">EVENTED_STRING_VALUE</a></td>
+        <td class="jd-descrcol" width="100%"><code>EVENTED_STRING = 4;</code>
+</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#NUM_VALUE">NUM_VALUE</a></td>
+        <td class="jd-descrcol" width="100%"><code>NUM = 2;</code>
+</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#STRING_VALUE">STRING_VALUE</a></td>
+        <td class="jd-descrcol" width="100%"><code>STRING = 1;</code>
+</td>
+    </tr>
+    
+    
 
 </table>
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -511,16 +591,14 @@ Summary:
         <td class="jd-typecol"><nobr>
             
             
+            final
+            static
             
-            
-            
-            <a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a></nobr>
+            Descriptors.EnumDescriptor</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#addSink(com.openxc.sinks.VehicleDataSink)">addSink</a></span>(<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> sink)</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#getDescriptor()">getDescriptor</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Add a new sink to the pipeline.</div>
-  
   </td></tr>
 
 
@@ -529,16 +607,14 @@ Summary:
         <td class="jd-typecol"><nobr>
             
             
+            final
             
             
-            
-            <a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a></nobr>
+            Descriptors.EnumDescriptor</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#addSource(com.openxc.sources.VehicleDataSource)">addSource</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#getDescriptorForType()">getDescriptorForType</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Add a new source to the pipeline.</div>
-  
   </td></tr>
 
 
@@ -547,67 +623,29 @@ Summary:
         <td class="jd-typecol"><nobr>
             
             
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#clearSinks()">clearSinks</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Remove and stop all sinks in the pipeline.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#clearSources()">clearSources</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Remove and stop all sources in the pipeline.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#get(java.lang.String)">get</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</nobr>
-        
-        <div class="jd-descrdiv">Return the last received value for the measurement if known.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
+            final
             
             
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#getMessageCount()">getMessageCount</a></span>()</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#getNumber()">getNumber</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            Descriptors.EnumValueDescriptor</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#getValueDescriptor()">getValueDescriptor</a></span>()</nobr>
         
   </td></tr>
 
@@ -618,12 +656,12 @@ Summary:
             
             
             
+            static
             
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a>&gt;</nobr>
+            EnumLiteMap&lt;<a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#getSinks()">getSinks</a></span>()</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#internalGetValueMap()">internalGetValueMap</a></span>()</nobr>
         
   </td></tr>
 
@@ -634,12 +672,12 @@ Summary:
             
             
             
+            static
             
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a>&gt;</nobr>
+            <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#getSources()">getSources</a></span>()</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#valueOf(int)">valueOf</a></span>(int value)</nobr>
         
   </td></tr>
 
@@ -650,16 +688,13 @@ Summary:
             
             
             
+            static
             
-            
-            void</nobr>
+            <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#valueOf(java.lang.String)">valueOf</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> name)</nobr>
         
-        <div class="jd-descrdiv">Accept new values from data sources and send it out to all registered
- sinks.</div>
-  
   </td></tr>
 
 
@@ -669,15 +704,13 @@ Summary:
             
             
             
+            static
             
-            
-            void</nobr>
+            <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#removeSink(com.openxc.sinks.VehicleDataSink)">removeSink</a></span>(<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> sink)</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor)">valueOf</a></span>(Descriptors.EnumValueDescriptor desc)</nobr>
         
-        <div class="jd-descrdiv">Remove a previously added sink from the pipeline.</div>
-  
   </td></tr>
 
 
@@ -686,86 +719,13 @@ Summary:
         <td class="jd-typecol"><nobr>
             
             
+            final
+            static
             
-            
-            
-            void</nobr>
+            <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">Type[]</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#removeSource(com.openxc.sources.VehicleDataSource)">removeSource</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
-        
-        <div class="jd-descrdiv">Remove a previously added source from the pipeline.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
-        
-        <div class="jd-descrdiv">At least one source is active - notify the operator.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
-        
-        <div class="jd-descrdiv">At least one source is not active - if all sources are inactive, notify
- the operator.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#stop()">stop</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Clear all sources and sinks from the pipeline and stop all of them.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#toString()">toString</a></span>()</nobr>
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html#values()">values</a></span>()</nobr>
         
   </td></tr>
 
@@ -783,6 +743,208 @@ Summary:
 <table id="inhmethods" class="jd-sumtable"><tr><th>
   <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
   <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Enum" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.Enum-trigger"
+          src="../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">java.lang.Enum</a>
+
+<div id="inherited-methods-java.lang.Enum">
+  <div id="inherited-methods-java.lang.Enum-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.Enum-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">clone</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">compareTo</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">compareTo</span>(E arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">finalize</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;E&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getDeclaringClass</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">name</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">ordinal</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            static
+            &lt;T&nbsp;extends&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">Enum</a>&lt;T&gt;&gt;
+            T</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">valueOf</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;T&gt; arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
 
 
 <tr class="api apilevel-" >
@@ -989,19 +1151,19 @@ From class
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sources.SourceCallback" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.sources.SourceCallback-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.google.protobuf.Internal.EnumLite" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.google.protobuf.Internal.EnumLite-trigger"
           src="../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From interface
 
-  <a href="../../com/openxc/sources/SourceCallback.html">com.openxc.sources.SourceCallback</a>
+  com.google.protobuf.Internal.EnumLite
 
-<div id="inherited-methods-com.openxc.sources.SourceCallback">
-  <div id="inherited-methods-com.openxc.sources.SourceCallback-list"
+<div id="inherited-methods-com.google.protobuf.Internal.EnumLite">
+  <div id="inherited-methods-com.google.protobuf.Internal.EnumLite-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-com.openxc.sources.SourceCallback-summary" style="display: none;">
+  <div id="inherited-methods-com.google.protobuf.Internal.EnumLite-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -1014,13 +1176,53 @@ From interface
             
             
             
-            void</nobr>
+            int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad">getNumber</span>()</nobr>
         
-        <div class="jd-descrdiv">Receive a new measurement with at least a value and optionally an event.</div>
-  
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.google.protobuf.ProtocolMessageEnum" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.google.protobuf.ProtocolMessageEnum-trigger"
+          src="../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  com.google.protobuf.ProtocolMessageEnum
+
+<div id="inherited-methods-com.google.protobuf.ProtocolMessageEnum">
+  <div id="inherited-methods-com.google.protobuf.ProtocolMessageEnum-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-com.google.protobuf.ProtocolMessageEnum-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            Descriptors.EnumDescriptor</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getDescriptorForType</span>()</nobr>
+        
   </td></tr>
 
 
@@ -1032,13 +1234,11 @@ From interface
             
             
             
-            void</nobr>
+            int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        <span class="sympad">getNumber</span>()</nobr>
         
-        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
-  
   </td></tr>
 
 
@@ -1050,14 +1250,55 @@ From interface
             
             
             
-            void</nobr>
+            Descriptors.EnumValueDescriptor</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        <span class="sympad">getValueDescriptor</span>()</nobr>
         
-        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
- sleep.</div>
-  
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Comparable" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.Comparable-trigger"
+          src="../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Comparable.html">java.lang.Comparable</a>
+
+<div id="inherited-methods-java.lang.Comparable">
+  <div id="inherited-methods-java.lang.Comparable-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.Comparable-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">compareTo</span>(T arg0)</nobr>
+        
   </td></tr>
 
 
@@ -1087,82 +1328,459 @@ From interface
 <!-- Enum Values -->
 
 
+<!-- ========= ENUM CONSTANTS DETAIL ======== -->
+<h2>Enum Values</h2>
+
+
+
+
+<A NAME="BOOL"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+        BOOL
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>BOOL = 3;</code>
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="EVENTED_BOOL"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+        EVENTED_BOOL
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>EVENTED_BOOL = 6;</code>
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="EVENTED_NUM"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+        EVENTED_NUM
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>EVENTED_NUM = 5;</code>
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="EVENTED_STRING"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+        EVENTED_STRING
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>EVENTED_STRING = 4;</code>
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="NUM"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+        NUM
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>NUM = 2;</code>
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="STRING"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+        STRING
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>STRING = 1;</code>
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+
 <!-- Constants -->
+
+
+<!-- ========= ENUM CONSTANTS DETAIL ======== -->
+<h2>Constants</h2>
+
+
+
+
+<A NAME="BOOL_VALUE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        BOOL_VALUE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>BOOL = 3;</code>
+</p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                3
+                (0x00000003)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="EVENTED_BOOL_VALUE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        EVENTED_BOOL_VALUE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>EVENTED_BOOL = 6;</code>
+</p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                6
+                (0x00000006)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="EVENTED_NUM_VALUE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        EVENTED_NUM_VALUE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>EVENTED_NUM = 5;</code>
+</p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                5
+                (0x00000005)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="EVENTED_STRING_VALUE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        EVENTED_STRING_VALUE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>EVENTED_STRING = 4;</code>
+</p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                4
+                (0x00000004)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="NUM_VALUE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        NUM_VALUE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>NUM = 2;</code>
+</p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                2
+                (0x00000002)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="STRING_VALUE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STRING_VALUE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p><code>STRING = 1;</code>
+</p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                1
+                (0x00000001)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
 
 
 <!-- Fields -->
 
 
 <!-- Public ctors -->
-
-
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<h2>Public Constructors</h2>
-
-
-
-<A NAME="DataPipeline()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        
-      </span>
-      <span class="sympad">DataPipeline</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="DataPipeline(com.openxc.DataPipeline.Operator)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        
-      </span>
-      <span class="sympad">DataPipeline</span>
-      <span class="normal">(<a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a> operator)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
 
 
 
@@ -1178,85 +1796,19 @@ From interface
 
 
 
-<A NAME="addSink(com.openxc.sinks.VehicleDataSink)"></A>
+<A NAME="getDescriptor()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
+        final 
          
          
-         
-         
-        <a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a>
+        Descriptors.EnumDescriptor
       </span>
-      <span class="sympad">addSink</span>
-      <span class="normal">(<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> sink)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Add a new sink to the pipeline.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="addSource(com.openxc.sources.VehicleDataSource)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        <a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a>
-      </span>
-      <span class="sympad">addSource</span>
-      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Add a new source to the pipeline.
-
- The source is given a reference to this DataPipeline as its callback.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="clearSinks()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">clearSinks</span>
+      <span class="sympad">getDescriptor</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1269,26 +1821,25 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Remove and stop all sinks in the pipeline.
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
 
 
-<A NAME="clearSources()"></A>
+<A NAME="getDescriptorForType()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
          
+        final 
          
          
-         
-        void
+        Descriptors.EnumDescriptor
       </span>
-      <span class="sympad">clearSources</span>
+      <span class="sympad">getDescriptorForType</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1301,99 +1852,25 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Remove and stop all sources in the pipeline.
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
 
 
-<A NAME="get(java.lang.String)"></A>
+<A NAME="getNumber()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
          
-         
-         
-         
-        <a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>
-      </span>
-      <span class="sympad">get</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Return the last received value for the measurement if known.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>a RawMeasurement with the last known value, or null if no value
-          has been received.
-</li></ul>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="getMessageCount()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
+        final 
          
          
         int
       </span>
-      <span class="sympad">getMessageCount</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>number of messages received since instantiation.
-</li></ul>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="getSinks()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a>&gt;
-      </span>
-      <span class="sympad">getSinks</span>
+      <span class="sympad">getNumber</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1412,19 +1889,19 @@ From interface
 </div>
 
 
-<A NAME="getSources()"></A>
+<A NAME="getValueDescriptor()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
          
+        final 
          
          
-         
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a>&gt;
+        Descriptors.EnumValueDescriptor
       </span>
-      <span class="sympad">getSources</span>
+      <span class="sympad">getValueDescriptor</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1443,221 +1920,19 @@ From interface
 </div>
 
 
-<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
+<A NAME="internalGetValueMap()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
          
          
          
-         
-        void
+        EnumLiteMap&lt;<a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>&gt;
       </span>
-      <span class="sympad">receive</span>
-      <span class="normal">(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Accept new values from data sources and send it out to all registered
- sinks.
-
- This method is required to implement the SourceCallback interface.
-
- If any data sink throws a DataSinkException when receiving data, it will
- be removed from the list of sinks.
-</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>measurement</td>
-          <td>the new measurement.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="removeSink(com.openxc.sinks.VehicleDataSink)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">removeSink</span>
-      <span class="normal">(<a href="../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> sink)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Remove a previously added sink from the pipeline.
-
- Once removed, the sink will no longer receive any new measurements from
- the pipeline's sources. The sink's <code><a href="../../com/openxc/sinks/VehicleDataSink.html#stop()">stop()</a></code> method
- is also called.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>sink</td>
-          <td>if the value is null, it is ignored.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="removeSource(com.openxc.sources.VehicleDataSource)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">removeSource</span>
-      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Remove a previously added source from the pipeline.
-
- Once removed, the source should no longer use this pipeline for its
- callback.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>source</td>
-          <td>if the value is null, it is ignored.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="sourceConnected(com.openxc.sources.VehicleDataSource)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">sourceConnected</span>
-      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>At least one source is active - notify the operator.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="sourceDisconnected(com.openxc.sources.VehicleDataSource)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">sourceDisconnected</span>
-      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>At least one source is not active - if all sources are inactive, notify
- the operator.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="stop()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">stop</span>
+      <span class="sympad">internalGetValueMap</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1670,26 +1945,118 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Clear all sources and sinks from the pipeline and stop all of them.
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
 
 
-<A NAME="toString()"></A>
+<A NAME="valueOf(int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
          
          
          
-         
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
       </span>
-      <span class="sympad">toString</span>
+      <span class="sympad">valueOf</span>
+      <span class="normal">(int value)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="valueOf(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+      <span class="sympad">valueOf</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> name)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a>
+      </span>
+      <span class="sympad">valueOf</span>
+      <span class="normal">(Descriptors.EnumValueDescriptor desc)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="values()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+         
+         
+        <a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">Type[]</a>
+      </span>
+      <span class="sympad">values</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">

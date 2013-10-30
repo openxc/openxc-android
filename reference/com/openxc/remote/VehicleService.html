@@ -287,6 +287,13 @@
   
   
 
+  
+   
+  
+  
+  
+  
+
 
 <div class="sum-details-links">
 
@@ -301,6 +308,9 @@ Summary:
   <a href="#inhconstants">Inherited Constants</a>
   
 
+
+  &#124; <a href="#lfields">Fields</a>
+  
 
 
 
@@ -361,6 +371,11 @@ Summary:
   
 
   
+  
+      implements 
+      
+        <a href="../../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a> 
+      
   
   
 
@@ -1025,9 +1040,31 @@ android.content.ComponentCallbacks2
 </td></tr>
 
 
+
+
 </table>
 
 
+
+
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="lfields" class="jd-sumtable"><tr><th colspan="12">Fields</th></tr>
+
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          public
+          static
+          
+          boolean</nobr></td>
+          <td class="jd-linkcol"><a href="../../../com/openxc/remote/VehicleService.html#sIsUnderTest">sIsUnderTest</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+
+</table>
 
 
 
@@ -1118,6 +1155,38 @@ android.content.ComponentCallbacks2
         
         <div class="jd-descrdiv">Shut down any associated services when this service is about to die.</div>
   
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onPipelineActivated()">onPipelineActivated</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()</nobr>
+        
   </td></tr>
 
 
@@ -4443,6 +4512,64 @@ From interface
 </td></tr>
 
 
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.DataPipeline.Operator" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.openxc.DataPipeline.Operator-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="../../../com/openxc/DataPipeline.Operator.html">com.openxc.DataPipeline.Operator</a>
+
+<div id="inherited-methods-com.openxc.DataPipeline.Operator">
+  <div id="inherited-methods-com.openxc.DataPipeline.Operator-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-com.openxc.DataPipeline.Operator-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/DataPipeline.Operator.html#onPipelineActivated()">onPipelineActivated</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/DataPipeline.Operator.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
 </table>
 
 
@@ -4467,6 +4594,43 @@ From interface
 
 
 <!-- Fields -->
+
+
+<!-- ========= FIELD DETAIL ======== -->
+<h2>Fields</h2>
+
+
+
+
+<A NAME="sIsUnderTest"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+        boolean
+      </span>
+        sIsUnderTest
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
 
 
 <!-- Public ctors -->
@@ -4616,6 +4780,68 @@ From interface
  This stops the data source (e.g. stops trace playback) and kills the
  thread used for notifying measurement listeners.
 </p></div>
+
+    </div>
+</div>
+
+
+<A NAME="onPipelineActivated()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">onPipelineActivated</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="onPipelineDeactivated()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">onPipelineDeactivated</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
