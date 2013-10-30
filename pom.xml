@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.openxcplatform</groupId>
     <artifactId>openxc-parent</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>5.1.0</version>
     <packaging>pom</packaging>
     <name>OpenXC - Parent</name>
     <description>Android library and example applications for the OpenXC Platform</description>
@@ -12,7 +12,7 @@
         <url>https://github.com/openxc/openxc-android</url>
         <connection>scm:git:https://github.com/openxc/openxc-android</connection>
         <developerConnection>scm:git:git@github.com:openxc/openxc-android</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v5.1.0</tag>
   </scm>
 
     <parent>
