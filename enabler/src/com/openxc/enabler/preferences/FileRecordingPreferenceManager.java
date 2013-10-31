@@ -70,7 +70,9 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void stopRecording() {
-        getVehicleManager().removeSink(mFileRecorder);
-        mFileRecorder = null;
+    	if(getVehicleManager() != null){
+	        getVehicleManager().removeSink(mFileRecorder);
+	        mFileRecorder = null;
+    	}
     }
 }
