@@ -44,4 +44,35 @@
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>
     <string name="application_version_key">application_version</string>
+    
+    
+    <!-- Vehicle Dashboard Strings -->
+    <string name="app_name">Vehicle Dashboard</string>
+    <string name="steering_wheel_angle_label">Steering Wheel Angle</string>
+    <string name="vehicle_speed_label">Vehicle Speed</string>
+    <string name="fuel_consumed_label">Fuel Consumed</string>
+    <string name="fuel_level_label">Fuel Level</string>
+    <string name="odometer_label">Odometer</string>
+    <string name="wiper_status_label">Windshield Wiper Status</string>
+    <string name="brake_pedal_status_label">Brake Pedal Status</string>
+    <string name="headlamp_status_label">Headlamp Status</string>
+    <string name="engine_speed_label">Engine Speed</string>
+    <string name="torque_at_transmission_label">Torque At Transmission</string>
+    <string name="accelerator_pedal_position_label">
+        Accelerator Pedal Position
+    </string>
+    <string name="transmission_gear_pos_label">
+        Transmission Gear Position
+    </string>
+    <string name="ignition_label">Ignition Status</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="android_latitude_label">Android Latitude</string>
+    <string name="android_longitude_label">Android Longitude</string>
+    <string name="parking_brake_status_label">Parking Brake Status</string>
+    <string name="button_event_label">Button Event</string>
+    <string name="door_status_label">Door Status</string>
+    <string name="left_turn">Left Turn</string>
+    <string name="right_turn">Right Turn</string>
+    
 </resources>
