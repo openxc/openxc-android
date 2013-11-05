@@ -103,14 +103,14 @@ public class BytestreamBuffer {
                             ByteStreams.limit(input, size));
                 }
 
-                if(message != null && !validateProtobuf(message)) {
-                    message = null;
-                } else {
+                if(message != null && validateProtobuf(message)) {
                     mBuffer = new ByteArrayOutputStream();
                     int remainingByte;
                     while((remainingByte = input.read()) != -1) {
                         mBuffer.write(remainingByte);
                     }
+                } else {
+                    message = null;
                 }
             } catch(IOException e) { }
 

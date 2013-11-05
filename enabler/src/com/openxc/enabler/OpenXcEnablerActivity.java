@@ -132,17 +132,6 @@ public class OpenXcEnablerActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
 
-        if(!stopService(new Intent(this, PreferenceManagerService.class))) {
-            Log.i(TAG, "Could not stop " +
-                        PreferenceManagerService.class.getSimpleName()
-                     + ". Service may not have been started.");
-        }
-
-        if(!stopService(new Intent(this, VehicleManager.class))) {
-            Log.i(TAG, "Could not stop " + VehicleManager.class.getSimpleName()
-                     + ". Service may not have been started.");
-        }
-
         Log.d(TAG, "Destroying Enabler activity");
     }
 
