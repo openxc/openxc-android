@@ -386,7 +386,7 @@ public class VehicleDashboardActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.vehicle_dashboard);
         Log.i(TAG, "Vehicle dashboard created");
 
         mSteeringWheelAngleView = (TextView) findViewById(
@@ -489,7 +489,7 @@ public class VehicleDashboardActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.vehicle_dashboard, menu);
         return true;
     }
 }
