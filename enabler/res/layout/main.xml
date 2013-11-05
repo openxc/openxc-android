@@ -31,6 +31,11 @@
             style="@style/ItemData"/>
     </LinearLayout>
     
+    <Button
+        android:id="@+id/view_vehicle_data_btn"
+        style="@style/WideButton"
+        android:text="@string/show_data_button"/>
+    
     <LinearLayout 
         style="@style/VerticallyStackedScroller">        
 	    <TextView 
