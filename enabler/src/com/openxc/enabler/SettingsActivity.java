@@ -88,6 +88,10 @@ public class SettingsActivity extends PreferenceActivity {
                     findPreference(getString(R.string.network_host_key)),
                     findPreference(getString(R.string.network_port_key)),
                     findPreference(getString(R.string.network_checkbox_key)));
+
+                initializeTracePreferences(
+                    findPreference(getString(R.string.trace_source_checkbox_key)),
+                    findPreference(getString(R.string.trace_source_file_key)));
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             } else if(action.equals(ABOUT_PREFERENCE)) {
