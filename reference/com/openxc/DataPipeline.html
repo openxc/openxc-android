@@ -176,13 +176,29 @@
           <div id="classes-nav">
             <ul>
               
+    <li><h2>Interfaces</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.RawMessageOrBuilder.html">BinaryMessages.RawMessageOrBuilder</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.TranslatedMessageOrBuilder.html">BinaryMessages.TranslatedMessageOrBuilder</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessageOrBuilder.html">BinaryMessages.VehicleMessageOrBuilder</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a></li>
+      </ul>
+    </li>
               
     <li><h2>Classes</h2>
       <ul>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.html">BinaryMessages</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.RawMessage.html">BinaryMessages.RawMessage</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.RawMessage.Builder.html">BinaryMessages.RawMessage.Builder</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.html">BinaryMessages.TranslatedMessage</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Builder.html">BinaryMessages.TranslatedMessage.Builder</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessage.Builder.html">BinaryMessages.VehicleMessage.Builder</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/BuildConfig.html">BuildConfig</a></li>
           <li class="selected api apilevel-"><a href="../../com/openxc/DataPipeline.html">DataPipeline</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/R.html">R</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/R.attr.html">R.attr</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/R.drawable.html">R.drawable</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/R.string.html">R.string</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/VehicleManager.html">VehicleManager</a></li>
           <li class="api apilevel-"><a href="../../com/openxc/VehicleManager.VehicleBinder.html">VehicleManager.VehicleBinder</a></li>
@@ -190,6 +206,12 @@
     </li>
               
               
+    <li><h2>Enums</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></li>
+          <li class="api apilevel-"><a href="../../com/openxc/BinaryMessages.VehicleMessage.Type.html">BinaryMessages.VehicleMessage.Type</a></li>
+      </ul>
+    </li>
               
     <li><h2>Exceptions</h2>
       <ul>
@@ -254,6 +276,8 @@
 
 Summary:
 
+  <a href="#nestedclasses">Nested Classes</a>
+  
 
 
 
@@ -262,7 +286,8 @@ Summary:
 
 
 
-  <a href="#pubctors">Ctors</a>
+
+  &#124; <a href="#pubctors">Ctors</a>
   
 
 
@@ -357,6 +382,10 @@ Summary:
  <code><a href="../../com/openxc/DataPipeline.html#receive(com.openxc.remote.RawMeasurement)">receive(RawMeasurement)</a></code> method on the this class when new
  values arrive. The DataPipeline then passes this value on to all currently
  registered data sinks.
+
+ The Pipeline can have an optional Operator, which implements a few callbacks
+ to check the status of the pipeline - e.g. if some source in the pipeline is
+ active.
 </p>
 
 
@@ -384,6 +413,26 @@ Summary:
 
 
 <h2>Summary</h2>
+
+
+
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<table id="nestedclasses" class="jd-sumtable"><tr><th colspan="12">Nested Classes</th></tr>
+
+
+  
+    <tr class="alt-color api apilevel-" >
+      <td class="jd-typecol"><nobr>
+        
+         
+         
+        
+        interface</nobr></td>
+      <td class="jd-linkcol"><a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a></td>
+      <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
 
 
 
@@ -424,6 +473,22 @@ Summary:
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../com/openxc/DataPipeline.html#DataPipeline()">DataPipeline</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#DataPipeline(com.openxc.DataPipeline.Operator)">DataPipeline</a></span>(<a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a> operator)</nobr>
         
   </td></tr>
 
@@ -630,6 +695,43 @@ Summary:
         <span class="sympad"><a href="../../com/openxc/DataPipeline.html#removeSource(com.openxc.sources.VehicleDataSource)">removeSource</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
         
         <div class="jd-descrdiv">Remove a previously added source from the pipeline.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        
+        <div class="jd-descrdiv">At least one source is active - notify the operator.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/DataPipeline.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        
+        <div class="jd-descrdiv">At least one source is not active - if all sources are inactive, notify
+ the operator.</div>
   
   </td></tr>
 
@@ -922,6 +1024,43 @@ From interface
   </td></tr>
 
 
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        
+        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        
+        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
+ sleep.</div>
+  
+  </td></tr>
+
+
 </table>
   </div>
 </div>
@@ -976,6 +1115,37 @@ From interface
       </span>
       <span class="sympad">DataPipeline</span>
       <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="DataPipeline(com.openxc.DataPipeline.Operator)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">DataPipeline</span>
+      <span class="normal">(<a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a> operator)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1405,6 +1575,71 @@ From interface
         </tr>
       </table>
   </div>
+
+    </div>
+</div>
+
+
+<A NAME="sourceConnected(com.openxc.sources.VehicleDataSource)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">sourceConnected</span>
+      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>At least one source is active - notify the operator.
+</p></div>
+
+    </div>
+</div>
+
+
+<A NAME="sourceDisconnected(com.openxc.sources.VehicleDataSource)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">sourceDisconnected</span>
+      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>At least one source is not active - if all sources are inactive, notify
+ the operator.
+</p></div>
 
     </div>
 </div>

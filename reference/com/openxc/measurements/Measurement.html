@@ -628,7 +628,7 @@ Summary:
             
             
             
-            double</nobr>
+            long</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getAge()">getAge</a></span>()</nobr>
@@ -646,11 +646,13 @@ Summary:
             
             
             
-            double</nobr>
+            long</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getBirthtime()">getBirthtime</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Return the creation time of this measurement;</div>
+  
   </td></tr>
 
 
@@ -805,7 +807,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#setTimestamp(double)">setTimestamp</a></span>(double timestamp)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#setTimestamp(long)">setTimestamp</a></span>(long timestamp)</nobr>
         
         <div class="jd-descrdiv">Set the birth timestamp for this measurement.</div>
   
@@ -886,7 +888,7 @@ Summary:
          
         abstract 
          
-        double
+        long
       </span>
       <span class="sympad">getAge</span>
       <span class="normal">()</span>
@@ -904,7 +906,7 @@ Summary:
   <div class="jd-tagdata jd-tagdescr"><p>Retreive the age of this measurement.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>the age of the data in seconds.
+      <ul class="nolist"><li>the age of the data in milliseconds.
 </li></ul>
   </div>
 
@@ -922,7 +924,7 @@ Summary:
          
         abstract 
          
-        double
+        long
       </span>
       <span class="sympad">getBirthtime</span>
       <span class="normal">()</span>
@@ -937,7 +939,13 @@ Summary:
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Return the creation time of this measurement;</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the creation time in milliseconds since the epoch of this
+ measurement.
+</li></ul>
+  </div>
 
     </div>
 </div>
@@ -1229,7 +1237,7 @@ Summary:
 </div>
 
 
-<A NAME="setTimestamp(double)"></A>
+<A NAME="setTimestamp(long)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1242,7 +1250,7 @@ Summary:
         void
       </span>
       <span class="sympad">setTimestamp</span>
-      <span class="normal">(double timestamp)</span>
+      <span class="normal">(long timestamp)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1254,9 +1262,17 @@ Summary:
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Set the birth timestamp for this measurement.
-
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Set the birth timestamp for this measurement.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>timestamp</td>
+          <td>the new timestamp, in milliseconds since the epoch.
+</td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>

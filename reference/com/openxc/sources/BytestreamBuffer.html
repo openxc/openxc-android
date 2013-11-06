@@ -188,6 +188,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
@@ -431,6 +432,41 @@ Summary:
 <!-- ========== METHOD SUMMARY =========== -->
 <table id="pubmethods" class="jd-sumtable"><tr><th colspan="12">Public Methods</th></tr>
 
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BytestreamBuffer.html#containsJson()">containsJson</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the buffer *most likely* contains JSON (as opposed to a
+ protobuf).</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BytestreamBuffer.html#readBinaryMessage()">readBinaryMessage</a></span>()</nobr>
+        
+  </td></tr>
 
 
 	 
@@ -763,6 +799,70 @@ From class
 
 <h2>Public Methods</h2>
 
+
+
+<A NAME="containsJson()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">containsJson</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Return true if the buffer *most likely* contains JSON (as opposed to a
+ protobuf).
+</p></div>
+
+    </div>
+</div>
+
+
+<A NAME="readBinaryMessage()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a>
+      </span>
+      <span class="sympad">readBinaryMessage</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
 
 
 <A NAME="readLines()"></A>

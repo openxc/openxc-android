@@ -188,6 +188,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
@@ -441,6 +442,43 @@ Summary:
   </td></tr>
 
 
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        
+        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        
+        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
+ sleep.</div>
+  
+  </td></tr>
+
+
 
 </table>
 
@@ -525,6 +563,71 @@ Summary:
         </tr>
       </table>
   </div>
+
+    </div>
+</div>
+
+
+<A NAME="sourceConnected(com.openxc.sources.VehicleDataSource)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+        abstract 
+         
+        void
+      </span>
+      <span class="sympad">sourceConnected</span>
+      <span class="normal">(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>The data source is connected, so if necessary, keep the device awake.
+</p></div>
+
+    </div>
+</div>
+
+
+<A NAME="sourceDisconnected(com.openxc.sources.VehicleDataSource)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+        abstract 
+         
+        void
+      </span>
+      <span class="sympad">sourceDisconnected</span>
+      <span class="normal">(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>The data source is connected, so if necessary, let the device go to
+ sleep.
+</p></div>
 
     </div>
 </div>

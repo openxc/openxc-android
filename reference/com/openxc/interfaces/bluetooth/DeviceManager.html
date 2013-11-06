@@ -443,6 +443,24 @@ Summary:
   </td></tr>
 
 
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/bluetooth/DeviceManager.html#stop()">stop</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Immediately cancel any pending Bluetooth operations.</div>
+  
+  </td></tr>
+
+
 
 </table>
 
@@ -789,6 +807,48 @@ From class
         </tr>
       </table>
   </div>
+
+    </div>
+</div>
+
+
+<A NAME="stop()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">stop</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Immediately cancel any pending Bluetooth operations.
+
+ The BluetoothSocket.connect() function blocks while waiting for a
+ connection, but it's thread safe and we can cancel that by calling
+ close() on it at any time.
+
+ Importantly we don't want to close the socket any other time, becauase we
+ want to leave that up to the user of the socket - if you call close()
+ twice, or close Input/Ouput streams associated with the socket
+ simultaneously, it can cause a segfault due to a bug in some Android
+ Bluetooth stacks. Awesome!
+</p></div>
 
     </div>
 </div>

@@ -522,8 +522,8 @@ Summary:
           protected
           
           final
-          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/Condition.html">Condition</a></nobr></td>
-          <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mDeviceChanged">mDeviceChanged</a></td>
+          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/ReadWriteLock.html">ReadWriteLock</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mConnectionLock">mConnectionLock</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
@@ -633,9 +633,10 @@ Summary:
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#isConnected()">isConnected</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
   
   </td></tr>
 
@@ -651,10 +652,9 @@ Summary:
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#setResource(java.lang.String)">setResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> otherResource)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
         
-        <div class="jd-descrdiv">Change the resource used by the instance to connect to the interface,
- restarting any neccessary services.</div>
+        <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
   
   </td></tr>
 
@@ -667,12 +667,13 @@ Summary:
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#stop()">stop</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#setResource(java.lang.String)">setResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> otherResource)</nobr>
         
-        <div class="jd-descrdiv">Clear the callback so no further updates are sent.</div>
+        <div class="jd-descrdiv">Change the resource used by the instance to connect to the interface,
+ restarting any neccessary services.</div>
   
   </td></tr>
 
@@ -733,6 +734,24 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#connect()">connect</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Initiate a connection to the vehicle interface.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#disconnect()">disconnect</a></span>()</nobr>
         
         <div class="jd-descrdiv">Perform any cleanup necessary to disconnect from the interface.</div>
@@ -741,7 +760,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -759,7 +778,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -772,25 +791,6 @@ Summary:
         <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#read(byte[])">read</a></span>(byte[] bytes)</nobr>
         
         <div class="jd-descrdiv">Read data from the source into the given array.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/interfaces/network/NetworkVehicleInterface.html#waitForConnection()">waitForConnection</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">If not already connected to the data source, initiate the connection and
- block until ready to be read.</div>
   
   </td></tr>
 
@@ -830,21 +830,42 @@ From class
 	 
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
+            abstract
             
             
             
             
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/Condition.html">Condition</a></nobr>
+            void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#createCondition()">createCondition</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#connect()">connect</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Initiate a connection to the vehicle interface.</div>
+  
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#connected()">connected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Must have the connection lock before calling this function
+</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -862,6 +883,25 @@ From class
 
 
 	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#disconnected()">disconnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Must have the connection lock before calling this function
+</div>
+  
+  </td></tr>
+
+
+	 
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
@@ -872,8 +912,11 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#isRunning()">isRunning</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#isConnected()">isConnected</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
   </td></tr>
 
 
@@ -885,11 +928,13 @@ From class
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#lockConnection()">lockConnection</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#isRunning()">isRunning</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Returns true if this source should be running, or if it should die.</div>
+  
   </td></tr>
 
 
@@ -931,7 +976,7 @@ From class
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            synchronized
+            
             
             
             
@@ -947,7 +992,7 @@ From class
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            synchronized
+            
             
             
             
@@ -965,22 +1010,6 @@ From class
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#unlockConnection()">unlockConnection</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
             
             
             
@@ -1020,43 +1049,6 @@ From class
   <div id="inherited-methods-com.openxc.sources.ContextualVehicleDataSource-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html#connected()">connected</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html#disconnected()">disconnected</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
- sleep.</div>
-  
-  </td></tr>
 
 
 	 
@@ -1109,6 +1101,38 @@ From class
             
             
             
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#connected()">connected</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#disconnected()">disconnected</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1150,6 +1174,41 @@ From class
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(java.lang.String)">handleMessage</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> serializedMeasurement)</nobr>
         
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
   </td></tr>
 
 
@@ -1533,6 +1592,25 @@ From interface
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/VehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1544,7 +1622,7 @@ From interface
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -1803,6 +1881,42 @@ From interface
 
 
 
+<A NAME="isConnected()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">isConnected</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc. The source is
+ capable of providing new vehicle data.
+
+ Returns true if connected, false otherwise.
+</p></div>
+
+    </div>
+</div>
+
+
 <A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1904,41 +2018,6 @@ From interface
 </div>
 
 
-<A NAME="stop()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">stop</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Clear the callback so no further updates are sent.
-
- Subclasses should be sure to call super.stop() so they also stop sending
- updates when killed by a user.
-</p></div>
-
-    </div>
-</div>
-
-
 <A NAME="toString()"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -2013,6 +2092,46 @@ From interface
 
 <h2>Protected Methods</h2>
 
+
+
+<A NAME="connect()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">connect</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Initiate a connection to the vehicle interface. </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../../../com/openxc/interfaces/network/NetworkSourceException.html">NetworkSourceException</a></td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
 
 
 <A NAME="disconnect()"></A>
@@ -2126,47 +2245,6 @@ From interface
       <table class="jd-tagtable">  
         <tr>
             <th><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/IOException.html">IOException</a></td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="waitForConnection()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        protected 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">waitForConnection</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>If not already connected to the data source, initiate the connection and
- block until ready to be read.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../../../com/openxc/sources/DataSourceException.html">DataSourceException</a></td>
             <td></td>
         </tr>
       </table>

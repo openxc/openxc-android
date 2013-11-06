@@ -396,12 +396,13 @@ Summary:
 <p>A vehicle data source that reads measurements from a pre-recorded trace file.
 
  This class is primarily for testing - a pre-recorded trace of the output from
- an OpenXC CAN translator is played back line by line into the library.
+ an OpenXC vehicle interface is played back line by line into the library.
  Everything from the VehicleService on up the chain is identical to when
  operating in a live vehicle.
 
  The trace file format is simply a plain text file of OpenXC JSON messages with
- an additional timestamp field, separated by newlines:
+ an additional timestamp field (in seconds with decimal parts), separated by
+ newlines:
 
  {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
  {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}
@@ -588,6 +589,25 @@ Summary:
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -600,7 +620,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -616,7 +636,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -634,7 +654,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -650,7 +670,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -734,43 +754,6 @@ From class
             
             
             
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html#connected()">connected</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/ContextualVehicleDataSource.html#disconnected()">disconnected</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
- sleep.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             Context</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -803,6 +786,38 @@ From class
   <div id="inherited-methods-com.openxc.sources.BaseVehicleDataSource-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#connected()">connected</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#disconnected()">disconnected</a></span>()</nobr>
+        
+  </td></tr>
 
 
 	 
@@ -854,6 +869,41 @@ From class
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(java.lang.String)">handleMessage</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> serializedMeasurement)</nobr>
         
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
   </td></tr>
 
 
@@ -1129,6 +1179,25 @@ From interface
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/VehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1140,7 +1209,7 @@ From interface
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -1477,6 +1546,42 @@ From interface
 
 <h2>Public Methods</h2>
 
+
+
+<A NAME="isConnected()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">isConnected</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc. The source is
+ capable of providing new vehicle data.
+
+ Returns true if connected, false otherwise.
+</p></div>
+
+    </div>
+</div>
 
 
 <A NAME="run()"></A>

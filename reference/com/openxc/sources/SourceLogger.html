@@ -188,6 +188,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
@@ -441,6 +442,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sources/SourceLogger.html#logTransferStats(java.lang.String, long, long, double)">logTransferStats</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> tag, long startTime, long endTime, double bytesReceived)</nobr>
         
+        <div class="jd-descrdiv">Log data transfer statistics to the Android log.</div>
+  
   </td></tr>
 
 
@@ -765,7 +768,31 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Log data transfer statistics to the Android log.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tag</td>
+          <td>the Android log tag to use.</td>
+        </tr>
+        <tr>
+          <th>startTime</td>
+          <td>the starting time for the stats calculation in
+ nanoseconds.</td>
+        </tr>
+        <tr>
+          <th>endTime</td>
+          <td>the ending time for the stats calculation in nanoseconds.</td>
+        </tr>
+        <tr>
+          <th>bytesReceived</td>
+          <td>the number of bytes received over the given period
+ of time
+</td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>

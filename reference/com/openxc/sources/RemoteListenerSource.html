@@ -188,6 +188,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
@@ -546,6 +547,38 @@ From class
             
             
             
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#connected()">connected</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#disconnected()">disconnected</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -587,6 +620,41 @@ From class
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(java.lang.String)">handleMessage</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> serializedMeasurement)</nobr>
         
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
   </td></tr>
 
 
@@ -862,6 +930,25 @@ From interface
             
             
             
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/VehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
+ a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -873,7 +960,7 @@ From interface
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             

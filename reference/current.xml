@@ -1,6 +1,3259 @@
 <api>
 <package name="com.openxc"
 >
+<class name="BinaryMessages"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.FileDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="registerAllExtensions"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="registry" type="com.google.protobuf.ExtensionRegistry">
+</parameter>
+</method>
+</class>
+<class name="BinaryMessages.RawMessage"
+ extends="com.google.protobuf.GeneratedMessage"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.BinaryMessages.RawMessageOrBuilder">
+</implements>
+<method name="getBus"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getData"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstance"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstanceForType"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.Descriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getMessageId"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getUnknownFields"
+ return="com.google.protobuf.UnknownFieldSet"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBus"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasData"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasMessageId"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetFieldAccessorTable"
+ return="com.google.protobuf.GeneratedMessage.FieldAccessorTable"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isInitialized"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilder"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilder"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="prototype" type="com.openxc.BinaryMessages.RawMessage">
+</parameter>
+</method>
+<method name="newBuilderForType"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilderForType"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="parent" type="com.google.protobuf.GeneratedMessage.BuilderParent">
+</parameter>
+</method>
+<method name="parseDelimitedFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseDelimitedFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="com.google.protobuf.ByteString">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="com.google.protobuf.ByteString">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="com.google.protobuf.CodedInputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="com.google.protobuf.CodedInputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="toBuilder"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="BUS_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DATA_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="MESSAGE_ID_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="PARSER"
+ type="com.google.protobuf.Parser"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="BinaryMessages.RawMessage.Builder"
+ extends="com.google.protobuf.GeneratedMessage.Builder"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.BinaryMessages.RawMessageOrBuilder">
+</implements>
+<method name="build"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="buildPartial"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearBus"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearData"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearMessageId"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBus"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getData"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstanceForType"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.Descriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getMessageId"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBus"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasData"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasMessageId"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetFieldAccessorTable"
+ return="com.google.protobuf.GeneratedMessage.FieldAccessorTable"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isInitialized"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="mergeFrom"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="com.openxc.BinaryMessages.RawMessage">
+</parameter>
+</method>
+<method name="setBus"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="int">
+</parameter>
+</method>
+<method name="setData"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="long">
+</parameter>
+</method>
+<method name="setMessageId"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="int">
+</parameter>
+</method>
+</class>
+<interface name="BinaryMessages.RawMessageOrBuilder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getBus"
+ return="int"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getData"
+ return="long"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getMessageId"
+ return="int"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBus"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasData"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasMessageId"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<class name="BinaryMessages.TranslatedMessage"
+ extends="com.google.protobuf.GeneratedMessage"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.BinaryMessages.TranslatedMessageOrBuilder">
+</implements>
+<method name="getBooleanEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBooleanValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstance"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstanceForType"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.Descriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNameBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumericEvent"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumericValue"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringEvent"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringEventBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringValue"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringValueBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getUnknownFields"
+ return="com.google.protobuf.UnknownFieldSet"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBooleanEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBooleanValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasName"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNumericEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNumericValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasStringEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasStringValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasType"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetFieldAccessorTable"
+ return="com.google.protobuf.GeneratedMessage.FieldAccessorTable"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isInitialized"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="prototype" type="com.openxc.BinaryMessages.TranslatedMessage">
+</parameter>
+</method>
+<method name="newBuilderForType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilderForType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="parent" type="com.google.protobuf.GeneratedMessage.BuilderParent">
+</parameter>
+</method>
+<method name="parseDelimitedFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseDelimitedFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="com.google.protobuf.ByteString">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="com.google.protobuf.ByteString">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="com.google.protobuf.CodedInputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="com.google.protobuf.CodedInputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="toBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="BOOLEAN_EVENT_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="8"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="BOOLEAN_VALUE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NAME_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NUMERIC_EVENT_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="7"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NUMERIC_VALUE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="PARSER"
+ type="com.google.protobuf.Parser"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="STRING_EVENT_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="6"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="STRING_VALUE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TYPE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="BinaryMessages.TranslatedMessage.Builder"
+ extends="com.google.protobuf.GeneratedMessage.Builder"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.BinaryMessages.TranslatedMessageOrBuilder">
+</implements>
+<method name="build"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="buildPartial"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearBooleanEvent"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearBooleanValue"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearName"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearNumericEvent"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearNumericValue"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearStringEvent"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearStringValue"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBooleanEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBooleanValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstanceForType"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.Descriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNameBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumericEvent"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumericValue"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringEvent"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringEventBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringValue"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringValueBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBooleanEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBooleanValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasName"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNumericEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNumericValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasStringEvent"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasStringValue"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasType"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetFieldAccessorTable"
+ return="com.google.protobuf.GeneratedMessage.FieldAccessorTable"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isInitialized"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="mergeFrom"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="com.openxc.BinaryMessages.TranslatedMessage">
+</parameter>
+</method>
+<method name="setBooleanEvent"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="boolean">
+</parameter>
+</method>
+<method name="setBooleanValue"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="boolean">
+</parameter>
+</method>
+<method name="setName"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</method>
+<method name="setNameBytes"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.google.protobuf.ByteString">
+</parameter>
+</method>
+<method name="setNumericEvent"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="double">
+</parameter>
+</method>
+<method name="setNumericValue"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="double">
+</parameter>
+</method>
+<method name="setStringEvent"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</method>
+<method name="setStringEventBytes"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.google.protobuf.ByteString">
+</parameter>
+</method>
+<method name="setStringValue"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</method>
+<method name="setStringValueBytes"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.google.protobuf.ByteString">
+</parameter>
+</method>
+<method name="setType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.BinaryMessages.TranslatedMessage.Type">
+</parameter>
+</method>
+</class>
+<class name="BinaryMessages.TranslatedMessage.Type"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.EnumDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptorForType"
+ return="com.google.protobuf.Descriptors.EnumDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumber"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValueDescriptor"
+ return="com.google.protobuf.Descriptors.EnumValueDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetValueMap"
+ return="com.google.protobuf.Internal.EnumLiteMap&lt;com.openxc.BinaryMessages.TranslatedMessage.Type&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="valueOf"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="valueOf"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="int">
+</parameter>
+</method>
+<method name="valueOf"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="com.google.protobuf.Descriptors.EnumValueDescriptor">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="BOOL_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EVENTED_BOOL_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="6"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EVENTED_NUM_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EVENTED_STRING_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NUM_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="STRING_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<interface name="BinaryMessages.TranslatedMessageOrBuilder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getBooleanEvent"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBooleanValue"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getName"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNameBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumericEvent"
+ return="double"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumericValue"
+ return="double"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringEvent"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringEventBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringValue"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringValueBytes"
+ return="com.google.protobuf.ByteString"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Type"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBooleanEvent"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasBooleanValue"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasName"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNumericEvent"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNumericValue"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasStringEvent"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasStringValue"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasType"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<class name="BinaryMessages.VehicleMessage"
+ extends="com.google.protobuf.GeneratedMessage"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.BinaryMessages.VehicleMessageOrBuilder">
+</implements>
+<method name="getDefaultInstance"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstanceForType"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.Descriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRawMessage"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRawMessageOrBuilder"
+ return="com.openxc.BinaryMessages.RawMessageOrBuilder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessage"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessageOrBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessageOrBuilder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getUnknownFields"
+ return="com.google.protobuf.UnknownFieldSet"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasRawMessage"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasTranslatedMessage"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasType"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetFieldAccessorTable"
+ return="com.google.protobuf.GeneratedMessage.FieldAccessorTable"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isInitialized"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilder"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilder"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="prototype" type="com.openxc.BinaryMessages.VehicleMessage">
+</parameter>
+</method>
+<method name="newBuilderForType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newBuilderForType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="parent" type="com.google.protobuf.GeneratedMessage.BuilderParent">
+</parameter>
+</method>
+<method name="parseDelimitedFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseDelimitedFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="com.google.protobuf.ByteString">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="com.google.protobuf.ByteString">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="InvalidProtocolBufferException" type="com.google.protobuf.InvalidProtocolBufferException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="java.io.InputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="com.google.protobuf.CodedInputStream">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="parseFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="input" type="com.google.protobuf.CodedInputStream">
+</parameter>
+<parameter name="extensionRegistry" type="com.google.protobuf.ExtensionRegistryLite">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="toBuilder"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="PARSER"
+ type="com.google.protobuf.Parser"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RAW_MESSAGE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TRANSLATED_MESSAGE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TYPE_FIELD_NUMBER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="BinaryMessages.VehicleMessage.Builder"
+ extends="com.google.protobuf.GeneratedMessage.Builder"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.openxc.BinaryMessages.VehicleMessageOrBuilder">
+</implements>
+<method name="build"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="buildPartial"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearRawMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearTranslatedMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="clearType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDefaultInstanceForType"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.Descriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRawMessage"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRawMessageBuilder"
+ return="com.openxc.BinaryMessages.RawMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRawMessageOrBuilder"
+ return="com.openxc.BinaryMessages.RawMessageOrBuilder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessage"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessageBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessageOrBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessageOrBuilder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasRawMessage"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasTranslatedMessage"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasType"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetFieldAccessorTable"
+ return="com.google.protobuf.GeneratedMessage.FieldAccessorTable"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="isInitialized"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="mergeFrom"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="com.openxc.BinaryMessages.VehicleMessage">
+</parameter>
+</method>
+<method name="mergeRawMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.BinaryMessages.RawMessage">
+</parameter>
+</method>
+<method name="mergeTranslatedMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.BinaryMessages.TranslatedMessage">
+</parameter>
+</method>
+<method name="setRawMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.BinaryMessages.RawMessage">
+</parameter>
+</method>
+<method name="setRawMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="builderForValue" type="com.openxc.BinaryMessages.RawMessage.Builder">
+</parameter>
+</method>
+<method name="setTranslatedMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.BinaryMessages.TranslatedMessage">
+</parameter>
+</method>
+<method name="setTranslatedMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="builderForValue" type="com.openxc.BinaryMessages.TranslatedMessage.Builder">
+</parameter>
+</method>
+<method name="setType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="com.openxc.BinaryMessages.VehicleMessage.Type">
+</parameter>
+</method>
+</class>
+<class name="BinaryMessages.VehicleMessage.Type"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getDescriptor"
+ return="com.google.protobuf.Descriptors.EnumDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescriptorForType"
+ return="com.google.protobuf.Descriptors.EnumDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getNumber"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValueDescriptor"
+ return="com.google.protobuf.Descriptors.EnumValueDescriptor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="internalGetValueMap"
+ return="com.google.protobuf.Internal.EnumLiteMap&lt;com.openxc.BinaryMessages.VehicleMessage.Type&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="valueOf"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="valueOf"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="value" type="int">
+</parameter>
+</method>
+<method name="valueOf"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="com.google.protobuf.Descriptors.EnumValueDescriptor">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="RAW_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TRANSLATED_VALUE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<interface name="BinaryMessages.VehicleMessageOrBuilder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getRawMessage"
+ return="com.openxc.BinaryMessages.RawMessage"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRawMessageOrBuilder"
+ return="com.openxc.BinaryMessages.RawMessageOrBuilder"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessage"
+ return="com.openxc.BinaryMessages.TranslatedMessage"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTranslatedMessageOrBuilder"
+ return="com.openxc.BinaryMessages.TranslatedMessageOrBuilder"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="com.openxc.BinaryMessages.VehicleMessage.Type"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasRawMessage"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasTranslatedMessage"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasType"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
 <class name="BuildConfig"
  extends="java.lang.Object"
  abstract="false"
@@ -46,6 +3299,16 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</constructor>
+<constructor name="DataPipeline"
+ type="com.openxc.DataPipeline"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="operator" type="com.openxc.DataPipeline.Operator">
+</parameter>
 </constructor>
 <method name="addSink"
  return="com.openxc.sinks.VehicleDataSink"
@@ -180,6 +3443,32 @@
 <parameter name="source" type="com.openxc.sources.VehicleDataSource">
 </parameter>
 </method>
+<method name="sourceConnected"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="sourceDisconnected"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
 <method name="stop"
  return="void"
  abstract="false"
@@ -192,6 +3481,36 @@
 >
 </method>
 </class>
+<interface name="DataPipeline.Operator"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="onPipelineActivated"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onPipelineDeactivated"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
 <class name="NoValueException"
  extends="java.lang.Exception"
  abstract="false"
@@ -242,6 +3561,33 @@
  visibility="public"
 >
 </constructor>
+</class>
+<class name="R.drawable"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R.drawable"
+ type="com.openxc.R.drawable"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="openxc_notification_icon_small_white"
+ type="int"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <class name="R.string"
  extends="java.lang.Object"
@@ -320,6 +3666,26 @@
 >
 </field>
 <field name="network_port_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="notification_content"
+ type="int"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="openxc_name"
  type="int"
  transient="false"
  volatile="false"
@@ -642,6 +4008,32 @@
 </parameter>
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
 </exception>
+</method>
+<method name="sourceConnected"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="sourceDisconnected"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
 </method>
 <method name="waitUntilBound"
  return="void"
@@ -1035,6 +4427,17 @@
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
 </exception>
 </constructor>
+<method name="connect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
 <method name="disconnect"
  return="void"
  abstract="false"
@@ -1089,19 +4492,6 @@
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
 </exception>
 </method>
-<method name="waitForConnection"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</method>
 </class>
 <class name="DeviceManager"
  extends="java.lang.Object"
@@ -1137,6 +4527,17 @@
 </parameter>
 <exception name="BluetoothException" type="com.openxc.interfaces.bluetooth.BluetoothException">
 </exception>
+</method>
+<method name="stop"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 </class>
 </package>
@@ -1227,6 +4628,19 @@
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
 </exception>
 </constructor>
+<method name="connect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="NetworkSourceException" type="com.openxc.interfaces.network.NetworkSourceException">
+</exception>
+</method>
 <method name="disconnect"
  return="void"
  abstract="false"
@@ -1293,19 +4707,6 @@
 >
 <parameter name="uriString" type="java.lang.String">
 </parameter>
-</method>
-<method name="waitForConnection"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
 </method>
 </class>
 </package>
@@ -1485,6 +4886,19 @@
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
 </exception>
 </constructor>
+<method name="connect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
+</method>
 <method name="disconnect"
  return="void"
  abstract="false"
@@ -1537,19 +4951,6 @@
 <parameter name="otherUri" type="java.lang.String">
 </parameter>
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
-</method>
-<method name="waitForConnection"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<exception name="InterruptedException" type="java.lang.InterruptedException">
 </exception>
 </method>
 <field name="ACTION_USB_DEVICE_ATTACHED"
@@ -1680,7 +5081,7 @@
 </exception>
 </method>
 <method name="getAge"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -1691,7 +5092,7 @@
 >
 </method>
 <method name="getBirthtime"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -1867,7 +5268,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 <method name="toRaw"
@@ -2293,7 +5694,7 @@
  visibility="public"
 >
 <method name="getAge"
- return="double"
+ return="long"
  abstract="true"
  native="false"
  synchronized="false"
@@ -2304,7 +5705,7 @@
 >
 </method>
 <method name="getBirthtime"
- return="double"
+ return="long"
  abstract="true"
  native="false"
  synchronized="false"
@@ -2414,7 +5815,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 <method name="toRaw"
@@ -3152,7 +6553,7 @@
 </parameter>
 <parameter name="event" type="java.lang.Object">
 </parameter>
-<parameter name="timestamp" type="java.lang.Double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 <field name="EVENT_FIELD"
@@ -3260,7 +6661,7 @@
 </parameter>
 <parameter name="event" type="java.lang.Object">
 </parameter>
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </constructor>
 <constructor name="RawMeasurement"
@@ -3271,6 +6672,18 @@
  visibility="public"
 >
 <parameter name="serialized" type="java.lang.String">
+</parameter>
+<exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
+</exception>
+</constructor>
+<constructor name="RawMeasurement"
+ type="com.openxc.remote.RawMeasurement"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="com.openxc.BinaryMessages.VehicleMessage">
 </parameter>
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
 </exception>
@@ -3309,7 +6722,7 @@
 >
 </method>
 <method name="getTimestamp"
- return="java.lang.Double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -3477,6 +6890,17 @@
 <parameter name="remoteService" type="com.openxc.remote.VehicleServiceInterface">
 </parameter>
 </constructor>
+<method name="isConnected"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="receive"
  return="boolean"
  abstract="false"
@@ -3536,6 +6960,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="com.openxc.DataPipeline.Operator">
+</implements>
 <constructor name="VehicleService"
  type="com.openxc.remote.VehicleService"
  static="false"
@@ -3557,6 +6983,38 @@
 <parameter name="intent" type="android.content.Intent">
 </parameter>
 </method>
+<method name="onPipelineActivated"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onPipelineDeactivated"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="sIsUnderTest"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <class name="VehicleServiceException"
  extends="java.lang.Exception"
@@ -4446,6 +7904,28 @@
 <parameter name="callback" type="com.openxc.sources.SourceCallback">
 </parameter>
 </constructor>
+<method name="connected"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="disconnected"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
 <method name="getTag"
  return="java.lang.String"
  abstract="false"
@@ -4482,6 +7962,30 @@
 >
 <parameter name="serializedMeasurement" type="java.lang.String">
 </parameter>
+</method>
+<method name="handleMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="message" type="com.openxc.BinaryMessages.VehicleMessage">
+</parameter>
+</method>
+<method name="isConnected"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 <method name="setCallback"
  return="void"
@@ -4524,6 +8028,28 @@
  visibility="public"
 >
 </constructor>
+<method name="containsJson"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="readBinaryMessage"
+ return="com.openxc.BinaryMessages.VehicleMessage"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="readLines"
  return="java.util.List&lt;java.lang.String&gt;"
  abstract="false"
@@ -4549,6 +8075,36 @@
 </parameter>
 <parameter name="length" type="int">
 </parameter>
+</method>
+</class>
+<class name="BytestreamConnectingTask"
+ extends="java.util.TimerTask"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BytestreamConnectingTask"
+ type="com.openxc.sources.BytestreamConnectingTask"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.BytestreamDataSource">
+</parameter>
+</constructor>
+<method name="run"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 </class>
 <class name="BytestreamDataSource"
@@ -4583,9 +8139,9 @@
 <parameter name="context" type="android.content.Context">
 </parameter>
 </constructor>
-<method name="createCondition"
- return="java.util.concurrent.locks.Condition"
- abstract="false"
+<method name="connect"
+ return="void"
+ abstract="true"
  native="false"
  synchronized="false"
  static="false"
@@ -4593,6 +8149,8 @@
  deprecated="not deprecated"
  visibility="protected"
 >
+<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
+</exception>
 </method>
 <method name="disconnect"
  return="void"
@@ -4607,17 +8165,6 @@
 </method>
 <method name="isRunning"
  return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
-<method name="lockConnection"
- return="void"
  abstract="false"
  native="false"
  synchronized="false"
@@ -4657,14 +8204,14 @@
  return="void"
  abstract="false"
  native="false"
- synchronized="true"
+ synchronized="false"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
 </method>
-<method name="unlockConnection"
+<method name="waitForConnection"
  return="void"
  abstract="false"
  native="false"
@@ -4674,24 +8221,11 @@
  deprecated="not deprecated"
  visibility="protected"
 >
-</method>
-<method name="waitForConnection"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
-</exception>
 <exception name="InterruptedException" type="java.lang.InterruptedException">
 </exception>
 </method>
-<field name="mDeviceChanged"
- type="java.util.concurrent.locks.Condition"
+<field name="mConnectionLock"
+ type="java.util.concurrent.locks.ReadWriteLock"
  transient="false"
  volatile="false"
  static="false"
@@ -4731,28 +8265,6 @@
 <parameter name="context" type="android.content.Context">
 </parameter>
 </constructor>
-<method name="connected"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
-<method name="disconnected"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</method>
 <method name="getContext"
  return="android.content.Context"
  abstract="false"
@@ -4974,6 +8486,32 @@
 <parameter name="measurement" type="com.openxc.remote.RawMeasurement">
 </parameter>
 </method>
+<method name="sourceConnected"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="sourceDisconnected"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
 </interface>
 <class name="SourceLogger"
  extends="java.lang.Object"
@@ -5018,6 +8556,17 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<method name="isConnected"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="setCallback"
  return="void"
  abstract="true"
@@ -5614,7 +9163,7 @@
 </parameter>
 </constructor>
 <method name="getAge"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -5625,7 +9174,7 @@
 >
 </method>
 <method name="getTimestamp"
- return="double"
+ return="long"
  abstract="false"
  native="false"
  synchronized="false"
@@ -5656,7 +9205,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="timestamp" type="double">
+<parameter name="timestamp" type="long">
 </parameter>
 </method>
 </class>

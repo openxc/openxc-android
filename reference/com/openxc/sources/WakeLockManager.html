@@ -188,6 +188,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
@@ -441,6 +442,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sources/WakeLockManager.html#acquireWakeLock()">acquireWakeLock</a></span>()</nobr>
         
+        <div class="jd-descrdiv">Acquire a wake lock if we don't already have one.</div>
+  
   </td></tr>
 
 
@@ -457,6 +460,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/sources/WakeLockManager.html#releaseWakeLock()">releaseWakeLock</a></span>()</nobr>
         
+        <div class="jd-descrdiv">If we have an active wake lock, release it.</div>
+  
   </td></tr>
 
 
@@ -781,7 +786,10 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Acquire a wake lock if we don't already have one.
+
+ If we already have a lock, keeps the one we have.
+</p></div>
 
     </div>
 </div>
@@ -812,7 +820,8 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>If we have an active wake lock, release it.
+</p></div>
 
     </div>
 </div>
