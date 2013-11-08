@@ -458,38 +458,4 @@ public class VehicleDashboardActivity extends Activity {
             mIsBound = false;
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        TurnSignalStatus command;
-        switch (item.getItemId()) {
-        case R.id.left_turn:
-            command = new TurnSignalStatus(
-                    TurnSignalStatus.TurnSignalPosition.LEFT);
-            try {
-                mVehicleManager.send(command);
-            } catch(UnrecognizedMeasurementTypeException e) {
-                Log.w(TAG, "Unable to send turn signal command", e);
-            }
-            return true;
-        case R.id.right_turn:
-            command = new TurnSignalStatus(
-                    TurnSignalStatus.TurnSignalPosition.RIGHT);
-            try {
-                mVehicleManager.send(command);
-            } catch(UnrecognizedMeasurementTypeException e) {
-                Log.w(TAG, "Unable to send turn signal command", e);
-            }
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.vehicle_dashboard, menu);
-        return true;
-    }
 }
