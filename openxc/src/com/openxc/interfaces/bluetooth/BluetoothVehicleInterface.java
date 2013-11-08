@@ -78,16 +78,19 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     @Override
     public boolean isConnected() {
         mConnectionLock.readLock().lock();
-        
-        boolean connected = mSocket != null && super.isConnected();
-        
-        try {
-        	connected &= mSocket.isConnected();
-        } catch (NoSuchMethodError e) {
-        	// Cannot get isConnected() result before API 14
-        	// Assume previous result is correct.
+
+        boolean connected = super.isConnected();
+        if(mSocket == null) {
+            connected = false;
+        } else {
+            try {
+                connected &= mSocket.isConnected();
+            } catch (NoSuchMethodError e) {
+                // Cannot get isConnected() result before API 14
+                // Assume previous result is correct.
+            }
         }
-        	
+
         mConnectionLock.readLock().unlock();
         return connected;
     }
