@@ -49,18 +49,25 @@
     
     <!-- Vehicle Dashboard Strings -->
     <string name="steering_wheel_angle_label">Steering Wheel</string>
+    <string name="degree_unit">&#xb0;</string>
     <string name="vehicle_speed_label">Vehicle Speed</string>
+    <string name="vehicle_speed_unit">km/h</string>
     <string name="fuel_consumed_label">Fuel Consumed</string>
+    <string name="fuel_consumed_unit">L</string>
     <string name="fuel_level_label">Fuel Level</string>
     <string name="odometer_label">Odometer</string>
+    <string name="odometer_unit">km</string>
     <string name="wiper_status_label">Windshield Wiper</string>
     <string name="brake_pedal_status_label">Brake Pedal</string>
     <string name="headlamp_status_label">Headlamp</string>
     <string name="engine_speed_label">Engine Speed</string>
+    <string name="engine_speed_unit">RPM</string>
     <string name="torque_at_transmission_label">Transmission Torque</string>
+    <string name="torque_at_transmission_unit">Nm</string>
     <string name="accelerator_pedal_position_label">
         Accelerator Pedal
     </string>
+    <string name="percent_unit">%</string>
     <string name="transmission_gear_pos_label">
         Transmission Gear
     </string>
