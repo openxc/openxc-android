@@ -7,6 +7,7 @@ TEMP_PATH=/tmp/openxc-apidocs
 rm -rf $TEMP_PATH
 cp -R openxc/target/apidocs $TEMP_PATH
 git checkout gh-pages
+git pull
 rm -rf *.html references assets reference resources
 cp -R $TEMP_PATH/* .
 git add -A
