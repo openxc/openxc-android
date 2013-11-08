@@ -48,7 +48,6 @@
     
     
     <!-- Vehicle Dashboard Strings -->
-    <string name="app_name">Vehicle Dashboard</string>
     <string name="steering_wheel_angle_label">Steering Wheel</string>
     <string name="vehicle_speed_label">Vehicle Speed</string>
     <string name="fuel_consumed_label">Fuel Consumed</string>
