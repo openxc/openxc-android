@@ -15,11 +15,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuInflater;
-
-import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.VehicleManager;
 import com.openxc.measurements.BrakePedalStatus;
 import com.openxc.measurements.HeadlampStatus;
