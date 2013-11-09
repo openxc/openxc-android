@@ -37,7 +37,7 @@ the `ANDROID_HOME` environment variable to the location of your SDK:
     export ANDROID_HOME=/opt/tools/android-sdk
 
 You also need the Android support library, but unfortunately Google doesn't
-consistently deploy this to the Central Maven repository. You can use teh
+consistently deploy this to the Central Maven repository. You can use the
 [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer)
 to get it in your local Maven repo:
 
