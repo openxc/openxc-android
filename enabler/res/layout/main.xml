@@ -6,20 +6,22 @@
     android:paddingRight="5sp"
     android:orientation="vertical">
     
+    <LinearLayout 
+	    android:id="@+id/service_not_running_bar"
+	    style="@style/WarningBar">
+	    <ImageView 
+	        style="@style/WarningImage"
+	        android:contentDescription="@string/warning"
+	        android:src="@drawable/warning"/>
+	    <TextView
+	        style="@style/WarningText"
+	        android:text="@string/service_not_running"/>
+	</LinearLayout>
+    
     <TextView 
         style="@style/SectionHeader"
         android:layout_marginTop="0sp"
-        android:text="@string/status_label"/>    
-    <LinearLayout
-        style="@style/ItemRow" >
-
-        <TextView 
-            style="@style/ItemLabel"
-            android:text="@string/vehicle_service_status_label"/>
-        <TextView
-            android:id="@+id/vehicle_service_status"
-            style="@style/ItemData"/>
-    </LinearLayout>
+        android:text="@string/status_label"/> 
     <LinearLayout
         style="@style/ItemRow" >
 

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 public class OpenXcEnablerActivity extends Activity {
     private static String TAG = "OpenXcEnablerActivity";
 
-    private TextView mVehicleManagerStatusView;
+    private View mServiceNotRunningWarningView;
     private TextView mMessageCountView;
     private ListView mSourceListView;
     private ListView mSinkListView;
@@ -63,7 +64,7 @@ public class OpenXcEnablerActivity extends Activity {
                     mVehicleManager.waitUntilBound();
                     OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            mVehicleManagerStatusView.setText("Running");
+                        	mServiceNotRunningWarningView.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -84,7 +85,7 @@ public class OpenXcEnablerActivity extends Activity {
             mVehicleManager = null;
             OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    mVehicleManagerStatusView.setText("Not running");
+                	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -99,15 +100,14 @@ public class OpenXcEnablerActivity extends Activity {
         startService(new Intent(this, VehicleManager.class));
         startService(new Intent(this, PreferenceManagerService.class));
 
-        mVehicleManagerStatusView = (TextView) findViewById(
-                R.id.vehicle_service_status);
+        mServiceNotRunningWarningView = findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
         mSourceListView = (ListView) findViewById(R.id.source_list);
         mSinkListView = (ListView) findViewById(R.id.sink_list);
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-                mVehicleManagerStatusView.setText("Not running");
+            	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
             }
         });
     }

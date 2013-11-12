@@ -44,4 +44,6 @@
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>
     <string name="application_version_key">application_version</string>
+    <string name="service_not_running">VehicleService not running.</string>
+    <string name="warning">Warning</string>
 </resources>
