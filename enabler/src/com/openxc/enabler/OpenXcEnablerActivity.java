@@ -49,6 +49,7 @@ public class OpenXcEnablerActivity extends Activity {
     private View mUsbConnIV;
     private View mNetworkConnIV;
     private View mFileConnIV;
+    private View mNoneConnView;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
@@ -77,7 +78,7 @@ public class OpenXcEnablerActivity extends Activity {
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, OpenXcEnablerActivity.this,
                     mUnknownConnIV, mFileConnIV, mNetworkConnIV,
-                    mBluetoothConnIV, mUsbConnIV);
+                    mBluetoothConnIV, mUsbConnIV, mNoneConnView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
@@ -110,6 +111,7 @@ public class OpenXcEnablerActivity extends Activity {
         mFileConnIV = findViewById(R.id.connection_file);
         mNetworkConnIV = findViewById(R.id.connection_network);
         mUnknownConnIV = findViewById(R.id.connection_unknown);
+        mNoneConnView = findViewById(R.id.connection_none);
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {

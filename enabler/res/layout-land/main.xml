@@ -41,7 +41,7 @@
 	    	    android:id="@+id/connection_file"
 	    	    style="@style/ItemDataImage"
 	    	    android:contentDescription="@string/connection_file"
-	    	    android:src="@drawable/file_white"/>
+	    	    android:src="@drawable/play_from_file_white"/>
 	    	<ImageView 
 	    	    android:id="@+id/connection_bluetooth"
 	    	    style="@style/ItemDataImage"
@@ -57,6 +57,10 @@
 	    	    style="@style/ItemDataImage"
 	    	    android:contentDescription="@string/connection_usb"
 	    	    android:src="@drawable/usb_white"/>
+	    	<TextView
+	            android:id="@+id/connection_none"
+	            android:text="@string/connection_none"
+	            style="@style/ItemDataRedBold"/>
 	    </LinearLayout>
 	</LinearLayout>
 	
@@ -69,31 +73,6 @@
         <TextView
             android:id="@+id/message_count"
             style="@style/ItemData"/>
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <LinearLayout 
-	        style="@style/HorizontallyStackedScroller">        
-		    <TextView 
-		        style="@style/SectionHeader"
-		        android:text="@string/source_list_label"/>
-		    <ListView 
-		        android:id="@+id/source_list" 
-		        style="@style/DefaultFont" />
-	    </LinearLayout>
-	    <LinearLayout 
-	        style="@style/HorizontallyStackedScroller"> 
-		    <TextView 
-		       	style="@style/SectionHeader"
-		        android:text="@string/sink_list_label" />
-		    <ListView 
-		        android:id="@+id/sink_list" 
-		        style="@style/DefaultFont" />  
-		</LinearLayout>  
     </LinearLayout>
     
 </LinearLayout>

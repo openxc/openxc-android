@@ -10,6 +10,7 @@
     <string name="connection_bluetooth">Bluetooth</string>
     <string name="connection_usb">USB</string>
     <string name="connection_network">Network</string>
+    <string name="connection_none">None</string>
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
