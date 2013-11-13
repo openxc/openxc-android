@@ -1,55 +1,69 @@
 package com.openxc.enabler;
 
+import java.util.List;
 import java.util.TimerTask;
 
 import android.app.Activity;
 
 import com.openxc.VehicleManager;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
+import com.openxc.interfaces.InterfaceType;
+
+import android.view.View;
 
 public class PipelineStatusUpdateTask extends TimerTask {
-    private VehicleManager mVehicleManager;
+	private VehicleManager mVehicleManager;
     private Activity mActivity;
-    private ListView mSourceListView;
-    private ListView mSinkListView;
-    private ArrayAdapter<Object> mSourceListAdapter;
-    private ArrayAdapter<Object> mSinkListAdapter;
+    private View mUnknownConnView;
+    private View mNetworkConnView;
+    private View mBluetoothConnView;
+    private View mUsbConnView;
+    private View mFileConnView;
 
     public PipelineStatusUpdateTask(VehicleManager vehicleService,
-            Activity activity, ListView sourceListView, ListView sinkListView) {
+            Activity activity, View unknownConnIV, View fileConnIV, 
+            View networkConnIV, View bluetoothConnIV, View usbConnIV) {
         mVehicleManager = vehicleService;
         mActivity = activity;
-        mSourceListView = sourceListView;
-        mSinkListView = sinkListView;
-
-        mSourceListAdapter = new ArrayAdapter<Object>(mActivity,
-                android.R.layout.simple_list_item_1);
-        mSourceListView.setAdapter(mSourceListAdapter);
-
-        mSinkListAdapter = new ArrayAdapter<Object>(mActivity,
-                android.R.layout.simple_list_item_1);
-        mSinkListView.setAdapter(mSinkListAdapter);
+        mUnknownConnView = unknownConnIV;
+        mFileConnView = fileConnIV;
+        mNetworkConnView = networkConnIV;
+        mBluetoothConnView = bluetoothConnIV;
+        mUsbConnView = usbConnIV;        
     }
 
-    public void run() {
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                mSourceListAdapter.clear();
-                // ArrayAdapter has a nice addAll method, but it's only
-                // supported in API 11 and greater (i.e. not 2.3).
-                for(String summary : mVehicleManager.getSourceSummaries()) {
-                    mSourceListAdapter.add(summary);
-                }
-                mSourceListAdapter.notifyDataSetChanged();
+    private void setIconVisibility(InterfaceType interfaceType, final View icon,
+    		List<InterfaceType> activeInterfaceTypes){
+    	// If active and not visible => make visible 
+    	if(activeInterfaceTypes.contains(interfaceType) 
+    			&& icon.getVisibility() != View.VISIBLE){
+    		mActivity.runOnUiThread(new Runnable(){
+				@Override
+				public void run() {
+					icon.setVisibility(View.VISIBLE);
+				}
+        	});
+        } 
+    	
+    	// If not active and not gone => make gone
+    	if(!activeInterfaceTypes.contains(interfaceType)
+    			&& (icon.getVisibility() != View.GONE)){
+        	mActivity.runOnUiThread(new Runnable(){
+				@Override
+				public void run() {
+					icon.setVisibility(View.GONE);
+				}
+        	});
+        }
+    }
+    
+    public void run() {        
 
-                mSinkListAdapter.clear();
-                // See about RE: addAll
-                for(String summary : mVehicleManager.getSinkSummaries()) {
-                    mSinkListAdapter.add(summary);
-                }
-                mSinkListAdapter.notifyDataSetChanged();
-            }
-        });
+        List<InterfaceType> activeInterfaceTypes = mVehicleManager.getActiveSourceTypes();
+    	
+        setIconVisibility(InterfaceType.BLUETOOTH, mBluetoothConnView, activeInterfaceTypes);
+        setIconVisibility(InterfaceType.FILE, mFileConnView, activeInterfaceTypes);
+        setIconVisibility(InterfaceType.NETWORK, mNetworkConnView, activeInterfaceTypes);
+        setIconVisibility(InterfaceType.USB, mUsbConnView, activeInterfaceTypes);
+        setIconVisibility(InterfaceType.UNKNOWN, mUnknownConnView, activeInterfaceTypes);
     }
 }

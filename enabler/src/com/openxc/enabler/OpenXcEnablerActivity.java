@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.openxc.VehicleManager;
@@ -45,8 +44,11 @@ public class OpenXcEnablerActivity extends Activity {
 
     private View mServiceNotRunningWarningView;
     private TextView mMessageCountView;
-    private ListView mSourceListView;
-    private ListView mSinkListView;
+    private View mUnknownConnIV;
+    private View mBluetoothConnIV;
+    private View mUsbConnIV;
+    private View mNetworkConnIV;
+    private View mFileConnIV;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
@@ -74,7 +76,8 @@ public class OpenXcEnablerActivity extends Activity {
                     OpenXcEnablerActivity.this, mMessageCountView);
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, OpenXcEnablerActivity.this,
-                    mSourceListView, mSinkListView);
+                    mUnknownConnIV, mFileConnIV, mNetworkConnIV,
+                    mBluetoothConnIV, mUsbConnIV);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
@@ -102,8 +105,11 @@ public class OpenXcEnablerActivity extends Activity {
 
         mServiceNotRunningWarningView = findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
-        mSourceListView = (ListView) findViewById(R.id.source_list);
-        mSinkListView = (ListView) findViewById(R.id.sink_list);
+        mBluetoothConnIV = findViewById(R.id.connection_bluetooth);
+        mUsbConnIV = findViewById(R.id.connection_usb);
+        mFileConnIV = findViewById(R.id.connection_file);
+        mNetworkConnIV = findViewById(R.id.connection_network);
+        mUnknownConnIV = findViewById(R.id.connection_unknown);
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {

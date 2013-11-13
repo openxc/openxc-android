@@ -4,9 +4,11 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sources.VehicleDataSource;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 public enum InterfaceType {
 	BLUETOOTH("BLUETOOTH"),
+	FILE("FILE"),
 	NETWORK("NETWORK"),
 	USB("USB"),
 	UNKNOWN("UNKNOWN");
@@ -23,6 +25,8 @@ public enum InterfaceType {
 			return UNKNOWN;
 		} else if(source instanceof BluetoothVehicleInterface){
 			return BLUETOOTH;
+		} else if(source instanceof TraceVehicleDataSource){
+			return FILE;
 		} else if(source instanceof NetworkVehicleInterface){
 			return NETWORK;
 		} else if(source instanceof UsbVehicleInterface){
@@ -39,6 +43,8 @@ public enum InterfaceType {
 			return UNKNOWN;
 		} else if(vInterfaceString.equalsIgnoreCase("BLUETOOTH")){
 			return BLUETOOTH;
+		} else if(vInterfaceString.equalsIgnoreCase("FILE")){
+			return FILE;
 		} else if(vInterfaceString.equalsIgnoreCase("NETWORK")){
 			return NETWORK;
 		} else if(vInterfaceString.equalsIgnoreCase("USB")){
