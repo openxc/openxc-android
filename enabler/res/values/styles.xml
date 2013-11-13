@@ -36,6 +36,13 @@
         <item name="android:gravity">right</item>      
     </style>
     
+    <style name="ItemDataImage">
+        <item name="android:layout_width">26sp</item>
+        <item name="android:layout_height">26sp</item>
+        <item name="android:padding">0sp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    
     <style name="VerticallyStackedScroller">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dip</item>
