@@ -5,6 +5,7 @@ import java.util.Set;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.enabler.R;
@@ -64,8 +65,15 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             					getVehicleManager().addVehicleInterface(BluetoothVehicleInterface.class, 
             							device.getAddress());
             					
+            					SharedPreferences.Editor editor = getPreferences().edit();
+            					editor.putString(getContext().getString(R.string.bluetooth_mac_key), 
+            							device.getAddress());
+            					editor.commit();
+            					
             					Log.d(TAG, "Paired Bluetooth device, " + device.getName() + 
             							", will be auto connected.");
+            					
+            					break;
             				}
             			}
             		}
