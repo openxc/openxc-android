@@ -17,7 +17,7 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothPreferenceManager";
     
-    private final static String OPENXC_VI_PREFIX = "OpenXC";
+    private final static String OPENXC_VI_PREFIX = "OpenXC-VI-";
 
     public BluetoothPreferenceManager(Context context) {
         super(context);
