@@ -1,6 +1,7 @@
 package com.openxc.enabler;
 
 import com.openxc.VehicleManager;
+import com.openxc.enabler.preferences.PreferenceManagerService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,5 +24,6 @@ public class BootupReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "Starting vehicle service on boot");
         context.startService(new Intent(context, VehicleManager.class));
+        context.startService(new Intent(context, PreferenceManagerService.class));
     }
 }
