@@ -127,10 +127,10 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     @Override
     public boolean isConnected() {
         // TODO BaseVehicleDataSource.isConnected() always returns false do
-    	// not us its result until this is fixed
-    	//return mRunning && super.isConnected();
-    	
-    	return mRunning;
+        // not us its result until this is fixed
+        //return mRunning && super.isConnected();
+        
+        return mRunning;
     }
 
     /**

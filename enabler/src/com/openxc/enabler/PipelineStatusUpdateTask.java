@@ -11,7 +11,7 @@ import com.openxc.interfaces.InterfaceType;
 import android.view.View;
 
 public class PipelineStatusUpdateTask extends TimerTask {
-	private VehicleManager mVehicleManager;
+    private VehicleManager mVehicleManager;
     private Activity mActivity;
     private View mUnknownConnView;
     private View mNetworkConnView;
@@ -35,56 +35,56 @@ public class PipelineStatusUpdateTask extends TimerTask {
     }
 
     private void setIconVisibility(InterfaceType interfaceType, final View icon,
-    		List<InterfaceType> activeInterfaceTypes){
-    	// If active and not visible => make visible 
-    	if(activeInterfaceTypes.contains(interfaceType) 
-    			&& icon.getVisibility() != View.VISIBLE){
-    		mActivity.runOnUiThread(new Runnable(){
-				@Override
-				public void run() {
-					icon.setVisibility(View.VISIBLE);
-				}
-        	});
+            List<InterfaceType> activeInterfaceTypes){
+        // If active and not visible => make visible 
+        if(activeInterfaceTypes.contains(interfaceType) 
+                && icon.getVisibility() != View.VISIBLE){
+            mActivity.runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    icon.setVisibility(View.VISIBLE);
+                }
+            });
         } 
-    	
-    	// If not active and not gone => make gone
-    	if(!activeInterfaceTypes.contains(interfaceType)
-    			&& (icon.getVisibility() != View.GONE)){
-        	mActivity.runOnUiThread(new Runnable(){
-				@Override
-				public void run() {
-					icon.setVisibility(View.GONE);
-				}
-        	});
+        
+        // If not active and not gone => make gone
+        if(!activeInterfaceTypes.contains(interfaceType)
+                && (icon.getVisibility() != View.GONE)){
+            mActivity.runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    icon.setVisibility(View.GONE);
+                }
+            });
         }
     }
     
     public void run() {        
 
         List<InterfaceType> activeInterfaceTypes = mVehicleManager.getActiveSourceTypes();
-    	
-        if(activeInterfaceTypes.isEmpty()){
-        	mActivity.runOnUiThread(new Runnable(){
-				@Override
-				public void run() {
-		        	mNoneConnView.setVisibility(View.VISIBLE);
-		        	
-		        	mBluetoothConnView.setVisibility(View.GONE);
-		        	mFileConnView.setVisibility(View.GONE);
-		        	mNetworkConnView.setVisibility(View.GONE);
-		        	mUsbConnView.setVisibility(View.GONE);
-		        	mUnknownConnView.setVisibility(View.GONE);
-				}        		
-        	});
-        } else {
-        	mActivity.runOnUiThread(new Runnable(){
-				@Override
-				public void run() {
-		        	mNoneConnView.setVisibility(View.GONE);
-				}        		
-        	});
         
-        	setIconVisibility(InterfaceType.BLUETOOTH, mBluetoothConnView, activeInterfaceTypes);
+        if(activeInterfaceTypes.isEmpty()){
+            mActivity.runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    mNoneConnView.setVisibility(View.VISIBLE);
+                    
+                    mBluetoothConnView.setVisibility(View.GONE);
+                    mFileConnView.setVisibility(View.GONE);
+                    mNetworkConnView.setVisibility(View.GONE);
+                    mUsbConnView.setVisibility(View.GONE);
+                    mUnknownConnView.setVisibility(View.GONE);
+                }                
+            });
+        } else {
+            mActivity.runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    mNoneConnView.setVisibility(View.GONE);
+                }                
+            });
+        
+            setIconVisibility(InterfaceType.BLUETOOTH, mBluetoothConnView, activeInterfaceTypes);
             setIconVisibility(InterfaceType.FILE, mFileConnView, activeInterfaceTypes);
             setIconVisibility(InterfaceType.NETWORK, mNetworkConnView, activeInterfaceTypes);
             setIconVisibility(InterfaceType.USB, mUsbConnView, activeInterfaceTypes);

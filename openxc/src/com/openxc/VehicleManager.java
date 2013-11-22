@@ -482,30 +482,30 @@ public class VehicleManager extends Service implements SourceCallback {
      * @return A list of the InterfaceTypes actively connected.
      */
     public List<InterfaceType> getActiveSourceTypes(){
-    	ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
+        ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
         for(VehicleDataSource source : mSources) {
-        	
-        	Log.d(TAG, "VehicleDataSource: " + source.toString());
-        	
-        	if(source.isConnected()){
-        		Log.d(TAG, "Connected VehicleDataSource: " + source.toString());
-        		
-        		sources.add(InterfaceType.interfaceTypeFromClass(source));
-        	}
+            
+            Log.d(TAG, "VehicleDataSource: " + source.toString());
+            
+            if(source.isConnected()){
+                Log.d(TAG, "Connected VehicleDataSource: " + source.toString());
+                
+                sources.add(InterfaceType.interfaceTypeFromClass(source));
+            }
         }
 
         for(VehicleDataSource source : mPipeline.getSources()) {
             if(source.isConnected()){
-            	sources.add(InterfaceType.interfaceTypeFromClass(source));
+                sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
         }
 
         if(mRemoteService != null) {
             try {
                 //sources.addAll(mRemoteService.getActiveSourceTypes());
-            	for(String sourceTypeString:mRemoteService.getActiveSourceTypeStrings()){
-            		sources.add(InterfaceType.interfaceTypeFromString(sourceTypeString));
-            	}
+                for(String sourceTypeString:mRemoteService.getActiveSourceTypeStrings()){
+                    sources.add(InterfaceType.interfaceTypeFromString(sourceTypeString));
+                }
             } catch(RemoteException e) {
                 Log.w(TAG, "Unable to retreive remote source summaries", e);
             }

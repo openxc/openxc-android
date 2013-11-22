@@ -67,7 +67,7 @@ public class OpenXcEnablerActivity extends Activity {
                     mVehicleManager.waitUntilBound();
                     OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                        	mServiceNotRunningWarningView.setVisibility(View.GONE);
+                            mServiceNotRunningWarningView.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -89,7 +89,7 @@ public class OpenXcEnablerActivity extends Activity {
             mVehicleManager = null;
             OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
+                    mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -124,7 +124,7 @@ public class OpenXcEnablerActivity extends Activity {
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-            	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
+                mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
             }
         });
     }

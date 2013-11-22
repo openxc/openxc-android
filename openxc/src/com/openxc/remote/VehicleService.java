@@ -192,10 +192,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
             
             public List<String> getActiveSourceTypeStrings() {
-            	ArrayList<String> sources = new ArrayList<String>();
+                ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
                     if(source.isConnected()){
-                    	sources.add(InterfaceType.interfaceTypeFromClass(source).toString());
+                        sources.add(InterfaceType.interfaceTypeFromClass(source).toString());
                     }
                 }
                 return sources;
