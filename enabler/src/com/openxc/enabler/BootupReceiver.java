@@ -15,7 +15,7 @@ import android.util.Log;
  * management.
  */
 public class BootupReceiver extends BroadcastReceiver {
-    private final static String TAG = "BootupReceiver";
+    private final static String TAG = BootupReceiver.class.getSimpleName();
 
     // TODO what about when the device is already started? need an app to hit?
     // or do we rely on it being started by the bind call? might get duplicate
