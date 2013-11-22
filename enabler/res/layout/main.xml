@@ -16,11 +16,6 @@
         <TextView
             style="@style/WarningText"
             android:text="@string/service_not_running"/>
-
-	<Button
-	    android:id="@+id/view_vehicle_data_btn"
-	    style="@style/WideButton"
-	    android:text="@string/show_data_button"/>
     </LinearLayout>
 
     <TextView
@@ -79,5 +74,10 @@
             android:id="@+id/message_count"
             style="@style/ItemData"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/view_vehicle_data_btn"
+        style="@style/MinimalButton"
+        android:text="@string/show_data_button"/>
 
 </LinearLayout>
