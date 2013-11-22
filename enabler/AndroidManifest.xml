@@ -33,6 +33,9 @@
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
       </activity>
+      
+      <activity android:name=".VehicleDashboardActivity">
+      </activity>
 
       <activity android:name=".SettingsActivity" />
 

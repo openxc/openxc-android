@@ -79,9 +79,9 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void stopUploading() {
-    	if(getVehicleManager() != null){
-	        getVehicleManager().removeSink(mUploader);
-	        mUploader = null;
-    	}
+        if(getVehicleManager() != null){
+            getVehicleManager().removeSink(mUploader);
+            mUploader = null;
+        }
     }
 }

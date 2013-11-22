@@ -5,7 +5,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">25sp</item>
     </style>
-    
+
     <style name="SectionHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -13,42 +13,54 @@
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="ItemRow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
+        <item name="android:layout_margin">1dp</item>
     </style>
-    
+
     <style name="ItemText">
         <item name="android:textSize">20sp</item>
     </style>
-    
+
     <style name="ItemLabel" parent="ItemText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    
+
     <style name="ItemData" parent="ItemText">
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:gravity">right</item>      
+        <item name="android:gravity">right</item>
+        <item name="android:paddingRight">2dp</item>
     </style>
-    
+
+    <style name="ItemUnit" parent="ItemText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="VerticallyStackedScroller">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dip</item>
         <item name="android:layout_weight">2</item>
-        <item name="android:orientation">vertical</item>  
+        <item name="android:orientation">vertical</item>
     </style>
-    
+
     <style name="HorizontallyStackedScroller">
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">2</item>
-        <item name="android:orientation">vertical</item>  
+        <item name="android:orientation">vertical</item>
     </style>
-    
-    
+
+    <style name="WideButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
 </resources>

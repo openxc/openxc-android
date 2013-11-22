@@ -22,11 +22,6 @@ Android projects within the repository. At the minimum, add the `openxc` project
 (the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
 required to run OpenXC applications).
 
-You can optionally add the `VehicleDashboardActivity` project to see an example
-vehicle dashboard OpenXC application, and also the `openxc-it` project which
-contains a test suite for the library and instrumentation tests that run on the
-device.
-
 ## Building from Command Line
 
 The build requires [Maven](http://maven.apache.org/download.html)
