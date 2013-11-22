@@ -21,7 +21,7 @@ public class PipelineStatusUpdateTask extends TimerTask {
     private View mNoneConnView;
 
     public PipelineStatusUpdateTask(VehicleManager vehicleService,
-            Activity activity, View unknownConnIV, View fileConnIV, 
+            Activity activity, View unknownConnIV, View fileConnIV,
             View networkConnIV, View bluetoothConnIV, View usbConnIV,
             View noneConnView) {
         mVehicleManager = vehicleService;
@@ -30,14 +30,14 @@ public class PipelineStatusUpdateTask extends TimerTask {
         mFileConnView = fileConnIV;
         mNetworkConnView = networkConnIV;
         mBluetoothConnView = bluetoothConnIV;
-        mUsbConnView = usbConnIV;   
+        mUsbConnView = usbConnIV;
         mNoneConnView = noneConnView;
     }
 
     private void setIconVisibility(InterfaceType interfaceType, final View icon,
             List<InterfaceType> activeInterfaceTypes){
-        // If active and not visible => make visible 
-        if(activeInterfaceTypes.contains(interfaceType) 
+        // If active and not visible => make visible
+        if(activeInterfaceTypes.contains(interfaceType)
                 && icon.getVisibility() != View.VISIBLE){
             mActivity.runOnUiThread(new Runnable(){
                 @Override
@@ -45,8 +45,8 @@ public class PipelineStatusUpdateTask extends TimerTask {
                     icon.setVisibility(View.VISIBLE);
                 }
             });
-        } 
-        
+        }
+
         // If not active and not gone => make gone
         if(!activeInterfaceTypes.contains(interfaceType)
                 && (icon.getVisibility() != View.GONE)){
@@ -58,37 +58,42 @@ public class PipelineStatusUpdateTask extends TimerTask {
             });
         }
     }
-    
-    public void run() {        
 
-        List<InterfaceType> activeInterfaceTypes = mVehicleManager.getActiveSourceTypes();
-        
+    public void run() {
+        List<InterfaceType> activeInterfaceTypes =
+            mVehicleManager.getActiveSourceTypes();
+
         if(activeInterfaceTypes.isEmpty()){
             mActivity.runOnUiThread(new Runnable(){
                 @Override
                 public void run() {
                     mNoneConnView.setVisibility(View.VISIBLE);
-                    
+
                     mBluetoothConnView.setVisibility(View.GONE);
                     mFileConnView.setVisibility(View.GONE);
                     mNetworkConnView.setVisibility(View.GONE);
                     mUsbConnView.setVisibility(View.GONE);
                     mUnknownConnView.setVisibility(View.GONE);
-                }                
+                }
             });
         } else {
             mActivity.runOnUiThread(new Runnable(){
                 @Override
                 public void run() {
                     mNoneConnView.setVisibility(View.GONE);
-                }                
+                }
             });
-        
-            setIconVisibility(InterfaceType.BLUETOOTH, mBluetoothConnView, activeInterfaceTypes);
-            setIconVisibility(InterfaceType.FILE, mFileConnView, activeInterfaceTypes);
-            setIconVisibility(InterfaceType.NETWORK, mNetworkConnView, activeInterfaceTypes);
-            setIconVisibility(InterfaceType.USB, mUsbConnView, activeInterfaceTypes);
-            setIconVisibility(InterfaceType.UNKNOWN, mUnknownConnView, activeInterfaceTypes);
+
+            setIconVisibility(InterfaceType.BLUETOOTH, mBluetoothConnView,
+                    activeInterfaceTypes);
+            setIconVisibility(InterfaceType.FILE, mFileConnView,
+                    activeInterfaceTypes);
+            setIconVisibility(InterfaceType.NETWORK, mNetworkConnView,
+                    activeInterfaceTypes);
+            setIconVisibility(InterfaceType.USB, mUsbConnView,
+                    activeInterfaceTypes);
+            setIconVisibility(InterfaceType.UNKNOWN, mUnknownConnView,
+                    activeInterfaceTypes);
         }
     }
 }

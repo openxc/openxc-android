@@ -12,15 +12,15 @@ public enum InterfaceType {
     NETWORK("NETWORK"),
     USB("USB"),
     UNKNOWN("UNKNOWN");
-    
+
     private String stringValue;
     private InterfaceType(String toString){
-        stringValue = toString; 
+        stringValue = toString;
     }
-    
+
     public static InterfaceType interfaceTypeFromClass(
             VehicleDataSource source){
-        
+
         if(source == null){
             return UNKNOWN;
         } else if(source instanceof BluetoothVehicleInterface){
@@ -35,10 +35,10 @@ public enum InterfaceType {
             return UNKNOWN;
         }
     }
-    
+
     public static InterfaceType interfaceTypeFromString(
             String vInterfaceString){
-        
+
         if(vInterfaceString == null){
             return UNKNOWN;
         } else if(vInterfaceString.equalsIgnoreCase("BLUETOOTH")){
@@ -53,7 +53,7 @@ public enum InterfaceType {
             return UNKNOWN;
         }
     }
-    
+
     @Override
     public String toString(){
         return stringValue;

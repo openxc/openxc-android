@@ -497,7 +497,6 @@ public class VehicleManager extends Service implements SourceCallback {
 
         if(mRemoteService != null) {
             try {
-                //sources.addAll(mRemoteService.getActiveSourceTypes());
                 for(String sourceTypeString:mRemoteService.getActiveSourceTypeStrings()){
                     sources.add(InterfaceType.interfaceTypeFromString(sourceTypeString));
                 }
