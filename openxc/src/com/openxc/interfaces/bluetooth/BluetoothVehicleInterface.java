@@ -30,6 +30,7 @@ import com.openxc.sources.SourceCallback;
 public class BluetoothVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
     private static final String TAG = "BluetoothVehicleInterface";
+    public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
 
     private DeviceManager mDeviceManager;
     private String mAddress;
@@ -226,7 +227,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 mOutStream = new BufferedWriter(new OutputStreamWriter(
                             mSocket.getOutputStream()));
                 mInStream = new BufferedInputStream(mSocket.getInputStream());
-                Log.i(TAG, "Socket stream to vehicle interface opened successfully");
+                Log.i(TAG, "Socket stream to vehicle interface " +
+                        "opened successfully");
             } catch(IOException e) {
                 Log.e(TAG, "Error opening streams ", e);
                 disconnect();
