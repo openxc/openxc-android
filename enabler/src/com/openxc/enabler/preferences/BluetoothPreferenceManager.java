@@ -16,7 +16,7 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
  */
 public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothPreferenceManager";
-    
+
     private final static String OPENXC_VI_PREFIX = "OpenXC-VI-";
 
     public BluetoothPreferenceManager(Context context) {
@@ -51,7 +51,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                         BluetoothVehicleInterface.class, deviceAddress);
             } else {
                 // Search paired BT devices for OpenXC VI
-                
+
                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if(bluetoothAdapter != null && bluetoothAdapter.isEnabled()){
                     // Get paired list of adapaters
@@ -62,23 +62,23 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                         for(BluetoothDevice device:pairedDevices){
                             if(device.getName().startsWith(OPENXC_VI_PREFIX)){
                                 // Autopair with this device
-                                getVehicleManager().addVehicleInterface(BluetoothVehicleInterface.class, 
+                                getVehicleManager().addVehicleInterface(BluetoothVehicleInterface.class,
                                         device.getAddress());
-                                
+
                                 SharedPreferences.Editor editor = getPreferences().edit();
-                                editor.putString(getContext().getString(R.string.bluetooth_mac_key), 
+                                editor.putString(getContext().getString(R.string.bluetooth_mac_key),
                                         device.getAddress());
                                 editor.commit();
-                                
-                                Log.d(TAG, "Paired Bluetooth device, " + device.getName() + 
+
+                                Log.d(TAG, "Paired Bluetooth device, " + device.getName() +
                                         ", will be auto connected.");
-                                
+
                                 break;
                             }
                         }
                     }
                 }
-                
+
                 Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
                         "), not starting source");
             }
