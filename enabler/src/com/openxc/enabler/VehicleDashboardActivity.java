@@ -12,26 +12,29 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.openxc.VehicleManager;
-import com.openxc.measurements.BrakePedalStatus;
-import com.openxc.measurements.HeadlampStatus;
-import com.openxc.measurements.EngineSpeed;
-import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.AcceleratorPedalPosition;
-import com.openxc.measurements.Latitude;
-import com.openxc.measurements.Longitude;
-import com.openxc.measurements.ParkingBrakeStatus;
-import com.openxc.measurements.IgnitionStatus;
-import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.TransmissionGearPosition;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.BrakePedalStatus;
+import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.FuelConsumed;
 import com.openxc.measurements.FuelLevel;
+import com.openxc.measurements.HeadlampStatus;
+import com.openxc.measurements.IgnitionStatus;
+import com.openxc.measurements.Latitude;
+import com.openxc.measurements.Longitude;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Odometer;
+import com.openxc.measurements.ParkingBrakeStatus;
+import com.openxc.measurements.SteeringWheelAngle;
+import com.openxc.measurements.TorqueAtTransmission;
+import com.openxc.measurements.TransmissionGearPosition;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.VehicleServiceException;
 
@@ -412,5 +415,23 @@ public class VehicleDashboardActivity extends Activity {
             unbindService(mConnection);
             mIsBound = false;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.settings:
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
     }
 }
