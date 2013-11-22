@@ -227,26 +227,6 @@
                 android:text="@string/degree_unit" />
         </TableRow>
 
-        <TableRow style="@style/ItemRow">
-            <TextView
-                android:id="@+id/button_event_label"
-                style="@style/ItemLabel"
-                android:text="@string/button_event_label" />
-            <TextView
-                android:id="@+id/button_event"
-                style="@style/ItemData" />
-        </TableRow>
-
-        <TableRow style="@style/ItemRow">
-            <TextView
-                android:id="@+id/door_status_label"
-                style="@style/ItemLabel"
-                android:text="@string/door_status_label" />
-            <TextView
-                android:id="@+id/door_status"
-                style="@style/ItemData" />
-        </TableRow>
-
     </TableLayout>
 
 </ScrollView>
