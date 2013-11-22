@@ -33,7 +33,7 @@
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
       </activity>
-      
+
       <activity android:name=".VehicleDashboardActivity">
       </activity>
 
@@ -53,7 +53,7 @@
               <action android:name="android.intent.action.BOOT_COMPLETED" />
           </intent-filter>
       </receiver>
-      
+
       <receiver android:name=".BluetoothReceiver">
           <intent-filter>
               <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
