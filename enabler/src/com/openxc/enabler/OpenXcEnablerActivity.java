@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.openxc.VehicleManager;
@@ -42,10 +42,14 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 public class OpenXcEnablerActivity extends Activity {
     private static String TAG = "OpenXcEnablerActivity";
 
-    private TextView mVehicleManagerStatusView;
+    private View mServiceNotRunningWarningView;
     private TextView mMessageCountView;
-    private ListView mSourceListView;
-    private ListView mSinkListView;
+    private View mUnknownConnIV;
+    private View mBluetoothConnIV;
+    private View mUsbConnIV;
+    private View mNetworkConnIV;
+    private View mFileConnIV;
+    private View mNoneConnView;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
@@ -63,7 +67,7 @@ public class OpenXcEnablerActivity extends Activity {
                     mVehicleManager.waitUntilBound();
                     OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            mVehicleManagerStatusView.setText("Running");
+                        	mServiceNotRunningWarningView.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -73,7 +77,8 @@ public class OpenXcEnablerActivity extends Activity {
                     OpenXcEnablerActivity.this, mMessageCountView);
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, OpenXcEnablerActivity.this,
-                    mSourceListView, mSinkListView);
+                    mUnknownConnIV, mFileConnIV, mNetworkConnIV,
+                    mBluetoothConnIV, mUsbConnIV, mNoneConnView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
@@ -84,7 +89,7 @@ public class OpenXcEnablerActivity extends Activity {
             mVehicleManager = null;
             OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    mVehicleManagerStatusView.setText("Not running");
+                	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -99,15 +104,27 @@ public class OpenXcEnablerActivity extends Activity {
         startService(new Intent(this, VehicleManager.class));
         startService(new Intent(this, PreferenceManagerService.class));
 
-        mVehicleManagerStatusView = (TextView) findViewById(
-                R.id.vehicle_service_status);
+        mServiceNotRunningWarningView = findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) findViewById(R.id.message_count);
-        mSourceListView = (ListView) findViewById(R.id.source_list);
-        mSinkListView = (ListView) findViewById(R.id.sink_list);
+        mBluetoothConnIV = findViewById(R.id.connection_bluetooth);
+        mUsbConnIV = findViewById(R.id.connection_usb);
+        mFileConnIV = findViewById(R.id.connection_file);
+        mNetworkConnIV = findViewById(R.id.connection_network);
+        mUnknownConnIV = findViewById(R.id.connection_unknown);
+        mNoneConnView = findViewById(R.id.connection_none);
+
+        findViewById(R.id.view_vehicle_data_btn).setOnClickListener(
+                new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                startActivity(new Intent(OpenXcEnablerActivity.this,
+                        VehicleDashboardActivity.class));
+            }
+        });
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-                mVehicleManagerStatusView.setText("Not running");
+            	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
             }
         });
     }

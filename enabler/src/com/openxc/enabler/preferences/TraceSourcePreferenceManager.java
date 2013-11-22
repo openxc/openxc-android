@@ -73,9 +73,9 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     }
 
     private synchronized void stopTrace() {
-    	if(getVehicleManager() != null){
-	        getVehicleManager().removeSource(mTraceSource);
-	        mTraceSource = null;
-    	}
+        if(getVehicleManager() != null){
+            getVehicleManager().removeSource(mTraceSource);
+            mTraceSource = null;
+        }
     }
 }

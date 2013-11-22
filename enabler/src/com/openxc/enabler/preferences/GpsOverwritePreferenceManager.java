@@ -23,8 +23,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     public void close() {
         super.close();
         if(getVehicleManager() != null){
-	        getVehicleManager().removeSink(mMockedLocationSink);
-	        mMockedLocationSink = null;
+            getVehicleManager().removeSink(mMockedLocationSink);
+            mMockedLocationSink = null;
         }
     }
 

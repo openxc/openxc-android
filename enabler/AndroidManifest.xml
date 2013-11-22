@@ -34,6 +34,9 @@
           </intent-filter>
       </activity>
 
+      <activity android:name=".VehicleDashboardActivity">
+      </activity>
+
       <activity android:name=".SettingsActivity" />
 
       <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity">
@@ -48,6 +51,12 @@
       <receiver android:name=".BootupReceiver">
           <intent-filter>
               <action android:name="android.intent.action.BOOT_COMPLETED" />
+          </intent-filter>
+      </receiver>
+
+      <receiver android:name=".BluetoothReceiver">
+          <intent-filter>
+              <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
           </intent-filter>
       </receiver>
   </application>

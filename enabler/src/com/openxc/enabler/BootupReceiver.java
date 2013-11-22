@@ -1,6 +1,7 @@
 package com.openxc.enabler;
 
 import com.openxc.VehicleManager;
+import com.openxc.enabler.preferences.PreferenceManagerService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,14 +15,14 @@ import android.util.Log;
  * management.
  */
 public class BootupReceiver extends BroadcastReceiver {
-    private final static String TAG = "BootupReceiver";
+    private final static String TAG = BootupReceiver.class.getSimpleName();
 
     // TODO what about when the device is already started? need an app to hit?
     // or do we rely on it being started by the bind call? might get duplicate
     // USB permission requests that way, but maybe it's OK.
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "Starting vehicle service on boot");
-        context.startService(new Intent(context, VehicleManager.class));
+        Log.i(TAG, "Loading configured vehicle services on bootup");
+        context.startService(new Intent(context, PreferenceManagerService.class));
     }
 }

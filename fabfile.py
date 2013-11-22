@@ -18,7 +18,6 @@ def release():
     local("mvn release:prepare")
     local("mvn release:perform")
     local("mvn package -pl enabler -am")
-    local("mvn package -pl examples -am")
 
     env.release = release_descriptor(env.root_dir)
     # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide

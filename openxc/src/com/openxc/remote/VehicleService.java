@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.openxc.DataPipeline;
 import com.openxc.R;
+import com.openxc.interfaces.InterfaceType;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
@@ -186,6 +187,16 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
                     sources.add(source.toString());
+                }
+                return sources;
+            }
+            
+            public List<String> getActiveSourceTypeStrings() {
+            	ArrayList<String> sources = new ArrayList<String>();
+                for(VehicleDataSource source : mPipeline.getSources()) {
+                    if(source.isConnected()){
+                    	sources.add(InterfaceType.interfaceTypeFromClass(source).toString());
+                    }
                 }
                 return sources;
             }
