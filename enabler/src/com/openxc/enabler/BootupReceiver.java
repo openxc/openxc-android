@@ -22,8 +22,7 @@ public class BootupReceiver extends BroadcastReceiver {
     // USB permission requests that way, but maybe it's OK.
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "Starting vehicle service on boot");
-        context.startService(new Intent(context, VehicleManager.class));
+        Log.i(TAG, "Loading configured vehicle services on bootup");
         context.startService(new Intent(context, PreferenceManagerService.class));
     }
 }
