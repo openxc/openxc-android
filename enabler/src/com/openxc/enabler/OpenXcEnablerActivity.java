@@ -110,11 +110,11 @@ public class OpenXcEnablerActivity extends Activity {
         // Set listener for Show Data button
         Button showVehicleDataBTN = (Button)findViewById(R.id.view_vehicle_data_btn);
         showVehicleDataBTN.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				startActivity(new Intent(OpenXcEnablerActivity.this, VehicleDashboardActivity.class));
-			}
-		});
+            @Override
+            public void onClick(View arg0) {
+                startActivity(new Intent(OpenXcEnablerActivity.this, VehicleDashboardActivity.class));
+            }
+        });
 
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
