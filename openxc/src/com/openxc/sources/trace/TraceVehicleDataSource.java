@@ -36,14 +36,8 @@ import android.util.Log;
  * Everything from the VehicleService on up the chain is identical to when
  * operating in a live vehicle.
  *
- * The trace file format is simply a plain text file of OpenXC JSON messages with
- * an additional timestamp field (in seconds with decimal parts), separated by
- * newlines:
- *
- * {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
- * {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}
- * {"timestamp": 1351176963.438211, "name": "brake_pedal_status", "value": false}
- * {"timestamp": 1351176963.438318, "name": "transmission_gear_position", "value": "second"}
+ * The trace file format is defined in the OpenXC message format specification:
+ * https://github.com/openxc/openxc-message-format
  *
  * The trace file to use is specified via the constructor as an Android-style
  * resource URI, e.g. "resource://42", "file:///storage/traces/trace.json" or a
