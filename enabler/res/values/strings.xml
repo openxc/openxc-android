@@ -41,9 +41,9 @@
     <string name="network_host_title">Network host address</string>
     <string name="network_port_title">Network port</string>
     <string name="trace_source_settings">Trace file playback</string>
-    <string name="trace_source_checkbox_title">Playback trace file</string>
-    <string name="trace_source_checkbox_summary">Use a previously recorded OpenXC trace file as the source</string>
-    <string name="trace_source_file_title">Trace file</string>
+    <string name="trace_source_checkbox_title">Use a pre-recorded trace file</string>
+    <string name="trace_source_checkbox_summary">Use an OpenXC vehicle data trace file as the source</string>
+    <string name="trace_source_file_title">Select a trace file for playback</string>
     <string name="trace_source_file_summary">Select an existing trace file</string>
     <string name="source_list_label">Data Sources</string>
     <string name="sink_list_label">Data Sinks</string>
