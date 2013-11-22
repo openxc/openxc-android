@@ -209,7 +209,10 @@ public class DataPipeline implements SourceCallback {
                     connected = connected || s.isConnected();
                 }
             }
-            mOperator.onPipelineDeactivated();
+
+            if(!connected) {
+                mOperator.onPipelineDeactivated();
+            }
         }
     }
 
