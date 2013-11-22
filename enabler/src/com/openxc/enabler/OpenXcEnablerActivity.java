@@ -113,6 +113,15 @@ public class OpenXcEnablerActivity extends Activity {
         mUnknownConnIV = findViewById(R.id.connection_unknown);
         mNoneConnView = findViewById(R.id.connection_none);
 
+        findViewById(R.id.view_vehicle_data_btn).setOnClickListener(
+                new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                startActivity(new Intent(OpenXcEnablerActivity.this,
+                        VehicleDashboardActivity.class));
+            }
+        });
+
         OpenXcEnablerActivity.this.runOnUiThread(new Runnable() {
             public void run() {
             	mServiceNotRunningWarningView.setVisibility(View.VISIBLE);

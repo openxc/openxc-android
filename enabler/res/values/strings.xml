@@ -11,6 +11,7 @@
     <string name="connection_usb">USB</string>
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
+    <string name="show_data_button">View Vehicle Data</string>
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
@@ -52,4 +53,40 @@
     <string name="application_version_key">application_version</string>
     <string name="service_not_running">VehicleService not running.</string>
     <string name="warning">Warning</string>
+
+    <!-- Vehicle Dashboard Strings -->
+    <string name="steering_wheel_angle_label">Steering Wheel</string>
+    <string name="degree_unit">&#xb0;</string>
+    <string name="vehicle_speed_label">Vehicle Speed</string>
+    <string name="vehicle_speed_unit">km/h</string>
+    <string name="fuel_consumed_label">Fuel Consumed</string>
+    <string name="fuel_consumed_unit">L</string>
+    <string name="fuel_level_label">Fuel Level</string>
+    <string name="odometer_label">Odometer</string>
+    <string name="odometer_unit">km</string>
+    <string name="wiper_status_label">Windshield Wiper</string>
+    <string name="brake_pedal_status_label">Brake Pedal</string>
+    <string name="headlamp_status_label">Headlamp</string>
+    <string name="engine_speed_label">Engine Speed</string>
+    <string name="engine_speed_unit">RPM</string>
+    <string name="torque_at_transmission_label">Transmission Torque</string>
+    <string name="torque_at_transmission_unit">Nm</string>
+    <string name="accelerator_pedal_position_label">
+        Accelerator Pedal
+    </string>
+    <string name="percent_unit">%</string>
+    <string name="transmission_gear_pos_label">
+        Transmission Gear
+    </string>
+    <string name="ignition_label">Ignition Status</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="android_latitude_label">Android Latitude</string>
+    <string name="android_longitude_label">Android Longitude</string>
+    <string name="parking_brake_status_label">Parking Brake</string>
+    <string name="button_event_label">Button Event</string>
+    <string name="door_status_label">Door Status</string>
+    <string name="left_turn">Left Turn</string>
+    <string name="right_turn">Right Turn</string>
+
 </resources>
