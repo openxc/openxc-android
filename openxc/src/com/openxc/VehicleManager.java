@@ -475,21 +475,16 @@ public class VehicleManager extends Service implements SourceCallback {
         }
         return sinks;
     }
-    
+
     /**
      * Returns a list of all active interface types
-     * 
+     *
      * @return A list of the InterfaceTypes actively connected.
      */
     public List<InterfaceType> getActiveSourceTypes(){
         ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
         for(VehicleDataSource source : mSources) {
-            
-            Log.d(TAG, "VehicleDataSource: " + source.toString());
-            
             if(source.isConnected()){
-                Log.d(TAG, "Connected VehicleDataSource: " + source.toString());
-                
                 sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
         }
