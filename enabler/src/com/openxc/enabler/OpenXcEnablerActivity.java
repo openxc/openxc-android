@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -106,13 +105,13 @@ public class OpenXcEnablerActivity extends Activity {
         mMessageCountView = (TextView) findViewById(R.id.message_count);
         mSourceListView = (ListView) findViewById(R.id.source_list);
         mSinkListView = (ListView) findViewById(R.id.sink_list);
-        
-        // Set listener for Show Data button
-        Button showVehicleDataBTN = (Button)findViewById(R.id.view_vehicle_data_btn);
-        showVehicleDataBTN.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.view_vehicle_data_btn).setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                startActivity(new Intent(OpenXcEnablerActivity.this, VehicleDashboardActivity.class));
+                startActivity(new Intent(OpenXcEnablerActivity.this,
+                        VehicleDashboardActivity.class));
             }
         });
 
