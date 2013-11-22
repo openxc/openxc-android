@@ -1,5 +1,11 @@
 # OpenXC Android Library Changelog
 
+## v5.1.1
+
+* Fix lifecycle issues with VehicleService from Enabler app.
+* Fix Bluetooth data sources in Android API 10-13 and below (2.3.x).
+* Fix selecting a trace file for playback in Android API 10-13 (2.3.x).
+
 ## v5.1
 
 * Run OpenXC VehicleService in the foreground (including an Android
