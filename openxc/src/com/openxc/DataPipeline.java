@@ -197,20 +197,30 @@ public class DataPipeline implements SourceCallback {
         return mMessagesReceived;
     }
 
+    public boolean isActive() {
+        return isActive(null);
+    }
+
+    /**
+     * Return true if at least one source is active.
+     */
+    public boolean isActive(VehicleDataSource skipSource) {
+        boolean connected = false;
+        for(VehicleDataSource s : mSources) {
+            if(s != skipSource) {
+                connected = connected || s.isConnected();
+            }
+        }
+        return connected;
+    }
+
     /**
      * At least one source is not active - if all sources are inactive, notify
      * the operator.
      */
     public void sourceDisconnected(VehicleDataSource source) {
         if(mOperator != null) {
-            boolean connected = false;
-            for(VehicleDataSource s : mSources) {
-                if(s != source) {
-                    connected = connected || s.isConnected();
-                }
-            }
-
-            if(!connected) {
+            if(!isActive(source)) {
                 mOperator.onPipelineDeactivated();
             }
         }
