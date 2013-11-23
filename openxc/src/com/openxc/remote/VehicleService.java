@@ -66,6 +66,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             new CopyOnWriteArrayList<VehicleInterface>();
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
+    private boolean mUserPipelineActive;
 
     @Override
     public void onCreate() {
@@ -190,7 +191,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 }
                 return sources;
             }
-            
+
             public List<String> getActiveSourceTypeStrings() {
                 ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
@@ -207,6 +208,18 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                     sinks.add(sink.toString());
                 }
                 return sinks;
+            }
+
+            public void userPipelineActivated() {
+                mUserPipelineActive = true;
+                VehicleService.this.onPipelineActivated();
+            }
+
+            public void userPipelineDeactivated() {
+                mUserPipelineActive = false;
+                if(!VehicleService.this.mPipeline.isActive()) {
+                    VehicleService.this.onPipelineDeactivated();
+                }
             }
     };
 
@@ -295,7 +308,9 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     }
 
     public void onPipelineDeactivated() {
-        mWakeLocker.releaseWakeLock();
-        removeFromForeground();
+        if(!mUserPipelineActive) {
+            mWakeLocker.releaseWakeLock();
+            removeFromForeground();
+        }
     }
 }

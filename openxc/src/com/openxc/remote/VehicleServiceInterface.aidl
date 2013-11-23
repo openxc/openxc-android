@@ -69,4 +69,7 @@ interface VehicleServiceInterface {
     List<String> getSourceSummaries();
     List<String> getSinkSummaries();
     List<String> getActiveSourceTypeStrings();
+
+    void userPipelineActivated();
+    void userPipelineDeactivated();
 }

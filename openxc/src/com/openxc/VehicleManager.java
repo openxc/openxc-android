@@ -32,9 +32,9 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.sinks.MeasurementListenerSink;
 import com.openxc.sinks.MockedLocationSink;
+import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.RemoteListenerSource;
-import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 
 /**
@@ -92,35 +92,35 @@ import com.openxc.sources.VehicleDataSource;
  * least one sink that stores the latest messages and handles passing on data to
  * users of this service.
  */
-public class VehicleManager extends Service implements SourceCallback {
+public class VehicleManager extends Service implements DataPipeline.Operator {
     public final static String VEHICLE_LOCATION_PROVIDER =
             MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
-    private DataPipeline mPipeline = new DataPipeline();
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
             new CopyOnWriteArrayList<VehicleInterface>();
 
-    // The DataPipeline in this class must only have 1 source - the special
-    // RemoteListenerSource that receives measurements from the
-    // VehicleService and propagates them to all of the user-registered
-    // sinks. Any user-registered sources must live in a separate array,
-    // unfortunately, so they don't try to circumvent the VehicleService
-    // and send their values directly to the in-process sinks (otherwise no
-    // other applications could receive updates from that source). For most
-    // applications that might be fine, but since we want to control trace
-    // playback from the Enabler, it needs to be able to inject those into the
-    // RVS.
-    private CopyOnWriteArrayList<VehicleDataSource> mSources =
-            new CopyOnWriteArrayList<VehicleDataSource>();
+    // The mRemoteOriginPipeline in this class must only have 1 source - the
+    // special RemoteListenerSource that receives measurements from the
+    // VehicleService and propagates them to all of the user-registered sinks.
+    private DataPipeline mRemoteOriginPipeline = new DataPipeline();
+
+    // The mUserOriginPipeline, oppositely, must have only 1 sink - the special
+    // UserSink that funnels data from user defined sources back to the
+    // VehicleService. Any user-registered sources go in the mUserOriginPipeline
+    // so they don't try to circumvent the VehicleService and send their values
+    // directly to the in-process sinks (otherwise no other applications could
+    // receive updates from that source).
+    private DataPipeline mUserOriginPipeline = new DataPipeline(this);
 
     private boolean mIsBound;
     private VehicleServiceInterface mRemoteService;
     private RemoteListenerSource mRemoteSource;
     private VehicleInterface mRemoteController;
-    private MeasurementListenerSink mNotifier;
+    private MeasurementListenerSink mNotifier = new MeasurementListenerSink();
+    private UserSink mUserSink;
 
     /**
      * Binder to connect IBinder in a ServiceConnection with the VehicleManager.
@@ -146,7 +146,8 @@ public class VehicleManager extends Service implements SourceCallback {
         super.onCreate();
         Log.i(TAG, "Service starting");
 
-        initializeDefaultSinks(mPipeline);
+        mRemoteOriginPipeline.addSink(mNotifier);
+
         bindRemote();
     }
 
@@ -154,7 +155,7 @@ public class VehicleManager extends Service implements SourceCallback {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Service being destroyed");
-        mPipeline.stop();
+        mRemoteOriginPipeline.stop();
         unbindRemote();
     }
 
@@ -306,18 +307,14 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public void addSource(VehicleDataSource source) {
         Log.i(TAG, "Adding data source " + source);
-        source.setCallback(this);
-        mSources.add(source);
+        mUserOriginPipeline.addSource(source);
     }
 
     /**
      * Remove a previously registered source from the data pipeline.
      */
     public void removeSource(VehicleDataSource source) {
-        if(source != null) {
-            mSources.remove(source);
-            source.stop();
-        }
+        mUserOriginPipeline.removeSource(source);
     }
 
     /**
@@ -335,7 +332,7 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public void addSink(VehicleDataSink sink) {
         Log.i(TAG, "Adding data sink " + sink);
-        mPipeline.addSink(sink);
+        mRemoteOriginPipeline.addSink(sink);
     }
 
     /**
@@ -343,7 +340,7 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public void removeSink(VehicleDataSink sink) {
         if(sink != null) {
-            mPipeline.removeSink(sink);
+            mRemoteOriginPipeline.removeSink(sink);
             sink.stop();
         }
     }
@@ -433,11 +430,11 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public List<String> getSourceSummaries() {
         ArrayList<String> sources = new ArrayList<String>();
-        for(VehicleDataSource source : mSources) {
+        for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
             sources.add(source.toString());
         }
 
-        for(VehicleDataSource source : mPipeline.getSources()) {
+        for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
             sources.add(source.toString());
         }
 
@@ -462,7 +459,7 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public List<String> getSinkSummaries() {
         ArrayList<String> sinks = new ArrayList<String>();
-        for(VehicleDataSink sink : mPipeline.getSinks()) {
+        for(VehicleDataSink sink : mRemoteOriginPipeline.getSinks()) {
             sinks.add(sink.toString());
         }
 
@@ -483,13 +480,14 @@ public class VehicleManager extends Service implements SourceCallback {
      */
     public List<InterfaceType> getActiveSourceTypes(){
         ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
-        for(VehicleDataSource source : mSources) {
+
+        for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
             if(source.isConnected()){
                 sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
         }
 
-        for(VehicleDataSource source : mPipeline.getSources()) {
+        for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
             if(source.isConnected()){
                 sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
@@ -497,8 +495,10 @@ public class VehicleManager extends Service implements SourceCallback {
 
         if(mRemoteService != null) {
             try {
-                for(String sourceTypeString:mRemoteService.getActiveSourceTypeStrings()){
-                    sources.add(InterfaceType.interfaceTypeFromString(sourceTypeString));
+                for(String sourceTypeString :
+                        mRemoteService.getActiveSourceTypeStrings()) {
+                    sources.add(InterfaceType.interfaceTypeFromString(
+                                sourceTypeString));
                 }
             } catch(RemoteException e) {
                 Log.w(TAG, "Unable to retreive remote source summaries", e);
@@ -553,7 +553,7 @@ public class VehicleManager extends Service implements SourceCallback {
         if(vehicleInterface != null) {
             Log.i(TAG, "Adding local vehicle interface " + vehicleInterface);
             mInterfaces.add(vehicleInterface);
-            mPipeline.addSource(vehicleInterface);
+            mRemoteOriginPipeline.addSource(vehicleInterface);
         }
     }
 
@@ -568,7 +568,7 @@ public class VehicleManager extends Service implements SourceCallback {
     public void removeLocalVehicleInterface(VehicleInterface vehicleInterface) {
         if(vehicleInterface != null) {
             mInterfaces.remove(vehicleInterface);
-            mPipeline.removeSource(vehicleInterface);
+            mRemoteOriginPipeline.removeSource(vehicleInterface);
         }
     }
 
@@ -579,33 +579,24 @@ public class VehicleManager extends Service implements SourceCallback {
             .toString();
     }
 
-    /**
-     * Not part of the public API for VehicleManager.
-     *
-     * This method is required to be public to implement the SourceCallback
-     * interface, but it should not be used by applications.
-     */
-    public void receive(RawMeasurement measurement) {
+    public void onPipelineActivated() {
         if(mRemoteService != null) {
             try {
-                mRemoteService.receive(measurement);
+                mRemoteService.userPipelineActivated();
             } catch(RemoteException e) {
                 Log.d(TAG, "Unable to send message to remote service", e);
             }
         }
     }
 
-    public void sourceDisconnected(VehicleDataSource source) {
-        Log.d(TAG, source + " disconnected");
-    }
-
-    public void sourceConnected(VehicleDataSource source) {
-        Log.d(TAG, source + " connected");
-    }
-
-    private void initializeDefaultSinks(DataPipeline pipeline) {
-        mNotifier = new MeasurementListenerSink();
-        pipeline.addSink(mNotifier);
+    public void onPipelineDeactivated() {
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.userPipelineDeactivated();
+            } catch(RemoteException e) {
+                Log.d(TAG, "Unable to send message to remote service", e);
+            }
+        }
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -618,7 +609,10 @@ public class VehicleManager extends Service implements SourceCallback {
             mInterfaces.add(mRemoteController);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
-            mPipeline.addSource(mRemoteSource);
+            mRemoteOriginPipeline.addSource(mRemoteSource);
+
+            mUserSink = new UserSink(mRemoteService);
+            mUserOriginPipeline.addSink(mUserSink);
 
             mRemoteBoundLock.lock();
             mRemoteBoundCondition.signalAll();
@@ -629,7 +623,8 @@ public class VehicleManager extends Service implements SourceCallback {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
             mInterfaces.remove(mRemoteController);
             mRemoteService = null;
-            mPipeline.removeSource(mRemoteSource);
+            mRemoteOriginPipeline.removeSource(mRemoteSource);
+            mUserOriginPipeline.removeSink(mUserSink);
             bindRemote();
         }
     };
