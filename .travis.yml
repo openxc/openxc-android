@@ -1,5 +1,12 @@
 language: java
 before_install:
+  # Maven 3.1.1
+  - wget http://www.us.apache.org/dist/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz
+  - tar xvf apache-maven-3.1.1-bin.tar.gz > /dev/null
+  - export MVN_HOME=`pwd`/apache-maven-3.1.1
+  - export PATH=${MVN_HOME}/bin/:${PATH}
+  - mvn --version
+
   # download the latest android sdk and unzip
   - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
