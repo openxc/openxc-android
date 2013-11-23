@@ -65,6 +65,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
+    private boolean mTraceValid = false;
     private long mFirstTimestamp = 0;
     private boolean mRunning = true;
     private boolean mLoop = true;
@@ -118,13 +119,15 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         this(null, context, filename, loop);
     }
 
+    /** Consider the trace source "connected" if it's running and at least 1
+     * measurement was parsed successfully from the file.
+     *
+     * This will catch errors e.g. if the trace is totally corrupted, but it
+     * won't give you any indication if it is partially corrupted.
+     */
     @Override
     public boolean isConnected() {
-        // TODO BaseVehicleDataSource.isConnected() always returns false do
-        // not us its result until this is fixed
-        //return mRunning && super.isConnected();
-        
-        return mRunning;
+        return mRunning && mTraceValid;
     }
 
     /**
@@ -182,6 +185,10 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                         continue;
                     }
                     measurement.untimestamp();
+                    if(!mTraceValid) {
+                        connected();
+                        mTraceValid = true;
+                    }
                     handleMessage(measurement);
                 }
             } catch(IOException e) {
@@ -200,11 +207,13 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 Log.d(TAG, "Not looping trace.");
                 break;
             }
+            disconnected();
             Log.d(TAG, "Restarting playback of trace " + mFilename);
             try {
                 Thread.sleep(1000);
             } catch(InterruptedException e) {}
         }
+        disconnected();
         mRunning = false;
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }
