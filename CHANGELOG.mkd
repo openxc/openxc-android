@@ -1,5 +1,9 @@
 # OpenXC Android Library Changelog
 
+## v5.1.2-dev
+
+* Building with Android API 19
+
 ## v5.1.1
 
 * Fix lifecycle issues with VehicleService from Enabler app.

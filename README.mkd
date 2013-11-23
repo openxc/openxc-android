@@ -40,7 +40,7 @@ SDK's top-level directory (e.g. `/home/user/android-sdk`.
 You must manually copy the Maven artifacts from this folder to your local
 repository:
 
-    sdk/ $ cp -R extras/android/m2repository/com ~/.m2/repository
+    $ cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 
 After satisfying those requirements, the build is pretty simple:
 
