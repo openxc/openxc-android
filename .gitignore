@@ -1,6 +1,7 @@
 target
 bin
 gen
+out
 .DS_Store
 /com/
 reference
@@ -8,5 +9,6 @@ reference
 .settings
 .project
 .classpath
+.idea/workspace.xml
 *.releaseBackup
 release.properties

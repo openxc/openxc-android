@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="libs1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/openxc/libs/guava-15.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/openxc/libs/jackson-core-2.2.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/openxc/libs/compatibility-v13-18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/openxc/libs/protobuf-java-2.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
