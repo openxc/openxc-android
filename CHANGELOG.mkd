@@ -2,7 +2,9 @@
 
 ## v5.1.2-dev
 
-* Building with Android API 19
+* Support Android API level 19.
+* Fix timestamps in trace files - support different locales and restore
+  fractional parts.
 
 ## v5.1.1
 
