@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 
 import com.openxc.TestUtils;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.serializers.JsonSerializer;
 
 public class RawMeasurementTest extends TestCase {
     RawMeasurement measurement;
@@ -39,6 +40,12 @@ public class RawMeasurementTest extends TestCase {
         assertTrue(measurement.isTimestamped());
         measurement.untimestamp();
         assertFalse(measurement.isTimestamped());
+    }
+
+    public void testSerializedTimestamp() {
+        String serialized = JsonSerializer.serialize(measurementName,
+                measurementValue, null, 1332432977835L);
+        assertTrue(serialized.contains("1332432977.835"));
     }
 
     public void testSerializeWithoutTimestamp() {

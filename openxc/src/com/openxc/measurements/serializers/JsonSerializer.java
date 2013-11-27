@@ -2,13 +2,13 @@ package com.openxc.measurements.serializers;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import java.text.DecimalFormat;
+import java.util.Locale;
+
+import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-
-import android.util.Log;
 
 public class JsonSerializer implements MeasurementSerializer {
     private static final String TAG = "JsonSerializer";
@@ -16,8 +16,13 @@ public class JsonSerializer implements MeasurementSerializer {
     public static final String VALUE_FIELD = "value";
     public static final String EVENT_FIELD = "event";
     public static final String TIMESTAMP_FIELD = "timestamp";
+    private static final String TIMESTAMP_PATTERN = "##########.######";
     private static DecimalFormat sTimestampFormatter =
-            new DecimalFormat("##########.000000");
+            (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+
+    static {
+        sTimestampFormatter.applyPattern(TIMESTAMP_PATTERN);
+    }
 
     public static String serialize(String name, Object value, Object event,
             long timestamp) {
@@ -39,9 +44,9 @@ public class JsonSerializer implements MeasurementSerializer {
 
             if(timestamp != 0) {
                 gen.writeFieldName(TIMESTAMP_FIELD);
-                // serialized measurements represent the timestamp as seconds
-                // with a fracitonal part
-                gen.writeRawValue(sTimestampFormatter.format(timestamp / 1000));
+                // serialized measurements store the timestamp in UNIX time
+                // (seconds with a fractional part since the UNIX epoch)
+                gen.writeRawValue(sTimestampFormatter.format(timestamp / 1000.0));
             }
 
             gen.writeEndObject();
