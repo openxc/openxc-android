@@ -45,6 +45,7 @@ public class VehicleDashboardActivity extends Activity {
     private VehicleManager mVehicleManager;
     private boolean mIsBound;
     private final Handler mHandler = new Handler();
+    private LocationManager mLocationManager;
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
     private TextView mFuelConsumedView;
@@ -333,6 +334,9 @@ public class VehicleDashboardActivity extends Activity {
         setContentView(R.layout.vehicle_dashboard);
         Log.i(TAG, "Vehicle dashboard created");
 
+        mLocationManager = (LocationManager)
+            getSystemService(Context.LOCATION_SERVICE);
+
         mSteeringWheelAngleView = (TextView) findViewById(
                 R.id.steering_wheel_angle);
         mVehicleSpeedView = (TextView) findViewById(
@@ -377,10 +381,8 @@ public class VehicleDashboardActivity extends Activity {
         bindService(new Intent(this, VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
 
-        LocationManager locationManager = (LocationManager)
-            getSystemService(Context.LOCATION_SERVICE);
         try {
-            locationManager.requestLocationUpdates(
+            mLocationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 0, 0,
                     mAndroidLocationListener);
         } catch(IllegalArgumentException e) {
@@ -396,6 +398,8 @@ public class VehicleDashboardActivity extends Activity {
             unbindService(mConnection);
             mIsBound = false;
         }
+
+        mLocationManager.removeUpdates(mAndroidLocationListener);
     }
 
     @Override
