@@ -3404,6 +3404,30 @@
  visibility="public"
 >
 </method>
+<method name="isActive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isActive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="skipSource" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
 <method name="receive"
  return="void"
  abstract="false"
@@ -3764,7 +3788,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="com.openxc.sources.SourceCallback">
+<implements name="com.openxc.DataPipeline.Operator">
 </implements>
 <constructor name="VehicleManager"
  type="com.openxc.VehicleManager"
@@ -3864,6 +3888,17 @@
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
 </exception>
 </method>
+<method name="getActiveSourceTypes"
+ return="java.util.List&lt;com.openxc.interfaces.InterfaceType&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="getMessageCount"
  return="int"
  abstract="false"
@@ -3912,7 +3947,7 @@
 <parameter name="intent" type="android.content.Intent">
 </parameter>
 </method>
-<method name="receive"
+<method name="onPipelineActivated"
  return="void"
  abstract="false"
  native="false"
@@ -3922,8 +3957,17 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="measurement" type="com.openxc.remote.RawMeasurement">
-</parameter>
+</method>
+<method name="onPipelineDeactivated"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 </method>
 <method name="removeListener"
  return="void"
@@ -4009,32 +4053,6 @@
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
 </exception>
 </method>
-<method name="sourceConnected"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="source" type="com.openxc.sources.VehicleDataSource">
-</parameter>
-</method>
-<method name="sourceDisconnected"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="source" type="com.openxc.sources.VehicleDataSource">
-</parameter>
-</method>
 <method name="waitUntilBound"
  return="void"
  abstract="false"
@@ -4089,6 +4107,65 @@
 </package>
 <package name="com.openxc.interfaces"
 >
+<class name="InterfaceType"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="interfaceTypeFromClass"
+ return="com.openxc.interfaces.InterfaceType"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="com.openxc.sources.VehicleDataSource">
+</parameter>
+</method>
+<method name="interfaceTypeFromString"
+ return="com.openxc.interfaces.InterfaceType"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="vInterfaceString" type="java.lang.String">
+</parameter>
+</method>
+<method name="valueOf"
+ return="com.openxc.interfaces.InterfaceType"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="com.openxc.interfaces.InterfaceType[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
 <class name="UriBasedVehicleInterfaceMixin"
  extends="java.lang.Object"
  abstract="false"
@@ -4492,6 +4569,17 @@
 <exception name="DataSourceException" type="com.openxc.sources.DataSourceException">
 </exception>
 </method>
+<field name="DEVICE_NAME_PREFIX"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;OpenXC-VI-&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <class name="DeviceManager"
  extends="java.lang.Object"
@@ -7088,6 +7176,19 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="getActiveSourceTypeStrings"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="getMessageCount"
  return="int"
  abstract="true"
@@ -7199,6 +7300,32 @@
 >
 <parameter name="listener" type="com.openxc.remote.VehicleServiceListener">
 </parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="userPipelineActivated"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="userPipelineDeactivated"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
@@ -7808,6 +7935,25 @@
 <parameter name="path" type="java.lang.String">
 </parameter>
 </method>
+</class>
+<class name="UserSink"
+ extends="com.openxc.sinks.BaseVehicleDataSink"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UserSink"
+ type="com.openxc.sinks.UserSink"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="service" type="com.openxc.remote.VehicleServiceInterface">
+</parameter>
+</constructor>
 </class>
 <interface name="VehicleDataSink"
  abstract="true"
@@ -9020,6 +9166,17 @@
 </method>
 <method name="getSerializedValue"
  return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTypeString"
+ return="java.lang.String"
  abstract="false"
  native="false"
  synchronized="false"

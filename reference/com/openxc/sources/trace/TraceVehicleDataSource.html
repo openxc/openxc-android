@@ -400,14 +400,8 @@ Summary:
  Everything from the VehicleService on up the chain is identical to when
  operating in a live vehicle.
 
- The trace file format is simply a plain text file of OpenXC JSON messages with
- an additional timestamp field (in seconds with decimal parts), separated by
- newlines:
-
- {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
- {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}
- {"timestamp": 1351176963.438211, "name": "brake_pedal_status", "value": false}
- {"timestamp": 1351176963.438318, "name": "transmission_gear_position", "value": "second"}
+ The trace file format is defined in the OpenXC message format specification:
+ https://github.com/openxc/openxc-message-format
 
  The trace file to use is specified via the constructor as an Android-style
  resource URI, e.g. "resource://42", "file:///storage/traces/trace.json" or a
@@ -594,8 +588,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/openxc/sources/trace/TraceVehicleDataSource.html#isConnected()">isConnected</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Return true if the data source is actively connected to its target, be it
- a USB endpoint, a Bluetooth channel, a trace file, etc.</div>
+        <div class="jd-descrdiv">Consider the trace source "connected" if it's running and at least 1
+ measurement was parsed successfully from the file.</div>
   
   </td></tr>
 
@@ -1573,11 +1567,11 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Return true if the data source is actively connected to its target, be it
- a USB endpoint, a Bluetooth channel, a trace file, etc. The source is
- capable of providing new vehicle data.
+  <div class="jd-tagdata jd-tagdescr"><p>Consider the trace source "connected" if it's running and at least 1
+ measurement was parsed successfully from the file.
 
- Returns true if connected, false otherwise.
+ This will catch errors e.g. if the trace is totally corrupted, but it
+ won't give you any indication if it is partially corrupted.
 </p></div>
 
     </div>

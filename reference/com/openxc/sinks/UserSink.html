@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
 <title>
 
-  BaseVehicleDataSink
+  UserSink
 
 
 | OpenXC Android Library
@@ -185,14 +185,14 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a></li>
-          <li class="selected api apilevel-"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></li>
+          <li class="selected api apilevel-"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></li>
       </ul>
     </li>
               
@@ -240,6 +240,13 @@
 <div id="api-info-block">
 
 
+
+  
+   
+  
+  
+  
+  
 
   
    
@@ -303,22 +310,21 @@ Summary:
      
     
     class
-<h1>BaseVehicleDataSink</h1>
+<h1>UserSink</h1>
 
 
 
-  
-    extends <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a><br/>
   
   
   
 
   
+    extends <a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a><br/>
   
-      implements 
-      
-        <a href="../../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> 
-      
+  
+  
+
+  
   
   
 
@@ -333,7 +339,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="2" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -341,7 +347,17 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.sinks.BaseVehicleDataSink</td>
+        <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">com.openxc.sinks.BaseVehicleDataSink</a></td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+         	
+        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.sinks.UserSink</td>
     </tr>
     
 
@@ -350,117 +366,22 @@ Summary:
 
 
 
-<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
 
-  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-direct" class="jd-expando-trigger closed"
-          ><img id="subclasses-direct-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>Known Direct Subclasses
-
-  <div id="subclasses-direct">
-      <div id="subclasses-direct-list"
-              class="jd-inheritedlinks"
-              
-              >
-          
-            
-              <a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a>,
-            
-              <a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a>,
-            
-              <a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a>,
-            
-              <a href="../../../com/openxc/sinks/UserSink.html">UserSink</a>
-            
-          
-      </div>
-      <div id="subclasses-direct-summary"
-              style="display: none;"
-              >
-  <table class="jd-sumtable-expando">
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a></td>
-              <td class="jd-descrcol" width="100%">Functionality to notify multiple clients asynchronously of new measurements.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></td>
-              <td class="jd-descrcol" width="100%">A parent class for data sinks that require access to an Android context.&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></td>
-              <td class="jd-descrcol" width="100%">Record raw vehicle measurements to a file as JSON.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></td>
-              <td class="jd-descrcol" width="100%">Pass measurements from a user-level data sources back to the remote
- VehicleService.&nbsp;</td>
-          </tr>
-  </table>
-      </div>
-  </div>
-</td></tr></table>
-
-
-
-<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
-
-  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-indirect" class="jd-expando-trigger closed"
-          ><img id="subclasses-indirect-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>Known Indirect Subclasses
-
-  <div id="subclasses-indirect">
-      <div id="subclasses-indirect-list"
-              class="jd-inheritedlinks"
-              
-              >
-          
-            
-              <a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a>,
-            
-              <a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a>,
-            
-              <a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a>,
-            
-              <a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a>
-            
-          
-      </div>
-      <div id="subclasses-indirect-summary"
-              style="display: none;"
-              >
-  <table class="jd-sumtable-expando">
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></td>
-              <td class="jd-descrcol" width="100%">A data sink that sends new measurements of specific types to listeners.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></td>
-              <td class="jd-descrcol" width="100%">Propagate vehicle location updates through the Android location interface.&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></td>
-              <td class="jd-descrcol" width="100%">A data sink that sends new measurements through an AIDL interface.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></td>
-              <td class="jd-descrcol" width="100%">Upload a stream of all incoming vehicle data to a remote HTTP server.&nbsp;</td>
-          </tr>
-  </table>
-      </div>
-  </div>
-</td></tr></table>
 
 
 <div class="jd-descr">
 
 
 <h2>Class Overview</h2>
-<p>A common parent class for all vehicle data sinks.
+<p>Pass measurements from a user-level data sources back to the remote
+ VehicleService.
 
- Many sinks require a reference to last known value of all measurements. This
- class encapsulates the functionality require to store a reference to the
- measurements data structure and query it for values.
+ This sink is a bit of a special case - it's used by the
+ <code><a href="../../../com/openxc/VehicleManager.html">VehicleManager</a></code> to pass measurement updates from a user's
+ data sources back to the VehicleService, so it can propagate them to all
+ OpenXC apps.
+
+ TODO it may be possible to merge this with the RemoteListenerSource.
 </p>
 
 
@@ -527,8 +448,10 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#BaseVehicleDataSink()">BaseVehicleDataSink</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/sinks/UserSink.html#UserSink(com.openxc.remote.VehicleServiceInterface)">UserSink</a></span>(<a href="../../../com/openxc/remote/VehicleServiceInterface.html">VehicleServiceInterface</a> service)</nobr>
         
+        <div class="jd-descrdiv">Registers a measurement listener with the remote service.</div>
+  
   </td></tr>
 
 
@@ -543,6 +466,74 @@ Summary:
 <!-- ========== METHOD SUMMARY =========== -->
 <table id="pubmethods" class="jd-sumtable"><tr><th colspan="12">Public Methods</th></tr>
 
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sinks/UserSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        
+        <div class="jd-descrdiv">Receive a raw measurement, deserialized to primatives.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/sinks/UserSink.html#toString()">toString</a></span>()</nobr>
+        
+  </td></tr>
+
+
+
+</table>
+
+
+
+
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="inhmethods" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">com.openxc.sinks.BaseVehicleDataSink</a>
+
+<div id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink">
+  <div id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
 
 
 	 
@@ -630,19 +621,11 @@ Summary:
   </td></tr>
 
 
-
 </table>
+  </div>
+</div>
+</td></tr>
 
-
-
-
-
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="inhmethods" class="jd-sumtable"><tr><th>
-  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
-  <div style="clear:left;">Inherited Methods</div></th></tr>
 
 
 <tr class="api apilevel-" >
@@ -943,7 +926,7 @@ From interface
 
 
 
-<A NAME="BaseVehicleDataSink()"></A>
+<A NAME="UserSink(com.openxc.remote.VehicleServiceInterface)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -955,8 +938,8 @@ From interface
          
         
       </span>
-      <span class="sympad">BaseVehicleDataSink</span>
-      <span class="normal">()</span>
+      <span class="sympad">UserSink</span>
+      <span class="normal">(<a href="../../../com/openxc/remote/VehicleServiceInterface.html">VehicleServiceInterface</a> service)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -968,7 +951,8 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Registers a measurement listener with the remote service.
+</p></div>
 
     </div>
 </div>
@@ -987,99 +971,6 @@ From interface
 
 <h2>Public Methods</h2>
 
-
-
-<A NAME="containsMeasurement(java.lang.String)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        boolean
-      </span>
-      <span class="sympad">containsMeasurement</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="get(java.lang.String)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>
-      </span>
-      <span class="sympad">get</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="getMeasurements()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Map.Entry.html">Entry</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>,&nbsp;<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>&gt;&gt;
-      </span>
-      <span class="sympad">getMeasurements</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
 
 
 <A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
@@ -1122,21 +1013,12 @@ From interface
         </tr>
       </table>
   </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../../com/openxc/sinks/DataSinkException.html">DataSinkException</a></td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
 
     </div>
 </div>
 
 
-<A NAME="stop()"></A>
+<A NAME="toString()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1146,9 +1028,9 @@ From interface
          
          
          
-        void
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
       </span>
-      <span class="sympad">stop</span>
+      <span class="sympad">toString</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1161,9 +1043,7 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>

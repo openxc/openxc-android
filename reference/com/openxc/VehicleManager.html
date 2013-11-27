@@ -394,7 +394,7 @@ Summary:
   
       implements 
       
-        <a href="../../com/openxc/sources/SourceCallback.html">SourceCallback</a> 
+        <a href="../../com/openxc/DataPipeline.Operator.html">DataPipeline.Operator</a> 
       
   
   
@@ -1289,6 +1289,24 @@ android.content.ComponentCallbacks2
             
             
             
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#getActiveSourceTypes()">getActiveSourceTypes</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Returns a list of all active interface types</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1300,7 +1318,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1318,7 +1336,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1337,7 +1355,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1353,7 +1371,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1369,7 +1387,7 @@ android.content.ComponentCallbacks2
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1385,6 +1403,22 @@ android.content.ComponentCallbacks2
 
 
 	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#onPipelineActivated()">onPipelineActivated</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
@@ -1392,10 +1426,10 @@ android.content.ComponentCallbacks2
             
             
             
-            boolean</nobr>
+            void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#onUnbind(android.content.Intent)">onUnbind</a></span>(Intent intent)</nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()</nobr>
         
   </td></tr>
 
@@ -1408,13 +1442,11 @@ android.content.ComponentCallbacks2
             
             
             
-            void</nobr>
+            boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#onUnbind(android.content.Intent)">onUnbind</a></span>(Intent intent)</nobr>
         
-        <div class="jd-descrdiv">Not part of the public API for VehicleManager.</div>
-  
   </td></tr>
 
 
@@ -1524,43 +1556,6 @@ android.content.ComponentCallbacks2
         
         <div class="jd-descrdiv">Send a command to the vehicle through the first available active
  <code><a href="../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
- sleep.</div>
   
   </td></tr>
 
@@ -4924,19 +4919,19 @@ From interface
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sources.SourceCallback" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.sources.SourceCallback-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.DataPipeline.Operator" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-com.openxc.DataPipeline.Operator-trigger"
           src="../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From interface
 
-  <a href="../../com/openxc/sources/SourceCallback.html">com.openxc.sources.SourceCallback</a>
+  <a href="../../com/openxc/DataPipeline.Operator.html">com.openxc.DataPipeline.Operator</a>
 
-<div id="inherited-methods-com.openxc.sources.SourceCallback">
-  <div id="inherited-methods-com.openxc.sources.SourceCallback-list"
+<div id="inherited-methods-com.openxc.DataPipeline.Operator">
+  <div id="inherited-methods-com.openxc.DataPipeline.Operator-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-com.openxc.sources.SourceCallback-summary" style="display: none;">
+  <div id="inherited-methods-com.openxc.DataPipeline.Operator-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -4952,10 +4947,8 @@ From interface
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../com/openxc/DataPipeline.Operator.html#onPipelineActivated()">onPipelineActivated</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Receive a new measurement with at least a value and optionally an event.</div>
-  
   </td></tr>
 
 
@@ -4970,29 +4963,8 @@ From interface
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        <span class="sympad"><a href="../../com/openxc/DataPipeline.Operator.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()</nobr>
         
-        <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../com/openxc/sources/SourceCallback.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
-        
-        <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
- sleep.</div>
-  
   </td></tr>
 
 
@@ -5487,6 +5459,42 @@ From interface
 </div>
 
 
+<A NAME="getActiveSourceTypes()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&gt;
+      </span>
+      <span class="sympad">getActiveSourceTypes</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Returns a list of all active interface types</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>A list of the InterfaceTypes actively connected.
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
 <A NAME="getMessageCount()"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -5704,6 +5712,68 @@ From interface
 </div>
 
 
+<A NAME="onPipelineActivated()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">onPipelineActivated</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="onPipelineDeactivated()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">onPipelineDeactivated</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
 <A NAME="onUnbind(android.content.Intent)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -5730,51 +5800,6 @@ From interface
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">receive</span>
-      <span class="normal">(<a href="../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Not part of the public API for VehicleManager.
-
- This method is required to be public to implement the SourceCallback
- interface, but it should not be used by applications.
-</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>measurement</td>
-          <td>the new measurement.
-</td>
-        </tr>
-      </table>
-  </div>
 
     </div>
 </div>
@@ -6044,71 +6069,6 @@ From interface
         </tr>
       </table>
   </div>
-
-    </div>
-</div>
-
-
-<A NAME="sourceConnected(com.openxc.sources.VehicleDataSource)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">sourceConnected</span>
-      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>The data source is connected, so if necessary, keep the device awake.
-</p></div>
-
-    </div>
-</div>
-
-
-<A NAME="sourceDisconnected(com.openxc.sources.VehicleDataSource)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">sourceDisconnected</span>
-      <span class="normal">(<a href="../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>The data source is connected, so if necessary, let the device go to
- sleep.
-</p></div>
 
     </div>
 </div>

@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
 <title>
 
-  BaseVehicleDataSink
+  InterfaceType
 
 
 | OpenXC Android Library
@@ -146,7 +146,7 @@
                 
     <li class="api apilevel-">
   <a href="../../../com/openxc/package-summary.html">com.openxc</a></li>
-    <li class="api apilevel-">
+    <li class="selected api apilevel-">
   <a href="../../../com/openxc/interfaces/package-summary.html">com.openxc.interfaces</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/interfaces/bluetooth/package-summary.html">com.openxc.interfaces.bluetooth</a></li>
@@ -160,7 +160,7 @@
   <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
-    <li class="selected api apilevel-">
+    <li class="api apilevel-">
   <a href="../../../com/openxc/sinks/package-summary.html">com.openxc.sinks</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
@@ -178,29 +178,28 @@
               
     <li><h2>Interfaces</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></li>
       </ul>
     </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a></li>
-          <li class="selected api apilevel-"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html">UriBasedVehicleInterfaceMixin</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/interfaces/VehicleInterfaceFactory.html">VehicleInterfaceFactory</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/interfaces/VehicleInterfaceManagerUtils.html">VehicleInterfaceManagerUtils</a></li>
       </ul>
     </li>
               
               
+    <li><h2>Enums</h2>
+      <ul>
+          <li class="selected api apilevel-"><a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a></li>
+      </ul>
+    </li>
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/DataSinkException.html">DataSinkException</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/interfaces/VehicleInterfaceException.html">VehicleInterfaceException</a></li>
       </ul>
     </li>
               
@@ -255,6 +254,18 @@
   
   
 
+  
+  
+  
+  
+
+  
+   
+  
+  
+  
+  
+
 
 <div class="sum-details-links">
 
@@ -264,13 +275,13 @@ Summary:
 
 
 
-
-
-
-
-
-  <a href="#pubctors">Ctors</a>
+  <a href="#enumconstants">Enums</a>
   
+
+
+
+
+
 
 
 
@@ -300,25 +311,24 @@ Summary:
 <div id="jd-header">
     public
      
-     
+    final 
     
-    class
-<h1>BaseVehicleDataSink</h1>
+    enum
+<h1>InterfaceType</h1>
 
 
 
-  
-    extends <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a><br/>
   
   
   
 
   
+    extends <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">Enum</a>&lt;E&nbsp;extends&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">Enum</a>&lt;E&gt;&gt;<br/>
   
-      implements 
-      
-        <a href="../../../com/openxc/sinks/VehicleDataSink.html">VehicleDataSink</a> 
-      
+  
+  
+
+  
   
   
 
@@ -333,7 +343,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="2" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -341,7 +351,17 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.sinks.BaseVehicleDataSink</td>
+        <td colspan="2" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">java.lang.Enum</a>&lt;E&nbsp;extends&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">java.lang.Enum</a>&lt;E&gt;&gt;</td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+         	
+        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.interfaces.InterfaceType</td>
     </tr>
     
 
@@ -350,118 +370,11 @@ Summary:
 
 
 
-<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
 
-  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-direct" class="jd-expando-trigger closed"
-          ><img id="subclasses-direct-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>Known Direct Subclasses
-
-  <div id="subclasses-direct">
-      <div id="subclasses-direct-list"
-              class="jd-inheritedlinks"
-              
-              >
-          
-            
-              <a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a>,
-            
-              <a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a>,
-            
-              <a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a>,
-            
-              <a href="../../../com/openxc/sinks/UserSink.html">UserSink</a>
-            
-          
-      </div>
-      <div id="subclasses-direct-summary"
-              style="display: none;"
-              >
-  <table class="jd-sumtable-expando">
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a></td>
-              <td class="jd-descrcol" width="100%">Functionality to notify multiple clients asynchronously of new measurements.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></td>
-              <td class="jd-descrcol" width="100%">A parent class for data sinks that require access to an Android context.&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></td>
-              <td class="jd-descrcol" width="100%">Record raw vehicle measurements to a file as JSON.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></td>
-              <td class="jd-descrcol" width="100%">Pass measurements from a user-level data sources back to the remote
- VehicleService.&nbsp;</td>
-          </tr>
-  </table>
-      </div>
-  </div>
-</td></tr></table>
-
-
-
-<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
-
-  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-indirect" class="jd-expando-trigger closed"
-          ><img id="subclasses-indirect-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>Known Indirect Subclasses
-
-  <div id="subclasses-indirect">
-      <div id="subclasses-indirect-list"
-              class="jd-inheritedlinks"
-              
-              >
-          
-            
-              <a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a>,
-            
-              <a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a>,
-            
-              <a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a>,
-            
-              <a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a>
-            
-          
-      </div>
-      <div id="subclasses-indirect-summary"
-              style="display: none;"
-              >
-  <table class="jd-sumtable-expando">
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></td>
-              <td class="jd-descrcol" width="100%">A data sink that sends new measurements of specific types to listeners.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></td>
-              <td class="jd-descrcol" width="100%">Propagate vehicle location updates through the Android location interface.&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></td>
-              <td class="jd-descrcol" width="100%">A data sink that sends new measurements through an AIDL interface.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></td>
-              <td class="jd-descrcol" width="100%">Upload a stream of all incoming vehicle data to a remote HTTP server.&nbsp;</td>
-          </tr>
-  </table>
-      </div>
-  </div>
-</td></tr></table>
 
 
 <div class="jd-descr">
 
-
-<h2>Class Overview</h2>
-<p>A common parent class for all vehicle data sinks.
-
- Many sinks require a reference to last known value of all measurements. This
- class encapsulates the functionality require to store a reference to the
- measurements data structure and query it for values.
-</p>
 
 
 
@@ -499,41 +412,57 @@ Summary:
 
 
 
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<table id="enumconstants" class="jd-sumtable"><tr><th colspan="12">Enum Values</th></tr>
 
-
-
-
-
-
-
-
-
-
-
-
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<table id="pubctors" class="jd-sumtable"><tr><th colspan="12">Public Constructors</th></tr>
-
-
-
-	 
+    
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            </nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#BaseVehicleDataSink()">BaseVehicleDataSink</a></span>()</nobr>
-        
-  </td></tr>
+        <td class="jd-descrcol"><a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&nbsp;</td>
+        <td class="jd-linkcol">BLUETOOTH&nbsp;</td>
+        <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-descrcol"><a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&nbsp;</td>
+        <td class="jd-linkcol">FILE&nbsp;</td>
+        <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-descrcol"><a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&nbsp;</td>
+        <td class="jd-linkcol">NETWORK&nbsp;</td>
+        <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-descrcol"><a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&nbsp;</td>
+        <td class="jd-linkcol">UNKNOWN&nbsp;</td>
+        <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-descrcol"><a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>&nbsp;</td>
+        <td class="jd-linkcol">USB&nbsp;</td>
+        <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
 
 
 
-</table>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -551,12 +480,12 @@ Summary:
             
             
             
+            static
             
-            
-            boolean</nobr>
+            <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#containsMeasurement(java.lang.String)">containsMeasurement</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/InterfaceType.html#interfaceTypeFromClass(com.openxc.sources.VehicleDataSource)">interfaceTypeFromClass</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
         
   </td></tr>
 
@@ -567,12 +496,12 @@ Summary:
             
             
             
+            static
             
-            
-            <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></nobr>
+            <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#get(java.lang.String)">get</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/InterfaceType.html#interfaceTypeFromString(java.lang.String)">interfaceTypeFromString</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> vInterfaceString)</nobr>
         
   </td></tr>
 
@@ -585,10 +514,10 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Map.Entry.html">Entry</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>,&nbsp;<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>&gt;&gt;</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#getMeasurements()">getMeasurements</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/InterfaceType.html#toString()">toString</a></span>()</nobr>
         
   </td></tr>
 
@@ -599,15 +528,13 @@ Summary:
             
             
             
+            static
             
-            
-            boolean</nobr>
+            <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/InterfaceType.html#valueOf(java.lang.String)">valueOf</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> name)</nobr>
         
-        <div class="jd-descrdiv">Receive a raw measurement, deserialized to primatives.</div>
-  
   </td></tr>
 
 
@@ -616,17 +543,14 @@ Summary:
         <td class="jd-typecol"><nobr>
             
             
+            final
+            static
             
-            
-            
-            void</nobr>
+            <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType[]</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#stop()">stop</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/InterfaceType.html#values()">values</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
-  
   </td></tr>
 
 
@@ -643,6 +567,208 @@ Summary:
 <table id="inhmethods" class="jd-sumtable"><tr><th>
   <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
   <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Enum" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.Enum-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">java.lang.Enum</a>
+
+<div id="inherited-methods-java.lang.Enum">
+  <div id="inherited-methods-java.lang.Enum-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.Enum-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">clone</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">compareTo</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">compareTo</span>(E arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">finalize</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;E&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getDeclaringClass</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">name</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">ordinal</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            static
+            &lt;T&nbsp;extends&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Enum.html">Enum</a>&lt;T&gt;&gt;
+            T</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">valueOf</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;T&gt; arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
 
 
 <tr class="api apilevel-" >
@@ -847,21 +973,23 @@ From class
 
 
 
+
+
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sinks.VehicleDataSink" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.sinks.VehicleDataSink-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Comparable" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.Comparable-trigger"
           src="../../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From interface
 
-  <a href="../../../com/openxc/sinks/VehicleDataSink.html">com.openxc.sinks.VehicleDataSink</a>
+  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Comparable.html">java.lang.Comparable</a>
 
-<div id="inherited-methods-com.openxc.sinks.VehicleDataSink">
-  <div id="inherited-methods-com.openxc.sinks.VehicleDataSink-list"
+<div id="inherited-methods-java.lang.Comparable">
+  <div id="inherited-methods-java.lang.Comparable-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-com.openxc.sinks.VehicleDataSink-summary" style="display: none;">
+  <div id="inherited-methods-java.lang.Comparable-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -874,32 +1002,11 @@ From interface
             
             
             
-            boolean</nobr>
+            int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad">compareTo</span>(T arg0)</nobr>
         
-        <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
-  
   </td></tr>
 
 
@@ -929,39 +1036,28 @@ From interface
 <!-- Enum Values -->
 
 
-<!-- Constants -->
-
-
-<!-- Fields -->
-
-
-<!-- Public ctors -->
-
-
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<h2>Public Constructors</h2>
+<!-- ========= ENUM CONSTANTS DETAIL ======== -->
+<h2>Enum Values</h2>
 
 
 
-<A NAME="BaseVehicleDataSink()"></A>
+
+<A NAME="BLUETOOTH"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
-         
-         
-         
-         
-        
+        static 
+        final 
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
       </span>
-      <span class="sympad">BaseVehicleDataSink</span>
-      <span class="normal">()</span>
+        BLUETOOTH
     </h4>
       <div class="api-level">
-        <div>
+        
 
-</div>
+
         
   
 
@@ -970,10 +1066,140 @@ From interface
       
   <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
+    
     </div>
 </div>
 
 
+
+<A NAME="FILE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
+      </span>
+        FILE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="NETWORK"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
+      </span>
+        NETWORK
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="UNKNOWN"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
+      </span>
+        UNKNOWN
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="USB"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
+      </span>
+        USB
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+
+<!-- Constants -->
+
+
+<!-- Fields -->
+
+
+<!-- Public ctors -->
 
 
 
@@ -989,20 +1215,20 @@ From interface
 
 
 
-<A NAME="containsMeasurement(java.lang.String)"></A>
+<A NAME="interfaceTypeFromClass(com.openxc.sources.VehicleDataSource)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
          
          
          
-         
-        boolean
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
       </span>
-      <span class="sympad">containsMeasurement</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</span>
+      <span class="sympad">interfaceTypeFromClass</span>
+      <span class="normal">(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1020,20 +1246,20 @@ From interface
 </div>
 
 
-<A NAME="get(java.lang.String)"></A>
+<A NAME="interfaceTypeFromString(java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
          
          
          
-         
-        <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
       </span>
-      <span class="sympad">get</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</span>
+      <span class="sympad">interfaceTypeFromString</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> vInterfaceString)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1051,7 +1277,7 @@ From interface
 </div>
 
 
-<A NAME="getMeasurements()"></A>
+<A NAME="toString()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1061,9 +1287,9 @@ From interface
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Map.Entry.html">Entry</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>,&nbsp;<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>&gt;&gt;
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
       </span>
-      <span class="sympad">getMeasurements</span>
+      <span class="sympad">toString</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1082,20 +1308,20 @@ From interface
 </div>
 
 
-<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
+<A NAME="valueOf(java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
          
          
          
-         
-        boolean
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType</a>
       </span>
-      <span class="sympad">receive</span>
-      <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
+      <span class="sympad">valueOf</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> name)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1107,48 +1333,25 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Receive a raw measurement, deserialized to primatives.
-
- Children of this class can call super.receive() if they need to store
- copies of received measurements to access via the get(String) method.
-</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>measurement</td>
-          <td>The new measurement.
-</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th><a href="../../../com/openxc/sinks/DataSinkException.html">DataSinkException</a></td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
 
 
-<A NAME="stop()"></A>
+<A NAME="values()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
+        final 
          
          
-         
-         
-        void
+        <a href="../../../com/openxc/interfaces/InterfaceType.html">InterfaceType[]</a>
       </span>
-      <span class="sympad">stop</span>
+      <span class="sympad">values</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1161,9 +1364,7 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
