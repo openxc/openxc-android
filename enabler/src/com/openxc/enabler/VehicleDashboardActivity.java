@@ -383,7 +383,7 @@ public class VehicleDashboardActivity extends Activity {
             getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(
-                    VehicleManager.VEHICLE_LOCATION_PROVIDER, 0, 0,
+                    LocationManager.GPS_PROVIDER, 0, 0,
                     mAndroidLocationListener);
         } catch(IllegalArgumentException e) {
             Log.w(TAG, "Vehicle location provider is unavailable");
