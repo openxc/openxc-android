@@ -314,6 +314,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Remove a previously registered source from the data pipeline.
      */
     public void removeSource(VehicleDataSource source) {
+        Log.i(TAG, "Removing data source " + source);
         mUserOriginPipeline.removeSource(source);
     }
 
