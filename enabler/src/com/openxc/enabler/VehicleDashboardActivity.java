@@ -61,7 +61,6 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mLongitudeView;
     private TextView mAndroidLatitudeView;
     private TextView mAndroidLongitudeView;
-    private TextView mDoorStatusView;
     private TextView mWiperStatusView;
     private TextView mHeadlampStatusView;
     StringBuffer mBuffer;
@@ -73,8 +72,7 @@ public class VehicleDashboardActivity extends Activity {
                 (WindshieldWiperStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mWiperStatusView.setText("" +
-                        wiperStatus.getValue().booleanValue());
+                    mWiperStatusView.setText(wiperStatus.toString());
                 }
             });
         }
@@ -85,8 +83,7 @@ public class VehicleDashboardActivity extends Activity {
             final VehicleSpeed speed = (VehicleSpeed) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mVehicleSpeedView.setText(
-                        "" + speed.getValue().doubleValue());
+                    mVehicleSpeedView.setText(speed.toString());
                 }
             });
         }
@@ -97,8 +94,7 @@ public class VehicleDashboardActivity extends Activity {
             final FuelConsumed fuel = (FuelConsumed) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mFuelConsumedView.setText(
-                        "" + fuel.getValue().doubleValue());
+                    mFuelConsumedView.setText(fuel.toString());
                 }
             });
         }
@@ -109,8 +105,7 @@ public class VehicleDashboardActivity extends Activity {
             final FuelLevel level = (FuelLevel) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mFuelLevelView.setText(
-                        "" + level.getValue().doubleValue());
+                    mFuelLevelView.setText(level.toString());
                 }
             });
         }
@@ -121,8 +116,7 @@ public class VehicleDashboardActivity extends Activity {
             final Odometer odometer = (Odometer) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mOdometerView.setText(
-                        "" + odometer.getValue().doubleValue());
+                    mOdometerView.setText(odometer.toString());
                 }
             });
         }
@@ -134,8 +128,7 @@ public class VehicleDashboardActivity extends Activity {
             final BrakePedalStatus status = (BrakePedalStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mVehicleBrakeStatusView.setText(
-                        "" + status.getValue().booleanValue());
+                    mVehicleBrakeStatusView.setText(status.toString());
                 }
             });
         }
@@ -147,8 +140,7 @@ public class VehicleDashboardActivity extends Activity {
         final ParkingBrakeStatus status = (ParkingBrakeStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mParkingBrakeStatusView.setText(
-                        "" + status.getValue().booleanValue());
+                    mParkingBrakeStatusView.setText(status.toString());
                 }
             });
         }
@@ -159,8 +151,7 @@ public class VehicleDashboardActivity extends Activity {
             final HeadlampStatus status = (HeadlampStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mHeadlampStatusView.setText(
-                        "" + status.getValue().booleanValue());
+                    mHeadlampStatusView.setText(status.toString());
                 }
             });
         }
@@ -171,8 +162,7 @@ public class VehicleDashboardActivity extends Activity {
             final EngineSpeed status = (EngineSpeed) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mVehicleEngineSpeedView.setText(
-                        "" + status.getValue().doubleValue());
+                    mVehicleEngineSpeedView.setText(status.toString());
                 }
             });
         }
@@ -184,8 +174,7 @@ public class VehicleDashboardActivity extends Activity {
             final TorqueAtTransmission status = (TorqueAtTransmission) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mTorqueAtTransmissionView.setText(
-                        "" + status.getValue().doubleValue());
+                    mTorqueAtTransmissionView.setText(status.toString());
                 }
             });
         }
@@ -198,8 +187,7 @@ public class VehicleDashboardActivity extends Activity {
                 (AcceleratorPedalPosition) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mAcceleratorPedalPositionView.setText(
-                        "" + status.getValue().doubleValue());
+                    mAcceleratorPedalPositionView.setText(status.toString());
                 }
             });
         }
@@ -213,8 +201,7 @@ public class VehicleDashboardActivity extends Activity {
                     (TransmissionGearPosition) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mTransmissionGearPosView.setText(
-                        "" + status.getValue().enumValue());
+                    mTransmissionGearPosView.setText(status.toString());
                 }
             });
         }
@@ -226,8 +213,7 @@ public class VehicleDashboardActivity extends Activity {
             final IgnitionStatus status = (IgnitionStatus) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mIgnitionStatusView.setText(
-                        "" + status.getValue().enumValue());
+                    mIgnitionStatusView.setText(status.toString());
                 }
             });
         }
@@ -239,8 +225,7 @@ public class VehicleDashboardActivity extends Activity {
             final Latitude lat = (Latitude) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mLatitudeView.setText(
-                        "" + lat.getValue().doubleValue());
+                    mLatitudeView.setText(lat.toString());
                 }
             });
         }
@@ -252,8 +237,7 @@ public class VehicleDashboardActivity extends Activity {
             final Longitude lng = (Longitude) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mLongitudeView.setText(
-                        "" + lng.getValue().doubleValue());
+                    mLongitudeView.setText(lng.toString());
                 }
             });
         }
@@ -282,8 +266,7 @@ public class VehicleDashboardActivity extends Activity {
             final SteeringWheelAngle angle = (SteeringWheelAngle) measurement;
             mHandler.post(new Runnable() {
                 public void run() {
-                    mSteeringWheelAngleView.setText(
-                        "" + angle.getValue().doubleValue());
+                    mSteeringWheelAngleView.setText(angle.toString());
                 }
             });
         }

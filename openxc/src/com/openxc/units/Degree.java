@@ -6,8 +6,14 @@ package com.openxc.units;
  * TODO this shouldn't represent two things.
  */
 public class Degree extends Quantity<Number> {
+    private final String TYPE_STRING = "\u00B0";
 
     public Degree(Number value) {
         super(value);
+    }
+
+    @Override
+    public String getTypeString() {
+        return TYPE_STRING;
     }
 }

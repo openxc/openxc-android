@@ -19,9 +19,6 @@
             <TextView
                 android:id="@+id/steering_wheel_angle"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/degree_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -32,9 +29,6 @@
             <TextView
                 android:id="@+id/vehicle_speed"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/vehicle_speed_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -45,9 +39,6 @@
             <TextView
                 android:id="@+id/fuel_consumed"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/fuel_consumed_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -58,9 +49,6 @@
             <TextView
                 android:id="@+id/fuel_level"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/percent_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -71,9 +59,6 @@
             <TextView
                 android:id="@+id/odometer"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/odometer_unit"/>
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -124,9 +109,6 @@
             <TextView
                 android:id="@+id/engine_speed"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/engine_speed_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -137,9 +119,6 @@
             <TextView
                 android:id="@+id/torque_at_transmission"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/torque_at_transmission_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -150,9 +129,6 @@
             <TextView
                 android:id="@+id/accelerator_pedal_position"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/percent_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -183,9 +159,6 @@
             <TextView
                 android:id="@+id/latitude"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/degree_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -196,9 +169,6 @@
             <TextView
                 android:id="@+id/longitude"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/degree_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -209,9 +179,6 @@
             <TextView
                 android:id="@+id/android_latitude"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/degree_unit" />
         </TableRow>
 
         <TableRow style="@style/ItemRow">
@@ -222,9 +189,6 @@
             <TextView
                 android:id="@+id/android_longitude"
                 style="@style/ItemData" />
-            <TextView
-                style="@style/ItemUnit"
-                android:text="@string/degree_unit" />
         </TableRow>
 
     </TableLayout>

@@ -1,7 +1,5 @@
 package com.openxc.units;
 
-import com.google.common.base.Objects;
-
 /**
  * A quantitative type of {@link Unit}.
  *
@@ -44,10 +42,12 @@ public abstract class Quantity<T extends Number> extends Unit {
         return mValue.intValue();
     }
 
+    public String getTypeString() {
+        return "";
+    }
+
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", mValue)
-            .toString();
+        return mValue.toString() + " " + getTypeString();
     }
 }
