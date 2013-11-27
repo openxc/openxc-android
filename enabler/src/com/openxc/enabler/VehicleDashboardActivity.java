@@ -63,7 +63,6 @@ public class VehicleDashboardActivity extends Activity {
     private TextView mAndroidLongitudeView;
     private TextView mWiperStatusView;
     private TextView mHeadlampStatusView;
-    StringBuffer mBuffer;
 
     WindshieldWiperStatus.Listener mWiperListener =
             new WindshieldWiperStatus.Listener() {
@@ -370,7 +369,6 @@ public class VehicleDashboardActivity extends Activity {
                 R.id.android_latitude);
         mAndroidLongitudeView = (TextView) findViewById(
                 R.id.android_longitude);
-        mBuffer = new StringBuffer();
     }
 
     @Override
