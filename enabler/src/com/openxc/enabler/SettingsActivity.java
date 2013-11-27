@@ -66,20 +66,18 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         initializeLegacyLayout();
     }
-    
-    @Override
+
     protected boolean isValidFragment(String fragmentName){
-    	if(RecordingPreferences.class.getName().equals(fragmentName)){
-    		return true;    		
-    	} else if(OutputPreferences.class.getName().equals(fragmentName)){
-    		return true;    		
-    	} else if(DataSourcePreferences.class.getName().equals(fragmentName)){
-    		return true;    		
-    	} else if(AboutPreferences.class.getName().equals(fragmentName)){
-    		return true;
-    	} 
-    	
-    	return false;
+        if(RecordingPreferences.class.getName().equals(fragmentName)){
+            return true;
+        } else if(OutputPreferences.class.getName().equals(fragmentName)){
+            return true;
+        } else if(DataSourcePreferences.class.getName().equals(fragmentName)){
+            return true;
+        } else if(AboutPreferences.class.getName().equals(fragmentName)){
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings("deprecation")
