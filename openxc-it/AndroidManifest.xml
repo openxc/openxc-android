@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.openxc" android:versionCode="14" android:versionName="5.2">
+    package="com.openxc" android:versionCode="14" android:versionName="5.2.1">
 
   <supports-screens android:largeScreens="true" android:xlargeScreens="true"
           android:anyDensity="true" />

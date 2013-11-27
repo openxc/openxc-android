@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v5.2.1-dev
+
 ## v5.2
 
 * Support Android API level 19.
