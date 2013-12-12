@@ -129,8 +129,8 @@ public class BytestreamBuffer {
     }
 
     private void logTransferStats() {
-        // log the transfer stats roughly every 1MB
-        if(mBytesReceived > mLastLoggedTransferStatsAtByte + 1024 * 1024) {
+        // log the transfer stats roughly every 512KB
+        if(mBytesReceived > mLastLoggedTransferStatsAtByte + 512 * 1024) {
             mLastLoggedTransferStatsAtByte = mBytesReceived;
             SourceLogger.logTransferStats(TAG, mStartTime, System.nanoTime(),
                     mBytesReceived);
