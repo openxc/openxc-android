@@ -12,8 +12,3 @@ reference
 .idea/workspace.xml
 *.releaseBackup
 release.properties
-out
-.idea
-enabler/enabler.iml
-openxc/openxc.iml
-openxc-it/openxc-it.iml
