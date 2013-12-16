@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.openxc.DataPipeline;
 import com.openxc.R;
+import com.openxc.interfaces.InterfaceType;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
@@ -65,6 +66,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             new CopyOnWriteArrayList<VehicleInterface>();
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
+    private boolean mUserPipelineActive;
 
     @Override
     public void onCreate() {
@@ -190,12 +192,34 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 return sources;
             }
 
+            public List<String> getActiveSourceTypeStrings() {
+                ArrayList<String> sources = new ArrayList<String>();
+                for(VehicleDataSource source : mPipeline.getSources()) {
+                    if(source.isConnected()){
+                        sources.add(InterfaceType.interfaceTypeFromClass(source).toString());
+                    }
+                }
+                return sources;
+            }
+
             public List<String> getSinkSummaries() {
                 ArrayList<String> sinks = new ArrayList<String>();
                 for(VehicleDataSink sink : mPipeline.getSinks()) {
                     sinks.add(sink.toString());
                 }
                 return sinks;
+            }
+
+            public void userPipelineActivated() {
+                mUserPipelineActive = true;
+                VehicleService.this.onPipelineActivated();
+            }
+
+            public void userPipelineDeactivated() {
+                mUserPipelineActive = false;
+                if(!VehicleService.this.mPipeline.isActive()) {
+                    VehicleService.this.onPipelineDeactivated();
+                }
             }
     };
 
@@ -284,7 +308,9 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     }
 
     public void onPipelineDeactivated() {
-        mWakeLocker.releaseWakeLock();
-        removeFromForeground();
+        if(!mUserPipelineActive) {
+            mWakeLocker.releaseWakeLock();
+            removeFromForeground();
+        }
     }
 }

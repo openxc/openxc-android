@@ -1,5 +1,15 @@
 # OpenXC Android Library Changelog
 
+## v5.2
+
+* Support Android API level 19.
+* Fix timestamps in trace files - support different locales and restore
+  fractional parts.
+* Add option to automatically connect to paired OpenXC-VI-* Bluetooth device.
+* Merge Vehicle Dashboard example into Enabler.
+* Simplified Enabler view - less debug information.
+* Fix display of Android location data in dashboard for comparison.
+
 ## v5.1.1
 
 * Fix lifecycle issues with VehicleService from Enabler app.

@@ -1,14 +1,22 @@
 language: java
 before_install:
+  # Maven 3.1.1
+  - wget http://www.us.apache.org/dist/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz
+  - tar xvf apache-maven-3.1.1-bin.tar.gz > /dev/null
+  - export MVN_HOME=`pwd`/apache-maven-3.1.1
+  - export PATH=${MVN_HOME}/bin/:${PATH}
+  - mvn --version
+
   # download the latest android sdk and unzip
   - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
-  - wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz
-  - tar xzf android-sdk_r22.0.5-linux.tgz
+  - wget http://dl.google.com/android/android-sdk_r22.3-linux.tgz
+  - tar xzf android-sdk_r22.3-linux.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
   - echo yes | android update sdk --filter platform-tools --no-ui --force > /dev/null
-  - echo yes | android update sdk --filter android-18 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter android-19,extra-android-support,extra-android-m2repository --no-ui --force > /dev/null
+  - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 install:
   - mvn install -DskipTests=true
 notifications:

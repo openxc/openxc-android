@@ -22,11 +22,6 @@ Android projects within the repository. At the minimum, add the `openxc` project
 (the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
 required to run OpenXC applications).
 
-You can optionally add the `VehicleDashboardActivity` project to see an example
-vehicle dashboard OpenXC application, and also the `openxc-it` project which
-contains a test suite for the library and instrumentation tests that run on the
-device.
-
 ## Building from Command Line
 
 The build requires [Maven](http://maven.apache.org/download.html)
@@ -37,17 +32,15 @@ the `ANDROID_HOME` environment variable to the location of your SDK:
     export ANDROID_HOME=/opt/tools/android-sdk
 
 You also need the Android support library, but unfortunately Google doesn't
-consistently deploy this to the Central Maven repository. You can use teh
-[maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer)
-to get it in your local Maven repo:
+deploy the latest versions of this to the the Central Maven repository. Instead,
+you must open the Android SDK manager and install the "Android Support
+Repository" package (under "Extras"). Next, open a terminal and navigate to your
+SDK's top-level directory (e.g. `/home/user/android-sdk`.
 
-    $ git clone https://github.com/mosabua/maven-android-sdk-deployer
-    $ cd maven-android-sdk-deployer
-    $ mvn clean install -N
-    $ cd extras
-    $ mvn clean install -N
-    $ cd compatibility-v13
-    $ mvn clean install
+You must manually copy the Maven artifacts from this folder to your local
+repository:
+
+    $ cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 
 After satisfying those requirements, the build is pretty simple:
 

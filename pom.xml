@@ -2,17 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.openxcplatform</groupId>
     <artifactId>openxc-parent</artifactId>
-    <version>5.1.2-SNAPSHOT</version>
+    <version>5.2</version>
     <packaging>pom</packaging>
     <name>OpenXC - Parent</name>
-    <description>Android library and example applications for the OpenXC Platform</description>
+    <description>Android library and Enabler application for the OpenXC Platform</description>
     <url>http://openxcplatform.com</url>
 
     <scm>
         <url>https://github.com/openxc/openxc-android</url>
         <connection>scm:git:https://github.com/openxc/openxc-android</connection>
         <developerConnection>scm:git:git@github.com:openxc/openxc-android</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v5.2</tag>
   </scm>
 
     <parent>
@@ -24,7 +24,6 @@
     <modules>
         <module>openxc</module>
         <module>openxc-it</module>
-        <module>examples</module>
         <module>enabler</module>
     </modules>
 
@@ -40,10 +39,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <android.version>4.1.1.4</android.version>
-        <android.platform>18</android.platform>
+        <android.platform>19</android.platform>
 
         <java.version>1.6</java.version>
-        <android-maven.version>3.6.0</android-maven.version>
+        <android-maven.version>3.8.0</android-maven.version>
     </properties>
 
     <dependencyManagement>
@@ -87,7 +86,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -136,7 +135,7 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/../libs</outputDirectory>
                             <excludeScope>provided</excludeScope>
-                            <excludeArtifactIds>jsr305,openxc,openxc-it,openxc-examples,openxc-enabler</excludeArtifactIds>
+                            <excludeArtifactIds>jsr305,openxc,openxc-it,openxc-enabler</excludeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
                         </configuration>
                     </execution>

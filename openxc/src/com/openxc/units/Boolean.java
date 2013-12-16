@@ -1,7 +1,5 @@
 package com.openxc.units;
 
-import com.google.common.base.Objects;
-
 /**
  * A boolean type of Unit.
  *
@@ -38,9 +36,7 @@ public class Boolean extends Unit {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", booleanValue())
-            .toString();
+        return mValue ? "on" : "off";
     }
 
     @Override

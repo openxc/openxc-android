@@ -36,14 +36,8 @@ import android.util.Log;
  * Everything from the VehicleService on up the chain is identical to when
  * operating in a live vehicle.
  *
- * The trace file format is simply a plain text file of OpenXC JSON messages with
- * an additional timestamp field (in seconds with decimal parts), separated by
- * newlines:
- *
- * {"timestamp": 1351176963.426318, "name": "door_status", "value": "passenger", "event": true}
- * {"timestamp": 1351176963.438087, "name": "fine_odometer_since_restart", "value": 0.0}
- * {"timestamp": 1351176963.438211, "name": "brake_pedal_status", "value": false}
- * {"timestamp": 1351176963.438318, "name": "transmission_gear_position", "value": "second"}
+ * The trace file format is defined in the OpenXC message format specification:
+ * https://github.com/openxc/openxc-message-format
  *
  * The trace file to use is specified via the constructor as an Android-style
  * resource URI, e.g. "resource://42", "file:///storage/traces/trace.json" or a
@@ -71,6 +65,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             implements Runnable {
     private static final String TAG = "TraceVehicleDataSource";
 
+    private boolean mTraceValid = false;
     private long mFirstTimestamp = 0;
     private boolean mRunning = true;
     private boolean mLoop = true;
@@ -124,9 +119,15 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         this(null, context, filename, loop);
     }
 
+    /** Consider the trace source "connected" if it's running and at least 1
+     * measurement was parsed successfully from the file.
+     *
+     * This will catch errors e.g. if the trace is totally corrupted, but it
+     * won't give you any indication if it is partially corrupted.
+     */
     @Override
     public boolean isConnected() {
-        return mRunning && super.isConnected();
+        return mRunning && mTraceValid;
     }
 
     /**
@@ -184,6 +185,10 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                         continue;
                     }
                     measurement.untimestamp();
+                    if(!mTraceValid) {
+                        connected();
+                        mTraceValid = true;
+                    }
                     handleMessage(measurement);
                 }
             } catch(IOException e) {
@@ -202,11 +207,13 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 Log.d(TAG, "Not looping trace.");
                 break;
             }
+            disconnected();
             Log.d(TAG, "Restarting playback of trace " + mFilename);
             try {
                 Thread.sleep(1000);
             } catch(InterruptedException e) {}
         }
+        disconnected();
         mRunning = false;
         Log.d(TAG, "Playback of trace " + mFilename + " is finished");
     }

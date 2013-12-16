@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.openxc" android:versionCode="14" android:versionName="5.1.1">
+      package="com.openxc" android:versionCode="14" android:versionName="5.2">
   <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <service android:name="com.openxc.VehicleManager"/>
@@ -9,5 +9,5 @@
           <action android:name="com.openxc.remote.VehicleServiceInterface" />
       </intent-filter>
   </service>
-  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
+  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
 </manifest>

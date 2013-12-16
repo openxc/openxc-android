@@ -286,9 +286,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", mValue)
-            .add("range", mRange)
-            .toString();
+        return getValue().toString();
     }
 }

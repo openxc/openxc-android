@@ -1,5 +1,9 @@
 package com.openxc.enabler.preferences;
 
+import java.util.Set;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.util.Log;
 
@@ -11,6 +15,7 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
  */
 public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothPreferenceManager";
+    public final static String AUTO_DEVICE_SELECTION_ENTRY = "Automatic";
 
     public BluetoothPreferenceManager(Context context) {
         super(context);
@@ -39,10 +44,16 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         if(enabled) {
             String deviceAddress = getPreferenceString(
                     R.string.bluetooth_mac_key);
-            if(deviceAddress != null ) {
+            if(deviceAddress == null || deviceAddress.equals(
+                        AUTO_DEVICE_SELECTION_ENTRY)) {
+                deviceAddress = searchForVehicleInterface();
+            }
+
+            if(deviceAddress != null) {
                 getVehicleManager().addVehicleInterface(
                         BluetoothVehicleInterface.class, deviceAddress);
             } else {
+                searchForVehicleInterface();
                 Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
                         "), not starting source");
             }
@@ -50,5 +61,22 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             getVehicleManager().removeVehicleInterface(
                     BluetoothVehicleInterface.class);
         }
+    }
+
+    private String searchForVehicleInterface() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        String deviceAddress = null;
+        if(adapter != null && adapter.isEnabled()){
+            Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
+            for(BluetoothDevice device : pairedDevices) {
+                if(device.getName().startsWith(
+                            BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                    Log.d(TAG, "Found paired OpenXC BT VI " + device.getName() +
+                            ", will be auto-connected.");
+                    deviceAddress = device.getAddress();
+                }
+            }
+        }
+        return deviceAddress;
     }
 }

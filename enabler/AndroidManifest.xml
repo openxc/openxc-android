@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.openxc.enabler" android:versionCode="14"
-    android:versionName="5.1.1">
+    android:versionName="5.2">
 
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,7 +13,7 @@
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
   <uses-feature android:name="android.hardware.usb.host"
           android:required="true" />
-  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
+  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
 
   <application android:label="@string/app_name" android:allowBackup="true"
             android:icon="@drawable/open_xc_launcher_icon_black"
@@ -34,6 +34,9 @@
           </intent-filter>
       </activity>
 
+      <activity android:name=".VehicleDashboardActivity">
+      </activity>
+
       <activity android:name=".SettingsActivity" />
 
       <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity">
@@ -48,6 +51,12 @@
       <receiver android:name=".BootupReceiver">
           <intent-filter>
               <action android:name="android.intent.action.BOOT_COMPLETED" />
+          </intent-filter>
+      </receiver>
+
+      <receiver android:name=".BluetoothReceiver">
+          <intent-filter>
+              <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
           </intent-filter>
       </receiver>
   </application>

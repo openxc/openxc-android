@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:padding="2dp">
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/steering_wheel_angle_label"
+                style="@style/ItemLabel"
+                android:text="@string/steering_wheel_angle_label" />
+            <TextView
+                android:id="@+id/steering_wheel_angle"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/vehicle_speed_label"
+                style="@style/ItemLabel"
+                android:text="@string/vehicle_speed_label" />
+            <TextView
+                android:id="@+id/vehicle_speed"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/fuel_consumed_label"
+                style="@style/ItemLabel"
+                android:text="@string/fuel_consumed_label" />
+            <TextView
+                android:id="@+id/fuel_consumed"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/fuel_level_label"
+                style="@style/ItemLabel"
+                android:text="@string/fuel_level_label" />
+            <TextView
+                android:id="@+id/fuel_level"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/odometer_label"
+                style="@style/ItemLabel"
+                android:text="@string/odometer_label" />
+            <TextView
+                android:id="@+id/odometer"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/wiper_status_label"
+                style="@style/ItemLabel"
+                android:text="@string/wiper_status_label" />
+            <TextView
+                android:id="@+id/wiper_status"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/brake_pedal_status_label"
+                style="@style/ItemLabel"
+                android:text="@string/brake_pedal_status_label" />
+            <TextView
+                android:id="@+id/brake_pedal_status"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/parking_brake_status_label"
+                style="@style/ItemLabel"
+                android:text="@string/parking_brake_status_label" />
+            <TextView
+                android:id="@+id/parking_brake_status"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/headlamp_status_label"
+                style="@style/ItemLabel"
+                android:text="@string/headlamp_status_label" />
+            <TextView
+                android:id="@+id/headlamp_status"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/engine_speed_label"
+                style="@style/ItemLabel"
+                android:text="@string/engine_speed_label" />
+            <TextView
+                android:id="@+id/engine_speed"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/torque_at_transmission_label"
+                style="@style/ItemLabel"
+                android:text="@string/torque_at_transmission_label" />
+            <TextView
+                android:id="@+id/torque_at_transmission"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/accelerator_pedal_position_label"
+                style="@style/ItemLabel"
+                android:text="@string/accelerator_pedal_position_label" />
+            <TextView
+                android:id="@+id/accelerator_pedal_position"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/transmission_gear_pos_label"
+                style="@style/ItemLabel"
+                android:text="@string/transmission_gear_pos_label" />
+            <TextView
+                android:id="@+id/transmission_gear_pos"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/ignition_label"
+                style="@style/ItemLabel"
+                android:text="@string/ignition_label" />
+            <TextView
+                android:id="@+id/ignition"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/latitude_label"
+                style="@style/ItemLabel"
+                android:text="@string/latitude_label" />
+            <TextView
+                android:id="@+id/latitude"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/longitude_label"
+                style="@style/ItemLabel"
+                android:text="@string/longitude_label" />
+            <TextView
+                android:id="@+id/longitude"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/android_latitude_label"
+                style="@style/ItemLabel"
+                android:text="@string/android_latitude_label" />
+            <TextView
+                android:id="@+id/android_latitude"
+                style="@style/ItemData" />
+        </TableRow>
+
+        <TableRow style="@style/ItemRow">
+            <TextView
+                android:id="@+id/android_longitude_label"
+                style="@style/ItemLabel"
+                android:text="@string/android_longitude_label" />
+            <TextView
+                android:id="@+id/android_longitude"
+                style="@style/ItemData" />
+        </TableRow>
+
+    </TableLayout>
+
+</ScrollView>

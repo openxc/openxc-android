@@ -27,6 +27,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.enabler.preferences.BluetoothPreferenceManager;
 import com.openxc.sinks.UploaderSink;
 
 /**
@@ -64,6 +65,19 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeLegacyLayout();
+    }
+
+    protected boolean isValidFragment(String fragmentName){
+        if(RecordingPreferences.class.getName().equals(fragmentName)){
+            return true;
+        } else if(OutputPreferences.class.getName().equals(fragmentName)){
+            return true;
+        } else if(DataSourcePreferences.class.getName().equals(fragmentName)){
+            return true;
+        } else if(AboutPreferences.class.getName().equals(fragmentName)){
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings("deprecation")
@@ -304,6 +318,10 @@ public class SettingsActivity extends PreferenceActivity {
     private void fillBluetoothDeviceList(final ListPreference preference) {
         ArrayList<String> entries = new ArrayList<String>();
         ArrayList<String> values = new ArrayList<String>();
+
+        entries.add("Automatically connect to paired OpenXC-VI device");
+        values.add(BluetoothPreferenceManager.AUTO_DEVICE_SELECTION_ENTRY);
+
         if(mBluetoothAdapter != null) {
             Log.d(TAG, "Starting paired device search");
             Set<BluetoothDevice> pairedDevices =

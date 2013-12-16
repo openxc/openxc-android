@@ -47,8 +47,6 @@ public class State<T extends Enum<?>> extends Unit {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", mValue)
-            .toString();
+        return mValue.toString();
     }
 }

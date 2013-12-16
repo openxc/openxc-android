@@ -165,41 +165,39 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     }
 
     protected void disconnect() {
-        if(!isConnected()) {
-            return;
-        }
-
         mConnectionLock.writeLock().lock();
         try {
-            Log.d(TAG, "Disconnecting from the socket " + mSocket);
-            try {
-                if(mInStream != null) {
-                    mInStream.close();
-                    mInStream = null;
+            if(isConnected()) {
+                Log.d(TAG, "Disconnecting from the socket " + mSocket);
+                try {
+                    if(mInStream != null) {
+                        mInStream.close();
+                        mInStream = null;
+                    }
+                } catch(IOException e) {
+                    Log.w(TAG, "Unable to close the input stream", e);
                 }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the input stream", e);
-            }
 
-            try {
-                if(mOutStream != null) {
-                    mOutStream.close();
-                    mOutStream = null;
+                try {
+                    if(mOutStream != null) {
+                        mOutStream.close();
+                        mOutStream = null;
+                    }
+                } catch(IOException e) {
+                    Log.w(TAG, "Unable to close the output stream", e);
                 }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the output stream", e);
-            }
 
-            try {
-                if(mSocket != null) {
-                    mSocket.close();
-                    mSocket = null;
+                try {
+                    if(mSocket != null) {
+                        mSocket.close();
+                        mSocket = null;
+                    }
+                } catch(IOException e) {
+                    Log.w(TAG, "Unable to close the socket", e);
                 }
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to close the socket", e);
             }
-            disconnected();
         } finally {
+            disconnected();
             mConnectionLock.writeLock().unlock();
         }
         Log.d(TAG, "Disconnected from the socket");
