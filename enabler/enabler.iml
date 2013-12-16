@@ -16,6 +16,7 @@
     <orderEntry type="library" name="libs1" level="project" />
     <orderEntry type="module" module-name="openxc" />
     <orderEntry type="module" module-name="openxc-it" />
+    <orderEntry type="library" name="crittercism_v4_3_0_sdkonly" level="project" />
   </component>
 </module>
 
