@@ -8,6 +8,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
 
@@ -95,9 +99,34 @@ public class OpenXcEnablerActivity extends Activity {
         }
     };
 
+    /**
+     * @return true if the Crashlytics API key is declared in AndroidManifest.xml metadata, otherwise return false.
+     */
+    static boolean hasCrashlyticsApiKey(Context context) {
+        try {
+            Context appContext = context.getApplicationContext();
+            ApplicationInfo ai = appContext.getPackageManager().getApplicationInfo(
+                    appContext.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = ai.metaData;
+            return (bundle != null) && (bundle.getString("com.crashlytics.ApiKey") != null);
+        } catch (NameNotFoundException e) {
+            // Should not happen since the name was determined dynamically from the app context.
+            Log.e(TAG, "Unexpected NameNotFound.", e);
+        }
+        return false;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (hasCrashlyticsApiKey(this)) {
+            Crashlytics.start(this);
+        } else {
+            Log.e(TAG, "No Crashlytics API key found. Visit http://crashlytics.com to set up an account.");
+
+        }
+
         setContentView(R.layout.main);
         Log.i(TAG, "OpenXC Enabler created");
 
