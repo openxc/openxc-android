@@ -12,7 +12,6 @@ public class AppConst {
      * Crittercism section
      */
 
-    public static final String CRITTERCISM_APP_ID = "52ac713a8b2e330ff3000003";
     /**
      * An app version code from which Crittercism is in use
      */

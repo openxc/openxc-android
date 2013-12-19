@@ -18,6 +18,8 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.enabler.utils.AppConst;
 import com.openxc.enabler.utils.AppUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -186,7 +188,11 @@ public class OpenXcEnablerActivity extends Activity {
             return;
         }
         if (crittercismPreferenceValue == AppConst.CRITTERCISM_DIALOG_DECISION_YES) {
-            Crittercism.initialize(getApplicationContext(), AppConst.CRITTERCISM_APP_ID);
+            String key = AppUtils.getCrittercismKey(this);
+            if (key.isEmpty()) {
+                return;
+            }
+            Crittercism.initialize(getApplicationContext(), key);
             return;
         }
         int appVersionCode = AppUtils.getAppVersionCode(this);
@@ -200,7 +206,12 @@ public class OpenXcEnablerActivity extends Activity {
                 editor.putInt(AppConst.CRITTERCISM_DIALOG_DECISION_KEY, AppConst.CRITTERCISM_DIALOG_DECISION_YES);
                 editor.commit();
 
-                Crittercism.initialize(getApplicationContext(), AppConst.CRITTERCISM_APP_ID);
+                String key = AppUtils.getCrittercismKey(OpenXcEnablerActivity.this);
+                if (key.isEmpty()) {
+                    return;
+                }
+                Crittercism.initialize(getApplicationContext(), key);
+                return;
             }
         });
         builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
