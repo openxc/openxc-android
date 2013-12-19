@@ -1,34 +1,23 @@
 package com.openxc.enabler;
 
+import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.*;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.util.Log;
+import android.widget.Toast;
+import com.openxc.enabler.preferences.BluetoothPreferenceManager;
+import com.openxc.enabler.utils.AppUtils;
+import com.openxc.sinks.UploaderSink;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import android.annotation.TargetApi;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.openxc.enabler.preferences.BluetoothPreferenceManager;
-import com.openxc.sinks.UploaderSink;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
@@ -300,19 +289,9 @@ public class SettingsActivity extends PreferenceActivity {
                         R.string.network_port_key), null));
     }
 
-    protected void initializeAboutPreferences(
-            Preference aboutVersionPreference) {
-        try {
-            mAboutVersionPreference = aboutVersionPreference;
-
-            String versionNumber = getPackageManager().getPackageInfo(
-                getPackageName(), 0).versionName;
-
-            updateSummary(mAboutVersionPreference, versionNumber);
-
-        } catch (NameNotFoundException e) {
-            Log.e(TAG, "Could not get application version.", e);
-        }
+    protected void initializeAboutPreferences(Preference aboutVersionPreference) {
+        mAboutVersionPreference = aboutVersionPreference;
+        updateSummary(mAboutVersionPreference, AppUtils.getAppVersionName(this));
     }
 
     private void fillBluetoothDeviceList(final ListPreference preference) {

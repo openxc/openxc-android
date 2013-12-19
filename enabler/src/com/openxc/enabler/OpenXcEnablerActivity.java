@@ -1,24 +1,27 @@
 package com.openxc.enabler;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.app.AlertDialog;
+import android.content.*;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import com.crittercism.app.Crittercism;
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
+import com.openxc.enabler.utils.AppConst;
+import com.openxc.enabler.utils.AppUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
  * the reliability of OpenXC by handling background tasks on behalf of client
@@ -127,6 +130,8 @@ public class OpenXcEnablerActivity extends Activity {
                 mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
             }
         });
+
+        processCrittercismInitDialog();
     }
 
     @Override
@@ -168,5 +173,58 @@ public class OpenXcEnablerActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
+    }
+
+    /**
+     * Process Crittercism. If user previously selects YES - initialize. If NO - skip. If none of above
+     * provide a dialog.
+     */
+    private void processCrittercismInitDialog() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int crittercismPreferenceValue = preferences.getInt(AppConst.CRITTERCISM_DIALOG_DECISION_KEY,
+                AppConst.CRITTERCISM_DIALOG_DECISION_DEFAULT);
+
+        if (crittercismPreferenceValue == AppConst.CRITTERCISM_DIALOG_DECISION_NO) {
+            return;
+        }
+        if (crittercismPreferenceValue == AppConst.CRITTERCISM_DIALOG_DECISION_YES) {
+            String key = AppUtils.getCrittercismKey(this);
+            if (key.isEmpty()) {
+                return;
+            }
+            Crittercism.initialize(getApplicationContext(), key);
+            return;
+        }
+        int appVersionCode = AppUtils.getAppVersionCode(this);
+        if (appVersionCode < AppConst.CRITTERCISM_INIT_VERSION_CODE) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(AppConst.CRITTERCISM_DIALOG_DECISION_KEY, AppConst.CRITTERCISM_DIALOG_DECISION_YES);
+                editor.commit();
+
+                String key = AppUtils.getCrittercismKey(OpenXcEnablerActivity.this);
+                if (key.isEmpty()) {
+                    return;
+                }
+                Crittercism.initialize(getApplicationContext(), key);
+                return;
+            }
+        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(AppConst.CRITTERCISM_DIALOG_DECISION_KEY, AppConst.CRITTERCISM_DIALOG_DECISION_NO);
+                editor.commit();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setTitle(getString(R.string.crittercism_dialog_title));
+        dialog.setMessage(getString(R.string.crittercism_dialog_message));
+        dialog.show();
     }
 }
