@@ -3,14 +3,12 @@ package com.openxc.interfaces.bluetooth;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
@@ -27,13 +25,9 @@ public class DeviceManager {
     private final static UUID RFCOMM_UUID = UUID.fromString(
             "00001101-0000-1000-8000-00805f9b34fb");
 
-    private Context mContext;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice mTargetDevice;
     private final Lock mDeviceLock = new ReentrantLock();
-    private final Condition mDeviceChangedCondition =
-            mDeviceLock.newCondition();
-    private BroadcastReceiver mReceiver;
     private BluetoothSocket mSocket;
     private AtomicBoolean mSocketConnecting = new AtomicBoolean(false);
 
@@ -42,7 +36,6 @@ public class DeviceManager {
      * to enable Bluetooth if it isn't already on.
      */
     public DeviceManager(Context context) throws BluetoothException {
-        mContext = context;
         // work around an Android bug, requires that this is called before
         // getting the default adapter
         if(Looper.myLooper() == null) {
@@ -65,16 +58,15 @@ public class DeviceManager {
      */
     public BluetoothSocket connect(String targetAddress)
             throws BluetoothException {
-        connectDevice(targetAddress);
         mDeviceLock.lock();
         try {
-            while(mTargetDevice == null) {
-                try {
-                    mDeviceChangedCondition.await();
-                } catch(InterruptedException e) {}
+            mTargetDevice = mBluetoothAdapter.getRemoteDevice(targetAddress);
+            if(mTargetDevice != null) {
+                mSocket = setupSocket(mTargetDevice);
+                connectToSocket(mSocket);
+            } else {
+                Log.e(TAG, "Unable to find Bluetooth device " + targetAddress);
             }
-            mSocket = setupSocket(mTargetDevice);
-            connectToSocket(mSocket);
         } finally {
             mDeviceLock.unlock();
         }
@@ -95,27 +87,6 @@ public class DeviceManager {
             throw new BluetoothException(error, e);
         } finally {
             mSocketConnecting.set(false);
-        }
-    }
-
-    /**
-     * Immediately cancel any pending Bluetooth operations.
-     *
-     * The BluetoothSocket.connect() function blocks while waiting for a
-     * connection, but it's thread safe and we can cancel that by calling
-     * close() on it at any time.
-     *
-     * Importantly we don't want to close the socket any other time, becauase we
-     * want to leave that up to the user of the socket - if you call close()
-     * twice, or close Input/Ouput streams associated with the socket
-     * simultaneously, it can cause a segfault due to a bug in some Android
-     * Bluetooth stacks. Awesome!
-     */
-    public void stop() {
-        if(mSocketConnecting.get() && mSocket != null) {
-            try {
-                mSocket.close();
-            } catch(IOException e) { }
         }
     }
 
@@ -149,62 +120,24 @@ public class DeviceManager {
         return socket;
     }
 
-    private void captureDevice(BluetoothDevice device) {
-        mDeviceLock.lock();
-        try {
-            mTargetDevice = device;
-            mDeviceChangedCondition.signal();
-        } finally {
-            mDeviceLock.unlock();
-        }
-
-        if(mReceiver != null) {
-            mContext.unregisterReceiver(mReceiver);
-            if(mBluetoothAdapter.isDiscovering()) {
-                mBluetoothAdapter.cancelDiscovery();
-            }
-        }
-    }
-
-    /** Check if a Bluetooth device matches the target address we're looking
-     * for.
-     *
-     * @param device candidate Bluetooth device that's been previously bonded
-     * @param targetAddress Bluetooth MAC addres we're looking for
-     *
-     * @return true if the address matches the candidate device
-     */
-    private boolean checkCandidateDevice(BluetoothDevice device,
-            String targetAddress) {
-        Log.d(TAG, "Found Bluetooth device: " + device);
-        if(device.getAddress().equals(targetAddress)) {
-            Log.d(TAG, "Found matching device: " + device);
-            return true;
-        }
-        return false;
-    }
-
     /**
-     * Check the list of previously paired devices for one matching the target
-     * address. Once a matching device is found, calls captureDevice to connect
-     * with it.
+     * Immediately cancel any pending Bluetooth operations.
      *
-     * This will not attempt to pair with unpaired devices - it's assumed that
-     * this step has already been completed by the user when selecting the
-     * Bluetooth device to use. If this class is used programatically with a
-     * hard-coded target address, you'll need to have previously paired the
-     * device.
+     * The BluetoothSocket.connect() function blocks while waiting for a
+     * connection, but it's thread safe and we can cancel that by calling
+     * close() on it at any time.
+     *
+     * Importantly we don't want to close the socket any other time, becauase we
+     * want to leave that up to the user of the socket - if you call close()
+     * twice, or close Input/Ouput streams associated with the socket
+     * simultaneously, it can cause a segfault due to a bug in some Android
+     * Bluetooth stacks. Awesome!
      */
-    private void connectDevice(final String targetAddress) {
-        Log.d(TAG, "Starting device enumeration");
-        Set<BluetoothDevice> pairedDevices =
-            mBluetoothAdapter.getBondedDevices();
-        for(BluetoothDevice device : pairedDevices) {
-            Log.d(TAG, "Found already paired device: " + device);
-            if(checkCandidateDevice(device, targetAddress)) {
-                captureDevice(device);
-                return;
-            }
+    public void stop() {
+        if(mSocketConnecting.get() && mSocket != null) {
+            try {
+                mSocket.close();
+            } catch(IOException e) { }
         }
     }
 }

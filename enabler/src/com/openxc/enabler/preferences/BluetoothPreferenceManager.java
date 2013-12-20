@@ -44,7 +44,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             String deviceAddress = getPreferenceString(
                     R.string.bluetooth_mac_key);
             if(deviceAddress == null || deviceAddress.equals(
-                        R.string.bluetooth_mac_automatic_option)) {
+                        getString(R.string.bluetooth_mac_automatic_option))) {
                 deviceAddress = searchForVehicleInterface();
             }
 
@@ -52,9 +52,9 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                 getVehicleManager().addVehicleInterface(
                         BluetoothVehicleInterface.class, deviceAddress);
             } else {
-                searchForVehicleInterface();
-                Log.d(TAG, "No Bluetooth device MAC set yet (" + deviceAddress +
-                        "), not starting source");
+                Log.d(TAG, "No Bluetooth device MAC set yet and no " +
+                        "recognized devices paired, not starting source");
+                // TODO need to keep attempting
             }
         } else {
             getVehicleManager().removeVehicleInterface(
@@ -73,6 +73,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                     Log.d(TAG, "Found paired OpenXC BT VI " + device.getName() +
                             ", will be auto-connected.");
                     deviceAddress = device.getAddress();
+                    break;
                 }
             }
         }
