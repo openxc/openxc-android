@@ -320,7 +320,7 @@ public class SettingsActivity extends PreferenceActivity {
         ArrayList<String> values = new ArrayList<String>();
 
         entries.add("Automatically connect to paired OpenXC-VI device");
-        values.add(BluetoothPreferenceManager.AUTO_DEVICE_SELECTION_ENTRY);
+        values.add(getString(R.string.bluetooth_mac_automatic_option));
 
         if(mBluetoothAdapter != null) {
             Log.d(TAG, "Starting paired device search");

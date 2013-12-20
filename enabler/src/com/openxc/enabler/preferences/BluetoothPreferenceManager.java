@@ -15,7 +15,6 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
  */
 public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothPreferenceManager";
-    public final static String AUTO_DEVICE_SELECTION_ENTRY = "Automatic";
 
     public BluetoothPreferenceManager(Context context) {
         super(context);
@@ -45,7 +44,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             String deviceAddress = getPreferenceString(
                     R.string.bluetooth_mac_key);
             if(deviceAddress == null || deviceAddress.equals(
-                        AUTO_DEVICE_SELECTION_ENTRY)) {
+                        R.string.bluetooth_mac_automatic_option)) {
                 deviceAddress = searchForVehicleInterface();
             }
 
