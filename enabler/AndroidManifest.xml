@@ -59,6 +59,10 @@
               <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
           </intent-filter>
       </receiver>
+      <!-- Must have a valid API key to use Crashlytics - this is a bogus API
+        key included just to make sure you can still build and install the app
+        from the open source repository. ! -->
+      <meta-data android:name="com.crashlytics.ApiKey" android:value="0000000000000000000000000000000000000000"/>
   </application>
 
 </manifest>
