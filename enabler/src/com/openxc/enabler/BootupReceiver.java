@@ -1,12 +1,11 @@
 package com.openxc.enabler;
 
-import com.openxc.VehicleManager;
-import com.openxc.enabler.preferences.PreferenceManagerService;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.openxc.enabler.preferences.PreferenceManagerService;
 
 /**
  * Receive the BOOT_COMPLETED signal and start the VehicleManager.

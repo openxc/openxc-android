@@ -1,7 +1,6 @@
 package com.openxc.interfaces.bluetooth;
 
 import java.io.IOException;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;

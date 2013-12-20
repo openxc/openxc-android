@@ -27,7 +27,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openxc.enabler.preferences.BluetoothPreferenceManager;
 import com.openxc.sinks.UploaderSink;
 
 /**

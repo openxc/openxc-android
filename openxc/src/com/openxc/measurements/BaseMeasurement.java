@@ -3,14 +3,10 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import com.google.common.base.Objects;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-
 import com.openxc.NoValueException;
 import com.openxc.remote.RawMeasurement;
-
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;

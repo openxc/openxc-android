@@ -2,8 +2,6 @@ package com.openxc.units;
 
 import java.util.Locale;
 
-import com.google.common.base.Objects;
-
 /**
  * A State is a type of Unit with a limited number of acceptable values.
  */
