@@ -248,12 +248,11 @@ public class SettingsActivity extends PreferenceActivity {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null) {
-            String message = "This device most likely does not have " +
-                "a Bluetooth adapter -- skipping device search";
-            Log.w(TAG, message);
+            Log.w(TAG, "This device most likely does not have " +
+                "a Bluetooth adapter -- skipping device search");
+        } else {
+            fillBluetoothDeviceList(mBluetoothDeviceListPreference);
         }
-
-        fillBluetoothDeviceList(mBluetoothDeviceListPreference);
 
         checkboxPreference.setOnPreferenceChangeListener(
                 mBluetoothCheckboxListener);
