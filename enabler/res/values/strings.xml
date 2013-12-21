@@ -36,6 +36,7 @@
     <string name="bluetooth_checkbox_summary">Read vehicle data from a vehicle interface connected wirelessly via Bluetooth</string>
     <string name="bluetooth_mac_title">Bluetooth Device</string>
     <string name="bluetooth_mac_automatic_option">Automatically Detect</string>
+    <string name="bluetooth_mac_automatic_summary">Automatically connect to paired OpenXC-VI device</string>
     <string name="network_settings">Network</string>
     <string name="network_checkbox_title">Use a network device</string>
     <string name="network_checkbox_summary">Read vehicle data from the network</string>

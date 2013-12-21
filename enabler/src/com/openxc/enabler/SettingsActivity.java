@@ -1,21 +1,19 @@
 package com.openxc.enabler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import android.annotation.TargetApi;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -27,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.sinks.UploaderSink;
 
 /**
@@ -49,7 +48,6 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.ABOUT";
     private final static int FILE_SELECTOR_RESULT = 100;
 
-    private BluetoothAdapter mBluetoothAdapter;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
     private Preference mTraceFilePreference;
@@ -58,12 +56,20 @@ public class SettingsActivity extends PreferenceActivity {
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
     private Preference mAboutVersionPreference;
-    private BroadcastReceiver mReceiver;
+    private PreferenceManagerService mPreferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeLegacyLayout();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mPreferenceManager != null) {
+            unbindService(mConnection);
+        }
     }
 
     protected boolean isValidFragment(String fragmentName){
@@ -132,17 +138,6 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mReceiver != null) {
-            unregisterReceiver(mReceiver);
-            if(mBluetoothAdapter != null) {
-                mBluetoothAdapter.cancelDiscovery();
-            }
-        }
-    }
-
-    @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
     }
@@ -171,6 +166,7 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.data_source_preferences);
+
             ((SettingsActivity)getActivity()).initializeBluetoothPreferences(
                 findPreference(getString(R.string.bluetooth_mac_key)),
                 findPreference(getString(R.string.bluetooth_checkbox_key)));
@@ -246,13 +242,17 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
                 mUpdateSummaryListener);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(mBluetoothAdapter == null) {
-            Log.w(TAG, "This device most likely does not have " +
-                "a Bluetooth adapter -- skipping device search");
-        } else {
-            fillBluetoothDeviceList(mBluetoothDeviceListPreference);
-        }
+        bindService(new Intent(this, PreferenceManagerService.class),
+                mConnection, Context.BIND_AUTO_CREATE);
+
+        List<String> entries = new ArrayList<String>();
+        entries.add(getString(R.string.bluetooth_mac_automatic_option));
+        List<String> values = new ArrayList<String>();
+        values.add(getString(R.string.bluetooth_mac_automatic_summary));
+
+        CharSequence[] prototype = {};
+        mBluetoothDeviceListPreference.setEntries(entries.toArray(prototype));
+        mBluetoothDeviceListPreference.setEntryValues(values.toArray(prototype));
 
         checkboxPreference.setOnPreferenceChangeListener(
                 mBluetoothCheckboxListener);
@@ -313,62 +313,6 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    private void fillBluetoothDeviceList(final ListPreference preference) {
-        ArrayList<String> entries = new ArrayList<String>();
-        ArrayList<String> values = new ArrayList<String>();
-
-        entries.add("Automatically connect to paired OpenXC-VI device");
-        values.add(getString(R.string.bluetooth_mac_automatic_option));
-
-        if(mBluetoothAdapter != null) {
-            Log.d(TAG, "Starting paired device search");
-            Set<BluetoothDevice> pairedDevices =
-                mBluetoothAdapter.getBondedDevices();
-            for(BluetoothDevice device : pairedDevices) {
-                Log.d(TAG, "Found paired device: " + device);
-                entries.add(device.getName() + " (" + device.getAddress() +
-                        ")");
-                values.add(device.getAddress());
-            }
-        }
-
-        CharSequence[] prototype = {};
-        preference.setEntries(entries.toArray(prototype));
-        preference.setEntryValues(values.toArray(prototype));
-
-        mReceiver = new BroadcastReceiver() {
-            public void onReceive(Context context, Intent intent) {
-                if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
-                    BluetoothDevice device = intent.getParcelableExtra(
-                            BluetoothDevice.EXTRA_DEVICE);
-                    if(device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                        List<CharSequence> entries =
-                            new ArrayList<CharSequence>(
-                                    Arrays.asList(preference.getEntries()));
-                        List<CharSequence> values =
-                            new ArrayList<CharSequence>(
-                                    Arrays.asList(preference.getEntryValues()));
-                        entries.add(device.getName() + " (" +
-                                device.getAddress() + ")");
-                        values.add(device.getAddress());
-                        CharSequence[] prototype = {};
-                        preference.setEntries(entries.toArray(prototype));
-                        preference.setEntryValues(values.toArray(prototype));
-                    }
-                }
-            }
-        };
-
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(mReceiver, filter);
-
-        if(mBluetoothAdapter != null) {
-            if(mBluetoothAdapter.isDiscovering()) {
-                mBluetoothAdapter.cancelDiscovery();
-            }
-            mBluetoothAdapter.startDiscovery();
-        }
-    }
 
     private OnPreferenceChangeListener mNetworkCheckboxListener =
             new OnPreferenceChangeListener() {
@@ -433,6 +377,32 @@ public class SettingsActivity extends PreferenceActivity {
             intent.setType("*/*");
             startActivityForResult(intent, FILE_SELECTOR_RESULT);
             return true;
+        }
+    };
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className,
+                IBinder service) {
+            Log.i(TAG, "Bound to PreferenceManagerService");
+            mPreferenceManager = ((PreferenceManagerService.PreferenceBinder)service
+                    ).getService();
+
+            Map<String, String> discoveredDevices =
+                    mPreferenceManager.getBluetoothDevices();
+            discoveredDevices.put(
+                    getString(R.string.bluetooth_mac_automatic_option),
+                    getString(R.string.bluetooth_mac_automatic_summary));
+            CharSequence[] prototype = {};
+            mBluetoothDeviceListPreference.setEntries(
+                    discoveredDevices.values().toArray(prototype));
+            mBluetoothDeviceListPreference.setEntryValues(
+                    discoveredDevices.keySet().toArray(prototype));
+
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            Log.w(TAG, "PreferenceMangerService disconnected unexpectedly");
+            mPreferenceManager = null;
         }
     };
 }
