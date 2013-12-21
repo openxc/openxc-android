@@ -397,6 +397,7 @@ public class SettingsActivity extends PreferenceActivity {
                     discoveredDevices.values().toArray(prototype));
             mBluetoothDeviceListPreference.setEntryValues(
                     discoveredDevices.keySet().toArray(prototype));
+            mBluetoothDeviceListPreference.setPersistent(true);
 
         }
 
