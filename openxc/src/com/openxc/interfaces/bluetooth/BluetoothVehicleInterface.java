@@ -240,8 +240,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     private void setAddress(String address) {
-        // TODO verify this is a valid MAC address - use
-        // Bluetoothadapter.checkBluetoothAddress()!
+        if(address == null || !BluetoothAdapter.checkBluetoothAddress(address)) {
+            throw new DataSourceResourceException("MAC is not valid");
+        }
         mAddress = address;
     }
 
