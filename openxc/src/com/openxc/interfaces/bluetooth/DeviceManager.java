@@ -66,18 +66,13 @@ public class DeviceManager {
         return connect(mBluetoothAdapter.getRemoteDevice(targetAddress));
     }
 
-    public BluetoothSocket connect(BluetoothDevice device) {
-        if(device != null) {
-            try {
-            mSocket = setupSocket(device);
-            connectToSocket(mSocket);
-            } catch(BluetoothException e) {
-                Log.e(TAG, "Unable to connect to Bluetooth device " + device,
-                        e);
-            }
-        } else {
-            Log.e(TAG, "Not connecting to null Bluetooth device");
+    public BluetoothSocket connect(BluetoothDevice device)
+            throws BluetoothException {
+        if(device == null) {
+            throw new BluetoothException("Not connecting to null Bluetooth device");
         }
+        mSocket = setupSocket(device);
+        connectToSocket(mSocket);
         return mSocket;
     }
 

@@ -249,7 +249,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             try {
                 if(vehicleInterface.setResource(resource)) {
                     Log.d(TAG, "Changed resource of already active interface " +
-                            vehicleInterface);
+                            vehicleInterface + " to " + resource);
                 } else {
                     Log.d(TAG, "Interface " + vehicleInterface +
                             " already had same active resource " + resource +
