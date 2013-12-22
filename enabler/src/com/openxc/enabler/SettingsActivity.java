@@ -68,8 +68,7 @@ public class SettingsActivity extends PreferenceActivity {
     public void onPause() {
         super.onPause();
         if(mPreferenceManager != null) {
-            // TODO why is this sometimes not bound?
-            // unbindService(mConnection);
+            unbindService(mConnection);
         }
     }
 
