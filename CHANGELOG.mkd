@@ -1,6 +1,9 @@
 # OpenXC Android Library Changelog
 
-## v5.2.1-dev
+## v5.3
+
+* Automatically discover, initiate pairing and connect to Bluetooth-enabled
+  OpenXC vehicle interfaces.
 
 ## v5.2
 
