@@ -100,7 +100,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
 
             public void readStoredPreferences() {
                 setBluetoothStatus(getPreferences().getBoolean(
-                            getString(R.string.bluetooth_checkbox_key), false));
+                            getString(R.string.bluetooth_checkbox_key), true));
             }
         };
     }
