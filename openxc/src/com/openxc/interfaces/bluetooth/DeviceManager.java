@@ -67,9 +67,6 @@ public class DeviceManager {
     }
 
     public void startDiscovery(BroadcastReceiver receiver) {
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        mContext.registerReceiver(receiver, filter);
-
         if(getDefaultAdapter() != null) {
             if(getDefaultAdapter().isDiscovering()) {
                 getDefaultAdapter().cancelDiscovery();

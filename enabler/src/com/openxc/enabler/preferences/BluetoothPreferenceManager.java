@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -46,6 +47,10 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
 
     public BluetoothPreferenceManager(Context context) {
         super(context);
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        context.registerReceiver(mDiscoveryReceiver, filter);
+
         try {
             mBluetoothDeviceManager = new DeviceManager(context);
             fillBluetoothDeviceList();
@@ -55,6 +60,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Map<String, String> getDiscoveredDevices() {
         return (Map<String, String>) mDiscoveredDevices.clone();
     }
@@ -62,9 +68,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     @Override
     public void close() {
         super.close();
-        if(mDiscoveryReceiver != null) {
-            getContext().unregisterReceiver(mDiscoveryReceiver);
-        }
+        getContext().unregisterReceiver(mDiscoveryReceiver);
         mBluetoothDeviceManager.stop();
     }
 
