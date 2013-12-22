@@ -34,6 +34,10 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         if(mBluetoothAdapter == null) {
             Log.w(TAG, "This device most likely does not have " +
                 "a Bluetooth adapter");
+        } else {
+            // TODO need to fill the list when constructed, otherwise the preference
+            // list will not have anything listed
+            fillBluetoothDeviceList();
         }
     }
 
@@ -104,7 +108,6 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     private synchronized void setBluetoothStatus(boolean enabled) {
         if(enabled) {
             Log.i(TAG, "Enabling the Bluetooth vehicle interface");
-            fillBluetoothDeviceList();
             String deviceAddress = getPreferenceString(
                     R.string.bluetooth_mac_key);
             if(deviceAddress == null || deviceAddress.equals(
