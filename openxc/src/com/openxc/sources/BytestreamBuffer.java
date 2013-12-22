@@ -19,11 +19,12 @@ import com.openxc.BinaryMessages;
  */
 public class BytestreamBuffer {
     private final static String TAG = "BytestreamBuffer";
+    private final static int STATS_LOG_FREQUENCY_KB = 128;
 
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
     private double mBytesReceived = 0;
     private double mLastLoggedTransferStatsAtByte = 0;
-    private final long mStartTime = System.nanoTime();
+    private long mLastLoggedStatsTime = System.nanoTime();
 
     /**
      * Add additional bytes to the buffer from the data source.
@@ -129,11 +130,12 @@ public class BytestreamBuffer {
     }
 
     private void logTransferStats() {
-        // log the transfer stats roughly every 512KB
-        if(mBytesReceived > mLastLoggedTransferStatsAtByte + 512 * 1024) {
+        if(mBytesReceived > mLastLoggedTransferStatsAtByte +
+                STATS_LOG_FREQUENCY_KB * 1024) {
+            SourceLogger.logTransferStats(TAG, mLastLoggedStatsTime, System.nanoTime(),
+                    mBytesReceived - mLastLoggedTransferStatsAtByte);
             mLastLoggedTransferStatsAtByte = mBytesReceived;
-            SourceLogger.logTransferStats(TAG, mStartTime, System.nanoTime(),
-                    mBytesReceived);
+            mLastLoggedStatsTime = System.nanoTime();
         }
     }
 
