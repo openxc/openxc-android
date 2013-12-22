@@ -9,7 +9,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
@@ -40,19 +42,40 @@ public class DeviceManager {
      * to enable Bluetooth if it isn't already on.
      */
     public DeviceManager(Context context) throws BluetoothException {
-        // work around an Android bug, requires that this is called before
-        // getting the default adapter
-        if(Looper.myLooper() == null) {
-            Looper.prepare();
-        }
         mContext = context;
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // TODO we call this here as a kind of hack to trigger the exception
+        // early on
+        getDefaultAdapter();
         if(mBluetoothAdapter == null) {
             String message = "This device most likely does not have " +
                     "a Bluetooth adapter";
             Log.w(TAG, message);
             throw new BluetoothException(message);
+        }
+    }
+
+    private BluetoothAdapter getDefaultAdapter() {
+        if(mBluetoothAdapter == null) {
+            // work around an Android bug, requires that this is called before
+            // getting the default adapter
+            if(Looper.myLooper() == null) {
+                Looper.prepare();
+            }
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        }
+        return mBluetoothAdapter;
+    }
+
+    public void startDiscovery(BroadcastReceiver receiver) {
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        mContext.registerReceiver(receiver, filter);
+
+        if(getDefaultAdapter() != null) {
+            if(getDefaultAdapter().isDiscovering()) {
+                getDefaultAdapter().cancelDiscovery();
+            }
+            Log.i(TAG, "Starting Bluetooth discovery");
+            getDefaultAdapter().startDiscovery();
         }
     }
 
@@ -64,7 +87,7 @@ public class DeviceManager {
      */
     public BluetoothSocket connect(String targetAddress)
             throws BluetoothException {
-        return connect(mBluetoothAdapter.getRemoteDevice(targetAddress));
+        return connect(getDefaultAdapter().getRemoteDevice(targetAddress));
     }
 
     public BluetoothSocket connect(BluetoothDevice device)
@@ -96,20 +119,28 @@ public class DeviceManager {
                 mSocket.close();
             } catch(IOException e) { }
         }
+
+        if(getDefaultAdapter() != null) {
+            getDefaultAdapter().cancelDiscovery();
+        }
+    }
+
+    public Set<BluetoothDevice> getPairedDevices() {
+        Set<BluetoothDevice> devices = new HashSet<BluetoothDevice>();
+        if(getDefaultAdapter() != null && getDefaultAdapter().isEnabled()) {
+            devices = getDefaultAdapter().getBondedDevices();
+        }
+        return devices;
     }
 
     public Set<BluetoothDevice> getCandidateDevices() {
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> candidates = new HashSet<BluetoothDevice>();
-        if(adapter != null && adapter.isEnabled()) {
-            Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
-            for(BluetoothDevice device : pairedDevices) {
-                if(device.getName().startsWith(
-                            BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
-                    Log.d(TAG, "Found paired OpenXC BT VI " + device.getName());
-                    candidates.add(device);
-                    break;
-                }
+
+        for(BluetoothDevice device : getPairedDevices()) {
+            if(device.getName().startsWith(
+                        BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                Log.d(TAG, "Found paired OpenXC BT VI " + device.getName());
+                candidates.add(device);
             }
         }
 
@@ -122,7 +153,7 @@ public class DeviceManager {
         for(String address : detectedDevices) {
             Log.d(TAG, "Found previously discovered OpenXC BT VI " + address);
             if(BluetoothAdapter.checkBluetoothAddress(address)) {
-                candidates.add(mBluetoothAdapter.getRemoteDevice(address));
+                candidates.add(getDefaultAdapter().getRemoteDevice(address));
             }
         }
         return candidates;
@@ -132,8 +163,8 @@ public class DeviceManager {
         mSocketConnecting.set(true);
         try {
             socket.connect();
-            if(mBluetoothAdapter.isDiscovering()) {
-                mBluetoothAdapter.cancelDiscovery();
+            if(getDefaultAdapter().isDiscovering()) {
+                getDefaultAdapter().cancelDiscovery();
             }
         } catch(IOException e) {
             String error = "Could not connect to SPP service on " + socket;
@@ -172,5 +203,4 @@ public class DeviceManager {
 
         return socket;
     }
-
 }
