@@ -389,19 +389,21 @@ public class SettingsActivity extends PreferenceActivity {
             mPreferenceManager = ((PreferenceManagerService.PreferenceBinder)service
                     ).getService();
 
-            if(mBluetoothDeviceListPreference.getEntries().length == 0 ||
-                    mBluetoothDeviceListPreference.getEntryValues().length == 0) {
-                List<String> entries = new ArrayList<String>();
-                entries.add(getString(R.string.bluetooth_mac_automatic_option));
-                List<String> values = new ArrayList<String>();
-                values.add(getString(R.string.bluetooth_mac_automatic_summary));
+            List<String> entries = new ArrayList<String>();
+            entries.add(getString(R.string.bluetooth_mac_automatic_option));
+            List<String> values = new ArrayList<String>();
+            values.add(getString(R.string.bluetooth_mac_automatic_summary));
 
-                CharSequence[] prototype = {};
-                mBluetoothDeviceListPreference.setEntries(
-                        entries.toArray(prototype));
-                mBluetoothDeviceListPreference.setEntryValues(
-                        values.toArray(prototype));
-            }
+            Map<String, String> discoveredDevices =
+                    mPreferenceManager.getBluetoothDevices();
+            entries.addAll(discoveredDevices.keySet());
+            values.addAll(discoveredDevices.values());
+
+            CharSequence[] prototype = {};
+            mBluetoothDeviceListPreference.setEntries(
+                    entries.toArray(prototype));
+            mBluetoothDeviceListPreference.setEntryValues(
+                    values.toArray(prototype));
         }
 
         public void onServiceDisconnected(ComponentName className) {
