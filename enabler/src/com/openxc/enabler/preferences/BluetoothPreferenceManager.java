@@ -17,6 +17,7 @@ import android.util.Log;
 import com.openxc.enabler.R;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
+import com.openxc.util.SupportSettingsUtils;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth CAN device.
@@ -35,8 +36,8 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             Log.w(TAG, "This device most likely does not have " +
                 "a Bluetooth adapter");
         } else {
-            // TODO need to fill the list when constructed, otherwise the preference
-            // list will not have anything listed
+            // TODO need to fill the list when constructed, otherwise the
+            // preference list will not have anything listed
             fillBluetoothDeviceList();
         }
     }
@@ -52,11 +53,13 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                         Context.MODE_MULTI_PROCESS).edit();
         Set<String> candidates = new HashSet<String>();
         for(Map.Entry<String, String> device : mDiscoveredDevices.entrySet()) {
-            if(device.getValue().startsWith(BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+            if(device.getValue().startsWith(
+                        BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
                 candidates.add(device.getKey());
             }
         }
-        editor.putStringSet(DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREF_KEY, candidates);
+        SupportSettingsUtils.putStringSet(editor,
+                DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREF_KEY, candidates);
         editor.commit();
     }
 

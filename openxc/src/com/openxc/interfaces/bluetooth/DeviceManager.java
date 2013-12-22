@@ -12,8 +12,9 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.openxc.util.SupportSettingsUtils;
 
 /**
  * The DeviceManager collects the functions required to connect to and open a
@@ -115,8 +116,9 @@ public class DeviceManager {
         SharedPreferences preferences =
                 mContext.getSharedPreferences(KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
                 Context.MODE_MULTI_PROCESS);
-        Set<String> detectedDevices = preferences.getStringSet(
-                KNOWN_BLUETOOTH_DEVICE_PREF_KEY, new HashSet<String>());
+        Set<String> detectedDevices = SupportSettingsUtils.getStringSet(
+                preferences, KNOWN_BLUETOOTH_DEVICE_PREF_KEY,
+                new HashSet<String>());
         for(String address : detectedDevices) {
             Log.d(TAG, "Found previously discovered OpenXC BT VI " + address);
             if(BluetoothAdapter.checkBluetoothAddress(address)) {
