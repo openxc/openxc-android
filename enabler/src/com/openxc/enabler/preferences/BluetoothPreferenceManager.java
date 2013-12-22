@@ -19,7 +19,23 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.util.SupportSettingsUtils;
 
 /**
- * Enable or disable receiving vehicle data from a Bluetooth CAN device.
+ * Enable or disable receiving vehicle data from a Bluetooth vehicle interface.
+ *
+ * When you enable the Bluetooth vehicle interface option, this is what happens:
+ *
+ *     * Discovery mode is enabled on the Bluetooth adapter to find any nearby
+ *          VIs that are powered up - they don't have to be previously paired.
+ *     * The Bluetooth device list in preferences is populated with a list of
+ *          all paired and discovered devices
+ *     * By default, the preference is set to automatic mode. In that mode, the
+ *          service will scan for any paired or unpaired Bluetooth device with a
+ *          name beginning with "OpenXC-VI-". For each device found, it attemps
+ *          to connect and read data.
+ *     * You can also explicitly select a device from the list, even one that
+ *          doesn't have the OpenXC-VI name prefix.
+ *
+ * Device discovery is only kicked off once, when the Bluetooth option is first
+ * enabled or the OpenXC service first starts, to avoid draining the battery.
  */
 public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "BluetoothPreferenceManager";
