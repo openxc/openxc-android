@@ -116,6 +116,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                 Log.d(TAG, "No Bluetooth vehicle interface selected -- " +
                         "starting in automatic mode");
             }
+            fillBluetoothDeviceList();
             getVehicleManager().addVehicleInterface(
                     BluetoothVehicleInterface.class, deviceAddress);
         } else {
