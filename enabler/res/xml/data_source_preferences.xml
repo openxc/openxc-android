@@ -18,7 +18,8 @@
         <ListPreference
                 android:key="@string/bluetooth_mac_key"
                 android:title="@string/bluetooth_mac_title"
-                android:defaultValue="@string/bluetooth_mac_automatic_option"/>
+                android:defaultValue="@string/bluetooth_mac_automatic_option"
+                android:persistent="true"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/network_settings">

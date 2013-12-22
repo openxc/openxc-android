@@ -68,7 +68,8 @@ public class SettingsActivity extends PreferenceActivity {
     public void onPause() {
         super.onPause();
         if(mPreferenceManager != null) {
-            unbindService(mConnection);
+            // TODO why is this sometimes not bound?
+            // unbindService(mConnection);
         }
     }
 
@@ -242,8 +243,9 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
                 mUpdateSummaryListener);
 
-        bindService(new Intent(this, PreferenceManagerService.class),
-                mConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(SettingsActivity.this,
+                    PreferenceManagerService.class), mConnection,
+                Context.BIND_AUTO_CREATE);
 
         List<String> entries = new ArrayList<String>();
         entries.add(getString(R.string.bluetooth_mac_automatic_option));
@@ -387,18 +389,19 @@ public class SettingsActivity extends PreferenceActivity {
             mPreferenceManager = ((PreferenceManagerService.PreferenceBinder)service
                     ).getService();
 
-            Map<String, String> discoveredDevices =
-                    mPreferenceManager.getBluetoothDevices();
-            discoveredDevices.put(
-                    getString(R.string.bluetooth_mac_automatic_option),
-                    getString(R.string.bluetooth_mac_automatic_summary));
-            CharSequence[] prototype = {};
-            mBluetoothDeviceListPreference.setEntries(
-                    discoveredDevices.values().toArray(prototype));
-            mBluetoothDeviceListPreference.setEntryValues(
-                    discoveredDevices.keySet().toArray(prototype));
-            mBluetoothDeviceListPreference.setPersistent(true);
+            if(mBluetoothDeviceListPreference.getEntries().length == 0 ||
+                    mBluetoothDeviceListPreference.getEntryValues().length == 0) {
+                List<String> entries = new ArrayList<String>();
+                entries.add(getString(R.string.bluetooth_mac_automatic_option));
+                List<String> values = new ArrayList<String>();
+                values.add(getString(R.string.bluetooth_mac_automatic_summary));
 
+                CharSequence[] prototype = {};
+                mBluetoothDeviceListPreference.setEntries(
+                        entries.toArray(prototype));
+                mBluetoothDeviceListPreference.setEntryValues(
+                        values.toArray(prototype));
+            }
         }
 
         public void onServiceDisconnected(ComponentName className) {

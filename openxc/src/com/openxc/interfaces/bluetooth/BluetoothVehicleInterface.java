@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +16,7 @@ import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
+import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
 
 /**
@@ -37,6 +40,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
+    private boolean mAutomaticMode = false;
 
     public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {
@@ -48,7 +52,14 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     "Unable to open Bluetooth device manager", e);
         }
 
-        setAddress(address);
+        if(address == null) {
+            Log.d(TAG, "No Bluetooth vehicle interface selected -- " +
+                    "starting in automatic mode");
+            mAutomaticMode = true;
+        } else {
+            mAutomaticMode = false;
+            setAddress(address);
+        }
         start();
     }
 
@@ -63,7 +74,12 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     public boolean setResource(String otherAddress) throws DataSourceException {
-        if(!sameResource(mAddress, otherAddress)) {
+        if(otherAddress == null) {
+            // switch to automatic but don't break the existing connection
+            mAutomaticMode = true;
+            return true;
+        } else if(!sameResource(mAddress, otherAddress)) {
+            mAutomaticMode = false;
             setAddress(otherAddress);
             try {
                 if(mSocket != null) {
@@ -107,6 +123,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public String toString() {
         return Objects.toStringHelper(this)
             .add("deviceAddress", mAddress)
+            .add("automaticMode", mAutomaticMode)
             .add("socket", mSocket)
             .toString();
     }
@@ -116,20 +133,44 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             return;
         }
 
-        mConnectionLock.writeLock().lock();
-        try {
-            if(!isConnected()) {
-                mSocket = mDeviceManager.connect(mAddress);
-                connectStreams();
-                connected();
+        if(mAddress != null) {
+            Log.i(TAG, "Connecting to manually specific Bluetooth device " + mAddress);
+            mConnectionLock.writeLock().lock();
+            try {
+                if(!isConnected()) {
+                    mSocket = mDeviceManager.connect(mAddress);
+                    connectStreams();
+                    connected();
+                }
+            } catch(BluetoothException e) {
+                Log.w(TAG, "Unable to connect to manually set device " +
+                        mAddress, e);
+                mSocket = null;
+                disconnected();
+            } finally {
+                mConnectionLock.writeLock().unlock();
             }
-        } catch(BluetoothException e) {
-            String message = "Unable to connect to device at address "
-                + mAddress;
-            Log.w(TAG, message, e);
-            disconnected();
-        } finally {
-            mConnectionLock.writeLock().unlock();
+        } else {
+            Log.v(TAG, "Attempting automatic detection of Bluetooth VI");
+            for(BluetoothDevice device : mDeviceManager.getCandidateDevices()) {
+                mConnectionLock.writeLock().lock();
+                try {
+                    if(!isConnected()) {
+                        Log.i(TAG, "Attempting connection to auto-detected " +
+                                "VI " + device);
+                        mSocket = mDeviceManager.connect(device);
+                        connectStreams();
+                        connected();
+                    }
+                } catch(BluetoothException e) {
+                    Log.w(TAG, "Unable to connect to auto-detected device " +
+                            device, e);
+                    mSocket = null;
+                    disconnected();
+                } finally {
+                    mConnectionLock.writeLock().unlock();
+                }
+            }
         }
     }
 
@@ -239,7 +280,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
-    private void setAddress(String address) {
+    private void setAddress(String address) throws DataSourceResourceException {
         if(address == null || !BluetoothAdapter.checkBluetoothAddress(address)) {
             throw new DataSourceResourceException("MAC is not valid");
         }

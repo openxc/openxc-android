@@ -354,8 +354,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * vehicle data source, call the addVehicleInterface method after binding
      * with VehicleManager:
      *
-     *      service.addVehicleInterface(BluetoothVehicleInterface.class,
-     *              new URI(""));
+     *      service.addVehicleInterface(BluetoothVehicleInterface.class, "");
      *
      * The only valid VehicleInteface types are those included with the library
      * - the vehicle service running in a remote process is the one to actually

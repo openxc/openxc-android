@@ -1,16 +1,18 @@
 package com.openxc.interfaces.bluetooth;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -22,14 +24,15 @@ import android.util.Log;
  */
 public class DeviceManager {
     private final static String TAG = "DeviceManager";
+    public static final String KNOWN_BLUETOOTH_DEVICE_PREFERENCES = "known_bluetooth_devices";
+    public static final String KNOWN_BLUETOOTH_DEVICE_PREF_KEY = "known_bluetooth_devices";
     private final static UUID RFCOMM_UUID = UUID.fromString(
             "00001101-0000-1000-8000-00805f9b34fb");
 
     private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothDevice mTargetDevice;
-    private final Lock mDeviceLock = new ReentrantLock();
     private BluetoothSocket mSocket;
     private AtomicBoolean mSocketConnecting = new AtomicBoolean(false);
+    private Context mContext;
 
     /**
      * The DeviceManager requires an Android Context in order to send the intent
@@ -41,6 +44,8 @@ public class DeviceManager {
         if(Looper.myLooper() == null) {
             Looper.prepare();
         }
+        mContext = context;
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null) {
             String message = "This device most likely does not have " +
@@ -58,66 +63,22 @@ public class DeviceManager {
      */
     public BluetoothSocket connect(String targetAddress)
             throws BluetoothException {
-        mDeviceLock.lock();
-        try {
-            mTargetDevice = mBluetoothAdapter.getRemoteDevice(targetAddress);
-            if(mTargetDevice != null) {
-                mSocket = setupSocket(mTargetDevice);
-                connectToSocket(mSocket);
-            } else {
-                Log.e(TAG, "Unable to find Bluetooth device " + targetAddress);
+        return connect(mBluetoothAdapter.getRemoteDevice(targetAddress));
+    }
+
+    public BluetoothSocket connect(BluetoothDevice device) {
+        if(device != null) {
+            try {
+            mSocket = setupSocket(device);
+            connectToSocket(mSocket);
+            } catch(BluetoothException e) {
+                Log.e(TAG, "Unable to connect to Bluetooth device " + device,
+                        e);
             }
-        } finally {
-            mDeviceLock.unlock();
+        } else {
+            Log.e(TAG, "Not connecting to null Bluetooth device");
         }
         return mSocket;
-    }
-
-    private void connectToSocket(BluetoothSocket socket) throws BluetoothException {
-        mSocketConnecting.set(true);
-        try {
-            socket.connect();
-        } catch(IOException e) {
-            String error = "Could not connect socket to SPP service on " +
-                mTargetDevice;
-            Log.e(TAG, error);
-            try {
-                socket.close();
-            } catch(IOException e2) {}
-            throw new BluetoothException(error, e);
-        } finally {
-            mSocketConnecting.set(false);
-        }
-    }
-
-    /**
-     * Open an RFCOMM socket to the connected Bluetooth device.
-     *
-     * The DeviceManager must already have a device connected, so connectDevice
-     * needs to be called.
-     */
-    private BluetoothSocket setupSocket(BluetoothDevice device)
-            throws BluetoothException {
-        if(device == null) {
-            Log.w(TAG, "Can't setup socket -- device is " + device);
-            throw new BluetoothException();
-        }
-
-        if(mBluetoothAdapter.isDiscovering()) {
-            mBluetoothAdapter.cancelDiscovery();
-        }
-
-        Log.d(TAG, "Scanning services on " + device);
-        BluetoothSocket socket = null;
-        try {
-            socket = device.createRfcommSocketToServiceRecord(
-                    RFCOMM_UUID);
-        } catch(IOException e) {
-            String error = "Unable to open a socket to device " + device;
-            Log.w(TAG, error);
-            throw new BluetoothException(error, e);
-        }
-        return socket;
     }
 
     /**
@@ -140,4 +101,79 @@ public class DeviceManager {
             } catch(IOException e) { }
         }
     }
+
+    public Set<BluetoothDevice> getCandidateDevices() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> candidates = new HashSet<BluetoothDevice>();
+        if(adapter != null && adapter.isEnabled()) {
+            Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
+            for(BluetoothDevice device : pairedDevices) {
+                if(device.getName().startsWith(
+                            BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                    Log.d(TAG, "Found paired OpenXC BT VI " + device.getName());
+                    candidates.add(device);
+                    break;
+                }
+            }
+        }
+
+        SharedPreferences preferences =
+                mContext.getSharedPreferences(KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
+                Context.MODE_MULTI_PROCESS);
+        Set<String> detectedDevices = preferences.getStringSet(
+                KNOWN_BLUETOOTH_DEVICE_PREF_KEY, new HashSet<String>());
+        for(String address : detectedDevices) {
+            Log.d(TAG, "Found previously discovered OpenXC BT VI " + address);
+            if(BluetoothAdapter.checkBluetoothAddress(address)) {
+                candidates.add(mBluetoothAdapter.getRemoteDevice(address));
+            }
+        }
+        return candidates;
+    }
+
+    private void connectToSocket(BluetoothSocket socket) throws BluetoothException {
+        mSocketConnecting.set(true);
+        try {
+            socket.connect();
+            if(mBluetoothAdapter.isDiscovering()) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
+        } catch(IOException e) {
+            String error = "Could not connect to SPP service on " + socket;
+            Log.e(TAG, error);
+            try {
+                socket.close();
+            } catch(IOException e2) {}
+            throw new BluetoothException(error, e);
+        } finally {
+            mSocketConnecting.set(false);
+        }
+    }
+
+    /**
+     * Open an RFCOMM socket to the Bluetooth device.
+     *
+     * The device may or may not actually exist, the argument is just a
+     * reference to it.
+     */
+    private BluetoothSocket setupSocket(BluetoothDevice device)
+            throws BluetoothException {
+        if(device == null) {
+            Log.w(TAG, "Can't setup socket -- device is " + device);
+            throw new BluetoothException();
+        }
+
+        Log.d(TAG, "Scanning services on " + device);
+        BluetoothSocket socket = null;
+        try {
+            socket = device.createRfcommSocketToServiceRecord(RFCOMM_UUID);
+        } catch(IOException e) {
+            String error = "Unable to open a socket to device " + device;
+            Log.w(TAG, error);
+            throw new BluetoothException(error, e);
+        }
+
+        return socket;
+    }
+
 }
