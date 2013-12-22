@@ -19,10 +19,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
+import com.openxc.interfaces.bluetooth.BluetoothException;
+import com.openxc.interfaces.bluetooth.DeviceManager;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
  * the reliability of OpenXC by handling background tasks on behalf of client
@@ -148,6 +151,21 @@ public class OpenXcEnablerActivity extends Activity {
             public void onClick(View arg0) {
                 startActivity(new Intent(OpenXcEnablerActivity.this,
                         VehicleDashboardActivity.class));
+            }
+        });
+
+        findViewById(R.id.start_bluetooth_search_btn).setOnClickListener(
+                new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    DeviceManager deviceManager = new DeviceManager(OpenXcEnablerActivity.this);
+                    deviceManager.startDiscovery();
+                } catch(BluetoothException e) {
+                    Toast.makeText(OpenXcEnablerActivity.this,
+                        "Bluetooth is disabled, can't search for devices",
+                        Toast.LENGTH_LONG).show();
+                }
             }
         });
 

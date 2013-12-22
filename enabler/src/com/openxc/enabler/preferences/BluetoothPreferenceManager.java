@@ -119,7 +119,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         }
 
         persistCandidateDiscoveredDevices();
-        mBluetoothDeviceManager.startDiscovery(mDiscoveryReceiver);
+        mBluetoothDeviceManager.startDiscovery();
     }
 
     private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {

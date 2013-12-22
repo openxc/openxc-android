@@ -66,7 +66,7 @@ public class DeviceManager {
         return mBluetoothAdapter;
     }
 
-    public void startDiscovery(BroadcastReceiver receiver) {
+    public void startDiscovery() {
         if(getDefaultAdapter() != null) {
             if(getDefaultAdapter().isDiscovering()) {
                 getDefaultAdapter().cancelDiscovery();
