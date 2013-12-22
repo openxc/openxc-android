@@ -76,6 +76,11 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/start_bluetooth_search_btn"
+        style="@style/MinimalButton"
+        android:text="@string/bluetooth_search_button"/>
+
+    <Button
         android:id="@+id/view_vehicle_data_btn"
         style="@style/MinimalButton"
         android:text="@string/show_data_button"/>
