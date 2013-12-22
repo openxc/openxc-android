@@ -284,8 +284,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             mAutomaticMode = true;
         } else if(!BluetoothAdapter.checkBluetoothAddress(address)) {
             throw new DataSourceResourceException("MAC is not valid");
+        } else {
+            mAddress = address;
         }
-        mAddress = address;
     }
 
     private static boolean sameResource(String address, String otherAddress) {
