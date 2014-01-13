@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
