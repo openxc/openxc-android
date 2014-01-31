@@ -69,6 +69,7 @@ public class SettingsActivity extends PreferenceActivity {
         super.onPause();
         if(mPreferenceManager != null) {
             unbindService(mConnection);
+            mPreferenceManager = null;
         }
     }
 
