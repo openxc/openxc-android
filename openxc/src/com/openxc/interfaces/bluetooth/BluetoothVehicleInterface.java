@@ -128,46 +128,49 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             return;
         }
 
+        BluetoothSocket newSocket;
         if(!mAutomaticMode) {
             Log.i(TAG, "Connecting to manually specific Bluetooth device " + mAddress);
-            mConnectionLock.writeLock().lock();
             try {
                 if(!isConnected()) {
-                    mSocket = mDeviceManager.connect(mAddress);
+                    newSocket = mDeviceManager.connect(mAddress);
                     connectStreams();
                     connected();
                 }
             } catch(BluetoothException e) {
                 Log.w(TAG, "Unable to connect to manually set device " +
                         mAddress, e);
-                mSocket = null;
+                newSocket = null;
                 disconnected();
-            } finally {
-                mConnectionLock.writeLock().unlock();
             }
         } else {
             Log.v(TAG, "Attempting automatic detection of Bluetooth VI");
             for(BluetoothDevice device : mDeviceManager.getCandidateDevices()) {
-                mConnectionLock.writeLock().lock();
                 try {
                     if(!isConnected()) {
                         Log.i(TAG, "Attempting connection to auto-detected " +
                                 "VI " + device);
                         mAddress = device.getAddress();
-                        mSocket = mDeviceManager.connect(device);
+                        newSocket = mDeviceManager.connect(device);
                         connectStreams();
                         connected();
+                        break;
                     }
                 } catch(BluetoothException e) {
                     Log.w(TAG, "Unable to connect to auto-detected device " +
                             device, e);
-                    mSocket = null;
+                    newSocket = null;
                     mAddress = null;
                     disconnected();
-                } finally {
-                    mConnectionLock.writeLock().unlock();
                 }
             }
+        }
+
+        mConnectionLock.writeLock().lock();
+        try {
+            mSocket = newSocket;
+        } finally {
+            mConnectionLock.writeLock().unlock();
         }
     }
 

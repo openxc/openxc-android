@@ -46,6 +46,8 @@ public class DeviceManager {
                     "a Bluetooth adapter";
             Log.w(TAG, message);
             throw new BluetoothException(message);
+        } else {
+            Log.d(TAG, "Initialize Bluetooth device manager");
         }
     }
 
@@ -131,7 +133,6 @@ public class DeviceManager {
         for(BluetoothDevice device : getPairedDevices()) {
             if(device.getName().startsWith(
                         BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
-                Log.d(TAG, "Found paired OpenXC BT VI " + device.getName());
                 candidates.add(device);
             }
         }
@@ -143,10 +144,14 @@ public class DeviceManager {
                 preferences, KNOWN_BLUETOOTH_DEVICE_PREF_KEY,
                 new HashSet<String>());
         for(String address : detectedDevices) {
-            Log.d(TAG, "Found previously discovered OpenXC BT VI " + address);
             if(BluetoothAdapter.checkBluetoothAddress(address)) {
                 candidates.add(getDefaultAdapter().getRemoteDevice(address));
             }
+        }
+
+        for(BluetoothDevice candidate : candidates) {
+            Log.d(TAG, "Found previously discovered or paired OpenXC BT VI "
+                    + candidate.getAddress());
         }
         return candidates;
     }
