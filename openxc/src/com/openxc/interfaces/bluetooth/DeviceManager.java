@@ -41,10 +41,7 @@ public class DeviceManager {
      */
     public DeviceManager(Context context) throws BluetoothException {
         mContext = context;
-        // TODO we call this here as a kind of hack to trigger the exception
-        // early on
-        getDefaultAdapter();
-        if(mBluetoothAdapter == null) {
+        if(getDefaultAdapter() == null) {
             String message = "This device most likely does not have " +
                     "a Bluetooth adapter";
             Log.w(TAG, message);
