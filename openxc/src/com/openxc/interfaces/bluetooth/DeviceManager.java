@@ -27,6 +27,7 @@ public class DeviceManager {
     private final static String TAG = "DeviceManager";
     public static final String KNOWN_BLUETOOTH_DEVICE_PREFERENCES = "known_bluetooth_devices";
     public static final String KNOWN_BLUETOOTH_DEVICE_PREF_KEY = "known_bluetooth_devices";
+    public static final String LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY = "last_connected_bluetooth_device";
     private final static UUID RFCOMM_UUID = UUID.fromString(
             "00001101-0000-1000-8000-00805f9b34fb");
 
@@ -91,6 +92,8 @@ public class DeviceManager {
         }
         mSocket = setupSocket(device);
         connectToSocket(mSocket);
+
+        storeLastConnectedDevice(device);
         return mSocket;
     }
 
@@ -125,6 +128,30 @@ public class DeviceManager {
             devices = getDefaultAdapter().getBondedDevices();
         }
         return devices;
+    }
+
+    private void storeLastConnectedDevice(BluetoothDevice device) {
+        SharedPreferences.Editor editor =
+                mContext.getSharedPreferences(
+                        DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
+                        Context.MODE_MULTI_PROCESS).edit();
+        editor.putString(LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY,
+                device.getAddress());
+        editor.commit();
+        Log.d(TAG, "Stored last connected device: " + device.getAddress());
+    }
+
+    public BluetoothDevice getLastConnectedDevice() {
+        SharedPreferences preferences =
+            mContext.getSharedPreferences(KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
+                    Context.MODE_MULTI_PROCESS);
+        String lastConnectedDeviceAddress = preferences.getString(
+                    LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY, null);
+        BluetoothDevice lastConnectedDevice = null;
+        if(lastConnectedDeviceAddress != null) {
+            lastConnectedDevice = getDefaultAdapter().getRemoteDevice(lastConnectedDeviceAddress);
+        }
+        return lastConnectedDevice;
     }
 
     public Set<BluetoothDevice> getCandidateDevices() {

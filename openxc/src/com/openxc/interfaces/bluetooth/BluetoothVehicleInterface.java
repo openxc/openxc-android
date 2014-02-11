@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import java.util.ArrayList;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -128,32 +130,40 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             return;
         }
 
-        BluetoothSocket newSocket;
+        BluetoothSocket newSocket = null;
         if(!mAutomaticMode) {
             Log.i(TAG, "Connecting to manually specific Bluetooth device " + mAddress);
             try {
                 if(!isConnected()) {
                     newSocket = mDeviceManager.connect(mAddress);
-                    connectStreams();
-                    connected();
                 }
             } catch(BluetoothException e) {
                 Log.w(TAG, "Unable to connect to manually set device " +
                         mAddress, e);
                 newSocket = null;
-                disconnected();
             }
         } else {
             Log.v(TAG, "Attempting automatic detection of Bluetooth VI");
-            for(BluetoothDevice device : mDeviceManager.getCandidateDevices()) {
+
+            ArrayList<BluetoothDevice> candidateDevices =
+                new ArrayList<BluetoothDevice>(
+                        mDeviceManager.getCandidateDevices());
+
+            BluetoothDevice lastConnectedDevice =
+                    mDeviceManager.getLastConnectedDevice();
+            if(lastConnectedDevice != null) {
+                Log.v(TAG, "First trying last connected BT VI: " +
+                        lastConnectedDevice);
+                candidateDevices.add(0, lastConnectedDevice);
+            }
+
+            for(BluetoothDevice device : candidateDevices) {
                 try {
                     if(!isConnected()) {
                         Log.i(TAG, "Attempting connection to auto-detected " +
                                 "VI " + device);
                         mAddress = device.getAddress();
                         newSocket = mDeviceManager.connect(device);
-                        connectStreams();
-                        connected();
                         break;
                     }
                 } catch(BluetoothException e) {
@@ -161,7 +171,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                             device, e);
                     newSocket = null;
                     mAddress = null;
-                    disconnected();
                 }
             }
         }
@@ -169,6 +178,21 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         mConnectionLock.writeLock().lock();
         try {
             mSocket = newSocket;
+            if(mSocket != null) {
+                try {
+                    // TODO when do we get a socket but then are unable to get
+                    // streams? will we retry another after this? before we
+                    // would get a full connection before accepting that we are
+                    // connected
+                    connectStreams();
+                    connected();
+                } catch(BluetoothException e) {
+                    Log.d(TAG, "Unable to open Bluetooth streams", e);
+                    disconnected();
+                }
+            } else {
+                disconnected();
+            }
         } finally {
             mConnectionLock.writeLock().unlock();
         }
