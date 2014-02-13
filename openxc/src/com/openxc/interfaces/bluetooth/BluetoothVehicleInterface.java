@@ -4,13 +4,15 @@ import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-
 import java.util.ArrayList;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 
 import com.google.common.base.Objects;
@@ -38,7 +40,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
 
     private DeviceManager mDeviceManager;
-    private String mAddress;
+    private String mExplicitAddress;
+    private String mConnectedAddress;
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
@@ -53,6 +56,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             throw new DataSourceException(
                     "Unable to open Bluetooth device manager", e);
         }
+
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        getContext().registerReceiver(mDiscoveryReceiver, filter);
 
         setAddress(address);
         start();
@@ -73,7 +79,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         if(isConnected() && otherAddress == null) {
             // switch to automatic but don't break the existing connection
             reconnect = false;
-        } else if(!sameResource(mAddress, otherAddress)) {
+        } else if(!sameResource(mConnectedAddress, otherAddress)) {
             reconnect = true;
         }
 
@@ -111,16 +117,24 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     @Override
-    public void stop() {
-        mDeviceManager.stop();
-        closeSocket();
-        super.stop();
+    public synchronized void stop() {
+        if(isRunning()) {
+            try {
+                getContext().unregisterReceiver(mDiscoveryReceiver);
+            } catch(IllegalArgumentException e) {
+                Log.w(TAG, "Broadcast receiver not registered but we expected it to be");
+            }
+            mDeviceManager.stop();
+            closeSocket();
+            super.stop();
+        }
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("deviceAddress", mAddress)
+            .add("explicitDeviceAddress", mExplicitAddress)
+            .add("connectedDeviceAddress", mConnectedAddress)
             .add("socket", mSocket)
             .toString();
     }
@@ -130,27 +144,40 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             return;
         }
 
+        BluetoothDevice lastConnectedDevice =
+                mDeviceManager.getLastConnectedDevice();
+
         BluetoothSocket newSocket = null;
-        if(!mAutomaticMode) {
-            Log.i(TAG, "Connecting to manually specific Bluetooth device " + mAddress);
-            try {
-                if(!isConnected()) {
-                    newSocket = mDeviceManager.connect(mAddress);
+        if(mExplicitAddress != null || !mAutomaticMode) {
+            String address = mExplicitAddress;
+            if(address == null && lastConnectedDevice != null) {
+                address = lastConnectedDevice.getAddress();
+            }
+
+            if(address != null) {
+                Log.i(TAG, "Connecting to Bluetooth device " + address);
+                try {
+                    if(!isConnected()) {
+                        newSocket = mDeviceManager.connect(address);
+                    }
+                } catch(BluetoothException e) {
+                    Log.w(TAG, "Unable to connect to device " + address, e);
+                    newSocket = null;
                 }
-            } catch(BluetoothException e) {
-                Log.w(TAG, "Unable to connect to manually set device " +
-                        mAddress, e);
-                newSocket = null;
+            } else {
+                Log.d(TAG, "No detected or stored Bluetooth device MAC, not attempting connection");
             }
         } else {
+            // Only try automatic detection of VI once, and whether or not we find
+            // and connect to one, don't go into automatic mode again unless
+            // manually triggered.
+            mAutomaticMode = false;
             Log.v(TAG, "Attempting automatic detection of Bluetooth VI");
 
             ArrayList<BluetoothDevice> candidateDevices =
                 new ArrayList<BluetoothDevice>(
                         mDeviceManager.getCandidateDevices());
 
-            BluetoothDevice lastConnectedDevice =
-                    mDeviceManager.getLastConnectedDevice();
             if(lastConnectedDevice != null) {
                 Log.v(TAG, "First trying last connected BT VI: " +
                         lastConnectedDevice);
@@ -162,7 +189,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     if(!isConnected()) {
                         Log.i(TAG, "Attempting connection to auto-detected " +
                                 "VI " + device);
-                        mAddress = device.getAddress();
                         newSocket = mDeviceManager.connect(device);
                         break;
                     }
@@ -170,8 +196,17 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     Log.w(TAG, "Unable to connect to auto-detected device " +
                             device, e);
                     newSocket = null;
-                    mAddress = null;
                 }
+            }
+
+            if(lastConnectedDevice == null && newSocket == null
+                    && candidateDevices.size() > 0) {
+                Log.i(TAG, "No BT VI ever connected, and none of " +
+                        "discovered devices could connect - storing " +
+                        candidateDevices.get(0).getAddress() +
+                        " as the next one to try");
+                mDeviceManager.storeLastConnectedDevice(
+                        candidateDevices.get(0));
             }
         }
 
@@ -180,12 +215,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             mSocket = newSocket;
             if(mSocket != null) {
                 try {
-                    // TODO when do we get a socket but then are unable to get
-                    // streams? will we retry another after this? before we
-                    // would get a full connection before accepting that we are
-                    // connected
                     connectStreams();
                     connected();
+                    mConnectedAddress = mSocket.getRemoteDevice().getAddress();
                 } catch(BluetoothException e) {
                     Log.d(TAG, "Unable to open Bluetooth streams", e);
                     disconnected();
@@ -305,18 +337,33 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     private void setAddress(String address) throws DataSourceResourceException {
-        if(address == null) {
-            Log.d(TAG, "No Bluetooth vehicle interface selected -- " +
-                    "switching to automatic mode");
-            mAutomaticMode = true;
-        } else if(!BluetoothAdapter.checkBluetoothAddress(address)) {
-            throw new DataSourceResourceException("MAC is not valid");
-        } else {
-            mAddress = address;
+        if(address != null && !BluetoothAdapter.checkBluetoothAddress(address)) {
+            throw new DataSourceResourceException("\"" + address +
+                    "\" is not a valid MAC address");
         }
+        mExplicitAddress = address;
     }
 
     private static boolean sameResource(String address, String otherAddress) {
         return otherAddress != null && otherAddress.equals(address);
     }
+
+    private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            // Whenever discovery finishes, take the opportunity to try and
+            // connect to detected devices if we're not already connected.
+            // Discovery may have been initiated by the Enabler UI, or by some
+            // other user action or app.
+            if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
+                Log.d(TAG, "Bluetooth discovery has finished");
+                if(!isConnected()) {
+                    if(mExplicitAddress == null) {
+                        mAutomaticMode = true;
+                    }
+                    resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
+                }
+            }
+        }
+    };
+
 }

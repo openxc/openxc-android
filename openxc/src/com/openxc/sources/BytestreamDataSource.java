@@ -1,6 +1,7 @@
 package com.openxc.sources;
 
 import java.io.IOException;
+import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -19,11 +20,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
+    private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
+    protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
+    protected static final int SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S = 60;
 
     private AtomicBoolean mRunning = new AtomicBoolean(false);
+    private int mReconnectionAttempts;
     protected final ReadWriteLock mConnectionLock = new ReentrantReadWriteLock();
     private final Condition mDeviceChanged = mConnectionLock.writeLock().newCondition();
     private Thread mThread;
+    private Timer mTimer;
     private BytestreamConnectingTask mConnectionCheckTask;
     private PayloadFormat mCurrentPayloadFormat = null;
 
@@ -68,20 +74,42 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      */
     protected void waitForConnection() throws InterruptedException {
         if(!isConnected() && mConnectionCheckTask == null) {
-            mConnectionCheckTask = new BytestreamConnectingTask(this);
+            resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
         }
 
         while(isRunning() && !isConnected()) {
+            ++mReconnectionAttempts;
             mConnectionLock.writeLock().lock();
             try {
-                Log.d(getTag(), "Still no device available");
                 mDeviceChanged.await();
             } finally {
                 mConnectionLock.writeLock().unlock();
             }
+
+            if(mReconnectionAttempts == MAX_FAST_RECONNECTION_ATTEMPTS) {
+                Log.d(this.getClass().getSimpleName(),
+                        "Unable to connect after " +
+                        MAX_FAST_RECONNECTION_ATTEMPTS +
+                        " attempts, slowing down attempts to every " +
+                        SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S + " seconds");
+            resetConnectionAttempts(SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S,
+                    SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
+            }
+        }
+        mReconnectionAttempts = 0;
+
+        mTimer.cancel();
+        mConnectionCheckTask = null;
+    }
+
+    protected void resetConnectionAttempts(long delay, long period) {
+        if(mTimer != null) {
+            mTimer.cancel();
         }
 
-        mConnectionCheckTask = null;
+        mConnectionCheckTask = new BytestreamConnectingTask(this);
+        mTimer = new Timer();
+        mTimer.schedule(mConnectionCheckTask, delay * 1000, period * 1000);
     }
 
     public void run() {

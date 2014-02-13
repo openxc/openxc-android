@@ -31,7 +31,10 @@ import com.openxc.util.SupportSettingsUtils;
  *     * By default, the preference is set to automatic mode. In that mode, the
  *          service will scan for any paired or unpaired Bluetooth device with a
  *          name beginning with "OpenXC-VI-". For each device found, it attemps
- *          to connect and read data.
+ *          to connect and read data. This automatic detection only happens when
+ *          manuaully initiated with a UI button, or when the Bluetooth
+ *          interface is first enabled. Otherwise, when it automatic mode it
+ *          will attempt to re-connect only with the last connected VI.
  *     * You can also explicitly select a device from the list, even one that
  *          doesn't have the OpenXC-VI name prefix.
  *
@@ -101,9 +104,9 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                 Log.d(TAG, "No Bluetooth vehicle interface selected -- " +
                         "starting in automatic mode");
             }
-            fillBluetoothDeviceList();
             getVehicleManager().addVehicleInterface(
                     BluetoothVehicleInterface.class, deviceAddress);
+            fillBluetoothDeviceList();
         } else {
             Log.i(TAG, "Disabling the Bluetooth vehicle interface");
             getVehicleManager().removeVehicleInterface(

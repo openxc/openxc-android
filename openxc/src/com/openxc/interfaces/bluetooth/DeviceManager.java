@@ -48,7 +48,7 @@ public class DeviceManager {
             Log.w(TAG, message);
             throw new BluetoothException(message);
         } else {
-            Log.d(TAG, "Initialize Bluetooth device manager");
+            Log.d(TAG, "Initializing Bluetooth device manager");
         }
     }
 
@@ -130,7 +130,7 @@ public class DeviceManager {
         return devices;
     }
 
-    private void storeLastConnectedDevice(BluetoothDevice device) {
+    public void storeLastConnectedDevice(BluetoothDevice device) {
         SharedPreferences.Editor editor =
                 mContext.getSharedPreferences(
                         DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
