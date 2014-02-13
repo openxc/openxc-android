@@ -15,7 +15,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Recieved intent Event: " + intent.getAction());
+        Log.d(TAG, "Recieved intent, event: " + intent.getAction());
 
         // If a Bluetooth device with the OpenXC device name prefix is
         // connected, start the service if it's not already started

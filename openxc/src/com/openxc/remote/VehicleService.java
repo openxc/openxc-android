@@ -60,6 +60,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     // https://code.google.com/p/android/issues/detail?id=12122
     public static boolean sIsUnderTest = false;
 
+    private boolean mForeground = false;
     private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
@@ -100,37 +101,43 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     }
 
     private void moveToForeground(){
-        Log.i(TAG, "Moving service to foreground.");
+        if(!mForeground) {
+            Log.i(TAG, "Moving service to foreground.");
 
-        try {
-            Intent intent = new Intent(this,
-                    Class.forName("com.openxc.enabler.OpenXcEnablerActivity"));
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    this, 0, intent, 0);
+            try {
+                Intent intent = new Intent(this,
+                        Class.forName("com.openxc.enabler.OpenXcEnablerActivity"));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        this, 0, intent, 0);
 
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(this);
-            notificationBuilder.setContentTitle(getString(R.string.openxc_name))
-                    .setContentInfo(getString(R.string.notification_content))
-                    .setSmallIcon(R.drawable.openxc_notification_icon_small_white)
-                    .setContentIntent(pendingIntent);
+                NotificationCompat.Builder notificationBuilder =
+                        new NotificationCompat.Builder(this);
+                notificationBuilder.setContentTitle(getString(R.string.openxc_name))
+                        .setContentInfo(getString(R.string.notification_content))
+                        .setSmallIcon(R.drawable.openxc_notification_icon_small_white)
+                        .setContentIntent(pendingIntent);
 
-            startForeground(SERVICE_NOTIFICATION_ID,
-                    notificationBuilder.build());
-        } catch (ClassNotFoundException e) {
-            // TODO Special action if enabler is not installed
+                startForeground(SERVICE_NOTIFICATION_ID,
+                        notificationBuilder.build());
+            } catch (ClassNotFoundException e) {
+                // TODO Special action if enabler is not installed
 
-            Log.e(TAG, "Could not find OpenXcEnablerActivity class.", e);
+                Log.e(TAG, "Could not find OpenXcEnablerActivity class.", e);
+            }
+            mForeground = true;
         }
     }
 
     private void removeFromForeground(){
-        Log.i(TAG, "Removing service from foreground.");
+        if(mForeground) {
+            Log.i(TAG, "Removing service from foreground.");
 
-        if(!sIsUnderTest) {
-            stopForeground(true);
+            if(!sIsUnderTest) {
+                stopForeground(true);
+            }
+            mForeground = false;
         }
     }
 
