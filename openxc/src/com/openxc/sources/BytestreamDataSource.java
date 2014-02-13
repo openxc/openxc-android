@@ -96,10 +96,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                     SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
             }
         }
-        mReconnectionAttempts = 0;
 
-        mTimer.cancel();
-        mConnectionCheckTask = null;
+        mReconnectionAttempts = 0;
     }
 
     protected void resetConnectionAttempts(long delay, long period) {
