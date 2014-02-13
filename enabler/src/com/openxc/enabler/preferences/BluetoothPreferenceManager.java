@@ -106,7 +106,6 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             }
             getVehicleManager().addVehicleInterface(
                     BluetoothVehicleInterface.class, deviceAddress);
-            fillBluetoothDeviceList();
         } else {
             Log.i(TAG, "Disabling the Bluetooth vehicle interface");
             getVehicleManager().removeVehicleInterface(

@@ -92,6 +92,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 }
             } catch(IOException e) {
             }
+            resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
         }
         return reconnect;
     }
