@@ -52,7 +52,7 @@ public class NativeGpsPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void stopNativeGps() {
-        if(getVehicleManager() != null){
+        if(getVehicleManager() != null && mNativeLocationSource != null){
             getVehicleManager().removeSource(mNativeLocationSource);
             mNativeLocationSource = null;
         }
