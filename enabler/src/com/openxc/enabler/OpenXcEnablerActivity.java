@@ -8,11 +8,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +27,7 @@ import com.crashlytics.android.Crashlytics;
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.interfaces.bluetooth.BluetoothException;
+import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
@@ -161,6 +164,18 @@ public class OpenXcEnablerActivity extends Activity {
                 try {
                     DeviceManager deviceManager = new DeviceManager(OpenXcEnablerActivity.this);
                     deviceManager.startDiscovery();
+                    // Re-adding the interface with a null address triggers
+                    // automatic mode 1 time
+                    mVehicleManager.addVehicleInterface(
+                            BluetoothVehicleInterface.class, null);
+
+                    // clears the existing explicitly set Bluetooth device.
+                    SharedPreferences.Editor editor =
+                            PreferenceManager.getDefaultSharedPreferences(
+                                OpenXcEnablerActivity.this).edit();
+                    editor.putString(getString(R.string.bluetooth_mac_key),
+                            getString(R.string.bluetooth_mac_automatic_option));
+                    editor.commit();
                 } catch(BluetoothException e) {
                     Toast.makeText(OpenXcEnablerActivity.this,
                         "Bluetooth is disabled, can't search for devices",
