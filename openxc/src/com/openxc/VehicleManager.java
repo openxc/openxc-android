@@ -252,6 +252,10 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Measurement.Listener interface to receive real-time updates
      * whenever a new value is received for the specified measurementType.
      *
+     * Make sure you unregister your listeners with
+     * VehicleManager.removeListener(...) when your activity or service closes
+     * and no longer requires updates.
+     *
      * @param measurementType The class of the Measurement
      *      (e.g. VehicleSpeed.class) the listener was listening for
      * @param listener An Measurement.Listener instance that was
