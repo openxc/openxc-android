@@ -80,9 +80,7 @@ public class DataPipeline implements SourceCallback {
             try {
                 sink.receive(measurement);
             } catch(DataSinkException e) {
-                // TODO I'd like to use the Android log here, but I don't want
-                // that to be the only com.android import.
-                System.out.println(this.getClass().getName() + ": The sink " +
+                Log.w(TAG, this.getClass().getName() + ": The sink " +
                         sink + " exploded when we sent a new message " +
                         "-- removing it from the pipeline: " + e);
                 deadSinks.add(sink);
