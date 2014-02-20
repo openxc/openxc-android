@@ -82,18 +82,18 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             mConnectionLock.writeLock().lock();
             try {
                 mDeviceChanged.await();
+
+                if(mReconnectionAttempts == MAX_FAST_RECONNECTION_ATTEMPTS) {
+                    Log.d(this.getClass().getSimpleName(),
+                            "Unable to connect after " +
+                            MAX_FAST_RECONNECTION_ATTEMPTS +
+                            " attempts, slowing down attempts to every " +
+                            SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S + " seconds");
+                    resetConnectionAttempts(SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S,
+                            SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
+                }
             } finally {
                 mConnectionLock.writeLock().unlock();
-            }
-
-            if(mReconnectionAttempts == MAX_FAST_RECONNECTION_ATTEMPTS) {
-                Log.d(this.getClass().getSimpleName(),
-                        "Unable to connect after " +
-                        MAX_FAST_RECONNECTION_ATTEMPTS +
-                        " attempts, slowing down attempts to every " +
-                        SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S + " seconds");
-            resetConnectionAttempts(SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S,
-                    SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
             }
         }
 
