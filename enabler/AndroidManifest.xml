@@ -57,6 +57,9 @@
           <intent-filter>
               <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
           </intent-filter>
+          <intent-filter>
+              <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+          </intent-filter>
       </receiver>
       <!-- Must have a valid API key to use Crashlytics - this is a bogus API
         key included just to make sure you can still build and install the app
