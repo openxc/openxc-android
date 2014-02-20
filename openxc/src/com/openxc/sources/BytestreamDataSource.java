@@ -27,7 +27,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private AtomicBoolean mRunning = new AtomicBoolean(false);
     private int mReconnectionAttempts;
     protected final ReadWriteLock mConnectionLock = new ReentrantReadWriteLock();
-    private final Condition mDeviceChanged = mConnectionLock.writeLock().newCondition();
+    protected final Condition mDeviceChanged = mConnectionLock.writeLock().newCondition();
     private Thread mThread;
     private Timer mTimer;
     private BytestreamConnectingTask mConnectionCheckTask;

@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,7 +29,7 @@ public class DeviceManager {
     public static final String KNOWN_BLUETOOTH_DEVICE_PREFERENCES = "known_bluetooth_devices";
     public static final String KNOWN_BLUETOOTH_DEVICE_PREF_KEY = "known_bluetooth_devices";
     public static final String LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY = "last_connected_bluetooth_device";
-    private final static UUID RFCOMM_UUID = UUID.fromString(
+    public final static UUID RFCOMM_UUID = UUID.fromString(
             "00001101-0000-1000-8000-00805f9b34fb");
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -72,6 +73,16 @@ public class DeviceManager {
             Log.i(TAG, "Starting Bluetooth discovery");
             getDefaultAdapter().startDiscovery();
         }
+    }
+
+    public BluetoothServerSocket listen() {
+        BluetoothServerSocket tmp = null;
+        try {
+            // TODO use an OpenXC-specific UUID
+            tmp = getDefaultAdapter().listenUsingRfcommWithServiceRecord(
+                    "TODO", DeviceManager.RFCOMM_UUID);
+        } catch (IOException e) { }
+        return tmp;
     }
 
     /**

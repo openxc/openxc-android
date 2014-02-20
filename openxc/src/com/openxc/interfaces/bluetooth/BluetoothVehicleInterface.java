@@ -4,10 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,6 +39,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
 
     private DeviceManager mDeviceManager;
+    private Thread mAcceptThread;
     private String mExplicitAddress;
     private String mConnectedAddress;
     private BufferedWriter mOutStream;
@@ -62,6 +62,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         setAddress(address);
         start();
+
+        mAcceptThread = new Thread(new Accepter());
+        mAcceptThread.start();
     }
 
     public BluetoothVehicleInterface(Context context, String address)
@@ -140,6 +143,66 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
+    private class Accepter implements Runnable {
+        private BluetoothServerSocket mmServerSocket;
+
+        @Override
+        public void run() {
+            Log.d(TAG, "Socket accepter starting up");
+            BluetoothSocket socket = null;
+            while(isRunning()) {
+                while(isConnected()) {
+                    mConnectionLock.writeLock().lock();
+                    try {
+                        mDeviceChanged.await();
+                    } catch(InterruptedException e) {
+
+                    } finally {
+                    	mConnectionLock.writeLock().unlock();
+                    }
+                }
+
+                // TODO clear up the threading here - the issue is that if we
+                // are connected, then disable the BT vehicle interface, it
+                // breaks the socket connecetion so we come out here - but we
+                // don't check to see if we're still running before creating
+                // another socket.
+                if(!isRunning()) {
+                    break;
+                }
+
+                Log.d(TAG, "Initializing listening socket");
+                mmServerSocket = mDeviceManager.listen();
+
+                try {
+                    Log.i(TAG, "Listening for inbound socket connections");
+                    socket = mmServerSocket.accept();
+                } catch (IOException e) {
+                    // break;
+                }
+
+                if(socket != null) {
+                    Log.i(TAG, "New inbound socket connection accepted");
+                    manageConnectedSocket(socket);
+                    try {
+                        Log.d(TAG, "Closing listening server socket");
+                        mmServerSocket.close();
+                    } catch (IOException e) { }
+                    // break;
+                }
+            }
+            Log.d(TAG, "Accepter is stopping");
+            // TODO clean up so we aren't duplicating shutdown logic
+            closeSocket();
+            stop();
+        }
+
+        public void stop() {
+            try {
+                mmServerSocket.close();
+            } catch (IOException e) { }
+        }
+    }
     protected void connect() {
         if(!isRunning()) {
             return;
@@ -211,9 +274,13 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             }
         }
 
+        manageConnectedSocket(newSocket);
+    }
+
+    private synchronized void manageConnectedSocket(BluetoothSocket socket) {
         mConnectionLock.writeLock().lock();
         try {
-            mSocket = newSocket;
+            mSocket = socket;
             if(mSocket != null) {
                 try {
                     connectStreams();
