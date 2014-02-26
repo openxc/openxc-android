@@ -424,6 +424,26 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
+     * Control whether polling is used to connect to a Bluetooth device or not.
+     *
+     * @param enabled True if polling should be used to connect to a Bluetooth
+     * device.
+     */
+    public void setBluetoothPollingStatus(boolean enabled) {
+        Log.i(TAG, (enabled ? "Enabling" : "Disabling") + " Bluetooth polling");
+
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.setBluetoothPollingStatus(enabled);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to change Bluetooth polling status", e);
+            }
+        } else {
+            Log.w(TAG, "Not connected to the VehicleService");
+        }
+    }
+
+    /**
      * Return a list of all sources active in the system, suitable for
      * displaying in a status view.
      *

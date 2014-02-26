@@ -49,6 +49,7 @@ public class SettingsActivity extends PreferenceActivity {
     private final static int FILE_SELECTOR_RESULT = 100;
 
     private ListPreference mBluetoothDeviceListPreference;
+    private CheckBoxPreference mBluetoothPollingPrefernce;
     private CheckBoxPreference mUploadingPreference;
     private Preference mTraceFilePreference;
     private CheckBoxPreference mTraceEnabledPreference;
@@ -102,7 +103,8 @@ public class SettingsActivity extends PreferenceActivity {
 
                 initializeBluetoothPreferences(
                     findPreference(getString(R.string.bluetooth_mac_key)),
-                    findPreference(getString(R.string.bluetooth_checkbox_key)));
+                    findPreference(getString(R.string.bluetooth_checkbox_key)),
+                    findPreference(getString(R.string.bluetooth_polling_key)));
 
                 initializeNetwork(
                     findPreference(getString(R.string.network_host_key)),
@@ -170,7 +172,8 @@ public class SettingsActivity extends PreferenceActivity {
 
             ((SettingsActivity)getActivity()).initializeBluetoothPreferences(
                 findPreference(getString(R.string.bluetooth_mac_key)),
-                findPreference(getString(R.string.bluetooth_checkbox_key)));
+                findPreference(getString(R.string.bluetooth_checkbox_key)),
+                findPreference(getString(R.string.bluetooth_polling_key)));
             ((SettingsActivity) getActivity()).initializeNetwork(
                     findPreference(getString(R.string.network_host_key)),
                     findPreference(getString(R.string.network_port_key)),
@@ -238,7 +241,8 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeBluetoothPreferences(Preference listPreference,
-            Preference checkboxPreference) {
+            Preference enabledPreference, Preference pollingPreference) {
+        mBluetoothPollingPrefernce = (CheckBoxPreference) pollingPreference;
         mBluetoothDeviceListPreference = (ListPreference) listPreference;
         mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
                 mUpdateSummaryListener);
@@ -256,12 +260,14 @@ public class SettingsActivity extends PreferenceActivity {
         mBluetoothDeviceListPreference.setEntries(entries.toArray(prototype));
         mBluetoothDeviceListPreference.setEntryValues(values.toArray(prototype));
 
-        checkboxPreference.setOnPreferenceChangeListener(
+        enabledPreference.setOnPreferenceChangeListener(
                 mBluetoothCheckboxListener);
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
         mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
+                    getString(R.string.bluetooth_checkbox_key), false));
+        mBluetoothPollingPrefernce.setEnabled(preferences.getBoolean(
                     getString(R.string.bluetooth_checkbox_key), false));
 
         updateSummary(mBluetoothDeviceListPreference,
@@ -340,6 +346,7 @@ public class SettingsActivity extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference,
                     Object newValue) {
                 mBluetoothDeviceListPreference.setEnabled((Boolean)newValue);
+                mBluetoothPollingPrefernce.setEnabled((Boolean)newValue);
                 return true;
             }
         };

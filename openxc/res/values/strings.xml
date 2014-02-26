@@ -10,6 +10,7 @@
     <string name="uploading_checkbox_key">uploading_enabled</string>
     <string name="uploading_path_key">uploading_target</string>
     <string name="bluetooth_checkbox_key">bluetooth_checkbox</string>
+    <string name="bluetooth_polling_key">bluetooth_polling</string>
     <string name="bluetooth_mac_key">bluetooth_mac</string>
     <string name="network_checkbox_key">network_checkbox</string>
     <string name="network_host_key">network_host</string>

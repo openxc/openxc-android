@@ -24,19 +24,28 @@ import com.openxc.util.SupportSettingsUtils;
  *
  * When you enable the Bluetooth vehicle interface option, this is what happens:
  *
- *     * Discovery mode is enabled on the Bluetooth adapter to find any nearby
- *          VIs that are powered up - they don't have to be previously paired.
+ *     * The BT discovery process is started to find any nearby VIs that are
+ *          powered up - they don't have to be previously paired.
  *     * The Bluetooth device list in preferences is populated with a list of
  *          all paired and discovered devices
- *     * By default, the preference is set to automatic mode. In that mode, the
+ *     * A socket is open and will accept incoming Bluetooth connections, e.g.
+ *          a connection initated by a VI acting as Bluetooth master. This
+ *          socket remains open as long as the Bluetooth vehicle interface is
+ *          enabled and is not currently connected.
+ *     * If the "use background polling" option is enabled (the default), we
+ *          try and initiate a connection to a discovered or previously selected
+ *          Bluetooth device. By default, the device preference is set to automatic
+ *          mode. In that mode, the
  *          service will scan for any paired or unpaired Bluetooth device with a
- *          name beginning with "OpenXC-VI-". For each device found, it attemps
- *          to connect and read data. This automatic detection only happens when
- *          manuaully initiated with a UI button, or when the Bluetooth
- *          interface is first enabled. Otherwise, when it automatic mode it
- *          will attempt to re-connect only with the last connected VI.
+ *          name beginning with "OpenXC-VI-". For each device found, it attempts
+ *          to connect and read data. This automatic scan is rather resource
+ *          intensive, so it only happens when manuaully initialized with a UI
+ *          button *or* once when the service first starts up if no VI has even
+ *          been previously connected. If a VI has been previously connected, in
+ *          the future it will only poll for a connection to that device.
  *     * You can also explicitly select a device from the list, even one that
- *          doesn't have the OpenXC-VI name prefix.
+ *          doesn't have the OpenXC-VI name prefix. Requesting an automatic scan
+ *          will reset this preference back to automatic mode.
  *
  * Device discovery is only kicked off once, when the Bluetooth option is first
  * enabled or the OpenXC service first starts, to avoid draining the battery.
@@ -79,6 +88,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
                 R.string.bluetooth_checkbox_key,
+                R.string.bluetooth_polling_key,
                 R.string.bluetooth_mac_key,
             };
 
@@ -89,6 +99,9 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             public void readStoredPreferences() {
                 setBluetoothStatus(getPreferences().getBoolean(
                             getString(R.string.bluetooth_checkbox_key), true));
+                getVehicleManager().setBluetoothPollingStatus(
+                        getPreferences().getBoolean(
+                            getString(R.string.bluetooth_polling_key), true));
             }
         };
     }

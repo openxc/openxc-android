@@ -4,17 +4,22 @@ import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.common.base.Objects;
+import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.remote.RawMeasurement;
 import com.openxc.sources.BytestreamDataSource;
@@ -45,7 +50,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private BufferedWriter mOutStream;
     private BufferedInputStream mInStream;
     private BluetoothSocket mSocket;
-    private boolean mAutomaticMode = false;
+    private boolean mPerformAutomaticScan = true;
+    private boolean mUsePolling = false;
 
     public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {
@@ -60,16 +66,34 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         getContext().registerReceiver(mDiscoveryReceiver, filter);
 
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        mUsePolling = preferences.getBoolean(
+                context.getString(R.string.bluetooth_polling_key), true);
+        Log.d(TAG, "Bluetooth device polling is " + (mUsePolling ? "enabled" : "disabled"));
+
         setAddress(address);
         start();
 
-        mAcceptThread = new Thread(new Accepter());
+        mAcceptThread = new Thread(new SocketAccepter());
         mAcceptThread.start();
     }
 
     public BluetoothVehicleInterface(Context context, String address)
             throws DataSourceException {
         this(null, context, address);
+    }
+
+    /**
+     * Control whether periodic polling is used to detect a Bluetooth VI.
+     *
+     * This class opens a Bluetooth socket and will accept incoming connections
+     * from a VI that can act as the Bluetooth master. For VIs that are only
+     * able to act as slave, we have to poll for a connection occasionally to
+     * see if it's within range.
+     */
+    public void setPollingStatus(boolean enabled) {
+        mUsePolling = enabled;
     }
 
     public boolean receive(RawMeasurement command) {
@@ -143,7 +167,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
-    private class Accepter implements Runnable {
+    private class SocketAccepter implements Runnable {
         private BluetoothServerSocket mmServerSocket;
 
         @Override
@@ -191,7 +215,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     // break;
                 }
             }
-            Log.d(TAG, "Accepter is stopping");
+            Log.d(TAG, "SocketAccepter is stopping");
             // TODO clean up so we aren't duplicating shutdown logic
             closeSocket();
             stop();
@@ -204,15 +228,17 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
     protected void connect() {
-        if(!isRunning()) {
+        if(!mUsePolling || !isRunning()) {
             return;
         }
+
+        Log.i(TAG, "Beginning polling for Bluetooth devices");
 
         BluetoothDevice lastConnectedDevice =
                 mDeviceManager.getLastConnectedDevice();
 
         BluetoothSocket newSocket = null;
-        if(mExplicitAddress != null || !mAutomaticMode) {
+        if(mExplicitAddress != null || !mPerformAutomaticScan) {
             String address = mExplicitAddress;
             if(address == null && lastConnectedDevice != null) {
                 address = lastConnectedDevice.getAddress();
@@ -235,7 +261,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             // Only try automatic detection of VI once, and whether or not we find
             // and connect to one, don't go into automatic mode again unless
             // manually triggered.
-            mAutomaticMode = false;
+            mPerformAutomaticScan = false;
             Log.v(TAG, "Attempting automatic detection of Bluetooth VI");
 
             ArrayList<BluetoothDevice> candidateDevices =
@@ -423,10 +449,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             // Discovery may have been initiated by the Enabler UI, or by some
             // other user action or app.
             if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
-                Log.d(TAG, "Bluetooth discovery has finished");
-                if(!isConnected()) {
+                if(mUsePolling && !isConnected()) {
+                    Log.d(TAG, "Bluetooth discovery has finished and we are not connected - kicking off reconnection attempts");
                     if(mExplicitAddress == null) {
-                        mAutomaticMode = true;
+                        mPerformAutomaticScan = true;
                     }
                     resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
                 }

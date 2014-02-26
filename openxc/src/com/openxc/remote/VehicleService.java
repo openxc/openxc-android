@@ -18,6 +18,7 @@ import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
 import com.openxc.interfaces.VehicleInterfaceManagerUtils;
+import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -187,6 +188,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                         interfaceName, resource);
             }
 
+            public void setBluetoothPollingStatus(boolean enabled) {
+                VehicleService.this.setBluetoothPollingStatus(enabled);
+            }
+
             public void removeVehicleInterface(String interfaceName) {
                 VehicleService.this.removeVehicleInterface(interfaceName);
             }
@@ -287,6 +292,14 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             vehicleInterface.stop();
             mInterfaces.remove(vehicleInterface);
             mPipeline.removeSource(vehicleInterface);
+        }
+    }
+
+    private void setBluetoothPollingStatus(boolean enabled) {
+        BluetoothVehicleInterface bluetoothInterface = (BluetoothVehicleInterface)
+                findActiveVehicleInterface(BluetoothVehicleInterface.class);
+        if(bluetoothInterface != null) {
+            bluetoothInterface.setPollingStatus(enabled);
         }
     }
 

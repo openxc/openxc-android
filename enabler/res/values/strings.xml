@@ -35,8 +35,10 @@
     <string name="gps_overwrite_checkbox_summary">Overwrite Android native GPS values with those from the vehicle (if available)</string>
     <string name="bluetooth_checkbox_title">Use a Bluetooth vehicle interface</string>
     <string name="bluetooth_checkbox_summary">Read vehicle data from a vehicle interface connected wirelessly via Bluetooth</string>
-    <string name="bluetooth_mac_title">Bluetooth Device</string>
-    <string name="bluetooth_mac_automatic_option">Automatically Detect</string>
+    <string name="bluetooth_polling_title">Use background polling to detect a BT VI</string>
+    <string name="bluetooth_polling_summary">To save battery life, disable this if your VI can act as a Bluetooth master</string>
+    <string name="bluetooth_mac_title">Bluetooth device address</string>
+    <string name="bluetooth_mac_automatic_option">Automatically detect</string>
     <string name="bluetooth_mac_automatic_summary">Automatically connect to paired OpenXC-VI device</string>
     <string name="network_settings">Network</string>
     <string name="network_checkbox_title">Use a network device</string>
