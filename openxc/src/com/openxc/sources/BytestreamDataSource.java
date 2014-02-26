@@ -22,7 +22,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
-    protected static final int SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S = 30;
+    protected static final int SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S = 60;
 
     private AtomicBoolean mRunning = new AtomicBoolean(false);
     private int mReconnectionAttempts;

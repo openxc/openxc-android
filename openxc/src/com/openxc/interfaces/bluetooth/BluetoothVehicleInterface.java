@@ -63,7 +63,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     "Unable to open Bluetooth device manager", e);
         }
 
-        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        IntentFilter filter = new IntentFilter(
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        getContext().registerReceiver(mDiscoveryReceiver, filter);
+        filter = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
         getContext().registerReceiver(mDiscoveryReceiver, filter);
 
         SharedPreferences preferences =
