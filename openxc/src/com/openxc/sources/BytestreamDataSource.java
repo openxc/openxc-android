@@ -32,6 +32,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private Timer mTimer;
     private BytestreamConnectingTask mConnectionCheckTask;
     private PayloadFormat mCurrentPayloadFormat = null;
+    private boolean mFastPolling = true;
 
     private enum PayloadFormat {
         JSON, PROTO
@@ -60,6 +61,17 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         }
     }
 
+    protected void setFastPolling(boolean enabled) {
+        mReconnectionAttempts = 0;
+        if(enabled) {
+            resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
+        } else if(mFastPolling && !enabled) {
+            resetConnectionAttempts(SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S,
+                    SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
+        }
+        mFastPolling = enabled;
+    }
+
     /**
      * If not already connected to the data source, initiate the connection and
      * block until ready to be read.
@@ -74,7 +86,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      */
     protected void waitForConnection() throws InterruptedException {
         if(!isConnected() && mConnectionCheckTask == null) {
-            resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
+            setFastPolling(true);
         }
 
         while(isRunning() && !isConnected()) {
@@ -89,8 +101,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                             MAX_FAST_RECONNECTION_ATTEMPTS +
                             " attempts, slowing down attempts to every " +
                             SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S + " seconds");
-                    resetConnectionAttempts(SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S,
-                            SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
+                    setFastPolling(false);
                 }
             } finally {
                 mConnectionLock.writeLock().unlock();
@@ -100,7 +111,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         mReconnectionAttempts = 0;
     }
 
-    protected void resetConnectionAttempts(long delay, long period) {
+    private void resetConnectionAttempts(long delay, long period) {
         if(mTimer != null) {
             mTimer.cancel();
         }
@@ -108,6 +119,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         mConnectionCheckTask = new BytestreamConnectingTask(this);
         mTimer = new Timer();
         mTimer.schedule(mConnectionCheckTask, delay * 1000, period * 1000);
+        mReconnectionAttempts = 0;
     }
 
     public void run() {

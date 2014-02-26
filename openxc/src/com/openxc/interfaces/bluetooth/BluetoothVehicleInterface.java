@@ -119,7 +119,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 }
             } catch(IOException e) {
             }
-            resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
+            setFastPolling(true);
         }
         return reconnect;
     }
@@ -444,18 +444,17 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            // Whenever discovery finishes, take the opportunity to try and
-            // connect to detected devices if we're not already connected.
-            // Discovery may have been initiated by the Enabler UI, or by some
-            // other user action or app.
-            if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
-                if(mUsePolling && !isConnected()) {
-                    Log.d(TAG, "Bluetooth discovery has finished and we are not connected - kicking off reconnection attempts");
-                    if(mExplicitAddress == null) {
-                        mPerformAutomaticScan = true;
-                    }
-                    resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
+            // Whenever discovery finishes or another Bluetooth device connects
+            // (i.e. it might be a car's infotainment system), take the
+            // opportunity to try and connect to detected devices if we're not
+            // already connected. Discovery may have been initiated by the
+            // Enabler UI, or by some other user action or app.
+            if(mUsePolling && !isConnected()) {
+                Log.d(TAG, "Discovery finished or a device connected, but we are not connected - kicking off reconnection attempts");
+                if(mExplicitAddress == null) {
+                    mPerformAutomaticScan = true;
                 }
+                setFastPolling(true);
             }
         }
     };
