@@ -201,6 +201,11 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 Log.d(TAG, "Initializing listening socket");
                 mmServerSocket = mDeviceManager.listen();
 
+                if(mmServerSocket == null) {
+                    Log.i(TAG, "Unable to listen for Bluetooth connections - adapter may be off");
+                    continue;
+                }
+
                 try {
                     Log.i(TAG, "Listening for inbound socket connections");
                     socket = mmServerSocket.accept();
