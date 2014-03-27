@@ -49,8 +49,8 @@ public class BytestreamBuffer {
     public List<String> readLines() {
         List<String> result;
         String bufferedString = mBuffer.toString();
-        if(bufferedString.indexOf("\n") != -1) {
-            String[] records = bufferedString.toString().split("\n", -1);
+        if(bufferedString.indexOf("\u0000") != -1) {
+            String[] records = bufferedString.toString().split("\u0000", -1);
 
             mBuffer = new ByteArrayOutputStream();
             result = Arrays.asList(records).subList(0, records.length - 1);
@@ -123,9 +123,14 @@ public class BytestreamBuffer {
      * protobuf).
      */
     public boolean containsJson() {
-        return CharMatcher.ASCII.and(
-                CharMatcher.JAVA_ISO_CONTROL.and(CharMatcher.WHITESPACE.negate()).negate()
-                    ).matchesAllOf(mBuffer.toString());
+        return CharMatcher.ASCII
+            // We need to allow the \u0000 delimiter for JSON messages, so we
+            // can't use the JAVA_ISO_CONTROL character set and must build the
+            // range manually (minus \u0000)
+            .and(CharMatcher.inRange('\u0001', '\u001f').negate())
+            .and(CharMatcher.inRange('\u007f', '\u009f').negate())
+            .and(CharMatcher.WHITESPACE.negate())
+            .matchesAllOf(mBuffer.toString());
     }
 
     private void logTransferStats() {
