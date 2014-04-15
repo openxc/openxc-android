@@ -21,7 +21,7 @@ public class BytestreamBufferTest extends AndroidTestCase {
 
     @SmallTest
     public void testreadLinesOne() {
-        byte[] bytes = new String("{\"key\": \"value\"}\r\n").getBytes();
+        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         buffer.receive(bytes, bytes.length);
         List<String> records = buffer.readLines();
         assertEquals(1, records.size());
@@ -34,10 +34,10 @@ public class BytestreamBufferTest extends AndroidTestCase {
 
     @SmallTest
     public void testreadLinesTwo() {
-        byte[] bytes = new String("{\"key\": \"value\"}\r\n").getBytes();
+        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         buffer.receive(bytes, bytes.length);
 
-        bytes = new String("{\"pork\": \"miracle\"}\r\n").getBytes();
+        bytes = new String("{\"pork\": \"miracle\"}\u0000").getBytes();
         buffer.receive(bytes, bytes.length);
 
         List<String> records = buffer.readLines();
@@ -54,7 +54,7 @@ public class BytestreamBufferTest extends AndroidTestCase {
 
     @SmallTest
     public void testLeavePartial() {
-        byte[] bytes = new String("{\"key\": \"value\"}\r\n").getBytes();
+        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         buffer.receive(bytes, bytes.length);
 
         bytes = new String("{\"pork\": \"mira").getBytes();
@@ -71,7 +71,7 @@ public class BytestreamBufferTest extends AndroidTestCase {
 
     @SmallTest
     public void testCompletePartial() {
-        byte[] bytes = new String("{\"key\": \"value\"}\r\n").getBytes();
+        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         buffer.receive(bytes, bytes.length);
 
         bytes = new String("{\"pork\": \"mira").getBytes();
@@ -83,7 +83,7 @@ public class BytestreamBufferTest extends AndroidTestCase {
         assertTrue(records.get(0).indexOf("key") != -1);
         assertTrue(records.get(0).indexOf("value") != -1);
 
-        bytes = new String("cle\"}\r\n").getBytes();
+        bytes = new String("cle\"}\u0000").getBytes();
         buffer.receive(bytes, bytes.length);
 
         records = buffer.readLines();

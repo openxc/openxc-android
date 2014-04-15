@@ -23,6 +23,9 @@ public class SupportSettingsUtilsTests extends ServiceTestCase<VehicleManager> {
     protected void setUp() throws Exception {
         super.setUp();
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
         value = new HashSet<String>();
         value.add("abcd");
         value.add("1234");

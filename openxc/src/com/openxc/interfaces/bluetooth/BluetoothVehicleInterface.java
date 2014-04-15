@@ -106,11 +106,14 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     public boolean setResource(String otherAddress) throws DataSourceException {
         boolean reconnect = false;
-        if(isConnected() && otherAddress == null) {
-            // switch to automatic but don't break the existing connection
-            reconnect = false;
-        } else if(!sameResource(mConnectedAddress, otherAddress)) {
-            reconnect = true;
+        if(isConnected()) {
+            if(otherAddress == null) {
+                // switch to automatic but don't break the existing connection
+                reconnect = false;
+            } else if(!sameResource(mConnectedAddress, otherAddress) &&
+                    !sameResource(mExplicitAddress, otherAddress)) {
+                reconnect = true;
+            }
         }
 
         setAddress(otherAddress);
