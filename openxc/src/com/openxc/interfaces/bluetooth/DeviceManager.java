@@ -194,6 +194,10 @@ public class DeviceManager {
         return candidates;
     }
 
+    public boolean isConnecting() {
+        return mSocketConnecting.get();
+    }
+
     private void connectToSocket(BluetoothSocket socket) throws BluetoothException {
         mSocketConnecting.set(true);
         try {

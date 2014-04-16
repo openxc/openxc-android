@@ -460,8 +460,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             // opportunity to try and connect to detected devices if we're not
             // already connected. Discovery may have been initiated by the
             // Enabler UI, or by some other user action or app.
-            if(mUsePolling && !isConnected()) {
-                Log.d(TAG, "Discovery finished or a device connected, but we are not connected - kicking off reconnection attempts");
+            if(mUsePolling && !isConnected() && !mDeviceManager.isConnecting()) {
+                Log.d(TAG, "Discovery finished or a device connected, but " +
+                        "we are not connected or attempting connections - " +
+                        "kicking off reconnection attempts");
                 if(mExplicitAddress == null) {
                     mPerformAutomaticScan = true;
                 }
