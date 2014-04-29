@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
 <title>
 
-  WakeLockManager
+  SupportSettingsUtils
 
 
 | OpenXC Android Library
@@ -162,13 +162,13 @@
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/sinks/package-summary.html">com.openxc.sinks</a></li>
-    <li class="selected api apilevel-">
+    <li class="api apilevel-">
   <a href="../../../com/openxc/sources/package-summary.html">com.openxc.sources</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/sources/trace/package-summary.html">com.openxc.sources.trace</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/units/package-summary.html">com.openxc.units</a></li>
-    <li class="api apilevel-">
+    <li class="selected api apilevel-">
   <a href="../../../com/openxc/util/package-summary.html">com.openxc.util</a></li>
               </ul><br/>
             </div> <!-- end packages -->
@@ -178,34 +178,22 @@
               
     <li><h2>Interfaces</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/SourceCallback.html">SourceCallback</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/util/FileOpener.html">FileOpener</a></li>
       </ul>
     </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/SourceLogger.html">SourceLogger</a></li>
-          <li class="selected api apilevel-"><a href="../../../com/openxc/sources/WakeLockManager.html">WakeLockManager</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/util/AgingData.html">AgingData</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</li>
+          <li class="api apilevel-"><a href="../../../com/openxc/util/AndroidFileOpener.html">AndroidFileOpener</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/util/JavaFileOpener.html">JavaFileOpener</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/util/Range.html">Range</a>&lt;T&gt;</li>
+          <li class="selected api apilevel-"><a href="../../../com/openxc/util/SupportSettingsUtils.html">SupportSettingsUtils</a></li>
       </ul>
     </li>
               
               
               
-    <li><h2>Exceptions</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/DataSourceException.html">DataSourceException</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/DataSourceResourceException.html">DataSourceResourceException</a></li>
-      </ul>
-    </li>
               
             </ul><br/>
           </div><!-- end classes -->
@@ -299,7 +287,7 @@ Summary:
      
     
     class
-<h1>WakeLockManager</h1>
+<h1>SupportSettingsUtils</h1>
 
 
 
@@ -332,7 +320,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.sources.WakeLockManager</td>
+        <td colspan="1" class="jd-inheritance-class-cell">com.openxc.util.SupportSettingsUtils</td>
     </tr>
     
 
@@ -411,7 +399,7 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/WakeLockManager.html#WakeLockManager(android.content.Context, java.lang.String)">WakeLockManager</a></span>(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> tag)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/util/SupportSettingsUtils.html#SupportSettingsUtils()">SupportSettingsUtils</a></span>()</nobr>
         
   </td></tr>
 
@@ -435,14 +423,16 @@ Summary:
             
             
             
+            static
             
-            
-            void</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/WakeLockManager.html#acquireWakeLock()">acquireWakeLock</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/util/SupportSettingsUtils.html#getStringSet(android.content.SharedPreferences, java.lang.String, java.util.Set<java.lang.String>)">getStringSet</a></span>(SharedPreferences preferences, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> key, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt; defaultValue)</nobr>
         
-        <div class="jd-descrdiv">Acquire a wake lock if we don't already have one.</div>
+        <div class="jd-descrdiv">Retreive a set of strings from SharedPreferences, using the built-in
+ getStringSet method if available and falling back to a comma separated
+ String if not.</div>
   
   </td></tr>
 
@@ -453,14 +443,15 @@ Summary:
             
             
             
-            
+            static
             
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/WakeLockManager.html#releaseWakeLock()">releaseWakeLock</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/util/SupportSettingsUtils.html#putStringSet(android.content.SharedPreferences.Editor, java.lang.String, java.util.Set<java.lang.String>)">putStringSet</a></span>(SharedPreferences.Editor editor, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> key, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt; value)</nobr>
         
-        <div class="jd-descrdiv">If we have an active wake lock, release it.</div>
+        <div class="jd-descrdiv">Store a set in SharedPreferences, using the built-in putStringSet method
+ if available and falling back to a comma separated String if not.</div>
   
   </td></tr>
 
@@ -715,7 +706,7 @@ From class
 
 
 
-<A NAME="WakeLockManager(android.content.Context, java.lang.String)"></A>
+<A NAME="SupportSettingsUtils()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -727,8 +718,8 @@ From class
          
         
       </span>
-      <span class="sympad">WakeLockManager</span>
-      <span class="normal">(Context context, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> tag)</span>
+      <span class="sympad">SupportSettingsUtils</span>
+      <span class="normal">()</span>
     </h4>
       <div class="api-level">
         <div>
@@ -761,20 +752,20 @@ From class
 
 
 
-<A NAME="acquireWakeLock()"></A>
+<A NAME="getStringSet(android.content.SharedPreferences, java.lang.String, java.util.Set<java.lang.String>)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
+        static 
          
          
          
-         
-        void
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt;
       </span>
-      <span class="sympad">acquireWakeLock</span>
-      <span class="normal">()</span>
+      <span class="sympad">getStringSet</span>
+      <span class="normal">(SharedPreferences preferences, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> key, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt; defaultValue)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -786,29 +777,54 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Acquire a wake lock if we don't already have one.
+  <div class="jd-tagdata jd-tagdescr"><p>Retreive a set of strings from SharedPreferences, using the built-in
+ getStringSet method if available and falling back to a comma separated
+ String if not.
 
- If we already have a lock, keeps the one we have.
-</p></div>
+ Note that this is a simple approach that won't work if the values in the
+ set contain commas.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>preferences</td>
+          <td>the SharedPreferences to retreive the set from.</td>
+        </tr>
+        <tr>
+          <th>key</td>
+          <td>the key for the preference.</td>
+        </tr>
+        <tr>
+          <th>defaultValue</td>
+          <td>the default value to return if the preference is not
+      stored.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>The set if found, otherwise the default value
+</li></ul>
+  </div>
 
     </div>
 </div>
 
 
-<A NAME="releaseWakeLock()"></A>
+<A NAME="putStringSet(android.content.SharedPreferences.Editor, java.lang.String, java.util.Set<java.lang.String>)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
         public 
-         
+        static 
          
          
          
         void
       </span>
-      <span class="sympad">releaseWakeLock</span>
-      <span class="normal">()</span>
+      <span class="sympad">putStringSet</span>
+      <span class="normal">(SharedPreferences.Editor editor, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> key, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt; value)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -820,8 +836,30 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>If we have an active wake lock, release it.
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Store a set in SharedPreferences, using the built-in putStringSet method
+ if available and falling back to a comma separated String if not.
+
+
+ Note that this is a simple approach that won't work if the values in the
+ set contain commas.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>editor</td>
+          <td>the editor to store the set in.</td>
+        </tr>
+        <tr>
+          <th>key</td>
+          <td>the key for the preference.</td>
+        </tr>
+        <tr>
+          <th>value</td>
+          <td>the value to store with the key.
+</td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>

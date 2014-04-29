@@ -477,9 +477,10 @@ Summary:
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html#validateResource(java.net.URI)">validateResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> uri)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html#validateResource(java.lang.String)">validateResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> uriString)</nobr>
         
-        <div class="jd-descrdiv">Validate the correctness of the host and port in a given URI.</div>
+        <div class="jd-descrdiv">Convert the parameter to a URI and validate the correctness of its host
+ and port.</div>
   
   </td></tr>
 
@@ -495,10 +496,9 @@ Summary:
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html#validateResource(java.lang.String)">validateResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> uriString)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html#validateResource(java.net.URI)">validateResource</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> uri)</nobr>
         
-        <div class="jd-descrdiv">Convert the parameter to a URI and validate the correctness of its host
- and port.</div>
+        <div class="jd-descrdiv">Validate the correctness of the host and port in a given URI.</div>
   
   </td></tr>
 
@@ -676,7 +676,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -692,7 +692,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -708,7 +708,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
@@ -888,42 +888,6 @@ From class
 </div>
 
 
-<A NAME="validateResource(java.net.URI)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-        static 
-         
-         
-         
-        boolean
-      </span>
-      <span class="sympad">validateResource</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> uri)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Validate the correctness of the host and port in a given URI.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>true if the address and port are valid.
-</li></ul>
-  </div>
-
-    </div>
-</div>
-
-
 <A NAME="validateResource(java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -951,6 +915,42 @@ From class
       
   <div class="jd-tagdata jd-tagdescr"><p>Convert the parameter to a URI and validate the correctness of its host
  and port.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the address and port are valid.
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="validateResource(java.net.URI)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">validateResource</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a> uri)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Validate the correctness of the host and port in a given URI.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Returns</h5>
       <ul class="nolist"><li>true if the address and port are valid.

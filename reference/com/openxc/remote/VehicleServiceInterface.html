@@ -632,9 +632,10 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#unregister(com.openxc.remote.VehicleServiceListener)">unregister</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#setBluetoothPollingStatus(boolean)">setBluetoothPollingStatus</a></span>(boolean enabled)</nobr>
         
-        <div class="jd-descrdiv">Stop sending asynchronous measurement updates to a remote listener.</div>
+        <div class="jd-descrdiv">The one vehicle interface specific function, control whether polling is
+ used to find Bluetooth vehicle interfaces.</div>
   
   </td></tr>
 
@@ -650,13 +651,31 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#unregister(com.openxc.remote.VehicleServiceListener)">unregister</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)</nobr>
+        
+        <div class="jd-descrdiv">Stop sending asynchronous measurement updates to a remote listener.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#userPipelineActivated()">userPipelineActivated</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -1196,6 +1215,53 @@ From interface
         </tr>
       </table>
   </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>RemoteException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setBluetoothPollingStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+        abstract 
+         
+        void
+      </span>
+      <span class="sympad">setBluetoothPollingStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>The one vehicle interface specific function, control whether polling is
+ used to find Bluetooth vehicle interfaces.
+
+ TODO The add/remove vehicle interface API should probably be refactored
+ since it doesn't well support extra interface-specific parameters such as
+ this one, and inter-process communication via shared preferences isn't
+ very reliable.
+</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Throws</h5>
       <table class="jd-tagtable">  

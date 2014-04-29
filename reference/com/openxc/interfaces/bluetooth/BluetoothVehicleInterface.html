@@ -233,6 +233,8 @@
    
   
   
+   
+  
   
    
   
@@ -300,6 +302,9 @@ Summary:
   <a href="#constants">Constants</a>
   
 
+
+  &#124; <a href="#inhconstants">Inherited Constants</a>
+  
 
 
 
@@ -514,6 +519,66 @@ Summary:
 
 
 
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<table id="inhconstants" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Constants</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-constants-com.openxc.sources.BytestreamDataSource" class="jd-expando-trigger closed"
+          ><img id="inherited-constants-com.openxc.sources.BytestreamDataSource-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../com/openxc/sources/BytestreamDataSource.html">com.openxc.sources.BytestreamDataSource</a>
+<div id="inherited-constants-com.openxc.sources.BytestreamDataSource">
+  <div id="inherited-constants-com.openxc.sources.BytestreamDataSource-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-constants-com.openxc.sources.BytestreamDataSource-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#RECONNECTION_ATTEMPT_WAIT_TIME_S">RECONNECTION_ATTEMPT_WAIT_TIME_S</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S">SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+
 
 
 
@@ -549,6 +614,17 @@ Summary:
           final
           <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/ReadWriteLock.html">ReadWriteLock</a></nobr></td>
           <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mConnectionLock">mConnectionLock</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/Condition.html">Condition</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mDeviceChanged">mDeviceChanged</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
@@ -673,6 +749,24 @@ Summary:
             
             
             
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/interfaces/bluetooth/BluetoothVehicleInterface.html#setPollingStatus(boolean)">setPollingStatus</a></span>(boolean enabled)</nobr>
+        
+        <div class="jd-descrdiv">Control whether periodic polling is used to detect a Bluetooth VI.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -685,10 +779,10 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            
+            synchronized
             
             
             
@@ -703,7 +797,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -989,13 +1083,29 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#start()">start</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#setFastPolling(boolean)">setFastPolling</a></span>(boolean enabled)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#start()">start</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1013,7 +1123,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1160,10 +1270,8 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.remote.RawMeasurement)">handleMessage</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
         
-        <div class="jd-descrdiv">Pass a new measurement to the callback, if set.</div>
-  
   </td></tr>
 
 
@@ -1194,8 +1302,10 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.remote.RawMeasurement)">handleMessage</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
+        <div class="jd-descrdiv">Pass a new measurement to the callback, if set.</div>
+  
   </td></tr>
 
 
@@ -1419,7 +1529,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -1435,7 +1545,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -1451,7 +1561,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
@@ -1950,6 +2060,43 @@ From interface
 </div>
 
 
+<A NAME="setPollingStatus(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setPollingStatus</span>
+      <span class="normal">(boolean enabled)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Control whether periodic polling is used to detect a Bluetooth VI.
+
+ This class opens a Bluetooth socket and will accept incoming connections
+ from a VI that can act as the Bluetooth master. For VIs that are only
+ able to act as slave, we have to poll for a connection occasionally to
+ see if it's within range.
+</p></div>
+
+    </div>
+</div>
+
+
 <A NAME="setResource(java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -2015,7 +2162,7 @@ From interface
          
          
          
-         
+        synchronized 
         void
       </span>
       <span class="sympad">stop</span>

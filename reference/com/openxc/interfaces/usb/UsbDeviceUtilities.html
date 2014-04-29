@@ -338,7 +338,7 @@ Summary:
 
  The URI format expected by these functions is:
 
-      usb://<vendor id>/<device id>
+      usb://vendor_id/device_id
 
  where both vendor ID and device ID are hex values without a "0x" prefix. An
  example valid URI is "usb://04d8/0053".
@@ -630,7 +630,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -646,7 +646,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -662,7 +662,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
@@ -793,7 +793,7 @@ From class
         <tr>
             <th><a href="../../../../com/openxc/sources/DataSourceResourceException.html">DataSourceResourceException</a></td>
             <td>If the URI doesn't match the
-      format usb://<vendor id>/<device id>
+      format usb://vendor_id/device_id
 </td>
         </tr>
       </table>
@@ -844,7 +844,7 @@ From class
         <tr>
             <th><a href="../../../../com/openxc/sources/DataSourceResourceException.html">DataSourceResourceException</a></td>
             <td>If the URI doesn't match the
-      format usb://<vendor id>/<device id>
+      format usb://vendor_id/device_id
 </td>
         </tr>
       </table>

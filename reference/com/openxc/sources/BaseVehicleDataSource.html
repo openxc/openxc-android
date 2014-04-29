@@ -705,10 +705,8 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.remote.RawMeasurement)">handleMessage</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
         
-        <div class="jd-descrdiv">Pass a new measurement to the callback, if set.</div>
-  
   </td></tr>
 
 
@@ -739,8 +737,10 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.remote.RawMeasurement)">handleMessage</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
+        <div class="jd-descrdiv">Pass a new measurement to the callback, if set.</div>
+  
   </td></tr>
 
 
@@ -915,7 +915,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -931,7 +931,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -947,7 +947,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
@@ -1379,7 +1379,7 @@ From interface
 </div>
 
 
-<A NAME="handleMessage(com.openxc.remote.RawMeasurement)"></A>
+<A NAME="handleMessage(com.openxc.BinaryMessages.VehicleMessage)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1392,7 +1392,7 @@ From interface
         void
       </span>
       <span class="sympad">handleMessage</span>
-      <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
+      <span class="normal">(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1404,17 +1404,7 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Pass a new measurement to the callback, if set.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>measurement</td>
-          <td>the new measurement object.
-</td>
-        </tr>
-      </table>
-  </div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
@@ -1451,7 +1441,7 @@ From interface
 </div>
 
 
-<A NAME="handleMessage(com.openxc.BinaryMessages.VehicleMessage)"></A>
+<A NAME="handleMessage(com.openxc.remote.RawMeasurement)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1464,7 +1454,7 @@ From interface
         void
       </span>
       <span class="sympad">handleMessage</span>
-      <span class="normal">(<a href="../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</span>
+      <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1476,7 +1466,17 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Pass a new measurement to the callback, if set.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>measurement</td>
+          <td>the new measurement object.
+</td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>

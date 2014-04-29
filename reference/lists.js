@@ -135,6 +135,7 @@ var DATA = [
       { id:133, label:"com.openxc.util.AndroidFileOpener", link:"com/openxc/util/AndroidFileOpener.html", type:"class" },
       { id:134, label:"com.openxc.util.FileOpener", link:"com/openxc/util/FileOpener.html", type:"class" },
       { id:135, label:"com.openxc.util.JavaFileOpener", link:"com/openxc/util/JavaFileOpener.html", type:"class" },
-      { id:136, label:"com.openxc.util.Range", link:"com/openxc/util/Range.html", type:"class" }
+      { id:136, label:"com.openxc.util.Range", link:"com/openxc/util/Range.html", type:"class" },
+      { id:137, label:"com.openxc.util.SupportSettingsUtils", link:"com/openxc/util/SupportSettingsUtils.html", type:"class" }
 
     ];

@@ -444,7 +444,7 @@ Summary:
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/interfaces/VehicleInterfaceManagerUtils.html#send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.remote.RawMeasurement)">send</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; interfaces, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/VehicleInterfaceManagerUtils.html#send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.measurements.Measurement)">send</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; interfaces, <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a> command)</nobr>
         
         <div class="jd-descrdiv">Attempt to send the command on every VehicleInterface in the list until
  at most one succeeds.</div>
@@ -463,7 +463,7 @@ Summary:
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/interfaces/VehicleInterfaceManagerUtils.html#send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.measurements.Measurement)">send</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; interfaces, <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a> command)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/interfaces/VehicleInterfaceManagerUtils.html#send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.remote.RawMeasurement)">send</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; interfaces, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</nobr>
         
         <div class="jd-descrdiv">Attempt to send the command on every VehicleInterface in the list until
  at most one succeeds.</div>
@@ -644,7 +644,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -660,7 +660,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -676,7 +676,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
@@ -767,41 +767,6 @@ From class
 
 
 
-<A NAME="send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.remote.RawMeasurement)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-        static 
-         
-         
-         
-        boolean
-      </span>
-      <span class="sympad">send</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; interfaces, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Attempt to send the command on every VehicleInterface in the list until
- at most one succeeds.
-
- This method makes no guaratees about the order it will traverse the list.
-</p></div>
-
-    </div>
-</div>
-
-
 <A NAME="send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.measurements.Measurement)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -834,6 +799,41 @@ From class
       <ul class="nolist"><li>send(List, RawMeasurement)</li>
       </ul>
   </div>
+
+    </div>
+</div>
+
+
+<A NAME="send(java.util.List<com.openxc.interfaces.VehicleInterface>, com.openxc.remote.RawMeasurement)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">send</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/List.html">List</a>&lt;<a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a>&gt; interfaces, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> command)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Attempt to send the command on every VehicleInterface in the list until
+ at most one succeeds.
+
+ This method makes no guaratees about the order it will traverse the list.
+</p></div>
 
     </div>
 </div>

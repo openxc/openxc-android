@@ -234,6 +234,8 @@
    
   
   
+   
+  
   
    
   
@@ -301,6 +303,9 @@ Summary:
   <a href="#constants">Constants</a>
   
 
+
+  &#124; <a href="#inhconstants">Inherited Constants</a>
+  
 
 
 
@@ -526,6 +531,66 @@ Summary:
 
 
 
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<table id="inhconstants" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Constants</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-constants-com.openxc.sources.BytestreamDataSource" class="jd-expando-trigger closed"
+          ><img id="inherited-constants-com.openxc.sources.BytestreamDataSource-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../com/openxc/sources/BytestreamDataSource.html">com.openxc.sources.BytestreamDataSource</a>
+<div id="inherited-constants-com.openxc.sources.BytestreamDataSource">
+  <div id="inherited-constants-com.openxc.sources.BytestreamDataSource-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-constants-com.openxc.sources.BytestreamDataSource-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#RECONNECTION_ATTEMPT_WAIT_TIME_S">RECONNECTION_ATTEMPT_WAIT_TIME_S</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S">SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+
 
 
 
@@ -561,6 +626,17 @@ Summary:
           final
           <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/ReadWriteLock.html">ReadWriteLock</a></nobr></td>
           <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mConnectionLock">mConnectionLock</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/concurrent/locks/Condition.html">Condition</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#mDeviceChanged">mDeviceChanged</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
@@ -1075,13 +1151,29 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#start()">start</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#setFastPolling(boolean)">setFastPolling</a></span>(boolean enabled)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BytestreamDataSource.html#start()">start</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1099,7 +1191,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1246,10 +1338,8 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.remote.RawMeasurement)">handleMessage</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
         
-        <div class="jd-descrdiv">Pass a new measurement to the callback, if set.</div>
-  
   </td></tr>
 
 
@@ -1280,8 +1370,10 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.BinaryMessages.VehicleMessage)">handleMessage</a></span>(<a href="../../../../com/openxc/BinaryMessages.VehicleMessage.html">BinaryMessages.VehicleMessage</a> message)</nobr>
+        <span class="sympad"><a href="../../../../com/openxc/sources/BaseVehicleDataSource.html#handleMessage(com.openxc.remote.RawMeasurement)">handleMessage</a></span>(<a href="../../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
         
+        <div class="jd-descrdiv">Pass a new measurement to the callback, if set.</div>
+  
   </td></tr>
 
 
@@ -1505,7 +1597,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -1521,7 +1613,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -1537,7 +1629,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 

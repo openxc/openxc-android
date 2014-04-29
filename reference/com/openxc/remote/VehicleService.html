@@ -466,7 +466,7 @@ Summary:
  <code><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></code> is activated as a <code><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>. Other
  vehicle interfaces can be activated with the
  #addVehicleInterface(Class, String) method and they can removed with
- #removeVehicleInterface(Class).
+ #removeVehicleInterface(VehicleInterface).
 
  This service uses the same <code><a href="../../../com/openxc/DataPipeline.html">DataPipeline</a></code> as the
  <code><a href="../../../com/openxc/VehicleManager.html">VehicleManager</a></code> to move data from sources to sinks, but it
@@ -1661,7 +1661,7 @@ From class
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)</nobr>
+        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)</nobr>
         
   </td></tr>
 
@@ -1677,7 +1677,7 @@ From class
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)</nobr>
+        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)</nobr>
         
   </td></tr>
 
@@ -1853,7 +1853,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)</nobr>
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)</nobr>
         
   </td></tr>
 
@@ -1869,7 +1869,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)</nobr>
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)</nobr>
         
   </td></tr>
 
@@ -2429,7 +2429,7 @@ From class
             Intent</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)</nobr>
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)</nobr>
         
   </td></tr>
 
@@ -2445,7 +2445,7 @@ From class
             Intent</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)</nobr>
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)</nobr>
         
   </td></tr>
 
@@ -2493,7 +2493,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0)</nobr>
+        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
         
   </td></tr>
 
@@ -2509,7 +2509,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <span class="sympad">sendBroadcast</span>(Intent arg0)</nobr>
         
   </td></tr>
 
@@ -2637,7 +2637,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0)</nobr>
+        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)</nobr>
         
   </td></tr>
 
@@ -2653,7 +2653,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)</nobr>
+        <span class="sympad">startActivities</span>(Intent[] arg0)</nobr>
         
   </td></tr>
 
@@ -2935,7 +2935,7 @@ From class
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)</nobr>
+        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)</nobr>
         
   </td></tr>
 
@@ -2951,7 +2951,7 @@ From class
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)</nobr>
+        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)</nobr>
         
   </td></tr>
 
@@ -3127,7 +3127,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)</nobr>
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)</nobr>
         
   </td></tr>
 
@@ -3143,7 +3143,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)</nobr>
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)</nobr>
         
   </td></tr>
 
@@ -3495,7 +3495,7 @@ From class
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getString</span>(int arg0)</nobr>
+        <span class="sympad">getString</span>(int arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object...</a> arg1)</nobr>
         
   </td></tr>
 
@@ -3511,7 +3511,7 @@ From class
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getString</span>(int arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object...</a> arg1)</nobr>
+        <span class="sympad">getString</span>(int arg0)</nobr>
         
   </td></tr>
 
@@ -3655,39 +3655,7 @@ From class
             TypedArray</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">obtainStyledAttributes</span>(int[] arg0)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            final
-            
-            
-            TypedArray</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            final
-            
-            
-            TypedArray</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">obtainStyledAttributes</span>(int arg0, int[] arg1)</nobr>
         
   </td></tr>
 
@@ -3704,6 +3672,38 @@ From class
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1, int arg2, int arg3)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            TypedArray</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">obtainStyledAttributes</span>(int[] arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            TypedArray</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">obtainStyledAttributes</span>(int arg0, int[] arg1)</nobr>
         
   </td></tr>
 
@@ -3815,7 +3815,7 @@ From class
             Intent</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)</nobr>
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)</nobr>
         
   </td></tr>
 
@@ -3831,7 +3831,7 @@ From class
             Intent</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)</nobr>
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)</nobr>
         
   </td></tr>
 
@@ -3879,7 +3879,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0)</nobr>
+        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
         
   </td></tr>
 
@@ -3895,7 +3895,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <span class="sympad">sendBroadcast</span>(Intent arg0)</nobr>
         
   </td></tr>
 
@@ -4023,7 +4023,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0)</nobr>
+        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)</nobr>
         
   </td></tr>
 
@@ -4039,7 +4039,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)</nobr>
+        <span class="sympad">startActivities</span>(Intent[] arg0)</nobr>
         
   </td></tr>
 
@@ -4369,7 +4369,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -4385,7 +4385,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -4401,7 +4401,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 

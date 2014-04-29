@@ -557,7 +557,7 @@ android.os.IBinder
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html#VehicleServiceInterface.Stub()">VehicleServiceInterface.Stub</a></span>()</nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html#Stub()">Stub</a></span>()</nobr>
         
         <div class="jd-descrdiv">Construct the stub at attach it to the interface.</div>
   
@@ -1131,7 +1131,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
@@ -1147,7 +1147,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
         
   </td></tr>
 
@@ -1163,7 +1163,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
@@ -1585,9 +1585,10 @@ From interface
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#unregister(com.openxc.remote.VehicleServiceListener)">unregister</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)</nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#setBluetoothPollingStatus(boolean)">setBluetoothPollingStatus</a></span>(boolean enabled)</nobr>
         
-        <div class="jd-descrdiv">Stop sending asynchronous measurement updates to a remote listener.</div>
+        <div class="jd-descrdiv">The one vehicle interface specific function, control whether polling is
+ used to find Bluetooth vehicle interfaces.</div>
   
   </td></tr>
 
@@ -1603,13 +1604,31 @@ From interface
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#unregister(com.openxc.remote.VehicleServiceListener)">unregister</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)</nobr>
+        
+        <div class="jd-descrdiv">Stop sending asynchronous measurement updates to a remote listener.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceInterface.html#userPipelineActivated()">userPipelineActivated</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             abstract
             
@@ -1664,7 +1683,7 @@ From interface
 
 
 
-<A NAME="VehicleServiceInterface.Stub()"></A>
+<A NAME="Stub()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1676,7 +1695,7 @@ From interface
          
         
       </span>
-      <span class="sympad">VehicleServiceInterface.Stub</span>
+      <span class="sympad">Stub</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">

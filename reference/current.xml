@@ -3577,7 +3577,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="R.attr"
+<constructor name="attr"
  type="com.openxc.R.attr"
  static="false"
  final="false"
@@ -3594,7 +3594,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="R.drawable"
+<constructor name="drawable"
  type="com.openxc.R.drawable"
  static="false"
  final="false"
@@ -3621,7 +3621,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="R.string"
+<constructor name="string"
  type="com.openxc.R.string"
  static="false"
  final="false"
@@ -3640,6 +3640,16 @@
 >
 </field>
 <field name="bluetooth_mac_key"
+ type="int"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="bluetooth_polling_key"
  type="int"
  transient="false"
  volatile="false"
@@ -4053,6 +4063,19 @@
 <exception name="UnrecognizedMeasurementTypeException" type="com.openxc.measurements.UnrecognizedMeasurementTypeException">
 </exception>
 </method>
+<method name="setBluetoothPollingStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+</method>
 <method name="waitUntilBound"
  return="void"
  abstract="false"
@@ -4084,7 +4107,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="VehicleManager.VehicleBinder"
+<constructor name="VehicleBinder"
  type="com.openxc.VehicleManager.VehicleBinder"
  static="false"
  final="false"
@@ -4554,6 +4577,19 @@
 <parameter name="command" type="com.openxc.remote.RawMeasurement">
 </parameter>
 </method>
+<method name="setPollingStatus"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+</method>
 <method name="setResource"
  return="boolean"
  abstract="false"
@@ -4616,6 +4652,87 @@
 <exception name="BluetoothException" type="com.openxc.interfaces.bluetooth.BluetoothException">
 </exception>
 </method>
+<method name="connect"
+ return="android.bluetooth.BluetoothSocket"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="device" type="android.bluetooth.BluetoothDevice">
+</parameter>
+<exception name="BluetoothException" type="com.openxc.interfaces.bluetooth.BluetoothException">
+</exception>
+</method>
+<method name="getCandidateDevices"
+ return="java.util.Set&lt;android.bluetooth.BluetoothDevice&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getLastConnectedDevice"
+ return="android.bluetooth.BluetoothDevice"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getPairedDevices"
+ return="java.util.Set&lt;android.bluetooth.BluetoothDevice&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isConnecting"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="listen"
+ return="android.bluetooth.BluetoothServerSocket"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="startDiscovery"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="stop"
  return="void"
  abstract="false"
@@ -4627,6 +4744,62 @@
  visibility="public"
 >
 </method>
+<method name="storeLastConnectedDevice"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="device" type="android.bluetooth.BluetoothDevice">
+</parameter>
+</method>
+<field name="KNOWN_BLUETOOTH_DEVICE_PREFERENCES"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;known_bluetooth_devices&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="KNOWN_BLUETOOTH_DEVICE_PREF_KEY"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;known_bluetooth_devices&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;last_connected_bluetooth_device&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RFCOMM_UUID"
+ type="java.util.UUID"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 </package>
 <package name="com.openxc.interfaces.network"
@@ -7288,6 +7461,21 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="setBluetoothPollingStatus"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="unregister"
  return="void"
  abstract="true"
@@ -7340,7 +7528,7 @@
 >
 <implements name="com.openxc.remote.VehicleServiceInterface">
 </implements>
-<constructor name="VehicleServiceInterface.Stub"
+<constructor name="Stub"
  type="com.openxc.remote.VehicleServiceInterface.Stub"
  static="false"
  final="false"
@@ -7429,7 +7617,7 @@
 >
 <implements name="com.openxc.remote.VehicleServiceListener">
 </implements>
-<constructor name="VehicleServiceListener.Stub"
+<constructor name="Stub"
  type="com.openxc.remote.VehicleServiceListener.Stub"
  static="false"
  final="false"
@@ -8346,6 +8534,19 @@
  visibility="public"
 >
 </method>
+<method name="setFastPolling"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="enabled" type="boolean">
+</parameter>
+</method>
 <method name="start"
  return="void"
  abstract="false"
@@ -8370,8 +8571,40 @@
 <exception name="InterruptedException" type="java.lang.InterruptedException">
 </exception>
 </method>
+<field name="RECONNECTION_ATTEMPT_WAIT_TIME_S"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="10"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="60"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
 <field name="mConnectionLock"
  type="java.util.concurrent.locks.ReadWriteLock"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="mDeviceChanged"
+ type="java.util.concurrent.locks.Condition"
  transient="false"
  volatile="false"
  static="false"
@@ -9500,6 +9733,57 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</method>
+</class>
+<class name="SupportSettingsUtils"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SupportSettingsUtils"
+ type="com.openxc.util.SupportSettingsUtils"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getStringSet"
+ return="java.util.Set&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="preferences" type="android.content.SharedPreferences">
+</parameter>
+<parameter name="key" type="java.lang.String">
+</parameter>
+<parameter name="defaultValue" type="java.util.Set&lt;java.lang.String&gt;">
+</parameter>
+</method>
+<method name="putStringSet"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="editor" type="android.content.SharedPreferences.Editor">
+</parameter>
+<parameter name="key" type="java.lang.String">
+</parameter>
+<parameter name="value" type="java.util.Set&lt;java.lang.String&gt;">
+</parameter>
 </method>
 </class>
 </package>
