@@ -1,5 +1,14 @@
 # OpenXC Android Library Changelog
 
+## v5.3.1
+
+* Improve reliability of automatic Bluetooth device detection and decrease the
+  impact on battery life.
+* Listen for Bluetooth VIs that initiate a new connection to avoid polling.
+  Uncheck the "use polling" option in the Enabler if you have a new Ford
+  Reference VI with a big "OpenXC" sticker on it, as this version is capable of
+  initiating the Bluetooth connection on wakeup.
+
 ## v5.3
 
 * Automatically discover, initiate pairing and connect to Bluetooth-enabled
