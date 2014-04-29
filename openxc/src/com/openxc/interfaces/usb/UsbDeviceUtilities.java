@@ -10,7 +10,7 @@ import com.openxc.sources.DataSourceResourceException;
  *
  * The URI format expected by these functions is:
  *
- *      usb://<vendor id>/<device id>
+ *      usb://vendor_id/device_id
  *
  * where both vendor ID and device ID are hex values without a "0x" prefix. An
  * example valid URI is "usb://04d8/0053".
@@ -30,7 +30,7 @@ public class UsbDeviceUtilities {
      *
      * @param uri the USB device URI
      * @throws DataSourceResourceException If the URI doesn't match the
-     *      format usb://<vendor id>/<device id>
+     *      format usb://vendor_id/device_id
      */
     public static int vendorFromUri(URI uri)
             throws DataSourceResourceException {
@@ -48,7 +48,7 @@ public class UsbDeviceUtilities {
      *
      * @param uri the USB device URI
      * @throws DataSourceResourceException If the URI doesn't match the
-     *      format usb://<vendor id>/<device id>
+     *      format usb://vendor_id/device_id
      */
     public static int productFromUri(URI uri)
             throws DataSourceResourceException {

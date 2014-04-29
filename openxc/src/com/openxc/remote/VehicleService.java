@@ -44,7 +44,7 @@ import com.openxc.sources.WakeLockManager;
  * {@link UsbVehicleInterface} is activated as a {@link VehicleInterface}. Other
  * vehicle interfaces can be activated with the
  * {@link #addVehicleInterface(Class, String)} method and they can removed with
- * {@link #removeVehicleInterface(Class)}.
+ * {@link #removeVehicleInterface(VehicleInterface)}.
  *
  * This service uses the same {@link com.openxc.DataPipeline} as the
  * {@link com.openxc.VehicleManager} to move data from sources to sinks, but it

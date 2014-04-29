@@ -56,7 +56,7 @@ public class SupportSettingsUtils {
      * Note that this is a simple approach that won't work if the values in the
      * set contain commas.
      *
-     * @param preferences the SharedPreferences to retreive the set from.
+     * @param editor the editor to store the set in.
      * @param key the key for the preference.
      * @param value the value to store with the key.
      */
