@@ -287,8 +287,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @throws VehicleServiceException if the listener is unable to be
      *      registered with the library internals - an exceptional situation
      *      that shouldn't occur.
-     * @throws UnrecognizedMeasurementTypeException if passed a class that does
-     *      not extend Measurement
      */
     public void removeListener(Class<? extends Measurement>
             measurementType, Measurement.Listener listener)

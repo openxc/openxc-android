@@ -79,8 +79,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      * You must have the mConnectionLock locked before calling this
      * function.
      *
-     * @throws DataSourceException The connection is still alive, but it
-     *      returned an unexpected result that cannot be handled.
      * @throws InterruptedException if the interrupted while blocked -- probably
      *      shutting down.
      */
