@@ -130,7 +130,7 @@ public class BytestreamBuffer {
             // range manually (minus \u0000)
             .and(CharMatcher.inRange('\u0001', '\u001f').negate())
             .and(CharMatcher.inRange('\u007f', '\u009f').negate())
-            .and(CharMatcher.WHITESPACE.negate())
+            .and(CharMatcher.ASCII)
             .matchesAllOf(mBuffer.toString());
     }
 
