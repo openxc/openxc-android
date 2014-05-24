@@ -1,5 +1,9 @@
 # OpenXC Android Library Changelog
 
+## v5.3.1-dev
+
+* Be less strict about incoming JSON messages (allow whitespace).
+
 ## v5.3.1
 
 * Improve reliability of automatic Bluetooth device detection and decrease the
