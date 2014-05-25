@@ -2,9 +2,8 @@ package com.openxc.measurements;
 
 import java.util.Locale;
 
-import com.openxc.units.State;
-
 import com.openxc.units.Boolean;
+import com.openxc.units.State;
 
 /**
  * A DoorStatus represents a door's ajar status.
@@ -32,27 +31,19 @@ public class VehicleDoorStatus
         BOOT
     }
 
-    public VehicleDoorStatus(State<DoorId> value, Boolean event) {
-        super(value, event);
+    public VehicleDoorStatus(State<DoorId> value) {
+        super(value);
+        // TODO how do we handle event?
     }
 
-    public VehicleDoorStatus(DoorId value, Boolean event) {
-        this(new State<DoorId>(value), event);
+    public VehicleDoorStatus(DoorId value) {
+        this(new State<DoorId>(value));
     }
 
-    public VehicleDoorStatus(String value, java.lang.Boolean event) {
-        this(DoorId.valueOf(value.toUpperCase(Locale.US)), new Boolean(event));
+    public VehicleDoorStatus(String value) {
+        this(DoorId.valueOf(value.toUpperCase(Locale.US)));
     }
 
-    @Override
-    public Boolean getEvent() {
-        return (Boolean) super.getEvent();
-    }
-
-    @Override
-    public java.lang.Boolean getSerializedEvent() {
-        return new java.lang.Boolean(getEvent().booleanValue());
-    }
 
     @Override
     public String getSerializedValue() {

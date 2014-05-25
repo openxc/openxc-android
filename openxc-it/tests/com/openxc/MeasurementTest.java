@@ -1,23 +1,18 @@
 package com.openxc;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
-import com.openxc.NoValueException;
-
-import com.openxc.remote.RawMeasurement;
-
-import com.openxc.TestUtils;
-
-import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.containsString;
 
-import com.openxc.units.Meter;
-import com.openxc.util.Range;
+import junit.framework.TestCase;
+
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.NoRangeException;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.units.Meter;
+import com.openxc.util.Range;
 
 public class MeasurementTest extends TestCase {
     TestMeasurement measurement;
@@ -61,26 +56,13 @@ public class MeasurementTest extends TestCase {
         assertFalse(measurement.equals(inequalMeasurement));
     }
 
-    public void testSerialize() {
+    public void testToVehicleMessage() {
         measurement = new TestMeasurement(10.1);
-        String data = measurement.serialize();
-        assertThat(data, containsString(TestMeasurement.ID));
-        assertThat(data, containsString(
-                    measurement.getSerializedValue().toString()));
-    }
-
-    public void testToRaw() {
-        measurement = new TestMeasurement(10.1);
-        RawMeasurement raw = measurement.toRaw();
-        assertEquals(raw.getName(), TestMeasurement.ID);
-        assertEquals(raw.getValue(), measurement.getValue().doubleValue());
-    }
-
-    public void testDeserialize() throws NoValueException,
-           UnrecognizedMeasurementTypeException {
-        measurement = new TestMeasurement(10.1);
-        assertEquals(BaseMeasurement.deserialize(measurement.serialize()),
-                measurement);
+        VehicleMessage message = measurement.toVehicleMessage();
+        assertTrue(message instanceof SimpleVehicleMessage);
+        SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+        assertEquals(simpleMessage.getName(), TestMeasurement.ID);
+        assertEquals(simpleMessage.getValue(), measurement.getValue().doubleValue());
     }
 
     public static class TestMeasurement extends BaseMeasurement<Meter> {

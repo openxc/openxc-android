@@ -21,7 +21,9 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -43,6 +45,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private static final String TAG = "BluetoothVehicleInterface";
     public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
 
+    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private DeviceManager mDeviceManager;
     private Thread mAcceptThread;
     private String mExplicitAddress;
@@ -99,9 +102,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         mUsePolling = enabled;
     }
 
-    public boolean receive(RawMeasurement command) {
-        String message = command.serialize() + "\u0000";
-        return write(message);
+    public boolean receive(VehicleMessage command) {
+        // TODO who knows what the current serialization format is? only using
+        // JSON right now
+        return write(new String(sStreamer.serializeForStream(command)));
     }
 
     public boolean setResource(String otherAddress) throws DataSourceException {

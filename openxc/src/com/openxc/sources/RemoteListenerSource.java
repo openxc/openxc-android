@@ -4,7 +4,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListener;
 
@@ -54,7 +54,7 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     private VehicleServiceListener mRemoteListener =
         new VehicleServiceListener.Stub() {
-            public void receive(RawMeasurement rawMeasurement) {
+            public void receive(VehicleMessage rawMeasurement) {
                 handleMessage(rawMeasurement);
             }
         };

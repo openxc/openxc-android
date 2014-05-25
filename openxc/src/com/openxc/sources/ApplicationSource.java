@@ -2,7 +2,7 @@ package com.openxc.sources;
 
 import com.google.common.base.Objects;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * A "reverse" source to pass externally generated measurements to the callback.
@@ -18,7 +18,7 @@ public class ApplicationSource extends BaseVehicleDataSource {
      * Note that this method is public - users of this class can directly force
      * it to send new values.
      */
-    public void handleMessage(RawMeasurement measurement) {
+    public void handleMessage(VehicleMessage measurement) {
         super.handleMessage(measurement);
     }
 

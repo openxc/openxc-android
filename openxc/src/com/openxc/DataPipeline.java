@@ -10,7 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.SourceCallback;
@@ -21,7 +22,7 @@ import com.openxc.sources.VehicleDataSource;
  *
  * A DataPipeline accepts two types of components - sources and sinks. The
  * sources (implementing {@link VehicleDataSource} call the
- * {@link #receive(RawMeasurement)} method on the this class when new
+ * {@link #receive(VehicleMessage)} method on the this class when new
  * values arrive. The DataPipeline then passes this value on to all currently
  * registered data sinks.
  *
@@ -34,8 +35,8 @@ public class DataPipeline implements SourceCallback {
 
     private Operator mOperator;
     private int mMessagesReceived = 0;
-    private Map<String, RawMeasurement> mMeasurements =
-            new ConcurrentHashMap<String, RawMeasurement>();
+    private Map<String, NamedVehicleMessage> mNamedMessages =
+            new ConcurrentHashMap<String, NamedVehicleMessage>();
     private CopyOnWriteArrayList<VehicleDataSink> mSinks =
             new CopyOnWriteArrayList<VehicleDataSink>();
     private CopyOnWriteArrayList<VehicleDataSource> mSources =
@@ -63,22 +64,21 @@ public class DataPipeline implements SourceCallback {
      * If any data sink throws a DataSinkException when receiving data, it will
      * be removed from the list of sinks.
      */
-    public void receive(RawMeasurement measurement) {
-        if(measurement == null) {
+    public void receive(VehicleMessage message) {
+        if(message == null) {
             return;
         }
 
-        if(measurement.getName() == null) {
-            Log.d(TAG, "Measurement's name was null - that shouldn't have made it this far");
-            return;
+        if(message instanceof NamedVehicleMessage) {
+            NamedVehicleMessage namedMessage = (NamedVehicleMessage) message;
+            mNamedMessages.put(namedMessage.getName(), namedMessage);
         }
 
-        mMeasurements.put(measurement.getName(), measurement);
         List<VehicleDataSink> deadSinks = new ArrayList<VehicleDataSink>();
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             VehicleDataSink sink = i.next();
             try {
-                sink.receive(measurement);
+                sink.receive(message);
             } catch(DataSinkException e) {
                 Log.w(TAG, this.getClass().getName() + ": The sink " +
                         sink + " exploded when we sent a new message " +
@@ -103,7 +103,7 @@ public class DataPipeline implements SourceCallback {
     /**
      * Remove a previously added sink from the pipeline.
      *
-     * Once removed, the sink will no longer receive any new measurements from
+     * Once removed, the sink will no longer receive any new messages from
      * the pipeline's sources. The sink's {@link VehicleDataSink#stop()} method
      * is also called.
      *
@@ -179,13 +179,13 @@ public class DataPipeline implements SourceCallback {
     }
 
     /**
-     * Return the last received value for the measurement if known.
+     * Return the last received value for the named message if known.
      *
-     * @return a RawMeasurement with the last known value, or null if no value
+     * @return a VehicleMessage with the last known value, or null if no value
      *          has been received.
      */
-    public RawMeasurement get(String measurementId) {
-        return mMeasurements.get(measurementId);
+    public NamedVehicleMessage get(String name) {
+        return mNamedMessages.get(name);
     }
 
     /**
@@ -238,7 +238,7 @@ public class DataPipeline implements SourceCallback {
         return Objects.toStringHelper(this)
             .add("sources", mSources)
             .add("sinks", mSinks)
-            .add("numMeasurementTypes", mMeasurements.size())
+            .add("numNamedMessageTypes", mNamedMessages.size())
             .toString();
     }
 }

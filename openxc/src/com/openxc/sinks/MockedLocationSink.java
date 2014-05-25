@@ -11,7 +11,8 @@ import com.google.common.base.Objects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * Propagate vehicle location updates through the Android location interface.
@@ -40,12 +41,15 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
         setupMockLocations();
     }
 
-    public boolean receive(RawMeasurement measurement) throws DataSinkException {
-        super.receive(measurement);
-        if(measurement.getName().equals(Latitude.ID) ||
-                measurement.getName().equals(Longitude.ID)) {
-            updateLocation();
-            return true;
+    public boolean receive(VehicleMessage message) throws DataSinkException {
+        super.receive(message);
+        if(message instanceof SimpleVehicleMessage) {
+            SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+            if(simpleMessage.getName().equals(Latitude.ID) ||
+                    simpleMessage.getName().equals(Longitude.ID)) {
+                updateLocation();
+                return true;
+            }
         }
         return false;
     }
@@ -101,9 +105,9 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
 
     private void updateLocation() {
         if(mLocationManager == null ||
-                !containsMeasurement(Latitude.ID) ||
-                !containsMeasurement(Longitude.ID) ||
-                !containsMeasurement(VehicleSpeed.ID)) {
+                !containsNamedMessage(Latitude.ID) ||
+                !containsNamedMessage(Longitude.ID) ||
+                !containsNamedMessage(VehicleSpeed.ID)) {
             return;
         }
 
@@ -115,9 +119,9 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
 
         Location location = new Location(LocationManager.GPS_PROVIDER);
         try {
-            location.setLatitude(((Number)get(Latitude.ID).getValue()).doubleValue());
-            location.setLongitude(((Number)get(Longitude.ID).getValue()).doubleValue());
-            location.setSpeed(((Number)(get(VehicleSpeed.ID).getValue())).floatValue());
+            location.setLatitude(((Number)getNamedMessage(Latitude.ID).get("value")).doubleValue());
+            location.setLongitude(((Number)getNamedMessage(Longitude.ID).get("value")).doubleValue());
+            location.setSpeed(((Number)(getNamedMessage(VehicleSpeed.ID).get("value"))).floatValue());
         } catch(ClassCastException e) {
             Log.e(TAG, "Expected a Number, but got something " +
                     "else -- not updating location", e);

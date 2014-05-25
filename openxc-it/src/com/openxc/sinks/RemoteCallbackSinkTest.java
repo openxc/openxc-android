@@ -1,24 +1,25 @@
 package com.openxc.sinks;
 
-import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.VehicleServiceListener;
-
 import android.test.AndroidTestCase;
-
 import android.test.suitebuilder.annotation.SmallTest;
+
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.remote.VehicleServiceListener;
 
 public class RemoteCallbackSinkTest extends AndroidTestCase {
     RemoteCallbackSink notifier;
     VehicleServiceListener listener;
-    String measurementId = "the_measurement";
+    String messageId = "the_measurement";
     String receivedId = null;
 
     @Override
     public void setUp() {
         notifier = new RemoteCallbackSink();
         listener = new VehicleServiceListener.Stub() {
-            public void receive(RawMeasurement value) {
-                receivedId = value.getName();
+            public void receive(VehicleMessage value) {
+                receivedId = ((NamedVehicleMessage)value).getName();
             }
         };
     }
@@ -51,12 +52,12 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
     public void testReceiveCorrectId() throws DataSinkException {
         notifier.register(listener);
         assertNull(receivedId);
-        notifier.receive(new RawMeasurement(measurementId, 1));
+        notifier.receive(new SimpleVehicleMessage(messageId, 1));
         try {
             Thread.sleep(50);
         } catch(InterruptedException e) {}
-        assertTrue(notifier.containsMeasurement(measurementId));
+        assertTrue(notifier.containsNamedMessage(messageId));
         assertNotNull(receivedId);
-        assertEquals(receivedId, measurementId);
+        assertEquals(receivedId, messageId);
     }
 }

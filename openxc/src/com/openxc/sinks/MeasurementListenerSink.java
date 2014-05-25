@@ -10,7 +10,8 @@ import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 
 /**
  * A data sink that sends new measurements of specific types to listeners.
@@ -34,11 +35,11 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
             throws UnrecognizedMeasurementTypeException {
         mListeners.put(measurementType, listener);
 
-        String measurementId = BaseMeasurement.getIdForClass(measurementType);
-        if(containsMeasurement(measurementId)) {
+        String name = BaseMeasurement.getIdForClass(measurementType);
+        if(containsNamedMessage(name)) {
             // send the last known value to the new listener
             try {
-                receive(get(measurementId));
+                receive(getNamedMessage(name));
             } catch(DataSinkException e) {
                 Log.w(TAG, "Sink could't receive measurement", e);
             }
@@ -57,21 +58,25 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
             .toString();
     }
 
-    protected void propagateMeasurement(String measurementId,
-            RawMeasurement rawMeasurement) {
-        try {
-            Measurement measurement = BaseMeasurement.getMeasurementFromRaw(
-                    rawMeasurement);
-            for(Measurement.Listener listener :
-                    mListeners.get(BaseMeasurement.getClassForId(measurementId))) {
-                listener.receive(measurement);
+    protected void propagateMessage(String name,
+            NamedVehicleMessage message) {
+        // TODO only handling SimpleVehicleMessage for now
+        if(message instanceof SimpleVehicleMessage) {
+            try {
+                Measurement measurement =
+                        BaseMeasurement.getMeasurementFromMessage(
+                                (SimpleVehicleMessage)message);
+                for(Measurement.Listener listener :
+                        mListeners.get(BaseMeasurement.getClassForId(name))) {
+                    listener.receive(measurement);
+                }
+            } catch(UnrecognizedMeasurementTypeException e) {
+                // This happens quite often if nobody has registered to receive
+                // updates for the specific signal. It can be an error, but if we
+                // log here it's really, really noisy.
+            } catch(NoValueException e) {
+                Log.w(TAG, "Received notification for a blank measurement", e);
             }
-        } catch(UnrecognizedMeasurementTypeException e) {
-            // This happens quite often if nobody has registered to receive
-            // updates for the specific signal. It can be an error, but if we
-            // log here it's really, really noisy.
-        } catch(NoValueException e) {
-            Log.w(TAG, "Received notification for a blank measurement", e);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.openxc.measurements;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
@@ -52,9 +52,7 @@ public interface Measurement {
      */
     public Unit getValue();
 
-    public String serialize();
-
-    public RawMeasurement toRaw();
+    public VehicleMessage toVehicleMessage();
 
     /**
      * Return the creation time of this measurement;
@@ -72,19 +70,4 @@ public interface Measurement {
      * @return something easily serializable - e.g. String, Double, Boolean.
      */
     public Object getSerializedValue();
-
-    /**
-     * Return an optional event associated with this measurement.
-     *
-     * TODO argh, no easy way to get a type for this without having two template
-     * parameters. can we have an optional template parameter in Java?
-     */
-    public Object getEvent();
-
-    /**
-     * Return the event of this measurement as a type good for serialization.
-     *
-     * @see #getSerializedValue()
-     */
-    public Object getSerializedEvent();
 }

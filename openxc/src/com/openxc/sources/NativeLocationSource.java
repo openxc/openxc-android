@@ -11,7 +11,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
 
 /**
  * Generate location measurements based on native GPS updates.
@@ -72,8 +72,10 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     }
 
     public void onLocationChanged(final Location location) {
-        handleMessage(new RawMeasurement(Latitude.ID, location.getLatitude()));
-        handleMessage(new RawMeasurement(Longitude.ID, location.getLongitude()));
+        handleMessage(new SimpleVehicleMessage(Latitude.ID,
+                    location.getLatitude()));
+        handleMessage(new SimpleVehicleMessage(Longitude.ID,
+                    location.getLongitude()));
     }
 
     public void onStatusChanged(String provider, int status,

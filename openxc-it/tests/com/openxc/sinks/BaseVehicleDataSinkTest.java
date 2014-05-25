@@ -1,10 +1,10 @@
 package com.openxc.sinks;
 
+import static org.mockito.Mockito.spy;
+
 import junit.framework.TestCase;
 
-import static org.mockito.Mockito.*;
-
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
 
 public class BaseVehicleDataSinkTest extends TestCase {
     BaseVehicleDataSink sink;
@@ -14,8 +14,9 @@ public class BaseVehicleDataSinkTest extends TestCase {
         sink = spy(new BaseVehicleDataSink());
     }
 
-    public void testReceiveRawMeasurement() throws DataSinkException {
-        sink.receive(new RawMeasurement("measurement_type", "value"));
+    public void testReceiveVehicleMessage() throws DataSinkException {
+        sink.receive(new SimpleVehicleMessage("measurement_type", "value"));
+        // TODO not testing anything!
     }
 
     public void testStop() {

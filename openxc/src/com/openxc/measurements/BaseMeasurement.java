@@ -6,7 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
@@ -30,7 +31,6 @@ import com.openxc.util.Range;
  */
 public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     private AgingData<TheUnit> mValue;
-    private AgingData<Unit> mEvent;
     private Range<TheUnit> mRange;
     private static BiMap<String, Class<? extends Measurement>>
             sMeasurementIdToClass;
@@ -46,11 +46,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
      */
     public BaseMeasurement(TheUnit value) {
         mValue = new AgingData<TheUnit>(value);
-    }
-
-    public BaseMeasurement(TheUnit value, Unit event) {
-        this(value);
-        mEvent = new AgingData<Unit>(event);
     }
 
     /**
@@ -94,35 +89,23 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mValue.getValue();
     }
 
-    public Object getEvent() {
-        if(mEvent != null) {
-            return mEvent.getValue();
-        }
-        return null;
-    }
-
     public Object getSerializedValue() {
         return getValue().getSerializedValue();
     }
 
-    public Object getSerializedEvent() {
-        return getEvent();
+    public VehicleMessage toVehicleMessage() {
+        // TODO expand to allow arbitrary other values values
+        // TODO add constructors to support setting timestamp from
+        // mValue.getTimestamp()
+        return new SimpleVehicleMessage(getGenericName(), getSerializedValue());
     }
 
-    public String serialize() {
-        return toRaw().serialize();
-    }
-
-    public RawMeasurement toRaw() {
-        return new RawMeasurement(getGenericName(), getSerializedValue(),
-                getSerializedEvent(), mValue.getTimestamp());
-    }
-
-    public static Measurement deserialize(String measurementString)
-            throws NoValueException, UnrecognizedMeasurementTypeException {
-        RawMeasurement rawMeasurement = new RawMeasurement(measurementString);
-        return BaseMeasurement.getMeasurementFromRaw(rawMeasurement);
-    }
+    // TODO what is this needed for?
+    // public static Measurement deserialize(String measurementString)
+            // throws NoValueException, UnrecognizedMeasurementTypeException {
+        // VehicleMessage message = new VehicleMessage(measurementString);
+        // return BaseMeasurement.getMeasurementFromMessage(message);
+    // }
 
     public String getGenericName() {
         return "base_measurement";
@@ -167,59 +150,41 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return result;
     }
 
-    public static Measurement getMeasurementFromRaw(
-            RawMeasurement rawMeasurement)
+    public static Measurement getMeasurementFromMessage(
+            SimpleVehicleMessage message)
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
-            BaseMeasurement.getClassForId(rawMeasurement.getName());
-        return BaseMeasurement.getMeasurementFromRaw(measurementClass,
-                rawMeasurement);
+            BaseMeasurement.getClassForId(message.getName());
+        return BaseMeasurement.getMeasurementFromMessage(measurementClass,
+                message);
     }
 
-    public static Measurement getMeasurementFromRaw(
+    public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
-            RawMeasurement rawMeasurement)
+            SimpleVehicleMessage message)
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor = null;
-        if(rawMeasurement != null && rawMeasurement.getValue() != null) {
-            Class<?> valueClass = rawMeasurement.getValue().getClass();
+        if(message != null && message.getValue() != null) {
+            Class<?> valueClass = message.getValue().getClass();
             if(valueClass == Double.class || valueClass == Integer.class) {
                 valueClass = Number.class;
             }
 
-            Class<?> eventClass = rawMeasurement.hasEvent() ?
-                                rawMeasurement.getEvent().getClass()
-                                : null;
-            if(eventClass == Double.class || eventClass == Integer.class) {
-                eventClass = Number.class;
-            }
-
+            // TODO need to support event and other arbitrary fields
             try {
-                if(eventClass != null) {
-                    constructor = measurementType.getConstructor(
-                            valueClass, eventClass);
-                } else {
-                    constructor = measurementType.getConstructor(valueClass);
-                }
+                constructor = measurementType.getConstructor(valueClass);
             } catch(NoSuchMethodException e) {
                 throw new UnrecognizedMeasurementTypeException(measurementType +
                         " doesn't have the expected constructor, " +
                        measurementType + "(" +
-                       valueClass +
-                       (eventClass != null ? ", " + eventClass : "") + ")");
+                       valueClass + ")");
             }
 
             Measurement measurement;
             try {
-                if(eventClass != null) {
-                    measurement = constructor.newInstance(
-                            rawMeasurement.getValue(),
-                            rawMeasurement.getEvent());
-                } else {
-                    measurement = constructor.newInstance(
-                            rawMeasurement.getValue());
-                }
-                measurement.setTimestamp(rawMeasurement.getTimestamp());
+                measurement = constructor.newInstance(
+                        message.getValue());
+                measurement.setTimestamp(message.getTimestamp());
                 return measurement;
             } catch(InstantiationException e) {
                 throw new UnrecognizedMeasurementTypeException(
@@ -256,14 +221,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
         if(!other.getValue().equals(getValue())) {
-            return false;
-        }
-
-        if(other.getEvent() != null && getEvent() != null) {
-            if(!other.getEvent().equals(getEvent())) {
-                return false;
-            }
-        } else if(other.getEvent() != getEvent()) {
             return false;
         }
 

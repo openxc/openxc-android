@@ -2,15 +2,14 @@ package com.openxc;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
 
 import android.content.Context;
-
-import junit.framework.Assert;
 
 public class TestUtils {
     public static void pause(int millis) {

@@ -5,7 +5,7 @@ import java.util.List;
 import android.util.Log;
 
 import com.openxc.measurements.Measurement;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.DataSinkException;
 
 /**
@@ -22,11 +22,11 @@ public class VehicleInterfaceManagerUtils {
      * Attempt to send the command on every VehicleInterface in the list until
      * at most one succeeds.
      *
-     * @see send(List, RawMeasurement)
+     * @see send(List, VehicleMessage)
      */
     public static boolean send(List<VehicleInterface> interfaces,
             Measurement command) {
-        return send(interfaces, command.toRaw());
+        return send(interfaces, command.toVehicleMessage());
     }
 
     /**
@@ -36,7 +36,7 @@ public class VehicleInterfaceManagerUtils {
      * This method makes no guaratees about the order it will traverse the list.
      */
     public static boolean send(List<VehicleInterface> interfaces,
-            RawMeasurement command) {
+            VehicleMessage command) {
         command.untimestamp();
         for(VehicleInterface vehicleInterface : interfaces) {
             try {

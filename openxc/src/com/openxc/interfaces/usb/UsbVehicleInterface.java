@@ -20,7 +20,9 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -51,6 +53,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
     public static final String ACTION_USB_DEVICE_ATTACHED =
             "com.ford.openxc.USB_DEVICE_ATTACHED";
 
+    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
     private UsbInterface mInterface;
@@ -162,12 +165,9 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
-    public boolean receive(RawMeasurement command) {
+    public boolean receive(VehicleMessage command) {
         if(isConnected()) {
-            String message = command.serialize() + "\u0000";
-            Log.d(TAG, "Writing string to USB: " + message);
-            byte[] bytes = message.getBytes();
-            return write(bytes);
+            return write(sStreamer.serializeForStream(command));
         }
         return false;
     }

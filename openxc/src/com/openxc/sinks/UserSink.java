@@ -4,7 +4,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceInterface;
 
 /**
@@ -29,7 +29,7 @@ public class UserSink extends BaseVehicleDataSink {
         mService = service;
     }
 
-    public boolean receive(RawMeasurement measurement) {
+    public boolean receive(VehicleMessage measurement) {
         if(mService != null) {
             try {
                 mService.receive(measurement);

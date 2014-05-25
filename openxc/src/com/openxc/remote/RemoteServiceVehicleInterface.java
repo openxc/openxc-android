@@ -4,6 +4,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.SourceCallback;
 
 /**
@@ -15,7 +16,7 @@ import com.openxc.sources.SourceCallback;
  * with an Android remote service interface.
  *
  * Ideally the VehicleServiceInterface would extend VehicleInterface, since it
- * does implement set(RawMeasurement), but the generated code for the interface
+ * does implement set(VehicleMessage), but the generated code for the interface
  * loses whatever other interfaces you try and add.
  */
 public class RemoteServiceVehicleInterface implements VehicleInterface {
@@ -27,7 +28,7 @@ public class RemoteServiceVehicleInterface implements VehicleInterface {
         mRemoteService = remoteService;
     }
 
-    public boolean receive(RawMeasurement command) {
+    public boolean receive(VehicleMessage command) {
         if(!isConnected()) {
             Log.w(TAG, "Not connected to the VehicleService");
             return false;

@@ -5,7 +5,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import junit.framework.TestCase;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
@@ -64,7 +65,7 @@ public class DataPipelineTest extends TestCase {
 
     public void testReceiveNewData() {
         pipeline.addSink(sink);
-        pipeline.receive(new RawMeasurement("measurement", "value", "event"));
+        pipeline.receive(new SimpleVehicleMessage("measurement", "value"));
         assertTrue(sink.received);
     }
 
@@ -98,8 +99,7 @@ public class DataPipelineTest extends TestCase {
 
         public void sendTestMessage() {
             if(callback != null) {
-                callback.receive(new RawMeasurement("message", "value",
-                            "event"));
+                callback.receive(new SimpleVehicleMessage("message", "value"));
             }
         }
 
@@ -115,7 +115,7 @@ public class DataPipelineTest extends TestCase {
     private class TestSink extends BaseVehicleDataSink {
         public boolean received = false;
 
-        public boolean receive(RawMeasurement measurement) {
+        public boolean receive(VehicleMessage measurement) {
             received = true;
             return true;
         }

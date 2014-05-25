@@ -14,7 +14,8 @@ import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.BaseVehicleDataSink;
@@ -26,7 +27,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     VehicleSpeed speedReceived;
     SteeringWheelAngle steeringAngleReceived;
     URI traceUri;
-    String receivedMeasurementId;
+    String receivedMessageId;
     TraceVehicleDataSource source;
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
@@ -110,14 +111,14 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
 
     @MediumTest
     public void testCustomSink() {
-        assertNull(receivedMeasurementId);
+        assertNull(receivedMessageId);
         service.addSink(mCustomSink);
         TestUtils.pause(150);
-        assertNotNull(receivedMeasurementId);
+        assertNotNull(receivedMessageId);
         service.removeSink(mCustomSink);
-        receivedMeasurementId = null;
+        receivedMessageId = null;
         TestUtils.pause(150);
-        assertNull(receivedMeasurementId);
+        assertNull(receivedMessageId);
     }
 
     @MediumTest
@@ -186,8 +187,8 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     private VehicleDataSink mCustomSink = new BaseVehicleDataSink() {
-        public boolean receive(RawMeasurement measurement) {
-            receivedMeasurementId = measurement.getName();
+        public boolean receive(VehicleMessage message) {
+            receivedMessageId = ((NamedVehicleMessage)message).getName();
             return true;
         }
     };

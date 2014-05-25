@@ -12,7 +12,8 @@ import org.json.JSONObject;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.util.FileOpener;
 
 public class FileRecorderSinkTest extends AndroidTestCase {
@@ -22,7 +23,6 @@ public class FileRecorderSinkTest extends AndroidTestCase {
 
     String measurementId = "measurement";
     String value = "value";
-    String event = "event";
 
     @Override
     public void setUp() throws IOException, DataSinkException {
@@ -34,24 +34,15 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     @SmallTest
     public void testReceiveValueOnly() throws DataSinkException {
         assertTrue(outputString.toString().indexOf(measurementId) == -1);
-        sink.receive(new RawMeasurement(measurementId, value));
+        sink.receive(new SimpleVehicleMessage(measurementId, value));
         sink.flush();
         assertTrue(outputString.toString().indexOf(measurementId) != -1);
         assertTrue(outputString.toString().indexOf(value) != -1);
-    }
-
-    @SmallTest
-    public void testReceiveEvented() throws DataSinkException {
-        sink.receive(new RawMeasurement(measurementId, value, event));
-        sink.flush();
-        assertTrue(outputString.toString().indexOf(measurementId) != -1);
-        assertTrue(outputString.toString().indexOf(value) != -1);
-        assertTrue(outputString.toString().indexOf(event) != -1);
     }
 
     @SmallTest
     public void testOutputFormat() throws JSONException, DataSinkException {
-        RawMeasurement measurement = new RawMeasurement(measurementId, value);
+        VehicleMessage measurement = new SimpleVehicleMessage(measurementId, value);
         sink.receive(measurement);
         sink.flush();
 
@@ -63,16 +54,16 @@ public class FileRecorderSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testCounts() throws JSONException, DataSinkException {
-        RawMeasurement measurement = new RawMeasurement("first", true);
+        VehicleMessage measurement = new SimpleVehicleMessage("first", true);
         sink.receive(measurement);
 
-        measurement = new RawMeasurement("first", false);
+        measurement = new SimpleVehicleMessage("first", false);
         sink.receive(measurement);
 
-        measurement = new RawMeasurement("second", true);
+        measurement = new SimpleVehicleMessage("second", true);
         sink.receive(measurement);
 
-        measurement = new RawMeasurement("second", true);
+        measurement = new SimpleVehicleMessage("second", true);
         sink.receive(measurement);
 
         sink.flush();
@@ -87,14 +78,14 @@ public class FileRecorderSinkTest extends AndroidTestCase {
 
     @SmallTest
     public void testStop() throws DataSinkException {
-        RawMeasurement measurement = new RawMeasurement("first", true);
+        VehicleMessage measurement = new SimpleVehicleMessage("first", true);
         assertTrue(sink.receive(measurement));
 
-        measurement = new RawMeasurement("second", false);
+        measurement = new SimpleVehicleMessage("second", false);
         assertTrue(sink.receive(measurement));
         sink.stop();
 
-        measurement = new RawMeasurement("third", true);
+        measurement = new SimpleVehicleMessage("third", true);
         try {
             sink.receive(measurement);
             Assert.fail("Expected a DataSinkException");

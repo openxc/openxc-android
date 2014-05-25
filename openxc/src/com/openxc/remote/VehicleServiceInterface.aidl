@@ -1,7 +1,7 @@
 package com.openxc.remote;
 
 import com.openxc.remote.VehicleServiceListener;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * The AIDL interface for a VehicleService running in a separate process.
@@ -20,17 +20,17 @@ interface VehicleServiceInterface {
      *
      * @param measurementType must match the ID field of a known Measurement
      *                        subclass.
-     * @return a RawMeasurement which may or may not have a value. This function
+     * @return a VehicleMessage which may or may not have a value. This function
      *         will never return null, even if no value is available.
      */
-    RawMeasurement get(String measurementType);
+    VehicleMessage get(String measurementType);
 
     /**
      * Set a new value for the measurement class on the vehicle.
      *
      * @param measurement The measurement to set on the vehicle.
      */
-    boolean send(in RawMeasurement measurement);
+    boolean send(in VehicleMessage measurement);
 
     /**
      * Register to receive asynchronous updates when measurements are received.
@@ -56,7 +56,7 @@ interface VehicleServiceInterface {
      * As an application's source receive updates, it can pass them back into
      * the remote process using this method.
      */
-    void receive(in RawMeasurement measurement);
+    void receive(in VehicleMessage measurement);
 
     /**
      * @return number of messages received since instantiation.

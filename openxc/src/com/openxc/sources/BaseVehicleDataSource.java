@@ -4,11 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import android.util.Log;
-
-import com.openxc.BinaryMessages;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * A common parent for all vehicle data sources.
@@ -16,7 +12,7 @@ import com.openxc.remote.RawMeasurement;
  * This class encapsulates funcationaliy common to most data sources. It accepts
  * and stores a SourceCallback reference (required by the
  * {@link com.openxc.sources.VehicleDataSource} interface) and implements a
- * {@link #handleMessage(RawMeasurement)} method for subclass to call
+ * {@link #handleMessage(VehicleMessage)} method for subclass to call
  * with each new measurement, regardless of its origin.
  */
 public class BaseVehicleDataSource implements VehicleDataSource {
@@ -90,24 +86,9 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      *
      * @param measurement the new measurement object.
      */
-    protected void handleMessage(RawMeasurement measurement) {
+    protected void handleMessage(VehicleMessage measurement) {
         if(mCallback != null && measurement != null) {
             mCallback.receive(measurement);
-        }
-    }
-
-    protected void handleMessage(String serializedMeasurement) {
-        try {
-          handleMessage(new RawMeasurement(serializedMeasurement));
-        } catch(UnrecognizedMeasurementTypeException e) {
-        }
-    }
-
-    protected void handleMessage(BinaryMessages.VehicleMessage message) {
-        try {
-          handleMessage(new RawMeasurement(message));
-        } catch(UnrecognizedMeasurementTypeException e) {
-            Log.d(TAG, "Unable to handle binary message", e);
         }
     }
 
