@@ -3,23 +3,33 @@ package com.openxc.messages;
 import java.util.HashMap;
 
 import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import android.os.Parcel;
 
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
 public class NamedVehicleMessageTest extends TestCase {
     NamedVehicleMessage message;
     HashMap<String, Object> data;
 
-    public void setUp() {
+    @Before
+    public void setup() {
         data = new HashMap<String, Object>();
         data.put("value", Double.valueOf(42));
         message = new NamedVehicleMessage("foo", data);
     }
 
+    @Test
     public void testName() {
         assertEquals("foo", message.getName());
     }
 
+    @Test
     public void testExtractsNameFromValues() {
         data.put("name", "bar");
         message = new NamedVehicleMessage(data);
@@ -27,6 +37,7 @@ public class NamedVehicleMessageTest extends TestCase {
         assertFalse(message.contains("name"));
     }
 
+    @Test
     public void testWriteAndReadFromParcel() {
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);

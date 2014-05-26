@@ -35,6 +35,16 @@ public class NamedVehicleMessage extends VehicleMessage {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final NamedVehicleMessage other = (NamedVehicleMessage) obj;
+        return super.equals(other) && mName.equals(other.mName);
+    }
+
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
         out.writeString(getName());

@@ -13,21 +13,21 @@ public class VehicleMessage implements Parcelable {
     public static final String TIMESTAMP_KEY = "timestamp";
 
     private long mTimestamp;
-    private Map<String, Object> mValues;
+    private Map<String, Object> mValues = new HashMap<String, Object>();
 
     public VehicleMessage(Long timestamp, Map<String, Object> values) {
         if(timestamp == null) {
             if(values != null && values.containsKey(TIMESTAMP_KEY)) {
                 mTimestamp = (Long) values.remove(TIMESTAMP_KEY);
             } else {
-                mTimestamp = 0;
+                timestamp();
             }
         } else {
             mTimestamp = timestamp;
         }
 
-        if(mValues != null) {
-            mValues = values;
+        if(values != null) {
+            mValues = new HashMap<String, Object>(values);
         }
     }
 
@@ -76,7 +76,7 @@ public class VehicleMessage implements Parcelable {
     }
 
     public void put(String key, Object value) {
-        if(mValues != null && key != null && value != null) {
+        if(key != null && value != null) {
             mValues.put(key, value);
         }
     }
@@ -133,7 +133,7 @@ public class VehicleMessage implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null || !super.equals(obj)) {
+        if(obj == null) {
             return false;
         }
 

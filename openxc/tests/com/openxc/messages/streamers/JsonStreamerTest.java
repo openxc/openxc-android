@@ -2,10 +2,9 @@ package com.openxc.messages.streamers;
 
 import java.util.List;
 
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import junit.framework.TestCase;
 
-public class JsonStreamerTest extends AndroidTestCase {
+public class JsonStreamerTest extends TestCase {
     JsonStreamer streamer;
 
     @Override
@@ -13,13 +12,11 @@ public class JsonStreamerTest extends AndroidTestCase {
         streamer = new JsonStreamer();
     }
 
-    @SmallTest
     public void testEmpty() {
         List<String> records = streamer.readLines();
         assertEquals(0, records.size());
     }
 
-    @SmallTest
     public void testreadLinesOne() {
         byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
@@ -32,7 +29,6 @@ public class JsonStreamerTest extends AndroidTestCase {
         assertEquals(0, records.size());
     }
 
-    @SmallTest
     public void testreadLinesTwo() {
         byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
@@ -52,7 +48,6 @@ public class JsonStreamerTest extends AndroidTestCase {
         assertEquals(0, records.size());
     }
 
-    @SmallTest
     public void testLeavePartial() {
         byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
@@ -69,7 +64,6 @@ public class JsonStreamerTest extends AndroidTestCase {
         assertEquals(0, records.size());
     }
 
-    @SmallTest
     public void testCompletePartial() {
         byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
