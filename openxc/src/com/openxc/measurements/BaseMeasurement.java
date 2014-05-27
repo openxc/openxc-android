@@ -14,7 +14,7 @@ import com.openxc.util.Range;
 
 /**
  * The BaseMeasurement is the base implementation of the Measurement, and
- * wraps wraps an instance of a {@link Unit}, and the value it returns is always
+ * wraps an instance of a {@link Unit}, and the value it returns is always
  * in terms of this Unit.
  *
  * The Unit wrapper might seem annoying at first, but it is critical to avoid
