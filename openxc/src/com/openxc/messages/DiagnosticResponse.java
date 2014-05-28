@@ -53,7 +53,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
 		if (values.containsKey(VALUE_KEY)) {
 			mValue = (float) values.get(VALUE_KEY);
 		}
-
     }
     
     public boolean getSuccess() {

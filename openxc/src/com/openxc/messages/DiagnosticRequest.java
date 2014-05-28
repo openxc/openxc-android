@@ -36,7 +36,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
 		}
     }
     
-    public boolean mMultipleResponses() {
+    public boolean getMultipleResponses() {
     	return mMultipleResponses;
     }
     
@@ -80,4 +80,3 @@ public class DiagnosticRequest extends DiagnosticMessage {
     }
 
 }
-

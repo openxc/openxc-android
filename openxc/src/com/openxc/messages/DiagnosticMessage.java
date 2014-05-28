@@ -7,8 +7,9 @@ public abstract class DiagnosticMessage extends VehicleMessage {
 	public static final String PID_KEY = "pid";
 	public static final String PAYLOAD_KEY = "payload";
 
-	//TODO what's a good default value to give these? 0 for everything like it is now as the java default 
-	//doesn't seem good...most necessary for the optional fields. or does it matter?
+	//TODO what's a good default value to give these (here and in the subclasses)? 
+	//0 for everything like it is now as the java default doesn't seem good...most necessary 
+	//for the optional fields. or does it matter?
 	protected int mCanBus;
     protected int mId;
     protected int mMode;
