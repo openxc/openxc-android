@@ -8,6 +8,8 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class CommandMessage extends NamedVehicleMessage {
 
+    public static final String COMMAND_KEY = "command";
+	
     public CommandMessage(String name, Map<String, Object> values) {
         super(name, values);
     }

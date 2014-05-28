@@ -11,6 +11,10 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class VehicleMessage implements Parcelable {
     public static final String TIMESTAMP_KEY = "timestamp";
+    public static final String ID_KEY = "id";
+    public static final String BUS_KEY = "bus";
+    public static final String MODE_KEY = "mode";
+    public static final String SUCCESS_KEY = "success";
 
     private long mTimestamp;
     private Map<String, Object> mValues = new HashMap<String, Object>();
@@ -37,7 +41,6 @@ public class VehicleMessage implements Parcelable {
 
     public static VehicleMessage buildSubtype(Map<String, Object> values)
             throws UnrecognizedMeasurementTypeException {
-        // TODO handle other types
         VehicleMessage message;
         if(values.containsKey(NamedVehicleMessage.NAME_KEY)) {
             if(values.containsKey(SimpleVehicleMessage.VALUE_KEY)) {
@@ -45,10 +48,27 @@ public class VehicleMessage implements Parcelable {
             } else {
                 message = new NamedVehicleMessage(values);
             }
-        } else {
+        } 
+        //begin_charles
+        else if (values.containsKey(VehicleMessage.ID_KEY) && values.containsKey(CanMessage.DATA_KEY)) {
+        	//TODO bus may be set to null here, no check for bus_key in values before get()ing
+        	message = new CanMessage((int)values.get(BUS_KEY), (int)values.get(ID_KEY), (byte[])values.get(CanMessage.DATA_KEY));        	
+        } else if (values.containsKey(VehicleMessage.MODE_KEY)) {
+        	if (values.containsKey(VehicleMessage.SUCCESS_KEY)) {
+        		message = new DiagnosticResponse();
+        	} else {
+        		message = new DiagnosticRequest();
+        	}
+        } else if (values.containsKey(CommandMessage.COMMAND_KEY)) {
+        	message = new CommandMessage();
+        } else if (values.containsKey(CommandResponse.COMMAND_RESPONSE_KEY)) {
+        	message = new CommandResponse();
+        }
+        //end_charles
+        else {
             message = new VehicleMessage(values);
         }
-
+        
         return message;
     }
 
