@@ -11,10 +11,10 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class VehicleMessage implements Parcelable {
     public static final String TIMESTAMP_KEY = "timestamp";
+    public static final String NAME_KEY = "name";
     public static final String ID_KEY = "id";
     public static final String BUS_KEY = "bus";
     public static final String MODE_KEY = "mode";
-    public static final String SUCCESS_KEY = "success";
 
     private long mTimestamp;
     private Map<String, Object> mValues = new HashMap<String, Object>();
@@ -42,22 +42,15 @@ public class VehicleMessage implements Parcelable {
     public static VehicleMessage buildSubtype(Map<String, Object> values)
             throws UnrecognizedMeasurementTypeException {
         VehicleMessage message;
-        if(values.containsKey(NamedVehicleMessage.NAME_KEY)) {
-            if(values.containsKey(SimpleVehicleMessage.VALUE_KEY)) {
-                message = new SimpleVehicleMessage(values);
-            } else {
-                message = new NamedVehicleMessage(values);
-            }
-        } 
         //begin_charles
-        else if (values.containsKey(VehicleMessage.ID_KEY) && values.containsKey(CanMessage.DATA_KEY)) {
-        	//TODO bus may be set to null here, no check for bus_key in values before get()ing
+        if (values.containsKey(CanMessage.DATA_KEY)) {
+        	//TODO bus or id may be set to null here, no checking they are in values before get()ing
         	message = new CanMessage((int)values.get(BUS_KEY), (int)values.get(ID_KEY), (byte[])values.get(CanMessage.DATA_KEY));        	
         } else if (values.containsKey(VehicleMessage.MODE_KEY)) {
-        	if (values.containsKey(VehicleMessage.SUCCESS_KEY)) {
-        		message = new DiagnosticResponse();
+        	if (values.containsKey(DiagnosticResponse.SUCCESS_KEY)) {
+        		message = new DiagnosticResponse(values);
         	} else {
-        		message = new DiagnosticRequest();
+        		message = new DiagnosticRequest(values);
         	}
         } else if (values.containsKey(CommandMessage.COMMAND_KEY)) {
         	message = new CommandMessage();
@@ -65,6 +58,15 @@ public class VehicleMessage implements Parcelable {
         	message = new CommandResponse();
         }
         //end_charles
+        //this check must be done last (or at least after checking if it's a DiagnosticRequest) because that
+        //might have a name field too
+        else if(values.containsKey(NamedVehicleMessage.NAME_KEY)) {
+            if(values.containsKey(SimpleVehicleMessage.VALUE_KEY)) {
+                message = new SimpleVehicleMessage(values);
+            } else {
+                message = new NamedVehicleMessage(values);
+            }
+        } 
         else {
             message = new VehicleMessage(values);
         }

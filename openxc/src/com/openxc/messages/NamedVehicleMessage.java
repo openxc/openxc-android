@@ -7,7 +7,6 @@ import android.os.Parcel;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class NamedVehicleMessage extends VehicleMessage {
-    public static final String NAME_KEY = "name";
 
     private String mName;
 

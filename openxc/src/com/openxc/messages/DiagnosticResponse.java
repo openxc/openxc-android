@@ -1,16 +1,21 @@
 package com.openxc.messages;
 
-public class DiagnosticResponse extends VehicleMessage {
-    private int mCanBus;
-    private int mId;
-    private int mMode;
-    private int mPid;
-    private boolean mSuccess;
-    private byte[] mPayload;
+import java.util.Map;
+
+import android.os.Parcel;
+
+public class DiagnosticResponse extends DiagnosticMessage {
+	
+	public static final String VALUE_KEY = "value";
+	public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
+    public static final String SUCCESS_KEY = "success";
+	
+    private boolean mSuccess = false;
     private float mValue;
     private NegativeResponseCode mNegativeResponseCode;
 
     public static enum NegativeResponseCode {
+    	none(-1),
         subFunctionNotSupported(0x12),
         incorrectMessageLengthOrInvalidFormat(0x13),
         busyRepeatRequest(0x21),
@@ -26,13 +31,62 @@ public class DiagnosticResponse extends VehicleMessage {
         subFunctionNotSupportedInActiveSession(0x7E),
         serviceNotSupportedInActiveSession(0x7F);
 
-        private int value;
+        private int code;
         NegativeResponseCode(int value) {
-        	this.value = value;        	
+        	this.code = value;        	
         }
         
-        public int value() {
-        	return this.value;
+        public int code() {
+        	return this.code;
         }
     };
+    
+    public DiagnosticResponse(Map<String, Object> values) {
+    	super(values);
+        if (values.containsKey(SUCCESS_KEY)) {
+			if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
+				mNegativeResponseCode = NegativeResponseCode.none;
+	        } else {
+	        	mNegativeResponseCode = (NegativeResponseCode)values.get(NEGATIVE_RESPONSE_CODE_KEY);
+	        }
+		}
+		if (values.containsKey(VALUE_KEY)) {
+			mValue = (float) values.get(VALUE_KEY);
+		}
+
+    }
+    
+    public boolean getSuccess() {
+    	return mSuccess;
+    }
+    
+    public float getValue() {
+    	return mValue;
+    }
+    
+    public NegativeResponseCode getNegativeResponseCode() {
+    	return mNegativeResponseCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final DiagnosticResponse other = (DiagnosticResponse) obj;
+        return super.equals(other) && (mSuccess == other.mSuccess)
+        		&& (mValue == other.mValue) && (mNegativeResponseCode == other.mNegativeResponseCode);
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        //TODO
+    }
+
+    @Override
+    protected void readFromParcel(Parcel in) {
+        //TODO
+    }
+
 }
