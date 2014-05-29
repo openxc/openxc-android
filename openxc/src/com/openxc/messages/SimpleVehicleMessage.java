@@ -25,12 +25,10 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     }
 
     public SimpleVehicleMessage(Map<String, Object> values) {
-        // TODO yikes, this is going to explode if there is no timestamp. and
-        // yes, yes, it does. this should also be hanlded by the parent types
-        // that are in charge of name, timestamp. we just tack on the value.
-        this(((Double) values.get(TIMESTAMP_KEY)).longValue(),
-                (String) values.get(NAME_KEY),
-                values.get(VALUE_KEY));
+    	//TODO could be better, but works
+    	//must use awful-readability-having ternary expression because constructor must be first statement
+        this(values.containsKey(TIMESTAMP_KEY) ? ((Double) values.get(TIMESTAMP_KEY)).longValue() : null, 
+        		(String) values.get(NAME_KEY), values.get(VALUE_KEY));        
     }
 
     public Object getValue() {
