@@ -5,87 +5,94 @@ import java.util.Map;
 import android.os.Parcel;
 
 public class DiagnosticResponse extends DiagnosticMessage {
-	
+
 	public static final String VALUE_KEY = "value";
 	public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
-    public static final String SUCCESS_KEY = "success";
-	
-    private boolean mSuccess = false;
-    private float mValue;
-    private NegativeResponseCode mNegativeResponseCode;
+	public static final String SUCCESS_KEY = "success";
 
-    public static enum NegativeResponseCode {
-    	none(-1),
-        subFunctionNotSupported(0x12),
-        incorrectMessageLengthOrInvalidFormat(0x13),
-        busyRepeatRequest(0x21),
-        conditionsNotCorrect(0x22),
-        requestSequenceError(0x24),
-        requestOutOfRange(0x31),
-        securityAccessDenied(0x33),
-        invalidKey(0x35),
-        exceedNumberOfAttempts(0x36),
-        requiredTimeDelayNotExpired(0x37),
-        uploadDownloadNotAccepted(0x70),
-        wrongBlockSequenceCounter(0x73),
-        subFunctionNotSupportedInActiveSession(0x7E),
-        serviceNotSupportedInActiveSession(0x7F);
+	private boolean mSuccess = false;
+	private float mValue;
+	private NegativeResponseCode mNegativeResponseCode;
 
-        private int code;
-        NegativeResponseCode(int value) {
-        	this.code = value;        	
-        }
-        
-        public int code() {
-        	return this.code;
-        }
-    };
-    
-    public DiagnosticResponse(Map<String, Object> values) {
-    	super(values);
-        if (values.containsKey(SUCCESS_KEY)) {
+	public static enum NegativeResponseCode {
+		none(-1),
+		subFunctionNotSupported(0x12),
+		incorrectMessageLengthOrInvalidFormat(0x13),
+		busyRepeatRequest(0x21),
+		conditionsNotCorrect(0x22),
+		requestSequenceError(0x24),
+		requestOutOfRange(0x31),
+		securityAccessDenied(0x33),
+		invalidKey(0x35),
+		exceedNumberOfAttempts(0x36),
+		requiredTimeDelayNotExpired(0x37),
+		uploadDownloadNotAccepted(0x70),
+		wrongBlockSequenceCounter(0x73),
+		subFunctionNotSupportedInActiveSession(0x7E),
+		serviceNotSupportedInActiveSession(0x7F);
+
+		private int code;
+
+		NegativeResponseCode(int value) {
+			this.code = value;
+		}
+
+		public int code() {
+			return this.code;
+		}
+
+		public String hexCodeString() {
+			return "0x" + Integer.toHexString(code);
+		}
+	};
+
+	public DiagnosticResponse(Map<String, Object> values) {
+		super(values);
+		if (values.containsKey(SUCCESS_KEY)) {
 			if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
 				mNegativeResponseCode = NegativeResponseCode.none;
-	        } else {
-	        	mNegativeResponseCode = (NegativeResponseCode)values.get(NEGATIVE_RESPONSE_CODE_KEY);
-	        }
+			} else {
+				mNegativeResponseCode = (NegativeResponseCode) values
+						.get(NEGATIVE_RESPONSE_CODE_KEY);
+			}
 		}
 		if (values.containsKey(VALUE_KEY)) {
 			mValue = (float) values.get(VALUE_KEY);
 		}
-    }
-    
-    public boolean getSuccess() {
-    	return mSuccess;
-    }
-    
-    public float getValue() {
-    	return mValue;
-    }
-    
-    public NegativeResponseCode getNegativeResponseCode() {
-    	return mNegativeResponseCode;
-    }
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if(obj == null || !super.equals(obj)) {
-            return false;
-        }
+	public boolean getSuccess() {
+		return mSuccess;
+	}
 
-        final DiagnosticResponse other = (DiagnosticResponse) obj;
-        return super.equals(other) && (mSuccess == other.mSuccess)
-        		&& (mValue == other.mValue) && (mNegativeResponseCode == other.mNegativeResponseCode);
-    }
+	public float getValue() {
+		return mValue;
+	}
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        //TODO
-    }
+	public NegativeResponseCode getNegativeResponseCode() {
+		return mNegativeResponseCode;
+	}
 
-    @Override
-    protected void readFromParcel(Parcel in) {
-        //TODO
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !super.equals(obj)) {
+			return false;
+		}
+
+		final DiagnosticResponse other = (DiagnosticResponse) obj;
+		return super.equals(other) && (mSuccess == other.mSuccess)
+				&& (mValue == other.mValue)
+				&& (mNegativeResponseCode == other.mNegativeResponseCode);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		// TODO
+	}
+
+	@Override
+	protected void readFromParcel(Parcel in) {
+		// TODO
+	}
 
 }

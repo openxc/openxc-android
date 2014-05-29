@@ -58,8 +58,8 @@ public class VehicleMessage implements Parcelable {
         	message = new CommandResponse();
         }
         //end_charles
-        //this check must be done last (or at least after checking if it's a DiagnosticRequest) because that
-        //might have a name field too
+        //this check must be done last (or at least after checking if it's a DiagnosticRequest because that
+        //might have a name field too)
         else if(values.containsKey(NamedVehicleMessage.NAME_KEY)) {
             if(values.containsKey(SimpleVehicleMessage.VALUE_KEY)) {
                 message = new SimpleVehicleMessage(values);

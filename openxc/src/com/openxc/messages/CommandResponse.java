@@ -9,9 +9,14 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 public class CommandResponse extends CommandMessage {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
+    private String mMessage;
 	
     public CommandResponse(String name, Map<String, Object> values) {
         super(name, values);
+    }
+    
+    public String getCommandResponse() {
+    	return mMessage;
     }
 
     private CommandResponse(Parcel in)

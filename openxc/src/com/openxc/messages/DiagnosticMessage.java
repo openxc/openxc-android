@@ -18,21 +18,23 @@ public abstract class DiagnosticMessage extends VehicleMessage {
     
     protected DiagnosticMessage(Map<String, Object> values) {
     	super(values);
-    	if (values.containsKey(BUS_KEY)) {
-    		mCanBus = (int)values.get(VehicleMessage.BUS_KEY);
+    	if (values != null) {
+	    	if (values.containsKey(BUS_KEY)) {
+	    		mCanBus = (int)values.get(VehicleMessage.BUS_KEY);
+	    	}
+	    	if (values.containsKey(ID_KEY)) {
+	    		mId = (int)values.get(VehicleMessage.ID_KEY);
+	    	}
+	    	if (values.containsKey(MODE_KEY)) {
+	    		mMode = (int)values.get(VehicleMessage.MODE_KEY);
+	    	}
+	        if (values.containsKey(PID_KEY)) {
+	        	mPid = (int)values.get(PID_KEY);
+	        } 
+	        if (values.containsKey(PAYLOAD_KEY)) {
+	        	mPayload = (byte[])values.get(PAYLOAD_KEY);
+	        }
     	}
-    	if (values.containsKey(ID_KEY)) {
-    		mId = (int)values.get(VehicleMessage.ID_KEY);
-    	}
-    	if (values.containsKey(MODE_KEY)) {
-    		mMode = (int)values.get(VehicleMessage.MODE_KEY);
-    	}
-        if (values.containsKey(PID_KEY)) {
-        	mPid = (int)values.get(PID_KEY);
-        } 
-        if (values.containsKey(PAYLOAD_KEY)) {
-        	mPayload = (byte[])values.get(PAYLOAD_KEY);
-        }
     }
     
     @Override
