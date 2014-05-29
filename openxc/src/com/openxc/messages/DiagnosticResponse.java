@@ -1,5 +1,6 @@
 package com.openxc.messages;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import android.os.Parcel;
@@ -32,13 +33,24 @@ public class DiagnosticResponse extends DiagnosticMessage {
 		serviceNotSupportedInActiveSession(0x7F);
 
 		private int code;
+		private static final Map<Integer, NegativeResponseCode> lookup = new HashMap<>();
+		
+		static {
+			for (NegativeResponseCode c : NegativeResponseCode.values()) {
+				lookup.put(c.code(), c);
+			}
+		}
 
-		NegativeResponseCode(int value) {
+		private NegativeResponseCode(int value) {
 			this.code = value;
 		}
 
 		public int code() {
 			return this.code;
+		}
+		
+		public static NegativeResponseCode get(int value) {
+			return lookup.get(value);
 		}
 
 		public String hexCodeString() {
@@ -48,16 +60,18 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
 	public DiagnosticResponse(Map<String, Object> values) {
 		super(values);
-		if (values.containsKey(SUCCESS_KEY)) {
-			if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
-				mNegativeResponseCode = NegativeResponseCode.none;
-			} else {
-				mNegativeResponseCode = (NegativeResponseCode) values
-						.get(NEGATIVE_RESPONSE_CODE_KEY);
+		if (values != null) {
+			if (values.containsKey(SUCCESS_KEY)) {
+				if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
+					mNegativeResponseCode = NegativeResponseCode.none;
+				} else {
+					mNegativeResponseCode = (NegativeResponseCode) values
+							.get(NEGATIVE_RESPONSE_CODE_KEY);
+				}
 			}
-		}
-		if (values.containsKey(VALUE_KEY)) {
-			mValue = (float) values.get(VALUE_KEY);
+			if (values.containsKey(VALUE_KEY)) {
+				mValue = (float) values.get(VALUE_KEY);
+			}
 		}
 	}
 
@@ -84,15 +98,23 @@ public class DiagnosticResponse extends DiagnosticMessage {
 				&& (mValue == other.mValue)
 				&& (mNegativeResponseCode == other.mNegativeResponseCode);
 	}
+	
+	//TODO this is a guess, not 100% sure how this parcel stuff fits in
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        out.writeByte((byte) (getSuccess() ? 1 : 0));
+        out.writeFloat(getValue());
+        out.writeInt(getNegativeResponseCode().code());    
+    }
 
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		// TODO
-	}
-
-	@Override
-	protected void readFromParcel(Parcel in) {
-		// TODO
-	}
+    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+    @Override
+    protected void readFromParcel(Parcel in) {
+        super.readFromParcel(in);
+        mSuccess = in.readByte() != 0;
+        mValue = in.readFloat();
+        mNegativeResponseCode = NegativeResponseCode.get(in.readInt());
+    }
 
 }

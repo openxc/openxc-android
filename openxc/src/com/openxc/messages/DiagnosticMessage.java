@@ -2,6 +2,8 @@ package com.openxc.messages;
 
 import java.util.Map;
 
+import android.os.Parcel;
+
 public abstract class DiagnosticMessage extends VehicleMessage {
     
 	public static final String PID_KEY = "pid";
@@ -67,6 +69,28 @@ public abstract class DiagnosticMessage extends VehicleMessage {
     
     public byte[] getPayload() {
     	return mPayload;
+    }
+    
+    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        out.writeInt(getCanBus());
+        out.writeInt(getId());
+        out.writeInt(getMode());
+        out.writeInt(getPid());
+        out.writeByteArray(getPayload());        
+    }
+
+    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+    @Override
+    protected void readFromParcel(Parcel in) {
+        super.readFromParcel(in);
+        mCanBus = in.readInt();
+        mId = in.readInt();
+        mMode = in.readInt();
+        mPid = in.readInt();
+        in.readByteArray(mPayload);
     }
     
 }

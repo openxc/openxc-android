@@ -72,15 +72,27 @@ public class DiagnosticRequest extends DiagnosticMessage {
 				&& (mFrequency == other.mFrequency)
 				&& (mName.equals(other.mName));
 	}
+	
+    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        out.writeByte((byte) (getMultipleResponses() ? 1 : 0));
+        out.writeFloat(getFactor());
+        out.writeFloat(getOffset());
+        out.writeFloat(getFrequency());
+        out.writeString(getName());        
+    }
 
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		// TODO
-	}
-
-	@Override
-	protected void readFromParcel(Parcel in) {
-		// TODO
-	}
+    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+    @Override
+    protected void readFromParcel(Parcel in) {
+        super.readFromParcel(in);
+        mMultipleResponses = in.readByte() != 0;
+        mFactor = in.readFloat();
+        mOffset = in.readFloat();
+        mFrequency = in.readFloat();
+        mName = in.readString();
+    }
 
 }
