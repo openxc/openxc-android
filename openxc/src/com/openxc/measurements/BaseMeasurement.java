@@ -24,7 +24,7 @@ import com.openxc.util.Range;
  * Most applications will not use this class directly, but will import specific
  * child classes that correspond to specific types of measurements - i.e. the
  * parameterized instances of this class with a Unit. That may seem like a
- * "psuedo-typedef" but we're using it it to enforce the binding between
+ * "psuedo-typedef" but we're using it to enforce the binding between
  * the measurement and its unit type. This unfortunately means we have to add
  * constructors to every child class because they aren't inherited from
  * Measurement. If you know of a better way, please say so.
@@ -94,7 +94,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public VehicleMessage toVehicleMessage() {
-        // TODO expand to allow arbitrary other values values
+        // TODO expand to allow arbitrary other values
         // TODO add constructors to support setting timestamp from
         // mValue.getTimestamp()
         return new SimpleVehicleMessage(getGenericName(), getSerializedValue());
