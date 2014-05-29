@@ -8,7 +8,7 @@ import com.openxc.units.Unit;
 /**
  * AgingData is a container for a data value that keeps track of its age.
  *
- * This class keeps track of the birth time of a bit of data, i.e. time time
+ * This class keeps track of the birth time of a bit of data, i.e. time
  * the AgingData object is instantiated.
  */
 public class AgingData<TheUnit extends Unit> {
