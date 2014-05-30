@@ -53,5 +53,5 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         readFromParcel(in);
     }
 
-    private SimpleVehicleMessage() { }
+    protected SimpleVehicleMessage() { }
 }
