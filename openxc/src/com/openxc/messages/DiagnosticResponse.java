@@ -1,6 +1,7 @@
 package com.openxc.messages;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import android.os.Parcel;
@@ -16,21 +17,21 @@ public class DiagnosticResponse extends DiagnosticMessage {
 	private NegativeResponseCode mNegativeResponseCode;
 
 	public static enum NegativeResponseCode {
-		none(-1),
-		subFunctionNotSupported(0x12),
-		incorrectMessageLengthOrInvalidFormat(0x13),
-		busyRepeatRequest(0x21),
-		conditionsNotCorrect(0x22),
-		requestSequenceError(0x24),
-		requestOutOfRange(0x31),
-		securityAccessDenied(0x33),
-		invalidKey(0x35),
-		exceedNumberOfAttempts(0x36),
-		requiredTimeDelayNotExpired(0x37),
-		uploadDownloadNotAccepted(0x70),
-		wrongBlockSequenceCounter(0x73),
-		subFunctionNotSupportedInActiveSession(0x7E),
-		serviceNotSupportedInActiveSession(0x7F);
+		NONE(-1),
+		SUB_FUNCTION_NOT_SUPPORTED(0x12),
+		INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT(0x13),
+		BUSY_REAPEAT_REQUEST(0x21),
+		CONDITIONS_NOT_CORRECT(0x22),
+		REQUEST_SEQUENCE_ERROR(0x24),
+		REQUEST_OUT_OF_RANGE(0x31),
+		SECURITY_ACCESS_DENIED(0x33),
+		INVALID_KEY(0x35),
+		EXCEED_NUMBER_OF_ATTEMPTS(0x36),
+		REQUIRED_TIME_DELAY_NOT_EXPIRED(0x37),
+		UPLOAD_DOWNLOAD_NOT_ACCEPTED(0x70),
+		WRONG_BLOCK_SEQUENCE_COUNTER(0x73),
+		SUB_FUNCTION_NOT_SUPPORTED_IN_ACTIVE_SESSION(0x7E),
+		SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION(0x7F);
 
 		private int code;
 		private static final Map<Integer, NegativeResponseCode> lookup = new HashMap<>();
@@ -54,8 +55,21 @@ public class DiagnosticResponse extends DiagnosticMessage {
 		}
 
 		public String hexCodeString() {
-			return "0x" + Integer.toHexString(code);
+			return "0x" + Integer.toHexString(this.code);
 		}
+		
+		public String toDocumentationString() {
+			String result = this.toString().toLowerCase(Locale.US);
+			String und = "_";
+			while (result.contains(und)) {
+				int underscoreIndex = result.indexOf(und);
+				result = result.substring(0, underscoreIndex) + 
+						String.valueOf(result.charAt(underscoreIndex + 1)).toUpperCase(Locale.US) 
+						+ result.substring(underscoreIndex + 2);
+			}
+			return result;
+		}
+		
 	};
 
 	public DiagnosticResponse(Map<String, Object> values) {
@@ -63,7 +77,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
 		if (values != null) {
 			if (values.containsKey(SUCCESS_KEY)) {
 				if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
-					mNegativeResponseCode = NegativeResponseCode.none;
+					mNegativeResponseCode = NegativeResponseCode.NONE;
 				} else {
 					mNegativeResponseCode = (NegativeResponseCode) values
 							.get(NEGATIVE_RESPONSE_CODE_KEY);
