@@ -16,7 +16,7 @@ public class NamedVehicleMessage extends VehicleMessage {
 
     public NamedVehicleMessage(Map<String, Object> values) {
         super(values);
-        // TODO pop name out of values
+        mName = (String)getValuesMap().remove(NAME_KEY);
     }
 
     public NamedVehicleMessage(String name, Map<String, Object> values) {

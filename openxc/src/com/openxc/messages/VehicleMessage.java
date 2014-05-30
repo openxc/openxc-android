@@ -51,9 +51,9 @@ public class VehicleMessage implements Parcelable {
         		message = new DiagnosticRequest(values);
         	}
         } else if (values.containsKey(CommandMessage.COMMAND_KEY)) {
-        	message = new CommandMessage();
+        	message = new CommandMessage((String)values.get(CommandMessage.COMMAND_KEY), values);
         } else if (values.containsKey(CommandResponse.COMMAND_RESPONSE_KEY) && values.containsKey(CommandResponse.MESSAGE_KEY)) {
-        	message = new CommandResponse();
+        	message = new CommandResponse((String)values.get(CommandResponse.COMMAND_RESPONSE_KEY), values);
         }
         //this check must be done last (or at least after checking if it's a DiagnosticRequest because that
         //might have a name field too)

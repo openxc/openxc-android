@@ -10,8 +10,8 @@ public class CommandMessage extends NamedVehicleMessage {
 
     public static final String COMMAND_KEY = "command";
 	
-    public CommandMessage(String name, Map<String, Object> values) {
-        super(name, values);
+    public CommandMessage(String command, Map<String, Object> values) {
+        super(command, values);
     }
 
     public String getCommandName() {

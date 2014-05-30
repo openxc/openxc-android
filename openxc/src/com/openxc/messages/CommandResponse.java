@@ -11,13 +11,20 @@ public class CommandResponse extends CommandMessage {
     public static final String COMMAND_RESPONSE_KEY = "command_response";
     public static final String MESSAGE_KEY = "message";
     private String mMessage;
-	
+    
     public CommandResponse(String name, Map<String, Object> values) {
         super(name, values);
+        if (values.containsKey(MESSAGE_KEY)) {
+        	mMessage = (String)values.get(MESSAGE_KEY);
+        }
+    }
+    
+    public String getMessage() {
+    	return mMessage;
     }
     
     public String getCommandResponse() {
-    	return mMessage;
+    	return getName();
     }
 
     private CommandResponse(Parcel in)

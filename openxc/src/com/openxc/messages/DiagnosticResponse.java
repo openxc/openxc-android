@@ -20,7 +20,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
 		NONE(-1),
 		SUB_FUNCTION_NOT_SUPPORTED(0x12),
 		INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT(0x13),
-		BUSY_REAPEAT_REQUEST(0x21),
+		BUSY_REPEAT_REQUEST(0x21),
 		CONDITIONS_NOT_CORRECT(0x22),
 		REQUEST_SEQUENCE_ERROR(0x24),
 		REQUEST_OUT_OF_RANGE(0x31),
@@ -69,7 +69,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
 			}
 			return result;
 		}
-		
 	};
 
 	public DiagnosticResponse(Map<String, Object> values) {
