@@ -1,7 +1,7 @@
 package com.openxc.messages.streamers;
 
 import java.io.ByteArrayInputStream;
-
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
         if(line != null) {
             try {
                 return mFormatter.deserialize(new ByteArrayInputStream(
-                            line.getBytes(FakeStandardCharset.UTF_8)));
+                            line.getBytes(StandardCharsets.UTF_8)));
             } catch(UnrecognizedMeasurementTypeException e) {
             }
         }
