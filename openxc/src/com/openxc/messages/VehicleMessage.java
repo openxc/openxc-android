@@ -43,7 +43,7 @@ public class VehicleMessage implements Parcelable {
             throws UnrecognizedMeasurementTypeException {
         VehicleMessage message;
         if (values.containsKey(BUS_KEY) && values.containsKey(ID_KEY) && values.containsKey(CanMessage.DATA_KEY)) {
-                message = new CanMessage((int)values.get(BUS_KEY), (int)values.get(ID_KEY), (byte[])values.get(CanMessage.DATA_KEY));            
+                message = new CanMessage((int)values.get(BUS_KEY), (int)values.get(ID_KEY), (byte[])values.get(CanMessage.DATA_KEY));
         } else if (values.containsKey(BUS_KEY) && values.containsKey(ID_KEY) && values.containsKey(MODE_KEY)) {
             if (values.containsKey(DiagnosticResponse.SUCCESS_KEY)) {
                 message = new DiagnosticResponse(values);
@@ -66,7 +66,7 @@ public class VehicleMessage implements Parcelable {
         } else {
             throw new UnrecognizedMeasurementTypeException("Unrecognized combination of entries in values = " + values.toString());
         }
-        
+
         return message;
     }
 
