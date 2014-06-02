@@ -4,6 +4,8 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.common.base.Objects;
+
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class NamedVehicleMessage extends VehicleMessage {
@@ -41,6 +43,15 @@ public class NamedVehicleMessage extends VehicleMessage {
 
         final NamedVehicleMessage other = (NamedVehicleMessage) obj;
         return super.equals(other) && mName.equals(other.mName);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("timestamp", getTimestamp())
+            .add("name", getName())
+            .add("values", getValuesMap())
+            .toString();
     }
 
     @Override
