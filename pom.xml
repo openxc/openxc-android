@@ -41,7 +41,7 @@
         <android.version>4.1.1.4</android.version>
         <android.platform>19</android.platform>
 
-        <java.version>1.6</java.version>
+        <java.version>1.7</java.version>
         <android-maven.version>3.8.1</android-maven.version>
     </properties>
 
