@@ -10,7 +10,7 @@ public class JsonFormatterTest extends TestCase {
     JsonFormatter formatter = new JsonFormatter();
     SimpleVehicleMessage message;
     String messageName = "foo";
-    Integer value = Integer.valueOf(42);
+    Double value = Double.valueOf(42);
 
     public void testSerializeWithoutTimestamp() {
         message = new SimpleVehicleMessage(messageName, value);
@@ -32,15 +32,6 @@ public class JsonFormatterTest extends TestCase {
     public void testDeserializeInvalidJson() {
         try {
             formatter.deserialize("{\"name\":");
-        } catch(UnrecognizedMeasurementTypeException e) {
-            return;
-        }
-        Assert.fail();
-    }
-
-    public void testDeserializeMissingAttribute() {
-        try {
-            formatter.deserialize("{\"name\": \"" + messageName + "\"}");
         } catch(UnrecognizedMeasurementTypeException e) {
             return;
         }
