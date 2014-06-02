@@ -94,10 +94,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public VehicleMessage toVehicleMessage() {
-        // TODO expand to allow arbitrary other values
-        // TODO add constructors to support setting timestamp from
-        // mValue.getTimestamp()
-        return new SimpleVehicleMessage(getGenericName(), getSerializedValue());
+        return new SimpleVehicleMessage(mValue.getTimestamp(),
+                getGenericName(), getSerializedValue());
     }
 
     // TODO what is this needed for?

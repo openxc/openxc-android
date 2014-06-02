@@ -169,8 +169,7 @@ public class VehicleMessage implements Parcelable {
                 } else if(messageClassName.equals(NamedVehicleMessage.class.getName())) {
                     return new NamedVehicleMessage(in);
                 } else if(messageClassName.equals(SimpleVehicleMessage.class.getName())) {
-                    // TODO branches for other types
-                    return new VehicleMessage();
+                    return new SimpleVehicleMessage(in);
                 } else {
                     throw new UnrecognizedMeasurementTypeException(
                             "Unrecognized message class: " + messageClassName);
@@ -188,7 +187,6 @@ public class VehicleMessage implements Parcelable {
 
     private VehicleMessage(Parcel in)
             throws UnrecognizedMeasurementTypeException {
-        this();
         readFromParcel(in);
     }
 

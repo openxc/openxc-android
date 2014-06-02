@@ -1,0 +1,76 @@
+package com.openxc.messages;
+
+import java.util.HashMap;
+
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import android.os.Parcel;
+
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+public class SimpleVehicleMessageTest extends TestCase {
+    SimpleVehicleMessage message;
+    Double value = Double.valueOf(42);
+    String name = "foo";
+
+    @Before
+    public void setup() {
+        message = new SimpleVehicleMessage(name, value);
+    }
+
+    @Test
+    public void getNameReturnsName() {
+        assertEquals(name, message.getName());
+    }
+
+    @Test
+    public void extractsNameAndvalueFromValues() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("name", name);
+        data.put("value", value);
+        message = new SimpleVehicleMessage(data);
+        assertEquals(name, message.getName());
+        assertEquals(value, message.getValue());
+        assertFalse(message.contains("name"));
+        assertFalse(message.contains("value"));
+    }
+
+    @Test
+    public void sameEquals() {
+        assertEquals(message, message);
+    }
+
+    @Test
+    public void sameNameAndValueEquals() {
+        SimpleVehicleMessage anotherMessage = new SimpleVehicleMessage(
+                name, value);
+        assertEquals(message, anotherMessage);
+    }
+
+    @Test
+    public void differentValueDoesntEqual() {
+        NamedVehicleMessage anotherMessage = new SimpleVehicleMessage(
+                "bar", value);
+        assertFalse(message.equals(anotherMessage));
+    }
+
+
+    @Test
+    public void writeAndReadFromParcel() {
+        Parcel parcel = Parcel.obtain();
+        message.writeToParcel(parcel, 0);
+
+        // Reset parcel for reading
+        parcel.setDataPosition(0);
+
+        VehicleMessage createdFromParcel =
+                VehicleMessage.CREATOR.createFromParcel(parcel);
+        assertTrue(createdFromParcel instanceof SimpleVehicleMessage);
+        assertEquals(message, createdFromParcel);
+    }
+}

@@ -11,24 +11,21 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
 
     private Object mValue;
 
-    // TODO should make this a generic that sets type for the value
-    public SimpleVehicleMessage(String name, Object value) {
-        super(name, null);
-        mValue = value;
-        put(VALUE_KEY, value);
-    }
-
     public SimpleVehicleMessage(Long timestamp, String name, Object value) {
         super(timestamp, name, null);
         mValue = value;
-        put(VALUE_KEY, value);
+    }
+
+    public SimpleVehicleMessage(String name, Object value) {
+        this(null, name, null);
     }
 
     public SimpleVehicleMessage(Map<String, Object> values) {
         //TODO could be better, but works
         //must use awful-readability-having ternary expression because constructor must be first statement
-        this(values.containsKey(TIMESTAMP_KEY) ? ((Double) values.get(TIMESTAMP_KEY)).longValue() : null, 
-                (String) values.get(NAME_KEY), values.get(VALUE_KEY));        
+        this(values.containsKey(TIMESTAMP_KEY) ?
+                    ((Double) values.get(TIMESTAMP_KEY)).longValue() : null,
+                (String) values.get(NAME_KEY), values.get(VALUE_KEY));
     }
 
     public Object getValue() {
@@ -47,9 +44,8 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         mValue = in.readValue(null);
     }
 
-    private SimpleVehicleMessage(Parcel in)
+    protected SimpleVehicleMessage(Parcel in)
             throws UnrecognizedMeasurementTypeException {
-        this();
         readFromParcel(in);
     }
 
