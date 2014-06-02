@@ -49,6 +49,12 @@ public class NamedVehicleMessageTest extends TestCase {
     }
 
     @Test
+    public void differentNameDoesntEqual() {
+        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("bar", data);
+        assertFalse(message.equals(anotherMessage));
+    }
+
+    @Test
     public void testWriteAndReadFromParcel() {
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);
