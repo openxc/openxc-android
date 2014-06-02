@@ -25,24 +25,24 @@ public class VehicleMessageTest extends TestCase {
     }
 
     @Test
-    public void testTimestamp() {
+    public void getsATimestamp() {
         assertTrue(message.isTimestamped());
         assertTrue(message.getTimestamp() > 0);
     }
 
     @Test
-    public void testValue() {
+    public void hasAValue() {
         assertEquals(42, message.get("value"));
     }
 
     @Test
-    public void testEmptyMessage() {
+    public void emptyMessage() {
         message = new VehicleMessage(new HashMap<String, Object>());
         assertTrue(message.getValuesMap() != null);
     }
 
     @Test
-    public void testTimestampExtractedFromValues() {
+    public void timestampExtractedFromValues() {
         HashMap<String, Object> data = new HashMap<String, Object>();
         data.put("value", Integer.valueOf(42));
         data.put(VehicleMessage.TIMESTAMP_KEY, Long.valueOf(1000));
@@ -55,39 +55,40 @@ public class VehicleMessageTest extends TestCase {
     }
 
     @Test
-    public void testSetManualTimestamp() {
+    public void setManualTimestamp() {
         message = new VehicleMessage(Long.valueOf(10000), data);
         assertTrue(message.isTimestamped());
         assertEquals(10000, message.getTimestamp());
     }
 
     @Test
-    public void testUntimestamp() {
+    public void untimestamp() {
         message = new VehicleMessage(Long.valueOf(10000), data);
         message.untimestamp();
         assertFalse(message.isTimestamped());
     }
 
     @Test
-    public void testSameEquals() {
+    public void sameEquals() {
         assertEquals(message, message);
     }
 
     @Test
-    public void testSameValuesEquals() {
+    public void sameValuesEquals() {
         VehicleMessage anotherMessage = new VehicleMessage(
                 message.getTimestamp(), data);
         assertEquals(message, anotherMessage);
     }
 
     @Test
-    public void testDifferentTimestampNotEqual() {
-        VehicleMessage anotherMessage = new VehicleMessage(Long.valueOf(10000), data);
+    public void differentTimestampNotEqual() {
+        VehicleMessage anotherMessage = new VehicleMessage(
+                Long.valueOf(10000), data);
         assertFalse(message.equals(anotherMessage));
     }
 
     @Test
-    public void testDifferentValuesNotEqual() {
+    public void differentValuesNotEqual() {
         data.put("another", "foo");
         // This also tests that the values map is copied and we don't have the
         // same reference from outside the class
@@ -97,7 +98,7 @@ public class VehicleMessageTest extends TestCase {
     }
 
     @Test
-    public void testWriteAndReadFromParcel() {
+    public void writeAndReadFromParcel() {
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);
 
