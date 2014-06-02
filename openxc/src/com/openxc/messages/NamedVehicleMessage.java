@@ -18,7 +18,7 @@ public class NamedVehicleMessage extends VehicleMessage {
 
     public NamedVehicleMessage(Map<String, Object> values) {
         super(values);
-        mName = (String)getValuesMap().remove(NAME_KEY);
+        mName = (String) getValuesMap().remove(NAME_KEY);
     }
 
     public NamedVehicleMessage(String name, Map<String, Object> values) {

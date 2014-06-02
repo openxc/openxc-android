@@ -29,15 +29,15 @@ public class SimpleVehicleMessageTest extends TestCase {
     }
 
     @Test
-    public void extractsNameAndvalueFromValues() {
+    public void extractsNameAndValueFromValues() {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        data.put("value", value);
+        data.put(NamedVehicleMessage.NAME_KEY, name);
+        data.put(SimpleVehicleMessage.VALUE_KEY, value);
         message = new SimpleVehicleMessage(data);
         assertEquals(name, message.getName());
         assertEquals(value, message.getValue());
-        assertFalse(message.contains("name"));
-        assertFalse(message.contains("value"));
+        assertFalse(message.contains(NamedVehicleMessage.NAME_KEY));
+        assertFalse(message.contains(SimpleVehicleMessage.VALUE_KEY));
     }
 
     @Test
