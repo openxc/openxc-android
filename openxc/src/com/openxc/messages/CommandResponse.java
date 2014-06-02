@@ -15,16 +15,16 @@ public class CommandResponse extends CommandMessage {
     public CommandResponse(String name, Map<String, Object> values) {
         super(name, values);
         if (values.containsKey(MESSAGE_KEY)) {
-        	mMessage = (String)values.get(MESSAGE_KEY);
+            mMessage = (String)values.get(MESSAGE_KEY);
         }
     }
     
     public String getMessage() {
-    	return mMessage;
+        return mMessage;
     }
     
     public String getCommandResponse() {
-    	return getName();
+        return getName();
     }
 
     private CommandResponse(Parcel in)

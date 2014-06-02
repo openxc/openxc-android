@@ -6,7 +6,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class CanMessage extends VehicleMessage {
     public static final String DATA_KEY = "data";
-	private int mCanBus;
+    private int mCanBus;
     private int mId;
     private byte[] mData = new byte[8];
 

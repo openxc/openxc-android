@@ -192,7 +192,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     } catch(InterruptedException e) {
 
                     } finally {
-                    	mConnectionLock.writeLock().unlock();
+                        mConnectionLock.writeLock().unlock();
                     }
                 }
 

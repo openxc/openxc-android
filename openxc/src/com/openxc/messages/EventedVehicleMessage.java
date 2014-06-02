@@ -26,14 +26,14 @@ public class EventedVehicleMessage extends SimpleVehicleMessage {
     }
 
     public EventedVehicleMessage(Map<String, Object> values) {
-    	//TODO could be better, but works
-    	//must use awful-readability-having ternary expression because constructor must be first statement
+        //TODO could be better, but works
+        //must use awful-readability-having ternary expression because constructor must be first statement
         this(values.containsKey(TIMESTAMP_KEY) ? ((Double) values.get(TIMESTAMP_KEY)).longValue() : null, 
-        		(String) values.get(NAME_KEY), values.get(VALUE_KEY), (String)values.get(EVENT_KEY));        
+                (String) values.get(NAME_KEY), values.get(VALUE_KEY), (String)values.get(EVENT_KEY));        
     }
     
     public String getEvent() {
-    	return mEvent;
+        return mEvent;
     }
 
     @Override

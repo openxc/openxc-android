@@ -6,37 +6,37 @@ import android.os.Parcel;
 
 public abstract class DiagnosticMessage extends VehicleMessage {
     
-	public static final String PID_KEY = "pid";
-	public static final String PAYLOAD_KEY = "payload";
+    public static final String PID_KEY = "pid";
+    public static final String PAYLOAD_KEY = "payload";
 
-	//TODO what's a good default value to give these (here and in the subclasses)? 
-	//0 for everything like it is now as the java default doesn't seem good...most necessary 
-	//for the optional fields. or does it matter?
-	protected int mCanBus;
+    //TODO what's a good default value to give these (here and in the subclasses)? 
+    //0 for everything like it is now as the java default doesn't seem good...most necessary 
+    //for the optional fields. or does it matter?
+    protected int mCanBus;
     protected int mId;
     protected int mMode;
     protected int mPid;
     protected byte[] mPayload;
     
     protected DiagnosticMessage(Map<String, Object> values) {
-    	super(values);
-    	if (values != null) {
-	    	if (values.containsKey(BUS_KEY)) {
-	    		mCanBus = (int)values.get(VehicleMessage.BUS_KEY);
-	    	}
-	    	if (values.containsKey(ID_KEY)) {
-	    		mId = (int)values.get(VehicleMessage.ID_KEY);
-	    	}
-	    	if (values.containsKey(MODE_KEY)) {
-	    		mMode = (int)values.get(VehicleMessage.MODE_KEY);
-	    	}
-	        if (values.containsKey(PID_KEY)) {
-	        	mPid = (int)values.get(PID_KEY);
-	        } 
-	        if (values.containsKey(PAYLOAD_KEY)) {
-	        	mPayload = (byte[])values.get(PAYLOAD_KEY);
-	        }
-    	}
+        super(values);
+        if (values != null) {
+            if (values.containsKey(BUS_KEY)) {
+                mCanBus = (int)values.get(VehicleMessage.BUS_KEY);
+            }
+            if (values.containsKey(ID_KEY)) {
+                mId = (int)values.get(VehicleMessage.ID_KEY);
+            }
+            if (values.containsKey(MODE_KEY)) {
+                mMode = (int)values.get(VehicleMessage.MODE_KEY);
+            }
+            if (values.containsKey(PID_KEY)) {
+                mPid = (int)values.get(PID_KEY);
+            } 
+            if (values.containsKey(PAYLOAD_KEY)) {
+                mPayload = (byte[])values.get(PAYLOAD_KEY);
+            }
+        }
     }
     
     @Override
@@ -47,28 +47,28 @@ public abstract class DiagnosticMessage extends VehicleMessage {
 
         final DiagnosticMessage other = (DiagnosticMessage) obj;
         return super.equals(other) && (mCanBus == other.mCanBus) && (mId == other.mId)
-        		&& (mMode == other.mMode) && (mPid == other.mPid) 
-        		&& (mPayload.equals(other.mPayload));
+                && (mMode == other.mMode) && (mPid == other.mPid) 
+                && (mPayload.equals(other.mPayload));
     }
 
     public int getCanBus() {
-    	return mCanBus;
+        return mCanBus;
     }
     
     public int getId() {
-    	return mId;
+        return mId;
     }
     
     public int getMode() {
-    	return mMode;
+        return mMode;
     }
     
     public int getPid() {
-    	return mPid;
+        return mPid;
     }
     
     public byte[] getPayload() {
-    	return mPayload;
+        return mPayload;
     }
     
     //TODO this is a guess, not 100% sure how this parcel stuff fits in
