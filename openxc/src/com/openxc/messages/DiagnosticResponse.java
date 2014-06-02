@@ -73,18 +73,14 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
     public DiagnosticResponse(Map<String, Object> values) {
         super(values);
-        if (values != null) {
-            if (values.containsKey(SUCCESS_KEY)) {
-                if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
-                    mNegativeResponseCode = NegativeResponseCode.NONE;
-                } else {
-                    mNegativeResponseCode = (NegativeResponseCode) values
-                            .get(NEGATIVE_RESPONSE_CODE_KEY);
-                }
-            }
-            if (values.containsKey(VALUE_KEY)) {
-                mValue = (float) values.get(VALUE_KEY);
-            }
+        if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
+                mNegativeResponseCode = NegativeResponseCode.NONE;
+        } else {
+            mNegativeResponseCode = (NegativeResponseCode) values
+                    .get(NEGATIVE_RESPONSE_CODE_KEY);
+        }
+        if (values.containsKey(VALUE_KEY)) {
+            mValue = (float) values.get(VALUE_KEY);
         }
     }
 

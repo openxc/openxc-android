@@ -17,7 +17,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     }
 
     public SimpleVehicleMessage(String name, Object value) {
-        this(null, name, null);
+        this(null, name, value);
     }
 
     public SimpleVehicleMessage(Map<String, Object> values) {
