@@ -66,7 +66,7 @@ public class NamedVehicleMessage extends VehicleMessage {
         mName = in.readString();
     }
 
-    private NamedVehicleMessage(Parcel in)
+    protected NamedVehicleMessage(Parcel in)
             throws UnrecognizedMeasurementTypeException {
         this();
         readFromParcel(in);

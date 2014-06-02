@@ -58,7 +58,7 @@ public class NamedVehicleMessageTest extends TestCase {
 
         VehicleMessage createdFromParcel =
                 VehicleMessage.CREATOR.createFromParcel(parcel);
-        assertTrue(message instanceof NamedVehicleMessage);
+        assertTrue(createdFromParcel instanceof NamedVehicleMessage);
         assertEquals(message, createdFromParcel);
     }
 }

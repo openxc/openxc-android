@@ -166,8 +166,9 @@ public class VehicleMessage implements Parcelable {
             try {
                 if(messageClassName.equals(VehicleMessage.class.getName())) {
                     return new VehicleMessage(in);
+                } else if(messageClassName.equals(NamedVehicleMessage.class.getName())) {
+                    return new NamedVehicleMessage(in);
                 } else if(messageClassName.equals(SimpleVehicleMessage.class.getName())) {
-                    // TODO
                     // TODO branches for other types
                     return new VehicleMessage();
                 } else {
