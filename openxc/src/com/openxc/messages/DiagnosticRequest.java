@@ -11,18 +11,17 @@ public class DiagnosticRequest extends DiagnosticMessage {
     public static final String OFFSET_KEY = "offset";
     public static final String FREQUENCY_KEY = "frequency";
 
-    private boolean mMultipleResponses;
-    private float mFactor;
-    private float mOffset;
-    private float mFrequency;
+    private boolean mMultipleResponses = false;
+    private float mFactor = 1f;
+    private float mOffset = 0f;
+    private float mFrequency = 0f;
     private String mName;
 
     public DiagnosticRequest(Map<String, Object> values) {
         super(values);
         if (values != null) {
             if (values.containsKey(MULTIPLE_RESPONSES_KEY)) {
-                mMultipleResponses = (boolean) values
-                        .get(MULTIPLE_RESPONSES_KEY);
+                mMultipleResponses = (boolean) values.get(MULTIPLE_RESPONSES_KEY);
             }
             if (values.containsKey(FACTOR_KEY)) {
                 mFactor = (float) values.get(FACTOR_KEY);
@@ -72,8 +71,8 @@ public class DiagnosticRequest extends DiagnosticMessage {
                 && (mFrequency == other.mFrequency)
                 && (mName.equals(other.mName));
     }
-    
-    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+
+    // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
@@ -81,10 +80,10 @@ public class DiagnosticRequest extends DiagnosticMessage {
         out.writeFloat(getFactor());
         out.writeFloat(getOffset());
         out.writeFloat(getFrequency());
-        out.writeString(getName());        
+        out.writeString(getName());
     }
 
-    //TODO this is a guess, not 100% sure how this parcel stuff fits in
+    // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
