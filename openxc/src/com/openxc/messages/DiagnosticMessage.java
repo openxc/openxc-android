@@ -14,7 +14,7 @@ public abstract class DiagnosticMessage extends VehicleMessage {
     public static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
     public static final Range<Integer> MODE_RANGE = new Range<>(1, 15);
     public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
-    public static final int MAX_PAYLOAD_LENGTH_IN_CHARS = MAX_PAYLOAD_LENGTH_IN_BYTES / 2;
+    public static final int MAX_PAYLOAD_LENGTH_IN_CHARS = MAX_PAYLOAD_LENGTH_IN_BYTES * 2;
 
     protected int mCanBus;
     protected int mId;
