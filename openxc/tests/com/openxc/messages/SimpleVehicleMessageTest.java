@@ -55,10 +55,9 @@ public class SimpleVehicleMessageTest extends TestCase {
     @Test
     public void differentValueDoesntEqual() {
         NamedVehicleMessage anotherMessage = new SimpleVehicleMessage(
-                "bar", value);
+                name, Double.valueOf(24));
         assertFalse(message.equals(anotherMessage));
     }
-
 
     @Test
     public void writeAndReadFromParcel() {

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.common.base.Objects;
+
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class SimpleVehicleMessage extends NamedVehicleMessage {
@@ -30,9 +32,28 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final SimpleVehicleMessage other = (SimpleVehicleMessage) obj;
+        return super.equals(other) && mValue.equals(other.mValue);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("timestamp", getTimestamp())
+            .add("name", getName())
+            .add("value", getValue())
+            .add("values", getValuesMap())
+            .toString();
+    }
+
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        // TODO This is going to write out the value twice, I think.
         out.writeValue(getValue());
     }
 
