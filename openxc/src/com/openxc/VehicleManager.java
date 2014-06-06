@@ -447,8 +447,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Return a list of all sources active in the system, suitable for
      * displaying in a status view.
      *
-     * This method is soley for being able to peek into the system to see what's
-     * active, which is why it returns strings intead of the actual source
+     * This method is solely for being able to peek into the system to see what's
+     * active, which is why it returns strings instead of the actual source
      * objects. We don't want applications to be able to modify the sources
      * through this method.
      *
