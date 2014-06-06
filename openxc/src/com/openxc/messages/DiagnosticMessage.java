@@ -77,6 +77,13 @@ public abstract class DiagnosticMessage extends VehicleMessage {
     public byte[] getPayload() {
         return mPayload;
     }
+    
+    /**
+     * @return string concatenation of the bus, id, mode, and pid
+     */
+    public String getDiagnosticIdentifier() {
+        return String.valueOf(getCanBus()) + String.valueOf(getId()) + String.valueOf(getMode()) + String.valueOf(getPid());
+    }
 
     // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override

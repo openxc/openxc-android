@@ -1,26 +1,25 @@
 package com.openxc.sinks;
 
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import android.util.Log;
 
-import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
 /**
  * Functionality to notify multiple clients asynchronously of new measurements.
  *
  * This class encapsulates the functionality to keep a thread-safe list of
- * listeners that want to be notified of updates asyncronously. Subclasses need
+ * listeners that want to be notified of updates asynchronously. Subclasses need
  * only to implement the {@link #propagateMessage(String, VehicleMessage)}
  * to add the actual logic for looping over the list of receivers and send them
  * new values.
  *
- * New measurments are queued up and propagated to receivers in a separate
+ * New measurements are queued up and propagated to receivers in a separate
  * thread, to avoid blocking the original sender of the data.
  */
 public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
@@ -29,8 +28,8 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private NotificationThread mNotificationThread = new NotificationThread();
     private Lock mNotificationsLock = new ReentrantLock();
     private Condition mNotificationReceived = mNotificationsLock.newCondition();
-    private ConcurrentHashMap<String, NamedVehicleMessage> mNotifications =
-            new ConcurrentHashMap<String, NamedVehicleMessage>(32);
+    private CopyOnWriteArrayList<VehicleMessage> mNotifications =
+            new CopyOnWriteArrayList<VehicleMessage>();
 
     public AbstractQueuedCallbackSink() {
         mNotificationThread.start();
@@ -42,18 +41,17 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
 
     // TODO how is this going to work for other messages? what key to do they
     // use to register?
-    public boolean receive(NamedVehicleMessage message)
+    public boolean receive(VehicleMessage message)
             throws DataSinkException {
         super.receive(message);
         mNotificationsLock.lock();
-        mNotifications.put(message.getName(), message);
+        mNotifications.add(message);
         mNotificationReceived.signal();
         mNotificationsLock.unlock();
         return true;
     }
 
-    abstract protected void propagateMessage(String name,
-            NamedVehicleMessage message);
+    abstract protected void propagateMessage(VehicleMessage message);
 
     private class NotificationThread extends Thread {
         private boolean mRunning = true;
@@ -89,10 +87,10 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                 }
 
                 // This iterator is weakly consistent, so we don't need the lock
-                Iterator<NamedVehicleMessage> it = mNotifications.values().iterator();
+                Iterator<VehicleMessage> it = mNotifications.iterator();
                 while(it.hasNext()) {
-                    NamedVehicleMessage message = it.next();
-                    propagateMessage(message.getName(), message);
+                    VehicleMessage message = it.next();
+                    propagateMessage(message);
                     it.remove();
                 }
             }

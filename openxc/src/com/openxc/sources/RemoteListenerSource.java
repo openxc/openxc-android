@@ -54,8 +54,8 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     private VehicleServiceListener mRemoteListener =
         new VehicleServiceListener.Stub() {
-            public void receive(VehicleMessage rawMeasurement) {
-                handleMessage(rawMeasurement);
+            public void receive(VehicleMessage message) {
+                handleMessage(message);
             }
         };
 }

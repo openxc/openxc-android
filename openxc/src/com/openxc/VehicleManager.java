@@ -1,7 +1,9 @@
 package com.openxc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -25,12 +27,14 @@ import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.sinks.MeasurementListenerSink;
+import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -119,7 +123,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private VehicleServiceInterface mRemoteService;
     private RemoteListenerSource mRemoteSource;
     private VehicleInterface mRemoteController;
-    private MeasurementListenerSink mNotifier = new MeasurementListenerSink();
+    private MessageListenerSink mNotifier = new MessageListenerSink();
     private UserSink mUserSink;
 
     /**
@@ -246,6 +250,23 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 UnrecognizedMeasurementTypeException {
         return VehicleInterfaceManagerUtils.send(mInterfaces, command);
     }
+    
+    /**
+     * Send a request to the vehicle through the first available active
+     * {@link com.openxc.interfaces.VehicleInterface}.
+     *
+     * This will attempt to send the request over all of the registered vehicle
+     * interfaces until one returns successfully. There is no guarantee about
+     * the order that the interfaces are attempted.
+     *
+     * @param request The desired request to send to the vehicle.
+     * @param listener The listener for the response
+     */
+    public void request(DiagnosticRequest request, DiagnosticResponse.Listener listener) {  
+        mNotifier.registerUntilDone(request, listener);
+        //TODO is this how to actually send it? 
+        //VehicleInterfaceManagerUtils.send(mInterfaces, request);
+    }
 
     /**
      * Register to receive asynchronous updates for a specific Measurement type.
@@ -274,9 +295,10 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         mNotifier.register(measurementType, listener);
     }
+    
 
     /**
-     * Unregister a previously reigstered Measurement.Listener instance.
+     * Unregister a previously registered Measurement.Listener instance.
      *
      * When an application is no longer interested in received measurement
      * updates (e.g. when it's pausing or exiting) it should unregister all
