@@ -98,13 +98,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
                 getGenericName(), getSerializedValue());
     }
 
-    // TODO what is this needed for?
-    // public static Measurement deserialize(String measurementString)
-            // throws NoValueException, UnrecognizedMeasurementTypeException {
-        // VehicleMessage message = new VehicleMessage(measurementString);
-        // return BaseMeasurement.getMeasurementFromMessage(message);
-    // }
-
     public String getGenericName() {
         return "base_measurement";
     }
@@ -178,10 +171,9 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
                        valueClass + ")");
             }
 
-            Measurement measurement;
             try {
-                measurement = constructor.newInstance(
-                        message.getValue());
+                Measurement measurement;
+                measurement = constructor.newInstance(message.getValue());
                 measurement.setTimestamp(message.getTimestamp());
                 return measurement;
             } catch(InstantiationException e) {
