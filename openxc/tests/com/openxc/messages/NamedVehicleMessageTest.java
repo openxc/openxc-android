@@ -2,9 +2,11 @@ package com.openxc.messages;
 
 import java.util.HashMap;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import junit.framework.TestCase;
-import org.junit.Test;
-import org.junit.Before;
+import org.junit.*;
+import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -13,7 +15,7 @@ import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
-public class NamedVehicleMessageTest extends TestCase {
+public class NamedVehicleMessageTest {
     NamedVehicleMessage message;
     HashMap<String, Object> data;
 
@@ -27,6 +29,13 @@ public class NamedVehicleMessageTest extends TestCase {
     @Test
     public void testName() {
         assertEquals("foo", message.getName());
+    }
+
+    @Test
+    public void getValues() {
+        Double value = (Double) message.get("value");
+        assertThat(value, notNullValue());
+        assertEquals(value.doubleValue(), 42, 0);
     }
 
     @Test

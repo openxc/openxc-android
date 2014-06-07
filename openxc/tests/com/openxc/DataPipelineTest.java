@@ -1,34 +1,40 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
-
+import static org.hamcrest.Matchers.*;
 import junit.framework.TestCase;
+import org.junit.*;
+import static org.junit.Assert.*;
+
+import java.util.HashMap;
 
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 
-public class DataPipelineTest extends TestCase {
+public class DataPipelineTest {
     DataPipeline pipeline;
     TestSource source;
     TestSink sink;
 
-    @Override
-    public void setUp() {
+    @Before
+    public void set() {
         pipeline = new DataPipeline();
         source = new TestSource();
         sink = new TestSink();
     }
 
-    public void testAddSource() {
+    @Test
+    public void addSource() {
         pipeline.addSource(source);
         assertThat(source.callback, notNullValue());
     }
 
-    public void testAddSink() {
+    @Test
+    public void addSink() {
         pipeline.addSource(source);
         source.sendTestMessage();
         assertFalse(sink.received);
@@ -37,7 +43,8 @@ public class DataPipelineTest extends TestCase {
         assertTrue(sink.received);
     }
 
-    public void testClearSources() {
+    @Test
+    public void clearSources() {
         pipeline.addSource(source);
         pipeline.addSink(sink);
         pipeline.clearSources();
@@ -45,14 +52,16 @@ public class DataPipelineTest extends TestCase {
         assertFalse(sink.received);
     }
 
-    public void testClearSinks() {
+    @Test
+    public void clearSinks() {
         pipeline.addSink(sink);
         pipeline.clearSinks();
         source.sendTestMessage();
         assertFalse(sink.received);
     }
 
-    public void testStopClearsPipeline() {
+    @Test
+    public void stopClearsPipeline() {
         pipeline.addSink(sink);
         pipeline.addSource(source);
         source.sendTestMessage();
@@ -63,20 +72,23 @@ public class DataPipelineTest extends TestCase {
         assertFalse(sink.received);
     }
 
-    public void testReceiveNewData() {
+    @Test
+    public void receiveNewData() {
         pipeline.addSink(sink);
         pipeline.receive(new SimpleVehicleMessage("measurement", "value"));
         assertTrue(sink.received);
     }
 
-    public void testConnectsSourceCallback() {
+    @Test
+    public void connectsSourceCallback() {
         pipeline.addSink(sink);
         pipeline.addSource(source);
         source.sendTestMessage();
         assertTrue(sink.received);
     }
 
-    public void testRemoveSink() {
+    @Test
+    public void removeSink() {
         pipeline.addSink(sink);
         TestSink anotherSink = new TestSink();
         pipeline.addSink(anotherSink);
@@ -85,13 +97,32 @@ public class DataPipelineTest extends TestCase {
         assertFalse(sink.received);
     }
 
-    public void testRemoveSource() {
+    @Test
+    public void removeSource() {
         pipeline.addSource(source);
         TestSource anotherSource = new TestSource();
         pipeline.addSource(anotherSource);
         pipeline.removeSource(source);
         source.sendTestMessage();
         assertFalse(sink.received);
+    }
+
+    @Test
+    public void getNamed() {
+        String name = "foo";
+        String value = "value";
+        pipeline.receive(new SimpleVehicleMessage(name, value));
+        SimpleVehicleMessage message = (SimpleVehicleMessage) pipeline.get(name);
+        assertThat(message, notNullValue());
+        assertThat((String)message.getValue(), equalTo(value));
+    }
+
+    @Test
+    public void getUnnamed() {
+        HashMap<String, Object> data = new HashMap<>();
+        pipeline.receive(new VehicleMessage(data));
+        NamedVehicleMessage message = pipeline.get("foo");
+        assertThat(message, nullValue());
     }
 
     private class TestSource extends BaseVehicleDataSource {
