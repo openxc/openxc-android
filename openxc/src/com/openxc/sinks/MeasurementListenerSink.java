@@ -11,6 +11,7 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 
 /**
@@ -58,25 +59,30 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
             .toString();
     }
 
-    protected void propagateMessage(String name,
-            NamedVehicleMessage message) {
-        // TODO only handling SimpleVehicleMessage for now
-        if(message instanceof SimpleVehicleMessage) {
-            try {
-                Measurement measurement =
-                        BaseMeasurement.getMeasurementFromMessage(
-                                (SimpleVehicleMessage)message);
-                for(Measurement.Listener listener :
-                        mListeners.get(BaseMeasurement.getClassForId(name))) {
-                    listener.receive(measurement);
-                }
-            } catch(UnrecognizedMeasurementTypeException e) {
-                // This happens quite often if nobody has registered to receive
-                // updates for the specific signal. It can be an error, but if we
-                // log here it's really, really noisy.
-            } catch(NoValueException e) {
-                Log.w(TAG, "Received notification for a blank measurement", e);
+    protected void propagateMessage(VehicleMessage message) {
+        if(message instanceof NamedVehicleMessage) {
+            propagateMeasurement((NamedVehicleMessage) message);
+        } else {
+            // TODO propagate generic VehicleMessage - need a new listener
+            // callback
+        }
+    }
+
+    protected void propagateMeasurement(NamedVehicleMessage message) {
+        try {
+            Measurement measurement =
+                BaseMeasurement.getMeasurementFromMessage(
+                        (SimpleVehicleMessage)message);
+            for(Measurement.Listener listener :
+                    mListeners.get(measurement.getClass())) {
+                listener.receive(measurement);
             }
+        } catch(UnrecognizedMeasurementTypeException e) {
+            // This happens quite often if nobody has registered to receive
+            // updates for the specific signal. It can be an error, but if we
+            // log here it's really, really noisy.
+        } catch(NoValueException e) {
+            Log.w(TAG, "Received notification for a blank measurement", e);
         }
     }
 }

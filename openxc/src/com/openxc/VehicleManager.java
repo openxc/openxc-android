@@ -25,7 +25,7 @@ import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
@@ -219,8 +219,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
-            // TODO may need to be more generic and use NamedVehicleMessage
-            SimpleVehicleMessage message = (SimpleVehicleMessage)
+            NamedVehicleMessage message = (NamedVehicleMessage)
                     mRemoteService.get(
                         BaseMeasurement.getIdForClass(measurementType));
             return BaseMeasurement.getMeasurementFromMessage(

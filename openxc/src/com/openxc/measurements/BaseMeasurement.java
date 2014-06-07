@@ -3,9 +3,11 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Map;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Unit;
@@ -142,7 +144,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public static Measurement getMeasurementFromMessage(
-            SimpleVehicleMessage message)
+            NamedVehicleMessage message)
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
             BaseMeasurement.getClassForId(message.getName());
@@ -152,46 +154,61 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
     public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
-            SimpleVehicleMessage message)
+            NamedVehicleMessage message)
             throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor = null;
-        if(message != null && message.getValue() != null) {
-            Class<?> valueClass = message.getValue().getClass();
-            if(valueClass == Double.class || valueClass == Integer.class) {
-                valueClass = Number.class;
-            }
+        if(message == null) {
+            throw new NoValueException();
+        }
 
-            // TODO need to support event and other arbitrary fields
-            try {
-                constructor = measurementType.getConstructor(valueClass);
-            } catch(NoSuchMethodException e) {
-                throw new UnrecognizedMeasurementTypeException(measurementType +
-                        " doesn't have the expected constructor, " +
-                       measurementType + "(" +
-                       valueClass + ")");
-            }
+        try {
+            if(message instanceof SimpleVehicleMessage) {
+                SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+                Class<?> valueClass = simpleMessage.getValue().getClass();
+                if(valueClass == Double.class || valueClass == Integer.class) {
+                    valueClass = Number.class;
+                }
 
-            try {
+                try {
+                    constructor = measurementType.getConstructor(valueClass);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMeasurementTypeException(measurementType +
+                            " doesn't have the expected constructor, " +
+                           measurementType + "(" +
+                           valueClass + ")");
+                }
+
                 Measurement measurement;
-                measurement = constructor.newInstance(message.getValue());
+                measurement = constructor.newInstance(simpleMessage.getValue());
+                measurement.setTimestamp(simpleMessage.getTimestamp());
+                return measurement;
+            } else {
+                try {
+                    constructor = measurementType.getConstructor(Map.class);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMeasurementTypeException(measurementType +
+                            " doesn't have a constructor accepting a Map");
+                }
+
+                Measurement measurement;
+                measurement = constructor.newInstance(message.getValuesMap());
                 measurement.setTimestamp(message.getTimestamp());
                 return measurement;
-            } catch(InstantiationException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " is abstract", e);
-            } catch(IllegalAccessException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " has a private constructor", e);
-            } catch(IllegalArgumentException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " has unexpected arguments", e);
-            } catch(InvocationTargetException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + "'s constructor threw an exception",
-                        e);
             }
+        } catch(InstantiationException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " is abstract", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has a private constructor", e);
+        } catch(IllegalArgumentException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has unexpected arguments", e);
+        } catch(InvocationTargetException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + "'s constructor threw an exception",
+                    e);
         }
-        throw new NoValueException();
     }
 
     @Override

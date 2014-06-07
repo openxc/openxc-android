@@ -7,6 +7,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.common.base.Objects;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.remote.VehicleServiceListener;
 
@@ -63,7 +64,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
             .toString();
     }
 
-    protected void propagateMessage(String name, NamedVehicleMessage message) {
+    protected void propagateMessage(VehicleMessage message) {
         synchronized(mListeners) {
             int i = mListeners.beginBroadcast();
             while(i > 0) {
