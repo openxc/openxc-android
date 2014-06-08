@@ -71,8 +71,7 @@ public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
     protected void propagateMeasurement(NamedVehicleMessage message) {
         try {
             Measurement measurement =
-                BaseMeasurement.getMeasurementFromMessage(
-                        (SimpleVehicleMessage)message);
+                BaseMeasurement.getMeasurementFromMessage(message);
             for(Measurement.Listener listener :
                     mListeners.get(measurement.getClass())) {
                 listener.receive(measurement);

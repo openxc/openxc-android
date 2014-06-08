@@ -1,0 +1,15 @@
+title VehicleManager propagates received message to listeners
+
+DataPipeline -> MeasurementListenerSink: receive(message)
+MeasurementListenerSink -> AbstractQueuedCallbackSink: receive(message)
+note right of AbstractQueuedCallbackSink: stores message in a synchronized list
+AbstractQueuedCallbackSink -> MeasurementListenerSink: propagateMessage(mesage)
+alt if message has a 'name' field
+   MeasurementListenerSink -> BaseMeasurement: getMeasurementFromMessage(message)
+   BaseMeasurement -> MeasurementListenerSink: Measurement
+   loop for each listener register for this Measurement's type
+      MeasurementListenerSink -> Measurement.Listener: receive(Measurement)
+   end
+else TODO propagate other types, or just a generic VehicleMessage
+end
+

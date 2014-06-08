@@ -13,7 +13,7 @@ import com.openxc.messages.VehicleMessage;
  * and stores a SourceCallback reference (required by the
  * {@link com.openxc.sources.VehicleDataSource} interface) and implements a
  * {@link #handleMessage(VehicleMessage)} method for subclass to call
- * with each new measurement, regardless of its origin.
+ * with each new message, regardless of its origin.
  */
 public class BaseVehicleDataSource implements VehicleDataSource {
     private final static String TAG = "BaseVehicleDataSource";
@@ -82,13 +82,13 @@ public class BaseVehicleDataSource implements VehicleDataSource {
     }
 
     /**
-     * Pass a new measurement to the callback, if set.
+     * Pass a new message to the callback, if set.
      *
-     * @param measurement the new measurement object.
+     * @param message the new message object.
      */
-    protected void handleMessage(VehicleMessage measurement) {
-        if(mCallback != null && measurement != null) {
-            mCallback.receive(measurement);
+    protected void handleMessage(VehicleMessage message) {
+        if(mCallback != null && message != null) {
+            mCallback.receive(message);
         }
     }
 

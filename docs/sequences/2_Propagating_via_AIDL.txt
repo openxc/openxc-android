@@ -1,0 +1,19 @@
+title Propagating message from Service to Manager via AIDL
+
+DataPipeline (Service) -> RemoteCallbackSink: receive(message);
+RemoteCallbackSink -> AbstractQueuedCallbackSink: receive(message)
+note over AbstractQueuedCallbackSink: stores message in a synchronized list
+AbstractQueuedCallbackSink -> RemoteCallbackSink: propagateMessage(mesage)
+loop for each OpenXC app's connected VehicleManager
+    RemoteCallbackSink -> RemoteListenerSource: receive(message)
+    note over RemoteCallbackSink,RemoteListenerSource: Crosses AIDL
+    RemoteListenerSource -> BaseVehicleDataSource: handleMessage(message)
+    BaseVehicleDataSource -> DataPipeline (Manager): receive(message)
+    alt if message has a 'name' field
+        note over DataPipeline (Manager): store locally for retreival by name
+    end
+    loop for each sink on the pipeline
+       DataPipeline (Manager) -> VehicleDataSink: receive(message);
+    end
+end
+
