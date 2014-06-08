@@ -39,10 +39,6 @@
             <type>apklib</type>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.crashlytics.android</groupId>
             <artifactId>crashlytics</artifactId>
             <version>[1.0.2,)</version>
