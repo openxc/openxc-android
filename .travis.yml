@@ -12,10 +12,11 @@ before_install:
   - which android
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 install:
-  - mvn install -DskipTests=true
+  - mvn install -DskipTests=true -pl openxc -am
 script:
   - mvn test -pl openxc
   - mvn test -pl openxc-it
+  - mvn package -pl enabler
 notifications:
   hipchat:
     - secure: "SYNsoAV2/tvC7l4IdJxBHjczthLuuOCJ3zruu55MN3EYomf25tlRed8msuVU\nv7n8sYWcPjiUI5lbHzQTKU0PT1+arlBMwRhPMG719ID3BcmufXqVys4yzn+K\nAL3YaDONClJRaNbuaqVpz7l97jvsN/VGYbKCGvymiGf6sKu6T4Y="
