@@ -82,6 +82,11 @@ def release():
 def snapshot():
     local("mvn clean deploy -pl openxc -am")
 
+@task
+def sequence_diagrams():
+    with lcd("docs/sequences"):
+        local("make")
+
 def release_descriptor(path):
     with lcd(path):
         return local('git describe HEAD', capture=True).rstrip("\n")
