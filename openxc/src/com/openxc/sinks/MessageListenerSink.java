@@ -20,13 +20,13 @@ import com.openxc.messages.SimpleVehicleMessage;
  * Applications requesting asynchronous updates for specific signals get their
  * values through this sink.
  */
-public class MeasurementListenerSink extends AbstractQueuedCallbackSink {
-    private final static String TAG = "MeasurementListenerSink";
+public class MessageListenerSink extends AbstractQueuedCallbackSink {
+    private final static String TAG = "MessageListenerSink";
 
     private Multimap<Class<? extends Measurement>,
             Measurement.Listener> mListeners = HashMultimap.create();
 
-    public MeasurementListenerSink() {
+    public MessageListenerSink() {
         mListeners = HashMultimap.create();
         mListeners = Multimaps.synchronizedMultimap(mListeners);
     }

@@ -30,7 +30,7 @@ import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.sinks.MeasurementListenerSink;
+import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -119,7 +119,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private VehicleServiceInterface mRemoteService;
     private RemoteListenerSource mRemoteSource;
     private VehicleInterface mRemoteController;
-    private MeasurementListenerSink mNotifier = new MeasurementListenerSink();
+    private MessageListenerSink mNotifier = new MessageListenerSink();
     private UserSink mUserSink;
 
     /**
