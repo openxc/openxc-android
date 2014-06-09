@@ -190,9 +190,12 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
                             " doesn't have a constructor accepting a Map");
                 }
 
-                Measurement measurement;
-                measurement = constructor.newInstance(message.getValuesMap());
-                measurement.setTimestamp(message.getTimestamp());
+                Measurement measurement = null;
+                // TODO do we allow creating measurements from a generic values
+                // map? need to make it public if so. i'm thinking that th
+                // emeasurement should subclass simplevehiclemessage
+                // measurement = constructor.newInstance(message.getValuesMap());
+                // measurement.setTimestamp(message.getTimestamp());
                 return measurement;
             }
         } catch(InstantiationException e) {

@@ -1,6 +1,7 @@
 package com.openxc.messages;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import android.os.Parcel;
 
@@ -8,7 +9,8 @@ import com.google.common.base.Objects;
 
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
-public class NamedVehicleMessage extends VehicleMessage {
+public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage {
+    public static final String NAME_KEY = "name";
 
     private String mName;
 
@@ -45,6 +47,12 @@ public class NamedVehicleMessage extends VehicleMessage {
         return super.equals(other) && mName.equals(other.mName);
     }
 
+    public MessageKey getKey() {
+        HashMap<String, Object> key = new HashMap<>();
+        key.put(NAME_KEY, getName());
+        return new MessageKey(key);
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -64,6 +72,10 @@ public class NamedVehicleMessage extends VehicleMessage {
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mName = in.readString();
+    }
+
+    protected static boolean matchesKeys(Map<String, Object> map) {
+        return map.containsKey(NAME_KEY);
     }
 
     protected NamedVehicleMessage(Parcel in)

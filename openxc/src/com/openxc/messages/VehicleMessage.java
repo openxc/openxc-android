@@ -11,10 +11,6 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class VehicleMessage implements Parcelable {
     public static final String TIMESTAMP_KEY = "timestamp";
-    public static final String NAME_KEY = "name";
-    public static final String ID_KEY = "id";
-    public static final String BUS_KEY = "bus";
-    public static final String MODE_KEY = "mode";
 
     private long mTimestamp;
     private Map<String, Object> mValues = new HashMap<String, Object>();
@@ -41,28 +37,24 @@ public class VehicleMessage implements Parcelable {
 
     public static VehicleMessage buildSubtype(Map<String, Object> values)
             throws UnrecognizedMeasurementTypeException {
+        // Must check from most specific to least
         VehicleMessage message;
-        if (values.containsKey(BUS_KEY) && values.containsKey(ID_KEY) && values.containsKey(CanMessage.DATA_KEY)) {
-                message = new CanMessage((int)values.get(BUS_KEY), (int)values.get(ID_KEY), (byte[])values.get(CanMessage.DATA_KEY));
-        } else if (values.containsKey(BUS_KEY) && values.containsKey(ID_KEY) && values.containsKey(MODE_KEY)) {
-            if (values.containsKey(DiagnosticResponse.SUCCESS_KEY)) {
-                message = new DiagnosticResponse(values);
-            } else {
-                message = new DiagnosticRequest(values);
-            }
-        } else if (values.containsKey(CommandMessage.COMMAND_KEY)) {
-            message = new CommandMessage((String) values.get(CommandMessage.COMMAND_KEY), values);
-        } else if (values.containsKey(CommandResponse.COMMAND_RESPONSE_KEY) && values.containsKey(CommandResponse.MESSAGE_KEY)) {
-            message = new CommandResponse((String) values.get(CommandResponse.COMMAND_RESPONSE_KEY), values);
-        }
-        //this check must be done last (or at least after checking if it's a DiagnosticRequest because that
-        //might have a name field too)
-        else if (values.containsKey(NamedVehicleMessage.NAME_KEY)) {
-            if (values.containsKey(SimpleVehicleMessage.VALUE_KEY)) {
-                message = new SimpleVehicleMessage(values);
-            } else {
-                message = new NamedVehicleMessage(values);
-            }
+        // TODO could clean this up with reflection since they all now have the
+        // same constructor
+        if(CanMessage.matchesKeys(values)) {
+            message = new CanMessage(values);
+        } else if(DiagnosticResponse.matchesKeys(values)) {
+            message = new DiagnosticResponse(values);
+        } else if(DiagnosticRequest.matchesKeys(values)) {
+            message = new DiagnosticRequest(values);
+        } else if(CommandMessage.matchesKeys(values)) {
+            message = new CommandMessage(values);
+        } else if(CommandResponse.matchesKeys(values)) {
+            message = new CommandResponse(values);
+        } else if(SimpleVehicleMessage.matchesKeys(values)) {
+            message = new SimpleVehicleMessage(values);
+        } else if(NamedVehicleMessage.matchesKeys(values)) {
+            message = new NamedVehicleMessage(values);
         } else {
             throw new UnrecognizedMeasurementTypeException("Unrecognized combination of entries in values = " + values.toString());
         }
@@ -81,7 +73,7 @@ public class VehicleMessage implements Parcelable {
         return mTimestamp;
     }
 
-    public Map<String, Object> getValuesMap() {
+    protected Map<String, Object> getValuesMap() {
         return mValues;
     }
 
@@ -184,6 +176,9 @@ public class VehicleMessage implements Parcelable {
         }
     };
 
+    protected static boolean matchesKeys(Map<String, Object> map) {
+        return true;
+    }
 
     private VehicleMessage(Parcel in)
             throws UnrecognizedMeasurementTypeException {

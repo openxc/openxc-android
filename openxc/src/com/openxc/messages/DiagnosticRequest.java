@@ -23,17 +23,21 @@ public class DiagnosticRequest extends DiagnosticMessage {
             if (values.containsKey(MULTIPLE_RESPONSES_KEY)) {
                 mMultipleResponses = (boolean) values.get(MULTIPLE_RESPONSES_KEY);
             }
+
             if (values.containsKey(FACTOR_KEY)) {
                 mFactor = (float) values.get(FACTOR_KEY);
             }
+
             if (values.containsKey(OFFSET_KEY)) {
                 mOffset = (float) values.get(OFFSET_KEY);
             }
+
             if (values.containsKey(FREQUENCY_KEY)) {
                 mFrequency = (float) values.get(FREQUENCY_KEY);
             }
-            if (values.containsKey(NAME_KEY)) {
-                mName = (String) values.get(NAME_KEY);
+
+            if (values.containsKey(NamedVehicleMessage.NAME_KEY)) {
+                mName = (String) values.get(NamedVehicleMessage.NAME_KEY);
             }
         }
     }

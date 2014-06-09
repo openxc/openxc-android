@@ -51,6 +51,10 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             .toString();
     }
 
+    protected static boolean matchesKeys(Map<String, Object> map) {
+        return NamedVehicleMessage.matchesKeys(map) && map.containsKey(VALUE_KEY);
+    }
+
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);

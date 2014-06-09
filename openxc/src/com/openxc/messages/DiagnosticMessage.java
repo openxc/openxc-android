@@ -8,6 +8,7 @@ import com.openxc.util.Range;
 
 public abstract class DiagnosticMessage extends VehicleMessage {
 
+    public static final String MODE_KEY = "mode";
     public static final String PID_KEY = "pid";
     public static final String PAYLOAD_KEY = "payload";
     // TODO can there be more busses?
@@ -25,14 +26,14 @@ public abstract class DiagnosticMessage extends VehicleMessage {
     protected DiagnosticMessage(Map<String, Object> values) {
         super(values);
         if (values != null) {
-            if (values.containsKey(BUS_KEY)) {
-                mCanBus = (int) values.get(VehicleMessage.BUS_KEY);
+            if (values.containsKey(CanMessage.BUS_KEY)) {
+                mCanBus = (int) values.get(CanMessage.BUS_KEY);
             }
-            if (values.containsKey(ID_KEY)) {
-                mId = (int) values.get(VehicleMessage.ID_KEY);
+            if (values.containsKey(CanMessage.ID_KEY)) {
+                mId = (int) values.get(CanMessage.ID_KEY);
             }
             if (values.containsKey(MODE_KEY)) {
-                mMode = (int) values.get(VehicleMessage.MODE_KEY);
+                mMode = (int) values.get(MODE_KEY);
             }
             if (values.containsKey(PID_KEY)) {
                 mPid = (int) values.get(PID_KEY);
@@ -100,4 +101,8 @@ public abstract class DiagnosticMessage extends VehicleMessage {
         in.readByteArray(mPayload);
     }
 
+    protected static boolean matchesKeys(Map<String, Object> map) {
+        return map.containsKey(CanMessage.BUS_KEY) && map.containsKey(CanMessage.ID_KEY) &&
+                map.containsKey(MODE_KEY);
+    }
 }

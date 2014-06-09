@@ -58,9 +58,17 @@ public class NamedVehicleMessageTest {
     }
 
     @Test
+    public void sameNameDifferentValueDoesntEqual() {
+        data = new HashMap<String, Object>();
+        data.put("value", Double.valueOf(24));
+        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
+        assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
     public void differentNameDoesntEqual() {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("bar", data);
-        assertFalse(message.equals(anotherMessage));
+        assertThat(message, not(equalTo(anotherMessage)));
     }
 
     @Test
@@ -75,5 +83,11 @@ public class NamedVehicleMessageTest {
                 VehicleMessage.CREATOR.createFromParcel(parcel);
         assertTrue(createdFromParcel instanceof NamedVehicleMessage);
         assertEquals(message, createdFromParcel);
+    }
+
+    @Test
+    public void matchesKey() {
+        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
+        assertThat(message.getKey(), equalTo(anotherMessage.getKey()));
     }
 }
