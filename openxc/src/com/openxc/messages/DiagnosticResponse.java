@@ -15,6 +15,10 @@ public class DiagnosticResponse extends DiagnosticMessage {
     private boolean mSuccess = false;
     private float mValue;
     private NegativeResponseCode mNegativeResponseCode;
+    
+    public interface Listener {
+        public void receive(DiagnosticRequest req, DiagnosticResponse response);
+    }
 
     public static enum NegativeResponseCode {
         NONE(-1),

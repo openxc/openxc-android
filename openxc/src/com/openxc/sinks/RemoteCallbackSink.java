@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceListener;
 
 /**

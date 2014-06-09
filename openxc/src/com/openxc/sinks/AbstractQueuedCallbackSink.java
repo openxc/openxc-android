@@ -1,7 +1,7 @@
 package com.openxc.sinks;
 
 import java.util.Iterator;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,12 +14,12 @@ import com.openxc.messages.VehicleMessage;
  * Functionality to notify multiple clients asynchronously of new measurements.
  *
  * This class encapsulates the functionality to keep a thread-safe list of
- * listeners that want to be notified of updates asyncronously. Subclasses need
+ * listeners that want to be notified of updates asynchronously. Subclasses need
  * only to implement the {@link #propagateMessage(VehicleMessage)}
  * to add the actual logic for looping over the list of receivers and send them
  * new values.
  *
- * New measurments are queued up and propagated to receivers in a separate
+ * New measurements are queued up and propagated to receivers in a separate
  * thread, to avoid blocking the original sender of the data.
  */
 public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
@@ -28,8 +28,8 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     private NotificationThread mNotificationThread = new NotificationThread();
     private Lock mNotificationsLock = new ReentrantLock();
     private Condition mNotificationReceived = mNotificationsLock.newCondition();
-    private ArrayList<VehicleMessage> mNotifications =
-            new ArrayList<VehicleMessage>();
+    private CopyOnWriteArrayList<VehicleMessage> mNotifications =
+            new CopyOnWriteArrayList<VehicleMessage>();
 
     public AbstractQueuedCallbackSink() {
         mNotificationThread.start();
@@ -94,6 +94,13 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                     mNotificationsLock.unlock();
                 }
 
+                // This iterator is weakly consistent, so we don't need the lock
+                Iterator<VehicleMessage> it = mNotifications.iterator();
+                while(it.hasNext()) {
+                    VehicleMessage message = it.next();
+                    propagateMessage(message);
+                    it.remove();
+                }
             }
             Log.d(TAG, "Stopped message notifier");
         }
