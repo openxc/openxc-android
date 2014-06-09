@@ -7,7 +7,7 @@ import android.os.Parcel;
 
 import com.openxc.util.Range;
 
-public abstract class DiagnosticMessage extends VehicleMessage {
+public abstract class DiagnosticMessage extends VehicleMessage implements KeyedMessage {
 
     public static final String MODE_KEY = "mode";
     public static final String PID_KEY = "pid";
@@ -42,7 +42,7 @@ public abstract class DiagnosticMessage extends VehicleMessage {
             if (values.containsKey(PAYLOAD_KEY)) {
                 // TODO what's the right way to convert this?
                 // https://github.com/openxc/openxc-message-format
-                // says "bytes [...] as a hexidecimal number in a string"
+                // says "bytes [...] as a hexadecimal number in a string"
                 mPayload = ((String) values.get(PAYLOAD_KEY)).getBytes();
             }
         }
