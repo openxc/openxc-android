@@ -18,6 +18,7 @@ import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.MessageKey;
 
 /**
  * A data sink that sends new measurements of specific types to listeners.
@@ -30,9 +31,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     private Multimap<Class<? extends Measurement>, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
-    private Multimap<String, DiagnosticResponse.Listener>
+    private Multimap<MessageKey, DiagnosticResponse.Listener>
             mDiagnosticListeners = HashMultimap.create();
-    private Map<String, DiagnosticRequest> mRequestMap = new HashMap<>();
+    private Map<MessageKey, DiagnosticRequest> mRequestMap = new HashMap<>();
 
     public MessageListenerSink() {
         mMeasurementListeners = Multimaps.synchronizedMultimap(
@@ -59,11 +60,11 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void registerUntilDone(DiagnosticRequest request,
             DiagnosticResponse.Listener listener) {
-        String diagnosticIdentifier = request.getDiagnosticIdentifier();
-        // Sending a request with the same diagnosticIdentifier as a previous
+        MessageKey key = request.getKey();
+        // Sending a request with the same key as a previous
         // one cancels the last one, so just overwrite it
-        mRequestMap.put(diagnosticIdentifier, request);
-        mDiagnosticListeners.put(diagnosticIdentifier, listener);
+        mRequestMap.put(key, request);
+        mDiagnosticListeners.put(key, listener);
     }
 
     public void unregister(Class<? extends Measurement> measurementType,
@@ -90,16 +91,16 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     }
 
     private void propagateDiagnosticResponse(DiagnosticResponse response) {
-        String diagnosticIdentifier = response.getDiagnosticIdentifier();
-        DiagnosticRequest request = mRequestMap.get(diagnosticIdentifier);
-        for(DiagnosticResponse.Listener listener : mDiagnosticListeners.get(diagnosticIdentifier)) {
+        MessageKey key = response.getKey();
+        DiagnosticRequest request = mRequestMap.get(key);
+        for(DiagnosticResponse.Listener listener : mDiagnosticListeners.get(key)) {
             listener.receive(request, response);
         }
         //if the frequency of the most recent request with this id is 0, it's done once the response has been received,
         //so no need to store them anymore
         if (request.getFrequency() == 0) {
-            mRequestMap.remove(diagnosticIdentifier);
-            mDiagnosticListeners.removeAll(diagnosticIdentifier);
+            mRequestMap.remove(key);
+            mDiagnosticListeners.removeAll(key);
         }
     }
 

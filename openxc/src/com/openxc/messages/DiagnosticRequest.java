@@ -4,6 +4,8 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.common.base.Objects;
+
 public class DiagnosticRequest extends DiagnosticMessage {
 
     public static final String MULTIPLE_RESPONSES_KEY = "multiple_responses";
@@ -74,6 +76,21 @@ public class DiagnosticRequest extends DiagnosticMessage {
                 && (mFactor == other.mFactor) && (mOffset == other.mOffset)
                 && (mFrequency == other.mFrequency)
                 && (mName.equals(other.mName));
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("timestamp", getTimestamp())
+            .add("id", getId())
+            .add("mode", getMode())
+            .add("pid", getPid())
+            .add("payload", getPayload())
+            .add("multiple_responses", getMultipleResponses())
+            .add("factor", getFactor())
+            .add("offset", getOffset())
+            .add("frequency", getFrequency())
+            .toString();
     }
 
     // TODO this is a guess, not 100% sure how this parcel stuff fits in

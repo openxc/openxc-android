@@ -6,6 +6,8 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.common.base.Objects;
+
 public class DiagnosticResponse extends DiagnosticMessage {
 
     public static final String VALUE_KEY = "value";
@@ -15,7 +17,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
     private boolean mSuccess = false;
     private float mValue;
     private NegativeResponseCode mNegativeResponseCode;
-    
+
     public interface Listener {
         public void receive(DiagnosticRequest req, DiagnosticResponse response);
     }
@@ -98,6 +100,20 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
     public NegativeResponseCode getNegativeResponseCode() {
         return mNegativeResponseCode;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("timestamp", getTimestamp())
+            .add("id", getId())
+            .add("mode", getMode())
+            .add("pid", getPid())
+            .add("payload", getPayload())
+            .add("value", getValue())
+            .add("negative_response_code", getNegativeResponseCode())
+            .add("success", getSuccess())
+            .toString();
     }
 
     @Override

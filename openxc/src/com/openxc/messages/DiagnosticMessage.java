@@ -1,6 +1,7 @@
 package com.openxc.messages;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import android.os.Parcel;
 
@@ -78,12 +79,14 @@ public abstract class DiagnosticMessage extends VehicleMessage {
     public byte[] getPayload() {
         return mPayload;
     }
-    
-    /**
-     * @return string concatenation of the bus, id, mode, and pid
-     */
-    public String getDiagnosticIdentifier() {
-        return String.valueOf(getCanBus()) + String.valueOf(getId()) + String.valueOf(getMode()) + String.valueOf(getPid());
+
+    public MessageKey getKey() {
+        HashMap<String, Object> key = new HashMap<>();
+        key.put(CanMessage.BUS_KEY, getCanBus());
+        key.put(CanMessage.ID_KEY, getId());
+        key.put(MODE_KEY, getMode());
+        key.put(PID_KEY, getPid());
+        return new MessageKey(key);
     }
 
     // TODO this is a guess, not 100% sure how this parcel stuff fits in

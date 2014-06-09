@@ -1,6 +1,7 @@
 package com.openxc.messages;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import android.os.Parcel;
 
@@ -40,6 +41,12 @@ public class CommandResponse extends CommandMessage {
 
     protected static boolean matchesKeys(Map<String, Object> map) {
         return map.containsKey(CommandResponse.COMMAND_RESPONSE_KEY);
+    }
+
+    public MessageKey getKey() {
+        HashMap<String, Object> key = new HashMap<>();
+        key.put(CommandMessage.COMMAND_KEY, getCommand());
+        return new MessageKey(key);
     }
 
     protected CommandResponse() { }

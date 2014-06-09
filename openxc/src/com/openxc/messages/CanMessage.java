@@ -3,10 +3,11 @@ package com.openxc.messages;
 import android.os.Parcel;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
-public class CanMessage extends VehicleMessage {
+public class CanMessage extends VehicleMessage implements KeyedMessage {
     public static final String ID_KEY = "id";
     public static final String BUS_KEY = "bus";
     public static final String DATA_KEY = "data";
@@ -42,6 +43,13 @@ public class CanMessage extends VehicleMessage {
 
     public byte[] getData() {
         return mData;
+    }
+
+    public MessageKey getKey() {
+        HashMap<String, Object> key = new HashMap<>();
+        key.put(BUS_KEY, getCanBus());
+        key.put(ID_KEY, getId());
+        return new MessageKey(key);
     }
 
     @Override
