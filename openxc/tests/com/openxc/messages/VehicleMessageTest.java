@@ -147,4 +147,15 @@ public class VehicleMessageTest {
         assertThat(((SimpleVehicleMessage)message).getName(), equalTo("bar"));
         assertEquals(((SimpleVehicleMessage)message).getValue(), "baz");
     }
+
+    @Test
+    public void buildCommandResponse() throws UnrecognizedMessageTypeException {
+        HashMap<String, Object> values = new HashMap<>();
+        values.put(CommandResponse.COMMAND_RESPONSE_KEY, "foo");
+        values.put(CommandResponse.MESSAGE_KEY, "bar");
+        VehicleMessage message = VehicleMessage.buildSubtype(values);
+        assertTrue(message instanceof CommandResponse);
+        assertThat(((CommandResponse)message).getCommand(), equalTo("foo"));
+        assertThat(((CommandResponse)message).getMessage(), equalTo("bar"));
+    }
 }
