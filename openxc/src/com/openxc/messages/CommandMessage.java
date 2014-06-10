@@ -16,10 +16,12 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
         mCommand = command;
     }
 
-    public CommandMessage(Map<String, Object> values) {
+    public CommandMessage(Map<String, Object> values) throws MismatchedMessageKeysException {
         super(values);
         if(!containsSameKeySet(values)) {
-            // TODO raise exception
+            throw new MismatchedMessageKeysException(
+                    "Missing keys for CommandMessage construction in values = " +
+                    values.toString());
         }
         setCommand(getValuesMap());
     }

@@ -13,9 +13,11 @@ public class CommandResponse extends CommandMessage {
     public static final String MESSAGE_KEY = "message";
     private String mMessage;
 
-    public CommandResponse(Map<String, Object> values) {
+    public CommandResponse(Map<String, Object> values) throws MismatchedMessageKeysException {
         if(!containsSameKeySet(values)) {
-            // TODO raise exception
+            throw new MismatchedMessageKeysException(
+                    "Missing keys for CommandResponse construction in values = " +
+                    values.toString());
         }
         setCommand((String) values.remove(COMMAND_RESPONSE_KEY));
         setMessage(values);

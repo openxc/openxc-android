@@ -5,10 +5,12 @@ import java.util.Map;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.common.base.Objects;
 
 public class VehicleMessage implements Parcelable {
+    private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
 
     private long mTimestamp;
@@ -37,28 +39,33 @@ public class VehicleMessage implements Parcelable {
     public static VehicleMessage buildSubtype(Map<String, Object> values)
             throws UnrecognizedMessageTypeException {
         // Must check from most specific to least
-        VehicleMessage message;
+        VehicleMessage message = new VehicleMessage();
         // TODO could clean this up with reflection since they all now have the
         // same constructor
-        if(CanMessage.containsSameKeySet(values)) {
-            message = new CanMessage(values);
-        } else if(DiagnosticResponse.containsSameKeySet(values)) {
-            message = new DiagnosticResponse(values);
-        } else if(DiagnosticRequest.containsSameKeySet(values)) {
-            message = new DiagnosticRequest(values);
-        } else if(CommandMessage.containsSameKeySet(values)) {
-            message = new CommandMessage(values);
-        } else if(CommandResponse.containsSameKeySet(values)) {
-            message = new CommandResponse(values);
-        } else if(SimpleVehicleMessage.containsSameKeySet(values)) {
-            message = new SimpleVehicleMessage(values);
-        } else if(NamedVehicleMessage.containsSameKeySet(values)) {
-            message = new NamedVehicleMessage(values);
-        } else {
-            // TODO should we allow generic vehicleMessage through? I think so.
-            throw new UnrecognizedMessageTypeException(
-                    "Unrecognized combination of entries in values = " +
-                    values.toString());
+        try {
+            if(CanMessage.containsSameKeySet(values)) {
+                message = new CanMessage(values);
+            } else if(DiagnosticResponse.containsSameKeySet(values)) {
+                message = new DiagnosticResponse(values);
+            } else if(DiagnosticRequest.containsSameKeySet(values)) {
+                message = new DiagnosticRequest(values);
+            } else if(CommandMessage.containsSameKeySet(values)) {
+                message = new CommandMessage(values);
+            } else if(CommandResponse.containsSameKeySet(values)) {
+                message = new CommandResponse(values);
+            } else if(SimpleVehicleMessage.containsSameKeySet(values)) {
+                message = new SimpleVehicleMessage(values);
+            } else if(NamedVehicleMessage.containsSameKeySet(values)) {
+                message = new NamedVehicleMessage(values);
+            } else {
+                // TODO should we allow generic vehicleMessage through? I think so.
+                throw new UnrecognizedMessageTypeException(
+                        "Unrecognized combination of entries in values = " +
+                        values.toString());
+            }
+        } catch (MismatchedMessageKeysException e) {
+            Log.w(TAG, "Incorrectly checking keys in buildSubtype before constructing " +
+            		"subtype...verify containsSameKeySet()!");
         }
 
         return message;

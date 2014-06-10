@@ -16,9 +16,11 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     private int mId;
     private byte[] mData = new byte[8];
 
-    public CanMessage(Map<String, Object> values) {
+    public CanMessage(Map<String, Object> values) throws MismatchedMessageKeysException {
         if(!containsSameKeySet(values)) {
-            // TODO raise exceptoin
+            throw new MismatchedMessageKeysException(
+                    "Missing keys for CanMessage construction in values = " +
+                    values.toString());
         }
         init((Integer)values.remove(BUS_KEY),
                 (Integer)values.remove(ID_KEY),
