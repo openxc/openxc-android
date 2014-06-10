@@ -93,7 +93,6 @@ public class DiagnosticRequest extends DiagnosticMessage {
             .toString();
     }
 
-    // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
@@ -104,7 +103,6 @@ public class DiagnosticRequest extends DiagnosticMessage {
         out.writeString(getName());
     }
 
-    // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);

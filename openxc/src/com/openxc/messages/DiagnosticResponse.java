@@ -128,7 +128,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
                 && mNegativeResponseCode == other.mNegativeResponseCode;
     }
 
-    //TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
@@ -137,7 +136,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
         out.writeInt(getNegativeResponseCode().code());
     }
 
-    //TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
