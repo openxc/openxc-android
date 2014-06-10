@@ -83,7 +83,6 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
 
     protected CommandMessage(Parcel in)
             throws UnrecognizedMessageTypeException {
-        this();
         readFromParcel(in);
     }
 
