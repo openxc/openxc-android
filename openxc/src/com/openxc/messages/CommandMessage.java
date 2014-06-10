@@ -13,7 +13,7 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
     private String mCommand;
 
     public CommandMessage(String command) {
-        init(command);
+        mCommand = command;
     }
 
     public CommandMessage(Map<String, Object> values) {
@@ -21,15 +21,19 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
         if(!matchesKeys(values)) {
             // TODO raise exception
         }
-        init((String) getValuesMap().remove(COMMAND_KEY));
+        setCommand(getValuesMap());
     }
 
     public CommandMessage(String command, Map<String, Object> values) {
         super(values);
     }
 
-    protected void init(String command) {
+    protected void setCommand(String command) {
         mCommand = command;
+    }
+
+    protected void setCommand(Map<String, Object> values) {
+        setCommand((String) values.remove(COMMAND_KEY));
     }
 
     public String getCommand() {

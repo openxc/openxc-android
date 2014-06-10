@@ -51,6 +51,10 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         return new MessageKey(key);
     }
 
+    protected static boolean matchesKeys(Map<String, Object> map) {
+        return map.containsKey(NAME_KEY);
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -72,13 +76,8 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         mName = in.readString();
     }
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
-        return map.containsKey(NAME_KEY);
-    }
-
     protected NamedVehicleMessage(Parcel in)
             throws UnrecognizedMessageTypeException {
-        this();
         readFromParcel(in);
     }
 

@@ -133,8 +133,7 @@ public class VehicleMessageTest {
         HashMap<String, Object> values = new HashMap<>();
         values.put(NamedVehicleMessage.NAME_KEY, "bar");
         VehicleMessage message = VehicleMessage.buildSubtype(values);
-        assertTrue(message instanceof NamedVehicleMessage);
-        assertThat(((NamedVehicleMessage)message).getName(), equalTo("bar"));
+        assertThat(message, instanceOf(NamedVehicleMessage.class));
     }
 
     @Test
@@ -143,9 +142,7 @@ public class VehicleMessageTest {
         values.put(SimpleVehicleMessage.NAME_KEY, "bar");
         values.put(SimpleVehicleMessage.VALUE_KEY, "baz");
         VehicleMessage message = VehicleMessage.buildSubtype(values);
-        assertTrue(message instanceof SimpleVehicleMessage);
-        assertThat(((SimpleVehicleMessage)message).getName(), equalTo("bar"));
-        assertEquals(((SimpleVehicleMessage)message).getValue(), "baz");
+        assertThat(message, instanceOf(SimpleVehicleMessage.class));
     }
 
     @Test
@@ -154,8 +151,6 @@ public class VehicleMessageTest {
         values.put(CommandResponse.COMMAND_RESPONSE_KEY, "foo");
         values.put(CommandResponse.MESSAGE_KEY, "bar");
         VehicleMessage message = VehicleMessage.buildSubtype(values);
-        assertTrue(message instanceof CommandResponse);
-        assertThat(((CommandResponse)message).getCommand(), equalTo("foo"));
-        assertThat(((CommandResponse)message).getMessage(), equalTo("bar"));
+        assertThat(message, instanceOf(CommandResponse.class));
     }
 }

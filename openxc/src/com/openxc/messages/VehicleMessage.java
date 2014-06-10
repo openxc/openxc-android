@@ -93,30 +93,6 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
-    /* Write the derived class name and timestamp to the parcel, but not any of
-     * the values.
-     */
-    protected void writeMinimalToParcel(Parcel out, int flags) {
-        out.writeString(getClass().getName());
-        out.writeLong(getTimestamp());
-    }
-
-    public void writeToParcel(Parcel out, int flags) {
-        writeMinimalToParcel(out, flags);
-        out.writeMap(getValuesMap());
-    }
-
-    protected void readMinimalFromParcel(Parcel in) {
-        // Not reading the derived class name as it is already pulled out of the
-        // Parcel by the CREATOR.
-        mTimestamp = in.readLong();
-    }
-
-    protected void readFromParcel(Parcel in) {
-        readMinimalFromParcel(in);
-        in.readMap(mValues, null);
-    }
-
     /**
      * Make the message's timestamp invalid so it won't end up in the
      * serialized version.
@@ -153,6 +129,30 @@ public class VehicleMessage implements Parcelable {
         return mTimestamp == other.mTimestamp && mValues.equals(other.mValues);
     }
 
+    /* Write the derived class name and timestamp to the parcel, but not any of
+     * the values.
+     */
+    protected void writeMinimalToParcel(Parcel out, int flags) {
+        out.writeString(getClass().getName());
+        out.writeLong(getTimestamp());
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        writeMinimalToParcel(out, flags);
+        out.writeMap(getValuesMap());
+    }
+
+    protected void readMinimalFromParcel(Parcel in) {
+        // Not reading the derived class name as it is already pulled out of the
+        // Parcel by the CREATOR.
+        mTimestamp = in.readLong();
+    }
+
+    protected void readFromParcel(Parcel in) {
+        readMinimalFromParcel(in);
+        in.readMap(mValues, null);
+    }
+
     public static final Parcelable.Creator<VehicleMessage> CREATOR =
             new Parcelable.Creator<VehicleMessage>() {
         public VehicleMessage createFromParcel(Parcel in) {
@@ -165,6 +165,8 @@ public class VehicleMessage implements Parcelable {
                     return new NamedVehicleMessage(in);
                 } else if(messageClassName.equals(SimpleVehicleMessage.class.getName())) {
                     return new SimpleVehicleMessage(in);
+                } else if(messageClassName.equals(CommandResponse.class.getName())) {
+                    return new CommandResponse(in);
                 } else {
                     throw new UnrecognizedMessageTypeException(
                             "Unrecognized message class: " + messageClassName);
