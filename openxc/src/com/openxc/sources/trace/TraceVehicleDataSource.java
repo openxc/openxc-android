@@ -16,7 +16,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
 import com.openxc.messages.formatters.VehicleMessageFormatter;
@@ -162,7 +162,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     VehicleMessage measurement;
                     try {
                         measurement = formatter.deserialize(line);
-                    } catch(UnrecognizedMeasurementTypeException e) {
+                    } catch(UnrecognizedMessageTypeException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
                         continue;

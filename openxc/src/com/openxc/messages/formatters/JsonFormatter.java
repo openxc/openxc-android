@@ -16,7 +16,7 @@ import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
 public class JsonFormatter implements VehicleMessageFormatter {
@@ -64,7 +64,7 @@ public class JsonFormatter implements VehicleMessageFormatter {
     }
 
     public VehicleMessage deserialize(String data)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMessageTypeException {
         Gson gson = new Gson();
         LinkedTreeMap<String, Object> result = new LinkedTreeMap<String, Object>();
         try {
@@ -74,13 +74,13 @@ public class JsonFormatter implements VehicleMessageFormatter {
                 // (long) (parser.getNumberValue().doubleValue() * 1000);
             return VehicleMessage.buildSubtype(result);
         } catch(JsonSyntaxException e) {
-            throw new UnrecognizedMeasurementTypeException(
+            throw new UnrecognizedMessageTypeException(
                     "Unable to parse JSON from \"" + data + "\": " + e);
         }
     }
 
     public VehicleMessage deserialize(InputStream data)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMessageTypeException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(data));
         return deserialize(reader.toString());
     }

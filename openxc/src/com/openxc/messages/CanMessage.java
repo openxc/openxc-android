@@ -5,8 +5,6 @@ import android.os.Parcel;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 public class CanMessage extends VehicleMessage implements KeyedMessage {
     public static final String ID_KEY = "id";
     public static final String BUS_KEY = "bus";
@@ -72,7 +70,7 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
                 && map.containsKey(DATA_KEY);
     }
 
-    private CanMessage(Parcel in) throws UnrecognizedMeasurementTypeException {
+    private CanMessage(Parcel in) throws UnrecognizedMessageTypeException {
         this();
         readFromParcel(in);
     }

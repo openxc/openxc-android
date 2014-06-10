@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.CharMatcher;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
 
@@ -37,7 +37,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
             try {
                 return mFormatter.deserialize(new ByteArrayInputStream(
                             line.getBytes(StandardCharsets.UTF_8)));
-            } catch(UnrecognizedMeasurementTypeException e) {
+            } catch(UnrecognizedMessageTypeException e) {
             }
         }
         return null;

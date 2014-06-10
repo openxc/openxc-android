@@ -3,7 +3,7 @@ package com.openxc.messages.formatters;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.SimpleVehicleMessage;
 
 public class JsonFormatterTest extends TestCase {
@@ -24,7 +24,7 @@ public class JsonFormatterTest extends TestCase {
             message = (SimpleVehicleMessage) formatter.deserialize(
                     "{\"name\": \"" + messageName + "\", \"value\": " +
                     value.toString() + "}");
-        } catch(UnrecognizedMeasurementTypeException e) {}
+        } catch(UnrecognizedMessageTypeException e) {}
         assertEquals(message.getName(), messageName);
         assertEquals(message.getValue(), value);
     }
@@ -32,7 +32,7 @@ public class JsonFormatterTest extends TestCase {
     public void testDeserializeInvalidJson() {
         try {
             formatter.deserialize("{\"name\":");
-        } catch(UnrecognizedMeasurementTypeException e) {
+        } catch(UnrecognizedMessageTypeException e) {
             return;
         }
         Assert.fail();

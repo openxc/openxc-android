@@ -7,8 +7,6 @@ import android.os.Parcel;
 
 import com.google.common.base.Objects;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 public class CommandMessage extends VehicleMessage implements KeyedMessage {
     public static final String COMMAND_KEY = "command";
 
@@ -80,7 +78,7 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
     }
 
     protected CommandMessage(Parcel in)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMessageTypeException {
         this();
         readFromParcel(in);
     }

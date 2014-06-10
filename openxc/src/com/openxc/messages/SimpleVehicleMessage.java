@@ -6,8 +6,6 @@ import android.os.Parcel;
 
 import com.google.common.base.Objects;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 public class SimpleVehicleMessage extends NamedVehicleMessage {
     public static final String VALUE_KEY = "value";
 
@@ -67,7 +65,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     }
 
     protected SimpleVehicleMessage(Parcel in)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMessageTypeException {
         readFromParcel(in);
     }
 

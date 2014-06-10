@@ -7,8 +7,6 @@ import android.os.Parcel;
 
 import com.google.common.base.Objects;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage {
     public static final String NAME_KEY = "name";
 
@@ -79,7 +77,7 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
     }
 
     protected NamedVehicleMessage(Parcel in)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMessageTypeException {
         this();
         readFromParcel(in);
     }

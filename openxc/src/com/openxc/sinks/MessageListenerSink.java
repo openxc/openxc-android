@@ -96,8 +96,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         for(DiagnosticResponse.Listener listener : mDiagnosticListeners.get(key)) {
             listener.receive(request, response);
         }
-        //if the frequency of the most recent request with this id is 0, it's done once the response has been received,
-        //so no need to store them anymore
+        //if the frequency of the most recent request with this id is 0, it's
+        //done once the response has been received, so no need to store them
+        //anymore
         if (request.getFrequency() == 0) {
             mRequestMap.remove(key);
             mDiagnosticListeners.removeAll(key);

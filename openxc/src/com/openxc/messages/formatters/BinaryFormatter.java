@@ -3,7 +3,7 @@ package com.openxc.messages.formatters;
 import java.io.IOException;
 import java.io.InputStream;
 import com.openxc.BinaryMessages;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -20,7 +20,7 @@ public class BinaryFormatter implements VehicleMessageFormatter {
             }
         } catch(IOException e) {
             // TODO
-        } catch(UnrecognizedMeasurementTypeException e) {
+        } catch(UnrecognizedMessageTypeException e) {
             // TODO
         }
         return null;
@@ -28,7 +28,7 @@ public class BinaryFormatter implements VehicleMessageFormatter {
 
     private VehicleMessage buildVehicleMessage(
             BinaryMessages.VehicleMessage binaryMessage)
-            throws UnrecognizedMeasurementTypeException{
+            throws UnrecognizedMessageTypeException{
         if(binaryMessage.hasTranslatedMessage()) {
                 BinaryMessages.TranslatedMessage translatedMessage =
                 binaryMessage.getTranslatedMessage();
@@ -36,7 +36,7 @@ public class BinaryFormatter implements VehicleMessageFormatter {
             if(translatedMessage.hasName()) {
                 name = translatedMessage.getName();
             } else {
-                throw new UnrecognizedMeasurementTypeException(
+                throw new UnrecognizedMessageTypeException(
                         "Binary message is missing name");
             }
 
@@ -51,11 +51,11 @@ public class BinaryFormatter implements VehicleMessageFormatter {
                 } else if(field.hasStringValue()) {
                     value = field.getStringValue();
                 } else {
-                    throw new UnrecognizedMeasurementTypeException(
+                    throw new UnrecognizedMessageTypeException(
                         "Binary message value had no...value");
                 }
             } else {
-                throw new UnrecognizedMeasurementTypeException(
+                throw new UnrecognizedMessageTypeException(
                         "Binary message had no value");
             }
 
@@ -87,7 +87,7 @@ public class BinaryFormatter implements VehicleMessageFormatter {
                     canMessage.getData().toByteArray());
 
         } else {
-            throw new UnrecognizedMeasurementTypeException(
+            throw new UnrecognizedMessageTypeException(
                     "Binary message type not recognized");
         }
     }

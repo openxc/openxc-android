@@ -7,7 +7,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.common.base.Objects;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 
 public class VehicleMessage implements Parcelable {
     public static final String TIMESTAMP_KEY = "timestamp";
@@ -36,7 +35,7 @@ public class VehicleMessage implements Parcelable {
     }
 
     public static VehicleMessage buildSubtype(Map<String, Object> values)
-            throws UnrecognizedMeasurementTypeException {
+            throws UnrecognizedMessageTypeException {
         // Must check from most specific to least
         VehicleMessage message;
         // TODO could clean this up with reflection since they all now have the
@@ -56,14 +55,17 @@ public class VehicleMessage implements Parcelable {
         } else if(NamedVehicleMessage.matchesKeys(values)) {
             message = new NamedVehicleMessage(values);
         } else {
-            throw new UnrecognizedMeasurementTypeException("Unrecognized combination of entries in values = " + values.toString());
+            // TODO should we allow generic vehicleMessage through? I think so.
+            throw new UnrecognizedMessageTypeException(
+                    "Unrecognized combination of entries in values = " +
+                    values.toString());
         }
 
         return message;
     }
 
     /**
-     * @return true if the measurement has a valid timestamp.
+     * @return true if the message has a valid timestamp.
      */
     public boolean isTimestamped() {
         return getTimestamp() != 0;
@@ -116,7 +118,7 @@ public class VehicleMessage implements Parcelable {
     }
 
     /**
-     * Make the measurement's timestamp invalid so it won't end up in the
+     * Make the message's timestamp invalid so it won't end up in the
      * serialized version.
      */
     public void untimestamp() {
@@ -156,6 +158,7 @@ public class VehicleMessage implements Parcelable {
         public VehicleMessage createFromParcel(Parcel in) {
             String messageClassName = in.readString();
             try {
+                // TODO need to handle unparceling other types
                 if(messageClassName.equals(VehicleMessage.class.getName())) {
                     return new VehicleMessage(in);
                 } else if(messageClassName.equals(NamedVehicleMessage.class.getName())) {
@@ -163,10 +166,10 @@ public class VehicleMessage implements Parcelable {
                 } else if(messageClassName.equals(SimpleVehicleMessage.class.getName())) {
                     return new SimpleVehicleMessage(in);
                 } else {
-                    throw new UnrecognizedMeasurementTypeException(
+                    throw new UnrecognizedMessageTypeException(
                             "Unrecognized message class: " + messageClassName);
                 }
-            } catch(UnrecognizedMeasurementTypeException e) {
+            } catch(UnrecognizedMessageTypeException e) {
                 return new VehicleMessage();
             }
         }
@@ -180,8 +183,7 @@ public class VehicleMessage implements Parcelable {
         return true;
     }
 
-    private VehicleMessage(Parcel in)
-            throws UnrecognizedMeasurementTypeException {
+    private VehicleMessage(Parcel in) throws UnrecognizedMessageTypeException {
         readFromParcel(in);
     }
 

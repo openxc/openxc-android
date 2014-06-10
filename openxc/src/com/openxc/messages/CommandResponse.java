@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import android.os.Parcel;
 
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
 public class CommandResponse extends CommandMessage {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
@@ -33,8 +31,7 @@ public class CommandResponse extends CommandMessage {
         return mMessage;
     }
 
-    private CommandResponse(Parcel in)
-            throws UnrecognizedMeasurementTypeException {
+    private CommandResponse(Parcel in) throws UnrecognizedMessageTypeException {
         this();
         readFromParcel(in);
     }

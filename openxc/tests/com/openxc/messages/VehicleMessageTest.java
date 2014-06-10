@@ -2,18 +2,20 @@ package com.openxc.messages;
 
 import java.util.HashMap;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.Before;
+import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import com.openxc.messages.UnrecognizedMessageTypeException;
 
 import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
-public class VehicleMessageTest extends TestCase {
+public class VehicleMessageTest {
     VehicleMessage message;
     HashMap<String, Object> data;
 
@@ -108,5 +110,19 @@ public class VehicleMessageTest extends TestCase {
         VehicleMessage createdFromParcel =
                 VehicleMessage.CREATOR.createFromParcel(parcel);
         assertEquals(message, createdFromParcel);
+    }
+
+    @Test(expected=UnrecognizedMessageTypeException.class)
+    public void buildFromEmptyValuesFails() throws UnrecognizedMessageTypeException {
+        HashMap<String, Object> values = new HashMap<>();
+        VehicleMessage.buildSubtype(values);
+    }
+
+    @Test(expected=UnrecognizedMessageTypeException.class)
+    public void buildFromUnrecognizedFails() throws UnrecognizedMessageTypeException {
+        HashMap<String, Object> values = new HashMap<>();
+        values.put("foo", "bar");
+        values.put("alice", Double.valueOf(42));
+        VehicleMessage.buildSubtype(values);
     }
 }
