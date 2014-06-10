@@ -51,7 +51,7 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
         }
 
         final CommandMessage other = (CommandMessage) obj;
-        return super.equals(other) && mCommand.equals(other.mCommand);
+        return mCommand.equals(other.mCommand);
     }
 
     public MessageKey getKey() {

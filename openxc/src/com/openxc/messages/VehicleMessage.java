@@ -169,6 +169,8 @@ public class VehicleMessage implements Parcelable {
                     return new CommandResponse(in);
                 } else if(messageClassName.equals(CommandMessage.class.getName())) {
                     return new CommandMessage(in);
+                } else if(messageClassName.equals(CanMessage.class.getName())) {
+                    return new CanMessage(in);
                 } else {
                     throw new UnrecognizedMessageTypeException(
                             "Unrecognized message class: " + messageClassName);

@@ -36,7 +36,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         }
 
         final SimpleVehicleMessage other = (SimpleVehicleMessage) obj;
-        return super.equals(other) && mValue.equals(other.mValue);
+        return mValue.equals(other.mValue);
     }
 
     @Override

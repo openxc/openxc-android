@@ -123,9 +123,9 @@ public class DiagnosticResponse extends DiagnosticMessage {
         }
 
         final DiagnosticResponse other = (DiagnosticResponse) obj;
-        return super.equals(other) && (mSuccess == other.mSuccess)
-                && (mValue == other.mValue)
-                && (mNegativeResponseCode == other.mNegativeResponseCode);
+        return mSuccess == other.mSuccess
+                && mValue == other.mValue
+                && mNegativeResponseCode == other.mNegativeResponseCode;
     }
 
     //TODO this is a guess, not 100% sure how this parcel stuff fits in

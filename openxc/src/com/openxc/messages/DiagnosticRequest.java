@@ -71,11 +71,11 @@ public class DiagnosticRequest extends DiagnosticMessage {
         }
 
         final DiagnosticRequest other = (DiagnosticRequest) obj;
-        return super.equals(other)
-                && (mMultipleResponses == other.mMultipleResponses)
-                && (mFactor == other.mFactor) && (mOffset == other.mOffset)
-                && (mFrequency == other.mFrequency)
-                && (mName.equals(other.mName));
+        return mMultipleResponses == other.mMultipleResponses
+                && mFactor == other.mFactor
+                && mOffset == other.mOffset
+                && mFrequency == other.mFrequency
+                && mName.equals(other.mName);
     }
 
     @Override

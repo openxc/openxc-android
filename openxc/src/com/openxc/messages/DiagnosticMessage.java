@@ -55,9 +55,11 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
         }
 
         final DiagnosticMessage other = (DiagnosticMessage) obj;
-        return super.equals(other) && (mCanBus == other.mCanBus)
-                && (mId == other.mId) && (mMode == other.mMode)
-                && (mPid == other.mPid) && (mPayload.equals(other.mPayload));
+        return mCanBus == other.mCanBus
+                && mId == other.mId
+                && mMode == other.mMode
+                && mPid == other.mPid
+                && mPayload.equals(other.mPayload);
     }
 
     public int getCanBus() {

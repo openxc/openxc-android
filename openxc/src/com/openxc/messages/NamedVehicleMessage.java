@@ -42,7 +42,7 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         }
 
         final NamedVehicleMessage other = (NamedVehicleMessage) obj;
-        return super.equals(other) && mName.equals(other.mName);
+        return mName.equals(other.mName);
     }
 
     public MessageKey getKey() {

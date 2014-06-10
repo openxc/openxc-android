@@ -5,12 +5,14 @@ import android.os.Parcel;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.google.common.base.Objects;
+
 public class CanMessage extends VehicleMessage implements KeyedMessage {
     public static final String ID_KEY = "id";
     public static final String BUS_KEY = "bus";
     public static final String DATA_KEY = "data";
 
-    private int mCanBus;
+    private int mBusId;
     private int mId;
     private byte[] mData = new byte[8];
 
@@ -18,8 +20,9 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         if(!matchesKeys(values)) {
             // TODO raise exceptoin
         }
-        init((Integer)values.get(BUS_KEY), (Integer)values.get(ID_KEY),
-                (byte[])values.get(CanMessage.DATA_KEY));
+        init((Integer)values.remove(BUS_KEY),
+                (Integer)values.remove(ID_KEY),
+                (byte[])values.remove(CanMessage.DATA_KEY));
     }
 
     public CanMessage(int canBus, int id, byte[] data) {
@@ -27,13 +30,13 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     }
 
     private void init(int canBus, int id, byte[] data)  {
-        mCanBus = canBus;
+        mBusId = canBus;
         mId = id;
         System.arraycopy(data, 0, mData, 0, data.length);
     }
 
-    public int getCanBus() {
-        return mCanBus;
+    public int getBus() {
+        return mBusId;
     }
     public int getId() {
         return mId;
@@ -45,24 +48,9 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
 
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
-        key.put(BUS_KEY, getCanBus());
+        key.put(BUS_KEY, getBus());
         key.put(ID_KEY, getId());
         return new MessageKey(key);
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        writeMinimalToParcel(out, flags);
-        out.writeInt(getCanBus());
-        out.writeInt(getId());
-        out.writeByteArray(getData());
-    }
-
-    public void readFromParcel(Parcel in) {
-        readMinimalFromParcel(in);
-        mCanBus = in.readInt();
-        mId = in.readInt();
-        in.readByteArray(mData);
     }
 
     protected static boolean matchesKeys(Map<String, Object> map) {
@@ -70,8 +58,41 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
                 && map.containsKey(DATA_KEY);
     }
 
-    private CanMessage(Parcel in) throws UnrecognizedMessageTypeException {
-        this();
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final CanMessage other = (CanMessage) obj;
+        return mId == other.mId && mBusId == other.mBusId;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("bus", getBus())
+            .add("id", getId())
+            .add("data", getData())
+            .toString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        writeMinimalToParcel(out, flags);
+        out.writeInt(getBus());
+        out.writeInt(getId());
+        out.writeByteArray(getData());
+    }
+
+    public void readFromParcel(Parcel in) {
+        readMinimalFromParcel(in);
+        mBusId = in.readInt();
+        mId = in.readInt();
+        in.readByteArray(mData);
+    }
+
+    protected CanMessage(Parcel in) throws UnrecognizedMessageTypeException {
         readFromParcel(in);
     }
 
