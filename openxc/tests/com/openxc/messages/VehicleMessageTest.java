@@ -136,4 +136,15 @@ public class VehicleMessageTest {
         assertTrue(message instanceof NamedVehicleMessage);
         assertThat(((NamedVehicleMessage)message).getName(), equalTo("bar"));
     }
+
+    @Test
+    public void buildSimple() throws UnrecognizedMessageTypeException {
+        HashMap<String, Object> values = new HashMap<>();
+        values.put(SimpleVehicleMessage.NAME_KEY, "bar");
+        values.put(SimpleVehicleMessage.VALUE_KEY, "baz");
+        VehicleMessage message = VehicleMessage.buildSubtype(values);
+        assertTrue(message instanceof SimpleVehicleMessage);
+        assertThat(((SimpleVehicleMessage)message).getName(), equalTo("bar"));
+        assertEquals(((SimpleVehicleMessage)message).getValue(), "baz");
+    }
 }
