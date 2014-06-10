@@ -14,7 +14,7 @@ public class CommandResponse extends CommandMessage {
     private String mMessage;
 
     public CommandResponse(Map<String, Object> values) {
-        if(!matchesKeys(values)) {
+        if(!containsSameKeySet(values)) {
             // TODO raise exception
         }
         setCommand((String) values.remove(COMMAND_RESPONSE_KEY));
@@ -39,7 +39,7 @@ public class CommandResponse extends CommandMessage {
         return mMessage;
     }
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
+    protected static boolean containsSameKeySet(Map<String, Object> map) {
         return map.containsKey(CommandResponse.COMMAND_RESPONSE_KEY);
     }
 

@@ -146,8 +146,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
         mNegativeResponseCode = NegativeResponseCode.get(in.readInt());
     }
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
-        return DiagnosticMessage.matchesKeys(map) &&
+    protected static boolean containsSameKeySet(Map<String, Object> map) {
+        return DiagnosticMessage.containsSameKeySet(map) &&
                 map.containsKey(DiagnosticResponse.SUCCESS_KEY);
     }
 }

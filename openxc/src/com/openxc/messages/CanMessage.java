@@ -17,7 +17,7 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     private byte[] mData = new byte[8];
 
     public CanMessage(Map<String, Object> values) {
-        if(!matchesKeys(values)) {
+        if(!containsSameKeySet(values)) {
             // TODO raise exceptoin
         }
         init((Integer)values.remove(BUS_KEY),
@@ -53,7 +53,7 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         return new MessageKey(key);
     }
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
+    protected static boolean containsSameKeySet(Map<String, Object> map) {
         return map.containsKey(BUS_KEY) && map.containsKey(ID_KEY)
                 && map.containsKey(DATA_KEY);
     }

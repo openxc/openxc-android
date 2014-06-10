@@ -18,7 +18,7 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
 
     public CommandMessage(Map<String, Object> values) {
         super(values);
-        if(!matchesKeys(values)) {
+        if(!containsSameKeySet(values)) {
             // TODO raise exception
         }
         setCommand(getValuesMap());
@@ -40,7 +40,7 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
         return mCommand;
     }
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
+    protected static boolean containsSameKeySet(Map<String, Object> map) {
         return map.containsKey(COMMAND_KEY);
     }
 

@@ -113,7 +113,7 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
         in.readByteArray(mPayload);
     }
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
+    protected static boolean containsSameKeySet(Map<String, Object> map) {
         return map.containsKey(CanMessage.BUS_KEY) && map.containsKey(CanMessage.ID_KEY) &&
                 map.containsKey(MODE_KEY);
     }

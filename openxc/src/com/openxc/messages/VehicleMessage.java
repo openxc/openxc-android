@@ -40,19 +40,19 @@ public class VehicleMessage implements Parcelable {
         VehicleMessage message;
         // TODO could clean this up with reflection since they all now have the
         // same constructor
-        if(CanMessage.matchesKeys(values)) {
+        if(CanMessage.containsSameKeySet(values)) {
             message = new CanMessage(values);
-        } else if(DiagnosticResponse.matchesKeys(values)) {
+        } else if(DiagnosticResponse.containsSameKeySet(values)) {
             message = new DiagnosticResponse(values);
-        } else if(DiagnosticRequest.matchesKeys(values)) {
+        } else if(DiagnosticRequest.containsSameKeySet(values)) {
             message = new DiagnosticRequest(values);
-        } else if(CommandMessage.matchesKeys(values)) {
+        } else if(CommandMessage.containsSameKeySet(values)) {
             message = new CommandMessage(values);
-        } else if(CommandResponse.matchesKeys(values)) {
+        } else if(CommandResponse.containsSameKeySet(values)) {
             message = new CommandResponse(values);
-        } else if(SimpleVehicleMessage.matchesKeys(values)) {
+        } else if(SimpleVehicleMessage.containsSameKeySet(values)) {
             message = new SimpleVehicleMessage(values);
-        } else if(NamedVehicleMessage.matchesKeys(values)) {
+        } else if(NamedVehicleMessage.containsSameKeySet(values)) {
             message = new NamedVehicleMessage(values);
         } else {
             // TODO should we allow generic vehicleMessage through? I think so.
@@ -185,7 +185,7 @@ public class VehicleMessage implements Parcelable {
         }
     };
 
-    protected static boolean matchesKeys(Map<String, Object> map) {
+    protected static boolean containsSameKeySet(Map<String, Object> map) {
         return true;
     }
 
