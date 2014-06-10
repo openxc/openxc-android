@@ -91,7 +91,6 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
         return new MessageKey(key);
     }
 
-    // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
@@ -102,7 +101,6 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
         out.writeByteArray(getPayload());
     }
 
-    // TODO this is a guess, not 100% sure how this parcel stuff fits in
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
