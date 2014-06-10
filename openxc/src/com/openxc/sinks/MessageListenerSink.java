@@ -13,9 +13,10 @@ import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
+import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.MessageKey;
@@ -29,9 +30,12 @@ import com.openxc.messages.MessageKey;
 public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MessageListenerSink";
 
-    private Multimap<Class<? extends Measurement>, Measurement.Listener>
+    //TODO is it necessary that these are hashmultimaps and not just e.g. hashmaps?
+    //Not sure how .put() checks equality of two KeyMatchers, may just be all single
+    //elemented arrays that each key maps to i.e. all keymatchers are "unique"
+    private Multimap<KeyMatcher, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
-    private Multimap<MessageKey, DiagnosticResponse.Listener>
+    private Multimap<KeyMatcher, DiagnosticResponse.Listener>
             mDiagnosticListeners = HashMultimap.create();
     private Map<MessageKey, DiagnosticRequest> mRequestMap = new HashMap<>();
 
@@ -42,34 +46,40 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 mDiagnosticListeners);
     }
 
-    public void register(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener)
-            throws UnrecognizedMeasurementTypeException {
-        mMeasurementListeners.put(measurementType, listener);
+    public void register(KeyMatcher matcher, Measurement.Listener listener) {
+        mMeasurementListeners.put(matcher, listener);
 
-        String name = BaseMeasurement.getIdForClass(measurementType);
-        if(containsNamedMessage(name)) {
-            // send the last known value to the new listener
-            try {
-                receive(getNamedMessage(name));
-            } catch(DataSinkException e) {
-                Log.w(TAG, "Sink could't receive measurement", e);
-            }
+        KeyedMessage keyed = matcher.get();
+        if (keyed instanceof NamedVehicleMessage) {
+            String name = ((NamedVehicleMessage) keyed).getName();
+            if(containsNamedMessage(name)) {
+                // send the last known value to the new listener
+                try {
+                    receive(getNamedMessage(name));
+                } catch(DataSinkException e) {
+                    Log.w(TAG, "Sink could't receive measurement", e);
+                }
+            } 
         }
-    }
+    }  
 
-    public void registerUntilDone(DiagnosticRequest request,
-            DiagnosticResponse.Listener listener) {
-        MessageKey key = request.getKey();
+    public void register(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
+        mDiagnosticListeners.put(matcher, listener);
+    }
+    
+    public void record(DiagnosticRequest request) {
         // Sending a request with the same key as a previous
         // one cancels the last one, so just overwrite it
-        mRequestMap.put(key, request);
-        mDiagnosticListeners.put(key, listener);
+        mRequestMap.put(request.getKey(), request);
     }
 
     public void unregister(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
         mMeasurementListeners.remove(measurementType, listener);
+    }
+    
+    public void unregister(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
+        mMeasurementListeners.remove(matcher, listener);
     }
 
     @Override
@@ -80,9 +90,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     }
 
     protected void propagateMessage(VehicleMessage message) {
-        if(message instanceof NamedVehicleMessage) {
-            propagateMeasurement((NamedVehicleMessage) message);
-        } else if(message instanceof DiagnosticResponse) {
+        if (message instanceof NamedVehicleMessage) {
+            propagateMeasurementFromMessage((NamedVehicleMessage) message);
+        } else if (message instanceof DiagnosticResponse) {
             propagateDiagnosticResponse((DiagnosticResponse) message);
         } else {
             // TODO propagate generic VehicleMessage - need a new listener
@@ -91,27 +101,26 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     }
 
     private void propagateDiagnosticResponse(DiagnosticResponse response) {
-        MessageKey key = response.getKey();
-        DiagnosticRequest request = mRequestMap.get(key);
-        for(DiagnosticResponse.Listener listener : mDiagnosticListeners.get(key)) {
-            listener.receive(request, response);
-        }
-        //if the frequency of the most recent request with this id is 0, it's
-        //done once the response has been received, so no need to store them
-        //anymore
-        if (request.getFrequency() == 0) {
-            mRequestMap.remove(key);
-            mDiagnosticListeners.removeAll(key);
+        DiagnosticRequest request = mRequestMap.get(response.getKey());
+        for (KeyMatcher matcher : mDiagnosticListeners.keys()) {
+            if (matcher.matches(response)) {
+                for (DiagnosticResponse.Listener listener : mDiagnosticListeners.get(matcher)) {
+                    listener.receive(request, response);
+                }
+            }
         }
     }
 
-    private void propagateMeasurement(NamedVehicleMessage message) {
+    private void propagateMeasurementFromMessage(NamedVehicleMessage message) {
         try {
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
-            for(Measurement.Listener listener :
-                    mMeasurementListeners.get(measurement.getClass())) {
-                listener.receive(measurement);
+            for (KeyMatcher matcher : mMeasurementListeners.keys()) {
+                if (matcher.matches(message)) {
+                    for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
+                        listener.receive(measurement);
+                    }
+                }
             }
         } catch(UnrecognizedMeasurementTypeException e) {
             // This happens quite often if nobody has registered to receive

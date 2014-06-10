@@ -1,9 +1,7 @@
 package com.openxc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -27,6 +25,8 @@ import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
@@ -132,7 +132,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * This class is used in the onServiceConnected method of a
      * ServiceConnection in a client of this service - the IBinder given to the
      * application can be cast to the VehicleBinder to retrieve the actual
-     * service instance. This is required to actaully call any of its methods.
+     * service instance. This is required to actually call any of its methods.
      */
     public class VehicleBinder extends Binder {
         /**
@@ -249,24 +249,18 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 UnrecognizedMeasurementTypeException {
         return VehicleInterfaceManagerUtils.send(mInterfaces, command);
     }
-
-    /**
-     * Send a request to the vehicle through the first available active
-     * {@link com.openxc.interfaces.VehicleInterface}.
-     *
-     * This will attempt to send the request over all of the registered vehicle
-     * interfaces until one returns successfully. There is no guarantee about
-     * the order that the interfaces are attempted.
-     *
-     * @param request The desired request to send to the vehicle.
-     * @param listener The listener for the response
-     */
-    public void request(DiagnosticRequest request, DiagnosticResponse.Listener listener) {
-        mNotifier.registerUntilDone(request, listener);
+    
+    public void request(DiagnosticRequest request) {
+        mNotifier.record(request);
         //TODO is this how to actually send it?
-        //VehicleInterfaceManagerUtils.send(mInterfaces, request);
+        VehicleInterfaceManagerUtils.send(mInterfaces, request);
     }
 
+    
+    //TODO the six methods below would ideally be condensed into 3 to 
+    //eliminate this overloading; however, it doesn't make much sense 
+    //to force a DiagnosticResponse.Listener into Measurement.Listener (or possible), 
+    //and that type has to stick around for backwards compatibility
     /**
      * Register to receive asynchronous updates for a specific Measurement type.
      *
@@ -292,14 +286,60 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             Measurement.Listener listener) throws VehicleServiceException,
                 UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
-        mNotifier.register(measurementType, listener);
+        
+        NamedVehicleMessage msg = new NamedVehicleMessage(BaseMeasurement.getIdForClass(measurementType));
+        addListener(msg, listener);
+    }
+    
+    public void addListener(KeyedMessage keyedMessage, Measurement.Listener listener) {
+        addListener(KeyMatcher.buildExactMatcher(keyedMessage), listener);
+    }
+    
+    public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
+        mNotifier.register(matcher, listener);
+    }
+    
+    /**
+     * Register to receive asynchronous updates for a specific Diagnostic Response.
+     *
+     * Use this method to register an object implementing the
+     * DiagnosticResponse.Listener interface to receive real-time updates
+     * whenever a new value is received for the specified measurementType.
+     *
+     * Make sure you unregister your listeners with
+     * VehicleManager.removeListener(...) when your activity or service closes
+     * and no longer requires updates.
+     *
+     * @param request The diagnosticRequest to listen to a response for
+     * @param listener A DiagnosticResponse.Listener instance 
+     * @throws VehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     * @throws UnrecognizedMeasurementTypeException if passed a measurementType
+     *      not extend Measurement
+     */
+    public void addListener(DiagnosticRequest request,
+            DiagnosticResponse.Listener listener) throws VehicleServiceException,
+                UnrecognizedMeasurementTypeException {
+        Log.i(TAG, "Adding Diagnostic Listener " + listener + " for request " + request);
+        
+        addListener(request, listener);
+    }
+    
+    public void addListener(KeyedMessage keyedMessage, DiagnosticResponse.Listener listener) {
+        addListener(KeyMatcher.buildExactMatcher(keyedMessage), listener);
+    }
+    
+    public void addListener(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
+        mNotifier.register(matcher, listener);
     }
 
-
+    //TODO ideally condense the two below methods into one, but again,
+    //backwards compatibility
     /**
      * Unregister a previously registered Measurement.Listener instance.
      *
-     * When an application is no longer interested in received measurement
+     * When an application is no longer interested in receiving measurement
      * updates (e.g. when it's pausing or exiting) it should unregister all
      * previously registered listeners to save on CPU.
      *
@@ -317,6 +357,22 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         Log.i(TAG, "Removing listener " + listener + " from " +
                 measurementType);
         mNotifier.unregister(measurementType, listener);
+    }
+    
+    /**
+     * Unregister a previously registered Diagnostic.Listener instance.
+     *
+     * When an application is no longer interested in receiving diagnostic
+     * updates (e.g. when it's pausing or exiting) it should unregister all
+     * previously registered listeners to save on CPU.
+     *
+     * @param matcher The KeyMatcher previously registered with the listener
+     * @param listener An object implementing the Diagnostic.Listener
+     */
+    public void removeListener(KeyMatcher matcher, DiagnosticResponse.Listener listener){
+        Log.i(TAG, "Removing diagnostic listener " + listener + " from " +
+                matcher);
+        mNotifier.unregister(matcher, listener);
     }
 
     /**
