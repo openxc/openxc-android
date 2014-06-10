@@ -2,10 +2,9 @@ package com.openxc.messages;
 
 import java.util.HashMap;
 
+import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import junit.framework.TestCase;
-import org.junit.*;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -40,10 +39,10 @@ public class NamedVehicleMessageTest {
 
     @Test
     public void testExtractsNameFromValues() {
-        data.put("name", "bar");
+        data.put(NamedVehicleMessage.NAME_KEY, "bar");
         message = new NamedVehicleMessage(data);
         assertEquals("bar", message.getName());
-        assertFalse(message.contains("name"));
+        assertFalse(message.contains(NamedVehicleMessage.NAME_KEY));
     }
 
     @Test
@@ -86,7 +85,7 @@ public class NamedVehicleMessageTest {
     }
 
     @Test
-    public void matchesKey() {
+    public void keyMatches() {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
         assertThat(message.getKey(), equalTo(anotherMessage.getKey()));
     }

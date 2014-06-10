@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -124,5 +126,14 @@ public class VehicleMessageTest {
         values.put("foo", "bar");
         values.put("alice", Double.valueOf(42));
         VehicleMessage.buildSubtype(values);
+    }
+
+    @Test
+    public void buildNamed() throws UnrecognizedMessageTypeException {
+        HashMap<String, Object> values = new HashMap<>();
+        values.put(NamedVehicleMessage.NAME_KEY, "bar");
+        VehicleMessage message = VehicleMessage.buildSubtype(values);
+        assertTrue(message instanceof NamedVehicleMessage);
+        assertThat(((NamedVehicleMessage)message).getName(), equalTo("bar"));
     }
 }
