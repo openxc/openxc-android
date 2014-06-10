@@ -10,21 +10,37 @@ import static org.junit.Assert.*;
 import android.os.Parcel;
 
 public class KeyMatcherTest {
-
-    public MessageKey getKey() {
-       HashMap<String, Object> key = new HashMap<>();
-       key.put("foo", "bar");
-       return new MessageKey(key);
-    }
+    KeyedMessage keyed = new KeyedMessage() {
+        public MessageKey getKey() {
+            HashMap<String, Object> key = new HashMap<>();
+            key.put("foo", "bar");
+            return new MessageKey(key);
+        }
+    };
 
     @Test
     public void exactMatcherMatchesOriginal() {
-        KeyMatcher matcher = KeyMatcher.buildExactMatcher(getKey());
-        assertTrue(matcher.matches(getKey()));
+        KeyMatcher matcher = KeyMatcher.buildExactMatcher(keyed);
+        assertTrue(matcher.matches(keyed));
+    }
+
+    @Test
+    public void exactMatcherMatchesAnotherWithSameKey() {
+        KeyMatcher matcher = KeyMatcher.buildExactMatcher(keyed);
+
+        KeyedMessage another = new KeyedMessage() {
+            public MessageKey getKey() {
+                HashMap<String, Object> key = new HashMap<>();
+                key.put("foo", "bar");
+                return new MessageKey(key);
+            }
+        };
+        assertTrue(matcher.matches(another));
     }
 
     @Test
     public void wildcardMatcherMatchesAll() {
-        assertTrue(KeyMatcher.getWildcardMatcher().matches(getKey()));
+        KeyMatcher matcher = KeyMatcher.buildExactMatcher(keyed);
+        assertTrue(KeyMatcher.getWildcardMatcher().matches(keyed));
     }
 }
