@@ -28,18 +28,13 @@ public abstract class DiagnosticMessage extends VehicleMessage
     private int mPid;
     private byte[] mPayload;
 
-    // TODO if this class is abstract, what is not implemented? is it ihe fact
-    // that there aren't any public constructors?
-    // public abstract DiagnosticMessage();
-
-    // TODO pid is optiona, it should not go in this basic constructor
+    // TODO pid is optional, it should not go in this basic constructor
     public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
         mBusId = busId;
         mId = id;
         mMode = mode;
         // TODO need a way to mark that we have *no* pid
-        // TODO need to copy array
-        mPayload = payload;
+        System.arraycopy(payload, 0, mPayload, 0, payload.length);
     }
 
     // TODO DRY
@@ -49,8 +44,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
         mId = id;
         mMode = mode;
         mPid = pid;
-        // TODO need to copy array
-        mPayload = payload;
+        System.arraycopy(payload, 0, mPayload, 0, payload.length);
     }
 
     protected DiagnosticMessage(Map<String, Object> values)
