@@ -61,8 +61,8 @@ public class VehicleMessage implements Parcelable {
                 message = new DiagnosticResponse(values);
             } else if(DiagnosticRequest.containsAllRequiredFields(values)) {
                 message = new DiagnosticRequest(values);
-            } else if(CommandMessage.containsAllRequiredFields(values)) {
-                message = new CommandMessage(values);
+            } else if(CommandRequest.containsAllRequiredFields(values)) {
+                message = new CommandRequest(values);
             } else if(CommandResponse.containsAllRequiredFields(values)) {
                 message = new CommandResponse(values);
             } else if(SimpleVehicleMessage.containsAllRequiredFields(values)) {
@@ -187,8 +187,8 @@ public class VehicleMessage implements Parcelable {
                     return new SimpleVehicleMessage(in);
                 } else if(messageClassName.equals(CommandResponse.class.getName())) {
                     return new CommandResponse(in);
-                } else if(messageClassName.equals(CommandMessage.class.getName())) {
-                    return new CommandMessage(in);
+                } else if(messageClassName.equals(CommandRequest.class.getName())) {
+                    return new CommandRequest(in);
                 } else if(messageClassName.equals(CanMessage.class.getName())) {
                     return new CanMessage(in);
                 } else if(messageClassName.equals(DiagnosticRequest.class.getName())) {

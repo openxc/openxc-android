@@ -1,53 +1,67 @@
 package com.openxc.messages;
 
 import java.util.Map;
-import java.util.HashMap;
 
 import android.os.Parcel;
 
 import com.google.common.base.Objects;
 
-public class CommandResponse extends CommandMessage {
+public class CommandResponse extends Command {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
     public static final String MESSAGE_KEY = "message";
     private String mMessage;
 
     public CommandResponse(Map<String, Object> values) throws InvalidMessageFieldsException {
-        // TODO if we call this it fails the validation check because we don't
-        // have a 'command' field, but that's OK with us. need to think of a
-        // better way to structure these message types.
-        // super(values);
-        if(!containsAllRequiredFields(values)) {
+        super(values);
+        if(!containsRequiredPrimeFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
         }
-        setCommand((String) values.remove(COMMAND_RESPONSE_KEY));
         setMessage(values);
     }
 
     public CommandResponse(String command, String message) {
         super(command);
-        mMessage = message;
+        setMessage(message);
     }
 
     public CommandResponse(String command, Map<String, Object> values)
             throws InvalidMessageFieldsException {
         super(command, values);
+        if(!containsRequiredPrimeFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
+                    values.toString());
+        }
         setMessage(values);
     }
+    
+    private void setMessage(String message) {
+        mMessage = message;
+    }
 
-    protected void setMessage(Map<String, Object> values) {
-        mMessage = (String) values.remove(MESSAGE_KEY);
+    private void setMessage(Map<String, Object> values) {
+        setMessage((String) values.remove(MESSAGE_KEY));
     }
 
     public String getMessage() {
         return mMessage;
     }
-
-    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return map.containsKey(CommandResponse.COMMAND_RESPONSE_KEY);
+    
+    @Override
+    public String getCommandKey() {
+        return COMMAND_RESPONSE_KEY;
+    }
+    
+    public static boolean containsRequiredPrimeFields(Map<String, Object> map) {
+        return map.containsKey(MESSAGE_KEY);
+    }
+    
+    public static boolean containsAllRequiredFields(Map<String, Object> map) {
+        return map.containsKey(COMMAND_RESPONSE_KEY) 
+                && containsRequiredPrimeFields(map);
     }
 
     @Override
@@ -59,12 +73,6 @@ public class CommandResponse extends CommandMessage {
         final CommandResponse other = (CommandResponse) obj;
         return (mMessage == null && other.mMessage == null) ||
                 mMessage.equals(other.mMessage);
-    }
-
-    public MessageKey getKey() {
-        HashMap<String, Object> key = new HashMap<>();
-        key.put(CommandMessage.COMMAND_KEY, getCommand());
-        return new MessageKey(key);
     }
 
     @Override
@@ -95,4 +103,5 @@ public class CommandResponse extends CommandMessage {
     }
 
     protected CommandResponse() { }
+    
 }
