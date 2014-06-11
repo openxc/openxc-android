@@ -19,28 +19,47 @@ public class DiagnosticRequest extends DiagnosticMessage {
     private float mFrequency = 0f;
     private String mName;
 
-    public DiagnosticRequest(Map<String, Object> values) {
+    public DiagnosticRequest(int busId, int id, int mode, byte[] payload) {
+        super(busId, id, mode, payload);
+    }
+
+    public DiagnosticRequest(int busId, int id, int mode, int pid,
+            byte[] payload) {
+        super(busId, id, mode, pid, payload);
+    }
+
+    public DiagnosticRequest(int busId, int id, int mode, int pid,
+            byte[] payload, boolean multipleResponses, float factor,
+            float offset, float frequency, String name) {
+        super(busId, id, mode, pid, payload);
+        mMultipleResponses = multipleResponses;
+        mFactor = factor;
+        mOffset = offset;
+        mFrequency = frequency;
+        mName = name;
+    }
+
+    public DiagnosticRequest(Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(values);
-        if (values != null) {
-            if (values.containsKey(MULTIPLE_RESPONSES_KEY)) {
-                mMultipleResponses = (boolean) values.get(MULTIPLE_RESPONSES_KEY);
-            }
+        if(contains(MULTIPLE_RESPONSES_KEY)) {
+            mMultipleResponses = (boolean) getValuesMap().remove(MULTIPLE_RESPONSES_KEY);
+        }
 
-            if (values.containsKey(FACTOR_KEY)) {
-                mFactor = (float) values.get(FACTOR_KEY);
-            }
+        if(contains(FACTOR_KEY)) {
+            mFactor = (float) getValuesMap().remove(FACTOR_KEY);
+        }
 
-            if (values.containsKey(OFFSET_KEY)) {
-                mOffset = (float) values.get(OFFSET_KEY);
-            }
+        if(contains(OFFSET_KEY)) {
+            mOffset = (float) getValuesMap().remove(OFFSET_KEY);
+        }
 
-            if (values.containsKey(FREQUENCY_KEY)) {
-                mFrequency = (float) values.get(FREQUENCY_KEY);
-            }
+        if(contains(FREQUENCY_KEY)) {
+            mFrequency = (float) getValuesMap().remove(FREQUENCY_KEY);
+        }
 
-            if (values.containsKey(NamedVehicleMessage.NAME_KEY)) {
-                mName = (String) values.get(NamedVehicleMessage.NAME_KEY);
-            }
+        if(contains(NamedVehicleMessage.NAME_KEY)) {
+            mName = (String) getValuesMap().remove(NamedVehicleMessage.NAME_KEY);
         }
     }
 
@@ -66,7 +85,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !super.equals(obj)) {
+        if(obj == null || !super.equals(obj)) {
             return false;
         }
 
@@ -75,7 +94,8 @@ public class DiagnosticRequest extends DiagnosticMessage {
                 && mFactor == other.mFactor
                 && mOffset == other.mOffset
                 && mFrequency == other.mFrequency
-                && mName.equals(other.mName);
+                && ((mName == null && other.mName == null)
+                    || mName.equals(other.mName));
     }
 
     @Override
@@ -113,4 +133,10 @@ public class DiagnosticRequest extends DiagnosticMessage {
         mName = in.readString();
     }
 
+    protected DiagnosticRequest(Parcel in)
+            throws UnrecognizedMessageTypeException {
+        readFromParcel(in);
+    }
+
+    protected DiagnosticRequest() { }
 }

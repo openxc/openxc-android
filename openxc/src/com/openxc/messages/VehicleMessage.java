@@ -16,23 +16,38 @@ public class VehicleMessage implements Parcelable {
     private long mTimestamp;
     private Map<String, Object> mValues = new HashMap<String, Object>();
 
-    public VehicleMessage(Long timestamp, Map<String, Object> values) {
-        if(timestamp == null) {
-            if(values != null && values.containsKey(TIMESTAMP_KEY)) {
-                mTimestamp = (Long) values.remove(TIMESTAMP_KEY);
-            } else {
-                timestamp();
-            }
-        } else {
-            mTimestamp = timestamp;
-        }
+    public VehicleMessage() {
+        timestamp();
+    }
 
-        if(values != null) {
-            mValues = new HashMap<String, Object>(values);
+    public VehicleMessage(Long timestamp) {
+        if(timestamp != null) {
+            mTimestamp = timestamp;
+        } else {
+            // TODO when should things get timestampped?
+            // timestamp();
+            mTimestamp = 0;
         }
     }
 
-    public VehicleMessage(Map<String, Object> values) {
+    public VehicleMessage(Long timestamp, Map<String, Object> values)
+            throws InvalidMessageFieldsException {
+        this(timestamp);
+        if(values != null) {
+            mValues = new HashMap<String, Object>(values);
+        }
+
+        if(contains(TIMESTAMP_KEY)) {
+            mTimestamp = (Long) getValuesMap().remove(TIMESTAMP_KEY);
+        }
+
+        if(mTimestamp == 0) {
+            timestamp();
+        }
+    }
+
+    public VehicleMessage(Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         this(null, values);
     }
 
@@ -43,19 +58,19 @@ public class VehicleMessage implements Parcelable {
         // TODO could clean this up with reflection since they all now have the
         // same constructor
         try {
-            if(CanMessage.containsSameKeySet(values)) {
+            if(CanMessage.containsRequiredFields(values)) {
                 message = new CanMessage(values);
-            } else if(DiagnosticResponse.containsSameKeySet(values)) {
+            } else if(DiagnosticResponse.containsRequiredFields(values)) {
                 message = new DiagnosticResponse(values);
-            } else if(DiagnosticRequest.containsSameKeySet(values)) {
+            } else if(DiagnosticRequest.containsRequiredFields(values)) {
                 message = new DiagnosticRequest(values);
-            } else if(CommandMessage.containsSameKeySet(values)) {
+            } else if(CommandMessage.containsRequiredFields(values)) {
                 message = new CommandMessage(values);
-            } else if(CommandResponse.containsSameKeySet(values)) {
+            } else if(CommandResponse.containsRequiredFields(values)) {
                 message = new CommandResponse(values);
-            } else if(SimpleVehicleMessage.containsSameKeySet(values)) {
+            } else if(SimpleVehicleMessage.containsRequiredFields(values)) {
                 message = new SimpleVehicleMessage(values);
-            } else if(NamedVehicleMessage.containsSameKeySet(values)) {
+            } else if(NamedVehicleMessage.containsRequiredFields(values)) {
                 message = new NamedVehicleMessage(values);
             } else {
                 // TODO should we allow generic vehicleMessage through? I think so.
@@ -63,9 +78,10 @@ public class VehicleMessage implements Parcelable {
                         "Unrecognized combination of entries in values = " +
                         values.toString());
             }
-        } catch (MismatchedMessageKeysException e) {
-            Log.w(TAG, "Incorrectly checking keys in buildSubtype before constructing " +
-            		"subtype...verify containsSameKeySet()!");
+        } catch(InvalidMessageFieldsException e) {
+            throw new UnrecognizedMessageTypeException(
+                    "Unrecognized combination of entries in values = " +
+                    values.toString() + " (should not get here)");
         }
 
         return message;
@@ -178,6 +194,10 @@ public class VehicleMessage implements Parcelable {
                     return new CommandMessage(in);
                 } else if(messageClassName.equals(CanMessage.class.getName())) {
                     return new CanMessage(in);
+                } else if(messageClassName.equals(DiagnosticRequest.class.getName())) {
+                    return new DiagnosticRequest(in);
+                } else if(messageClassName.equals(DiagnosticResponse.class.getName())) {
+                    return new DiagnosticResponse(in);
                 } else {
                     throw new UnrecognizedMessageTypeException(
                             "Unrecognized message class: " + messageClassName);
@@ -192,13 +212,8 @@ public class VehicleMessage implements Parcelable {
         }
     };
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
-        return true;
-    }
-
     private VehicleMessage(Parcel in) throws UnrecognizedMessageTypeException {
         readFromParcel(in);
     }
 
-    protected VehicleMessage() { }
 }

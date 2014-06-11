@@ -29,7 +29,8 @@ public class CommandMessageTest {
     }
 
     @Test
-    public void extractsCommandFromValues() {
+    public void extractsCommandFromValues()
+            throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
         data.put(CommandMessage.COMMAND_KEY, command);
         message = new CommandMessage(data);

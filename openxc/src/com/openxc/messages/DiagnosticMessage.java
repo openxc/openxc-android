@@ -7,44 +7,73 @@ import android.os.Parcel;
 
 import com.openxc.util.Range;
 
-public abstract class DiagnosticMessage extends VehicleMessage implements KeyedMessage {
+public abstract class DiagnosticMessage extends VehicleMessage
+        implements KeyedMessage {
 
+    public static final String ID_KEY = CanMessage.ID_KEY;
+    public static final String BUS_KEY = CanMessage.BUS_KEY;
     public static final String MODE_KEY = "mode";
     public static final String PID_KEY = "pid";
     public static final String PAYLOAD_KEY = "payload";
-    // TODO can there be more busses?
+
+    // TODO can there be more buses?
     public static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
     public static final Range<Integer> MODE_RANGE = new Range<>(1, 15);
     public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
     public static final int MAX_PAYLOAD_LENGTH_IN_CHARS = MAX_PAYLOAD_LENGTH_IN_BYTES * 2;
 
-    protected int mCanBus;
-    protected int mId;
-    protected int mMode;
-    protected int mPid;
-    protected byte[] mPayload;
+    private int mBusId;
+    private int mId;
+    private int mMode;
+    private int mPid;
+    private byte[] mPayload;
 
-    protected DiagnosticMessage(Map<String, Object> values) {
+    // TODO if this class is abstract, what is not implemented? is it ihe fact
+    // that there aren't any public constructors?
+    // public abstract DiagnosticMessage();
+
+    // TODO pid is optiona, it should not go in this basic constructor
+    public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
+        mBusId = busId;
+        mId = id;
+        mMode = mode;
+        // TODO need a way to mark that we have *no* pid
+        // TODO need to copy array
+        mPayload = payload;
+    }
+
+    // TODO DRY
+    public DiagnosticMessage(int busId, int id, int mode, int pid,
+            byte[] payload) {
+        mBusId = busId;
+        mId = id;
+        mMode = mode;
+        mPid = pid;
+        // TODO need to copy array
+        mPayload = payload;
+    }
+
+    protected DiagnosticMessage(Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(values);
-        if (values != null) {
-            if (values.containsKey(CanMessage.BUS_KEY)) {
-                mCanBus = (int) values.get(CanMessage.BUS_KEY);
-            }
-            if (values.containsKey(CanMessage.ID_KEY)) {
-                mId = (int) values.get(CanMessage.ID_KEY);
-            }
-            if (values.containsKey(MODE_KEY)) {
-                mMode = (int) values.get(MODE_KEY);
-            }
-            if (values.containsKey(PID_KEY)) {
-                mPid = (int) values.get(PID_KEY);
-            }
-            if (values.containsKey(PAYLOAD_KEY)) {
-                // TODO what's the right way to convert this?
-                // https://github.com/openxc/openxc-message-format
-                // says "bytes [...] as a hexadecimal number in a string"
-                mPayload = ((String) values.get(PAYLOAD_KEY)).getBytes();
-            }
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
+                    values.toString());
+        }
+
+        mBusId = (Integer) getValuesMap().remove(CanMessage.BUS_KEY);
+        mId = (Integer) getValuesMap().remove(CanMessage.ID_KEY);
+        mMode = (Integer) getValuesMap().remove(MODE_KEY);
+
+        if(contains(PID_KEY)) {
+            mPid = (Integer) getValuesMap().remove(PID_KEY);
+        }
+        if(contains(PAYLOAD_KEY)) {
+            // TODO what's the right way to convert this?
+            // https://github.com/openxc/openxc-message-format
+            // says "bytes [...] as a hexadecimal number in a string"
+            mPayload = ((String) getValuesMap().remove(PAYLOAD_KEY)).getBytes();
         }
     }
 
@@ -55,15 +84,16 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
         }
 
         final DiagnosticMessage other = (DiagnosticMessage) obj;
-        return mCanBus == other.mCanBus
+        return mBusId == other.mBusId
                 && mId == other.mId
                 && mMode == other.mMode
-                && mPid == other.mPid
-                && mPayload.equals(other.mPayload);
+                && mPid == other.mPid;
+                // TODO
+                // && mPayload.equals(other.mPayload);
     }
 
-    public int getCanBus() {
-        return mCanBus;
+    public int getBusId() {
+        return mBusId;
     }
 
     public int getId() {
@@ -84,7 +114,7 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
 
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
-        key.put(CanMessage.BUS_KEY, getCanBus());
+        key.put(CanMessage.BUS_KEY, getBusId());
         key.put(CanMessage.ID_KEY, getId());
         key.put(MODE_KEY, getMode());
         key.put(PID_KEY, getPid());
@@ -94,25 +124,29 @@ public abstract class DiagnosticMessage extends VehicleMessage implements KeyedM
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeInt(getCanBus());
+        out.writeInt(getBusId());
         out.writeInt(getId());
         out.writeInt(getMode());
         out.writeInt(getPid());
-        out.writeByteArray(getPayload());
+        // TODO
+        // out.writeByteArray(getPayload());
     }
 
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        mCanBus = in.readInt();
+        mBusId = in.readInt();
         mId = in.readInt();
         mMode = in.readInt();
         mPid = in.readInt();
-        in.readByteArray(mPayload);
+        // TODO
+        // in.readByteArray(mPayload);
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
-        return map.containsKey(CanMessage.BUS_KEY) && map.containsKey(CanMessage.ID_KEY) &&
-                map.containsKey(MODE_KEY);
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
+        return map.containsKey(BUS_KEY) && map.containsKey(ID_KEY)
+                && map.containsKey(MODE_KEY);
     }
+
+    protected DiagnosticMessage() { }
 }

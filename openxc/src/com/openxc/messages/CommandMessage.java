@@ -16,18 +16,20 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
         mCommand = command;
     }
 
-    public CommandMessage(Map<String, Object> values) throws MismatchedMessageKeysException {
+    public CommandMessage(Map<String, Object> values) throws InvalidMessageFieldsException {
         super(values);
-        if(!containsSameKeySet(values)) {
-            throw new MismatchedMessageKeysException(
-                    "Missing keys for CommandMessage construction in values = " +
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
                     values.toString());
         }
         setCommand(getValuesMap());
     }
 
-    public CommandMessage(String command, Map<String, Object> values) {
+    public CommandMessage(String command, Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(values);
+        mCommand = command;
     }
 
     protected void setCommand(String command) {
@@ -42,7 +44,7 @@ public class CommandMessage extends VehicleMessage implements KeyedMessage {
         return mCommand;
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
         return map.containsKey(COMMAND_KEY);
     }
 

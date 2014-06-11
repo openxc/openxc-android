@@ -18,6 +18,65 @@ public class DiagnosticResponse extends DiagnosticMessage {
     private float mValue;
     private NegativeResponseCode mNegativeResponseCode;
 
+    public DiagnosticResponse(Map<String, Object> values)
+            throws InvalidMessageFieldsException {
+        super(values);
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
+                    values.toString());
+        }
+
+        if(mSuccess = (boolean) values.get(SUCCESS_KEY)) {
+                mNegativeResponseCode = NegativeResponseCode.NONE;
+        } else {
+            mNegativeResponseCode = (NegativeResponseCode) values.get(
+                    NEGATIVE_RESPONSE_CODE_KEY);
+        }
+
+        if(values.containsKey(VALUE_KEY)) {
+            mValue = (float) values.get(VALUE_KEY);
+        }
+    }
+
+    public boolean getSuccess() {
+        return mSuccess;
+    }
+
+    public float getValue() {
+        return mValue;
+    }
+
+    public NegativeResponseCode getNegativeResponseCode() {
+        return mNegativeResponseCode;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("timestamp", getTimestamp())
+            .add("id", getId())
+            .add("mode", getMode())
+            .add("pid", getPid())
+            .add("payload", getPayload())
+            .add("value", getValue())
+            .add("negative_response_code", getNegativeResponseCode())
+            .add("success", getSuccess())
+            .toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final DiagnosticResponse other = (DiagnosticResponse) obj;
+        return mSuccess == other.mSuccess
+                && mValue == other.mValue
+                && mNegativeResponseCode == other.mNegativeResponseCode;
+    }
+
     public interface Listener {
         public void receive(DiagnosticRequest req, DiagnosticResponse response);
     }
@@ -77,57 +136,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
         }
     };
 
-    public DiagnosticResponse(Map<String, Object> values) {
-        super(values);
-        if (mSuccess = (boolean) values.get(SUCCESS_KEY)) {
-                mNegativeResponseCode = NegativeResponseCode.NONE;
-        } else {
-            mNegativeResponseCode = (NegativeResponseCode) values
-                    .get(NEGATIVE_RESPONSE_CODE_KEY);
-        }
-        if (values.containsKey(VALUE_KEY)) {
-            mValue = (float) values.get(VALUE_KEY);
-        }
-    }
-
-    public boolean getSuccess() {
-        return mSuccess;
-    }
-
-    public float getValue() {
-        return mValue;
-    }
-
-    public NegativeResponseCode getNegativeResponseCode() {
-        return mNegativeResponseCode;
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-            .add("timestamp", getTimestamp())
-            .add("id", getId())
-            .add("mode", getMode())
-            .add("pid", getPid())
-            .add("payload", getPayload())
-            .add("value", getValue())
-            .add("negative_response_code", getNegativeResponseCode())
-            .add("success", getSuccess())
-            .toString();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !super.equals(obj)) {
-            return false;
-        }
-
-        final DiagnosticResponse other = (DiagnosticResponse) obj;
-        return mSuccess == other.mSuccess
-                && mValue == other.mValue
-                && mNegativeResponseCode == other.mNegativeResponseCode;
-    }
-
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
@@ -144,8 +152,17 @@ public class DiagnosticResponse extends DiagnosticMessage {
         mNegativeResponseCode = NegativeResponseCode.get(in.readInt());
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
-        return DiagnosticMessage.containsSameKeySet(map) &&
-                map.containsKey(DiagnosticResponse.SUCCESS_KEY);
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
+        // TODO parent removes its own fields so we can't check again, need to
+        // refactor
+        //DiagnosticMessage.containsRequiredFields(map) &&
+        return map.containsKey(DiagnosticResponse.SUCCESS_KEY);
     }
+
+    protected DiagnosticResponse(Parcel in)
+            throws UnrecognizedMessageTypeException {
+        readFromParcel(in);
+    }
+
+    protected DiagnosticResponse() { }
 }

@@ -13,21 +13,34 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
     private String mName;
 
     public NamedVehicleMessage(String name) {
-        this(name, null);
+        mName = name;
     }
 
-    public NamedVehicleMessage(Map<String, Object> values) {
+    public NamedVehicleMessage(Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(values);
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
+                    values.toString());
+        }
         mName = (String) getValuesMap().remove(NAME_KEY);
     }
 
-    public NamedVehicleMessage(String name, Map<String, Object> values) {
+    public NamedVehicleMessage(String name, Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(values);
         mName = name;
     }
 
-    public NamedVehicleMessage(Long timestamp, String name, Map<String, Object> values) {
+    public NamedVehicleMessage(Long timestamp, String name, Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(timestamp, values);
+        mName = name;
+    }
+
+    public NamedVehicleMessage(Long timestamp, String name) {
+        super(timestamp);
         mName = name;
     }
 
@@ -51,7 +64,9 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         return new MessageKey(key);
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
+    // TODO oops, can't override a static method so we need to implement this
+    // check another way
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
         return map.containsKey(NAME_KEY);
     }
 

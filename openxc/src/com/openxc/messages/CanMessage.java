@@ -16,15 +16,17 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     private int mId;
     private byte[] mData = new byte[8];
 
-    public CanMessage(Map<String, Object> values) throws MismatchedMessageKeysException {
-        if(!containsSameKeySet(values)) {
-            throw new MismatchedMessageKeysException(
-                    "Missing keys for CanMessage construction in values = " +
+    public CanMessage(Map<String, Object> values) throws InvalidMessageFieldsException {
+        super(values);
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
                     values.toString());
         }
-        init((Integer)values.remove(BUS_KEY),
-                (Integer)values.remove(ID_KEY),
-                (byte[])values.remove(CanMessage.DATA_KEY));
+
+        init((Integer)getValuesMap().remove(BUS_KEY),
+                (Integer)getValuesMap().remove(ID_KEY),
+                (byte[])getValuesMap().remove(CanMessage.DATA_KEY));
     }
 
     public CanMessage(int canBus, int id, byte[] data) {
@@ -55,7 +57,7 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         return new MessageKey(key);
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
         return map.containsKey(BUS_KEY) && map.containsKey(ID_KEY)
                 && map.containsKey(DATA_KEY);
     }

@@ -43,7 +43,8 @@ public class CanMessageTest {
     }
 
     @Test
-    public void extractsFieldsFromValues() {
+    public void extractsFieldsFromValues()
+            throws InvalidMessageFieldsException {
         HashMap<String, Object> values = new HashMap<>();
         values.put(CanMessage.ID_KEY, id);
         values.put(CanMessage.BUS_KEY, bus);

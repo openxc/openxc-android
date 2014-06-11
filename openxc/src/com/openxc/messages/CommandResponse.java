@@ -13,10 +13,14 @@ public class CommandResponse extends CommandMessage {
     public static final String MESSAGE_KEY = "message";
     private String mMessage;
 
-    public CommandResponse(Map<String, Object> values) throws MismatchedMessageKeysException {
-        if(!containsSameKeySet(values)) {
-            throw new MismatchedMessageKeysException(
-                    "Missing keys for CommandResponse construction in values = " +
+    public CommandResponse(Map<String, Object> values) throws InvalidMessageFieldsException {
+        // TODO if we call this it failes the validation check because we don't
+        // have a 'command' field, but that's OK with us. need to think of a
+        // better way to structure these message types.
+        // super(values);
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
                     values.toString());
         }
         setCommand((String) values.remove(COMMAND_RESPONSE_KEY));
@@ -28,7 +32,8 @@ public class CommandResponse extends CommandMessage {
         mMessage = message;
     }
 
-    public CommandResponse(String command, Map<String, Object> values) {
+    public CommandResponse(String command, Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(command, values);
         setMessage(values);
     }
@@ -41,7 +46,7 @@ public class CommandResponse extends CommandMessage {
         return mMessage;
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
         return map.containsKey(CommandResponse.COMMAND_RESPONSE_KEY);
     }
 

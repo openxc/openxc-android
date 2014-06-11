@@ -35,7 +35,7 @@ public class CommandResponseTest {
     }
 
     @Test
-    public void messageIsOptional() {
+    public void messageIsOptional() throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
         data.put(CommandResponse.COMMAND_RESPONSE_KEY, command);
         response = new CommandResponse(data);
@@ -45,7 +45,8 @@ public class CommandResponseTest {
     }
 
     @Test
-    public void extractsCommandAndMessageFromValues() {
+    public void extractsCommandAndMessageFromValues()
+            throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
         data.put(CommandResponse.COMMAND_RESPONSE_KEY, command);
         data.put(CommandResponse.MESSAGE_KEY, message);

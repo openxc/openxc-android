@@ -11,6 +11,7 @@ import java.util.HashMap;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.InvalidMessageFieldsException;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
@@ -118,7 +119,7 @@ public class DataPipelineTest {
     }
 
     @Test
-    public void getUnnamed() {
+    public void getUnnamed() throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
         pipeline.receive(new VehicleMessage(data));
         NamedVehicleMessage message = pipeline.get("foo");

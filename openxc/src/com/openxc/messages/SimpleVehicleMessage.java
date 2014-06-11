@@ -12,7 +12,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     private Object mValue;
 
     public SimpleVehicleMessage(Long timestamp, String name, Object value) {
-        super(timestamp, name, null);
+        super(timestamp, name);
         mValue = value;
     }
 
@@ -20,8 +20,14 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         this(null, name, value);
     }
 
-    public SimpleVehicleMessage(Map<String, Object> values) {
+    public SimpleVehicleMessage(Map<String, Object> values)
+            throws InvalidMessageFieldsException {
         super(values);
+        if(!containsRequiredFields(values)) {
+            throw new InvalidMessageFieldsException(
+                    "Missing keys for construction in values = " +
+                    values.toString());
+        }
         mValue = getValuesMap().remove(VALUE_KEY);
     }
 
@@ -49,8 +55,12 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             .toString();
     }
 
-    protected static boolean containsSameKeySet(Map<String, Object> map) {
-        return NamedVehicleMessage.containsSameKeySet(map) && map.containsKey(VALUE_KEY);
+    protected static boolean containsRequiredFields(Map<String, Object> map) {
+        return map.containsKey(VALUE_KEY);
+        // TODO the parent constructor removes the name, so the our validation
+        // fails. argh!
+        //NamedVehicleMessage.containsRequiredFields(map)
+
     }
 
     @Override

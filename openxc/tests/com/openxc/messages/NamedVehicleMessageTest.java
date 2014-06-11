@@ -21,24 +21,38 @@ public class NamedVehicleMessageTest {
     @Before
     public void setup() {
         data = new HashMap<String, Object>();
-        data.put("value", Double.valueOf(42));
-        message = new NamedVehicleMessage("foo", data);
+        message = new NamedVehicleMessage("foo");
     }
 
     @Test
-    public void testName() {
+    public void getNameReturnsName() {
         assertEquals("foo", message.getName());
     }
 
     @Test
-    public void getValues() {
+    public void getValues() throws InvalidMessageFieldsException {
+        data.put("value", Double.valueOf(42));
+        message = new NamedVehicleMessage("foo", data);
         Double value = (Double) message.get("value");
         assertThat(value, notNullValue());
         assertEquals(value.doubleValue(), 42, 0);
     }
 
+    @Test(expected=InvalidMessageFieldsException.class)
+    public void buildFromEmptyFails() throws InvalidMessageFieldsException {
+        data = new HashMap<String, Object>();
+        message = new NamedVehicleMessage(data);
+    }
+
+    @Test(expected=InvalidMessageFieldsException.class)
+    public void buildFromIncompleteFails() throws InvalidMessageFieldsException {
+        data = new HashMap<String, Object>();
+        data.put("foo", "bar");
+        message = new NamedVehicleMessage(data);
+    }
+
     @Test
-    public void testExtractsNameFromValues() {
+    public void extractsNameFromValues() throws InvalidMessageFieldsException {
         data.put(NamedVehicleMessage.NAME_KEY, "bar");
         message = new NamedVehicleMessage(data);
         assertEquals("bar", message.getName());
@@ -51,13 +65,15 @@ public class NamedVehicleMessageTest {
     }
 
     @Test
-    public void sameNameAndValueEquals() {
+    public void sameNameAndValueEquals()
+            throws InvalidMessageFieldsException {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
         assertEquals(message, anotherMessage);
     }
 
     @Test
-    public void sameNameDifferentValueDoesntEqual() {
+    public void sameNameDifferentValueDoesntEqual()
+            throws InvalidMessageFieldsException {
         data = new HashMap<String, Object>();
         data.put("value", Double.valueOf(24));
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
@@ -66,12 +82,12 @@ public class NamedVehicleMessageTest {
 
     @Test
     public void differentNameDoesntEqual() {
-        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("bar", data);
+        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("bar");
         assertThat(message, not(equalTo(anotherMessage)));
     }
 
     @Test
-    public void testWriteAndReadFromParcel() {
+    public void writeAndReadFromParcel() {
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);
 
@@ -85,7 +101,7 @@ public class NamedVehicleMessageTest {
     }
 
     @Test
-    public void keyMatches() {
+    public void keyMatches() throws InvalidMessageFieldsException {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
         assertThat(message.getKey(), equalTo(anotherMessage.getKey()));
     }

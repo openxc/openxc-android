@@ -30,7 +30,8 @@ public class SimpleVehicleMessageTest {
     }
 
     @Test
-    public void extractsNameAndValueFromValues() {
+    public void extractsNameAndValueFromValues()
+            throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
         data.put(NamedVehicleMessage.NAME_KEY, name);
         data.put(SimpleVehicleMessage.VALUE_KEY, value);
