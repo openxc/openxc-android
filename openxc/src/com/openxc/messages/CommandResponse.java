@@ -14,11 +14,11 @@ public class CommandResponse extends CommandMessage {
     private String mMessage;
 
     public CommandResponse(Map<String, Object> values) throws InvalidMessageFieldsException {
-        // TODO if we call this it failes the validation check because we don't
+        // TODO if we call this it fails the validation check because we don't
         // have a 'command' field, but that's OK with us. need to think of a
         // better way to structure these message types.
         // super(values);
-        if(!containsRequiredFields(values)) {
+        if(!containsAllRequiredFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
@@ -46,7 +46,7 @@ public class CommandResponse extends CommandMessage {
         return mMessage;
     }
 
-    protected static boolean containsRequiredFields(Map<String, Object> map) {
+    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
         return map.containsKey(CommandResponse.COMMAND_RESPONSE_KEY);
     }
 

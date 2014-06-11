@@ -23,7 +23,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     public SimpleVehicleMessage(Map<String, Object> values)
             throws InvalidMessageFieldsException {
         super(values);
-        if(!containsRequiredFields(values)) {
+        if(!containsRequiredPrimeFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
@@ -54,13 +54,13 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             .add("values", getValuesMap())
             .toString();
     }
-
-    protected static boolean containsRequiredFields(Map<String, Object> map) {
+    
+    private static boolean containsRequiredPrimeFields(Map<String, Object> map) {
         return map.containsKey(VALUE_KEY);
-        // TODO the parent constructor removes the name, so the our validation
-        // fails. argh!
-        //NamedVehicleMessage.containsRequiredFields(map)
-
+    }
+    
+    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
+        return NamedVehicleMessage.containsAllRequiredFields(map) && containsRequiredPrimeFields(map);
     }
 
     @Override

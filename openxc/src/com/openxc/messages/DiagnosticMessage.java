@@ -56,7 +56,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
     protected DiagnosticMessage(Map<String, Object> values)
             throws InvalidMessageFieldsException {
         super(values);
-        if(!containsRequiredFields(values)) {
+        if(!containsAllRequiredFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
@@ -143,7 +143,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
         // in.readByteArray(mPayload);
     }
 
-    protected static boolean containsRequiredFields(Map<String, Object> map) {
+    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
         return map.containsKey(BUS_KEY) && map.containsKey(ID_KEY)
                 && map.containsKey(MODE_KEY);
     }

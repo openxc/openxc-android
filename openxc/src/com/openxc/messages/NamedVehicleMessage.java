@@ -19,7 +19,7 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
     public NamedVehicleMessage(Map<String, Object> values)
             throws InvalidMessageFieldsException {
         super(values);
-        if(!containsRequiredFields(values)) {
+        if(!containsAllRequiredFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
@@ -66,7 +66,7 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
 
     // TODO oops, can't override a static method so we need to implement this
     // check another way
-    protected static boolean containsRequiredFields(Map<String, Object> map) {
+    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
         return map.containsKey(NAME_KEY);
     }
 

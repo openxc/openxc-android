@@ -21,14 +21,14 @@ public class DiagnosticResponse extends DiagnosticMessage {
     public DiagnosticResponse(Map<String, Object> values)
             throws InvalidMessageFieldsException {
         super(values);
-        if(!containsRequiredFields(values)) {
+        if(!containsRequiredPrimeFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
         }
 
         if(mSuccess = (boolean) values.get(SUCCESS_KEY)) {
-                mNegativeResponseCode = NegativeResponseCode.NONE;
+            mNegativeResponseCode = NegativeResponseCode.NONE;
         } else {
             mNegativeResponseCode = (NegativeResponseCode) values.get(
                     NEGATIVE_RESPONSE_CODE_KEY);
@@ -151,12 +151,13 @@ public class DiagnosticResponse extends DiagnosticMessage {
         mValue = in.readFloat();
         mNegativeResponseCode = NegativeResponseCode.get(in.readInt());
     }
-
-    protected static boolean containsRequiredFields(Map<String, Object> map) {
-        // TODO parent removes its own fields so we can't check again, need to
-        // refactor
-        //DiagnosticMessage.containsRequiredFields(map) &&
+    
+    private static boolean containsRequiredPrimeFields(Map<String, Object> map) {
         return map.containsKey(DiagnosticResponse.SUCCESS_KEY);
+    }
+    
+    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
+        return DiagnosticMessage.containsAllRequiredFields(map) && containsRequiredPrimeFields(map);
     }
 
     protected DiagnosticResponse(Parcel in)

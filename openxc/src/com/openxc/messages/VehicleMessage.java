@@ -5,7 +5,6 @@ import java.util.Map;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.common.base.Objects;
 
@@ -30,8 +29,7 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
-    public VehicleMessage(Long timestamp, Map<String, Object> values)
-            throws InvalidMessageFieldsException {
+    public VehicleMessage(Long timestamp, Map<String, Object> values) {
         this(timestamp);
         if(values != null) {
             mValues = new HashMap<String, Object>(values);
@@ -46,8 +44,7 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
-    public VehicleMessage(Map<String, Object> values)
-            throws InvalidMessageFieldsException {
+    public VehicleMessage(Map<String, Object> values) {
         this(null, values);
     }
 
@@ -58,19 +55,19 @@ public class VehicleMessage implements Parcelable {
         // TODO could clean this up with reflection since they all now have the
         // same constructor
         try {
-            if(CanMessage.containsRequiredFields(values)) {
+            if(CanMessage.containsAllRequiredFields(values)) {
                 message = new CanMessage(values);
-            } else if(DiagnosticResponse.containsRequiredFields(values)) {
+            } else if(DiagnosticResponse.containsAllRequiredFields(values)) {
                 message = new DiagnosticResponse(values);
-            } else if(DiagnosticRequest.containsRequiredFields(values)) {
+            } else if(DiagnosticRequest.containsAllRequiredFields(values)) {
                 message = new DiagnosticRequest(values);
-            } else if(CommandMessage.containsRequiredFields(values)) {
+            } else if(CommandMessage.containsAllRequiredFields(values)) {
                 message = new CommandMessage(values);
-            } else if(CommandResponse.containsRequiredFields(values)) {
+            } else if(CommandResponse.containsAllRequiredFields(values)) {
                 message = new CommandResponse(values);
-            } else if(SimpleVehicleMessage.containsRequiredFields(values)) {
+            } else if(SimpleVehicleMessage.containsAllRequiredFields(values)) {
                 message = new SimpleVehicleMessage(values);
-            } else if(NamedVehicleMessage.containsRequiredFields(values)) {
+            } else if(NamedVehicleMessage.containsAllRequiredFields(values)) {
                 message = new NamedVehicleMessage(values);
             } else {
                 // TODO should we allow generic vehicleMessage through? I think so.
