@@ -25,15 +25,15 @@ public abstract class DiagnosticMessage extends VehicleMessage
     private int mBusId;
     private int mId;
     private int mMode;
-    private int mPid;
+    private int mPid = -1;
     private byte[] mPayload;
+    private boolean hasPid = false;
 
     // TODO pid is optional, it should not go in this basic constructor
     public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
         mBusId = busId;
         mId = id;
         mMode = mode;
-        // TODO need a way to mark that we have *no* pid
         System.arraycopy(payload, 0, mPayload, 0, payload.length);
     }
 
@@ -43,7 +43,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
         mBusId = busId;
         mId = id;
         mMode = mode;
-        mPid = pid;
+        setPid(pid);
         System.arraycopy(payload, 0, mPayload, 0, payload.length);
     }
 
@@ -70,20 +70,14 @@ public abstract class DiagnosticMessage extends VehicleMessage
             mPayload = ((String) getValuesMap().remove(PAYLOAD_KEY)).getBytes();
         }
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !super.equals(obj)) {
-            return false;
-        }
-
-        final DiagnosticMessage other = (DiagnosticMessage) obj;
-        return mBusId == other.mBusId
-                && mId == other.mId
-                && mMode == other.mMode
-                && mPid == other.mPid;
-                // TODO
-                // && mPayload.equals(other.mPayload);
+    
+    private void setPid(int pid) {
+        mPid = pid;
+        hasPid = true;
+    }
+    
+    public boolean hasPid() {
+        return hasPid;
     }
 
     public int getBusId() {
@@ -104,6 +98,21 @@ public abstract class DiagnosticMessage extends VehicleMessage
 
     public byte[] getPayload() {
         return mPayload;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final DiagnosticMessage other = (DiagnosticMessage) obj;
+        return mBusId == other.mBusId
+                && mId == other.mId
+                && mMode == other.mMode
+                && mPid == other.mPid;
+                // TODO
+                // && mPayload.equals(other.mPayload);
     }
 
     public MessageKey getKey() {
