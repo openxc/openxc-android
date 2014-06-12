@@ -60,7 +60,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
         mMode = (Integer) getValuesMap().remove(MODE_KEY);
 
         if(contains(PID_KEY)) {
-            mPid = (Integer) getValuesMap().remove(PID_KEY);
+            setPid((Integer) getValuesMap().remove(PID_KEY));
         }
         if(contains(PAYLOAD_KEY)) {
             // TODO what's the right way to convert this?
@@ -140,7 +140,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
         mBusId = in.readInt();
         mId = in.readInt();
         mMode = in.readInt();
-        mPid = in.readInt();
+        setPid(in.readInt());
         // TODO
         // in.readByteArray(mPayload);
     }
