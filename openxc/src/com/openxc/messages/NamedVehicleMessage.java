@@ -64,8 +64,6 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         return new MessageKey(key);
     }
 
-    // TODO oops, can't override a static method so we need to implement this
-    // check another way
     protected static boolean containsAllRequiredFields(Map<String, Object> map) {
         return map.containsKey(NAME_KEY);
     }
