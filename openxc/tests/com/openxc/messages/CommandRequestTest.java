@@ -14,13 +14,13 @@ import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
-public class CommandMessageTest {
-    CommandMessage message;
+public class CommandRequestTest {
+    CommandRequest message;
     String command = "foo";
 
     @Before
     public void setup() {
-        message = new CommandMessage(command);
+        message = new CommandRequest(command);
     }
 
     @Test
@@ -32,10 +32,10 @@ public class CommandMessageTest {
     public void extractsCommandFromValues()
             throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
-        data.put(CommandMessage.COMMAND_KEY, command);
-        message = new CommandMessage(data);
+        data.put(CommandRequest.COMMAND_KEY, command);
+        message = new CommandRequest(data);
         assertThat(message.getCommand(), equalTo(command));
-        assertFalse(message.contains(CommandMessage.COMMAND_KEY));
+        assertFalse(message.contains(CommandRequest.COMMAND_KEY));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class CommandMessageTest {
 
     @Test
     public void sameCommandEquals() {
-        CommandMessage anotherMessage = new CommandMessage(command);
+        CommandRequest anotherMessage = new CommandRequest(command);
         assertEquals(message, anotherMessage);
     }
 
@@ -59,7 +59,7 @@ public class CommandMessageTest {
 
         VehicleMessage createdFromParcel =
                 VehicleMessage.CREATOR.createFromParcel(parcel);
-        assertThat(createdFromParcel, instanceOf(CommandMessage.class));
+        assertThat(createdFromParcel, instanceOf(CommandRequest.class));
         assertEquals(message, createdFromParcel);
     }
 }
