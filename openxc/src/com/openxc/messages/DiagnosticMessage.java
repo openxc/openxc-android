@@ -63,9 +63,6 @@ public abstract class DiagnosticMessage extends VehicleMessage
             setPid((Integer) getValuesMap().remove(PID_KEY));
         }
         if(contains(PAYLOAD_KEY)) {
-            // TODO what's the right way to convert this?
-            // https://github.com/openxc/openxc-message-format
-            // says "bytes [...] as a hexadecimal number in a string"
             byte[] payload = (byte[]) getValuesMap().remove(PAYLOAD_KEY);
             System.arraycopy(payload, 0, mPayload, 0, payload.length);;
         }
