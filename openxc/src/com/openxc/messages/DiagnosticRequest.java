@@ -19,6 +19,10 @@ public class DiagnosticRequest extends DiagnosticMessage {
     private float mFrequency = 0f;
     private String mName;
 
+    public DiagnosticRequest(int busId, int id, int mode) {
+        super(busId, id, mode);
+    }
+    
     public DiagnosticRequest(int busId, int id, int mode, byte[] payload) {
         super(busId, id, mode, payload);
     }

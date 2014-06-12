@@ -29,22 +29,21 @@ public abstract class DiagnosticMessage extends VehicleMessage
     private byte[] mPayload;
     private boolean hasPid = false;
 
-    // TODO pid is optional, it should not go in this basic constructor
-    public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
+    public DiagnosticMessage(int busId, int id, int mode) {
         mBusId = busId;
         mId = id;
         mMode = mode;
+    }
+    
+    public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
+        this(busId, id, mode);
         System.arraycopy(payload, 0, mPayload, 0, payload.length);
     }
 
-    // TODO DRY
     public DiagnosticMessage(int busId, int id, int mode, int pid,
             byte[] payload) {
-        mBusId = busId;
-        mId = id;
-        mMode = mode;
+        this(busId, id, mode, payload);
         setPid(pid);
-        System.arraycopy(payload, 0, mPayload, 0, payload.length);
     }
 
     protected DiagnosticMessage(Map<String, Object> values)
