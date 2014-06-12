@@ -26,7 +26,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
     private int mId;
     private int mMode;
     private int mPid = -1;
-    private byte[] mPayload;
+    private byte[] mPayload = new byte[MAX_PAYLOAD_LENGTH_IN_BYTES];
     private boolean hasPid = false;
 
     public DiagnosticMessage(int busId, int id, int mode) {
@@ -66,7 +66,8 @@ public abstract class DiagnosticMessage extends VehicleMessage
             // TODO what's the right way to convert this?
             // https://github.com/openxc/openxc-message-format
             // says "bytes [...] as a hexadecimal number in a string"
-            mPayload = ((String) getValuesMap().remove(PAYLOAD_KEY)).getBytes();
+            byte[] payload = (byte[]) getValuesMap().remove(PAYLOAD_KEY);
+            System.arraycopy(payload, 0, mPayload, 0, payload.length);;
         }
     }
     
