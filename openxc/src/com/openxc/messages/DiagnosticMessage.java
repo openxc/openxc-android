@@ -26,7 +26,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
     private int mId;
     private int mMode;
     private int mPid = -1;
-    private byte[] mPayload = new byte[MAX_PAYLOAD_LENGTH_IN_BYTES];
+    private byte[] mPayload;
     private boolean hasPid = false;
 
     public DiagnosticMessage(int busId, int id, int mode) {
@@ -64,6 +64,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
         }
         if(contains(PAYLOAD_KEY)) {
             byte[] payload = (byte[]) getValuesMap().remove(PAYLOAD_KEY);
+            mPayload = new byte[MAX_PAYLOAD_LENGTH_IN_BYTES];
             System.arraycopy(payload, 0, mPayload, 0, payload.length);;
         }
     }
