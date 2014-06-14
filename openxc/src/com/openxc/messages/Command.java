@@ -3,53 +3,84 @@ package com.openxc.messages;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Command extends VehicleMessage implements KeyedMessage {
+import android.os.Parcel;
+
+import com.google.common.base.Objects;
+
+public class Command extends VehicleMessage implements KeyedMessage {
+    public static final String COMMAND_KEY = "command";
 
     private String mCommand;
-        
+
     protected Command(String command) {
-        setCommand(command);
+        mCommand = command;
     }
 
     protected Command(Map<String, Object> values) throws InvalidMessageFieldsException {
         super(values);
-        if(!containsRequiredCommandField(values)) {
+        if(!containsAllRequiredFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
         }
-        setCommand(getValuesMap());
+        mCommand = (String) getValuesMap().remove(COMMAND_KEY);
     }
 
     protected Command(String command, Map<String, Object> values) {
         super(values);
-        setCommand(command);
-    }
-    
-    public void setCommand(String command) {
         mCommand = command;
     }
-    
-    public void setCommand(Map<String, Object> values) {
-        setCommand((String) values.remove(getCommandKey()));
-    }
-
-    public abstract String getCommandKey();
 
     public String getCommand() {
         return mCommand;
-    }  
+    }
+
+    public static boolean containsAllRequiredFields(Map<String, Object> map) {
+        return map.containsKey(COMMAND_KEY);
+    }
 
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
-        key.put(CommandRequest.COMMAND_KEY, getCommand());
+        key.put(COMMAND_KEY, getCommand());
         return new MessageKey(key);
     }
-    
-    protected Command() { }
-    
-    private boolean containsRequiredCommandField(Map<String, Object> map) {
-        return map.containsKey(getCommandKey());
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final Command other = (Command) obj;
+        return getCommand().equals(other.getCommand());
     }
-    
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("timestamp", getTimestamp())
+            .add("command", getCommand())
+            .add("values", getValuesMap())
+            .toString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        out.writeString(getCommand());
+    }
+
+    @Override
+    protected void readFromParcel(Parcel in) {
+        super.readFromParcel(in);
+        mCommand = in.readString();
+    }
+
+    protected Command(Parcel in)
+            throws UnrecognizedMessageTypeException {
+        readFromParcel(in);
+    }
+
+    protected Command() { }
+
 }

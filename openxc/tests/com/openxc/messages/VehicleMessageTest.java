@@ -166,8 +166,8 @@ public class VehicleMessageTest {
     @Test
     public void buildCommandMessage() throws UnrecognizedMessageTypeException {
         HashMap<String, Object> values = new HashMap<>();
-        values.put(CommandRequest.COMMAND_KEY, "foo");
+        values.put(Command.COMMAND_KEY, "foo");
         VehicleMessage message = VehicleMessage.buildSubtype(values);
-        assertThat(message, instanceOf(CommandRequest.class));
+        assertThat(message, instanceOf(Command.class));
     }
 }
