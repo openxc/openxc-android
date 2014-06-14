@@ -3,8 +3,12 @@ package com.openxc.messages;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.common.base.Objects;
 
@@ -19,18 +23,19 @@ public class VehicleMessage implements Parcelable {
         timestamp();
     }
 
-    public VehicleMessage(Long timestamp) {
-        if(timestamp != null) {
-            mTimestamp = timestamp;
-        } else {
-            // TODO when should things get timestampped?
-            // timestamp();
-            mTimestamp = 0;
-        }
+    public VehicleMessage(Long timestamp) throws InvalidMessageFieldsException {
+        this();
+        setTimestamp(timestamp);
     }
 
-    public VehicleMessage(Long timestamp, Map<String, Object> values) {
-        this(timestamp);
+    public VehicleMessage(Long timestamp, Map<String, Object> values)
+            throws InvalidMessageFieldsException {
+        this(values);
+        setTimestamp(timestamp);
+    }
+
+    public VehicleMessage(Map<String, Object> values) {
+        this();
         if(values != null) {
             mValues = new HashMap<String, Object>(values);
         }
@@ -38,14 +43,15 @@ public class VehicleMessage implements Parcelable {
         if(contains(TIMESTAMP_KEY)) {
             mTimestamp = (Long) getValuesMap().remove(TIMESTAMP_KEY);
         }
-
-        if(mTimestamp == 0) {
-            timestamp();
-        }
     }
 
-    public VehicleMessage(Map<String, Object> values) {
-        this(null, values);
+    public void setTimestamp(Long timestamp)
+            throws InvalidMessageFieldsException {
+        if(timestamp == null) {
+            throw new InvalidMessageFieldsException(
+                    "Explicit timestmap cannot be null");
+        }
+        mTimestamp = timestamp;
     }
 
     public static VehicleMessage buildSubtype(Map<String, Object> values)
@@ -177,29 +183,32 @@ public class VehicleMessage implements Parcelable {
             new Parcelable.Creator<VehicleMessage>() {
         public VehicleMessage createFromParcel(Parcel in) {
             String messageClassName = in.readString();
+            Constructor<? extends VehicleMessage> constructor = null;
+            Class<? extends VehicleMessage> messageClass = null;
             try {
-                // TODO need to handle unparceling other types
-                if(messageClassName.equals(VehicleMessage.class.getName())) {
-                    return new VehicleMessage(in);
-                } else if(messageClassName.equals(NamedVehicleMessage.class.getName())) {
-                    return new NamedVehicleMessage(in);
-                } else if(messageClassName.equals(SimpleVehicleMessage.class.getName())) {
-                    return new SimpleVehicleMessage(in);
-                } else if(messageClassName.equals(CommandResponse.class.getName())) {
-                    return new CommandResponse(in);
-                } else if(messageClassName.equals(Command.class.getName())) {
-                    return new Command(in);
-                } else if(messageClassName.equals(CanMessage.class.getName())) {
-                    return new CanMessage(in);
-                } else if(messageClassName.equals(DiagnosticRequest.class.getName())) {
-                    return new DiagnosticRequest(in);
-                } else if(messageClassName.equals(DiagnosticResponse.class.getName())) {
-                    return new DiagnosticResponse(in);
-                } else {
+                try {
+                    messageClass = Class.forName(messageClassName).asSubclass(
+                            VehicleMessage.class);
+                } catch(ClassNotFoundException e) {
                     throw new UnrecognizedMessageTypeException(
                             "Unrecognized message class: " + messageClassName);
                 }
-            } catch(UnrecognizedMessageTypeException e) {
+
+                try {
+                    // Must use getDeclaredConstructor because it's a protected
+                    // constructor. That's OK since we are the parent class and
+                    // should have access, we're not breaking abstraction.
+                    constructor = messageClass.getDeclaredConstructor(Parcel.class);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMessageTypeException(messageClass +
+                            " doesn't have the expected constructor", e);
+                }
+
+                return constructor.newInstance(in);
+            } catch(InstantiationException|IllegalAccessException
+                    |InvocationTargetException
+                    |UnrecognizedMessageTypeException e) {
+                Log.e(TAG, "Unable to unparcel a " + messageClass, e);
                 return new VehicleMessage();
             }
         }
@@ -209,8 +218,10 @@ public class VehicleMessage implements Parcelable {
         }
     };
 
-    private VehicleMessage(Parcel in) throws UnrecognizedMessageTypeException {
+    // This must be protected so that we can call it using relfection from this
+    // class. Kind of weird, but it works.
+    protected VehicleMessage(Parcel in)
+            throws UnrecognizedMessageTypeException {
         readFromParcel(in);
     }
-
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
+import com.openxc.messages.InvalidMessageFieldsException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -96,8 +97,13 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public VehicleMessage toVehicleMessage() {
-        return new SimpleVehicleMessage(mValue.getTimestamp(),
-                getGenericName(), getSerializedValue());
+        VehicleMessage message = null;
+        try {
+            message = new SimpleVehicleMessage(mValue.getTimestamp(),
+                    getGenericName(), getSerializedValue());
+        } catch(InvalidMessageFieldsException e) {
+        }
+        return message;
     }
 
     public String getGenericName() {

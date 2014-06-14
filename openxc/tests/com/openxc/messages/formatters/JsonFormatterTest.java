@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import com.openxc.messages.InvalidMessageFieldsException;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.SimpleVehicleMessage;
 
@@ -49,7 +50,7 @@ public class JsonFormatterTest {
     }
 
     @Test
-    public void testSerializedTimestamp() {
+    public void testSerializedTimestamp() throws InvalidMessageFieldsException {
         String serialized = new String(formatter.serialize(
                     new SimpleVehicleMessage(
                         Long.valueOf(1332432977835L), messageName, value)));

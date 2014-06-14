@@ -39,7 +39,8 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         mName = name;
     }
 
-    public NamedVehicleMessage(Long timestamp, String name) {
+    public NamedVehicleMessage(Long timestamp, String name)
+            throws InvalidMessageFieldsException {
         super(timestamp);
         mName = name;
     }

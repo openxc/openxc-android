@@ -11,13 +11,15 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
 
     private Object mValue;
 
-    public SimpleVehicleMessage(Long timestamp, String name, Object value) {
+    public SimpleVehicleMessage(Long timestamp, String name, Object value)
+            throws InvalidMessageFieldsException {
         super(timestamp, name);
         mValue = value;
     }
 
     public SimpleVehicleMessage(String name, Object value) {
-        this(null, name, value);
+        super(name);
+        mValue = value;
     }
 
     public SimpleVehicleMessage(Map<String, Object> values)
@@ -54,11 +56,11 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             .add("values", getValuesMap())
             .toString();
     }
-    
+
     private static boolean containsRequiredPrimeFields(Map<String, Object> map) {
         return map.containsKey(VALUE_KEY);
     }
-    
+
     protected static boolean containsAllRequiredFields(Map<String, Object> map) {
         return NamedVehicleMessage.containsAllRequiredFields(map) && containsRequiredPrimeFields(map);
     }
