@@ -66,10 +66,12 @@ public class JsonFormatter implements VehicleMessageFormatter {
     public VehicleMessage deserialize(String data)
             throws UnrecognizedMessageTypeException {
         Gson gson = new Gson();
-        LinkedTreeMap<String, Object> result = new LinkedTreeMap<String, Object>();
+        LinkedTreeMap<String, Object> result =
+                new LinkedTreeMap<String, Object>();
         try {
-            result = (LinkedTreeMap<String, Object>) gson.fromJson(data, result.getClass());
-            // TODO this needs to happenb ut only for JSON?
+            result = (LinkedTreeMap<String, Object>) gson.fromJson(
+                    data, result.getClass());
+            // TODO this needs to happen but only for JSON?
             // measurement.mTimestamp =
                 // (long) (parser.getNumberValue().doubleValue() * 1000);
             return VehicleMessage.buildSubtype(result);

@@ -1,92 +1,124 @@
 package com.openxc.messages.streamers;
 
+import org.junit.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLog;
+
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
+
 import java.util.List;
 
-import junit.framework.TestCase;
-
-public class JsonStreamerTest extends TestCase {
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+public class JsonStreamerTest {
     JsonStreamer streamer;
 
-    @Override
-    public void setUp() {
+    @Before
+    public void setup() {
+        ShadowLog.stream = System.out;
         streamer = new JsonStreamer();
     }
 
-    public void testEmpty() {
-        List<String> records = streamer.readLines();
-        assertEquals(0, records.size());
+    @Test
+    public void jsonContainsJson() {
+        assertTrue(streamer.containsJson("{\"name\": \"foo\"}\u0000"));
     }
 
-    public void testreadLinesOne() {
-        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
-        streamer.receive(bytes, bytes.length);
-        List<String> records = streamer.readLines();
-        assertEquals(1, records.size());
-        assertTrue(records.get(0).indexOf("key") != -1);
-        assertTrue(records.get(0).indexOf("value") != -1);
-
-        records = streamer.readLines();
-        assertEquals(0, records.size());
+    @Test
+    public void paritalJsonDoesntContainJson() {
+        assertFalse(streamer.containsJson("{\"name\": \"foo\"}\u0000\u0001\u0002"));
     }
 
-    public void testreadLinesTwo() {
-        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
-        streamer.receive(bytes, bytes.length);
-
-        bytes = new String("{\"pork\": \"miracle\"}\u0000").getBytes();
-        streamer.receive(bytes, bytes.length);
-
-        List<String> records = streamer.readLines();
-        assertEquals(2, records.size());
-        assertTrue(records.get(0).indexOf("key") != -1);
-        assertTrue(records.get(0).indexOf("value") != -1);
-
-        assertTrue(records.get(1).indexOf("pork") != -1);
-        assertTrue(records.get(1).indexOf("miracle") != -1);
-
-        records = streamer.readLines();
-        assertEquals(0, records.size());
+    @Test
+    public void notJsonDoesntContainJson() {
+        assertFalse(streamer.containsJson("\u0000\u0001\u0002"));
     }
 
-    public void testLeavePartial() {
-        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
-        streamer.receive(bytes, bytes.length);
-
-        bytes = new String("{\"pork\": \"mira").getBytes();
-        streamer.receive(bytes, bytes.length);
-
-        List<String> records = streamer.readLines();
-        assertEquals(1, records.size());
-        assertTrue(records.get(0).indexOf("key") != -1);
-        assertTrue(records.get(0).indexOf("value") != -1);
-
-        records = streamer.readLines();
-        assertEquals(0, records.size());
+    @Test
+    public void emptyhasNoMessages() {
+        assertThat(streamer.parseNextMessage(), nullValue());
     }
 
-    public void testCompletePartial() {
-        byte[] bytes = new String("{\"key\": \"value\"}\u0000").getBytes();
+    @Test
+    public void dontReadInvalid() {
+        byte[] bytes = new String("{\"foo\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
-        bytes = new String("{\"pork\": \"mira").getBytes();
+        assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void readingValidAfterInvalid() {
+        byte[] bytes = new String("{\"foo\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
-        List<String> records = streamer.readLines();
-        assertEquals("Should only have 1 complete record in the result",
-                1, records.size());
-        assertTrue(records.get(0).indexOf("key") != -1);
-        assertTrue(records.get(0).indexOf("value") != -1);
+        bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        assertThat(streamer.parseNextMessage(), nullValue());
+        assertThat(streamer.parseNextMessage(), notNullValue());
+    }
+
+    @Test
+    public void readLinesOne() {
+        byte[] bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        VehicleMessage message = streamer.parseNextMessage();
+        assertThat(message, notNullValue());
+        assertThat(message, instanceOf(NamedVehicleMessage.class));
+        NamedVehicleMessage namedMessage = (NamedVehicleMessage) message;
+        assertThat(namedMessage.getName(), equalTo("foo"));
+
+        assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void readLinesTwo() {
+        byte[] bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        bytes = new String("{\"name\": \"miracle\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        assertThat(streamer.parseNextMessage(), notNullValue());
+        assertThat(streamer.parseNextMessage(), notNullValue());
+        assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void leavePartial() {
+        byte[] bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        bytes = new String("{\"name\": \"mira").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        assertThat(streamer.parseNextMessage(), notNullValue());
+        assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void completePartial() {
+        byte[] bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        bytes = new String("{\"name\": \"mira").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        assertThat(streamer.parseNextMessage(), notNullValue());
+        assertThat(streamer.parseNextMessage(), nullValue());
 
         bytes = new String("cle\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
-        records = streamer.readLines();
-        assertEquals(1, records.size());
-        assertTrue(records.get(0).indexOf("pork") != -1);
-        assertTrue(records.get(0).indexOf("miracle") != -1);
-
-        records = streamer.readLines();
-        assertEquals(0, records.size());
+        assertThat(streamer.parseNextMessage(), notNullValue());
+        assertThat(streamer.parseNextMessage(), nullValue());
     }
-
 }

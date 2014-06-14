@@ -10,7 +10,10 @@ import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
 
+import android.util.Log;
+
 public class JsonStreamer extends VehicleMessageStreamer {
+    private static String TAG = "JsonStreamer";
     private final static String DELIMITER = "\u0000";
 
     private StringBuffer mBuffer = new StringBuffer();
@@ -35,9 +38,10 @@ public class JsonStreamer extends VehicleMessageStreamer {
         String line = readLine();
         if(line != null) {
             try {
-                return mFormatter.deserialize(new ByteArrayInputStream(
-                            line.getBytes(StandardCharsets.UTF_8)));
+                return mFormatter.deserialize(line);
             } catch(UnrecognizedMessageTypeException e) {
+                Log.w(TAG, "Unable to deserialize JSON: " + e);
+
             }
         }
         return null;
@@ -66,21 +70,9 @@ public class JsonStreamer extends VehicleMessageStreamer {
         int delimiterIndex = mBuffer.indexOf(DELIMITER);
         String line = null;
         if(delimiterIndex != -1) {
-            line = mBuffer.substring(0, delimiterIndex + 1);
+            line = mBuffer.substring(0, delimiterIndex);
             mBuffer.delete(0, delimiterIndex + 1);
         }
         return line;
-    }
-
-    // TODO really don't need this but we have unit tests for it and I don't
-    // want to just throw those away - need to pull out the string buffering
-    // part from this class and test that separately
-    public List<String> readLines() {
-        List<String> lines = new ArrayList<String>();
-        String line = null;
-        while((line = readLine()) != null) {
-            lines.add(line);
-        }
-        return lines;
     }
 }
