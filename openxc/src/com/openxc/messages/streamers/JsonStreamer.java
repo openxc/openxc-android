@@ -40,8 +40,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
             try {
                 return mFormatter.deserialize(line);
             } catch(UnrecognizedMessageTypeException e) {
-                Log.w(TAG, "Unable to deserialize JSON: " + e);
-
+                Log.w(TAG, "Unable to deserialize JSON", e);
             }
         }
         return null;

@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLog;
 
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
@@ -21,7 +20,6 @@ public class JsonStreamerTest {
 
     @Before
     public void setup() {
-        ShadowLog.stream = System.out;
         streamer = new JsonStreamer();
     }
 

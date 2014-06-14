@@ -9,10 +9,16 @@ import org.apache.commons.io.IOUtils;
 
 import com.google.common.io.ByteStreams;
 import com.google.protobuf.CodedInputStream;
+
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.BinaryFormatter;
 
+import android.util.Log;
+
 public class BinaryStreamer extends VehicleMessageStreamer {
+    private static String TAG = "JsonStreamer";
+
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
     public VehicleMessage parseNextMessage() {
@@ -40,7 +46,11 @@ public class BinaryStreamer extends VehicleMessageStreamer {
                     mBuffer = new ByteArrayOutputStream();
                     IOUtils.copy(input, mBuffer);
                 }
-            } catch(IOException e) { }
+            } catch(IOException e) {
+                Log.w(TAG, "Unable to deserialize protobuf", e);
+            } catch(UnrecognizedMessageTypeException e) {
+                Log.w(TAG, "Deserialized protobuf had was unrecognized message type", e);
+            }
 
         }
         return message;
