@@ -35,10 +35,4 @@ public abstract class VehicleMessageStreamer {
             mLastLoggedStatsTime = System.nanoTime();
         }
     }
-
-    public String toString() {
-        // TODO
-        // return new String(mBuffer.array(), "ASCII");
-        return "";
-    }
 }
