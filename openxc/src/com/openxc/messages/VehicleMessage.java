@@ -23,6 +23,9 @@ public class VehicleMessage implements Parcelable {
         timestamp();
     }
 
+    /**
+     * @param timestamp timestamp as milliseconds since unix epoch
+     */
     public VehicleMessage(Long timestamp) throws InvalidMessageFieldsException {
         this();
         setTimestamp(timestamp);
@@ -34,6 +37,12 @@ public class VehicleMessage implements Parcelable {
         setTimestamp(timestamp);
     }
 
+    /**
+     * @param values A map of all fields and values in this message. If the map
+     * contains the key TIMESTAMP_KEY, its value is interpreted as a UNIX
+     * timestamp (seconds since the UNIX epoch, as a double with millisecond
+     * precision).
+     */
     public VehicleMessage(Map<String, Object> values) {
         this();
         if(values != null) {
@@ -41,7 +50,8 @@ public class VehicleMessage implements Parcelable {
         }
 
         if(contains(TIMESTAMP_KEY)) {
-            mTimestamp = (Long) getValuesMap().remove(TIMESTAMP_KEY);
+            double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
+            mTimestamp = (long) timestampSeconds * 1000;
         }
     }
 
@@ -97,6 +107,10 @@ public class VehicleMessage implements Parcelable {
         return getTimestamp() != 0;
     }
 
+    /**
+     * @return the timestamp of the message in milliseconds since the UNIX
+     * epoch.
+     */
     public long getTimestamp() {
         return mTimestamp;
     }

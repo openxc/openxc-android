@@ -71,9 +71,6 @@ public class JsonFormatter implements VehicleMessageFormatter {
         try {
             result = (LinkedTreeMap<String, Object>) gson.fromJson(
                     data, result.getClass());
-            // TODO this needs to happen but only for JSON?
-            // measurement.mTimestamp =
-                // (long) (parser.getNumberValue().doubleValue() * 1000);
             return VehicleMessage.buildSubtype(result);
         } catch(JsonSyntaxException e) {
             throw new UnrecognizedMessageTypeException(

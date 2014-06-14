@@ -42,7 +42,7 @@ public class VehicleMessageTest {
     }
 
     @Test
-    public void emptyMessagehasTimestamp() throws InvalidMessageFieldsException {
+    public void emptyMessageHasTimestamp() throws InvalidMessageFieldsException {
         message = new VehicleMessage();
         assertTrue(message.getValuesMap() != null);
         assertTrue(message.isTimestamped());
@@ -55,17 +55,17 @@ public class VehicleMessageTest {
     }
 
     @Test
-    public void timestampExtractedFromValues()
+    public void timestampExtractedFromValuesAsSeconds()
             throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<String, Object>();
         data.put("value", Integer.valueOf(42));
-        data.put(VehicleMessage.TIMESTAMP_KEY, Long.valueOf(1000));
+        data.put(VehicleMessage.TIMESTAMP_KEY, Double.valueOf(1000));
         message = new VehicleMessage(data);
 
         assertEquals(42, message.get("value"));
         assertFalse(message.contains(VehicleMessage.TIMESTAMP_KEY));
         assertEquals(null, message.get(VehicleMessage.TIMESTAMP_KEY));
-        assertEquals(1000, message.getTimestamp());
+        assertEquals(1000 * 1000, message.getTimestamp());
     }
 
     @Test
