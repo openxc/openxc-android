@@ -20,7 +20,6 @@ public abstract class DiagnosticMessage extends VehicleMessage
     public static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
     public static final Range<Integer> MODE_RANGE = new Range<>(1, 15);
     public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
-    public static final int MAX_PAYLOAD_LENGTH_IN_CHARS = MAX_PAYLOAD_LENGTH_IN_BYTES * 2;
 
     private int mBusId;
     private int mId;
@@ -34,10 +33,10 @@ public abstract class DiagnosticMessage extends VehicleMessage
         mId = id;
         mMode = mode;
     }
-    
+
     public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
         this(busId, id, mode);
-        System.arraycopy(payload, 0, mPayload, 0, payload.length);
+        setPayload(payload);
     }
 
     public DiagnosticMessage(int busId, int id, int mode, int pid,
@@ -63,17 +62,22 @@ public abstract class DiagnosticMessage extends VehicleMessage
             setPid((Integer) getValuesMap().remove(PID_KEY));
         }
         if(contains(PAYLOAD_KEY)) {
-            byte[] payload = (byte[]) getValuesMap().remove(PAYLOAD_KEY);
-            mPayload = new byte[MAX_PAYLOAD_LENGTH_IN_BYTES];
-            System.arraycopy(payload, 0, mPayload, 0, payload.length);;
+            setPayload((byte[]) getValuesMap().remove(PAYLOAD_KEY));
         }
     }
-    
+
+    void setPayload(byte[] payload) {
+        if(payload != null) {
+            mPayload = new byte[MAX_PAYLOAD_LENGTH_IN_BYTES];
+            System.arraycopy(payload, 0, mPayload, 0, mPayload.length);
+        }
+    }
+
     private void setPid(int pid) {
         mPid = pid;
         hasPid = true;
     }
-    
+
     public boolean hasPid() {
         return hasPid;
     }
@@ -97,7 +101,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
     public byte[] getPayload() {
         return mPayload;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !super.equals(obj)) {

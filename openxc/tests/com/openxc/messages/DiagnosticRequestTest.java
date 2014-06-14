@@ -20,7 +20,7 @@ public class DiagnosticRequestTest {
     int bus = 1;
     int mode = 2;
     int pid = 4;
-    byte[] payload = new byte[8];
+    byte[] payload = new byte[7];
 
     // TODO test building from values with missing keys
 
