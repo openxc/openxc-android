@@ -19,7 +19,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
-public class JsonFormatter implements VehicleMessageFormatter {
+public class JsonFormatter {
     private static final String TAG = "JsonFormatter";
     public static final String NAME_FIELD = "name";
     public static final String VALUE_FIELD = "value";
@@ -34,7 +34,7 @@ public class JsonFormatter implements VehicleMessageFormatter {
     }
 
     // TODO need a version of this for each more specific type
-    public byte[] serialize(VehicleMessage message) {
+    public static String serialize(VehicleMessage message) {
         StringWriter buffer = new StringWriter(64);
         // TODO migrate from Jackson to Gson
         JsonFactory jsonFactory = new JsonFactory();
@@ -60,10 +60,10 @@ public class JsonFormatter implements VehicleMessageFormatter {
             Log.w(TAG, "Unable to encode all data to JSON -- " +
                     "message may be incomplete", e);
         }
-        return buffer.toString().getBytes();
+        return buffer.toString();
     }
 
-    public VehicleMessage deserialize(String data)
+    public static VehicleMessage deserialize(String data)
             throws UnrecognizedMessageTypeException {
         Gson gson = new Gson();
         LinkedTreeMap<String, Object> result =
@@ -78,7 +78,7 @@ public class JsonFormatter implements VehicleMessageFormatter {
         }
     }
 
-    public VehicleMessage deserialize(InputStream data)
+    public static VehicleMessage deserialize(InputStream data)
             throws UnrecognizedMessageTypeException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(data));
         return deserialize(reader.toString());
@@ -88,7 +88,7 @@ public class JsonFormatter implements VehicleMessageFormatter {
      * Return true if the buffer *most likely* contains JSON (as opposed to a
      * protobuf).
      */
-    public boolean containsJson(String buffer) {
+    public static boolean containsJson(String buffer) {
         return CharMatcher.ASCII
             // We need to allow the \u0000 delimiter for JSON messages, so we
             // can't use the JAVA_ISO_CONTROL character set and must build the

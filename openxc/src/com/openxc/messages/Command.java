@@ -12,11 +12,11 @@ public class Command extends VehicleMessage implements KeyedMessage {
 
     private String mCommand;
 
-    protected Command(String command) {
+    public Command(String command) {
         mCommand = command;
     }
 
-    protected Command(Map<String, Object> values) throws InvalidMessageFieldsException {
+    public Command(Map<String, Object> values) throws InvalidMessageFieldsException {
         super(values);
         if(!containsAllRequiredFields(values)) {
             throw new InvalidMessageFieldsException(
@@ -26,7 +26,7 @@ public class Command extends VehicleMessage implements KeyedMessage {
         mCommand = (String) getValuesMap().remove(COMMAND_KEY);
     }
 
-    protected Command(String command, Map<String, Object> values) {
+    public Command(String command, Map<String, Object> values) {
         super(values);
         mCommand = command;
     }

@@ -45,10 +45,8 @@ public class VehicleMessage implements Parcelable {
      */
     public VehicleMessage(Map<String, Object> values) {
         this();
-        if(values != null) {
-            mValues = new HashMap<String, Object>(values);
-        }
 
+        setValues(values);
         if(contains(TIMESTAMP_KEY)) {
             double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
             mTimestamp = (long) timestampSeconds * 1000;
@@ -86,14 +84,13 @@ public class VehicleMessage implements Parcelable {
             } else if(NamedVehicleMessage.containsAllRequiredFields(values)) {
                 message = new NamedVehicleMessage(values);
             } else {
-                // TODO should we allow generic vehicleMessage through? I think so.
-                throw new UnrecognizedMessageTypeException(
-                        "Unrecognized combination of entries in values = " +
+                Log.w(TAG, "Unrecognized combination of entries in values = " +
                         values.toString());
+                message = new VehicleMessage(values);
             }
         } catch(InvalidMessageFieldsException e) {
             throw new UnrecognizedMessageTypeException(
-                    "Unrecognized combination of entries in values = " +
+                    "Malformed combination of entries in values = " +
                     values.toString() + " (should not get here)");
         }
 
@@ -113,6 +110,12 @@ public class VehicleMessage implements Parcelable {
      */
     public long getTimestamp() {
         return mTimestamp;
+    }
+
+    protected void setValues(Map<String, Object> values) {
+        if(values != null) {
+            mValues = new HashMap<String, Object>(values);
+        }
     }
 
     protected Map<String, Object> getValuesMap() {

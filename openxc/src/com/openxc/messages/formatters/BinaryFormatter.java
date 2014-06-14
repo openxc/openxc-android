@@ -12,7 +12,7 @@ import com.openxc.messages.VehicleMessage;
 
 import android.util.Log;
 
-public class BinaryFormatter implements VehicleMessageFormatter {
+public class BinaryFormatter {
     private final static String TAG = "BinaryFormatter";
 
     public VehicleMessage deserialize(InputStream data)

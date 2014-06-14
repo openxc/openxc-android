@@ -125,18 +125,22 @@ public class VehicleMessageTest {
         assertEquals(message, createdFromParcel);
     }
 
-    @Test(expected=UnrecognizedMessageTypeException.class)
-    public void buildFromEmptyValuesFails() throws UnrecognizedMessageTypeException {
+    @Test
+    public void buildFromEmptyReturnsDefault() throws UnrecognizedMessageTypeException {
         HashMap<String, Object> values = new HashMap<>();
-        VehicleMessage.buildSubtype(values);
+        VehicleMessage message = VehicleMessage.buildSubtype(values);
+        assertThat(message, instanceOf(VehicleMessage.class));
     }
 
-    @Test(expected=UnrecognizedMessageTypeException.class)
-    public void buildFromUnrecognizedFails() throws UnrecognizedMessageTypeException {
+    @Test
+    public void buildFromUnrecognizedReturnsGeneric() throws UnrecognizedMessageTypeException {
         HashMap<String, Object> values = new HashMap<>();
         values.put("foo", "bar");
         values.put("alice", Double.valueOf(42));
-        VehicleMessage.buildSubtype(values);
+        VehicleMessage message = VehicleMessage.buildSubtype(values);
+        assertThat(message, instanceOf(VehicleMessage.class));
+        assertTrue(message.contains("foo"));
+        assertEquals(message.get("alice"), 42.0);
     }
 
     @Test

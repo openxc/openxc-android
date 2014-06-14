@@ -44,22 +44,22 @@ public class JsonStreamerTest {
     }
 
     @Test
-    public void dontReadInvalid() {
+    public void readValidUnrecognized() {
         byte[] bytes = new String("{\"foo\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
-        assertThat(streamer.parseNextMessage(), nullValue());
+        assertThat(streamer.parseNextMessage(), notNullValue());
     }
 
     @Test
-    public void readingValidAfterInvalid() {
+    public void readingGenericThenSpecific() {
         byte[] bytes = new String("{\"foo\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
         bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
-        assertThat(streamer.parseNextMessage(), nullValue());
+        assertThat(streamer.parseNextMessage(), notNullValue());
         assertThat(streamer.parseNextMessage(), notNullValue());
     }
 

@@ -11,7 +11,6 @@ import android.util.Log;
 
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
-import com.openxc.messages.formatters.VehicleMessageFormatter;
 import com.openxc.util.FileOpener;
 
 /**
@@ -35,7 +34,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
     private FileOpener mFileOpener;
     private BufferedWriter mWriter;
     private Calendar mLastMessageReceived;
-    private VehicleMessageFormatter mFormatter = new JsonFormatter();
+    private JsonFormatter mFormatter = new JsonFormatter();
 
     public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
         mFileOpener = fileOpener;

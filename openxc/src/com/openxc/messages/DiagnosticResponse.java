@@ -8,34 +8,52 @@ import android.os.Parcel;
 
 import com.google.common.base.Objects;
 
-public class DiagnosticResponse extends DiagnosticMessage {
+public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
 
     public static final String VALUE_KEY = "value";
     public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
     public static final String SUCCESS_KEY = "success";
 
+    private DiagnosticRequest mRequest;
     private boolean mSuccess = false;
+    // TODO need a way to say 'no value' so you know to look at payload
     private float mValue;
-    private NegativeResponseCode mNegativeResponseCode;
+    private byte[] mPayload;
+    private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
+
+    public DiagnosticResponse(DiagnosticRequest request, byte[] payload,
+            boolean success) {
+        mRequest = request;
+        setPayload(payload);
+        mSuccess = success;
+    }
 
     public DiagnosticResponse(Map<String, Object> values)
             throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsRequiredPrimeFields(values)) {
+        if(!DiagnosticRequest.containsAllRequiredFields(values)
+                && containsAllRequiredFields(values)) {
             throw new InvalidMessageFieldsException(
                     "Missing keys for construction in values = " +
                     values.toString());
         }
 
-        if(mSuccess = (boolean) values.get(SUCCESS_KEY)) {
-            mNegativeResponseCode = NegativeResponseCode.NONE;
-        } else {
-            mNegativeResponseCode = (NegativeResponseCode) values.get(
-                    NEGATIVE_RESPONSE_CODE_KEY);
+        mRequest = new DiagnosticRequest(values);
+        // Kind of weird, but we have to wait for the DiagnosticReuqest to pull
+        // out its values from the map before we store a copy, otherwise we'll
+        // get a bunch of duplicates. This design smells a bit.
+        setValues(mRequest.getValuesMap());
+        mSuccess = (boolean) getValuesMap().remove(SUCCESS_KEY);
+        if(!mSuccess) {
+            mNegativeResponseCode = (NegativeResponseCode)
+                getValuesMap().remove(NEGATIVE_RESPONSE_CODE_KEY);
         }
 
         if(values.containsKey(VALUE_KEY)) {
-            mValue = (float) values.get(VALUE_KEY);
+            mValue = (float) getValuesMap().remove(VALUE_KEY);
+        }
+
+        if(contains(DiagnosticRequest.PAYLOAD_KEY)) {
+            setPayload((byte[]) getValuesMap().remove(DiagnosticRequest.PAYLOAD_KEY));
         }
     }
 
@@ -47,8 +65,40 @@ public class DiagnosticResponse extends DiagnosticMessage {
         return mValue;
     }
 
+    public boolean hasPid() {
+        return mRequest.hasPid();
+    }
+
+    public int getBusId() {
+        return mRequest.getBusId();
+    }
+
+    public int getId() {
+        return mRequest.getId();
+    }
+
+    public int getMode() {
+        return mRequest.getMode();
+    }
+
+    public int getPid() {
+        return mRequest.getPid();
+    }
+
+    public byte[] getPayload() {
+        return mPayload;
+    }
+
     public NegativeResponseCode getNegativeResponseCode() {
         return mNegativeResponseCode;
+    }
+
+    void setPayload(byte[] payload) {
+        if(payload != null) {
+            mPayload = new byte[DiagnosticRequest.MAX_PAYLOAD_LENGTH_IN_BYTES];
+            System.arraycopy(payload, 0, mPayload, 0,
+                    Math.min(payload.length, mPayload.length));
+        }
     }
 
     @Override
@@ -63,6 +113,10 @@ public class DiagnosticResponse extends DiagnosticMessage {
             .add("negative_response_code", getNegativeResponseCode())
             .add("success", getSuccess())
             .toString();
+    }
+
+    public MessageKey getKey() {
+        return mRequest.getKey();
     }
 
     @Override
@@ -141,7 +195,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
         super.writeToParcel(out, flags);
         out.writeByte((byte) (getSuccess() ? 1 : 0));
         out.writeFloat(getValue());
-        out.writeInt(getNegativeResponseCode().code());
+        out.writeSerializable(getNegativeResponseCode());
     }
 
     @Override
@@ -149,15 +203,12 @@ public class DiagnosticResponse extends DiagnosticMessage {
         super.readFromParcel(in);
         mSuccess = in.readByte() != 0;
         mValue = in.readFloat();
-        mNegativeResponseCode = NegativeResponseCode.get(in.readInt());
+        mNegativeResponseCode = (NegativeResponseCode) in.readSerializable();
     }
-    
-    private static boolean containsRequiredPrimeFields(Map<String, Object> map) {
-        return map.containsKey(DiagnosticResponse.SUCCESS_KEY);
-    }
-    
+
     protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return DiagnosticMessage.containsAllRequiredFields(map) && containsRequiredPrimeFields(map);
+        return DiagnosticRequest.containsAllRequiredFields(map) &&
+                map.containsKey(DiagnosticResponse.SUCCESS_KEY);
     }
 
     protected DiagnosticResponse(Parcel in)

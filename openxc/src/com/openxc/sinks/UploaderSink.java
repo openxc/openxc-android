@@ -31,7 +31,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.google.common.base.Objects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
-import com.openxc.messages.formatters.VehicleMessageFormatter;
 
 /**
  * Upload a stream of all incoming vehicle data to a remote HTTP server.
@@ -59,7 +58,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private Lock mQueueLock = new ReentrantLock();
     private Condition mRecordsQueued = mQueueLock.newCondition();
     private UploaderThread mUploader = new UploaderThread();
-    private VehicleMessageFormatter mFormatter = new JsonFormatter();
+    private JsonFormatter mFormatter = new JsonFormatter();
 
     /**
      * Initialize and start a new UploaderSink immediately.
