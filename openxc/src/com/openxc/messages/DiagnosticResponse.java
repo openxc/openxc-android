@@ -132,7 +132,7 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
     }
 
     public interface Listener {
-        public void receive(DiagnosticRequest req, DiagnosticResponse response);
+        public void receive(DiagnosticRequest request, DiagnosticResponse response);
     }
 
     public static enum NegativeResponseCode {
