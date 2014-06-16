@@ -257,7 +257,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     
-    //TODO the six methods below would ideally be condensed into 3 to 
+    //TODO the methods below would ideally be condensed into 3 or so to 
     //eliminate this overloading; however, it doesn't make much sense 
     //to force a DiagnosticResponse.Listener into Measurement.Listener (or possible), 
     //and that type has to stick around for backwards compatibility
@@ -300,6 +300,18 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
     
     /**
+     * Register a single listener for multiple requests. Calls 
+     * {@link #addListener(DiagnosticRequest, DiagnosticResponse.Listener)} on all requests in the list.
+     * @param requests List of DiagnosticRequests to listen to a response for
+     * @param listener A DiagnosticResponse.Listener instance 
+     */
+    public void addListeners(List<DiagnosticRequest> requests, DiagnosticResponse.Listener listener) {
+        for (DiagnosticRequest request : requests) {
+            addListener(request, listener);
+        }
+    }
+    
+    /**
      * Register to receive asynchronous updates for a specific Diagnostic Response.
      *
      * Use this method to register an object implementing the
@@ -319,8 +331,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      not extend Measurement
      */
     public void addListener(DiagnosticRequest request,
-            DiagnosticResponse.Listener listener) throws VehicleServiceException,
-                UnrecognizedMeasurementTypeException {
+            DiagnosticResponse.Listener listener) {
         Log.i(TAG, "Adding Diagnostic Listener " + listener + " for request " + request);
         
         addListener(request, listener);
