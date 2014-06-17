@@ -2,6 +2,7 @@ package com.openxc.messages;
 
 import android.os.Parcel;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
 
     private void setData(Map<String, Object> values) {
         // Kind of a hack, but when we are deserializing from JSON with
-        // Gson, we get the payload array back as an ArrayList instead of a
+        // Gson, we get the data array back as an ArrayList instead of a
         // byte[].
         Object data = getValuesMap().remove(DATA_KEY);
         if(data instanceof ArrayList) {
@@ -58,7 +59,9 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     }
 
     private void setData(byte[] data) {
-        System.arraycopy(data, 0, mData, 0, data.length);
+        if(data != null) {
+            System.arraycopy(data, 0, mData, 0, data.length);
+        }
     }
 
     public CanMessage(int canBus, int id, byte[] data) {
@@ -97,7 +100,8 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         }
 
         final CanMessage other = (CanMessage) obj;
-        return mId == other.mId && mBusId == other.mBusId;
+        return mId == other.mId && mBusId == other.mBusId
+                && Arrays.equals(mData, other.mData);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
             .add("timestamp", getTimestamp())
             .add("bus", getBus())
             .add("id", getId())
-            .add("data", getData())
+            .add("data", Arrays.toString(getData()))
             .toString();
     }
 

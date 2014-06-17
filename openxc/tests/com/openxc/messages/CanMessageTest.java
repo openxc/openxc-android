@@ -89,13 +89,6 @@ public class CanMessageTest {
     }
 
     @Test
-    public void differentDataStillEquals() {
-        CanMessage anotherMessage = new CanMessage(bus, id,
-                new byte[] {1,2,3,4,5,6,7,8});
-        assertEquals(message, anotherMessage);
-    }
-
-    @Test
     public void differentIdNotEqual() {
         CanMessage anotherMessage = new CanMessage(id + 1, bus, data);
         assertThat(message, not(equalTo(anotherMessage)));
