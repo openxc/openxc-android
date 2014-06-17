@@ -5,11 +5,13 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class Command extends VehicleMessage implements KeyedMessage {
     public static final String COMMAND_KEY = "command";
 
+    @SerializedName(COMMAND_KEY)
     private String mCommand;
 
     public Command(String command) {

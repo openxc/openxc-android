@@ -10,14 +10,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class VehicleMessage implements Parcelable {
     private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
 
-    private long mTimestamp;
-    private Map<String, Object> mValues = new HashMap<String, Object>();
+    // Not serializing this automatically, handling in JsonFormatter to get the
+    // proper format
+    private transient long mTimestamp;
+    // The 'transient' keyword means this will not be serialized - we want to
+    // handle it manually so the values aren't wrapped with a "values" object.
+    private transient Map<String, Object> mValues = new HashMap<String, Object>();
 
     public VehicleMessage() {
         timestamp();
@@ -48,8 +53,8 @@ public class VehicleMessage implements Parcelable {
 
         setValues(values);
         if(contains(TIMESTAMP_KEY)) {
-            double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
-            mTimestamp = (long) timestampSeconds * 1000;
+            Double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
+            mTimestamp = Double.valueOf((timestampSeconds * 1000.0)).longValue();
         }
     }
 
@@ -118,7 +123,7 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
-    protected Map<String, Object> getValuesMap() {
+    public Map<String, Object> getValuesMap() {
         return mValues;
     }
 

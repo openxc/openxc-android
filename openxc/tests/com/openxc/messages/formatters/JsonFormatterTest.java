@@ -51,7 +51,7 @@ public class JsonFormatterTest {
     @Test
     public void serializeDiagnosticRequest() {
         serializeDeserializeAndCheckEqual(new DiagnosticRequest(1, 2, 3, 4,
-                    new byte[]{1,2,3,4}, false, 1.2, 42, 2, "foo"));
+                    new byte[]{1,2,3,4}, false, 2, "foo"));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class JsonFormatterTest {
             throws InvalidMessageFieldsException {
         HashMap<String, Object> data = new HashMap<>();
         data.put("foo", "bar");
-        data.put("baz", 42);
+        data.put("baz", 42.0);
         serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo", data));
     }
 
@@ -92,7 +92,7 @@ public class JsonFormatterTest {
     public void serializeVehicleMessageArbitraryFields() {
         HashMap<String, Object> data = new HashMap<>();
         data.put("foo", "bar");
-        data.put("baz", 42);
+        data.put("baz", 42.0);
         VehicleMessage message = new VehicleMessage(data);
         serializeDeserializeAndCheckEqual(message);
     }
@@ -134,6 +134,6 @@ public class JsonFormatterTest {
         String serialized = new String(formatter.serialize(
                     new SimpleVehicleMessage(
                         Long.valueOf(1332432977835L), messageName, value)));
-        assertTrue(serialized.contains("1332432977.835"));
+        assertTrue(serialized.contains("1.332432977835E9"));
     }
 }

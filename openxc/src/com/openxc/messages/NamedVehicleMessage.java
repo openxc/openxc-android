@@ -5,11 +5,13 @@ import java.util.HashMap;
 
 import android.os.Parcel;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage {
     public static final String NAME_KEY = "name";
 
+    @SerializedName(NAME_KEY)
     private String mName;
 
     public NamedVehicleMessage(String name) {

@@ -1,24 +1,37 @@
 package com.openxc.messages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.common.primitives.Bytes;
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
 
+    public static final String PAYLOAD_KEY = DiagnosticRequest.PAYLOAD_KEY;
     public static final String VALUE_KEY = "value";
     public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
     public static final String SUCCESS_KEY = "success";
 
     private DiagnosticRequest mRequest;
+
+    @SerializedName(SUCCESS_KEY)
     private boolean mSuccess = false;
+
     // TODO need a way to say 'no value' so you know to look at payload
+    @SerializedName(VALUE_KEY)
     private float mValue;
+
+    @SerializedName(PAYLOAD_KEY)
     private byte[] mPayload;
+
+    @SerializedName(NEGATIVE_RESPONSE_CODE_KEY)
     private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
 
     public DiagnosticResponse(DiagnosticRequest request, byte[] payload,
@@ -53,7 +66,13 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
         }
 
         if(contains(DiagnosticRequest.PAYLOAD_KEY)) {
-            setPayload((byte[]) getValuesMap().remove(DiagnosticRequest.PAYLOAD_KEY));
+            // Same weird workaround as in CanMessage and DiagnosticRequest
+            Object payload = getValuesMap().remove(PAYLOAD_KEY);
+            if(payload instanceof ArrayList) {
+                setPayload(Bytes.toArray(((ArrayList<Byte>) payload)));
+            } else{
+                setPayload((byte[]) payload);
+            }
         }
     }
 
@@ -95,7 +114,7 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
 
     void setPayload(byte[] payload) {
         if(payload != null) {
-            mPayload = new byte[DiagnosticRequest.MAX_PAYLOAD_LENGTH_IN_BYTES];
+            mPayload = new byte[payload.length];
             System.arraycopy(payload, 0, mPayload, 0,
                     Math.min(payload.length, mPayload.length));
         }
@@ -108,7 +127,7 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
             .add("id", getId())
             .add("mode", getMode())
             .add("pid", getPid())
-            .add("payload", getPayload())
+            .add("payload", Arrays.toString(getPayload()))
             .add("value", getValue())
             .add("negative_response_code", getNegativeResponseCode())
             .add("success", getSuccess())
@@ -125,6 +144,7 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
             return false;
         }
 
+        // TODO need common fields with DiagnosticRequest
         final DiagnosticResponse other = (DiagnosticResponse) obj;
         return mSuccess == other.mSuccess
                 && mValue == other.mValue

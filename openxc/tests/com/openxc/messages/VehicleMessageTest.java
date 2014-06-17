@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLog;
 
 import com.openxc.messages.UnrecognizedMessageTypeException;
 
@@ -24,7 +23,6 @@ public class VehicleMessageTest {
 
     @Before
     public void setup() throws InvalidMessageFieldsException {
-        ShadowLog.stream = System.out;
         data = new HashMap<String, Object>();
         data.put("value", Integer.valueOf(42));
         message = new VehicleMessage(data);

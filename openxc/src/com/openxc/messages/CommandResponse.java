@@ -5,6 +5,7 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class CommandResponse extends VehicleMessage implements KeyedMessage {
@@ -12,8 +13,11 @@ public class CommandResponse extends VehicleMessage implements KeyedMessage {
     public static final String COMMAND_RESPONSE_KEY = "command_response";
     public static final String MESSAGE_KEY = "message";
 
+    @SerializedName(COMMAND_RESPONSE_KEY)
     private String mCommand;
+
     // Message is optional
+    @SerializedName(MESSAGE_KEY)
     private String mMessage;
 
     public CommandResponse(String command, String message) {

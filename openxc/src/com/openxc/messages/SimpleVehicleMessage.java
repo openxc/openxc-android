@@ -4,11 +4,13 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class SimpleVehicleMessage extends NamedVehicleMessage {
     public static final String VALUE_KEY = "value";
 
+    @SerializedName(VALUE_KEY)
     private Object mValue;
 
     public SimpleVehicleMessage(Long timestamp, String name, Object value)
