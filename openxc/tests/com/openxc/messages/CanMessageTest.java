@@ -19,11 +19,14 @@ public class CanMessageTest {
     int id = 42;
     int bus = 1;
     byte[] data = new byte[8];
-
-    // TODO test building from values with missing keys
+    HashMap<String, Object> values;
 
     @Before
     public void setup() {
+        values = new HashMap<>();
+        values.put(CanMessage.ID_KEY, id);
+        values.put(CanMessage.BUS_KEY, bus);
+        values.put(CanMessage.DATA_KEY, data);
         message = new CanMessage(bus, id, data);
     }
 
@@ -42,13 +45,33 @@ public class CanMessageTest {
         assertArrayEquals(data, message.getData());
     }
 
+    @Test(expected=InvalidMessageFieldsException.class)
+    public void buildEmptyValues() throws InvalidMessageFieldsException {
+        values = new HashMap<>();
+        new CanMessage(values);
+    }
+
+    @Test(expected=InvalidMessageFieldsException.class)
+    public void buildMissingId() throws InvalidMessageFieldsException {
+        values.remove(CanMessage.ID_KEY);
+        new CanMessage(values);
+    }
+
+    @Test(expected=InvalidMessageFieldsException.class)
+    public void buildMissingBus() throws InvalidMessageFieldsException {
+        values.remove(CanMessage.BUS_KEY);
+        new CanMessage(values);
+    }
+
+    @Test(expected=InvalidMessageFieldsException.class)
+    public void buildMissingData() throws InvalidMessageFieldsException {
+        values.remove(CanMessage.DATA_KEY);
+        new CanMessage(values);
+    }
+
     @Test
     public void extractsFieldsFromValues()
             throws InvalidMessageFieldsException {
-        HashMap<String, Object> values = new HashMap<>();
-        values.put(CanMessage.ID_KEY, id);
-        values.put(CanMessage.BUS_KEY, bus);
-        values.put(CanMessage.DATA_KEY, data);
         message = new CanMessage(values);
 
         assertThat(message.getId(), equalTo(id));
@@ -68,8 +91,7 @@ public class CanMessageTest {
     @Test
     public void differentDataStillEquals() {
         CanMessage anotherMessage = new CanMessage(bus, id,
-                new byte[] {1,2,3,4,5,6,7,8}
-        );
+                new byte[] {1,2,3,4,5,6,7,8});
         assertEquals(message, anotherMessage);
     }
 

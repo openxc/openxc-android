@@ -1,5 +1,7 @@
 package com.openxc.messages.formatters;
 
+import java.util.Map;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,17 +16,16 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonSerializer;
 import com.google.gson.internal.LinkedTreeMap;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
 public class JsonFormatter {
     private static final String TAG = "JsonFormatter";
-    public static final String NAME_FIELD = "name";
-    public static final String VALUE_FIELD = "value";
-    public static final String EVENT_FIELD = "event";
-    public static final String TIMESTAMP_FIELD = "timestamp";
     private static final String TIMESTAMP_PATTERN = "##########.######";
     private static DecimalFormat sTimestampFormatter =
             (DecimalFormat) DecimalFormat.getInstance(Locale.US);
@@ -33,34 +34,18 @@ public class JsonFormatter {
         sTimestampFormatter.applyPattern(TIMESTAMP_PATTERN);
     }
 
-    // TODO need a version of this for each more specific type
     public static String serialize(VehicleMessage message) {
-        StringWriter buffer = new StringWriter(64);
-        // TODO migrate from Jackson to Gson
-        JsonFactory jsonFactory = new JsonFactory();
-        try {
-            JsonGenerator gen = jsonFactory.createGenerator(buffer);
-
-            gen.writeStartObject();
-            // TODO
-            // gen.writeStringField(NAME_FIELD, message.getName());
-            // TODO for each of values in message.getvalues(), writeObjectField
-
-            if(message.isTimestamped()) {
-                gen.writeFieldName(TIMESTAMP_FIELD);
-                // serialized measurements store the timestamp in UNIX time
-                // (seconds with a fractional part since the UNIX epoch)
-                gen.writeRawValue(sTimestampFormatter.format(
-                            message.getTimestamp() / 1000.0));
-            }
-
-            gen.writeEndObject();
-            gen.close();
-        } catch(IOException e) {
-            Log.w(TAG, "Unable to encode all data to JSON -- " +
-                    "message may be incomplete", e);
+        Gson gson = new Gson();
+        JsonObject result = gson.toJsonTree(message).getAsJsonObject();
+        if(message.isTimestamped()) {
+            result.add(VehicleMessage.TIMESTAMP_KEY,
+                    new JsonPrimitive(message.getTimestamp() / 1000.0));
         }
-        return buffer.toString();
+
+        for(Map.Entry<String, Object> entry : message.getValuesMap().entrySet()) {
+            result.add(entry.getKey(), gson.toJsonTree(entry.getValue()));
+        }
+        return gson.toJson(result);
     }
 
     public static VehicleMessage deserialize(String data)

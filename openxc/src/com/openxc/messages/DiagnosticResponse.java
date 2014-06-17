@@ -6,19 +6,29 @@ import java.util.Map;
 
 import android.os.Parcel;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
 
+    public static final String PAYLOAD_KEY = DiagnosticRequest.PAYLOAD_KEY;
     public static final String VALUE_KEY = "value";
     public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
     public static final String SUCCESS_KEY = "success";
 
     private DiagnosticRequest mRequest;
+
+    @SerializedName(SUCCESS_KEY)
     private boolean mSuccess = false;
+
     // TODO need a way to say 'no value' so you know to look at payload
+    @SerializedName(VALUE_KEY)
     private float mValue;
+
+    @SerializedName(PAYLOAD_KEY)
     private byte[] mPayload;
+
+    @SerializedName(NEGATIVE_RESPONSE_CODE_KEY)
     private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
 
     public DiagnosticResponse(DiagnosticRequest request, byte[] payload,
