@@ -123,7 +123,7 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
         }
 
         if(contains(FREQUENCY_KEY)) {
-            mFrequency = (double) getValuesMap().remove(FREQUENCY_KEY);
+            mFrequency = (Double) getValuesMap().remove(FREQUENCY_KEY);
         }
 
         if(contains(NAME_KEY)) {
@@ -201,7 +201,9 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
                 && mPid == other.mPid
                 && Arrays.equals(mPayload, other.mPayload)
                 && mMultipleResponses == other.mMultipleResponses
-                && mFrequency == other.mFrequency
+                // TODO because of floating point precision this comparison
+                // doesn't always work. should we store it as a long?
+                // && mFrequency == other.mFrequency
                 && ((mName == null && other.mName == null)
                     || mName.equals(other.mName));
     }
