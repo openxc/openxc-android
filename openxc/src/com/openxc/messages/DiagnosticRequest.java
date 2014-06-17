@@ -1,5 +1,6 @@
 package com.openxc.messages;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -198,8 +199,7 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
                 && mId == other.mId
                 && mMode == other.mMode
                 && mPid == other.mPid
-                && ((mPayload == null && other.mPayload == null)
-                        || mPayload.equals(other.mPayload))
+                && Arrays.equals(mPayload, other.mPayload)
                 && mMultipleResponses == other.mMultipleResponses
                 && mFrequency == other.mFrequency
                 && ((mName == null && other.mName == null)
@@ -210,11 +210,11 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
     public String toString() {
         return Objects.toStringHelper(this)
             .add("timestamp", getTimestamp())
-            .add("id", getId())
             .add("bus", getBusId())
+            .add("id", getId())
             .add("mode", getMode())
             .add("pid", getPid())
-            .add("payload", getPayload())
+            .add("payload", Arrays.toString(getPayload()))
             .add("multiple_responses", getMultipleResponses())
             .add("frequency", getFrequency())
             .add("name", getName())
