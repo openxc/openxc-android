@@ -9,7 +9,6 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLog;
 
 import android.os.Parcel;
 
@@ -26,7 +25,6 @@ public class DiagnosticRequestTest {
 
     @Before
     public void setup() {
-        ShadowLog.stream = System.out;
         request = new DiagnosticRequest(bus, id, mode, pid, payload);
 
         values = new HashMap<>();
