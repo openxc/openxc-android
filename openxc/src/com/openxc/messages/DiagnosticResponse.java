@@ -100,7 +100,7 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
         return mRequest.getMode();
     }
 
-    public int getPid() {
+    public Integer getPid() {
         return mRequest.getPid();
     }
 

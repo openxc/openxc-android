@@ -51,7 +51,7 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
     private boolean mMultipleResponses = false;
 
     @SerializedName(FREQUENCY_KEY)
-    // Frequency is an optional field, so it is stored as an Integer so it can
+    // Frequency is an optional field, so it is stored as a Double so it can
     // be nulled.
     private Double mFrequency;
 
