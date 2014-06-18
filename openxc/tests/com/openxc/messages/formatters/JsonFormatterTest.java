@@ -48,7 +48,7 @@ public class JsonFormatterTest {
     @Test
     public void serializeDiagnosticResponse() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
-                    new DiagnosticRequest(1, 2, 3, 4),
+                    1, 2, 3, 4,
                     new byte[]{1,2,3,4}, true));
     }
 

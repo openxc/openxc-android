@@ -12,17 +12,11 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
+public class DiagnosticResponse extends DiagnosticMessage {
 
-    public static final String ID_KEY = DiagnosticRequest.ID_KEY;
-    public static final String BUS_KEY = DiagnosticRequest.BUS_KEY;
-    public static final String MODE_KEY = DiagnosticRequest.MODE_KEY;
-    public static final String PAYLOAD_KEY = DiagnosticRequest.PAYLOAD_KEY;
     public static final String VALUE_KEY = "value";
     public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
     public static final String SUCCESS_KEY = "success";
-
-    private DiagnosticRequest mRequest;
 
     public static final String[] sRequiredFieldsValues = new String[] {
             BUS_KEY, ID_KEY, MODE_KEY, SUCCESS_KEY };
@@ -36,26 +30,23 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
     @SerializedName(VALUE_KEY)
     private float mValue;
 
-    @SerializedName(PAYLOAD_KEY)
-    private byte[] mPayload;
-
     @SerializedName(NEGATIVE_RESPONSE_CODE_KEY)
     private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
 
-    public DiagnosticResponse(DiagnosticRequest request, byte[] payload,
+    public DiagnosticResponse(int busId, int id, int mode, int pid,
+            byte[] payload,
             boolean success) {
-        mRequest = request;
-        setPayload(payload);
+        super(busId, id, mode, pid, payload);
         mSuccess = success;
     }
 
-    public DiagnosticResponse(DiagnosticRequest request,
+    public DiagnosticResponse(int busId, int id, int mode, int pid,
             byte[] payload,
             boolean success,
             NegativeResponseCode negativeResponseCode,
             float value,
             HashMap<String, Object> extraValues) {
-        this(request, payload, success);
+        this(busId, id, mode, pid, payload, success);
         mNegativeResponseCode = negativeResponseCode;
         mValue = value;
         // TODO extra values?
@@ -69,40 +60,8 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
         return mValue;
     }
 
-    public boolean hasPid() {
-        return mRequest.hasPid();
-    }
-
-    public int getBusId() {
-        return mRequest.getBusId();
-    }
-
-    public int getId() {
-        return mRequest.getId();
-    }
-
-    public int getMode() {
-        return mRequest.getMode();
-    }
-
-    public Integer getPid() {
-        return mRequest.getPid();
-    }
-
-    public byte[] getPayload() {
-        return mPayload;
-    }
-
     public NegativeResponseCode getNegativeResponseCode() {
         return mNegativeResponseCode;
-    }
-
-    void setPayload(byte[] payload) {
-        if(payload != null) {
-            mPayload = new byte[payload.length];
-            System.arraycopy(payload, 0, mPayload, 0,
-                    Math.min(payload.length, mPayload.length));
-        }
     }
 
     @Override
@@ -119,10 +78,6 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
             .toString();
     }
 
-    public MessageKey getKey() {
-        return mRequest.getKey();
-    }
-
     public static boolean containsRequiredFields(Set<String> fields) {
         return fields.containsAll(sRequiredFields);
     }
@@ -133,7 +88,6 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
             return false;
         }
 
-        // TODO need common fields with DiagnosticRequest
         final DiagnosticResponse other = (DiagnosticResponse) obj;
         return mSuccess == other.mSuccess
                 && mValue == other.mValue

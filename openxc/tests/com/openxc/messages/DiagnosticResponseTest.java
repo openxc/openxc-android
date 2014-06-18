@@ -27,8 +27,7 @@ public class DiagnosticResponseTest {
 
     @Before
     public void setup() {
-        response = new DiagnosticResponse(
-                new DiagnosticRequest(bus, id, mode, pid), payload, true);
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, true);
     }
 
     @Test

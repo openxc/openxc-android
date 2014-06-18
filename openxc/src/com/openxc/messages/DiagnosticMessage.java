@@ -1,0 +1,158 @@
+package com.openxc.messages;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import android.os.Parcel;
+
+import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
+import com.openxc.util.Range;
+
+public abstract class DiagnosticMessage extends VehicleMessage
+        implements KeyedMessage {
+
+    public static final String ID_KEY = CanMessage.ID_KEY;
+    public static final String BUS_KEY = CanMessage.BUS_KEY;
+    public static final String MODE_KEY = "mode";
+    public static final String PID_KEY = "pid";
+    public static final String PAYLOAD_KEY = "payload";
+
+    public static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
+    public static final Range<Integer> MODE_RANGE = new Range<>(1, 0xff);
+    // Note that this is a limit of the OpenXC Vi firmware at the moment - a
+    // diagnostic request can tehcnically have a much larger payload.
+    public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
+
+    @SerializedName(BUS_KEY)
+    private int mBusId;
+
+    @SerializedName(ID_KEY)
+    private int mId;
+
+    @SerializedName(MODE_KEY)
+    private int mMode;
+
+    @SerializedName(PID_KEY)
+    // PID is an optional field, so it is stored as an Integer so it can be
+    // nulled.
+    private Integer mPid;
+
+    @SerializedName(PAYLOAD_KEY)
+    private byte[] mPayload;
+
+    public DiagnosticMessage(int busId, int id, int mode) {
+        mBusId = busId;
+        mId = id;
+        mMode = mode;
+    }
+
+    public DiagnosticMessage(int busId, int id, int mode, int pid) {
+        this(busId, id, mode);
+        mPid = pid;
+    }
+
+    public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
+        this(busId, id, mode);
+        setPayload(payload);
+    }
+
+    public DiagnosticMessage(int busId, int id, int mode, int pid,
+            byte[] payload) {
+        this(busId, id, mode, payload);
+        mPid = pid;
+    }
+
+    public boolean hasPid() {
+        return mPid != null;
+    }
+
+    public int getBusId() {
+        return mBusId;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public int getMode() {
+        return mMode;
+    }
+
+    public Integer getPid() {
+        return mPid;
+    }
+
+    public byte[] getPayload() {
+        return mPayload;
+    }
+
+    void setPayload(byte[] payload) {
+        if(payload != null) {
+            mPayload = new byte[payload.length];
+            System.arraycopy(payload, 0, mPayload, 0, payload.length);
+        }
+    }
+
+    public MessageKey getKey() {
+        HashMap<String, Object> key = new HashMap<>();
+        key.put(CanMessage.BUS_KEY, getBusId());
+        key.put(CanMessage.ID_KEY, getId());
+        key.put(MODE_KEY, getMode());
+        key.put(PID_KEY, getPid());
+        return new MessageKey(key);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !super.equals(obj)) {
+            return false;
+        }
+
+        final DiagnosticMessage other = (DiagnosticMessage) obj;
+        return mBusId == other.mBusId
+                && mId == other.mId
+                && mMode == other.mMode
+                && mPid == other.mPid
+                && Arrays.equals(mPayload, other.mPayload);
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        out.writeInt(getBusId());
+        out.writeInt(getId());
+        out.writeInt(getMode());
+        out.writeValue(getPid());
+        if(getPayload() != null) {
+            out.writeInt(getPayload().length);
+            out.writeByteArray(getPayload());
+        } else {
+            out.writeInt(0);
+        }
+    }
+
+    @Override
+    protected void readFromParcel(Parcel in) {
+        super.readFromParcel(in);
+        mBusId = in.readInt();
+        mId = in.readInt();
+        mMode = in.readInt();
+        mPid = (Integer) in.readValue(Integer.class.getClassLoader());
+
+        int payloadSize = in.readInt();
+        if(payloadSize > 0) {
+            mPayload = new byte[payloadSize];
+            in.readByteArray(mPayload);
+        }
+    }
+
+    protected DiagnosticMessage(Parcel in)
+            throws UnrecognizedMessageTypeException {
+        readFromParcel(in);
+    }
+
+    protected DiagnosticMessage() { }
+}
