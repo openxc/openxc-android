@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import com.openxc.messages.DiagnosticRequest;
+
 import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
@@ -32,7 +34,8 @@ public class DiagnosticRequestTest {
 
     @Before
     public void setup() {
-        request = new DiagnosticRequest(bus, id, mode, pid, payload);
+        request = new DiagnosticRequest(bus, id, mode, pid);
+        request.setPayload(payload);
     }
 
     @Test
@@ -83,21 +86,24 @@ public class DiagnosticRequestTest {
     @Test
     public void differentIdNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id + 1, bus, mode, payload);
+                id + 1, bus, mode);
+        anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
 
     @Test
     public void differentBusNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id, bus + 1, mode, payload);
+                id, bus + 1, mode);
+        anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
 
     @Test
     public void differentModeNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id, bus, mode + 1, payload);
+                id, bus, mode + 1);
+        anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
 
@@ -105,7 +111,8 @@ public class DiagnosticRequestTest {
     public void differentPayloadNotEqual() {
         payload[1] = (byte) (payload[1] + 1);
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id, bus, mode, payload);
+                id, bus, mode);
+        anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
 
