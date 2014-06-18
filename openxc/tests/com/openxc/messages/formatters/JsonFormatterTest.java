@@ -19,7 +19,6 @@ import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
-import com.openxc.messages.InvalidMessageFieldsException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -79,8 +78,7 @@ public class JsonFormatterTest {
     }
 
     @Test
-    public void serializeNamedMessageWithValues()
-            throws InvalidMessageFieldsException {
+    public void serializeNamedMessageWithValues() {
         HashMap<String, Object> data = new HashMap<>();
         data.put("foo", "bar");
         data.put("baz", 42.0);
@@ -136,7 +134,7 @@ public class JsonFormatterTest {
     }
 
     @Test
-    public void testSerializedTimestamp() throws InvalidMessageFieldsException {
+    public void testSerializedTimestamp() {
         String serialized = new String(formatter.serialize(
                     new SimpleVehicleMessage(
                         Long.valueOf(1332432977835L), messageName, value)));

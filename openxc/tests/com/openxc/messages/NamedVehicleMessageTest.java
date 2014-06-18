@@ -57,7 +57,7 @@ public class NamedVehicleMessageTest {
     }
 
     @Test
-    public void keyMatches() throws InvalidMessageFieldsException {
+    public void keyMatches() {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo");
         assertThat(message.getKey(), equalTo(anotherMessage.getKey()));
     }

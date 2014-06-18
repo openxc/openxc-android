@@ -21,7 +21,7 @@ public class VehicleMessageTest {
     HashMap<String, Object> data;
 
     @Before
-    public void setup() throws InvalidMessageFieldsException {
+    public void setup()  {
         data = new HashMap<String, Object>();
         data.put("value", Integer.valueOf(42));
         message = new VehicleMessage(data);
@@ -39,27 +39,27 @@ public class VehicleMessageTest {
     }
 
     @Test
-    public void emptyMessageHasTimestamp() throws InvalidMessageFieldsException {
+    public void emptyMessageHasTimestamp() {
         message = new VehicleMessage();
         assertTrue(message.getValuesMap() != null);
         assertTrue(message.isTimestamped());
     }
 
     @Test
-    public void emptyMessage() throws InvalidMessageFieldsException {
+    public void emptyMessage() {
         message = new VehicleMessage(new HashMap<String, Object>());
         assertTrue(message.getValuesMap() != null);
     }
 
     @Test
-    public void setManualTimestamp() throws InvalidMessageFieldsException {
+    public void setManualTimestamp() {
         message = new VehicleMessage(Long.valueOf(10000), data);
         assertTrue(message.isTimestamped());
         assertEquals(10000, message.getTimestamp());
     }
 
     @Test
-    public void untimestamp() throws InvalidMessageFieldsException {
+    public void untimestamp() {
         message = new VehicleMessage(Long.valueOf(10000), data);
         message.untimestamp();
         assertFalse(message.isTimestamped());
@@ -71,22 +71,21 @@ public class VehicleMessageTest {
     }
 
     @Test
-    public void sameValuesEquals() throws InvalidMessageFieldsException {
+    public void sameValuesEquals() {
         VehicleMessage anotherMessage = new VehicleMessage(
                 message.getTimestamp(), data);
         assertEquals(message, anotherMessage);
     }
 
     @Test
-    public void differentTimestampNotEqual()
-            throws InvalidMessageFieldsException {
+    public void differentTimestampNotEqual() {
         VehicleMessage anotherMessage = new VehicleMessage(
                 Long.valueOf(10000), data);
         assertFalse(message.equals(anotherMessage));
     }
 
     @Test
-    public void differentValuesNotEqual() throws InvalidMessageFieldsException {
+    public void differentValuesNotEqual() {
         data.put("another", "foo");
         // This also tests that the values map is copied and we don't have the
         // same reference from outside the class

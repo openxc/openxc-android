@@ -26,15 +26,13 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         mName = name;
     }
 
-    public NamedVehicleMessage(String name, Map<String, Object> extraValues)
-            throws InvalidMessageFieldsException {
+    public NamedVehicleMessage(String name, Map<String, Object> extraValues) {
         super(extraValues);
         mName = name;
     }
 
     public NamedVehicleMessage(Long timestamp, String name,
-            Map<String, Object> extraValues)
-            throws InvalidMessageFieldsException {
+            Map<String, Object> extraValues) {
         super(timestamp, extraValues);
         mName = name;
     }

@@ -60,8 +60,7 @@ public class DiagnosticRequestTest {
     }
 
     @Test
-    public void getPidWithNoPidReturnsNull()
-            throws InvalidMessageFieldsException {
+    public void getPidWithNoPidReturnsNull() {
         DiagnosticRequest noPidRequest = new DiagnosticRequest(1, 2, 3);
         assertThat(noPidRequest.getPid(), nullValue());
     }
@@ -125,8 +124,7 @@ public class DiagnosticRequestTest {
     }
 
     @Test
-    public void writeAndReadFromParcelNoOptionalFields()
-            throws InvalidMessageFieldsException {
+    public void writeAndReadFromParcelNoOptionalFields() {
         request = new DiagnosticRequest(1, 2, 3);
 
         Parcel parcel = Parcel.obtain();

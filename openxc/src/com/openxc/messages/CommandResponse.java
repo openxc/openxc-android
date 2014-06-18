@@ -34,8 +34,7 @@ public class CommandResponse extends VehicleMessage implements KeyedMessage {
     }
 
     public CommandResponse(String command, String message,
-            Map<String, Object> extraValues)
-            throws InvalidMessageFieldsException {
+            Map<String, Object> extraValues) {
         super(extraValues);
         mCommand = command;
     }
