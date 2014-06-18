@@ -1,11 +1,11 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -26,16 +26,6 @@ public class CommandTest {
     @Test
     public void getCommandReturnsCommand() {
         assertEquals(command, message.getCommand());
-    }
-
-    @Test
-    public void extractsCommandFromValues()
-            throws InvalidMessageFieldsException {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put(Command.COMMAND_KEY, command);
-        message = new Command(data);
-        assertThat(message.getCommand(), equalTo(command));
-        assertFalse(message.contains(Command.COMMAND_KEY));
     }
 
     @Test

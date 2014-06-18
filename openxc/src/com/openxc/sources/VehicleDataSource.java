@@ -1,6 +1,5 @@
 package com.openxc.sources;
 
-import com.openxc.sources.SourceCallback;
 
 /**
  * The interface for all sources of raw vehicle measurements.

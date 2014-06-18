@@ -1,11 +1,8 @@
 package com.openxc.sources;
 
 import android.content.Context;
-
 import android.os.PowerManager;
-
 import android.os.PowerManager.WakeLock;
-
 import android.util.Log;
 
 public class WakeLockManager {

@@ -1,17 +1,21 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import junit.framework.TestCase;
-import org.junit.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
-import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.NamedVehicleMessage;
-import com.openxc.messages.VehicleMessage;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.openxc.messages.InvalidMessageFieldsException;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;

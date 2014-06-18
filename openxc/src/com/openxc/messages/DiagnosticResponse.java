@@ -1,25 +1,33 @@
 package com.openxc.messages;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.common.primitives.Bytes;
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
 
+    public static final String ID_KEY = DiagnosticRequest.ID_KEY;
+    public static final String BUS_KEY = DiagnosticRequest.BUS_KEY;
+    public static final String MODE_KEY = DiagnosticRequest.MODE_KEY;
     public static final String PAYLOAD_KEY = DiagnosticRequest.PAYLOAD_KEY;
     public static final String VALUE_KEY = "value";
     public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
     public static final String SUCCESS_KEY = "success";
 
     private DiagnosticRequest mRequest;
+
+    public static final String[] sRequiredFieldsValues = new String[] {
+            BUS_KEY, ID_KEY, MODE_KEY, SUCCESS_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(SUCCESS_KEY)
     private boolean mSuccess = false;
@@ -41,39 +49,16 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
         mSuccess = success;
     }
 
-    public DiagnosticResponse(Map<String, Object> values)
-            throws InvalidMessageFieldsException {
-        if(!DiagnosticRequest.containsAllRequiredFields(values)
-                && containsAllRequiredFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-
-        mRequest = new DiagnosticRequest(values);
-        // Kind of weird, but we have to wait for the DiagnosticReuqest to pull
-        // out its values from the map before we store a copy, otherwise we'll
-        // get a bunch of duplicates. This design smells a bit.
-        setValues(mRequest.getValuesMap());
-        mSuccess = (boolean) getValuesMap().remove(SUCCESS_KEY);
-        if(!mSuccess) {
-            mNegativeResponseCode = (NegativeResponseCode)
-                getValuesMap().remove(NEGATIVE_RESPONSE_CODE_KEY);
-        }
-
-        if(values.containsKey(VALUE_KEY)) {
-            mValue = (float) getValuesMap().remove(VALUE_KEY);
-        }
-
-        if(contains(DiagnosticRequest.PAYLOAD_KEY)) {
-            // Same weird workaround as in CanMessage and DiagnosticRequest
-            Object payload = getValuesMap().remove(PAYLOAD_KEY);
-            if(payload instanceof ArrayList) {
-                setPayload(Bytes.toArray(((ArrayList<Byte>) payload)));
-            } else{
-                setPayload((byte[]) payload);
-            }
-        }
+    public DiagnosticResponse(DiagnosticRequest request,
+            byte[] payload,
+            boolean success,
+            NegativeResponseCode negativeResponseCode,
+            float value,
+            HashMap<String, Object> extraValues) {
+        this(request, payload, success);
+        mNegativeResponseCode = negativeResponseCode;
+        mValue = value;
+        // TODO extra values?
     }
 
     public boolean getSuccess() {
@@ -136,6 +121,10 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
 
     public MessageKey getKey() {
         return mRequest.getKey();
+    }
+
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override
@@ -224,11 +213,6 @@ public class DiagnosticResponse extends VehicleMessage implements KeyedMessage {
         mSuccess = in.readByte() != 0;
         mValue = in.readFloat();
         mNegativeResponseCode = (NegativeResponseCode) in.readSerializable();
-    }
-
-    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return DiagnosticRequest.containsAllRequiredFields(map) &&
-                map.containsKey(DiagnosticResponse.SUCCESS_KEY);
     }
 
     protected DiagnosticResponse(Parcel in)

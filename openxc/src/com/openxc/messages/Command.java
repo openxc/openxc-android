@@ -1,15 +1,23 @@
 package com.openxc.messages;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class Command extends VehicleMessage implements KeyedMessage {
     public static final String COMMAND_KEY = "command";
+
+    public static final String[] sRequiredFieldsValues = new String[] {
+            COMMAND_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_KEY)
     private String mCommand;
@@ -18,18 +26,8 @@ public class Command extends VehicleMessage implements KeyedMessage {
         mCommand = command;
     }
 
-    public Command(Map<String, Object> values) throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsAllRequiredFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-        mCommand = (String) getValuesMap().remove(COMMAND_KEY);
-    }
-
-    public Command(String command, Map<String, Object> values) {
-        super(values);
+    public Command(String command, Map<String, Object> extraValues) {
+        super(extraValues);
         mCommand = command;
     }
 
@@ -37,14 +35,14 @@ public class Command extends VehicleMessage implements KeyedMessage {
         return mCommand;
     }
 
-    public static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return map.containsKey(COMMAND_KEY);
-    }
-
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(COMMAND_KEY, getCommand());
         return new MessageKey(key);
+    }
+
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override

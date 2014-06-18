@@ -1,8 +1,8 @@
 package com.openxc;
 
-import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import junit.framework.TestCase;
 
 import com.openxc.units.Meter;
 

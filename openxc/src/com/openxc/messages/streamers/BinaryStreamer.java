@@ -7,14 +7,13 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import android.util.Log;
+
 import com.google.common.io.ByteStreams;
 import com.google.protobuf.CodedInputStream;
-
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.BinaryFormatter;
-
-import android.util.Log;
 
 public class BinaryStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";

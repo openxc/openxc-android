@@ -1,20 +1,26 @@
 package com.openxc.messages;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class SimpleVehicleMessage extends NamedVehicleMessage {
     public static final String VALUE_KEY = "value";
 
+    public static final String[] sRequiredFieldsValues = new String[] {
+            NAME_KEY, VALUE_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
+
     @SerializedName(VALUE_KEY)
     private Object mValue;
 
-    public SimpleVehicleMessage(Long timestamp, String name, Object value)
-            throws InvalidMessageFieldsException {
+    public SimpleVehicleMessage(Long timestamp, String name, Object value) {
         super(timestamp, name);
         mValue = value;
     }
@@ -23,20 +29,14 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         super(name);
         mValue = value;
     }
-
-    public SimpleVehicleMessage(Map<String, Object> values)
-            throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsRequiredPrimeFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-        mValue = getValuesMap().remove(VALUE_KEY);
-    }
+    // TODO need a constructor that accepts extra values
 
     public Object getValue() {
         return mValue;
+    }
+
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override
@@ -57,14 +57,6 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             .add("value", getValue())
             .add("values", getValuesMap())
             .toString();
-    }
-
-    private static boolean containsRequiredPrimeFields(Map<String, Object> map) {
-        return map.containsKey(VALUE_KEY);
-    }
-
-    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return NamedVehicleMessage.containsAllRequiredFields(map) && containsRequiredPrimeFields(map);
     }
 
     @Override

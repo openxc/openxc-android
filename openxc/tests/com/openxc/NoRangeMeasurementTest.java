@@ -1,12 +1,12 @@
 package com.openxc;
 
-import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import junit.framework.TestCase;
 
-import com.openxc.units.Meter;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.NoRangeException;
+import com.openxc.units.Meter;
 
 public class NoRangeMeasurementTest extends TestCase {
     BaseMeasurement<Meter> measurement;

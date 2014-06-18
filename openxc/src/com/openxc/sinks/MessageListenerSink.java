@@ -17,9 +17,9 @@ import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
+import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.MessageKey;
 
 /**
  * A data sink that sends new measurements of specific types to listeners.

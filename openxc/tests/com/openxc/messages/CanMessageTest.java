@@ -1,11 +1,14 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -18,17 +21,14 @@ public class CanMessageTest {
     CanMessage message;
     int id = 42;
     int bus = 1;
-    byte[] data = new byte[8];
-    HashMap<String, Object> values;
+    byte[] data = new byte[] {1,2,3,4,5,6,7,8};
 
     @Before
     public void setup() {
-        values = new HashMap<>();
-        values.put(CanMessage.ID_KEY, id);
-        values.put(CanMessage.BUS_KEY, bus);
-        values.put(CanMessage.DATA_KEY, data);
         message = new CanMessage(bus, id, data);
     }
+
+    // TODO test extra fields are stored
 
     @Test
     public void getIdReturnsId() {
@@ -43,44 +43,6 @@ public class CanMessageTest {
     @Test
     public void getDataReturnsData() {
         assertArrayEquals(data, message.getData());
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildEmptyValues() throws InvalidMessageFieldsException {
-        values = new HashMap<>();
-        new CanMessage(values);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildMissingId() throws InvalidMessageFieldsException {
-        values.remove(CanMessage.ID_KEY);
-        new CanMessage(values);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildMissingBus() throws InvalidMessageFieldsException {
-        values.remove(CanMessage.BUS_KEY);
-        new CanMessage(values);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildMissingData() throws InvalidMessageFieldsException {
-        values.remove(CanMessage.DATA_KEY);
-        new CanMessage(values);
-    }
-
-    @Test
-    public void extractsFieldsFromValues()
-            throws InvalidMessageFieldsException {
-        message = new CanMessage(values);
-
-        assertThat(message.getId(), equalTo(id));
-        assertThat(message.getBus(), equalTo(bus));
-        assertArrayEquals(message.getData(), data);
-
-        assertFalse(message.contains(CanMessage.ID_KEY));
-        assertFalse(message.contains(CanMessage.BUS_KEY));
-        assertFalse(message.contains(CanMessage.DATA_KEY));
     }
 
     @Test

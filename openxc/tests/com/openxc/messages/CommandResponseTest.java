@@ -1,11 +1,12 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -32,29 +33,6 @@ public class CommandResponseTest {
     @Test
     public void getMessageReturnsMessage() {
         assertEquals(command, response.getCommand());
-    }
-
-    @Test
-    public void messageIsOptional() throws InvalidMessageFieldsException {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put(CommandResponse.COMMAND_RESPONSE_KEY, command);
-        response = new CommandResponse(data);
-        assertThat(response.getCommand(), equalTo(command));
-        assertThat(response.getMessage(), nullValue());
-        assertFalse(response.contains(CommandResponse.COMMAND_RESPONSE_KEY));
-    }
-
-    @Test
-    public void extractsCommandAndMessageFromValues()
-            throws InvalidMessageFieldsException {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put(CommandResponse.COMMAND_RESPONSE_KEY, command);
-        data.put(CommandResponse.MESSAGE_KEY, message);
-        response = new CommandResponse(data);
-        assertThat(response.getCommand(), equalTo(command));
-        assertThat(response.getMessage(), equalTo(message));
-        assertFalse(response.contains(CommandResponse.COMMAND_RESPONSE_KEY));
-        assertFalse(response.contains(CommandResponse.MESSAGE_KEY));
     }
 
     @Test

@@ -1,17 +1,25 @@
 package com.openxc.messages;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class CommandResponse extends VehicleMessage implements KeyedMessage {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
     public static final String MESSAGE_KEY = "message";
+
+    public static final String[] sRequiredFieldsValues = new String[] {
+            COMMAND_RESPONSE_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_RESPONSE_KEY)
     private String mCommand;
@@ -25,26 +33,11 @@ public class CommandResponse extends VehicleMessage implements KeyedMessage {
         mMessage = message;
     }
 
-    public CommandResponse(Map<String, Object> values) throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsAllRequiredFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-        mCommand = (String) getValuesMap().remove(COMMAND_RESPONSE_KEY);
-        setMessage(getValuesMap());
-    }
-
-    public CommandResponse(String command, Map<String, Object> values)
+    public CommandResponse(String command, String message,
+            Map<String, Object> extraValues)
             throws InvalidMessageFieldsException {
-        super(values);
+        super(extraValues);
         mCommand = command;
-        setMessage(values);
-    }
-
-    private void setMessage(Map<String, Object> values) {
-        mMessage = (String) values.remove(MESSAGE_KEY);
     }
 
     public String getMessage() {
@@ -53,10 +46,6 @@ public class CommandResponse extends VehicleMessage implements KeyedMessage {
 
     public String getCommand() {
         return mCommand;
-    }
-
-    public static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return map.containsKey(COMMAND_RESPONSE_KEY);
     }
 
     @Override
@@ -84,6 +73,10 @@ public class CommandResponse extends VehicleMessage implements KeyedMessage {
         HashMap<String, Object> key = new HashMap<>();
         key.put(COMMAND_RESPONSE_KEY, getCommand());
         return new MessageKey(key);
+    }
+
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override

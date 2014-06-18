@@ -1,16 +1,14 @@
 package com.openxc.messages;
 
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.gson.annotations.SerializedName;
-import com.google.common.primitives.Bytes;
 import com.google.common.base.Objects;
-
+import com.google.gson.annotations.SerializedName;
 import com.openxc.util.Range;
 
 public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
@@ -29,6 +27,11 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
     // Note that this is a limit of the OpenXC Vi firmware at the moment - a
     // diagnostic request can tehcnically have a much larger payload.
     public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
+
+    public static final String[] sRequiredFieldsValues = new String[] {
+            ID_KEY, BUS_KEY, MODE_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(BUS_KEY)
     private int mBusId;
@@ -89,48 +92,6 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
         mName = name;
     }
 
-    public DiagnosticRequest(Map<String, Object> values)
-            throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsAllRequiredFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-
-        // Because of the way we are deserializing from JSON, we get all numbers
-        // as Double.
-        mBusId = ((Number) getValuesMap().remove(CanMessage.BUS_KEY)).intValue();
-        mId = ((Number) getValuesMap().remove(CanMessage.ID_KEY)).intValue();
-        mMode = ((Number) getValuesMap().remove(MODE_KEY)).intValue();
-
-        if(contains(PID_KEY)) {
-            mPid = ((Number) getValuesMap().remove(PID_KEY)).intValue();
-        }
-
-        if(contains(PAYLOAD_KEY)) {
-            // Same weird workaround as in CanMessage
-            Object payload = getValuesMap().remove(PAYLOAD_KEY);
-            if(payload instanceof ArrayList) {
-                setPayload(Bytes.toArray(((ArrayList<Byte>) payload)));
-            } else{
-                setPayload((byte[]) payload);
-            }
-        }
-
-        if(contains(MULTIPLE_RESPONSES_KEY)) {
-            mMultipleResponses = (boolean) getValuesMap().remove(MULTIPLE_RESPONSES_KEY);
-        }
-
-        if(contains(FREQUENCY_KEY)) {
-            mFrequency = (Double) getValuesMap().remove(FREQUENCY_KEY);
-        }
-
-        if(contains(NAME_KEY)) {
-            mName = (String) getValuesMap().remove(NAME_KEY);
-        }
-    }
-
     public boolean hasPid() {
         return mPid != null;
     }
@@ -174,11 +135,6 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
         return mName;
     }
 
-    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return map.containsKey(BUS_KEY) && map.containsKey(ID_KEY)
-                && map.containsKey(MODE_KEY);
-    }
-
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(CanMessage.BUS_KEY, getBusId());
@@ -186,6 +142,10 @@ public class DiagnosticRequest extends VehicleMessage implements KeyedMessage {
         key.put(MODE_KEY, getMode());
         key.put(PID_KEY, getPid());
         return new MessageKey(key);
+    }
+
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override

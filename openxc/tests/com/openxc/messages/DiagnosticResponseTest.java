@@ -1,11 +1,12 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -48,25 +49,6 @@ public class DiagnosticResponseTest {
     @Test
     public void getPayloadReturnsPayload() {
         assertArrayEquals(payload, response.getPayload());
-    }
-
-    @Test
-    public void extractsFieldsFromValues()
-            throws InvalidMessageFieldsException {
-        HashMap<String, Object> values = new HashMap<>();
-        values.put(DiagnosticRequest.ID_KEY, id);
-        values.put(DiagnosticRequest.BUS_KEY, bus);
-        values.put(DiagnosticRequest.MODE_KEY, mode);
-        values.put(DiagnosticResponse.SUCCESS_KEY, true);
-        response = new DiagnosticResponse(values);
-
-        assertThat(response.getId(), equalTo(id));
-        assertThat(response.getBusId(), equalTo(bus));
-        assertThat(response.getMode(), equalTo(mode));
-
-        assertFalse(response.contains(DiagnosticRequest.ID_KEY));
-        assertFalse(response.contains(DiagnosticRequest.BUS_KEY));
-        assertFalse(response.contains(DiagnosticRequest.MODE_KEY));
     }
 
     // TODO test read/write payload and no payload, I know it's failing

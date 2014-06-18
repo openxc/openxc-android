@@ -1,7 +1,6 @@
 package com.openxc.sinks;
 
 import static org.mockito.Mockito.spy;
-
 import junit.framework.TestCase;
 
 import com.openxc.messages.SimpleVehicleMessage;

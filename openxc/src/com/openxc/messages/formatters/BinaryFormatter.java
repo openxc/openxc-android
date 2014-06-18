@@ -3,14 +3,14 @@ package com.openxc.messages.formatters;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.util.Log;
+
 import com.openxc.BinaryMessages;
-import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
-
-import android.util.Log;
 
 public class BinaryFormatter {
     private final static String TAG = "BinaryFormatter";

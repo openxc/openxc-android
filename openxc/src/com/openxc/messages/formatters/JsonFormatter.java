@@ -1,66 +1,81 @@
 package com.openxc.messages.formatters;
 
-import java.util.Map;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import android.util.Log;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.JsonSerializer;
-import com.google.gson.internal.LinkedTreeMap;
+
+import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.DiagnosticResponse;
+import com.openxc.messages.CanMessage;
+import com.openxc.messages.Command;
+import com.openxc.messages.CommandResponse;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
 public class JsonFormatter {
     private static final String TAG = "JsonFormatter";
-    private static final String TIMESTAMP_PATTERN = "##########.######";
-    private static DecimalFormat sTimestampFormatter =
-            (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-
-    static {
-        sTimestampFormatter.applyPattern(TIMESTAMP_PATTERN);
-    }
+    private static Gson sGson = new Gson();
 
     public static String serialize(VehicleMessage message) {
-        Gson gson = new Gson();
-        JsonObject result = gson.toJsonTree(message).getAsJsonObject();
-        if(message.isTimestamped()) {
-            result.add(VehicleMessage.TIMESTAMP_KEY,
-                    new JsonPrimitive(message.getTimestamp() / 1000.0));
-        }
-
-        for(Map.Entry<String, Object> entry : message.getValuesMap().entrySet()) {
-            result.add(entry.getKey(), gson.toJsonTree(entry.getValue()));
-        }
-        return gson.toJson(result);
+        return sGson.toJson(message);
     }
 
     public static VehicleMessage deserialize(String data)
             throws UnrecognizedMessageTypeException {
-        Gson gson = new Gson();
-        LinkedTreeMap<String, Object> result =
-                new LinkedTreeMap<String, Object>();
+        JsonObject root;
         try {
-            result = (LinkedTreeMap<String, Object>) gson.fromJson(
-                    data, result.getClass());
-            return VehicleMessage.buildSubtype(result);
+            JsonParser parser = new JsonParser();
+            root = parser.parse(data).getAsJsonObject();
         } catch(JsonSyntaxException e) {
             throw new UnrecognizedMessageTypeException(
                     "Unable to parse JSON from \"" + data + "\": " + e);
         }
+
+        Set<String> fields = new HashSet<>();
+        for(Map.Entry<String, JsonElement> entry : root.entrySet()) {
+            fields.add(entry.getKey());
+        }
+
+        Gson gson = new Gson();
+        VehicleMessage message = new VehicleMessage();
+        // TODO how will they capture unmatched fields into a 'values' map?
+        if(CanMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, CanMessage.class);
+        } else if(DiagnosticResponse.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, DiagnosticResponse.class);
+        } else if(DiagnosticRequest.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, DiagnosticRequest.class);
+        } else if(Command.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, Command.class);
+        } else if(CommandResponse.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, CommandResponse.class);
+        } else if(SimpleVehicleMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, SimpleVehicleMessage.class);
+        } else if(NamedVehicleMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, NamedVehicleMessage.class);
+        } else {
+            Log.w(TAG, "Unrecognized combination of fields: " + fields.toString());
+            // TODO not sure how this is going to work
+            // message = sGson.fromJson(fields, VehicleMessage.class);
+        }
+        return message;
     }
 
     public static VehicleMessage deserialize(InputStream data)
@@ -83,5 +98,4 @@ public class JsonFormatter {
             .and(CharMatcher.ASCII)
             .matchesAllOf(buffer.toString());
     }
-
 }

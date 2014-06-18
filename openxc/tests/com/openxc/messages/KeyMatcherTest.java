@@ -1,13 +1,10 @@
 package com.openxc.messages;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 
-import static org.hamcrest.Matchers.*;
-import junit.framework.TestCase;
-import org.junit.*;
-import static org.junit.Assert.*;
-
-import android.os.Parcel;
+import org.junit.Test;
 
 public class KeyMatcherTest {
     KeyedMessage keyed = new KeyedMessage() {

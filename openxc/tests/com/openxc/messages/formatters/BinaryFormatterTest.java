@@ -1,22 +1,22 @@
 package com.openxc.messages.formatters;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-import org.junit.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import com.openxc.BinaryMessages;
-import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.UnrecognizedMessageTypeException;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)

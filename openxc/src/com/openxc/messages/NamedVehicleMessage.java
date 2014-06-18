@@ -1,12 +1,15 @@
 package com.openxc.messages;
 
-import java.util.Map;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage {
     public static final String NAME_KEY = "name";
@@ -14,35 +17,29 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
     @SerializedName(NAME_KEY)
     private String mName;
 
+    public static final String[] sRequiredFieldsValues = new String[] {
+            NAME_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
+
     public NamedVehicleMessage(String name) {
         mName = name;
     }
 
-    public NamedVehicleMessage(Map<String, Object> values)
+    public NamedVehicleMessage(String name, Map<String, Object> extraValues)
             throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsAllRequiredFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-        mName = (String) getValuesMap().remove(NAME_KEY);
-    }
-
-    public NamedVehicleMessage(String name, Map<String, Object> values)
-            throws InvalidMessageFieldsException {
-        super(values);
+        super(extraValues);
         mName = name;
     }
 
-    public NamedVehicleMessage(Long timestamp, String name, Map<String, Object> values)
+    public NamedVehicleMessage(Long timestamp, String name,
+            Map<String, Object> extraValues)
             throws InvalidMessageFieldsException {
-        super(timestamp, values);
+        super(timestamp, extraValues);
         mName = name;
     }
 
-    public NamedVehicleMessage(Long timestamp, String name)
-            throws InvalidMessageFieldsException {
+    public NamedVehicleMessage(Long timestamp, String name) {
         super(timestamp);
         mName = name;
     }
@@ -67,8 +64,8 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         return new MessageKey(key);
     }
 
-    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return map.containsKey(NAME_KEY);
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override

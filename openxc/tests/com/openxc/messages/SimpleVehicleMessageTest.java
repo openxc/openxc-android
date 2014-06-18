@@ -1,11 +1,12 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -30,19 +31,6 @@ public class SimpleVehicleMessageTest {
     }
 
     @Test
-    public void extractsNameAndValueFromValues()
-            throws InvalidMessageFieldsException {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put(NamedVehicleMessage.NAME_KEY, name);
-        data.put(SimpleVehicleMessage.VALUE_KEY, value);
-        message = new SimpleVehicleMessage(data);
-        assertEquals(name, message.getName());
-        assertEquals(value, message.getValue());
-        assertFalse(message.contains(NamedVehicleMessage.NAME_KEY));
-        assertFalse(message.contains(SimpleVehicleMessage.VALUE_KEY));
-    }
-
-    @Test
     public void sameEquals() {
         assertEquals(message, message);
     }
@@ -50,7 +38,7 @@ public class SimpleVehicleMessageTest {
     @Test
     public void sameNameAndValueEquals() {
         SimpleVehicleMessage anotherMessage = new SimpleVehicleMessage(
-                name, value);
+                message.getTimestamp(), name, value);
         assertEquals(message, anotherMessage);
     }
 
@@ -71,7 +59,7 @@ public class SimpleVehicleMessageTest {
 
         VehicleMessage createdFromParcel =
                 VehicleMessage.CREATOR.createFromParcel(parcel);
-        assertTrue(createdFromParcel instanceof SimpleVehicleMessage);
+        assertThat(createdFromParcel, instanceOf(SimpleVehicleMessage.class));
         assertEquals(message, createdFromParcel);
     }
 }

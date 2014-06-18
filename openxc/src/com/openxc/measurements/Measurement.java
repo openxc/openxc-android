@@ -1,7 +1,6 @@
 package com.openxc.measurements;
 
 import com.openxc.messages.VehicleMessage;
-
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
 

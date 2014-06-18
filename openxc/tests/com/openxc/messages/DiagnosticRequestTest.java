@@ -1,11 +1,19 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -21,21 +29,19 @@ public class DiagnosticRequestTest {
     int mode = 2;
     int pid = 4;
     byte[] payload = new byte[]{1, 2, 3, 4, 5, 6, 7};
-    HashMap<String, Object> values;
 
     @Before
     public void setup() {
         request = new DiagnosticRequest(bus, id, mode, pid, payload);
-
-        values = new HashMap<>();
-        values.put(DiagnosticRequest.BUS_KEY, bus);
-        values.put(DiagnosticRequest.ID_KEY, id);
-        values.put(DiagnosticRequest.MODE_KEY, mode);
     }
 
     @Test
     public void checkRequiredFields() {
-        assertTrue(DiagnosticRequest.containsAllRequiredFields(values));
+        Set<String> fields = new HashSet<>();
+        fields.add(DiagnosticRequest.ID_KEY);
+        fields.add(DiagnosticRequest.BUS_KEY);
+        fields.add(DiagnosticRequest.MODE_KEY);
+        assertTrue(DiagnosticRequest.containsRequiredFields(fields));
     }
 
     @Test
@@ -56,7 +62,7 @@ public class DiagnosticRequestTest {
     @Test
     public void getPidWithNoPidReturnsNull()
             throws InvalidMessageFieldsException {
-        DiagnosticRequest noPidRequest = new DiagnosticRequest(values);
+        DiagnosticRequest noPidRequest = new DiagnosticRequest(1, 2, 3);
         assertThat(noPidRequest.getPid(), nullValue());
     }
 
@@ -68,58 +74,6 @@ public class DiagnosticRequestTest {
     @Test
     public void getPayloadReturnsPayload() {
         assertArrayEquals(payload, request.getPayload());
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildEmptyValues() throws InvalidMessageFieldsException {
-        values = new HashMap<>();
-        new DiagnosticRequest(values);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildMissingId() throws InvalidMessageFieldsException {
-        values.remove(DiagnosticRequest.ID_KEY);
-        new DiagnosticRequest(values);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildMissingBus() throws InvalidMessageFieldsException {
-        values.remove(DiagnosticRequest.BUS_KEY);
-        new DiagnosticRequest(values);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildMissingMode() throws InvalidMessageFieldsException {
-        values.remove(DiagnosticRequest.MODE_KEY);
-        new DiagnosticRequest(values);
-    }
-
-    @Test
-    public void includeOptionalPid() throws InvalidMessageFieldsException {
-        values.put(DiagnosticRequest.PID_KEY, pid);
-        request = new DiagnosticRequest(values);
-        assertThat(request.getPid(), equalTo(pid));
-    }
-
-    @Test
-    public void includeOptionalPayload() throws InvalidMessageFieldsException {
-        values.put(DiagnosticRequest.PAYLOAD_KEY, payload);
-        request = new DiagnosticRequest(values);
-        assertThat(request.getPayload(), equalTo(payload));
-    }
-
-    @Test
-    public void extractsFieldsFromValues()
-            throws InvalidMessageFieldsException {
-        request = new DiagnosticRequest(values);
-
-        assertThat(request.getId(), equalTo(id));
-        assertThat(request.getBusId(), equalTo(bus));
-        assertThat(request.getMode(), equalTo(mode));
-
-        assertFalse(request.contains(DiagnosticRequest.ID_KEY));
-        assertFalse(request.contains(DiagnosticRequest.BUS_KEY));
-        assertFalse(request.contains(DiagnosticRequest.MODE_KEY));
     }
 
     @Test
@@ -173,7 +127,7 @@ public class DiagnosticRequestTest {
     @Test
     public void writeAndReadFromParcelNoOptionalFields()
             throws InvalidMessageFieldsException {
-        request = new DiagnosticRequest(values);
+        request = new DiagnosticRequest(1, 2, 3);
 
         Parcel parcel = Parcel.obtain();
         request.writeToParcel(parcel, 0);

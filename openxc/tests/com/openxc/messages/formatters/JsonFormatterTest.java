@@ -1,25 +1,29 @@
 package com.openxc.messages.formatters;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 
-import org.junit.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import com.openxc.messages.InvalidMessageFieldsException;
-import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
-import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.DiagnosticRequest;
-import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.DiagnosticResponse;
+import com.openxc.messages.InvalidMessageFieldsException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.UnrecognizedMessageTypeException;
+import com.openxc.messages.VehicleMessage;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -112,11 +116,13 @@ public class JsonFormatterTest {
 
     @Test
     public void testDeserialize() throws UnrecognizedMessageTypeException {
-        SimpleVehicleMessage message = (SimpleVehicleMessage) formatter.deserialize(
+        VehicleMessage message = formatter.deserialize(
                 "{\"name\": \"" + messageName + "\", \"value\": " +
                 value.toString() + "}");
-        assertEquals(message.getName(), messageName);
-        assertEquals(message.getValue(), value);
+        assertThat(message, instanceOf(SimpleVehicleMessage.class));
+        SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+        assertEquals(simpleMessage.getName(), messageName);
+        assertEquals(simpleMessage.getValue(), value);
     }
 
     @Test

@@ -2,18 +2,14 @@ package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.BaseMeasurement;
-import com.openxc.measurements.NoRangeException;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleSpeed;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
 

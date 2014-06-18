@@ -1,6 +1,5 @@
 package com.openxc.sources;
 
-import java.nio.ByteBuffer;
 
 /**
  * A "mixin" of sorts to be used with object composition, this contains

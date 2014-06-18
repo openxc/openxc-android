@@ -1,16 +1,11 @@
 package com.openxc.messages.streamers;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import android.util.Log;
 
 import com.google.common.base.CharMatcher;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
-
-import android.util.Log;
 
 public class JsonStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";

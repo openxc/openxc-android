@@ -1,7 +1,6 @@
 package com.openxc.sources;
 
 import com.google.common.base.Objects;
-
 import com.openxc.messages.VehicleMessage;
 
 /**

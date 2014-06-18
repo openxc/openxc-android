@@ -1,10 +1,8 @@
 package com.openxc.util;
 
-import junit.framework.TestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-
-import com.openxc.util.Range;
+import junit.framework.TestCase;
 
 public class RangeTest extends TestCase {
     Range<Double> range;

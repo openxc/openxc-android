@@ -1,28 +1,32 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class VehicleMessage implements Parcelable {
     private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
 
-    // Not serializing this automatically, handling in JsonFormatter to get the
-    // proper format
-    private transient long mTimestamp;
+    // We store this as a double in the class so it's simpler to serialize (as a
+    // floating point number), even though when you call getTimestamp() we
+    // return a long to match the standard Java UNIX time interface.
+    private double mTimestamp;
+
     // The 'transient' keyword means this will not be serialized - we want to
     // handle it manually so the values aren't wrapped with a "values" object.
     private transient Map<String, Object> mValues = new HashMap<String, Object>();
+
+    public static final Set<String> sRequiredFields = new HashSet<String>();
 
     public VehicleMessage() {
         timestamp();
@@ -31,13 +35,12 @@ public class VehicleMessage implements Parcelable {
     /**
      * @param timestamp timestamp as milliseconds since unix epoch
      */
-    public VehicleMessage(Long timestamp) throws InvalidMessageFieldsException {
+    public VehicleMessage(Long timestamp) {
         this();
         setTimestamp(timestamp);
     }
 
-    public VehicleMessage(Long timestamp, Map<String, Object> values)
-            throws InvalidMessageFieldsException {
+    public VehicleMessage(Long timestamp, Map<String, Object> values) {
         this(values);
         setTimestamp(timestamp);
     }
@@ -54,52 +57,11 @@ public class VehicleMessage implements Parcelable {
         setValues(values);
         if(contains(TIMESTAMP_KEY)) {
             Double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
-            mTimestamp = Double.valueOf((timestampSeconds * 1000.0)).longValue();
         }
     }
 
-    public void setTimestamp(Long timestamp)
-            throws InvalidMessageFieldsException {
-        if(timestamp == null) {
-            throw new InvalidMessageFieldsException(
-                    "Explicit timestmap cannot be null");
-        }
-        mTimestamp = timestamp;
-    }
-
-    public static VehicleMessage buildSubtype(Map<String, Object> values)
-            throws UnrecognizedMessageTypeException {
-        // Must check from most specific to least
-        VehicleMessage message = new VehicleMessage();
-        // TODO could clean this up with reflection since they all now have the
-        // same constructor
-        try {
-            if(CanMessage.containsAllRequiredFields(values)) {
-                message = new CanMessage(values);
-            } else if(DiagnosticResponse.containsAllRequiredFields(values)) {
-                message = new DiagnosticResponse(values);
-            } else if(DiagnosticRequest.containsAllRequiredFields(values)) {
-                message = new DiagnosticRequest(values);
-            } else if(Command.containsAllRequiredFields(values)) {
-                message = new Command(values);
-            } else if(CommandResponse.containsAllRequiredFields(values)) {
-                message = new CommandResponse(values);
-            } else if(SimpleVehicleMessage.containsAllRequiredFields(values)) {
-                message = new SimpleVehicleMessage(values);
-            } else if(NamedVehicleMessage.containsAllRequiredFields(values)) {
-                message = new NamedVehicleMessage(values);
-            } else {
-                Log.w(TAG, "Unrecognized combination of entries in values = " +
-                        values.toString());
-                message = new VehicleMessage(values);
-            }
-        } catch(InvalidMessageFieldsException e) {
-            throw new UnrecognizedMessageTypeException(
-                    "Malformed combination of entries in values = " +
-                    values.toString() + " (should not get here)");
-        }
-
-        return message;
+    public void setTimestamp(Long timestamp) {
+        mTimestamp = timestamp / 1000.0;
     }
 
     /**
@@ -114,7 +76,7 @@ public class VehicleMessage implements Parcelable {
      * epoch.
      */
     public long getTimestamp() {
-        return mTimestamp;
+        return Double.valueOf(mTimestamp * 1000.0).longValue();
     }
 
     protected void setValues(Map<String, Object> values) {
@@ -193,7 +155,7 @@ public class VehicleMessage implements Parcelable {
     protected void readMinimalFromParcel(Parcel in) {
         // Not reading the derived class name as it is already pulled out of the
         // Parcel by the CREATOR.
-        mTimestamp = in.readLong();
+        setTimestamp(in.readLong());
     }
 
     protected void readFromParcel(Parcel in) {

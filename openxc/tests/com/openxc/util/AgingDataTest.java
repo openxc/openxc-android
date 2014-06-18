@@ -1,16 +1,16 @@
 package com.openxc.util;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+
 import java.util.Date;
 
-import com.openxc.TestUtils;
-
-import com.openxc.units.Degree;
-
 import junit.framework.TestCase;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
-import com.openxc.util.AgingData;
+import com.openxc.TestUtils;
+import com.openxc.units.Degree;
 
 public class AgingDataTest extends TestCase {
     AgingData<Degree> data;

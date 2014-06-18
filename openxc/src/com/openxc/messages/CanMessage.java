@@ -1,15 +1,17 @@
 package com.openxc.messages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import android.os.Parcel;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
-import com.google.gson.annotations.SerializedName;
-import com.google.common.primitives.Bytes;
 import com.google.common.base.Objects;
+import com.google.common.primitives.Bytes;
+import com.google.gson.annotations.SerializedName;
 
 public class CanMessage extends VehicleMessage implements KeyedMessage {
     public static final String ID_KEY = "id";
@@ -25,18 +27,10 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     @SerializedName(DATA_KEY)
     private byte[] mData = new byte[8];
 
-    public CanMessage(Map<String, Object> values) throws InvalidMessageFieldsException {
-        super(values);
-        if(!containsAllRequiredFields(values)) {
-            throw new InvalidMessageFieldsException(
-                    "Missing keys for construction in values = " +
-                    values.toString());
-        }
-
-        setBusId(getValuesMap());
-        setId(getValuesMap());
-        setData(getValuesMap());
-    }
+    public static final String[] sRequiredFieldsValues = new String[] {
+            BUS_KEY, ID_KEY, DATA_KEY };
+    public static final Set<String> sRequiredFields = new HashSet<String>(
+            Arrays.asList(sRequiredFieldsValues));
 
     private void setBusId(Map<String, Object> values) {
         mBusId = ((Number) getValuesMap().remove(BUS_KEY)).intValue();
@@ -70,6 +64,15 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         setData(data);
     }
 
+    public CanMessage(int canBus, int id, byte[] data,
+            Map<String, Object> extraFields) {
+        super(extraFields);
+        mBusId = canBus;
+        mId = id;
+        setData(data);
+    }
+
+
     public int getBus() {
         return mBusId;
     }
@@ -88,9 +91,8 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         return new MessageKey(key);
     }
 
-    protected static boolean containsAllRequiredFields(Map<String, Object> map) {
-        return map.containsKey(BUS_KEY) && map.containsKey(ID_KEY)
-                && map.containsKey(DATA_KEY);
+    public static boolean containsRequiredFields(Set<String> fields) {
+        return fields.containsAll(sRequiredFields);
     }
 
     @Override

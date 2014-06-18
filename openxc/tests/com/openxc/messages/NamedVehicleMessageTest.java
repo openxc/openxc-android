@@ -1,11 +1,13 @@
 package com.openxc.messages;
 
-import java.util.HashMap;
-
-import org.junit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -16,11 +18,9 @@ import android.os.Parcel;
 @RunWith(RobolectricTestRunner.class)
 public class NamedVehicleMessageTest {
     NamedVehicleMessage message;
-    HashMap<String, Object> data;
 
     @Before
     public void setup() {
-        data = new HashMap<String, Object>();
         message = new NamedVehicleMessage("foo");
     }
 
@@ -29,55 +29,11 @@ public class NamedVehicleMessageTest {
         assertEquals("foo", message.getName());
     }
 
-    @Test
-    public void getValues() throws InvalidMessageFieldsException {
-        data.put("value", Double.valueOf(42));
-        message = new NamedVehicleMessage("foo", data);
-        Double value = (Double) message.get("value");
-        assertThat(value, notNullValue());
-        assertEquals(value.doubleValue(), 42, 0);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildFromEmptyFails() throws InvalidMessageFieldsException {
-        data = new HashMap<String, Object>();
-        message = new NamedVehicleMessage(data);
-    }
-
-    @Test(expected=InvalidMessageFieldsException.class)
-    public void buildFromIncompleteFails() throws InvalidMessageFieldsException {
-        data = new HashMap<String, Object>();
-        data.put("foo", "bar");
-        message = new NamedVehicleMessage(data);
-    }
-
-    @Test
-    public void extractsNameFromValues() throws InvalidMessageFieldsException {
-        data.put(NamedVehicleMessage.NAME_KEY, "bar");
-        message = new NamedVehicleMessage(data);
-        assertEquals("bar", message.getName());
-        assertFalse(message.contains(NamedVehicleMessage.NAME_KEY));
-    }
+    // TODO test storing extra values, comparing with values
 
     @Test
     public void sameEquals() {
         assertEquals(message, message);
-    }
-
-    @Test
-    public void sameNameAndValueEquals()
-            throws InvalidMessageFieldsException {
-        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
-        assertEquals(message, anotherMessage);
-    }
-
-    @Test
-    public void sameNameDifferentValueDoesntEqual()
-            throws InvalidMessageFieldsException {
-        data = new HashMap<String, Object>();
-        data.put("value", Double.valueOf(24));
-        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
-        assertThat(message, not(equalTo(anotherMessage)));
     }
 
     @Test
@@ -96,13 +52,13 @@ public class NamedVehicleMessageTest {
 
         VehicleMessage createdFromParcel =
                 VehicleMessage.CREATOR.createFromParcel(parcel);
-        assertTrue(createdFromParcel instanceof NamedVehicleMessage);
+        assertThat(createdFromParcel, instanceOf(NamedVehicleMessage.class));
         assertEquals(message, createdFromParcel);
     }
 
     @Test
     public void keyMatches() throws InvalidMessageFieldsException {
-        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo", data);
+        NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo");
         assertThat(message.getKey(), equalTo(anotherMessage.getKey()));
     }
 }
