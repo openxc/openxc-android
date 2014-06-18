@@ -1,7 +1,6 @@
 package com.openxc.messages;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +8,6 @@ import android.os.Parcel;
 
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.openxc.util.Range;
 
 public class DiagnosticRequest extends DiagnosticMessage {
 
@@ -40,22 +38,16 @@ public class DiagnosticRequest extends DiagnosticMessage {
     public DiagnosticRequest(int busId, int id, int mode, int pid) {
         super(busId, id, mode, pid);
     }
-
-    public DiagnosticRequest(int busId, int id, int mode, byte[] payload) {
-        super(busId, id, mode, payload);
-    }
-
-    public DiagnosticRequest(int busId, int id, int mode, int pid,
-            byte[] payload) {
-        super(busId, id, mode, pid, payload);
-    }
-
-    public DiagnosticRequest(int busId, int id, int mode, int pid,
-            byte[] payload, boolean multipleResponses, double frequency,
-            String name) {
-        super(busId, id, mode, pid, payload);
+    
+    public void setMultipleResponses(boolean multipleResponses) {
         mMultipleResponses = multipleResponses;
+    }
+    
+    public void setFrequency(Double frequency) {
         mFrequency = frequency;
+    }
+    
+    public void setName(String name) {
         mName = name;
     }
 

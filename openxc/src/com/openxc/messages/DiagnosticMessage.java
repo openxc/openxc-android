@@ -2,12 +2,8 @@ package com.openxc.messages;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import android.os.Parcel;
 
-import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.openxc.util.Range;
 
@@ -23,7 +19,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
     public static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
     public static final Range<Integer> MODE_RANGE = new Range<>(1, 0xff);
     // Note that this is a limit of the OpenXC Vi firmware at the moment - a
-    // diagnostic request can tehcnically have a much larger payload.
+    // diagnostic request can technically have a much larger payload.
     public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
 
     @SerializedName(BUS_KEY)
@@ -53,17 +49,13 @@ public abstract class DiagnosticMessage extends VehicleMessage
         this(busId, id, mode);
         mPid = pid;
     }
-
-    public DiagnosticMessage(int busId, int id, int mode, byte[] payload) {
-        this(busId, id, mode);
+    
+    public DiagnosticMessage(int busId, int id, int mode, int pid,
+            byte[] payload) {
+        this(busId, id, mode, pid);
         setPayload(payload);
     }
 
-    public DiagnosticMessage(int busId, int id, int mode, int pid,
-            byte[] payload) {
-        this(busId, id, mode, payload);
-        mPid = pid;
-    }
 
     public boolean hasPid() {
         return mPid != null;
@@ -88,8 +80,12 @@ public abstract class DiagnosticMessage extends VehicleMessage
     public byte[] getPayload() {
         return mPayload;
     }
+    
+    public void setPid(int pid) {
+        mPid = pid;
+    }
 
-    void setPayload(byte[] payload) {
+    public void setPayload(byte[] payload) {
         if(payload != null) {
             mPayload = new byte[payload.length];
             System.arraycopy(payload, 0, mPayload, 0, payload.length);
