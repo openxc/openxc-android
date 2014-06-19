@@ -137,7 +137,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
         }
 
         public String hexCodeString() {
-            return "0x" + Integer.toHexString(this.code);
+            return "0x" + Integer.toHexString(this.code).toUpperCase(Locale.US);
         }
 
         public String toDocumentationString() {
