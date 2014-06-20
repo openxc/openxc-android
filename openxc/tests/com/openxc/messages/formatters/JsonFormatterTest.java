@@ -63,6 +63,11 @@ public class JsonFormatterTest {
 
     @Test
     public void serializeCommandResponse() {
+        serializeDeserializeAndCheckEqual(new CommandResponse("foo"));
+    }
+
+    @Test
+    public void serializeCommandResponseWithMessage() {
         serializeDeserializeAndCheckEqual(new CommandResponse("foo", "bar"));
     }
 
