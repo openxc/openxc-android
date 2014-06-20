@@ -54,6 +54,12 @@ public class JsonFormatterTest {
     @Test
     public void serializeDiagnosticRequest() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        serializeDeserializeAndCheckEqual(request);
+    }
+
+    @Test
+    public void serializeDiagnosticRequestWithOptional() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
         request.setPayload(new byte[]{1,2,3,4});
         request.setMultipleResponses(false);
         request.setFrequency(2.0);
