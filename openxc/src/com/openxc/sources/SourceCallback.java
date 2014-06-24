@@ -3,7 +3,7 @@ package com.openxc.sources;
 import com.openxc.messages.VehicleMessage;
 
 /**
- * A receipient of measurement updates from a vehicle data source.
+ * A recipient of measurement updates from a vehicle data source.
  *
  * A VehicleDataSource is given a callback that implements this interface. When
  * new measurements arrive from the source, it uses the

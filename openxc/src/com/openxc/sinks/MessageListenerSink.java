@@ -30,9 +30,6 @@ import com.openxc.messages.VehicleMessage;
 public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MessageListenerSink";
 
-    //TODO is it necessary that these are hashmultimaps and not just e.g. hashmaps?
-    //Not sure how .put() checks equality of two KeyMatchers, may just be all single
-    //elemented arrays that each key maps to i.e. all keymatchers are "unique"
     private Multimap<KeyMatcher, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
     private Multimap<KeyMatcher, DiagnosticResponse.Listener>

@@ -39,8 +39,6 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         mNotificationThread.done();
     }
 
-    // TODO how is this going to work for other messages? what key to do they
-    // use to register?
     public boolean receive(VehicleMessage message)
             throws DataSinkException {
         super.receive(message);
