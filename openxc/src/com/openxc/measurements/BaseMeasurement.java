@@ -182,7 +182,13 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
                 Measurement measurement;
                 measurement = constructor.newInstance(simpleMessage.getValue());
-                measurement.setTimestamp(simpleMessage.getTimestamp());
+                
+                if (simpleMessage.getTimestamp() != null) {
+                    measurement.setTimestamp(simpleMessage.getTimestamp());
+                } /* else {
+                    TODO timestamp isn't nullable in measurement, should we do this?
+                    measurement.setTimestamp(0l);
+                  }*/
                 return measurement;
             } else {
                 try {

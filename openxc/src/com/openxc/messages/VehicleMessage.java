@@ -16,11 +16,12 @@ import com.google.common.base.Objects;
 public class VehicleMessage implements Parcelable {
     private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
+    private static final long sNoTimestampValue = 0l;
 
     // We store this as a double in the class so it's simpler to serialize (as a
     // floating point number), even though when you call getTimestamp() we
     // return a long to match the standard Java UNIX time interface.
-    private double mTimestamp;
+    private Double mTimestamp;
 
     // The 'transient' keyword means this will not be serialized - we want to
     // handle it manually so the values aren't wrapped with a "values" object.
@@ -28,9 +29,7 @@ public class VehicleMessage implements Parcelable {
 
     public static final Set<String> sRequiredFields = new HashSet<String>();
 
-    public VehicleMessage() {
-        timestamp();
-    }
+    public VehicleMessage() { }
 
     /**
      * @param timestamp timestamp as milliseconds since unix epoch
@@ -56,26 +55,34 @@ public class VehicleMessage implements Parcelable {
 
         setValues(values);
         if(contains(TIMESTAMP_KEY)) {
+            //TODO not used anywhere
             Double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
         }
     }
 
     public void setTimestamp(Long timestamp) {
-        mTimestamp = timestamp / 1000.0;
+        if (timestamp == null || timestamp == sNoTimestampValue) {
+            untimestamp();
+        } else {
+            mTimestamp = timestamp / 1000.0;
+        }
     }
 
     /**
      * @return true if the message has a valid timestamp.
      */
     public boolean isTimestamped() {
-        return getTimestamp() != 0;
+        return mTimestamp != null;
     }
 
     /**
      * @return the timestamp of the message in milliseconds since the UNIX
      * epoch.
      */
-    public long getTimestamp() {
+    public Long getTimestamp() {
+        if (!isTimestamped()) {
+            return null;
+        }
         return Double.valueOf(mTimestamp * 1000.0).longValue();
     }
 
@@ -108,12 +115,12 @@ public class VehicleMessage implements Parcelable {
      * serialized version.
      */
     public void untimestamp() {
-        mTimestamp = 0;
+        mTimestamp = null;
     }
 
-    private void timestamp() {
+    public void timestamp() {
         if(!isTimestamped()) {
-            mTimestamp = System.currentTimeMillis();
+            mTimestamp = Double.valueOf(System.currentTimeMillis());
         }
     }
 
@@ -136,7 +143,8 @@ public class VehicleMessage implements Parcelable {
         }
 
         final VehicleMessage other = (VehicleMessage) obj;
-        return mTimestamp == other.mTimestamp && mValues.equals(other.mValues);
+        return ((mTimestamp == null && other.mTimestamp == null) || 
+                mTimestamp == other.mTimestamp) && mValues.equals(other.mValues);
     }
 
     /* Write the derived class name and timestamp to the parcel, but not any of
@@ -144,7 +152,11 @@ public class VehicleMessage implements Parcelable {
      */
     protected void writeMinimalToParcel(Parcel out, int flags) {
         out.writeString(getClass().getName());
-        out.writeLong(getTimestamp());
+        if (isTimestamped()) {
+            out.writeLong(getTimestamp());
+        } else {
+            out.writeLong(sNoTimestampValue);
+        }
     }
 
     public void writeToParcel(Parcel out, int flags) {

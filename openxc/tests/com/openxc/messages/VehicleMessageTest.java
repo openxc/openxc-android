@@ -26,23 +26,17 @@ public class VehicleMessageTest {
         data.put("value", Integer.valueOf(42));
         message = new VehicleMessage(data);
     }
-
-    @Test
-    public void getsATimestamp() {
-        assertTrue(message.isTimestamped());
-        assertTrue(message.getTimestamp() > 0);
-    }
-
+    
     @Test
     public void hasAValue() {
         assertEquals(42, message.get("value"));
     }
 
     @Test
-    public void emptyMessageHasTimestamp() {
+    public void emptyMessageHasNoTimestamp() {
         message = new VehicleMessage();
         assertTrue(message.getValuesMap() != null);
-        assertTrue(message.isTimestamped());
+        assertTrue(!message.isTimestamped());
     }
 
     @Test
@@ -55,7 +49,7 @@ public class VehicleMessageTest {
     public void setManualTimestamp() {
         message = new VehicleMessage(Long.valueOf(10000), data);
         assertTrue(message.isTimestamped());
-        assertEquals(10000, message.getTimestamp());
+        assertEquals(Long.valueOf(10000), message.getTimestamp());
     }
 
     @Test
