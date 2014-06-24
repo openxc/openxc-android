@@ -16,7 +16,6 @@ import com.google.common.base.Objects;
 public class VehicleMessage implements Parcelable {
     private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
-    private static final long sNoTimestampValue = 0l;
 
     // We store this as a double in the class so it's simpler to serialize (as a
     // floating point number), even though when you call getTimestamp() we
@@ -61,7 +60,7 @@ public class VehicleMessage implements Parcelable {
     }
 
     public void setTimestamp(Long timestamp) {
-        if (timestamp == null || timestamp == sNoTimestampValue) {
+        if (timestamp == null) {
             untimestamp();
         } else {
             mTimestamp = timestamp / 1000.0;
@@ -152,11 +151,7 @@ public class VehicleMessage implements Parcelable {
      */
     protected void writeMinimalToParcel(Parcel out, int flags) {
         out.writeString(getClass().getName());
-        if (isTimestamped()) {
-            out.writeLong(getTimestamp());
-        } else {
-            out.writeLong(sNoTimestampValue);
-        }
+        out.writeValue(getTimestamp());
     }
 
     public void writeToParcel(Parcel out, int flags) {
@@ -167,7 +162,7 @@ public class VehicleMessage implements Parcelable {
     protected void readMinimalFromParcel(Parcel in) {
         // Not reading the derived class name as it is already pulled out of the
         // Parcel by the CREATOR.
-        setTimestamp(in.readLong());
+        setTimestamp((Long)in.readValue(Long.class.getClassLoader()));
     }
 
     protected void readFromParcel(Parcel in) {
