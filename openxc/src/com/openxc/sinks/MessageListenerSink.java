@@ -1,5 +1,6 @@
 package com.openxc.sinks;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +78,15 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     
     public void unregister(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
         mMeasurementListeners.remove(matcher, listener);
+    }
+    
+    public void unregister(DiagnosticResponse.Listener listener) {
+        for (KeyMatcher matcher : mDiagnosticListeners.keys()) {
+            Collection<DiagnosticResponse.Listener> listeners = mDiagnosticListeners.get(matcher);
+            if (listeners.contains(listener)) {
+                listeners.remove(listener);
+            }
+        }
     }
 
     @Override

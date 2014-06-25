@@ -385,6 +385,12 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 matcher);
         mNotifier.unregister(matcher, listener);
     }
+    
+    public void removeListener(DiagnosticResponse.Listener listener) {
+        Log.i(TAG, "Removing diagnostic listener " + listener
+                + " from all matchers.");
+        mNotifier.unregister(listener);
+    }
 
     /**
      * Add a new data source to the vehicle service.
