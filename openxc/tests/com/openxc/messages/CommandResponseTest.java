@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.HashMap;
+
 import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
@@ -33,6 +35,13 @@ public class CommandResponseTest {
     @Test
     public void getMessageReturnsMessage() {
         assertEquals(command, response.getCommand());
+    }
+
+    @Test
+    public void constructWithExtraValuesHasMessage() {
+        response = new CommandResponse(command, message,
+                new HashMap<String, Object>());
+        assertEquals(message, response.getMessage());
     }
 
     @Test

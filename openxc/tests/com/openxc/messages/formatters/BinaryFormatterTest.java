@@ -58,7 +58,7 @@ public class BinaryFormatterTest {
     }
 
     @Test
-    public void deserializeInvalidRetursNull() throws IOException,
+    public void deserializeInvalidReturnsNull() throws IOException,
            UnrecognizedMessageTypeException {
         InputStream input = new ByteArrayInputStream(new byte[]{0,1,2,3,4});
         assertThat(formatter.deserialize(input), nullValue());

@@ -94,10 +94,10 @@ public class JsonFormatterTest {
 
     @Test
     public void serializeNamedMessageWithValues() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("foo", "bar");
-        data.put("baz", 42.0);
-        serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo", data));
+        HashMap<String, Object> extras = new HashMap<>();
+        extras.put("foo", "bar");
+        extras.put("baz", 42.0);
+        serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo", extras));
     }
 
     @Test
@@ -106,11 +106,11 @@ public class JsonFormatterTest {
     }
 
     @Test
-    public void serializeVehicleMessageArbitraryFields() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("foo", "bar");
-        data.put("baz", 42.0);
-        VehicleMessage message = new VehicleMessage(data);
+    public void serializeWithExtras() {
+        HashMap<String, Object> extras = new HashMap<>();
+        extras.put("foo", "bar");
+        extras.put("baz", 42.0);
+        VehicleMessage message = new VehicleMessage(extras);
         serializeDeserializeAndCheckEqual(message);
     }
 

@@ -18,43 +18,44 @@ import android.os.Parcel;
 @RunWith(RobolectricTestRunner.class)
 public class VehicleMessageTest {
     VehicleMessage message;
-    HashMap<String, Object> data;
+    HashMap<String, Object> extras;
+    String key = "foo";
 
     @Before
     public void setup()  {
-        data = new HashMap<String, Object>();
-        data.put("value", Integer.valueOf(42));
-        message = new VehicleMessage(data);
+        extras = new HashMap<String, Object>();
+        extras.put(key, Integer.valueOf(42));
+        message = new VehicleMessage(extras);
     }
-    
+
     @Test
-    public void hasAValue() {
-        assertEquals(42, message.get("value"));
+    public void hasExtraValue() {
+        assertEquals(42, message.getExtras().get(key));
     }
 
     @Test
     public void emptyMessageHasNoTimestamp() {
         message = new VehicleMessage();
-        assertTrue(message.getValuesMap() != null);
+        assertTrue(message.getExtras() != null);
         assertTrue(!message.isTimestamped());
     }
 
     @Test
     public void emptyMessage() {
         message = new VehicleMessage(new HashMap<String, Object>());
-        assertTrue(message.getValuesMap() != null);
+        assertTrue(message.getExtras() != null);
     }
 
     @Test
     public void setManualTimestamp() {
-        message = new VehicleMessage(Long.valueOf(10000), data);
+        message = new VehicleMessage(Long.valueOf(10000), extras);
         assertTrue(message.isTimestamped());
         assertEquals(Long.valueOf(10000), message.getTimestamp());
     }
 
     @Test
     public void untimestamp() {
-        message = new VehicleMessage(Long.valueOf(10000), data);
+        message = new VehicleMessage(Long.valueOf(10000), extras);
         message.untimestamp();
         assertFalse(message.isTimestamped());
     }
@@ -67,24 +68,24 @@ public class VehicleMessageTest {
     @Test
     public void sameValuesEquals() {
         VehicleMessage anotherMessage = new VehicleMessage(
-                message.getTimestamp(), data);
+                message.getTimestamp(), extras);
         assertEquals(message, anotherMessage);
     }
 
     @Test
     public void differentTimestampNotEqual() {
         VehicleMessage anotherMessage = new VehicleMessage(
-                Long.valueOf(10000), data);
+                Long.valueOf(10000), extras);
         assertFalse(message.equals(anotherMessage));
     }
 
     @Test
     public void differentValuesNotEqual() {
-        data.put("another", "foo");
+        extras.put("another", "foo");
         // This also tests that the values map is copied and we don't have the
         // same reference from outside the class
         VehicleMessage anotherMessage = new VehicleMessage(
-                message.getTimestamp(), data);
+                message.getTimestamp(), extras);
         assertFalse(message.equals(anotherMessage));
     }
 

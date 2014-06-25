@@ -36,7 +36,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
     public DiagnosticResponse(int busId, int id, int mode, int pid,
             byte[] payload,
             boolean success) {
-        super(busId, id, mode, pid, payload);
+        super(busId, id, mode, pid);
+        setPayload(payload);
         mSuccess = success;
     }
 
@@ -45,11 +46,11 @@ public class DiagnosticResponse extends DiagnosticMessage {
             boolean success,
             NegativeResponseCode negativeResponseCode,
             float value,
-            HashMap<String, Object> extraValues) {
+            HashMap<String, Object> extras) {
         this(busId, id, mode, pid, payload, success);
+        setExtras(extras);
         mNegativeResponseCode = negativeResponseCode;
         mValue = value;
-        // TODO extra values?
     }
 
     public boolean getSuccess() {
@@ -75,6 +76,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
             .add("value", getValue())
             .add("negative_response_code", getNegativeResponseCode())
             .add("success", getSuccess())
+            .add("extras", getExtras())
             .toString();
     }
 

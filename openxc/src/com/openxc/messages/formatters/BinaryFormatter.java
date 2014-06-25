@@ -9,6 +9,7 @@ import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
@@ -80,10 +81,7 @@ public class BinaryFormatter {
             if(event == null) {
                 return new SimpleVehicleMessage(name, value);
             } else {
-                NamedVehicleMessage message = new NamedVehicleMessage(name);
-                message.put(SimpleVehicleMessage.VALUE_KEY, value);
-                message.put("event", event);
-                return message;
+               return new EventedSimpleVehicleMessage(name, value, event);
             }
         } else if(binaryMessage.hasRawMessage()) {
             BinaryMessages.RawMessage canMessage = binaryMessage.getRawMessage();

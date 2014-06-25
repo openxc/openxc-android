@@ -38,15 +38,15 @@ public class DiagnosticRequest extends DiagnosticMessage {
     public DiagnosticRequest(int busId, int id, int mode, int pid) {
         super(busId, id, mode, pid);
     }
-    
+
     public void setMultipleResponses(boolean multipleResponses) {
         mMultipleResponses = multipleResponses;
     }
-    
+
     public void setFrequency(Double frequency) {
         mFrequency = frequency;
     }
-    
+
     public void setName(String name) {
         mName = name;
     }
@@ -94,7 +94,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
             .add("multiple_responses", getMultipleResponses())
             .add("frequency", getFrequency())
             .add("name", getName())
-            .add("values", getValuesMap())
+            .add("extras", getExtras())
             .toString();
     }
 

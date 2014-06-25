@@ -9,40 +9,41 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class SimpleVehicleMessage extends NamedVehicleMessage {
-    public static final String VALUE_KEY = "value";
+public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
+    public static final String EVENT_KEY = "event";
 
     public static final String[] sRequiredFieldsValues = new String[] {
-            NAME_KEY, VALUE_KEY };
+            NAME_KEY, VALUE_KEY, EVENT_KEY };
     public static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
-    @SerializedName(VALUE_KEY)
-    private Object mValue;
+    @SerializedName(EVENT_KEY)
+    private Object mEvent;
 
-    public SimpleVehicleMessage(Long timestamp, String name, Object value) {
-        super(timestamp, name);
-        mValue = value;
+    public EventedSimpleVehicleMessage(Long timestamp, String name, Object value,
+            Object event) {
+        super(timestamp, name, value);
+        mEvent = event;
     }
 
-    public SimpleVehicleMessage(String name, Object value) {
-        this(null, name, value);
+    public EventedSimpleVehicleMessage(String name, Object value, Object event) {
+        this(null, name, value, event);
     }
 
-    public Object getValue() {
-        return mValue;
+    public Object getEvent() {
+        return mEvent;
     }
 
-    public Number getValueAsNumber() {
-        return (Number) mValue;
+    public Number getEventAsNumber() {
+        return (Number) mEvent;
     }
 
-    public String getValueAsString() {
-        return (String) mValue;
+    public String getEventAsString() {
+        return (String) mEvent;
     }
 
-    public Boolean getValueAsBoolean() {
-        return (Boolean) mValue;
+    public Boolean getEventAsBoolean() {
+        return (Boolean) mEvent;
     }
 
     public static boolean containsRequiredFields(Set<String> fields) {
@@ -55,8 +56,8 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             return false;
         }
 
-        final SimpleVehicleMessage other = (SimpleVehicleMessage) obj;
-        return mValue.equals(other.mValue);
+        final EventedSimpleVehicleMessage other = (EventedSimpleVehicleMessage) obj;
+        return mEvent.equals(other.mEvent);
     }
 
     @Override
@@ -65,6 +66,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
             .add("timestamp", getTimestamp())
             .add("name", getName())
             .add("value", getValue())
+            .add("event", getEvent())
             .add("extras", getExtras())
             .toString();
     }
@@ -72,18 +74,18 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeValue(getValue());
+        out.writeValue(getEvent());
     }
 
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        mValue = in.readValue(null);
+        mEvent = in.readValue(null);
     }
 
-    protected SimpleVehicleMessage(Parcel in)
+    protected EventedSimpleVehicleMessage(Parcel in)
             throws UnrecognizedMessageTypeException {
         readFromParcel(in);
     }
 
-    protected SimpleVehicleMessage() { }
+    protected EventedSimpleVehicleMessage() { }
 }

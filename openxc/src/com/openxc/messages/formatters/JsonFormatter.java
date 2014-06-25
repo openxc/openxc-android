@@ -55,7 +55,6 @@ public class JsonFormatter {
 
         Gson gson = new Gson();
         VehicleMessage message = new VehicleMessage();
-        // TODO how will they capture unmatched fields into a 'values' map?
         if(CanMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, CanMessage.class);
         } else if(DiagnosticResponse.containsRequiredFields(fields)) {
@@ -70,10 +69,11 @@ public class JsonFormatter {
             message = sGson.fromJson(root, SimpleVehicleMessage.class);
         } else if(NamedVehicleMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, NamedVehicleMessage.class);
+        } else if(fields.contains(VehicleMessage.EXTRAS_KEY)) {
+            message = sGson.fromJson(root, VehicleMessage.class);
         } else {
             Log.w(TAG, "Unrecognized combination of fields: " + fields.toString());
-            // TODO not sure how this is going to work
-            // message = sGson.fromJson(fields, VehicleMessage.class);
+            // TODO should really raise an exception here
         }
         return message;
     }

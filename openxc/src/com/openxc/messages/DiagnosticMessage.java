@@ -49,13 +49,6 @@ public abstract class DiagnosticMessage extends VehicleMessage
         this(busId, id, mode);
         mPid = pid;
     }
-    
-    public DiagnosticMessage(int busId, int id, int mode, int pid,
-            byte[] payload) {
-        this(busId, id, mode, pid);
-        setPayload(payload);
-    }
-
 
     public boolean hasPid() {
         return mPid != null;
@@ -80,7 +73,7 @@ public abstract class DiagnosticMessage extends VehicleMessage
     public byte[] getPayload() {
         return mPayload;
     }
-    
+
     public void setPid(int pid) {
         mPid = pid;
     }

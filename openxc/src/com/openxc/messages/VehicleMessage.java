@@ -11,20 +11,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class VehicleMessage implements Parcelable {
     private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
+    public static final String EXTRAS_KEY = "extras";
 
     // We store this as a double in the class so it's simpler to serialize (as a
     // floating point number), even though when you call getTimestamp() we
     // return a long to match the standard Java UNIX time interface.
     private Double mTimestamp;
 
-    // The 'transient' keyword means this will not be serialized - we want to
-    // handle it manually so the values aren't wrapped with a "values" object.
-    private transient Map<String, Object> mValues = new HashMap<String, Object>();
+    @SerializedName(EXTRAS_KEY)
+    private Map<String, Object> mExtras = new HashMap<String, Object>();
 
     public static final Set<String> sRequiredFields = new HashSet<String>();
 
@@ -34,35 +35,23 @@ public class VehicleMessage implements Parcelable {
      * @param timestamp timestamp as milliseconds since unix epoch
      */
     public VehicleMessage(Long timestamp) {
-        this();
         setTimestamp(timestamp);
     }
 
-    public VehicleMessage(Long timestamp, Map<String, Object> values) {
-        this(values);
+    public VehicleMessage(Long timestamp, Map<String, Object> extras) {
+        this(extras);
         setTimestamp(timestamp);
     }
 
     /**
-     * @param values A map of all fields and values in this message. If the map
-     * contains the key TIMESTAMP_KEY, its value is interpreted as a UNIX
-     * timestamp (seconds since the UNIX epoch, as a double with millisecond
-     * precision).
+     * @param extras A map of any extra data to attach to this message.
      */
-    public VehicleMessage(Map<String, Object> values) {
-        this();
-
-        setValues(values);
-        if(contains(TIMESTAMP_KEY)) {
-            //TODO not used anywhere
-            Double timestampSeconds = (Double) getValuesMap().remove(TIMESTAMP_KEY);
-        }
+    public VehicleMessage(Map<String, Object> extras) {
+        setExtras(extras);
     }
 
     public void setTimestamp(Long timestamp) {
-        if (timestamp == null) {
-            untimestamp();
-        } else {
+        if(timestamp != null) {
             mTimestamp = timestamp / 1000.0;
         }
     }
@@ -85,28 +74,14 @@ public class VehicleMessage implements Parcelable {
         return Double.valueOf(mTimestamp * 1000.0).longValue();
     }
 
-    protected void setValues(Map<String, Object> values) {
-        if(values != null) {
-            mValues = new HashMap<String, Object>(values);
+    public void setExtras(Map<String, Object> extras) {
+        if(extras != null) {
+            mExtras = new HashMap<String, Object>(extras);
         }
     }
 
-    public Map<String, Object> getValuesMap() {
-        return mValues;
-    }
-
-    public Object get(String key) {
-        return mValues.get(key);
-    }
-
-    public boolean contains(String key) {
-        return mValues.containsKey(key);
-    }
-
-    public void put(String key, Object value) {
-        if(key != null && value != null) {
-            mValues.put(key, value);
-        }
+    public Map<String, Object> getExtras() {
+        return mExtras;
     }
 
     /**
@@ -123,11 +98,16 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
+    // TODO create casting convenience functions as neccessary
+    public SimpleVehicleMessage asSimpleMessage() {
+        return (SimpleVehicleMessage) this;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("timestamp", getTimestamp())
-            .add("values", getValuesMap())
+            .add("extras", getExtras())
             .toString();
     }
 
@@ -142,32 +122,21 @@ public class VehicleMessage implements Parcelable {
         }
 
         final VehicleMessage other = (VehicleMessage) obj;
-        return ((mTimestamp == null && other.mTimestamp == null) || 
-                mTimestamp == other.mTimestamp) && mValues.equals(other.mValues);
-    }
-
-    /* Write the derived class name and timestamp to the parcel, but not any of
-     * the values.
-     */
-    protected void writeMinimalToParcel(Parcel out, int flags) {
-        out.writeString(getClass().getName());
-        out.writeValue(getTimestamp());
+        return Objects.equal(mTimestamp, other.mTimestamp) &&
+                Objects.equal(mExtras, other.mExtras);
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        writeMinimalToParcel(out, flags);
-        out.writeMap(getValuesMap());
-    }
-
-    protected void readMinimalFromParcel(Parcel in) {
-        // Not reading the derived class name as it is already pulled out of the
-        // Parcel by the CREATOR.
-        setTimestamp((Long)in.readValue(Long.class.getClassLoader()));
+        out.writeString(getClass().getName());
+        out.writeValue(getTimestamp());
+        out.writeMap(getExtras());
     }
 
     protected void readFromParcel(Parcel in) {
-        readMinimalFromParcel(in);
-        in.readMap(mValues, null);
+        // Not reading the derived class name as it is already pulled out of the
+        // Parcel by the CREATOR.
+        setTimestamp((Long)in.readValue(Long.class.getClassLoader()));
+        in.readMap(mExtras, null);
     }
 
     public static final Parcelable.Creator<VehicleMessage> CREATOR =

@@ -36,6 +36,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
         return mNamedMessages.containsKey(name);
     }
 
+    // TODO this should be by Key, not Name. then we can use it for everything
     public NamedVehicleMessage getNamedMessage(String name) {
         return mNamedMessages.get(name);
     }

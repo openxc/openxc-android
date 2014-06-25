@@ -119,9 +119,14 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
 
         Location location = new Location(LocationManager.GPS_PROVIDER);
         try {
-            location.setLatitude(((Number)getNamedMessage(Latitude.ID).get("value")).doubleValue());
-            location.setLongitude(((Number)getNamedMessage(Longitude.ID).get("value")).doubleValue());
-            location.setSpeed(((Number)(getNamedMessage(VehicleSpeed.ID).get("value"))).floatValue());
+            SimpleVehicleMessage message = getNamedMessage(Latitude.ID).asSimpleMessage();
+            location.setLatitude(message.getValueAsNumber().doubleValue());
+
+            message = getNamedMessage(Longitude.ID).asSimpleMessage();
+            location.setLongitude(message.getValueAsNumber().doubleValue());
+
+            message = getNamedMessage(VehicleSpeed.ID).asSimpleMessage();
+            location.setSpeed(message.getValueAsNumber().floatValue());
         } catch(ClassCastException e) {
             Log.e(TAG, "Expected a Number, but got something " +
                     "else -- not updating location", e);

@@ -22,12 +22,13 @@ public class Command extends VehicleMessage implements KeyedMessage {
     @SerializedName(COMMAND_KEY)
     private String mCommand;
 
-    public Command(String command) {
+    public Command(String command, Map<String, Object> extras) {
+        super(extras);
         mCommand = command;
     }
 
-    public Command(String command, Map<String, Object> extraValues) {
-        super(extraValues);
+    public Command(String command) {
+        this(command, null);
         mCommand = command;
     }
 
@@ -60,7 +61,7 @@ public class Command extends VehicleMessage implements KeyedMessage {
         return Objects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("command", getCommand())
-            .add("values", getValuesMap())
+            .add("extras", getExtras())
             .toString();
     }
 
