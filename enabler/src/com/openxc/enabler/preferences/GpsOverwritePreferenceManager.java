@@ -4,17 +4,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.openxc.enabler.R;
-import com.openxc.sinks.MockedLocationSink;
+import com.openxc.VehicleLocationProvider;
 
 /**
  * Enable or disable overwriting native GPS measurements with those from the
  * vehicle.
  *
- * @see MockedLocationSink#setOverwritingStatus
+ * @see VehicleLocationProvider#setOverwritingStatus
  */
 public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     private final static String TAG = "GpsOverwritePreferenceManager";
-    private MockedLocationSink mMockedLocationSink;
+    private VehicleLocationProvider mVehicleLocationProvider;
 
     public GpsOverwritePreferenceManager(Context context) {
         super(context);
@@ -23,8 +23,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     public void close() {
         super.close();
         if(getVehicleManager() != null){
-            mMockedLocationSink.stop();
-            mMockedLocationSink = null;
+            mVehicleLocationProvider.stop();
+            mVehicleLocationProvider = null;
         }
     }
 
@@ -47,10 +47,10 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
 
     private void setNativeGpsOverwriteStatus(boolean enabled) {
         Log.i(TAG, "Setting native GPS overwriting to " + enabled);
-        if(mMockedLocationSink == null) {
-            mMockedLocationSink = new MockedLocationSink(getContext(),
+        if(mVehicleLocationProvider == null) {
+            mVehicleLocationProvider = new VehicleLocationProvider(getContext(),
                     getVehicleManager());
         }
-        mMockedLocationSink.setOverwritingStatus(enabled);
+        mVehicleLocationProvider.setOverwritingStatus(enabled);
     }
 }
