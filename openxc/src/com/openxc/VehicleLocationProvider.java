@@ -1,4 +1,4 @@
-package com.openxc.sinks;
+package com.openxc;
 
 import java.lang.reflect.Method;
 
@@ -19,19 +19,19 @@ import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
 
 /**
- * Propagate vehicle location updates through the Android location interface.
+ * Propagate GPS and vehicle speed updates from OpenXC to the normal Android
+ * location system.
  *
- * If we have at least latitude, longitude and vehicle speed from
- * the vehicle, we send out a mocked location for the
- * LocationManager.GPS_PROVIDER and VEHICLE_LOCATION_PROVIDER
- * providers.
+ * If we have at least latitude, longitude and vehicle speed from the vehicle,
+ * we send out a new location for the LocationManager.GPS_PROVIDER and
+ * VEHICLE_LOCATION_PROVIDER providers in the Android location service.
  *
  * Developers can either use the standard Android location framework
- * with mocked locations enabled, or the specific OpenXC
- * Latitude/Longitude measurements.
+ * with vehicle locations enabled in OpenXC, or the specific OpenXC
+ * Latitude/Longitude measurements directly.
  */
-public class MockedLocationSink implements Measurement.Listener {
-    public final static String TAG = "MockedLocationSink";
+public class VehicleLocationProvider implements Measurement.Listener {
+    public final static String TAG = "VehicleLocationProvider";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
     private VehicleManager mVehicleManager;
@@ -39,7 +39,7 @@ public class MockedLocationSink implements Measurement.Listener {
     private boolean mOverwriteNativeStatus;
     private boolean mNativeGpsOverridden;
 
-    public MockedLocationSink(Context context, VehicleManager vehicleManager) {
+    public VehicleLocationProvider(Context context, VehicleManager vehicleManager) {
         mVehicleManager = vehicleManager;
         mLocationManager = (LocationManager) context.getSystemService(
                 Context.LOCATION_SERVICE);
@@ -58,7 +58,19 @@ public class MockedLocationSink implements Measurement.Listener {
         }
     }
 
+    public void stop() {
+        if(mVehicleManager != null) {
+            try {
+                mVehicleManager.removeListener(Latitude.class, this);
+                mVehicleManager.removeListener(Longitude.class, this);
+                mVehicleManager.removeListener(VehicleSpeed.class, this);
+            } catch(VehicleServiceException e) {
+            }
+        }
+    }
+
     public void receive(Measurement measurement) {
+        // Not using the value, but using it to trigger polling for an update
         updateLocation();
     }
 

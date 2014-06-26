@@ -1,7 +1,6 @@
 package com.openxc.interfaces.network;
 
 import junit.framework.Assert;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 

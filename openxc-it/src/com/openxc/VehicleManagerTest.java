@@ -1,11 +1,7 @@
 package com.openxc;
 
-import com.openxc.VehicleManager;
-
 import android.content.Intent;
-
 import android.test.ServiceTestCase;
-
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 

@@ -19,7 +19,7 @@ public class BaseVehicleDataSink implements VehicleDataSink {
             new ConcurrentHashMap<String, NamedVehicleMessage>();
 
     /**
-     * Receive a message, deserialized to primatives.
+     * Receive a message.
      *
      * Children of this class can call super.receive() if they need to store
      * copies of received named messages to access via the get(String) method.

@@ -35,7 +35,6 @@ import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.sinks.MessageListenerSink;
-import com.openxc.sinks.MockedLocationSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.RemoteListenerSource;
@@ -98,7 +97,7 @@ import com.openxc.sources.VehicleDataSource;
  */
 public class VehicleManager extends Service implements DataPipeline.Operator {
     public final static String VEHICLE_LOCATION_PROVIDER =
-            MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
+            VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
@@ -171,7 +170,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     @Override
-    public boolean onUnbind(Intent intent){
+    public boolean onUnbind(Intent intent) {
         Log.i(TAG, "Service unbinding in response to " + intent);
         return true;
     }
@@ -249,18 +248,18 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 UnrecognizedMeasurementTypeException {
         return VehicleInterfaceManagerUtils.send(mInterfaces, command);
     }
-    
+
     public void request(DiagnosticRequest request) {
         mNotifier.record(request);
         //TODO is this how to actually send it?
         VehicleInterfaceManagerUtils.send(mInterfaces, request);
     }
 
-    
-    //TODO the methods below would ideally be condensed into 3 or so to 
-    //eliminate this overloading; however, it doesn't make much sense 
-    //to force a DiagnosticResponse.Listener into Measurement.Listener (or possible), 
-    //and that type has to stick around for backwards compatibility
+
+    //TODO the methods below would ideally be condensed into 3 or so to
+    //eliminate this overloading; however, it doesn't make much sense
+    //to force a DiagnosticResponse.Listener into Measurement.Listener (or
+    //possible), and that type has to stick around for backwards compatibility
     /**
      * Register to receive asynchronous updates for a specific Measurement type.
      *
@@ -286,33 +285,41 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             Measurement.Listener listener) throws VehicleServiceException,
                 UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
-        
-        NamedVehicleMessage msg = new NamedVehicleMessage(BaseMeasurement.getIdForClass(measurementType));
+
+        NamedVehicleMessage msg = new NamedVehicleMessage(
+                BaseMeasurement.getIdForClass(measurementType));
         addListener(msg, listener);
     }
-    
-    public void addListener(KeyedMessage keyedMessage, Measurement.Listener listener) {
+
+    public void addListener(KeyedMessage keyedMessage,
+            Measurement.Listener listener) {
         addListener(KeyMatcher.buildExactMatcher(keyedMessage), listener);
     }
-    
+
     public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
         mNotifier.register(matcher, listener);
     }
-    
+
     /**
-     * Register a single listener for multiple requests. Calls 
-     * {@link #addListener(DiagnosticRequest, DiagnosticResponse.Listener)} on all requests in the list.
+     * Register a single listener for multiple requests. Calls
+     * {@link #addListener(DiagnosticRequest, DiagnosticResponse.Listener)} on
+     * all requests in the list.
+     *
+     * TODO this seems like it belongs in the application to me
+     *
      * @param requests List of DiagnosticRequests to listen to a response for
-     * @param listener A DiagnosticResponse.Listener instance 
+     * @param listener A DiagnosticResponse.Listener instance
      */
-    public void addListeners(List<DiagnosticRequest> requests, DiagnosticResponse.Listener listener) {
+    public void addListeners(List<DiagnosticRequest> requests,
+            DiagnosticResponse.Listener listener) {
         for (DiagnosticRequest request : requests) {
             addListener(request, listener);
         }
     }
-    
+
     /**
-     * Register to receive asynchronous updates for a specific Diagnostic Response.
+     * Register to receive asynchronous updates for a specific Diagnostic
+     * Response.
      *
      * Use this method to register an object implementing the
      * DiagnosticResponse.Listener interface to receive real-time updates
@@ -322,8 +329,12 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * VehicleManager.removeListener(...) when your activity or service closes
      * and no longer requires updates.
      *
+     * TODO I'd like figure out how we can use the same LIstener type for all
+     * types of messages - they should all be able to accept VechileMessage and
+     * infer the type
+     *
      * @param request The diagnosticRequest to listen to a response for
-     * @param listener A DiagnosticResponse.Listener instance 
+     * @param listener A DiagnosticResponse.Listener instance
      * @throws VehicleServiceException if the listener is unable to be
      *      unregistered with the library internals - an exceptional situation
      *      that shouldn't occur.
@@ -332,16 +343,19 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      */
     public void addListener(DiagnosticRequest request,
             DiagnosticResponse.Listener listener) {
-        Log.i(TAG, "Adding Diagnostic Listener " + listener + " for request " + request);
-        
+        Log.i(TAG, "Adding Diagnostic Listener " + listener + " for request " +
+                request);
+
         addListener(request, listener);
     }
-    
-    public void addListener(KeyedMessage keyedMessage, DiagnosticResponse.Listener listener) {
+
+    public void addListener(KeyedMessage keyedMessage,
+            DiagnosticResponse.Listener listener) {
         addListener(KeyMatcher.buildExactMatcher(keyedMessage), listener);
     }
-    
-    public void addListener(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
+
+    public void addListener(KeyMatcher matcher,
+            DiagnosticResponse.Listener listener) {
         mNotifier.register(matcher, listener);
     }
 
@@ -369,7 +383,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 measurementType);
         mNotifier.unregister(measurementType, listener);
     }
-    
+
     /**
      * Unregister a previously registered Diagnostic.Listener instance.
      *
@@ -380,12 +394,13 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @param matcher The KeyMatcher previously registered with the listener
      * @param listener An object implementing the Diagnostic.Listener
      */
-    public void removeListener(KeyMatcher matcher, DiagnosticResponse.Listener listener){
+    public void removeListener(KeyMatcher matcher,
+            DiagnosticResponse.Listener listener) {
         Log.i(TAG, "Removing diagnostic listener " + listener + " from " +
                 matcher);
         mNotifier.unregister(matcher, listener);
     }
-    
+
     public void removeListener(DiagnosticResponse.Listener listener) {
         Log.i(TAG, "Removing diagnostic listener " + listener
                 + " from all matchers.");
@@ -537,22 +552,20 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
-    /**
-     * Return a list of all sources active in the system, suitable for
+    /** Return a list of all sources active in the system, suitable for
      * displaying in a status view.
      *
-     * This method is solely for being able to peek into the system to see what's
-     * active, which is why it returns strings instead of the actual source
-     * objects. We don't want applications to be able to modify the sources
-     * through this method.
+     * This method is solely for being able to peek into the system to see
+     * what's active, which is why it returns strings instead of the actual
+     * source objects. We don't want applications to be able to modify the
+     * sources through this method.
      *
      * @return A list of the names and status of all sources.
      */
-    public List<String> getSourceSummaries() {
-        ArrayList<String> sources = new ArrayList<String>();
-        for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
-            sources.add(source.toString());
-        }
+    public List<String> getSourceSummaries() { ArrayList<String> sources = new
+        ArrayList<String>(); for(VehicleDataSource source :
+                mRemoteOriginPipeline.getSources()) {
+            sources.add(source.toString()); }
 
         for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
             sources.add(source.toString());
@@ -598,17 +611,17 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * @return A list of the InterfaceTypes actively connected.
      */
-    public List<InterfaceType> getActiveSourceTypes(){
+    public List<InterfaceType> getActiveSourceTypes() {
         ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
 
         for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
-            if(source.isConnected()){
+            if(source.isConnected()) {
                 sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
         }
 
         for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
-            if(source.isConnected()){
+            if(source.isConnected()) {
                 sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
         }

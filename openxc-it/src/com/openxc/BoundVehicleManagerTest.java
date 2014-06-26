@@ -3,7 +3,6 @@ package com.openxc;
 import java.net.URI;
 
 import junit.framework.Assert;
-
 import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
