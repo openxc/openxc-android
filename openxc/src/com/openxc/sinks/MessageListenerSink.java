@@ -122,10 +122,12 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         try {
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
-            for (KeyMatcher matcher : mMeasurementListeners.keys()) {
-                if (matcher.matches(message)) {
-                    for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
-                        listener.receive(measurement);
+            synchronized(mMeasurementListeners) {
+                for (KeyMatcher matcher : mMeasurementListeners.keys()) {
+                    if (matcher.matches(message)) {
+                        for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
+                            listener.receive(measurement);
+                        }
                     }
                 }
             }

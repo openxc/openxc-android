@@ -1,5 +1,6 @@
 package com.openxc.sinks;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
@@ -79,11 +80,15 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
 
                     // This iterator is weakly consistent, so we don't need the lock
                     Iterator<VehicleMessage> it = mNotifications.iterator();
+                    CopyOnWriteArrayList<VehicleMessage> deleted =
+                            new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
                     while(it.hasNext()) {
                         VehicleMessage message = it.next();
                         propagateMessage(message);
-                        it.remove();
+                        deleted.add(message);
                     }
+                    mNotifications.removeAll(deleted);
+                                        
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +
                             "item for notification -- likely shutting down");
@@ -94,11 +99,15 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
 
                 // This iterator is weakly consistent, so we don't need the lock
                 Iterator<VehicleMessage> it = mNotifications.iterator();
+                CopyOnWriteArrayList<VehicleMessage> deleted =
+                        new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
                 while(it.hasNext()) {
                     VehicleMessage message = it.next();
                     propagateMessage(message);
-                    it.remove();
+                    deleted.add(message);
                 }
+                mNotifications.removeAll(deleted);
+
             }
             Log.d(TAG, "Stopped message notifier");
         }
