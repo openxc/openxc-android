@@ -23,7 +23,7 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     public void close() {
         super.close();
         if(getVehicleManager() != null){
-            getVehicleManager().removeSink(mMockedLocationSink);
+            mMockedLocationSink.stop();
             mMockedLocationSink = null;
         }
     }
@@ -48,8 +48,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     private void setNativeGpsOverwriteStatus(boolean enabled) {
         Log.i(TAG, "Setting native GPS overwriting to " + enabled);
         if(mMockedLocationSink == null) {
-            mMockedLocationSink = new MockedLocationSink(getContext());
-            getVehicleManager().addSink(mMockedLocationSink);
+            mMockedLocationSink = new MockedLocationSink(getContext(),
+                    getVehicleManager());
         }
         mMockedLocationSink.setOverwritingStatus(enabled);
     }

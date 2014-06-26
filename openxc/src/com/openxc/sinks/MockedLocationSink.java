@@ -8,11 +8,15 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import com.google.common.base.Objects;
+
+import com.openxc.VehicleManager;
+import com.openxc.NoValueException;
+import com.openxc.remote.VehicleServiceException;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.VehicleMessage;
 
 /**
  * Propagate vehicle location updates through the Android location interface.
@@ -26,32 +30,36 @@ import com.openxc.messages.VehicleMessage;
  * with mocked locations enabled, or the specific OpenXC
  * Latitude/Longitude measurements.
  */
-public class MockedLocationSink extends ContextualVehicleDataSink {
+public class MockedLocationSink implements Measurement.Listener {
     public final static String TAG = "MockedLocationSink";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
 
+    private VehicleManager mVehicleManager;
     private LocationManager mLocationManager;
     private boolean mOverwriteNativeStatus;
     private boolean mNativeGpsOverridden;
 
-    public MockedLocationSink(Context context) {
-        super(context);
-        mLocationManager = (LocationManager) getContext().getSystemService(
+    public MockedLocationSink(Context context, VehicleManager vehicleManager) {
+        mVehicleManager = vehicleManager;
+        mLocationManager = (LocationManager) context.getSystemService(
                 Context.LOCATION_SERVICE);
         setupMockLocations();
+
+        try {
+            mVehicleManager.addListener(Latitude.class, this);
+            mVehicleManager.addListener(Longitude.class, this);
+            mVehicleManager.addListener(VehicleSpeed.class, this);
+        } catch(VehicleServiceException e) {
+            Log.d(TAG, "Unable to register for GPS from vehicle," +
+                    "mocked location may not work");
+        } catch(UnrecognizedMeasurementTypeException e) {
+            // TODO this is dumb that we know these measurements are good, but
+            // we still could get an exception
+        }
     }
 
-    public boolean receive(VehicleMessage message) throws DataSinkException {
-        super.receive(message);
-        if(message instanceof SimpleVehicleMessage) {
-            SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
-            if(simpleMessage.getName().equals(Latitude.ID) ||
-                    simpleMessage.getName().equals(Longitude.ID)) {
-                updateLocation();
-                return true;
-            }
-        }
-        return false;
+    public void receive(Measurement measurement) {
+        updateLocation();
     }
 
     /**
@@ -104,46 +112,41 @@ public class MockedLocationSink extends ContextualVehicleDataSink {
     }
 
     private void updateLocation() {
-        if(mLocationManager == null ||
-                !containsNamedMessage(Latitude.ID) ||
-                !containsNamedMessage(Longitude.ID) ||
-                !containsNamedMessage(VehicleSpeed.ID)) {
-            return;
-        }
-
-        // Only enable overwriting the built-in Android GPS provider if we
-        // actually receive a GPS update from the vehicle. This is to avoid
-        // killing GPS just by having the OpenXC app installed (because it's
-        // always running the serivce in the background).
-        overwriteNativeProvider();
-
-        Location location = new Location(LocationManager.GPS_PROVIDER);
         try {
-            SimpleVehicleMessage message = getNamedMessage(Latitude.ID).asSimpleMessage();
-            location.setLatitude(message.getValueAsNumber().doubleValue());
+            Latitude latitude = (Latitude) mVehicleManager.get(Latitude.class);
+            Longitude longitude = (Longitude) mVehicleManager.get(
+                    Longitude.class);
+            VehicleSpeed speed = (VehicleSpeed) mVehicleManager.get(
+                    VehicleSpeed.class);
 
-            message = getNamedMessage(Longitude.ID).asSimpleMessage();
-            location.setLongitude(message.getValueAsNumber().doubleValue());
+            // Only enable overwriting the built-in Android GPS provider if we
+            // actually receive a GPS update from the vehicle. This is to avoid
+            // killing GPS just by having the OpenXC app installed (because it's
+            // always running the serivce in the background).
+            overwriteNativeProvider();
 
-            message = getNamedMessage(VehicleSpeed.ID).asSimpleMessage();
-            location.setSpeed(message.getValueAsNumber().floatValue());
-        } catch(ClassCastException e) {
-            Log.e(TAG, "Expected a Number, but got something " +
-                    "else -- not updating location", e);
-        }
+            Location location = new Location(LocationManager.GPS_PROVIDER);
+            location.setLatitude(latitude.getValue().doubleValue());
+            location.setLongitude(longitude.getValue().doubleValue());
+            location.setSpeed((float) speed.getValue().doubleValue());
 
-        makeLocationComplete(location);
-        try {
-            if(mOverwriteNativeStatus) {
+            makeLocationComplete(location);
+            try {
+                if(mOverwriteNativeStatus) {
+                    mLocationManager.setTestProviderLocation(
+                            LocationManager.GPS_PROVIDER, location);
+                }
+                location.setProvider(VEHICLE_LOCATION_PROVIDER);
                 mLocationManager.setTestProviderLocation(
-                        LocationManager.GPS_PROVIDER, location);
+                        VEHICLE_LOCATION_PROVIDER, location);
+            } catch(SecurityException e) {
+                Log.w(TAG, "Unable to use mocked locations, " +
+                        "insufficient privileges", e);
             }
-            location.setProvider(VEHICLE_LOCATION_PROVIDER);
-            mLocationManager.setTestProviderLocation(
-                    VEHICLE_LOCATION_PROVIDER, location);
-        } catch(SecurityException e) {
-            Log.w(TAG, "Unable to use mocked locations, " +
-                    "insufficient privileges", e);
+        } catch(NoValueException e) {
+        } catch(UnrecognizedMeasurementTypeException e) {
+            // TODO this is dumb that we know these measurements are good, but
+            // we still could get an exception
         }
     }
 
