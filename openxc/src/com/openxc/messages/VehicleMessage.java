@@ -22,6 +22,7 @@ public class VehicleMessage implements Parcelable {
     // We store this as a double in the class so it's simpler to serialize (as a
     // floating point number), even though when you call getTimestamp() we
     // return a long to match the standard Java UNIX time interface.
+    @SerializedName(TIMESTAMP_KEY)
     private Double mTimestamp;
 
     @SerializedName(EXTRAS_KEY)
