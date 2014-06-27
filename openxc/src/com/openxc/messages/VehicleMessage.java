@@ -95,7 +95,7 @@ public class VehicleMessage implements Parcelable {
 
     public void timestamp() {
         if(!isTimestamped()) {
-            mTimestamp = Double.valueOf(System.currentTimeMillis());
+            mTimestamp = Double.valueOf(System.currentTimeMillis() / 1000.0);
         }
     }
 

@@ -1,9 +1,12 @@
 package com.openxc.messages;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import org.junit.Before;
@@ -51,6 +54,17 @@ public class VehicleMessageTest {
         message = new VehicleMessage(Long.valueOf(10000), extras);
         assertTrue(message.isTimestamped());
         assertEquals(Long.valueOf(10000), message.getTimestamp());
+    }
+
+    @Test
+    public void setAutomaticTriggeredTimestamp() {
+        message = new VehicleMessage();
+        message.timestamp();
+        assertTrue(message.isTimestamped());
+        Date date = new Date(message.getTimestamp());
+        // Catch a regression where we didn't divide by 1000 before storing
+        // timestamp as a double.
+        assertThat(date.getYear(), equalTo(new Date().getYear()));
     }
 
     @Test

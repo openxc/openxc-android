@@ -68,10 +68,7 @@ public class DataPipeline implements SourceCallback {
         if(message == null) {
             return;
         }
-        
-        //TODO good spot?
-        message.timestamp();
-        
+
         if(message instanceof NamedVehicleMessage) {
             NamedVehicleMessage namedMessage = (NamedVehicleMessage) message;
             mNamedMessages.put(namedMessage.getName(), namedMessage);
