@@ -2,10 +2,10 @@ package com.openxc.measurements;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+
 import com.openxc.NoValueException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -13,6 +13,8 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
+
+import android.util.Log;
 
 /**
  * The BaseMeasurement is the base implementation of the Measurement, and
@@ -136,7 +138,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     public static Class<? extends Measurement>
             getClassForId(String measurementId)
             throws UnrecognizedMeasurementTypeException {
-        Class<? extends Measurement> result = sMeasurementIdToClass.get(measurementId);
+        Class<? extends Measurement> result = sMeasurementIdToClass.get(
+                measurementId);
         if(result == null) {
             throw new UnrecognizedMeasurementTypeException(
                     "Didn't have a measurement with ID " + measurementId +
@@ -164,8 +167,10 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         }
 
         try {
+            // TODO support EventedSimpleVehicleMessage
             if(message instanceof SimpleVehicleMessage) {
-                SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+                SimpleVehicleMessage simpleMessage =
+                        (SimpleVehicleMessage) message;
                 Class<?> valueClass = simpleMessage.getValue().getClass();
                 if(valueClass == Double.class || valueClass == Integer.class) {
                     valueClass = Number.class;
@@ -174,37 +179,24 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
                 try {
                     constructor = measurementType.getConstructor(valueClass);
                 } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(measurementType +
+                    throw new UnrecognizedMeasurementTypeException(
+                            measurementType +
                             " doesn't have the expected constructor, " +
                            measurementType + "(" +
                            valueClass + ")");
                 }
 
-                Measurement measurement;
-                measurement = constructor.newInstance(simpleMessage.getValue());
-                
+                Measurement measurement = constructor.newInstance(
+                        simpleMessage.getValue());
                 if (simpleMessage.getTimestamp() != null) {
                     measurement.setTimestamp(simpleMessage.getTimestamp());
-                } /* else {
-                    TODO timestamp isn't nullable in measurement, should we do this?
-                    measurement.setTimestamp(0l);
-                  }*/
+                }
                 return measurement;
             } else {
-                try {
-                    constructor = measurementType.getConstructor(Map.class);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(measurementType +
-                            " doesn't have a constructor accepting a Map");
-                }
-
-                Measurement measurement = null;
                 // TODO do we allow creating measurements from a generic values
                 // map? need to make it public if so. i'm thinking that th
                 // emeasurement should subclass simplevehiclemessage
-                // measurement = constructor.newInstance(message.getValuesMap());
-                // measurement.setTimestamp(message.getTimestamp());
-                return measurement;
+                return null;
             }
         } catch(InstantiationException e) {
             throw new UnrecognizedMeasurementTypeException(

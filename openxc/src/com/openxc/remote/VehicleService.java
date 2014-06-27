@@ -107,6 +107,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             Log.i(TAG, "Moving service to foreground.");
 
             try {
+                // TODO any way to not tie this to an Activity from the Enabler?
                 Intent intent = new Intent(this,
                         Class.forName("com.openxc.enabler.OpenXcEnablerActivity"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -124,9 +125,8 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 startForeground(SERVICE_NOTIFICATION_ID,
                         notificationBuilder.build());
             } catch (ClassNotFoundException e) {
-                // TODO Special action if enabler is not installed
-
-                Log.e(TAG, "Could not find OpenXcEnablerActivity class.", e);
+                // This may happen if you are running the instrumentation tests
+                // and it's not an error
             }
             mForeground = true;
         }
