@@ -155,6 +155,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 Log.w(TAG, "Unable to use mocked locations, " +
                         "insufficient privileges - make sure mock locations " +
                         "are allowed in device settings", e);
+            } catch(IllegalArgumentException e) {
+                Log.w(TAG, "Unable to set test provider location", e);
             }
         } catch(NoValueException e) {
         } catch(UnrecognizedMeasurementTypeException e) {

@@ -43,6 +43,20 @@ public class VehicleLocationProviderTest
                     VehicleService.class));
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
+        try {
+            // Remove it so that the VehicleLocationProvider re-adds it with fresh
+            // location history
+            mLocationManager.removeTestProvider(
+                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
+        } catch(IllegalArgumentException e) {
+        }
+
+        try {
+            // Remove it so that the VehicleLocationProvider re-adds it with fresh
+            // location history
+            mLocationManager.removeTestProvider(LocationManager.GPS_PROVIDER);
+        } catch(IllegalArgumentException e) {
+        }
     }
 
     // Due to bugs and or general crappiness in the ServiceTestCase, you will
@@ -58,10 +72,6 @@ public class VehicleLocationProviderTest
         manager.addSource(source);
         locationProvider = new VehicleLocationProvider(getContext(), manager);
         locationProvider.setOverwritingStatus(true);
-        // Remove it so that the VehicleLocationProvider re-adds it with fresh
-        // location history
-        mLocationManager.removeTestProvider(
-                VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
     }
 
     @Override
@@ -122,6 +132,20 @@ public class VehicleLocationProviderTest
     }
 
     @MediumTest
+    public void testOverwritesNativeGps() {
+        prepareServices();
+        source.inject(Latitude.ID, latitude);
+        source.inject(Longitude.ID, longitude);
+        source.inject(VehicleSpeed.ID, speed);
+        Location location = mLocationManager.getLastKnownLocation(
+                LocationManager.GPS_PROVIDER);
+        assertThat(location, notNullValue());
+        assertThat(location.getLatitude(), equalTo(latitude));
+        assertThat(location.getLongitude(), equalTo(longitude));
+        assertThat(location.getSpeed(), equalTo(speed.floatValue()));
+    }
+
+    @MediumTest
     public void testNotOverwrittenWhenDisabled() {
         prepareServices();
         locationProvider.setOverwritingStatus(false);
@@ -129,7 +153,7 @@ public class VehicleLocationProviderTest
         source.inject(Longitude.ID, longitude);
         source.inject(VehicleSpeed.ID, speed);
         Location location = mLocationManager.getLastKnownLocation(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
+                LocationManager.GPS_PROVIDER);
         assertThat(location, nullValue());
     }
 
