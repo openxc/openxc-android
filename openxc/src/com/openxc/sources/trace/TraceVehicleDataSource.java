@@ -143,6 +143,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      */
     public void run() {
         while(mRunning) {
+            // TODO should we wait to start until the callback is set?
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader;
             try {
