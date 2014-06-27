@@ -20,6 +20,7 @@ import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
@@ -90,6 +91,12 @@ public class JsonFormatterTest {
     @Test
     public void serializeSimpleMessage() {
         serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", "bar"));
+    }
+
+    @Test
+    public void serializeEventedSimpleMessage() {
+        serializeDeserializeAndCheckEqual(new EventedSimpleVehicleMessage(
+                    "foo", "bar", "baz"));
     }
 
     @Test

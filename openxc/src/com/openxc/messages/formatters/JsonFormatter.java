@@ -25,6 +25,7 @@ import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
@@ -65,6 +66,8 @@ public class JsonFormatter {
             message = sGson.fromJson(root, Command.class);
         } else if(CommandResponse.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, CommandResponse.class);
+        } else if(EventedSimpleVehicleMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, EventedSimpleVehicleMessage.class);
         } else if(SimpleVehicleMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, SimpleVehicleMessage.class);
         } else if(NamedVehicleMessage.containsRequiredFields(fields)) {
