@@ -60,7 +60,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         }
 
         public synchronized void done() {
-            Log.d(TAG, "Stopping notification thread");
+            Log.d(TAG, "Stopping message notifier");
             mRunning = false;
             // A context switch right can cause a race condition if we
             // used take() instead of poll(): when mRunning is set to
@@ -71,6 +71,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         }
 
         public void run() {
+            Log.d(TAG, "Starting notification thread");
             while(isRunning()) {
                 mNotificationsLock.lock();
                 try {
@@ -88,11 +89,11 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                         deleted.add(message);
                     }
                     mNotifications.removeAll(deleted);
-                                        
+
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +
                             "item for notification -- likely shutting down");
-                    return;
+                    break;
                 } finally {
                     mNotificationsLock.unlock();
                 }
@@ -107,9 +108,8 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                     deleted.add(message);
                 }
                 mNotifications.removeAll(deleted);
-
             }
-            Log.d(TAG, "Stopped message notifier");
+            Log.d(TAG, "Stopped notification thread");
         }
     }
 }
