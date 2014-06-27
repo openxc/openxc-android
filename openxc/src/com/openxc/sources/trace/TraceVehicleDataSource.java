@@ -155,12 +155,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             String line = null;
             long startingTime = System.nanoTime();
             // In the future may want to support binary traces
-            JsonFormatter formatter = new JsonFormatter();
             try {
                 while(mRunning && (line = reader.readLine()) != null) {
                     VehicleMessage measurement;
                     try {
-                        measurement = formatter.deserialize(line);
+                        measurement = JsonFormatter.deserialize(line);
                     } catch(UnrecognizedMessageTypeException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
