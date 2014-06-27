@@ -121,6 +121,18 @@ public class VehicleLocationProviderTest
         assertThat(location.getSpeed(), equalTo(speed.floatValue()));
     }
 
+    @MediumTest
+    public void testNotOverwrittenWhenDisabled() {
+        prepareServices();
+        locationProvider.setOverwritingStatus(false);
+        source.inject(Latitude.ID, latitude);
+        source.inject(Longitude.ID, longitude);
+        source.inject(VehicleSpeed.ID, speed);
+        Location location = mLocationManager.getLastKnownLocation(
+                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
+        assertThat(location, nullValue());
+    }
+
     private class TestSource extends BaseVehicleDataSource {
         private SourceCallback callback;
 
