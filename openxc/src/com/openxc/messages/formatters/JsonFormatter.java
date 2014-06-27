@@ -44,7 +44,7 @@ public class JsonFormatter {
         try {
             JsonParser parser = new JsonParser();
             root = parser.parse(data).getAsJsonObject();
-        } catch(JsonSyntaxException e) {
+        } catch(JsonSyntaxException | IllegalStateException e) {
             throw new UnrecognizedMessageTypeException(
                     "Unable to parse JSON from \"" + data + "\": " + e);
         }
