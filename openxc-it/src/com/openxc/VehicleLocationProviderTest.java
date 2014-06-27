@@ -139,6 +139,13 @@ public class VehicleLocationProviderTest
         public void inject(String name, Object value) {
             if(callback != null) {
                 callback.receive(new SimpleVehicleMessage(name, value));
+                // If we don't pause here the background thread that processes
+                // the injected measurement may not get to run before we make
+                // our assertions
+                // TODO make this less of an integration test, e.g. use the
+                // datapipeline which doesn't have this background thread to
+                // worry about.
+                TestUtils.pause(10);
             }
         }
 
