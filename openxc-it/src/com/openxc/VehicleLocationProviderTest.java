@@ -43,18 +43,30 @@ public class VehicleLocationProviderTest
                     VehicleService.class));
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
-        TestUtils.pause(50);
+    }
+
+    // Due to bugs and or general crappiness in the ServiceTestCase, you will
+    // run into many unexpected problems if you start the service in setUp - see
+    // this blog post for more details:
+    // http://convales.blogspot.de/2012/07/never-start-or-shutdown-service-in.html
+    private void prepareServices() {
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);
         manager = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         manager.waitUntilBound();
+        manager.addSource(source);
         locationProvider = new VehicleLocationProvider(getContext(), manager);
+        locationProvider.setOverwritingStatus(true);
+        // Remove it so that the VehicleLocationProvider re-adds it with fresh
+        // location history
+        mLocationManager.removeTestProvider(
+                VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
     }
 
     @Override
     protected void tearDown() throws Exception {
-        if(source != null) {
+        if(locationProvider != null) {
             locationProvider.stop();
         }
         super.tearDown();
@@ -62,6 +74,7 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testNoLocationMessages() {
+        prepareServices();
         assertThat(mLocationManager.getLastKnownLocation(
                     VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
                 nullValue());
@@ -69,6 +82,7 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testNoLocationWithOnlyLatitude() {
+        prepareServices();
         source.inject(Latitude.ID, latitude);
         assertThat(mLocationManager.getLastKnownLocation(
                     VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
@@ -77,6 +91,7 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testNoLocationWithOnlyLongitude() {
+        prepareServices();
         source.inject(Longitude.ID, longitude);
         assertThat(mLocationManager.getLastKnownLocation(
                     VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
@@ -85,6 +100,7 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testNoLocationWithOnlySpeed() {
+        prepareServices();
         source.inject(VehicleSpeed.ID, speed);
         assertThat(mLocationManager.getLastKnownLocation(
                     VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
@@ -93,6 +109,7 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testLocationWhenAllPresent() {
+        prepareServices();
         source.inject(Latitude.ID, latitude);
         source.inject(Longitude.ID, longitude);
         source.inject(VehicleSpeed.ID, speed);

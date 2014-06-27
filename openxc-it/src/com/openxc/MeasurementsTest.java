@@ -2,6 +2,8 @@ package com.openxc;
 
 import java.net.URI;
 
+import junit.framework.Assert;
+
 import android.content.Intent;
 import android.os.RemoteException;
 import android.test.ServiceTestCase;
@@ -25,6 +27,7 @@ import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.sources.trace.TraceVehicleDataSource;
+import com.openxc.sources.DataSourceException;
 
 public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
@@ -38,23 +41,34 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
         traceUri = TestUtils.copyToStorage(getContext(), R.raw.tracejson,
                 "trace.json");
+    }
 
+    // Due to bugs and or general crappiness in the ServiceTestCase, you will
+    // run into many unexpected problems if you start the service in setUp - see
+    // this blog post for more details:
+    // http://convales.blogspot.de/2012/07/never-start-or-shutdown-service-in.html
+    private void prepareServices() {
         Intent startIntent = new Intent();
         startIntent.setClass(getContext(), VehicleManager.class);
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        source = new TraceVehicleDataSource(getContext(), traceUri);
-        service.addSource(source);
+        try {
+            source = new TraceVehicleDataSource(getContext(), traceUri);
+            service.addSource(source);
+        } catch(DataSourceException e) {
+            Assert.fail();
+        }
         TestUtils.pause(100);
     }
 
     @Override
     protected void tearDown() throws Exception {
-        service.removeSource(source);
+        if(service != null) {
+            service.removeSource(source);
+        }
         super.tearDown();
     }
 
@@ -65,6 +79,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     @MediumTest
     public void testGetSpeed() throws UnrecognizedMeasurementTypeException,
             NoValueException, RemoteException, InterruptedException {
+        prepareServices();
         VehicleSpeed measurement = (VehicleSpeed)
                 service.get(VehicleSpeed.class);
         checkReceivedMeasurement(measurement);
@@ -75,6 +90,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetSteeringWheelAngle()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         SteeringWheelAngle measurement = (SteeringWheelAngle)
                 service.get(SteeringWheelAngle.class);
         checkReceivedMeasurement(measurement);
@@ -85,6 +101,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetTorqueAtTransmission()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         TorqueAtTransmission measurement = (TorqueAtTransmission)
                 service.get(TorqueAtTransmission.class);
         checkReceivedMeasurement(measurement);
@@ -95,6 +112,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetOdometer()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         Odometer measurement = (Odometer) service.get(Odometer.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 124141.0);
@@ -104,6 +122,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetFuelLevel()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         FuelLevel measurement = (FuelLevel)
                 service.get(FuelLevel.class);
         checkReceivedMeasurement(measurement);
@@ -114,6 +133,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetFuelConsumed()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         FuelConsumed measurement = (FuelConsumed)
                 service.get(FuelConsumed.class);
         checkReceivedMeasurement(measurement);
@@ -124,6 +144,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetAcceleratorPedalPosition()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         AcceleratorPedalPosition measurement = (AcceleratorPedalPosition)
                 service.get(AcceleratorPedalPosition.class);
         checkReceivedMeasurement(measurement);
@@ -133,6 +154,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     @MediumTest
     public void testGetLatitude() throws UnrecognizedMeasurementTypeException,
             NoValueException, RemoteException, InterruptedException {
+        prepareServices();
         Latitude measurement = (Latitude) service.get(Latitude.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 45.123);
@@ -141,6 +163,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     @MediumTest
     public void testGetLongitude() throws UnrecognizedMeasurementTypeException,
             NoValueException, RemoteException, InterruptedException {
+        prepareServices();
         Longitude measurement = (Longitude) service.get(Longitude.class);
         checkReceivedMeasurement(measurement);
         assertEquals(measurement.getValue().doubleValue(), 120.442);
@@ -150,6 +173,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetWindshieldWiperStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         WindshieldWiperStatus measurement = (WindshieldWiperStatus)
                 service.get(WindshieldWiperStatus.class);
         checkReceivedMeasurement(measurement);
@@ -160,6 +184,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetBrakePedalStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         BrakePedalStatus measurement = (BrakePedalStatus)
             service.get(BrakePedalStatus.class);
         checkReceivedMeasurement(measurement);
@@ -170,6 +195,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetHeadlampStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         HeadlampStatus measurement = (HeadlampStatus)
             service.get(HeadlampStatus.class);
         checkReceivedMeasurement(measurement);
@@ -180,6 +206,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetHighBeamStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         HighBeamStatus measurement = (HighBeamStatus)
             service.get(HighBeamStatus.class);
         checkReceivedMeasurement(measurement);
@@ -190,6 +217,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetTransmissionGearPosition()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         TransmissionGearPosition measurement = (TransmissionGearPosition)
                 service.get(TransmissionGearPosition.class);
         checkReceivedMeasurement(measurement);
@@ -201,6 +229,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     public void testGetVehicleDoorStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
+        prepareServices();
         VehicleDoorStatus event = (VehicleDoorStatus)
                 service.get(VehicleDoorStatus.class);
         checkReceivedMeasurement(event);
