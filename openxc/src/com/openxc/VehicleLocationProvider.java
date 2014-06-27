@@ -153,7 +153,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
                         VEHICLE_LOCATION_PROVIDER, location);
             } catch(SecurityException e) {
                 Log.w(TAG, "Unable to use mocked locations, " +
-                        "insufficient privileges", e);
+                        "insufficient privileges - make sure mock locations " +
+                        "are allowed in device settings", e);
             }
         } catch(NoValueException e) {
         } catch(UnrecognizedMeasurementTypeException e) {
@@ -172,7 +173,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
                         LocationManager.GPS_PROVIDER, true);
             } catch(SecurityException e) {
                 Log.w(TAG, "Unable to use mocked locations, " +
-                        "insufficient privileges", e);
+                        "insufficient privileges - make sure mock locations " +
+                        "are allowed in device settings", e);
             }
         }
     }
@@ -187,8 +189,9 @@ public class VehicleLocationProvider implements Measurement.Listener {
             mLocationManager.setTestProviderEnabled(
                     VEHICLE_LOCATION_PROVIDER, true);
         } catch(SecurityException e) {
-            Log.w(TAG, "Unable to use mocked locations, " +
-                    "insufficient privileges", e);
+                Log.w(TAG, "Unable to use mocked locations, " +
+                        "insufficient privileges - make sure mock locations " +
+                        "are allowed in device settings", e);
             mLocationManager = null;
         }
     }
