@@ -17,6 +17,3 @@ script:
   - mvn clean package -pl enabler
   - mvn test -pl openxc
   - mvn test -pl openxc-it
-notifications:
-  hipchat:
-    - secure: "SYNsoAV2/tvC7l4IdJxBHjczthLuuOCJ3zruu55MN3EYomf25tlRed8msuVU\nv7n8sYWcPjiUI5lbHzQTKU0PT1+arlBMwRhPMG719ID3BcmufXqVys4yzn+K\nAL3YaDONClJRaNbuaqVpz7l97jvsN/VGYbKCGvymiGf6sKu6T4Y="
