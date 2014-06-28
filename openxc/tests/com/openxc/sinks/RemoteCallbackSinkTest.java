@@ -1,20 +1,30 @@
 package com.openxc.sinks;
 
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import org.junit.Test;
+import org.junit.Before;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+
+import org.robolectric.annotation.Config;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.Robolectric;
 
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceListener;
 
-public class RemoteCallbackSinkTest extends AndroidTestCase {
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+public class RemoteCallbackSinkTest {
     RemoteCallbackSink notifier;
     VehicleServiceListener listener;
     String messageId = "the_measurement";
     String receivedId = null;
 
-    @Override
+    @Before
     public void setUp() {
         notifier = new RemoteCallbackSink();
         listener = new VehicleServiceListener.Stub() {
@@ -24,14 +34,14 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         };
     }
 
-    @SmallTest
+    @Test
     public void testRegister() {
         assertEquals(0, notifier.getListenerCount());
         notifier.register(listener);
         assertEquals(1, notifier.getListenerCount());
     }
 
-    @SmallTest
+    @Test
     public void testUnregisterInvalid() {
         // this just shouldn't explode, it should ignore it...or should it?
         // failing silently is usually a bad thing
@@ -40,7 +50,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         assertEquals(0, notifier.getListenerCount());
     }
 
-    @SmallTest
+    @Test
     public void testUnregisterValid() {
         notifier.register(listener);
         assertEquals(1, notifier.getListenerCount());
@@ -48,7 +58,7 @@ public class RemoteCallbackSinkTest extends AndroidTestCase {
         assertEquals(0, notifier.getListenerCount());
     }
 
-    @SmallTest
+    @Test
     public void testReceiveCorrectId() throws DataSinkException {
         notifier.register(listener);
         assertNull(receivedId);

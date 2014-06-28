@@ -1,5 +1,16 @@
 package com.openxc.sinks;
 
+import org.junit.runner.RunWith;
+import org.junit.Test;
+import org.junit.Before;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+import org.robolectric.annotation.Config;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.Robolectric;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -9,14 +20,13 @@ import junit.framework.Assert;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
-
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.util.FileOpener;
 
-public class FileRecorderSinkTest extends AndroidTestCase {
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+public class FileRecorderSinkTest {
     FileRecorderSink sink;
     FileOpener opener;
     StringWriter outputString;
@@ -24,14 +34,14 @@ public class FileRecorderSinkTest extends AndroidTestCase {
     String measurementId = "measurement";
     String value = "value";
 
-    @Override
+    @Before
     public void setUp() throws IOException, DataSinkException {
         outputString = new StringWriter();
         opener = new MockFileOpener();
         sink = new FileRecorderSink(opener);
     }
 
-    @SmallTest
+    @Test
     public void testReceiveValueOnly() throws DataSinkException {
         assertTrue(outputString.toString().indexOf(measurementId) == -1);
         sink.receive(new SimpleVehicleMessage(measurementId, value));
@@ -40,7 +50,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
         assertTrue(outputString.toString().indexOf(value) != -1);
     }
 
-    @SmallTest
+    @Test
     public void testOutputFormat() throws JSONException, DataSinkException {
         VehicleMessage measurement = new SimpleVehicleMessage(measurementId, value);
         sink.receive(measurement);
@@ -52,7 +62,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
         assertTrue(message.getString("value").equals(value));
     }
 
-    @SmallTest
+    @Test
     public void testCounts() throws JSONException, DataSinkException {
         VehicleMessage measurement = new SimpleVehicleMessage("first", true);
         sink.receive(measurement);
@@ -76,7 +86,7 @@ public class FileRecorderSinkTest extends AndroidTestCase {
         assertTrue(records[3].indexOf("second") != -1);
     }
 
-    @SmallTest
+    @Test
     public void testStop() throws DataSinkException {
         VehicleMessage measurement = new SimpleVehicleMessage("first", true);
         assertTrue(sink.receive(measurement));

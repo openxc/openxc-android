@@ -1,6 +1,5 @@
 package com.openxc.interfaces.bluetooth;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
