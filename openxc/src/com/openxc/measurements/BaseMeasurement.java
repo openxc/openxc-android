@@ -35,6 +35,8 @@ import android.util.Log;
  * Measurement. If you know of a better way, please say so.
  */
 public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
+    private static final String TAG = BaseMeasurement.class.toString();
+
     private AgingData<TheUnit> mValue;
     private AgingData<Unit> mEvent;
     private Range<TheUnit> mRange;
@@ -51,6 +53,13 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
      * @param value the TheUnit this measurement represents.
      */
     public BaseMeasurement(TheUnit value) {
+        if(!sMeasurementIdToClass.inverse().containsKey(this.getClass())) {
+            try {
+                cacheMeasurementId(this.getClass());
+            } catch(UnrecognizedMeasurementTypeException e) {
+                Log.w(TAG, "Incomplete BaseMeasurement subclass", e);
+            }
+        }
         mValue = new AgingData<TheUnit>(value);
     }
 
