@@ -18,6 +18,8 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
+import com.openxc.TestSource;
+import com.openxc.TestSink;
 
 public class DataPipelineTest {
     DataPipeline pipeline;
@@ -127,32 +129,5 @@ public class DataPipelineTest {
         pipeline.receive(new VehicleMessage(data));
         NamedVehicleMessage message = pipeline.get("foo");
         assertThat(message, nullValue());
-    }
-
-    private class TestSource extends BaseVehicleDataSource {
-        private SourceCallback callback;
-
-        public void sendTestMessage() {
-            if(callback != null) {
-                callback.receive(new SimpleVehicleMessage("message", "value"));
-            }
-        }
-
-        public void setCallback(SourceCallback theCallback) {
-            callback = theCallback;
-        }
-
-        public void stop() {
-            callback = null;
-        }
-    }
-
-    private class TestSink extends BaseVehicleDataSink {
-        public boolean received = false;
-
-        public boolean receive(VehicleMessage measurement) {
-            received = true;
-            return true;
-        }
     }
 }
