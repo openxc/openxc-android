@@ -6,7 +6,13 @@ android:
     - sysimg-19
     - build-tools-19.0.1
     - extra-android-support
+    # TODO SDK tools v22.6.4 has a bug, once Travis updates to v23 this will work
+    # I tried updating the tools manually but that wipes the Travis-specific
+    # scripts.
     - extra-android-m2repository
+  licenses:
+    - android-sdk-license-5be876d5
+    - android-sdk-license-598b93a6
 before_install:
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 install:
