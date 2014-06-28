@@ -1,23 +1,30 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import junit.framework.TestCase;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.NoRangeException;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
 
-public class MeasurementTest extends TestCase {
+public class MeasurementTest {
     TestMeasurement measurement;
     Range<Meter> range;
 
-    @Override
+    @Before
     public void setUp() {
         try {
             BaseMeasurement.getIdForClass(TestMeasurement.class);
@@ -29,24 +36,29 @@ public class MeasurementTest extends TestCase {
         measurement = new TestMeasurement(new Meter(10.1), range);
     }
 
-    public void testGet() {
+    @Test
+    public void getDouble() {
         assertThat(measurement.getValue().doubleValue(), equalTo(10.1));
     }
 
-    public void testHasRange() {
+    @Test
+    public void hasRange() {
         assertTrue(measurement.hasRange());
     }
 
-    public void testGetRange() throws NoRangeException {
+    @Test
+    public void getRange() throws NoRangeException {
         assertThat(measurement.getRange(), equalTo(range));
     }
 
-    public void testAgeIsPositive() {
+    @Test
+    public void ageIsPositive() {
         TestUtils.pause(10);
         assertThat(measurement.getAge(), greaterThan(Long.valueOf(0)));
     }
 
-    public void testEquality() {
+    @Test
+    public void equality() {
         TestMeasurement anotherMeasurement =
             new TestMeasurement(new Meter(10.1), range);
         TestMeasurement inequalMeasurement  =
@@ -55,13 +67,26 @@ public class MeasurementTest extends TestCase {
         assertFalse(measurement.equals(inequalMeasurement));
     }
 
-    public void testToVehicleMessage() {
+    @Test
+    public void toVehicleMessage() {
         measurement = new TestMeasurement(10.1);
         VehicleMessage message = measurement.toVehicleMessage();
         assertTrue(message instanceof SimpleVehicleMessage);
-        SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+        SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
         assertEquals(simpleMessage.getName(), TestMeasurement.ID);
         assertEquals(simpleMessage.getValue(), measurement.getValue().doubleValue());
+    }
+
+    @Test
+    public void eventedToVehicleMessage() {
+        VehicleDoorStatus doorMeasurement = new VehicleDoorStatus(
+                VehicleDoorStatus.DoorId.DRIVER, true);
+        VehicleMessage message = doorMeasurement.toVehicleMessage();
+        assertTrue(message instanceof EventedSimpleVehicleMessage);
+        EventedSimpleVehicleMessage eventedMessage = message.asEventedMessage();
+        assertEquals(eventedMessage.getName(), VehicleDoorStatus.ID);
+        assertEquals(eventedMessage.getValue(), doorMeasurement.getValue().toString());
+        assertEquals(eventedMessage.getEvent(), doorMeasurement.getEvent().booleanValue());
     }
 
     public static class TestMeasurement extends BaseMeasurement<Meter> {

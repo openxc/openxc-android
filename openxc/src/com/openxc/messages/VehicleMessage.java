@@ -99,9 +99,12 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
-    // TODO create casting convenience functions as neccessary
     public SimpleVehicleMessage asSimpleMessage() {
         return (SimpleVehicleMessage) this;
+    }
+
+    public EventedSimpleVehicleMessage asEventedMessage() {
+        return (EventedSimpleVehicleMessage) this;
     }
 
     @Override

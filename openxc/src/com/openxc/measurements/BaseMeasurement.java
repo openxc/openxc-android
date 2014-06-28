@@ -9,6 +9,7 @@ import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
@@ -35,6 +36,7 @@ import android.util.Log;
  */
 public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     private AgingData<TheUnit> mValue;
+    private AgingData<Unit> mEvent;
     private Range<TheUnit> mRange;
     private static BiMap<String, Class<? extends Measurement>>
             sMeasurementIdToClass;
@@ -50,6 +52,11 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
      */
     public BaseMeasurement(TheUnit value) {
         mValue = new AgingData<TheUnit>(value);
+    }
+
+    public BaseMeasurement(TheUnit value, Unit event) {
+        this(value);
+        mEvent = new AgingData<Unit>(event);
     }
 
     /**
@@ -93,14 +100,35 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mValue.getValue();
     }
 
+    public boolean hasEvent() {
+        return mEvent != null;
+    }
+
+    public Object getEvent() {
+        if(hasEvent()) {
+            return mEvent.getValue();
+        }
+        return null;
+    }
+
     public Object getSerializedValue() {
         return getValue().getSerializedValue();
     }
 
+    public Object getSerializedEvent() {
+        return getEvent();
+    }
+
     public VehicleMessage toVehicleMessage() {
         VehicleMessage message = null;
-        message = new SimpleVehicleMessage(mValue.getTimestamp(),
-                getGenericName(), getSerializedValue());
+        if(hasEvent()) {
+            message = new EventedSimpleVehicleMessage(mValue.getTimestamp(),
+                    getGenericName(), getSerializedValue(),
+                    getSerializedEvent());
+        } else {
+            message = new SimpleVehicleMessage(mValue.getTimestamp(),
+                    getGenericName(), getSerializedValue());
+        }
         return message;
     }
 
@@ -231,6 +259,14 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
         if(!other.getValue().equals(getValue())) {
+            return false;
+        }
+
+        if(other.getEvent() != null && getEvent() != null) {
+            if(!other.getEvent().equals(getEvent())) {
+                return false;
+            }
+        } else if(other.getEvent() != getEvent()) {
             return false;
         }
 

@@ -23,6 +23,7 @@ import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleButtonEvent;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
@@ -226,6 +227,20 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
+    public void testGetVehicleButtonEvent()
+            throws UnrecognizedMeasurementTypeException, NoValueException,
+            RemoteException, InterruptedException {
+        prepareServices();
+        VehicleButtonEvent event = (VehicleButtonEvent)
+                service.get(VehicleButtonEvent.class);
+        checkReceivedMeasurement(event);
+        assertEquals(event.getValue().enumValue(),
+                VehicleButtonEvent.ButtonId.OK);
+        assertEquals(event.getEvent().enumValue(),
+                VehicleButtonEvent.ButtonAction.PRESSED);
+    }
+
+    @MediumTest
     public void testGetVehicleDoorStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException,
             RemoteException, InterruptedException {
@@ -235,8 +250,7 @@ public class MeasurementsTest extends ServiceTestCase<VehicleManager> {
         checkReceivedMeasurement(event);
         assertEquals(event.getValue().enumValue(),
                 VehicleDoorStatus.DoorId.DRIVER);
-        // TODO
-        // assertEquals(event.getEvent().booleanValue(), true);
+        assertEquals(event.getEvent().booleanValue(), true);
     }
 }
 
