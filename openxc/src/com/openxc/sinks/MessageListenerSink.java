@@ -57,14 +57,14 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 } catch(DataSinkException e) {
                     Log.w(TAG, "Sink could't receive measurement", e);
                 }
-            } 
+            }
         }
-    }  
+    }
 
     public void register(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
         mDiagnosticListeners.put(matcher, listener);
     }
-    
+
     public void record(DiagnosticRequest request) {
         // Sending a request with the same key as a previous
         // one cancels the last one, so just overwrite it
@@ -73,13 +73,20 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void unregister(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
-        mMeasurementListeners.remove(measurementType, listener);
+        // TODO hack alert! need to refactor this
+        try {
+        mMeasurementListeners.remove(KeyMatcher.buildExactMatcher(
+                    new NamedVehicleMessage(
+                        BaseMeasurement.getIdForClass(measurementType))),
+                listener);
+        } catch(UnrecognizedMeasurementTypeException e) {
+        }
     }
-    
+
     public void unregister(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
         mMeasurementListeners.remove(matcher, listener);
     }
-    
+
     public void unregister(DiagnosticResponse.Listener listener) {
         for (KeyMatcher matcher : mDiagnosticListeners.keys()) {
             Collection<DiagnosticResponse.Listener> listeners = mDiagnosticListeners.get(matcher);

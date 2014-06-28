@@ -1,4 +1,4 @@
-package com.openxc;
+package com.openxc.sinks;
 
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.messages.VehicleMessage;

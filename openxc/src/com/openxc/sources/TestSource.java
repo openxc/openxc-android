@@ -1,4 +1,4 @@
-package com.openxc;
+package com.openxc.sources;
 
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
@@ -22,8 +22,10 @@ public class TestSource extends BaseVehicleDataSource {
             // TODO make this less of an integration test, e.g. use the
             // datapipeline which doesn't have this background thread to
             // worry about.
-            TestUtils.pause(10);
-        }
+            try {
+                Thread.sleep(10);
+            } catch(InterruptedException e) {}
+            }
     }
 
 

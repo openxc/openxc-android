@@ -18,7 +18,7 @@ import com.openxc.remote.VehicleService;
 import com.openxc.VehicleManager;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-import com.openxc.TestSource;
+import com.openxc.sources.TestSource;
 
 public class VehicleLocationProviderTest
         extends ServiceTestCase<VehicleManager> {

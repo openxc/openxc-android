@@ -19,16 +19,15 @@ import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sinks.VehicleDataSink;
-import com.openxc.sources.trace.TraceVehicleDataSource;
 import com.openxc.sources.DataSourceException;
+import com.openxc.sources.TestSource;
 
 public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
     VehicleSpeed speedReceived;
     SteeringWheelAngle steeringAngleReceived;
-    URI traceUri;
     String receivedMessageId;
-    TraceVehicleDataSource source;
+    TestSource source = new TestSource();
 
     VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(Measurement measurement) {
@@ -50,10 +49,6 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        // TODO convert this to use a test source with an inject method instead
-        // of all of this timing stuff!
-        traceUri = TestUtils.copyToStorage(getContext(), R.raw.tracejson,
-                "trace.json");
 
         speedReceived = null;
         steeringAngleReceived = null;
@@ -62,7 +57,6 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // cached), kill it.
         getContext().stopService(new Intent(getContext(),
                     VehicleService.class));
-        TestUtils.pause(50);
     }
 
     // Due to bugs and or general crappiness in the ServiceTestCase, you will
@@ -75,11 +69,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
         service.waitUntilBound();
-        try {
-            source = new TraceVehicleDataSource(getContext(), traceUri);
-        } catch(DataSourceException e) {
-            Assert.fail();
-        }
+        service.addSource(source);
     }
 
     @Override
@@ -105,13 +95,12 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testListenerGetsLastKnownValue()
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
+        // TODO this is actuall a feature of MessageListenerSink - it should be
+        // pushed over to tests specifically for that
         prepareServices();
-        service.addSource(source);
-        TestUtils.pause(100);
-        // kill the incoming data stream
-        service.removeSource(source);
+        source.inject(VehicleSpeed.ID, 42.0);
         service.addListener(VehicleSpeed.class, speedListener);
-        TestUtils.pause(20);
+        TestUtils.pause(50);
         assertNotNull(speedReceived);
     }
 
@@ -119,28 +108,21 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testAddListener() throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         prepareServices();
-        service.addSource(source);
         service.addListener(VehicleSpeed.class, speedListener);
-        // let some measurements flow through the system
-        TestUtils.pause(150);
+        source.inject(VehicleSpeed.ID, 42.0);
         assertNotNull(speedReceived);
     }
 
     @MediumTest
     public void testCustomSink() throws DataSourceException {
         prepareServices();
-        source = new TraceVehicleDataSource(getContext(), traceUri, true);
-        service.addSource(source);
-        TestUtils.pause(150);
         assertNull(receivedMessageId);
         service.addSink(mCustomSink);
-        // TODO because of the 1 second delay before the trace restart.
-        // NEED TO INJECT AND NOT USE TRACE PLAYBACK FOR TESTS.
-        TestUtils.pause(1500);
+        source.inject(VehicleSpeed.ID, 42.0);
         assertNotNull(receivedMessageId);
         service.removeSink(mCustomSink);
         receivedMessageId = null;
-        TestUtils.pause(150);
+        source.inject(VehicleSpeed.ID, 42.0);
         assertNull(receivedMessageId);
     }
 
@@ -149,11 +131,11 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         prepareServices();
-        service.addSource(source);
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        // let some measurements flow through the system
-        TestUtils.pause(100);
+        source.inject(VehicleSpeed.ID, 42.0);
+        source.inject(SteeringWheelAngle.ID, 12.1);
+        TestUtils.pause(5);
         assertNotNull(steeringAngleReceived);
         assertNotNull(speedReceived);
     }
@@ -162,13 +144,12 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testRemoveListener() throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         prepareServices();
-        service.addSource(source);
         service.addListener(VehicleSpeed.class, speedListener);
-        // let some measurements flow through the system
-        TestUtils.pause(100);
+        source.inject(VehicleSpeed.ID, 42.0);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        TestUtils.pause(150);
+        source.inject(VehicleSpeed.ID, 42.0);
+        TestUtils.pause(10);
         assertNull(speedReceived);
     }
 
@@ -176,10 +157,7 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testRemoveWithoutListening()
             throws VehicleServiceException {
         prepareServices();
-        service.addSource(source);
         service.removeListener(VehicleSpeed.class, speedListener);
-        TestUtils.pause(150);
-        assertNull(speedReceived);
     }
 
     @MediumTest
@@ -187,13 +165,13 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         prepareServices();
-        service.addSource(source);
         service.addListener(VehicleSpeed.class, speedListener);
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
-        TestUtils.pause(100);
+        source.inject(VehicleSpeed.ID, 42.0);
         service.removeListener(VehicleSpeed.class, speedListener);
         speedReceived = null;
-        TestUtils.pause(150);
+        source.inject(VehicleSpeed.ID, 42.0);
+        TestUtils.pause(10);
         assertNull(speedReceived);
     }
 
@@ -202,11 +180,8 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
             throws UnrecognizedMeasurementTypeException,
             NoValueException, VehicleServiceException, DataSourceException {
         prepareServices();
-        source = new TraceVehicleDataSource(getContext(), traceUri, true);
-        service.addSource(source);
-        TestUtils.pause(100);
-        service.removeSource(source);
-        TestUtils.pause(100);
+        source.inject(VehicleSpeed.ID, 42.0);
+        TestUtils.pause(1);
         Measurement measurement = service.get(VehicleSpeed.class);
         long age = measurement.getAge();
         assertTrue("Measurement age (" + age + ") should be > 5ms",

@@ -18,8 +18,8 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
-import com.openxc.TestSource;
-import com.openxc.TestSink;
+import com.openxc.sources.TestSource;
+import com.openxc.sinks.TestSink;
 
 public class DataPipelineTest {
     DataPipeline pipeline;
