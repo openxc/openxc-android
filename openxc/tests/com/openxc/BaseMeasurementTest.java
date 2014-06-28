@@ -1,40 +1,64 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import junit.framework.Assert;
-import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
 
-public class BaseMeasurementTest extends TestCase {
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+public class BaseMeasurementTest {
     Range<Meter> range;
     Double value = Double.valueOf(42);
-    String name = "vehicle_speed";
     SimpleVehicleMessage message;
 
-    @Override
+    @Before
     public void setUp() throws UnrecognizedMeasurementTypeException {
-        message = new SimpleVehicleMessage(name, value);
-        BaseMeasurement.getIdForClass(VehicleSpeed.class);
+        message = new SimpleVehicleMessage(VehicleSpeed.ID, value);
     }
 
-    public void testBuildFromMessage()
+    @Test
+    public void buildFromMessage()
             throws UnrecognizedMeasurementTypeException, NoValueException {
-        Measurement measurement =
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        Measurement deserializedMeasurement =
             BaseMeasurement.getMeasurementFromMessage(message);
-        assertTrue(measurement instanceof VehicleSpeed);
-        VehicleSpeed vehicleSpeed = (VehicleSpeed) measurement;
-        assertThat(vehicleSpeed.getValue().doubleValue(), equalTo(value));
+        assertThat(deserializedMeasurement, instanceOf(VehicleSpeed.class));
+        VehicleSpeed vehicleSpeed = (VehicleSpeed) deserializedMeasurement;
+        assertThat(vehicleSpeed, equalTo(measurement));
     }
 
-    public void testBuildFromUnrecognizedMessage()
+    @Test
+    public void buildEventedFromMessage()
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        VehicleDoorStatus measurement = new VehicleDoorStatus("driver", false);
+        VehicleMessage eventedMessage = measurement.toVehicleMessage();
+        Measurement deserializedMeasurement =
+            BaseMeasurement.getMeasurementFromMessage((NamedVehicleMessage) eventedMessage);
+        assertThat(deserializedMeasurement, instanceOf(VehicleDoorStatus.class));
+        VehicleDoorStatus doorStatus = (VehicleDoorStatus) deserializedMeasurement;
+        assertThat(doorStatus, equalTo(measurement));
+    }
+
+    @Test
+    public void buildFromUnrecognizedMessage()
             throws NoValueException {
         message = new SimpleVehicleMessage("foo", value);
         try {

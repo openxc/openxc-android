@@ -205,36 +205,60 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
         try {
             // TODO support EventedSimpleVehicleMessage
+            Measurement measurement = null;
             if(message instanceof SimpleVehicleMessage) {
-                SimpleVehicleMessage simpleMessage =
-                        (SimpleVehicleMessage) message;
+                SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
                 Class<?> valueClass = simpleMessage.getValue().getClass();
                 if(valueClass == Double.class || valueClass == Integer.class) {
                     valueClass = Number.class;
                 }
 
-                try {
-                    constructor = measurementType.getConstructor(valueClass);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(
-                            measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ")");
+                if(message instanceof EventedSimpleVehicleMessage) {
+                    EventedSimpleVehicleMessage eventedMessage =
+                            message.asEventedMessage();
+
+                    Class<?> eventClass = eventedMessage.getEvent().getClass();
+                    if(eventClass == Double.class || eventClass == Integer.class) {
+                        eventClass = Number.class;
+                    }
+
+                    try {
+                        constructor = measurementType.getConstructor(
+                                valueClass, eventClass);
+                    } catch(NoSuchMethodException e) {
+                        throw new UnrecognizedMeasurementTypeException(
+                                measurementType +
+                                " doesn't have the expected constructor, " +
+                               measurementType + "(" +
+                               valueClass + ", " + eventClass + ")");
+                    }
+
+                    measurement = constructor.newInstance(
+                            eventedMessage.getValue(),
+                            eventedMessage.getEvent());
+                } else {
+                    try {
+                        constructor = measurementType.getConstructor(valueClass);
+                    } catch(NoSuchMethodException e) {
+                        throw new UnrecognizedMeasurementTypeException(
+                                measurementType +
+                                " doesn't have the expected constructor, " +
+                               measurementType + "(" +
+                               valueClass + ")");
+                    }
+
+                    measurement = constructor.newInstance(
+                            simpleMessage.getValue());
                 }
 
-                Measurement measurement = constructor.newInstance(
-                        simpleMessage.getValue());
                 if (simpleMessage.getTimestamp() != null) {
                     measurement.setTimestamp(simpleMessage.getTimestamp());
                 }
-                return measurement;
-            } else {
-                // TODO do we allow creating measurements from a generic values
-                // map? need to make it public if so. i'm thinking that th
-                // emeasurement should subclass simplevehiclemessage
-                return null;
             }
+            // TODO do we allow creating measurements from a generic values
+            // map? need to make it public if so. i'm thinking that th
+            // measurement should subclass simplevehiclemessage
+            return measurement;
         } catch(InstantiationException e) {
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + " is abstract", e);
