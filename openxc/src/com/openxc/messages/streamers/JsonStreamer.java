@@ -30,7 +30,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
     }
 
     public VehicleMessage parseNextMessage() {
-        String line = readLine();
+        String line = readToDelimiter();
         if(line != null) {
             try {
                 return mFormatter.deserialize(line);
@@ -44,7 +44,11 @@ public class JsonStreamer extends VehicleMessageStreamer {
     @Override
     public void receive(byte[] bytes, int length) {
         super.receive(bytes, length);
-        mBuffer.append(new String(bytes));
+        // Creating a new String object for each message causes the
+        // GC to go a little crazy, but I don't see another obvious way
+        // of converting the byte[] to something the StringBuilder can
+        // accept (either char[] or String). See #151.
+        mBuffer.append(new String(bytes, 0, length));
     }
 
     public byte[] serializeForStream(VehicleMessage message) {
@@ -52,20 +56,24 @@ public class JsonStreamer extends VehicleMessageStreamer {
     }
 
     /**
-     * Parse the current byte buffer to find messages.
+     * Parse the current byte buffer to find the next potential message.
      *
-     * Any messages found in the
-     * buffer are removed and returned.
+     * The first potential serialized message data in the buffer is removed and
+     * returned. Any delimiters at the start of the buffer will be cleared.
      *
-     * @return A list of messages parsed and subsequently removed from the
-     *      buffer, if any.
+     * @return A potential serialized JSON message or null if none found.
      */
-    private String readLine() {
-        int delimiterIndex = mBuffer.indexOf(DELIMITER);
+    private String readToDelimiter() {
         String line = null;
-        if(delimiterIndex != -1) {
-            line = mBuffer.substring(0, delimiterIndex);
-            mBuffer.delete(0, delimiterIndex + 1);
+        while(line == null || line.isEmpty()) {
+            int delimiterIndex = mBuffer.indexOf(DELIMITER);
+            if(delimiterIndex != -1) {
+                line = mBuffer.substring(0, delimiterIndex);
+                mBuffer.delete(0, delimiterIndex + 1);
+            } else {
+                line = null;
+                break;
+            }
         }
         return line;
     }

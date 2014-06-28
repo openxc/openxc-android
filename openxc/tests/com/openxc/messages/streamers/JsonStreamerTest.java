@@ -43,8 +43,32 @@ public class JsonStreamerTest {
     }
 
     @Test
-    public void emptyhasNoMessages() {
+    public void emptyHasNoMessages() {
         assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void receiveLessThanFullBufferDoesntGrabAll() {
+        // When we receive bytes, we have a buffer with bytes but only part of
+        // it may be valid. The streamer must only try and use the valid part of
+        // the buffer.
+        byte[] bytes = new String(
+                "{\"name\": \"bar\"}\u0000{\"name\": \"bing\"}\u0000").getBytes();
+        // Tell the JsonStreamer that the buffer is only valid up to the end of
+        // the first message.
+        streamer.receive(bytes, 16);
+
+        assertThat(streamer.parseNextMessage(), notNullValue());
+        // If we can parse both, it's broken.
+        assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void clearsDelimitersInFrontOfMessage() {
+        byte[] bytes = new String("\u0000\u0000{\"foo\": \"bar\"}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+
+        assertThat(streamer.parseNextMessage(), notNullValue());
     }
 
     @Test
