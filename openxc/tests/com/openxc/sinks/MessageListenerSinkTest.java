@@ -21,6 +21,7 @@ import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.BaseMeasurement;
 
@@ -39,6 +40,35 @@ public class MessageListenerSinkTest {
     @After
     public void tearDown() {
         sink.stop();
+    }
+
+    @Test
+    public void nonKeyedIgnored() throws DataSinkException {
+        KeyedMessage message = new NamedVehicleMessage("foo");
+        sink.register(ExactKeyMatcher.buildExactMatcher(message),
+                listener);
+        sink.receive(new VehicleMessage());
+    }
+
+    @Test
+    public void receiveNonMatchingNotPropagated() throws DataSinkException {
+        NamedVehicleMessage message = new NamedVehicleMessage("foo");
+        sink.register(ExactKeyMatcher.buildExactMatcher(message), listener);
+        message = new NamedVehicleMessage("bar");
+        sink.receive(message);
+        sink.clearQueue();
+        assertThat(listener.received, nullValue());
+    }
+
+    @Test
+    public void receiveNonMatchingMeasurementNotPropagated() throws
+            DataSinkException, UnrecognizedMeasurementTypeException {
+        VehicleSpeed speed = new VehicleSpeed(42.0);
+        sink.register(speed.getClass(), speedListener);
+        SteeringWheelAngle angle = new SteeringWheelAngle(10.1);
+        sink.receive(angle.toVehicleMessage());
+        sink.clearQueue();
+        assertThat(speedReceived, nullValue());
     }
 
     @Test
