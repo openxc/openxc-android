@@ -86,19 +86,4 @@ public class JsonFormatter {
         BufferedReader reader = new BufferedReader(new InputStreamReader(data));
         return deserialize(reader.toString());
     }
-
-    /**
-     * Return true if the buffer *most likely* contains JSON (as opposed to a
-     * protobuf).
-     */
-    public static boolean containsJson(String buffer) {
-        return CharMatcher.ASCII
-            // We need to allow the \u0000 delimiter for JSON messages, so we
-            // can't use the JAVA_ISO_CONTROL character set and must build the
-            // range manually (minus \u0000)
-            .and(CharMatcher.inRange('\u0001', '\u001f').negate())
-            .and(CharMatcher.inRange('\u007f', '\u009f').negate())
-            .and(CharMatcher.ASCII)
-            .matchesAllOf(buffer.toString());
-    }
 }
