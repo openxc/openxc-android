@@ -92,17 +92,6 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testListenerGetsLastKnownValue()
-            throws VehicleServiceException,
-            UnrecognizedMeasurementTypeException {
-        prepareServices();
-        source.inject(VehicleSpeed.ID, 42.0);
-        service.addListener(VehicleSpeed.class, speedListener);
-        TestUtils.pause(50);
-        assertNotNull(speedReceived);
-    }
-
-    @MediumTest
     public void testAddListener() throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
         prepareServices();

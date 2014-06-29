@@ -32,17 +32,6 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
                 ++mListenerCount;
             }
         }
-
-        // send the last known value of all named messages to the new listener
-        for(Map.Entry<String, NamedVehicleMessage> entry : getNamedMessages()) {
-            try {
-                listener.receive(entry.getValue());
-            } catch(RemoteException e) {
-                Log.w(TAG, "Couldn't notify application " +
-                        "listener -- did it crash?", e);
-                break;
-            }
-        }
     }
 
     public void unregister(VehicleServiceListener listener) {

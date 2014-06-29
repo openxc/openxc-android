@@ -50,19 +50,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void register(KeyMatcher matcher, VehicleMessage.Listener listener) {
         mMessageListeners.put(matcher, listener);
-
-        if(matcher instanceof ExactKeyMatcher) {
-            // TODO consider getting rid of this feature
-            // if(containsKey(((ExactKeyMatcher) matcher).getKey())) {
-                // TODO re-enable
-                // Send the last known value to the new listener
-                // try {
-                    // receive(getNamedMessage(name));
-                // } catch(DataSinkException e) {
-                    // Log.w(TAG, "Sink could't receive measurement", e);
-                // }
-            // }
-        }
     }
 
     public void register(KeyedMessage message,
