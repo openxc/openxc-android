@@ -49,7 +49,11 @@ public class DiagnosticResponseTest {
         assertArrayEquals(payload, response.getPayload());
     }
 
-    // TODO test read/write payload and no payload, I know it's failing
+    @Test
+    public void clearPayload() {
+        response.setPayload(null);
+        assertThat(response.getPayload(), nullValue());
+    }
 
     @Test
     public void sameEquals() {
@@ -87,6 +91,22 @@ public class DiagnosticResponseTest {
                 bus, id, mode, pid, payload, success);
         anotherResponse.setPayload(payload);
         assertThat(response, not(equalTo(anotherResponse)));
+    }
+
+    @Test
+    public void parcelWithNoPayload() {
+        response.setPayload(null);
+        Parcel parcel = Parcel.obtain();
+        response.writeToParcel(parcel, 0);
+
+        // Reset parcel for reading
+        parcel.setDataPosition(0);
+
+        VehicleMessage createdFromParcel =
+                VehicleMessage.CREATOR.createFromParcel(parcel);
+        assertThat(createdFromParcel, instanceOf(DiagnosticResponse.class));
+        assertEquals(response, createdFromParcel);
+        assertThat(response.getPayload(), nullValue());
     }
 
     @Test

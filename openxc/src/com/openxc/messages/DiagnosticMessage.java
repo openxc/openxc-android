@@ -82,6 +82,8 @@ public abstract class DiagnosticMessage extends VehicleMessage
         if(payload != null) {
             mPayload = new byte[payload.length];
             System.arraycopy(payload, 0, mPayload, 0, payload.length);
+        } else {
+            mPayload = null;
         }
     }
 

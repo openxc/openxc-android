@@ -35,6 +35,9 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
     public DiagnosticResponse(int busId, int id, int mode, int pid,
             byte[] payload,
+            // TODO rather than construct with success, construct with negative
+            // response code only if it failed. otherwise we assume it was
+            // successful.
             boolean success) {
         super(busId, id, mode, pid);
         setPayload(payload);
