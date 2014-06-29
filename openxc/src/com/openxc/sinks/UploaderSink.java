@@ -74,9 +74,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
         this(context, uriFromString(path));
     }
 
-    @Override
     public void stop() {
-        super.stop();
         mUploader.done();
     }
 

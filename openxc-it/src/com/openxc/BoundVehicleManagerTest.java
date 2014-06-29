@@ -17,7 +17,6 @@ import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
-import com.openxc.sinks.BaseVehicleDataSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.TestSource;
@@ -184,10 +183,12 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // smaller unit tests.
     }
 
-    private VehicleDataSink mCustomSink = new BaseVehicleDataSink() {
+    private VehicleDataSink mCustomSink = new VehicleDataSink() {
         public void receive(VehicleMessage message) {
             receivedMessageId = ((NamedVehicleMessage)message).getName();
         }
+
+        public void stop() { }
     };
 }
 

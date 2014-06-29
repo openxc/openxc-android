@@ -15,8 +15,6 @@ import org.junit.Test;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.sinks.BaseVehicleDataSink;
-import com.openxc.sources.BaseVehicleDataSource;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.TestSource;
 import com.openxc.sinks.TestSink;
