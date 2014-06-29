@@ -130,6 +130,11 @@ public class DiagnosticResponseTest {
     }
 
     @Test
+    public void toStringNotNull() {
+        assertThat(response.toString(), notNullValue());
+    }
+
+    @Test
     public void parcelWithNoPayload() {
         response.setPayload(null);
         Parcel parcel = Parcel.obtain();

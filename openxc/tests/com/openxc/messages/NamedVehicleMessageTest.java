@@ -1,9 +1,7 @@
 package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
@@ -38,6 +36,11 @@ public class NamedVehicleMessageTest {
     public void differentNameDoesntEqual() {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("bar");
         assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(message.toString(), notNullValue());
     }
 
     @Test

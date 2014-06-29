@@ -1,10 +1,7 @@
 package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -114,6 +111,11 @@ public class DiagnosticRequestTest {
                 bus, id, mode);
         anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(request.toString(), notNullValue());
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -54,6 +54,11 @@ public class CommandResponseTest {
         CommandResponse anotherResponse = new CommandResponse(
                 command, message + " different");
         assertFalse(response.equals(anotherResponse));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(response.toString(), notNullValue());
     }
 
     @Test

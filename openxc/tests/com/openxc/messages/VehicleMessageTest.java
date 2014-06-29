@@ -104,6 +104,11 @@ public class VehicleMessageTest {
     }
 
     @Test
+    public void toStringNotNull() {
+        assertThat(message.toString(), notNullValue());
+    }
+
+    @Test
     public void writeAndReadFromParcel() {
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);

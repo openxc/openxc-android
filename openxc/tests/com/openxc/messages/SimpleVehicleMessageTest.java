@@ -1,7 +1,7 @@
 package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -47,6 +47,11 @@ public class SimpleVehicleMessageTest {
         NamedVehicleMessage anotherMessage = new SimpleVehicleMessage(
                 name, Double.valueOf(24));
         assertFalse(message.equals(anotherMessage));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(message.toString(), notNullValue());
     }
 
     @Test

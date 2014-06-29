@@ -1,9 +1,7 @@
 package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -52,6 +50,11 @@ public class CanMessageTest {
     public void differentIdNotEqual() {
         CanMessage anotherMessage = new CanMessage(id + 1, bus, data);
         assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(message.toString(), notNullValue());
     }
 
     @Test

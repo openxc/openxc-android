@@ -66,6 +66,11 @@ public class KeyMatcherTest {
                 not(equalTo(ExactKeyMatcher.buildExactMatcher(another))));
     }
 
+    @Test
+    public void toStringNotNull() {
+        assertThat(keyed.toString(), notNullValue());
+    }
+
     private class TestKeyedMessage extends KeyedMessage {
         public MessageKey getKey() {
             HashMap<String, Object> key = new HashMap<>();
