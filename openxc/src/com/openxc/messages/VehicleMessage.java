@@ -111,6 +111,10 @@ public class VehicleMessage implements Parcelable {
         return (EventedSimpleVehicleMessage) this;
     }
 
+    public KeyedMessage asKeyedMessage() {
+        return (KeyedMessage) this;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.openxc.TestUtils;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.KeyedMessage;
@@ -34,6 +35,10 @@ public class MessageListenerSinkTest {
         SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
         sink.register(ExactKeyMatcher.buildExactMatcher(message), listener);
         sink.receive(message);
+        // TODO would like to not have something as unreliable as a delay here,
+        // but we are waiting on the backgroud thread in
+        // AbstractQueuedCallbackSink to propagate the data
+        TestUtils.pause(20);
         assertThat(listener.received, notNullValue());
         assertEquals(listener.received, message);
     }

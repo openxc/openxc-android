@@ -20,6 +20,7 @@ import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
@@ -105,13 +106,21 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     }
 
     protected void propagateMessage(VehicleMessage message) {
-        if (message instanceof NamedVehicleMessage) {
-            propagateMeasurementFromMessage((NamedVehicleMessage) message);
+        if(message instanceof KeyedMessage) {
+            for (KeyMatcher matcher : mMessageListeners.keys()) {
+                if (matcher.matches(message.asKeyedMessage())) {
+                    for (VehicleMessage.Listener listener :
+                            mMessageListeners.get(matcher)) {
+                        listener.receive(message);
+                    }
+                }
+            }
+        }
+
+        if (message instanceof SimpleVehicleMessage) {
+            propagateMeasurementFromMessage(message.asSimpleMessage());
         } else if (message instanceof DiagnosticResponse) {
             propagateDiagnosticResponse((DiagnosticResponse) message);
-        } else {
-            // TODO propagate generic VehicleMessage - need a new listener
-            // callback
         }
     }
 
@@ -126,16 +135,14 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         }
     }
 
-    private void propagateMeasurementFromMessage(NamedVehicleMessage message) {
+    private void propagateMeasurementFromMessage(SimpleVehicleMessage message) {
         try {
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
-            synchronized(mMeasurementListeners) {
-                for (KeyMatcher matcher : mMeasurementListeners.keys()) {
-                    if (matcher.matches(message)) {
-                        for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
-                            listener.receive(measurement);
-                        }
+            for (KeyMatcher matcher : mMeasurementListeners.keys()) {
+                if (matcher.matches(message)) {
+                    for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
+                        listener.receive(measurement);
                     }
                 }
             }
