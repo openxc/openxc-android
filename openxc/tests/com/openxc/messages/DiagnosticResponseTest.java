@@ -111,6 +111,26 @@ public class DiagnosticResponseTest {
     }
 
     @Test
+    public void sameValueEqual() {
+        double value = 42.0;
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, success,
+                null, value);
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(
+                bus, id, mode, pid, payload, success, null, value);
+        assertThat(response, equalTo(anotherResponse));
+    }
+
+    @Test
+    public void differentValueNotEqual() {
+        double value = 42.0;
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, success,
+                null, value);
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(
+                bus, id, mode, pid, payload, success, null, value + 1);
+        assertThat(response, not(equalTo(anotherResponse)));
+    }
+
+    @Test
     public void parcelWithNoPayload() {
         response.setPayload(null);
         Parcel parcel = Parcel.obtain();

@@ -49,7 +49,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
             NegativeResponseCode negativeResponseCode,
             double value) {
         this(busId, id, mode, pid, payload, success);
-        mNegativeResponseCode = negativeResponseCode;
+        mNegativeResponseCode = negativeResponseCode == null ?
+                NegativeResponseCode.NONE : negativeResponseCode;
         mValue = value;
     }
 
@@ -97,7 +98,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
         final DiagnosticResponse other = (DiagnosticResponse) obj;
         return mSuccess == other.mSuccess
                 && Objects.equal(mValue, other.mValue)
-                && mNegativeResponseCode == other.mNegativeResponseCode;
+                && Objects.equal(mNegativeResponseCode, other.mNegativeResponseCode);
     }
 
     public interface Listener {

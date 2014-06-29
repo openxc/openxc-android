@@ -53,6 +53,13 @@ public class JsonFormatterTest {
     }
 
     @Test
+    public void serializeDiagnosticResponseWithValue() {
+        serializeDeserializeAndCheckEqual(new DiagnosticResponse(
+                    1, 2, 3, 4,
+                    new byte[]{1,2,3,4}, true, null, 42.0));
+    }
+
+    @Test
     public void serializeDiagnosticRequest() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
         serializeDeserializeAndCheckEqual(request);
