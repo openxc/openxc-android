@@ -32,6 +32,8 @@ import com.openxc.messages.VehicleMessage;
 public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MessageListenerSink";
 
+    private Multimap<KeyMatcher, VehicleMessage.Listener>
+            mMessageListeners = HashMultimap.create();
     private Multimap<KeyMatcher, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
     private Multimap<KeyMatcher, DiagnosticResponse.Listener>
@@ -39,26 +41,27 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private Map<MessageKey, DiagnosticRequest> mRequestMap = new HashMap<>();
 
     public MessageListenerSink() {
+        mMessageListeners = Multimaps.synchronizedMultimap(mMessageListeners);
         mMeasurementListeners = Multimaps.synchronizedMultimap(
                 mMeasurementListeners);
         mDiagnosticListeners = Multimaps.synchronizedMultimap(
                 mDiagnosticListeners);
     }
 
-    public void register(KeyMatcher matcher, Measurement.Listener listener) {
-        mMeasurementListeners.put(matcher, listener);
+    public void register(KeyMatcher matcher, VehicleMessage.Listener listener) {
+        mMessageListeners.put(matcher, listener);
 
-        KeyedMessage keyed = matcher.get();
-        if (keyed instanceof NamedVehicleMessage) {
-            String name = ((NamedVehicleMessage) keyed).getName();
-            if(containsNamedMessage(name)) {
-                // send the last known value to the new listener
-                try {
-                    receive(getNamedMessage(name));
-                } catch(DataSinkException e) {
-                    Log.w(TAG, "Sink could't receive measurement", e);
-                }
-            }
+        if(matcher instanceof ExactKeyMatcher) {
+            // TODO consider getting rid of this feature
+            // if(containsKey(((ExactKeyMatcher) matcher).getKey())) {
+                // TODO re-enable
+                // Send the last known value to the new listener
+                // try {
+                    // receive(getNamedMessage(name));
+                // } catch(DataSinkException e) {
+                    // Log.w(TAG, "Sink could't receive measurement", e);
+                // }
+            // }
         }
     }
 

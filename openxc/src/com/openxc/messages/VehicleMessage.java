@@ -15,6 +15,10 @@ import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 public class VehicleMessage implements Parcelable {
+    public interface Listener {
+        public void receive(VehicleMessage message);
+    }
+
     private static final String TAG = "VehicleMessage";
     public static final String TIMESTAMP_KEY = "timestamp";
     public static final String EXTRAS_KEY = "extras";

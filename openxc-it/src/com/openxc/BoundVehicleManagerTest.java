@@ -95,8 +95,6 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testListenerGetsLastKnownValue()
             throws VehicleServiceException,
             UnrecognizedMeasurementTypeException {
-        // TODO this is actuall a feature of MessageListenerSink - it should be
-        // pushed over to tests specifically for that
         prepareServices();
         source.inject(VehicleSpeed.ID, 42.0);
         service.addListener(VehicleSpeed.class, speedListener);
