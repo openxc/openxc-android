@@ -86,7 +86,7 @@ public class DiagnosticRequestTest {
     @Test
     public void differentIdNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id + 1, bus, mode);
+                bus, id + 1, mode);
         anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
@@ -94,7 +94,7 @@ public class DiagnosticRequestTest {
     @Test
     public void differentBusNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id, bus + 1, mode);
+                bus + 1, id, mode);
         anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
@@ -102,7 +102,7 @@ public class DiagnosticRequestTest {
     @Test
     public void differentModeNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id, bus, mode + 1);
+                bus, id, mode + 1);
         anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }
@@ -111,7 +111,7 @@ public class DiagnosticRequestTest {
     public void differentPayloadNotEqual() {
         payload[1] = (byte) (payload[1] + 1);
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
-                id, bus, mode);
+                bus, id, mode);
         anotherRequest.setPayload(payload);
         assertThat(request, not(equalTo(anotherRequest)));
     }

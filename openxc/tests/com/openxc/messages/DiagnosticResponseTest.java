@@ -1,7 +1,7 @@
 package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -22,10 +22,11 @@ public class DiagnosticResponseTest {
     int mode = 2;
     int pid = 4;
     byte[] payload = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
+    boolean success = true;
 
     @Before
     public void setup() {
-        response = new DiagnosticResponse(bus, id, mode, pid, payload, true);
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, success);
     }
 
     @Test
@@ -55,7 +56,38 @@ public class DiagnosticResponseTest {
         assertEquals(response, response);
     }
 
-    // TODO check inequalities
+    @Test
+    public void differentIdNotEqual() {
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(
+                bus, id + 1, mode, pid, payload, success);
+        anotherResponse.setPayload(payload);
+        assertThat(response, not(equalTo(anotherResponse)));
+    }
+
+    @Test
+    public void differentBusNotEqual() {
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(
+                bus + 1, id, mode, pid, payload, success);
+        anotherResponse.setPayload(payload);
+        assertThat(response, not(equalTo(anotherResponse)));
+    }
+
+    @Test
+    public void differentModeNotEqual() {
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(
+                bus, id, mode + 1, pid, payload, success);
+        anotherResponse.setPayload(payload);
+        assertThat(response, not(equalTo(anotherResponse)));
+    }
+
+    @Test
+    public void differentPayloadNotEqual() {
+        payload[1] = (byte) (payload[1] + 1);
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(
+                bus, id, mode, pid, payload, success);
+        anotherResponse.setPayload(payload);
+        assertThat(response, not(equalTo(anotherResponse)));
+    }
 
     @Test
     public void writeAndReadFromParcel() {
