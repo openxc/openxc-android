@@ -1,5 +1,7 @@
 package com.openxc.messages;
 
+import com.google.common.base.Objects;
+
 public abstract class ExactKeyMatcher extends KeyMatcher {
     public abstract MessageKey getKey();
 
@@ -24,5 +26,10 @@ public abstract class ExactKeyMatcher extends KeyMatcher {
         }
 
         return getKey().equals(((ExactKeyMatcher)obj).getKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getKey());
     }
 }

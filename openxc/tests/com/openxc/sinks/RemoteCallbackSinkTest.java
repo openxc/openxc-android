@@ -62,11 +62,12 @@ public class RemoteCallbackSinkTest {
     public void testReceiveCorrectId() throws DataSinkException {
         notifier.register(listener);
         assertNull(receivedId);
-        notifier.receive(new SimpleVehicleMessage(messageId, 1));
+        SimpleVehicleMessage message = new SimpleVehicleMessage(messageId, 1);
+        notifier.receive(message);
+        assertTrue(notifier.containsKey(message.getKey()));
         try {
             Thread.sleep(50);
         } catch(InterruptedException e) {}
-        assertTrue(notifier.containsNamedMessage(messageId));
         assertNotNull(receivedId);
         assertEquals(receivedId, messageId);
     }

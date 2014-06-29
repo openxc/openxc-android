@@ -11,7 +11,7 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage {
+public class NamedVehicleMessage extends KeyedMessage {
     public static final String NAME_KEY = "name";
 
     @SerializedName(NAME_KEY)

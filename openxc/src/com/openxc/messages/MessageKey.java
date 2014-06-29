@@ -2,6 +2,8 @@ package com.openxc.messages;
 
 import java.util.Map;
 
+import com.google.common.base.Objects;
+
 public class MessageKey {
     private Map<String, Object> mParts;
 
@@ -19,4 +21,8 @@ public class MessageKey {
         return mParts.equals(other.mParts);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(mParts);
+    }
 }

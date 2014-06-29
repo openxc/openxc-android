@@ -11,7 +11,7 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class CommandResponse extends VehicleMessage implements KeyedMessage {
+public class CommandResponse extends KeyedMessage {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
     public static final String MESSAGE_KEY = "message";

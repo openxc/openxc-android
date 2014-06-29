@@ -66,7 +66,7 @@ public class KeyMatcherTest {
                 not(equalTo(ExactKeyMatcher.buildExactMatcher(another))));
     }
 
-    private class TestKeyedMessage implements KeyedMessage {
+    private class TestKeyedMessage extends KeyedMessage {
         public MessageKey getKey() {
             HashMap<String, Object> key = new HashMap<>();
             // This is the same key as the other, but not the same instance

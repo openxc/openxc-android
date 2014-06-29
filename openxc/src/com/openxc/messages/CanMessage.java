@@ -11,7 +11,7 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class CanMessage extends VehicleMessage implements KeyedMessage {
+public class CanMessage extends KeyedMessage {
     public static final String ID_KEY = "id";
     public static final String BUS_KEY = "bus";
     public static final String DATA_KEY = "data";

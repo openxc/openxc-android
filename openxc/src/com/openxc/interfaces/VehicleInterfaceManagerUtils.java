@@ -22,17 +22,6 @@ public class VehicleInterfaceManagerUtils {
      * Attempt to send the command on every VehicleInterface in the list until
      * at most one succeeds.
      *
-     * @see send(List, VehicleMessage)
-     */
-    public static boolean send(List<VehicleInterface> interfaces,
-            Measurement command) {
-        return send(interfaces, command.toVehicleMessage());
-    }
-
-    /**
-     * Attempt to send the command on every VehicleInterface in the list until
-     * at most one succeeds.
-     *
      * This method makes no guaratees about the order it will traverse the list.
      */
     public static boolean send(List<VehicleInterface> interfaces,

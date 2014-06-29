@@ -11,7 +11,7 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class Command extends VehicleMessage implements KeyedMessage {
+public class Command extends KeyedMessage {
     public static final String COMMAND_KEY = "command";
 
     public static final String[] sRequiredFieldsValues = new String[] {

@@ -7,8 +7,7 @@ import android.os.Parcel;
 import com.google.gson.annotations.SerializedName;
 import com.openxc.util.Range;
 
-public abstract class DiagnosticMessage extends VehicleMessage
-        implements KeyedMessage {
+public abstract class DiagnosticMessage extends KeyedMessage {
 
     public static final String ID_KEY = CanMessage.ID_KEY;
     public static final String BUS_KEY = CanMessage.BUS_KEY;

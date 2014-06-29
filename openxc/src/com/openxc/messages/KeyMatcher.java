@@ -1,5 +1,7 @@
 package com.openxc.messages;
 
+import com.google.common.base.Objects;
+
 public abstract class KeyMatcher {
     public abstract boolean matches(KeyedMessage other);
 
@@ -20,5 +22,10 @@ public abstract class KeyMatcher {
         }
 
         return obj == this;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this);
     }
 }

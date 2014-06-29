@@ -31,6 +31,7 @@ import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
@@ -245,17 +246,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @param command The desired command to send to the vehicle.
      * @return true if the message was sent successfully
      */
+    public boolean send(VehicleMessage message) throws
+                UnrecognizedMeasurementTypeException {
+        return VehicleInterfaceManagerUtils.send(mInterfaces, message);
+    }
+
     public boolean send(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
-        return VehicleInterfaceManagerUtils.send(mInterfaces, command);
+        return send(command.toVehicleMessage());
     }
-
-    public void request(DiagnosticRequest request) {
-        mNotifier.record(request);
-        //TODO is this how to actually send it?
-        VehicleInterfaceManagerUtils.send(mInterfaces, request);
-    }
-
 
     //TODO the methods below would ideally be condensed into 3 or so to
     //eliminate this overloading; however, it doesn't make much sense
@@ -299,23 +298,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
         mNotifier.register(matcher, listener);
-    }
-
-    /**
-     * Register a single listener for multiple requests. Calls
-     * {@link #addListener(DiagnosticRequest, DiagnosticResponse.Listener)} on
-     * all requests in the list.
-     *
-     * TODO this seems like it belongs in the application to me
-     *
-     * @param requests List of DiagnosticRequests to listen to a response for
-     * @param listener A DiagnosticResponse.Listener instance
-     */
-    public void addListeners(List<DiagnosticRequest> requests,
-            DiagnosticResponse.Listener listener) {
-        for (DiagnosticRequest request : requests) {
-            addListener(request, listener);
-        }
     }
 
     /**

@@ -23,8 +23,8 @@ public class BaseVehicleDataSinkTest {
         String name = "foo";
         SimpleVehicleMessage message = new SimpleVehicleMessage(name, "value");
         sink.receive(message);
-        assertTrue(sink.containsNamedMessage(name));
-        assertThat(sink.getNamedMessage(name).asSimpleMessage(),
+        assertTrue(sink.containsKey(message.getKey()));
+        assertThat(sink.get(message.getKey()).asSimpleMessage(),
                 equalTo(message));
     }
 }
