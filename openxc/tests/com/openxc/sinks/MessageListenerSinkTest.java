@@ -22,6 +22,7 @@ import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.Measurement;
+import com.openxc.measurements.BaseMeasurement;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -59,6 +60,41 @@ public class MessageListenerSinkTest {
         sink.clearQueue();
         assertThat(speedReceived, notNullValue());
         assertEquals(speedReceived, speed);
+    }
+
+    @Test
+    public void removeMeasurementListenerByClass()
+            throws UnrecognizedMeasurementTypeException, DataSinkException {
+        VehicleSpeed speed = new VehicleSpeed(42.0);
+        sink.register(speed.getClass(), speedListener);
+        sink.unregister(speed.getClass(), speedListener);
+        sink.receive(speed.toVehicleMessage());
+        sink.clearQueue();
+        assertThat(speedReceived, nullValue());
+    }
+
+    @Test
+    public void removeMeasurementListener()
+            throws UnrecognizedMeasurementTypeException, DataSinkException {
+        VehicleSpeed speed = new VehicleSpeed(42.0);
+        sink.register(speed.getClass(), speedListener);
+        sink.unregister(
+                BaseMeasurement.buildMatcherForMeasurement(speed.getClass()),
+                speedListener);
+        sink.receive(speed.toVehicleMessage());
+        sink.clearQueue();
+        assertThat(speedReceived, nullValue());
+    }
+
+    @Test
+    public void removeMessageListener()
+            throws UnrecognizedMeasurementTypeException, DataSinkException {
+        NamedVehicleMessage message = new NamedVehicleMessage("foo");
+        sink.register(ExactKeyMatcher.buildExactMatcher(message), listener);
+        sink.unregister(ExactKeyMatcher.buildExactMatcher(message), listener);
+        sink.receive(message);
+        sink.clearQueue();
+        assertThat(listener.received, nullValue());
     }
 
     @Test

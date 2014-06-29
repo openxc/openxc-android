@@ -47,7 +47,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     public void register(Class<? extends Measurement> measurementType,
             Measurement.Listener listener)
             throws UnrecognizedMeasurementTypeException {
-        register(BaseMeasurement.buildMatcherForMeasurment(measurementType),
+        register(BaseMeasurement.buildMatcherForMeasurement(measurementType),
                 listener);
     }
 
@@ -62,7 +62,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     public void unregister(Class<? extends Measurement> measurementType,
             Measurement.Listener listener)
             throws UnrecognizedMeasurementTypeException {
-        unregister(BaseMeasurement.buildMatcherForMeasurment(measurementType),
+        unregister(BaseMeasurement.buildMatcherForMeasurement(measurementType),
                 listener);
     }
 

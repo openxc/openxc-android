@@ -176,7 +176,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
                 sMeasurementIdToClass.inverse().get(measurementType)).getKey();
     }
 
-    public static KeyMatcher buildMatcherForMeasurment(
+    public static KeyMatcher buildMatcherForMeasurement(
             Class<? extends Measurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
         return ExactKeyMatcher.buildExactMatcher(
