@@ -6,6 +6,7 @@ import android.util.Log;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.SourceCallback;
+import com.openxc.sinks.DataSinkException;
 
 /**
  *
@@ -28,18 +29,16 @@ public class RemoteServiceVehicleInterface implements VehicleInterface {
         mRemoteService = remoteService;
     }
 
-    public boolean receive(VehicleMessage command) {
+    public void receive(VehicleMessage command) throws DataSinkException {
         if(!isConnected()) {
-            Log.w(TAG, "Not connected to the VehicleService");
-            return false;
+            throw new DataSinkException("Not connected to the VehicleService");
         }
 
         try {
-            return mRemoteService.send(command);
+            mRemoteService.send(command);
         } catch(RemoteException e) {
-            Log.w(TAG, "Unable to send command to remote vehicle service",
-                    e);
-            return false;
+            throw new DataSinkException(
+                    "Unable to send command to remote vehicle service");
         }
     }
 

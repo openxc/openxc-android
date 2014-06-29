@@ -24,12 +24,11 @@ public class BaseVehicleDataSink implements VehicleDataSink {
      * Children of this class can call super.receive() if they need to store
      * copies of received named messages to access via the get(String) method.
      */
-    public boolean receive(VehicleMessage message) throws DataSinkException {
+    public void receive(VehicleMessage message) throws DataSinkException {
         if(message instanceof NamedVehicleMessage) {
             NamedVehicleMessage namedMessage = (NamedVehicleMessage) message;
             mNamedMessages.put(namedMessage.getName(), namedMessage);
         }
-        return true;
     }
 
     public boolean containsNamedMessage(String name) {

@@ -40,7 +40,7 @@ public class FileRecorderSink extends BaseVehicleDataSink {
         mFileOpener = fileOpener;
     }
 
-    public synchronized boolean receive(VehicleMessage message)
+    public synchronized void receive(VehicleMessage message)
             throws DataSinkException {
         if(mLastMessageReceived == null ||
                     GregorianCalendar.getInstance().getTimeInMillis()
@@ -65,10 +65,8 @@ public class FileRecorderSink extends BaseVehicleDataSink {
             mWriter.write(new String(mFormatter.serialize(message)));
             mWriter.newLine();
         } catch(IOException e) {
-            Log.w(TAG, "Unable to write message to file", e);
-            return false;
+            throw new DataSinkException("Unable to write message to file");
         }
-        return true;
     }
 
     public synchronized void stop() {

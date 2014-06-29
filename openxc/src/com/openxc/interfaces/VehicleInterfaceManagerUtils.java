@@ -40,11 +40,10 @@ public class VehicleInterfaceManagerUtils {
         command.untimestamp();
         for(VehicleInterface vehicleInterface : interfaces) {
             try {
-                if(vehicleInterface.receive(command)) {
-                    Log.d(TAG, "Sent " + command + " using interface " +
-                            vehicleInterface);
-                    return true;
-                }
+                vehicleInterface.receive(command);
+                Log.d(TAG, "Sent " + command + " using interface " +
+                        vehicleInterface);
+                return true;
             } catch(DataSinkException e) {
                 continue;
             }

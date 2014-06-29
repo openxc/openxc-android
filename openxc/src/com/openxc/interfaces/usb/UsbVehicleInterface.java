@@ -27,6 +27,7 @@ import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
+import com.openxc.sinks.DataSinkException;
 
 /**
  * A vehicle data source reading measurements from an OpenXC USB device.
@@ -165,11 +166,12 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
-    public boolean receive(VehicleMessage command) {
+    public void receive(VehicleMessage command) throws DataSinkException {
         if(isConnected()) {
-            return write(sStreamer.serializeForStream(command));
+            if(!write(sStreamer.serializeForStream(command))) {
+                throw new DataSinkException("Unable to write command");
+            }
         }
-        return false;
     }
 
     public boolean setResource(String otherUri) throws DataSourceException {

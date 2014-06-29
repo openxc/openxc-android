@@ -28,6 +28,7 @@ import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
+import com.openxc.sinks.DataSinkException;
 
 /**
  * A vehicle data source reading measurements from an Bluetooth-enabled
@@ -102,10 +103,12 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         mUsePolling = enabled;
     }
 
-    public boolean receive(VehicleMessage command) {
+    public void receive(VehicleMessage command) throws DataSinkException {
         // TODO who knows what the current serialization format is? only using
         // JSON right now
-        return write(new String(sStreamer.serializeForStream(command)));
+        if(!write(new String(sStreamer.serializeForStream(command)))) {
+            throw new DataSinkException("Unable to write command");
+        }
     }
 
     public boolean setResource(String otherAddress) throws DataSourceException {

@@ -40,14 +40,13 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         mNotificationThread.done();
     }
 
-    public boolean receive(VehicleMessage message)
+    public void receive(VehicleMessage message)
             throws DataSinkException {
         super.receive(message);
         mNotificationsLock.lock();
         mNotifications.add(message);
         mNotificationReceived.signal();
         mNotificationsLock.unlock();
-        return true;
     }
 
     abstract protected void propagateMessage(VehicleMessage message);

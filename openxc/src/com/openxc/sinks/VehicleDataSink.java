@@ -23,7 +23,7 @@ public interface VehicleDataSink {
      *
      * @param measurement The new measurement.
      */
-    public boolean receive(VehicleMessage measurement) throws DataSinkException;
+    public void receive(VehicleMessage measurement) throws DataSinkException;
 
     /**
      * Release any acquired resources and either stop sending measurements (if a

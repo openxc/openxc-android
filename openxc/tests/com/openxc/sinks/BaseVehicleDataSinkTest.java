@@ -1,24 +1,30 @@
 package com.openxc.sinks;
 
-import static org.mockito.Mockito.spy;
-import junit.framework.TestCase;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import com.openxc.messages.SimpleVehicleMessage;
 
-public class BaseVehicleDataSinkTest extends TestCase {
+public class BaseVehicleDataSinkTest {
     BaseVehicleDataSink sink;
 
-    @Override
+    @Before
     public void setUp() {
-        sink = spy(new BaseVehicleDataSink());
+        sink = new BaseVehicleDataSink();
     }
 
-    public void testReceiveVehicleMessage() throws DataSinkException {
-        sink.receive(new SimpleVehicleMessage("measurement_type", "value"));
-        // TODO not testing anything!
-    }
-
-    public void testStop() {
-        sink.stop();
+    @Test
+    public void storesNamedMessageLocally() throws DataSinkException {
+        String name = "foo";
+        SimpleVehicleMessage message = new SimpleVehicleMessage(name, "value");
+        sink.receive(message);
+        assertTrue(sink.containsNamedMessage(name));
+        assertThat(sink.getNamedMessage(name).asSimpleMessage(),
+                equalTo(message));
     }
 }

@@ -29,7 +29,7 @@ public class UserSink extends BaseVehicleDataSink {
         mService = service;
     }
 
-    public boolean receive(VehicleMessage measurement) {
+    public void receive(VehicleMessage measurement) {
         if(mService != null) {
             try {
                 mService.receive(measurement);
@@ -37,7 +37,6 @@ public class UserSink extends BaseVehicleDataSink {
                 Log.d(TAG, "Unable to send message to remote service", e);
             }
         }
-        return true;
     }
 
     @Override

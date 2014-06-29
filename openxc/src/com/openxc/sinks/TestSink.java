@@ -6,8 +6,7 @@ import com.openxc.messages.VehicleMessage;
 public class TestSink extends BaseVehicleDataSink {
     public boolean received = false;
 
-    public boolean receive(VehicleMessage measurement) {
+    public void receive(VehicleMessage measurement) {
         received = true;
-        return true;
     }
 }

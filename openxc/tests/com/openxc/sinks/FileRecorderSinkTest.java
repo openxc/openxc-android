@@ -89,10 +89,10 @@ public class FileRecorderSinkTest {
     @Test
     public void testStop() throws DataSinkException {
         VehicleMessage measurement = new SimpleVehicleMessage("first", true);
-        assertTrue(sink.receive(measurement));
+        sink.receive(measurement);
 
         measurement = new SimpleVehicleMessage("second", false);
-        assertTrue(sink.receive(measurement));
+        sink.receive(measurement);
         sink.stop();
 
         measurement = new SimpleVehicleMessage("third", true);

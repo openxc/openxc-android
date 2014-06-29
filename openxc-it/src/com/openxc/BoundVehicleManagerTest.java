@@ -198,9 +198,8 @@ public class BoundVehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     private VehicleDataSink mCustomSink = new BaseVehicleDataSink() {
-        public boolean receive(VehicleMessage message) {
+        public void receive(VehicleMessage message) {
             receivedMessageId = ((NamedVehicleMessage)message).getName();
-            return true;
         }
     };
 }
