@@ -38,17 +38,6 @@ public class MessageListenerSinkTest {
         assertEquals(listener.received, message);
     }
 
-    @Test
-    public void testListenerGetsLastKnownValue() throws DataSinkException {
-        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
-        sink.receive(message);
-        // This also tests the helper method for going from message -> exact key
-        // matcher
-        sink.register(message, listener);
-        assertThat(listener.received, notNullValue());
-        assertEquals(listener.received, message);
-    }
-
     private class SpyListener implements VehicleMessage.Listener {
         public VehicleMessage received;
 
