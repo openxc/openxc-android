@@ -93,10 +93,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
                 && Objects.equal(mNegativeResponseCode, other.mNegativeResponseCode);
     }
 
-    public interface Listener {
-        public void receive(DiagnosticRequest request, DiagnosticResponse response);
-    }
-
     public static enum NegativeResponseCode {
         NONE(-1),
         SUB_FUNCTION_NOT_SUPPORTED(0x12),
