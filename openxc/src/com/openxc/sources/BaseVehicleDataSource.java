@@ -41,10 +41,13 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      *      from sending updates.
      */
     public void setCallback(SourceCallback callback) {
-        mCallbackLock.lock();
-        mCallback = callback;
-        mCallbackChanged.signal();
-        mCallbackLock.unlock();
+        try {
+            mCallbackLock.lock();
+            mCallback = callback;
+            mCallbackChanged.signal();
+        } finally {
+            mCallbackLock.unlock();
+        }
     }
 
     protected void disconnected() {
@@ -92,6 +95,19 @@ public class BaseVehicleDataSource implements VehicleDataSource {
             mCallback.receive(message);
         }
     }
+
+    protected void waitForCallback() {
+        try {
+            mCallbackLock.lock();
+            if(mCallback == null) {
+                mCallbackChanged.await();
+            }
+        } catch(InterruptedException e) {
+        } finally {
+            mCallbackLock.unlock();
+        }
+    }
+
 
     /**
      * Return a string suitable as a tag for logging.
