@@ -31,6 +31,8 @@ import com.openxc.messages.VehicleMessage;
 public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MessageListenerSink";
 
+    // TODO i'd like to somehow combine these - I think switching to an event
+    // bus will solve it
     private Multimap<KeyMatcher, VehicleMessage.Listener>
             mMessageListeners = HashMultimap.create();
     private Multimap<KeyMatcher, Measurement.Listener>
@@ -46,13 +48,19 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         mMessageListeners.put(matcher, listener);
     }
 
-    public void register(KeyedMessage message,
-            VehicleMessage.Listener listener) {
-        register(ExactKeyMatcher.buildExactMatcher(message), listener);
+    public void register(KeyMatcher matcher, Measurement.Listener listener) {
+        mMeasurementListeners.put(matcher, listener);
     }
 
-    public void register(KeyMatcher matcher, Measurement.Listener listener) {
-        // TODO how do we handle listeners for measurements, not messages?
+    public void register(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener) {
+        // TODO this is really ugly, need a helper to go from Measurment class
+        // -> MessageKey or -> KeyMatcher
+        try {
+            register(ExactKeyMatcher.buildExactMatcher(new NamedVehicleMessage(
+                            BaseMeasurement.getIdForClass(measurementType))),
+                    listener);
+        } catch(UnrecognizedMeasurementTypeException e) { }
     }
 
     public void register(KeyedMessage message,
@@ -64,18 +72,33 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             Measurement.Listener listener) {
         // TODO hack alert! need to refactor this
         try {
-        mMeasurementListeners.remove(ExactKeyMatcher.buildExactMatcher(
+            unregister(ExactKeyMatcher.buildExactMatcher(
                     new NamedVehicleMessage(
                         BaseMeasurement.getIdForClass(measurementType))),
                 listener);
-        } catch(UnrecognizedMeasurementTypeException e) {
-        }
+        } catch(UnrecognizedMeasurementTypeException e) { }
+    }
+
+    public void unregister(KeyMatcher matcher, Measurement.Listener listener) {
+        mMeasurementListeners.remove(matcher, listener);
+    }
+
+    public void unregister(KeyMatcher matcher,
+            VehicleMessage.Listener listener) {
+        mMessageListeners.remove(matcher, listener);
+    }
+
+    public void unregister(KeyedMessage message,
+            VehicleMessage.Listener listener) {
+        mMessageListeners.remove(ExactKeyMatcher.buildExactMatcher(message),
+                listener);
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("numListeners", mMeasurementListeners.size())
+            .add("numMessageListeners", mMessageListeners.size())
+            .add("numMeasurementListeners", mMeasurementListeners.size())
             .toString();
     }
 
@@ -89,10 +112,13 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                     }
                 }
             }
-        }
 
-        if (message instanceof SimpleVehicleMessage) {
-            propagateMeasurementFromMessage(message.asSimpleMessage());
+            // TODO how do we know when a a message is a measurement and should be
+            // propagated as such? I think an event bus will take care of this as
+            // listners will become more generic
+            if (message instanceof SimpleVehicleMessage) {
+                propagateMeasurementFromMessage(message.asSimpleMessage());
+            }
         }
     }
 
