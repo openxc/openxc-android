@@ -45,10 +45,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
             byte[] payload,
             boolean success,
             NegativeResponseCode negativeResponseCode,
-            float value,
-            HashMap<String, Object> extras) {
+            float value) {
         this(busId, id, mode, pid, payload, success);
-        setExtras(extras);
         mNegativeResponseCode = negativeResponseCode;
         mValue = value;
     }

@@ -28,8 +28,6 @@ public class CanMessageTest {
         message = new CanMessage(bus, id, data);
     }
 
-    // TODO test extra fields are stored
-
     @Test
     public void getIdReturnsId() {
         assertEquals(id, message.getId());

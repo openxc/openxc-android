@@ -23,8 +23,6 @@ public class DiagnosticResponseTest {
     int pid = 4;
     byte[] payload = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
 
-    // TODO test building from values with missing keys
-
     @Before
     public void setup() {
         response = new DiagnosticResponse(bus, id, mode, pid, payload, true);

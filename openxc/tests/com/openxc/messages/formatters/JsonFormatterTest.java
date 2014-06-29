@@ -100,11 +100,13 @@ public class JsonFormatterTest {
     }
 
     @Test
-    public void serializeNamedMessageWithValues() {
+    public void serializeNamedMessageWithExtras() {
         HashMap<String, Object> extras = new HashMap<>();
         extras.put("foo", "bar");
         extras.put("baz", 42.0);
-        serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo", extras));
+        VehicleMessage message = new NamedVehicleMessage("foo");
+        message.setExtras(extras);
+        serializeDeserializeAndCheckEqual(message);
     }
 
     @Test

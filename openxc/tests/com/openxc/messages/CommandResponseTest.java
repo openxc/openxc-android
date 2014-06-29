@@ -38,13 +38,6 @@ public class CommandResponseTest {
     }
 
     @Test
-    public void constructWithExtraValuesHasMessage() {
-        response = new CommandResponse(command, message,
-                new HashMap<String, Object>());
-        assertEquals(message, response.getMessage());
-    }
-
-    @Test
     public void sameEquals() {
         assertEquals(response, response);
     }

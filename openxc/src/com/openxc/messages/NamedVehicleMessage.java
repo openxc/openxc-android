@@ -26,18 +26,9 @@ public class NamedVehicleMessage extends VehicleMessage implements KeyedMessage 
         mName = name;
     }
 
-    public NamedVehicleMessage(Long timestamp, String name,
-            Map<String, Object> extras) {
-        super(timestamp, extras);
-        mName = name;
-    }
-
-    public NamedVehicleMessage(String name, Map<String, Object> extras) {
-        this(null, name, extras);
-    }
-
     public NamedVehicleMessage(Long timestamp, String name) {
-        this(timestamp, name, null);
+        super(timestamp);
+        mName = name;
     }
 
     public String getName() {

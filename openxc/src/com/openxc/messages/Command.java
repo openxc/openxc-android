@@ -22,13 +22,7 @@ public class Command extends VehicleMessage implements KeyedMessage {
     @SerializedName(COMMAND_KEY)
     private String mCommand;
 
-    public Command(String command, Map<String, Object> extras) {
-        super(extras);
-        mCommand = command;
-    }
-
     public Command(String command) {
-        this(command, null);
         mCommand = command;
     }
 

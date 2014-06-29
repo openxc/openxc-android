@@ -28,19 +28,13 @@ public class CommandResponse extends VehicleMessage implements KeyedMessage {
     @SerializedName(MESSAGE_KEY)
     private String mMessage;
 
-    public CommandResponse(String command, String message,
-            Map<String, Object> extras) {
-        super(extras);
+    public CommandResponse(String command, String message) {
         mMessage = message;
         mCommand = command;
     }
 
-    public CommandResponse(String command, String message) {
-        this(command, message, null);
-    }
-
     public CommandResponse(String command) {
-        this(command, null, null);
+        this(command, null);
     }
 
     public String getMessage() {

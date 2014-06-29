@@ -30,16 +30,10 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
     public static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
-    public CanMessage(int canBus, int id, byte[] data,
-            Map<String, Object> extras) {
-        super(extras);
+    public CanMessage(int canBus, int id, byte[] data) {
         mBusId = canBus;
         mId = id;
         setPayload(data);
-    }
-
-    public CanMessage(int canBus, int id, byte[] data) {
-        this(canBus, id, data, null);
     }
 
     public int getBus() {
