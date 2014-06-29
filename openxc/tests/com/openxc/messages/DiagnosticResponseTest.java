@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +49,21 @@ public class DiagnosticResponseTest {
     @Test
     public void getPayloadReturnsPayload() {
         assertArrayEquals(payload, response.getPayload());
+    }
+
+    @Test
+    public void getValueReturnsValue() {
+        double value = 42.0;
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, success,
+                null, value);
+        assertTrue(response.hasValue());
+        assertThat(response.getValue(), equalTo(value));
+    }
+
+    @Test
+    public void getValueNoValueReturnsNull() {
+        assertFalse(response.hasValue());
+        assertThat(response.getValue(), nullValue());
     }
 
     @Test

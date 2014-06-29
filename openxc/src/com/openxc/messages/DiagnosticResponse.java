@@ -26,9 +26,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
     @SerializedName(SUCCESS_KEY)
     private boolean mSuccess = false;
 
-    // TODO need a way to say 'no value' so you know to look at payload
     @SerializedName(VALUE_KEY)
-    private float mValue;
+    private Double mValue;
 
     @SerializedName(NEGATIVE_RESPONSE_CODE_KEY)
     private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
@@ -48,7 +47,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
             byte[] payload,
             boolean success,
             NegativeResponseCode negativeResponseCode,
-            float value) {
+            double value) {
         this(busId, id, mode, pid, payload, success);
         mNegativeResponseCode = negativeResponseCode;
         mValue = value;
@@ -58,7 +57,11 @@ public class DiagnosticResponse extends DiagnosticMessage {
         return mSuccess;
     }
 
-    public float getValue() {
+    public boolean hasValue() {
+        return mValue != null;
+    }
+
+    public Double getValue() {
         return mValue;
     }
 
@@ -93,7 +96,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
         final DiagnosticResponse other = (DiagnosticResponse) obj;
         return mSuccess == other.mSuccess
-                && mValue == other.mValue
+                && Objects.equal(mValue, other.mValue)
                 && mNegativeResponseCode == other.mNegativeResponseCode;
     }
 
@@ -160,7 +163,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
         out.writeByte((byte) (getSuccess() ? 1 : 0));
-        out.writeFloat(getValue());
+        out.writeValue(getValue());
         out.writeSerializable(getNegativeResponseCode());
     }
 
@@ -168,7 +171,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mSuccess = in.readByte() != 0;
-        mValue = in.readFloat();
+        mValue = (Double) in.readValue(Double.class.getClassLoader());
         mNegativeResponseCode = (NegativeResponseCode) in.readSerializable();
     }
 
