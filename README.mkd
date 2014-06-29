@@ -22,6 +22,22 @@ Android projects within the repository. At the minimum, add the `openxc` project
 (the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
 required to run OpenXC applications).
 
+## Tests
+
+To run the unit tests suite:
+
+    $ mvn test -pl openxc
+
+To generate a code coverage report for the test suite:
+
+    $ mvn cobertura:cobertura -pl openxc
+
+To run the instrumentation tests (must have an attached Android device or
+emulator):
+
+    $ mvn install -pl openxc -am
+    $ mvn install -pl openxc-it
+
 ## Building from Command Line
 
 The build requires [Maven](http://maven.apache.org/download.html)
