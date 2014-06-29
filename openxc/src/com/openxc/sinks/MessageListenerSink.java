@@ -54,11 +54,8 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void register(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
-        // TODO this is really ugly, need a helper to go from Measurment class
-        // -> MessageKey or -> KeyMatcher
         try {
-            register(ExactKeyMatcher.buildExactMatcher(new NamedVehicleMessage(
-                            BaseMeasurement.getIdForClass(measurementType))),
+            register(BaseMeasurement.buildMatcherForMeasurment(measurementType),
                     listener);
         } catch(UnrecognizedMeasurementTypeException e) { }
     }
@@ -70,12 +67,10 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void unregister(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
-        // TODO hack alert! need to refactor this
         try {
-            unregister(ExactKeyMatcher.buildExactMatcher(
-                    new NamedVehicleMessage(
-                        BaseMeasurement.getIdForClass(measurementType))),
-                listener);
+            unregister(
+                    BaseMeasurement.buildMatcherForMeasurment(measurementType),
+                    listener);
         } catch(UnrecognizedMeasurementTypeException e) { }
     }
 

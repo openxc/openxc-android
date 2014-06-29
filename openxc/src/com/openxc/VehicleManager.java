@@ -224,10 +224,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
-            // TODO need hepler methods to clean this up
-            MessageKey key = new NamedVehicleMessage(
-                        BaseMeasurement.getIdForClass(measurementType)).getKey();
-            SimpleVehicleMessage message = mRemoteService.get(key).asSimpleMessage();
+            SimpleVehicleMessage message = mRemoteService.get(
+                    BaseMeasurement.buildMatcherForMeasurment(measurementType))
+                    .asSimpleMessage();
             return BaseMeasurement.getMeasurementFromMessage(
                     measurementType, message);
         } catch(RemoteException | ClassCastException e) {
