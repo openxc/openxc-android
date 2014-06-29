@@ -17,6 +17,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
@@ -61,7 +62,17 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         }
     }
 
-    public void register(KeyMatcher matcher, DiagnosticResponse.Listener listener) {
+    public void register(KeyedMessage message,
+            VehicleMessage.Listener listener) {
+        register(ExactKeyMatcher.buildExactMatcher(message), listener);
+    }
+
+    public void register(KeyMatcher matcher, Measurement.Listener listener) {
+        // TODO how do we handle listeners for measurements, not messages?
+    }
+
+    public void register(KeyMatcher matcher,
+            DiagnosticResponse.Listener listener) {
         mDiagnosticListeners.put(matcher, listener);
     }
 
@@ -75,7 +86,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             Measurement.Listener listener) {
         // TODO hack alert! need to refactor this
         try {
-        mMeasurementListeners.remove(KeyMatcher.buildExactMatcher(
+        mMeasurementListeners.remove(ExactKeyMatcher.buildExactMatcher(
                     new NamedVehicleMessage(
                         BaseMeasurement.getIdForClass(measurementType))),
                 listener);

@@ -28,6 +28,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.remote.RemoteServiceVehicleInterface;
@@ -293,7 +294,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     public void addListener(KeyedMessage keyedMessage,
             Measurement.Listener listener) {
-        addListener(KeyMatcher.buildExactMatcher(keyedMessage), listener);
+        addListener(ExactKeyMatcher.buildExactMatcher(keyedMessage), listener);
     }
 
     public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
@@ -351,7 +352,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     public void addListener(KeyedMessage keyedMessage,
             DiagnosticResponse.Listener listener) {
-        addListener(KeyMatcher.buildExactMatcher(keyedMessage), listener);
+        addListener(ExactKeyMatcher.buildExactMatcher(keyedMessage), listener);
     }
 
     public void addListener(KeyMatcher matcher,
