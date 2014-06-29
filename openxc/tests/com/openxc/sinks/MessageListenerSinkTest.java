@@ -61,6 +61,13 @@ public class MessageListenerSinkTest {
     }
 
     @Test
+    public void receiveUnrecognizedSimpleMessage() throws
+            DataSinkException, UnrecognizedMeasurementTypeException {
+        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        sink.receive(message);
+    }
+
+    @Test
     public void receiveNonMatchingMeasurementNotPropagated() throws
             DataSinkException, UnrecognizedMeasurementTypeException {
         VehicleSpeed speed = new VehicleSpeed(42.0);
