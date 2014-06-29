@@ -110,6 +110,11 @@ public class MessageListenerSinkTest {
         assertThat(listener.received, notNullValue());
     }
 
+    @Test
+    public void toStringNotNull() {
+        assertThat(sink.toString(), notNullValue());
+    }
+
     private VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
         public void receive(Measurement measurement) {
             speedReceived = (VehicleSpeed) measurement;
