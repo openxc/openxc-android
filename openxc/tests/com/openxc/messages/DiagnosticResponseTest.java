@@ -24,11 +24,10 @@ public class DiagnosticResponseTest {
     int mode = 2;
     int pid = 4;
     byte[] payload = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
-    boolean success = true;
 
     @Before
     public void setup() {
-        response = new DiagnosticResponse(bus, id, mode, pid, payload, success);
+        response = new DiagnosticResponse(bus, id, mode, pid, payload);
     }
 
     @Test
@@ -54,8 +53,8 @@ public class DiagnosticResponseTest {
     @Test
     public void getValueReturnsValue() {
         double value = 42.0;
-        response = new DiagnosticResponse(bus, id, mode, pid, payload, success,
-                null, value);
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, null,
+                value);
         assertTrue(response.hasValue());
         assertThat(response.getValue(), equalTo(value));
     }
@@ -80,7 +79,7 @@ public class DiagnosticResponseTest {
     @Test
     public void differentIdNotEqual() {
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
-                bus, id + 1, mode, pid, payload, success);
+                bus, id + 1, mode, pid, payload);
         anotherResponse.setPayload(payload);
         assertThat(response, not(equalTo(anotherResponse)));
     }
@@ -88,7 +87,7 @@ public class DiagnosticResponseTest {
     @Test
     public void differentBusNotEqual() {
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
-                bus + 1, id, mode, pid, payload, success);
+                bus + 1, id, mode, pid, payload);
         anotherResponse.setPayload(payload);
         assertThat(response, not(equalTo(anotherResponse)));
     }
@@ -96,7 +95,7 @@ public class DiagnosticResponseTest {
     @Test
     public void differentModeNotEqual() {
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
-                bus, id, mode + 1, pid, payload, success);
+                bus, id, mode + 1, pid, payload);
         anotherResponse.setPayload(payload);
         assertThat(response, not(equalTo(anotherResponse)));
     }
@@ -105,7 +104,7 @@ public class DiagnosticResponseTest {
     public void differentPayloadNotEqual() {
         payload[1] = (byte) (payload[1] + 1);
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
-                bus, id, mode, pid, payload, success);
+                bus, id, mode, pid, payload);
         anotherResponse.setPayload(payload);
         assertThat(response, not(equalTo(anotherResponse)));
     }
@@ -113,20 +112,20 @@ public class DiagnosticResponseTest {
     @Test
     public void sameValueEqual() {
         double value = 42.0;
-        response = new DiagnosticResponse(bus, id, mode, pid, payload, success,
-                null, value);
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, null,
+                value);
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
-                bus, id, mode, pid, payload, success, null, value);
+                bus, id, mode, pid, payload, null, value);
         assertThat(response, equalTo(anotherResponse));
     }
 
     @Test
     public void differentValueNotEqual() {
         double value = 42.0;
-        response = new DiagnosticResponse(bus, id, mode, pid, payload, success,
-                null, value);
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, null,
+                value);
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
-                bus, id, mode, pid, payload, success, null, value + 1);
+                bus, id, mode, pid, payload, null, value + 1);
         assertThat(response, not(equalTo(anotherResponse)));
     }
 

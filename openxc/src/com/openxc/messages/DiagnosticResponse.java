@@ -33,29 +33,23 @@ public class DiagnosticResponse extends DiagnosticMessage {
     private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
 
     public DiagnosticResponse(int busId, int id, int mode, int pid,
-            byte[] payload,
-            // TODO rather than construct with success, construct with negative
-            // response code only if it failed. otherwise we assume it was
-            // successful.
-            boolean success) {
+            byte[] payload) {
         super(busId, id, mode, pid);
         setPayload(payload);
-        mSuccess = success;
     }
 
     public DiagnosticResponse(int busId, int id, int mode, int pid,
             byte[] payload,
-            boolean success,
             NegativeResponseCode negativeResponseCode,
             double value) {
-        this(busId, id, mode, pid, payload, success);
+        this(busId, id, mode, pid, payload);
         mNegativeResponseCode = negativeResponseCode == null ?
                 NegativeResponseCode.NONE : negativeResponseCode;
         mValue = value;
     }
 
     public boolean getSuccess() {
-        return mSuccess;
+        return mNegativeResponseCode == NegativeResponseCode.NONE;
     }
 
     public boolean hasValue() {
@@ -80,7 +74,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
             .add("payload", Arrays.toString(getPayload()))
             .add("value", getValue())
             .add("negative_response_code", getNegativeResponseCode())
-            .add("success", getSuccess())
             .add("extras", getExtras())
             .toString();
     }
@@ -96,8 +89,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
         }
 
         final DiagnosticResponse other = (DiagnosticResponse) obj;
-        return mSuccess == other.mSuccess
-                && Objects.equal(mValue, other.mValue)
+        return Objects.equal(mValue, other.mValue)
                 && Objects.equal(mNegativeResponseCode, other.mNegativeResponseCode);
     }
 
@@ -163,7 +155,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeByte((byte) (getSuccess() ? 1 : 0));
         out.writeValue(getValue());
         out.writeSerializable(getNegativeResponseCode());
     }
@@ -171,7 +162,6 @@ public class DiagnosticResponse extends DiagnosticMessage {
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        mSuccess = in.readByte() != 0;
         mValue = (Double) in.readValue(Double.class.getClassLoader());
         mNegativeResponseCode = (NegativeResponseCode) in.readSerializable();
     }

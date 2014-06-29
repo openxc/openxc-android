@@ -49,14 +49,14 @@ public class JsonFormatterTest {
     public void serializeDiagnosticResponse() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                     1, 2, 3, 4,
-                    new byte[]{1,2,3,4}, true));
+                    new byte[]{1,2,3,4}));
     }
 
     @Test
     public void serializeDiagnosticResponseWithValue() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                     1, 2, 3, 4,
-                    new byte[]{1,2,3,4}, true, null, 42.0));
+                    new byte[]{1,2,3,4}, null, 42.0));
     }
 
     @Test
