@@ -57,4 +57,9 @@ public class CommandTest {
         assertThat(createdFromParcel, instanceOf(Command.class));
         assertEquals(message, createdFromParcel);
     }
+
+    @Test
+    public void keyNotNull() {
+        assertThat(message.getKey(), notNullValue());
+    }
 }

@@ -83,4 +83,9 @@ public class CanMessageTest {
         assertThat(createdFromParcel, instanceOf(CanMessage.class));
         assertEquals(message, createdFromParcel);
     }
+
+    @Test
+    public void keyNotNull() {
+        assertThat(message.getKey(), notNullValue());
+    }
 }

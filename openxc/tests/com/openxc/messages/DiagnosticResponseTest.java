@@ -163,4 +163,9 @@ public class DiagnosticResponseTest {
         assertThat(createdFromParcel, instanceOf(DiagnosticResponse.class));
         assertEquals(response, createdFromParcel);
     }
+
+    @Test
+    public void keyNotNull() {
+        assertThat(response.getKey(), notNullValue());
+    }
 }

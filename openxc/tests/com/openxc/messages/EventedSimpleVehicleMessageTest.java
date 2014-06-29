@@ -81,4 +81,9 @@ public class EventedSimpleVehicleMessageTest {
         assertThat(createdFromParcel, instanceOf(EventedSimpleVehicleMessage.class));
         assertEquals(message, createdFromParcel);
     }
+
+    @Test
+    public void keyNotNull() {
+        assertThat(message.getKey(), notNullValue());
+    }
 }

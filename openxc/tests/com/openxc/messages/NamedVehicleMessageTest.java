@@ -62,4 +62,9 @@ public class NamedVehicleMessageTest {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("foo");
         assertThat(message.getKey(), equalTo(anotherMessage.getKey()));
     }
+
+    @Test
+    public void keyNotNull() {
+        assertThat(message.getKey(), notNullValue());
+    }
 }

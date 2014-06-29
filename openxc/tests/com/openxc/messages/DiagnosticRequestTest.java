@@ -147,4 +147,9 @@ public class DiagnosticRequestTest {
         assertThat(createdFromParcel, instanceOf(DiagnosticRequest.class));
         assertEquals(request, createdFromParcel);
     }
+
+    @Test
+    public void keyNotNull() {
+        assertThat(request.getKey(), notNullValue());
+    }
 }
