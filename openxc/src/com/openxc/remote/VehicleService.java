@@ -21,6 +21,7 @@ import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.MessageKey;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
@@ -157,8 +158,14 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
     private final VehicleServiceInterface.Stub mBinder =
         new VehicleServiceInterface.Stub() {
-            public VehicleMessage get(String measurementId) {
-                return mPipeline.get(measurementId);
+            public VehicleMessage get(MessageKey key) {
+                VehicleMessage message = mPipeline.get(key);
+                if(message == null) {
+                    // We can't return null via the AIDL so we return a blank
+                    // VehicleMessage intsead
+                    message = new VehicleMessage();
+                }
+                return message;
             }
 
             public boolean send(VehicleMessage command) {

@@ -25,10 +25,12 @@ import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.MessageKey;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
@@ -222,12 +224,13 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
-            NamedVehicleMessage message = (NamedVehicleMessage)
-                    mRemoteService.get(
-                        BaseMeasurement.getIdForClass(measurementType));
+            // TODO need hepler methods to clean this up
+            MessageKey key = new NamedVehicleMessage(
+                        BaseMeasurement.getIdForClass(measurementType)).getKey();
+            SimpleVehicleMessage message = mRemoteService.get(key).asSimpleMessage();
             return BaseMeasurement.getMeasurementFromMessage(
                     measurementType, message);
-        } catch(RemoteException e) {
+        } catch(RemoteException | ClassCastException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             throw new NoValueException();
         }

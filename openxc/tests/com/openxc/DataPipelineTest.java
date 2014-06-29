@@ -6,13 +6,16 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.SourceCallback;
@@ -115,17 +118,20 @@ public class DataPipelineTest {
     public void getNamed() {
         String name = "foo";
         String value = "value";
-        pipeline.receive(new SimpleVehicleMessage(name, value));
-        SimpleVehicleMessage message = (SimpleVehicleMessage) pipeline.get(name);
-        assertThat(message, notNullValue());
-        assertThat((String)message.getValue(), equalTo(value));
+        KeyedMessage message = new SimpleVehicleMessage(name, value);
+        pipeline.receive(message);
+        SimpleVehicleMessage retreived = (SimpleVehicleMessage) pipeline.get(
+                message.getKey());
+        assertThat(retreived, notNullValue());
+        assertThat((String)retreived.getValue(), equalTo(value));
     }
 
     @Test
-    public void getUnnamed() {
-        HashMap<String, Object> data = new HashMap<>();
-        pipeline.receive(new VehicleMessage(data));
-        NamedVehicleMessage message = pipeline.get("foo");
-        assertThat(message, nullValue());
+    public void getKeyed() {
+        DiagnosticRequest request = new DiagnosticRequest(42, 1, 2, 4);
+        pipeline.receive(request);
+        VehicleMessage message = pipeline.get(request.getKey());
+        assertThat(message, notNullValue());
+        assertEquals(message, request);
     }
 }

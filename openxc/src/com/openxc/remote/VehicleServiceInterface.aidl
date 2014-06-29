@@ -2,6 +2,7 @@ package com.openxc.remote;
 
 import com.openxc.remote.VehicleServiceListener;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.MessageKey;
 
 /**
  * The AIDL interface for a VehicleService running in a separate process.
@@ -18,12 +19,14 @@ interface VehicleServiceInterface {
     /**
      * Retreive the most recent value for the measurement.
      *
-     * @param measurementType must match the ID field of a known Measurement
-     *                        subclass.
+     * TODO can we have this return null or does that cause problems with the
+     * AIDL?
+     *
+     * @param key the key of the message to retreive.
      * @return a VehicleMessage which may or may not have a value. This function
      *         will never return null, even if no value is available.
      */
-    VehicleMessage get(String measurementType);
+    VehicleMessage get(in MessageKey key);
 
     /**
      * Set a new value for the measurement class on the vehicle.
