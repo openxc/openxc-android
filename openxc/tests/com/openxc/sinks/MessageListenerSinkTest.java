@@ -35,10 +35,7 @@ public class MessageListenerSinkTest {
         SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
         sink.register(ExactKeyMatcher.buildExactMatcher(message), listener);
         sink.receive(message);
-        // TODO would like to not have something as unreliable as a delay here,
-        // but we are waiting on the backgroud thread in
-        // AbstractQueuedCallbackSink to propagate the data
-        TestUtils.pause(20);
+        sink.clearQueue();
         assertThat(listener.received, notNullValue());
         assertEquals(listener.received, message);
     }

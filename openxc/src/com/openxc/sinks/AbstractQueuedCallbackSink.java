@@ -28,7 +28,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
 
     private NotificationThread mNotificationThread = new NotificationThread();
     private Lock mNotificationsLock = new ReentrantLock();
-    private Condition mNotificationReceived = mNotificationsLock.newCondition();
+    private Condition mNotificationsChanged = mNotificationsLock.newCondition();
     private CopyOnWriteArrayList<VehicleMessage> mNotifications =
             new CopyOnWriteArrayList<VehicleMessage>();
 
@@ -43,10 +43,27 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
     public void receive(VehicleMessage message)
             throws DataSinkException {
         super.receive(message);
-        mNotificationsLock.lock();
-        mNotifications.add(message);
-        mNotificationReceived.signal();
-        mNotificationsLock.unlock();
+        try {
+            mNotificationsLock.lock();
+            mNotifications.add(message);
+            mNotificationsChanged.signal();
+        } finally {
+            mNotificationsLock.unlock();
+        }
+    }
+
+    /* Block until the notifications queue is cleared.
+     */
+    public void clearQueue() {
+        try {
+            mNotificationsLock.lock();
+            while(!mNotifications.isEmpty()) {
+                mNotificationsChanged.await();
+            }
+        } catch(InterruptedException e) {
+        } finally {
+            mNotificationsLock.unlock();
+        }
     }
 
     abstract protected void propagateMessage(VehicleMessage message);
@@ -75,7 +92,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                 mNotificationsLock.lock();
                 try {
                     if(mNotifications.isEmpty()) {
-                        mNotificationReceived.await();
+                        mNotificationsChanged.await();
                     }
 
                     // This iterator is weakly consistent, so we don't need the lock
@@ -94,19 +111,9 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
                             "item for notification -- likely shutting down");
                     break;
                 } finally {
+                    mNotificationsChanged.signal();
                     mNotificationsLock.unlock();
                 }
-
-                // This iterator is weakly consistent, so we don't need the lock
-                Iterator<VehicleMessage> it = mNotifications.iterator();
-                CopyOnWriteArrayList<VehicleMessage> deleted =
-                        new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
-                while(it.hasNext()) {
-                    VehicleMessage message = it.next();
-                    propagateMessage(message);
-                    deleted.add(message);
-                }
-                mNotifications.removeAll(deleted);
             }
             Log.d(TAG, "Stopped notification thread");
         }
