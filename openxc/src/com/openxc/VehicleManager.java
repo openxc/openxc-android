@@ -225,7 +225,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
         try {
             SimpleVehicleMessage message = mRemoteService.get(
-                    BaseMeasurement.buildMatcherForMeasurment(measurementType))
+                    BaseMeasurement.getKeyForMeasurement(measurementType))
                     .asSimpleMessage();
             return BaseMeasurement.getMeasurementFromMessage(
                     measurementType, message);
@@ -281,10 +281,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             Measurement.Listener listener) throws VehicleServiceException,
                 UnrecognizedMeasurementTypeException {
         Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
-
-        NamedVehicleMessage msg = new NamedVehicleMessage(
-                BaseMeasurement.getIdForClass(measurementType));
-        addListener(msg, listener);
+        addListener(BaseMeasurement.buildMatcherForMeasurment(measurementType),
+                listener);
     }
 
     public void addListener(KeyedMessage keyedMessage,

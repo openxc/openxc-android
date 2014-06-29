@@ -26,12 +26,6 @@ public class MeasurementTest {
 
     @Before
     public void setUp() {
-        try {
-            BaseMeasurement.getIdForClass(TestMeasurement.class);
-        } catch (UnrecognizedMeasurementTypeException e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
         range = new Range<Meter>(new Meter(0.0), new Meter(101.2));
         measurement = new TestMeasurement(new Meter(10.1), range);
     }
