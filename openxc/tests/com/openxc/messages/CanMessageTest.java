@@ -42,6 +42,13 @@ public class CanMessageTest {
     }
 
     @Test
+    public void setNoData() {
+        message = new CanMessage(bus, id, null);
+        assertThat(message.getData(), notNullValue());
+        assertArrayEquals(new byte[]{0,0,0,0,0,0,0,0}, message.getData());
+    }
+
+    @Test
     public void sameEquals() {
         assertEquals(message, message);
     }
