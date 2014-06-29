@@ -64,7 +64,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 mVehicleManager.removeListener(Latitude.class, this);
                 mVehicleManager.removeListener(Longitude.class, this);
                 mVehicleManager.removeListener(VehicleSpeed.class, this);
-            } catch(VehicleServiceException e) {
+            } catch(VehicleServiceException | UnrecognizedMeasurementTypeException e) {
             }
         }
     }

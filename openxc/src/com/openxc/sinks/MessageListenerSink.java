@@ -44,38 +44,26 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 mMeasurementListeners);
     }
 
-    public void register(KeyMatcher matcher, VehicleMessage.Listener listener) {
-        mMessageListeners.put(matcher, listener);
+    public void register(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener)
+            throws UnrecognizedMeasurementTypeException {
+        register(BaseMeasurement.buildMatcherForMeasurment(measurementType),
+                listener);
     }
 
     public void register(KeyMatcher matcher, Measurement.Listener listener) {
         mMeasurementListeners.put(matcher, listener);
     }
 
-    public void register(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener) {
-        try {
-            register(BaseMeasurement.buildMatcherForMeasurment(measurementType),
-                    listener);
-        } catch(UnrecognizedMeasurementTypeException e) { }
-    }
-
-    public void register(MessageKey key, VehicleMessage.Listener listener) {
-        register(ExactKeyMatcher.buildExactMatcher(key), listener);
-    }
-
-    public void register(KeyedMessage message,
-            VehicleMessage.Listener listener) {
-        register(ExactKeyMatcher.buildExactMatcher(message), listener);
+    public void register(KeyMatcher matcher, VehicleMessage.Listener listener) {
+        mMessageListeners.put(matcher, listener);
     }
 
     public void unregister(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener) {
-        try {
-            unregister(
-                    BaseMeasurement.buildMatcherForMeasurment(measurementType),
-                    listener);
-        } catch(UnrecognizedMeasurementTypeException e) { }
+            Measurement.Listener listener)
+            throws UnrecognizedMeasurementTypeException {
+        unregister(BaseMeasurement.buildMatcherForMeasurment(measurementType),
+                listener);
     }
 
     public void unregister(KeyMatcher matcher, Measurement.Listener listener) {
@@ -85,16 +73,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     public void unregister(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
         mMessageListeners.remove(matcher, listener);
-    }
-
-    public void unregister(KeyedMessage message,
-            VehicleMessage.Listener listener) {
-        mMessageListeners.remove(ExactKeyMatcher.buildExactMatcher(message),
-                listener);
-    }
-
-    public void unregister(MessageKey key, VehicleMessage.Listener listener) {
-        unregister(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     @Override

@@ -280,13 +280,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     public void addListener(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) throws VehicleServiceException,
                 UnrecognizedMeasurementTypeException {
-        addListener(BaseMeasurement.buildMatcherForMeasurment(measurementType),
-                listener);
-    }
-
-    public void addListener(KeyedMessage keyedMessage,
-            Measurement.Listener listener) {
-        addListener(ExactKeyMatcher.buildExactMatcher(keyedMessage), listener);
+        Log.i(TAG, "Adding listener " + listener + " for " + measurementType);
+        mNotifier.register(measurementType, listener);
     }
 
     public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
@@ -295,14 +290,21 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     public void addListener(KeyedMessage keyedMessage,
+            Measurement.Listener listener) {
+        addListener(keyedMessage.getKey(), listener);
+    }
+
+    public void addListener(MessageKey key, Measurement.Listener listener) {
+        addListener(ExactKeyMatcher.buildExactMatcher(key), listener);
+    }
+
+    public void addListener(KeyedMessage keyedMessage,
             VehicleMessage.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " to " + keyedMessage);
-        mNotifier.register(keyedMessage, listener);
+        addListener(keyedMessage.getKey(), listener);
     }
 
     public void addListener(MessageKey key, VehicleMessage.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " to " + key);
-        mNotifier.register(key, listener);
+        addListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     public void addListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
@@ -325,11 +327,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      registered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
-    public void removeListener(Class<? extends Measurement>
-            measurementType, Measurement.Listener listener)
-            throws VehicleServiceException {
-        Log.i(TAG, "Removing listener " + listener + " from " +
-                measurementType);
+    public void removeListener(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener)
+            throws VehicleServiceException,
+                UnrecognizedMeasurementTypeException {
+        Log.i(TAG, "Removing listener " + listener + " for " + measurementType);
         mNotifier.unregister(measurementType, listener);
     }
 
@@ -338,11 +340,12 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     public void removeListener(KeyMatcher matcher, Measurement.Listener listener) {
+        Log.i(TAG, "Removing listener " + listener + " from " + matcher);
         mNotifier.unregister(matcher, listener);
     }
 
     public void removeListener(KeyedMessage message, VehicleMessage.Listener listener) {
-        removeListener(ExactKeyMatcher.buildExactMatcher(message), listener);
+        removeListener(message.getKey(), listener);
     }
 
     public void removeListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
@@ -350,7 +353,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     public void removeListener(MessageKey key, VehicleMessage.Listener listener) {
-        mNotifier.unregister(key, listener);
+        removeListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     /**

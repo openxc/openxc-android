@@ -19,6 +19,7 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.ExactKeyMatcher;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.Measurement;
 
@@ -50,7 +51,8 @@ public class MessageListenerSinkTest {
     }
 
     @Test
-    public void listenerReceivesMeasurement() throws DataSinkException {
+    public void listenerReceivesMeasurement() throws DataSinkException,
+           UnrecognizedMeasurementTypeException {
         VehicleSpeed speed = new VehicleSpeed(42.0);
         sink.register(speed.getClass(), speedListener);
         sink.receive(speed.toVehicleMessage());
@@ -60,7 +62,8 @@ public class MessageListenerSinkTest {
     }
 
     @Test
-    public void messageAndMeasurementListenersBothReceive() throws DataSinkException {
+    public void messageAndMeasurementListenersBothReceive() throws DataSinkException,
+            UnrecognizedMeasurementTypeException {
         VehicleSpeed speed = new VehicleSpeed(42.0);
         VehicleMessage message = speed.toVehicleMessage();
         sink.register(ExactKeyMatcher.buildExactMatcher((KeyedMessage) message), listener);

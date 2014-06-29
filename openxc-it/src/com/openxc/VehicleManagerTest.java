@@ -173,7 +173,8 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
 
     @MediumTest
     public void testRemoveWithoutListening()
-            throws VehicleServiceException {
+            throws VehicleServiceException,
+            UnrecognizedMeasurementTypeException {
         prepareServices();
         service.removeListener(VehicleSpeed.class, speedListener);
     }
