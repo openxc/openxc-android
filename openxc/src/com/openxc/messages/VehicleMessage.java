@@ -103,6 +103,10 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
+    public NamedVehicleMessage asNamedMessage() {
+        return (NamedVehicleMessage) this;
+    }
+
     public SimpleVehicleMessage asSimpleMessage() {
         return (SimpleVehicleMessage) this;
     }

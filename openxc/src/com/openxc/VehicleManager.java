@@ -280,7 +280,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     public void addListener(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) throws VehicleServiceException,
                 UnrecognizedMeasurementTypeException {
-        Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
         addListener(BaseMeasurement.buildMatcherForMeasurment(measurementType),
                 listener);
     }
@@ -291,6 +290,23 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener + " to " + matcher);
+        mNotifier.register(matcher, listener);
+    }
+
+    public void addListener(KeyedMessage keyedMessage,
+            VehicleMessage.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener + " to " + keyedMessage);
+        mNotifier.register(keyedMessage, listener);
+    }
+
+    public void addListener(MessageKey key, VehicleMessage.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener + " to " + key);
+        mNotifier.register(key, listener);
+    }
+
+    public void addListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener + " to " + matcher);
         mNotifier.register(matcher, listener);
     }
 
@@ -317,7 +333,25 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.unregister(measurementType, listener);
     }
 
-    // TODO need to add and test removeListener for KeyedMessage
+    public void removeListener(KeyedMessage message, Measurement.Listener listener) {
+        removeListener(ExactKeyMatcher.buildExactMatcher(message), listener);
+    }
+
+    public void removeListener(KeyMatcher matcher, Measurement.Listener listener) {
+        mNotifier.unregister(matcher, listener);
+    }
+
+    public void removeListener(KeyedMessage message, VehicleMessage.Listener listener) {
+        removeListener(ExactKeyMatcher.buildExactMatcher(message), listener);
+    }
+
+    public void removeListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
+        mNotifier.unregister(matcher, listener);
+    }
+
+    public void removeListener(MessageKey key, VehicleMessage.Listener listener) {
+        mNotifier.unregister(key, listener);
+    }
 
     /**
      * Add a new data source to the vehicle service.
