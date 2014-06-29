@@ -15,8 +15,6 @@ import com.openxc.remote.VehicleServiceInterface;
  * {@link com.openxc.VehicleManager} to pass measurement updates from a user's
  * data sources back to the VehicleService, so it can propagate them to all
  * OpenXC apps.
- *
- * TODO it may be possible to merge this with the RemoteListenerSource.
  */
 public class UserSink extends BaseVehicleDataSink {
     private final static String TAG = UserSink.class.getSimpleName();
