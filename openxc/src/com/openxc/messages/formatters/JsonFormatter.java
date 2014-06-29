@@ -75,8 +75,8 @@ public class JsonFormatter {
         } else if(fields.contains(VehicleMessage.EXTRAS_KEY)) {
             message = sGson.fromJson(root, VehicleMessage.class);
         } else {
-            Log.w(TAG, "Unrecognized combination of fields: " + fields.toString());
-            // TODO should really raise an exception here
+            throw new UnrecognizedMessageTypeException(
+                    "Unrecognized combination of fields: " + fields);
         }
         return message;
     }

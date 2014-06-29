@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
@@ -65,26 +66,32 @@ public class JsonStreamerTest {
 
     @Test
     public void clearsDelimitersInFrontOfMessage() {
-        byte[] bytes = new String("\u0000\u0000{\"foo\": \"bar\"}\u0000").getBytes();
+        byte[] bytes = new String("\u0000\u0000{\"name\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
         assertThat(streamer.parseNextMessage(), notNullValue());
     }
 
     @Test
-    public void readValidUnrecognized() {
+    public void readWithOnlyExtras() {
+        byte[] bytes = new String("{\"extras\": {\"foo\": \"bar\"}}\u0000").getBytes();
+        streamer.receive(bytes, bytes.length);
+        assertThat(streamer.parseNextMessage(), notNullValue());
+    }
+
+    @Test
+    public void readUnrecognizedFields() {
         byte[] bytes = new String("{\"foo\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
-
-        assertThat(streamer.parseNextMessage(), notNullValue());
+        assertThat(streamer.parseNextMessage(), nullValue());
     }
 
     @Test
     public void readingGenericThenSpecific() {
-        byte[] bytes = new String("{\"foo\": \"bar\"}\u0000").getBytes();
+        byte[] bytes = new String("{\"name\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
-        bytes = new String("{\"name\": \"foo\"}\u0000").getBytes();
+        bytes = new String("{\"name\": \"foo\", \"value\": \"bar\"}\u0000").getBytes();
         streamer.receive(bytes, bytes.length);
 
         assertThat(streamer.parseNextMessage(), notNullValue());
