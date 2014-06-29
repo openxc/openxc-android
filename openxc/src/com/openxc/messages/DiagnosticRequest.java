@@ -75,11 +75,8 @@ public class DiagnosticRequest extends DiagnosticMessage {
 
         final DiagnosticRequest other = (DiagnosticRequest) obj;
         return mMultipleResponses == other.mMultipleResponses
-                // TODO because of floating point precision this comparison
-                // doesn't always work. should we store it as a long?
-                // && mFrequency == other.mFrequency
-                && ((mName == null && other.mName == null)
-                    || mName.equals(other.mName));
+                && Objects.equal(mFrequency, other.mFrequency)
+                && Objects.equal(mName, other.mName);
     }
 
     @Override
