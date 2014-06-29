@@ -3,13 +3,11 @@ package com.openxc.messages;
 import com.google.common.base.Objects;
 
 public abstract class KeyMatcher {
-    public abstract boolean matches(KeyedMessage other);
+    public abstract boolean matches(MessageKey key);
 
-    private static KeyMatcher sWildcardMatcher = new KeyMatcher() {
-        public boolean matches(KeyedMessage other) {
-            return true;
-        }
-    };
+    public boolean matches(KeyedMessage other) {
+        return matches(other.getKey());
+    }
 
     public static KeyMatcher getWildcardMatcher() {
         return sWildcardMatcher;
@@ -24,8 +22,9 @@ public abstract class KeyMatcher {
         return obj == this;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(this);
-    }
+    private static KeyMatcher sWildcardMatcher = new KeyMatcher() {
+        public boolean matches(MessageKey other) {
+            return true;
+        }
+    };
 }

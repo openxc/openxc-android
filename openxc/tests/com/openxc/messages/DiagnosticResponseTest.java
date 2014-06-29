@@ -51,10 +51,27 @@ public class DiagnosticResponseTest {
     }
 
     @Test
-    public void getValueReturnsValue() {
+    public void nullNegativeResponseMeansSuccess() {
         double value = 42.0;
         response = new DiagnosticResponse(bus, id, mode, pid, payload, null,
                 value);
+        assertTrue(response.isSuccessful());
+        assertEquals(response.getNegativeResponseCode(),
+                DiagnosticResponse.NegativeResponseCode.NONE);
+    }
+
+    @Test
+    public void withNrcNotSuccessful() {
+        response = new DiagnosticResponse(bus, id, mode, pid, payload,
+                DiagnosticResponse.NegativeResponseCode.WRONG_BLOCK_SEQUENCE_COUNTER, 42);
+        assertFalse(response.isSuccessful());
+    }
+
+    @Test
+    public void getValueReturnsValue() {
+        double value = 42.0;
+        response = new DiagnosticResponse(bus, id, mode, pid, payload,
+                DiagnosticResponse.NegativeResponseCode.NONE, value);
         assertTrue(response.hasValue());
         assertThat(response.getValue(), equalTo(value));
     }
@@ -126,6 +143,18 @@ public class DiagnosticResponseTest {
                 value);
         DiagnosticResponse anotherResponse = new DiagnosticResponse(
                 bus, id, mode, pid, payload, null, value + 1);
+        assertThat(response, not(equalTo(anotherResponse)));
+    }
+
+    @Test
+    public void differentNrcNotEqual() {
+        double value = 42.0;
+        response = new DiagnosticResponse(bus, id, mode, pid, payload, null,
+                value);
+        DiagnosticResponse anotherResponse = new DiagnosticResponse(bus, id,
+                mode, pid, payload,
+                DiagnosticResponse.NegativeResponseCode.WRONG_BLOCK_SEQUENCE_COUNTER,
+                value);
         assertThat(response, not(equalTo(anotherResponse)));
     }
 

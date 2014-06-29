@@ -48,7 +48,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
         mValue = value;
     }
 
-    public boolean getSuccess() {
+    public boolean isSuccessful() {
         return mNegativeResponseCode == NegativeResponseCode.NONE;
     }
 

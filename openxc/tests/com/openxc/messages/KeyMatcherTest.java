@@ -11,6 +11,13 @@ import org.junit.Test;
 
 public class KeyMatcherTest {
     KeyedMessage keyed = new TestKeyedMessage();
+    KeyedMessage different = new KeyedMessage() {
+        public MessageKey getKey() {
+            HashMap<String, Object> key = new HashMap<>();
+            key.put("baz", "bing");
+            return new MessageKey(key);
+        }
+    };
 
     @Test
     public void exactMatcherMatchesOriginal() {
@@ -54,16 +61,38 @@ public class KeyMatcherTest {
 
     @Test
     public void exactMatcherDoesntMatchDifferentExactMatcher() {
-        KeyedMessage another = new KeyedMessage() {
-            public MessageKey getKey() {
-                HashMap<String, Object> key = new HashMap<>();
-                key.put("baz", "bing");
-                return new MessageKey(key);
+        assertThat(ExactKeyMatcher.buildExactMatcher(keyed),
+                not(equalTo(ExactKeyMatcher.buildExactMatcher(different))));
+    }
+
+    @Test
+    public void sameHashCode() {
+        assertEquals(ExactKeyMatcher.buildExactMatcher(keyed).hashCode(),
+                ExactKeyMatcher.buildExactMatcher(keyed).hashCode());
+    }
+
+    @Test
+    public void inexactHashCodeNotEqual() {
+        KeyMatcher matcher = new KeyMatcher() {
+            public boolean matches(MessageKey message) {
+                return false;
             }
         };
 
-        assertThat(ExactKeyMatcher.buildExactMatcher(keyed),
-                not(equalTo(ExactKeyMatcher.buildExactMatcher(another))));
+        KeyMatcher anotherMatcher = new KeyMatcher() {
+            public boolean matches(MessageKey message) {
+                return false;
+            }
+        };
+
+        assertThat(matcher.hashCode(), not(equalTo(anotherMatcher.hashCode())));
+    }
+
+    @Test
+    public void differentHashCode() {
+        assertThat(ExactKeyMatcher.buildExactMatcher(keyed).hashCode(),
+                not(equalTo(ExactKeyMatcher.buildExactMatcher(
+                            different).hashCode())));
     }
 
     @Test

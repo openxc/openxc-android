@@ -139,10 +139,5 @@ public abstract class DiagnosticMessage extends KeyedMessage {
         }
     }
 
-    protected DiagnosticMessage(Parcel in)
-            throws UnrecognizedMessageTypeException {
-        readFromParcel(in);
-    }
-
     protected DiagnosticMessage() { }
 }

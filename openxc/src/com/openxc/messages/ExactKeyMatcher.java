@@ -9,8 +9,8 @@ public abstract class ExactKeyMatcher extends KeyMatcher {
         return new ExactKeyMatcher() {
             private MessageKey mKey = keyed.getKey();
 
-            public boolean matches(KeyedMessage other) {
-                return mKey.equals(other.getKey());
+            public boolean matches(MessageKey other) {
+                return mKey.equals(other);
             }
 
             public MessageKey getKey() {

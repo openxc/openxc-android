@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -62,7 +63,16 @@ public class DiagnosticRequestTest {
     @Test
     public void getPidWithNoPidReturnsNull() {
         DiagnosticRequest noPidRequest = new DiagnosticRequest(1, 2, 3);
+        assertFalse(noPidRequest.hasPid());
         assertThat(noPidRequest.getPid(), nullValue());
+    }
+
+    @Test
+    public void setPid() {
+        request = new DiagnosticRequest(1, 2, 3);
+        request.setPid(42);
+        assertTrue(request.hasPid());
+        assertEquals(request.getPid(), Integer.valueOf(42));
     }
 
     @Test
@@ -85,6 +95,30 @@ public class DiagnosticRequestTest {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
                 bus, id + 1, mode);
         anotherRequest.setPayload(payload);
+        assertThat(request, not(equalTo(anotherRequest)));
+    }
+
+    @Test
+    public void differentNameNotEqual() {
+        DiagnosticRequest anotherRequest = new DiagnosticRequest(
+                bus, id, mode);
+        anotherRequest.setName("foo");
+        assertThat(request, not(equalTo(anotherRequest)));
+    }
+
+    @Test
+    public void differentFrequencyNotEqual() {
+        DiagnosticRequest anotherRequest = new DiagnosticRequest(
+                bus, id, mode);
+        anotherRequest.setFrequency(2.0);
+        assertThat(request, not(equalTo(anotherRequest)));
+    }
+
+    @Test
+    public void differentMultipleResponsesNotequal() {
+        DiagnosticRequest anotherRequest = new DiagnosticRequest(
+                bus, id, mode);
+        anotherRequest.setMultipleResponses(true);
         assertThat(request, not(equalTo(anotherRequest)));
     }
 
@@ -120,6 +154,7 @@ public class DiagnosticRequestTest {
 
     @Test
     public void writeAndReadFromParcelWithPayloadAndPid() {
+        request.setMultipleResponses(true);
         Parcel parcel = Parcel.obtain();
         request.writeToParcel(parcel, 0);
 

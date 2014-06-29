@@ -52,8 +52,7 @@ public class CommandResponse extends KeyedMessage {
         }
 
         final CommandResponse other = (CommandResponse) obj;
-        return (mMessage == null && other.mMessage == null) ||
-                mMessage.equals(other.mMessage);
+        return Objects.equal(mMessage, other.mMessage);
     }
 
     @Override

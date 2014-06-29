@@ -54,20 +54,32 @@ public class CanMessageTest {
     }
 
     @Test
+    public void nullNotEqual() {
+        assertThat(message, not(equalTo(null)));
+    }
+
+    @Test
     public void differentIdNotEqual() {
         CanMessage anotherMessage = new CanMessage(id + 1, bus, data);
         assertThat(message, not(equalTo(anotherMessage)));
     }
 
     @Test
-    public void toStringNotNull() {
-        assertThat(message.toString(), notNullValue());
-    }
-
-    @Test
     public void differentBusNotEqual() {
         CanMessage anotherMessage = new CanMessage(id, bus + 1, data);
         assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
+    public void differentDataNotEqual() {
+        CanMessage anotherMessage = new CanMessage(id, bus,
+                new byte[] {8,7,6,5,4,3,2,1});
+        assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(message.toString(), notNullValue());
     }
 
     @Test
