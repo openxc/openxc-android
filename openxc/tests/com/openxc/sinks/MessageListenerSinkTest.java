@@ -10,6 +10,7 @@ import org.robolectric.Robolectric;
 
 import org.junit.runner.RunWith;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 
 import com.openxc.messages.NamedVehicleMessage;
@@ -31,6 +32,11 @@ public class MessageListenerSinkTest {
     @Before
     public void setUp() {
         sink = new MessageListenerSink();
+    }
+
+    @After
+    public void tearDown() {
+        sink.stop();
     }
 
     @Test
