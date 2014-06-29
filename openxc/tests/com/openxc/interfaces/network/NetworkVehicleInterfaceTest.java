@@ -1,33 +1,49 @@
 package com.openxc.interfaces.network;
 
-import junit.framework.Assert;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import android.content.Context;
 
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 
-public class NetworkVehicleInterfaceTest extends AndroidTestCase {
+@Config(emulateSdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+public class NetworkVehicleInterfaceTest {
     String goodUri = "//192.168.1.1:4000";
     String missingPortUri = "//192.168.1.1";
     String incorrectSchemeUri = "file://192.168.1.1:4000";
     String missingPrefixUri = "192.168.2.2:5000";
     NetworkVehicleInterface source;
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         if(source != null) {
             source.stop();
         }
-        super.tearDown();
     }
 
-    @SmallTest
+    private Context getContext() {
+        return Robolectric.application;
+    }
+
+    @Test
     public void testValidUri() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), goodUri);
     }
 
-    @SmallTest
+    @Test
     public void testValidateResource() {
         assertTrue(NetworkVehicleInterface.validateResource(goodUri));
         assertFalse(NetworkVehicleInterface.validateResource(missingPortUri));
@@ -35,25 +51,25 @@ public class NetworkVehicleInterfaceTest extends AndroidTestCase {
         assertTrue(NetworkVehicleInterface.validateResource(missingPrefixUri));
     }
 
-    @SmallTest
+    @Test
     public void testResourceMatching() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), goodUri);
         assertFalse(source.setResource(goodUri));
     }
 
-    @SmallTest
+    @Test
     public void testResourceMatchingMassaged() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
         assertFalse(source.setResource(missingPrefixUri));
     }
 
-    @SmallTest
+    @Test
     public void testResourceChanged() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), goodUri);
         assertTrue(source.setResource(missingPrefixUri));
     }
 
-    @SmallTest
+    @Test
     public void testMalformedUri() throws DataSourceException {
         try {
             source = new NetworkVehicleInterface(getContext(), missingPortUri);
@@ -63,7 +79,7 @@ public class NetworkVehicleInterfaceTest extends AndroidTestCase {
         Assert.fail("Expected a DataSourceResourceException");
     }
 
-    @SmallTest
+    @Test
     public void testUriWithBadScheme() throws DataSourceException {
         try {
             source = new NetworkVehicleInterface(getContext(),
@@ -74,7 +90,7 @@ public class NetworkVehicleInterfaceTest extends AndroidTestCase {
         Assert.fail("Expected a DataSourceResourceException");
     }
 
-    @SmallTest
+    @Test
     public void testMissingPrefix() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
     }

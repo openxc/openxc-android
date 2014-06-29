@@ -88,12 +88,16 @@ public class UsbVehicleInterface extends BytestreamDataSource
         try {
             mManager = (UsbManager) getContext().getSystemService(
                     Context.USB_SERVICE);
+            if(mManager == null) {
+                throw new NoClassDefFoundError();
+            }
         } catch(NoClassDefFoundError e) {
             String message = "No USB service found on this device -- " +
                 "can't use USB vehicle interface";
             Log.w(TAG, message);
             throw new DataSourceException(message);
         }
+
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
 
@@ -420,7 +424,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     };
 
-    private static URI createUri(String uriString) throws DataSourceException {
+    public static URI createUri(String uriString) throws DataSourceException {
         URI uri;
         if(uriString == null) {
             uri = null;
