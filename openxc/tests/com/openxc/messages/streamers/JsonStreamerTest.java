@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -16,12 +17,14 @@ import org.robolectric.annotation.Config;
 
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class JsonStreamerTest {
     JsonStreamer streamer;
+    SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
 
     @Before
     public void setup() {
@@ -153,5 +156,13 @@ public class JsonStreamerTest {
 
         assertThat(streamer.parseNextMessage(), notNullValue());
         assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
+    @Test
+    public void deserializeSerialized() {
+        byte[] data = streamer.serializeForStream(message);
+        streamer.receive(data, data.length);
+        VehicleMessage deserialized = streamer.parseNextMessage();
+        assertEquals(message, deserialized);
     }
 }
