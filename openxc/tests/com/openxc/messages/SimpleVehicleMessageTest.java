@@ -36,6 +36,23 @@ public class SimpleVehicleMessageTest {
     }
 
     @Test
+    public void valueAsNumber() {
+        assertEquals(message.getValueAsNumber(), value);
+    }
+
+    @Test
+    public void valueAsString() {
+        message = new SimpleVehicleMessage(name, "foo");
+        assertEquals(message.getValueAsString(), "foo");
+    }
+
+    @Test
+    public void valueAsBoolean() {
+        message = new SimpleVehicleMessage(name, Boolean.valueOf(true));
+        assertEquals(message.getValueAsBoolean(), true);
+    }
+
+    @Test
     public void sameNameAndValueEquals() {
         SimpleVehicleMessage anotherMessage = new SimpleVehicleMessage(
                 message.getTimestamp(), name, value);
