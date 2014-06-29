@@ -51,11 +51,6 @@ public class CanMessage extends VehicleMessage implements KeyedMessage {
         if(data != null) {
             System.arraycopy(data, 0, mData, 0, data.length);
         }
-        // Kind of a hack, but when we are deserializing from JSON with
-        // Gson, we get the data array back as an ArrayList instead of a
-        // byte[].
-        // TODO do we need this anymore?
-        // setPayload(Bytes.toArray(((ArrayList<Byte>) data)));
     }
 
     public MessageKey getKey() {
