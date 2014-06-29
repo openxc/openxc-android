@@ -64,7 +64,6 @@ public class RemoteCallbackSinkTest {
         assertNull(receivedId);
         SimpleVehicleMessage message = new SimpleVehicleMessage(messageId, 1);
         notifier.receive(message);
-        assertTrue(notifier.containsKey(message.getKey()));
         try {
             Thread.sleep(50);
         } catch(InterruptedException e) {}

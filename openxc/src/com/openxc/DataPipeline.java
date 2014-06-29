@@ -10,7 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.KeyedMessage;
+import com.openxc.messages.MessageKey;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.VehicleDataSink;
@@ -35,12 +36,12 @@ public class DataPipeline implements SourceCallback {
 
     private Operator mOperator;
     private int mMessagesReceived = 0;
-    private Map<String, NamedVehicleMessage> mNamedMessages =
-            new ConcurrentHashMap<String, NamedVehicleMessage>();
+    private Map<MessageKey, KeyedMessage> mKeyedMessages =
+            new ConcurrentHashMap<>();
     private CopyOnWriteArrayList<VehicleDataSink> mSinks =
-            new CopyOnWriteArrayList<VehicleDataSink>();
+            new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<VehicleDataSource> mSources =
-            new CopyOnWriteArrayList<VehicleDataSource>();
+            new CopyOnWriteArrayList<>();
 
     public interface Operator {
         public void onPipelineDeactivated();
@@ -69,12 +70,12 @@ public class DataPipeline implements SourceCallback {
             return;
         }
 
-        if(message instanceof NamedVehicleMessage) {
-            NamedVehicleMessage namedMessage = (NamedVehicleMessage) message;
-            mNamedMessages.put(namedMessage.getName(), namedMessage);
+        if(message instanceof KeyedMessage) {
+            KeyedMessage keyedMessage = message.asKeyedMessage();
+            mKeyedMessages.put(keyedMessage.getKey(), keyedMessage);
         }
 
-        List<VehicleDataSink> deadSinks = new ArrayList<VehicleDataSink>();
+        List<VehicleDataSink> deadSinks = new ArrayList<>();
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             VehicleDataSink sink = i.next();
             try {
@@ -179,13 +180,14 @@ public class DataPipeline implements SourceCallback {
     }
 
     /**
-     * Return the last received value for the named message if known.
+     * Return the last received value for the keyed message if known.
      *
+     * @param key the key of the message to retreive, if any available.
      * @return a VehicleMessage with the last known value, or null if no value
      *          has been received.
      */
-    public NamedVehicleMessage get(String name) {
-        return mNamedMessages.get(name);
+    public KeyedMessage get(MessageKey key) {
+        return mKeyedMessages.get(key);
     }
 
     /**
@@ -238,7 +240,7 @@ public class DataPipeline implements SourceCallback {
         return Objects.toStringHelper(this)
             .add("sources", mSources)
             .add("sinks", mSinks)
-            .add("numNamedMessageTypes", mNamedMessages.size())
+            .add("numKeyedMessageTypes", mKeyedMessages.size())
             .toString();
     }
 }

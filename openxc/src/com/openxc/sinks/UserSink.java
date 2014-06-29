@@ -16,7 +16,7 @@ import com.openxc.remote.VehicleServiceInterface;
  * data sources back to the VehicleService, so it can propagate them to all
  * OpenXC apps.
  */
-public class UserSink extends BaseVehicleDataSink {
+public class UserSink implements VehicleDataSink {
     private final static String TAG = UserSink.class.getSimpleName();
     private VehicleServiceInterface mService;
 
@@ -41,4 +41,6 @@ public class UserSink extends BaseVehicleDataSink {
     public String toString() {
         return Objects.toStringHelper(this).toString();
     }
+
+    public void stop() { }
 }

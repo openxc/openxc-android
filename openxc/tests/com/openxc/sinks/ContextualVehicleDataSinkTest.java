@@ -12,6 +12,8 @@ import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Robolectric;
 
+import com.openxc.messages.VehicleMessage;
+
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class ContextualVehicleDataSinkTest {
@@ -30,5 +32,9 @@ public class ContextualVehicleDataSinkTest {
         public Context getContextSpy() {
             return getContext();
         }
+
+        public void receive(VehicleMessage message) { }
+
+        public void stop() { }
     }
 }

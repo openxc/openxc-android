@@ -8,6 +8,9 @@ import com.google.common.collect.HashBiMap;
 
 import com.openxc.NoValueException;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.MessageKey;
+import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -163,13 +166,21 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         }
     }
 
-    public static String getIdForClass(
+    public static MessageKey getKeyForMeasurement(
             Class<? extends Measurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
         if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
             cacheMeasurementId(measurementType);
         }
-        return sMeasurementIdToClass.inverse().get(measurementType);
+        return new NamedVehicleMessage(
+                sMeasurementIdToClass.inverse().get(measurementType)).getKey();
+    }
+
+    public static KeyMatcher buildMatcherForMeasurment(
+            Class<? extends Measurement> measurementType)
+            throws UnrecognizedMeasurementTypeException {
+        return ExactKeyMatcher.buildExactMatcher(
+                getKeyForMeasurement(measurementType));
     }
 
     public static Class<? extends Measurement>
@@ -186,8 +197,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     public static Measurement getMeasurementFromMessage(
-            NamedVehicleMessage message)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
+            SimpleVehicleMessage message)
+                throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
             BaseMeasurement.getClassForId(message.getName());
         return BaseMeasurement.getMeasurementFromMessage(measurementClass,
@@ -196,8 +207,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
     public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
-            NamedVehicleMessage message)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
+            SimpleVehicleMessage message)
+                throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor = null;
         if(message == null) {
             throw new NoValueException();

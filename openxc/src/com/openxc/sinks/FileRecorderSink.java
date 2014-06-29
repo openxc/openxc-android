@@ -25,7 +25,7 @@ import com.openxc.util.FileOpener;
  * consider the previous trip to have ended. When activity resumes, start a new
  * trip.
  */
-public class FileRecorderSink extends BaseVehicleDataSink {
+public class FileRecorderSink implements VehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private final static int INTER_TRIP_THRESHOLD_MINUTES = 5;
     private static SimpleDateFormat sDateFormatter =

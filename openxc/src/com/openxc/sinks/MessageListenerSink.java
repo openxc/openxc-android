@@ -15,9 +15,9 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.MessageKey;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
-import com.openxc.messages.MessageKey;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -54,13 +54,14 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void register(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
-        // TODO this is really ugly, need a helper to go from Measurment class
-        // -> MessageKey or -> KeyMatcher
         try {
-            register(ExactKeyMatcher.buildExactMatcher(new NamedVehicleMessage(
-                            BaseMeasurement.getIdForClass(measurementType))),
+            register(BaseMeasurement.buildMatcherForMeasurment(measurementType),
                     listener);
         } catch(UnrecognizedMeasurementTypeException e) { }
+    }
+
+    public void register(MessageKey key, VehicleMessage.Listener listener) {
+        register(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     public void register(KeyedMessage message,
@@ -70,12 +71,10 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void unregister(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
-        // TODO hack alert! need to refactor this
         try {
-            unregister(ExactKeyMatcher.buildExactMatcher(
-                    new NamedVehicleMessage(
-                        BaseMeasurement.getIdForClass(measurementType))),
-                listener);
+            unregister(
+                    BaseMeasurement.buildMatcherForMeasurment(measurementType),
+                    listener);
         } catch(UnrecognizedMeasurementTypeException e) { }
     }
 
@@ -92,6 +91,10 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             VehicleMessage.Listener listener) {
         mMessageListeners.remove(ExactKeyMatcher.buildExactMatcher(message),
                 listener);
+    }
+
+    public void unregister(MessageKey key, VehicleMessage.Listener listener) {
+        unregister(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     @Override

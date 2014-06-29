@@ -16,7 +16,6 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.units.Meter;
@@ -51,7 +50,8 @@ public class BaseMeasurementTest {
         VehicleDoorStatus measurement = new VehicleDoorStatus("driver", false);
         VehicleMessage eventedMessage = measurement.toVehicleMessage();
         Measurement deserializedMeasurement =
-            BaseMeasurement.getMeasurementFromMessage((NamedVehicleMessage) eventedMessage);
+            BaseMeasurement.getMeasurementFromMessage(
+                    eventedMessage.asSimpleMessage());
         assertThat(deserializedMeasurement, instanceOf(VehicleDoorStatus.class));
         VehicleDoorStatus doorStatus = (VehicleDoorStatus) deserializedMeasurement;
         assertThat(doorStatus, equalTo(measurement));

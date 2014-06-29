@@ -23,7 +23,7 @@ import com.openxc.messages.VehicleMessage;
  * New measurements are queued up and propagated to receivers in a separate
  * thread, to avoid blocking the original sender of the data.
  */
-public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
+public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
     private final static String TAG = "AbstractQueuedCallbackSink";
 
     private NotificationThread mNotificationThread = new NotificationThread();
@@ -42,7 +42,6 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
 
     public void receive(VehicleMessage message)
             throws DataSinkException {
-        super.receive(message);
         try {
             mNotificationsLock.lock();
             mNotifications.add(message);

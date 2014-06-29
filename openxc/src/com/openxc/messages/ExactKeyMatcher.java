@@ -5,9 +5,9 @@ import com.google.common.base.Objects;
 public abstract class ExactKeyMatcher extends KeyMatcher {
     public abstract MessageKey getKey();
 
-    public static ExactKeyMatcher buildExactMatcher(final KeyedMessage keyed) {
+    public static ExactKeyMatcher buildExactMatcher(final MessageKey key) {
         return new ExactKeyMatcher() {
-            private MessageKey mKey = keyed.getKey();
+            private MessageKey mKey = key;
 
             public boolean matches(MessageKey other) {
                 return mKey.equals(other);
@@ -17,6 +17,10 @@ public abstract class ExactKeyMatcher extends KeyMatcher {
                 return mKey;
             }
         };
+    }
+
+    public static ExactKeyMatcher buildExactMatcher(final KeyedMessage keyed) {
+        return buildExactMatcher(keyed.getKey());
     }
 
     @Override
