@@ -80,10 +80,4 @@ public class JsonFormatter {
         }
         return message;
     }
-
-    public static VehicleMessage deserialize(InputStream data)
-            throws UnrecognizedMessageTypeException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(data));
-        return deserialize(reader.toString());
-    }
 }
