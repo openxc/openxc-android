@@ -204,7 +204,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         }
 
         try {
-            // TODO support EventedSimpleVehicleMessage
             Measurement measurement = null;
             if(message instanceof SimpleVehicleMessage) {
                 SimpleVehicleMessage simpleMessage = message.asSimpleMessage();

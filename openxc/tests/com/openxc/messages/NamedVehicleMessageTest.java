@@ -29,8 +29,6 @@ public class NamedVehicleMessageTest {
         assertEquals("foo", message.getName());
     }
 
-    // TODO test storing extra values, comparing with values
-
     @Test
     public void sameEquals() {
         assertEquals(message, message);
