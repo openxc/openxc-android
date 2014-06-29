@@ -50,6 +50,22 @@ public class VehicleMessageTest {
     }
 
     @Test
+    public void cantRetimestamp() {
+        message.timestamp();
+        Long timestamp = message.getTimestamp();
+        message.timestamp();
+        assertEquals(timestamp, message.getTimestamp());
+    }
+
+    @Test
+    public void invalidExtras() {
+        message = new VehicleMessage();
+        message.setExtras(null);
+        assertThat(message.getExtras(), notNullValue());
+        assertTrue(message.getExtras().isEmpty());
+    }
+
+    @Test
     public void setManualTimestamp() {
         message = new VehicleMessage(Long.valueOf(10000), extras);
         assertTrue(message.isTimestamped());
@@ -72,6 +88,11 @@ public class VehicleMessageTest {
         message = new VehicleMessage(Long.valueOf(10000), extras);
         message.untimestamp();
         assertFalse(message.isTimestamped());
+    }
+
+    @Test
+    public void doesntEqualNull() {
+        assertThat(message, not(equalTo(null)));
     }
 
     @Test
