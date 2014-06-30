@@ -58,7 +58,6 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private Lock mQueueLock = new ReentrantLock();
     private Condition mRecordsQueued = mQueueLock.newCondition();
     private UploaderThread mUploader = new UploaderThread();
-    private JsonFormatter mFormatter = new JsonFormatter();
 
     /**
      * Initialize and start a new UploaderSink immediately.
@@ -79,7 +78,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
     }
 
     public void receive(VehicleMessage message) {
-        mRecordQueue.offer(new String(mFormatter.serialize(message)));
+        mRecordQueue.offer(new String(JsonFormatter.serialize(message)));
         if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
             mQueueLock.lock();
             mRecordsQueued.signal();

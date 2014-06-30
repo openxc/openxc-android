@@ -12,7 +12,6 @@ public class JsonStreamer extends VehicleMessageStreamer {
     private final static String DELIMITER = "\u0000";
 
     private StringBuffer mBuffer = new StringBuffer();
-    private JsonFormatter mFormatter = new JsonFormatter();
 
     /**
      * Return true if the buffer *most likely* contains JSON (as opposed to a
@@ -33,7 +32,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
         String line = readToDelimiter();
         if(line != null) {
             try {
-                return mFormatter.deserialize(line);
+                return JsonFormatter.deserialize(line);
             } catch(UnrecognizedMessageTypeException e) {
                 Log.w(TAG, "Unable to deserialize JSON", e);
             }
@@ -52,7 +51,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
     }
 
     public byte[] serializeForStream(VehicleMessage message) {
-        return (mFormatter.serialize(message) + DELIMITER).getBytes();
+        return (JsonFormatter.serialize(message) + DELIMITER).getBytes();
     }
 
     /**

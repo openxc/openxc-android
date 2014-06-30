@@ -34,7 +34,6 @@ public class FileRecorderSink implements VehicleDataSink {
     private FileOpener mFileOpener;
     private BufferedWriter mWriter;
     private Calendar mLastMessageReceived;
-    private JsonFormatter mFormatter = new JsonFormatter();
 
     public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
         mFileOpener = fileOpener;
@@ -62,7 +61,7 @@ public class FileRecorderSink implements VehicleDataSink {
 
         mLastMessageReceived = GregorianCalendar.getInstance();
         try {
-            mWriter.write(new String(mFormatter.serialize(message)));
+            mWriter.write(new String(JsonFormatter.serialize(message)));
             mWriter.newLine();
         } catch(IOException e) {
             throw new DataSinkException("Unable to write message to file");
