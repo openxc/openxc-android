@@ -21,7 +21,6 @@ import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
 public class JsonFormatter {
-    private static final String TAG = "JsonFormatter";
     private static Gson sGson = new Gson();
 
     public static String serialize(VehicleMessage message) {
@@ -44,7 +43,6 @@ public class JsonFormatter {
             fields.add(entry.getKey());
         }
 
-        Gson gson = new Gson();
         VehicleMessage message = new VehicleMessage();
         if(CanMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, CanMessage.class);

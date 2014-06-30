@@ -20,7 +20,6 @@ import com.openxc.sources.SourceCallback;
  * loses whatever other interfaces you try and add.
  */
 public class RemoteServiceVehicleInterface implements VehicleInterface {
-    private final static String TAG = "RemoteServiceVehicleInterface";
     private VehicleServiceInterface mRemoteService;
 
     public RemoteServiceVehicleInterface(

@@ -37,10 +37,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
 
-    private enum PayloadFormat {
-        JSON, PROTO
-    }
-
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
     }
