@@ -3,22 +3,21 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import android.util.Log;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-
 import com.openxc.NoValueException;
-import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.MessageKey;
-import com.openxc.messages.ExactKeyMatcher;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
-
-import android.util.Log;
 
 /**
  * The BaseMeasurement is the base implementation of the Measurement, and

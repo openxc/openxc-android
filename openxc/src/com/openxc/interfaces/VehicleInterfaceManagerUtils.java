@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.openxc.measurements.Measurement;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.DataSinkException;
 

@@ -2,8 +2,8 @@ package com.openxc.measurements;
 
 import java.util.Locale;
 
-import com.openxc.units.State;
 import com.openxc.units.Boolean;
+import com.openxc.units.State;
 
 /**
  * A DoorStatus represents a door's ajar status.

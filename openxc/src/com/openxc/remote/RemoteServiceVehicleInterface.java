@@ -1,12 +1,11 @@
 package com.openxc.remote;
 
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.sources.SourceCallback;
 import com.openxc.sinks.DataSinkException;
+import com.openxc.sources.SourceCallback;
 
 /**
  *

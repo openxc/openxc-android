@@ -1,6 +1,5 @@
 package com.openxc.sinks;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;

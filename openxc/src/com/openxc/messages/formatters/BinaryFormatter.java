@@ -7,9 +7,8 @@ import android.util.Log;
 
 import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
-import com.openxc.messages.NamedVehicleMessage;
-import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 

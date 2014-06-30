@@ -1,12 +1,12 @@
 package com.openxc.messages;
 
-import java.util.Map;
 import java.util.HashMap;
-
-import com.google.common.base.Objects;
+import java.util.Map;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.common.base.Objects;
 
 public class MessageKey implements Parcelable {
     private Map<String, Object> mParts = new HashMap<>();

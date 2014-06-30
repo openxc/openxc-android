@@ -1,9 +1,5 @@
 package com.openxc.sinks;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.util.Log;
 
 import com.google.common.base.Objects;
@@ -15,11 +11,8 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.KeyMatcher;
-import com.openxc.messages.MessageKey;
-import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
 /**

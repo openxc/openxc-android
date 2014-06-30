@@ -1,31 +1,21 @@
 package com.openxc.messages.formatters;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.DecimalFormat;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import android.util.Log;
-
-import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-
-import com.openxc.messages.DiagnosticRequest;
-import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
-import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;

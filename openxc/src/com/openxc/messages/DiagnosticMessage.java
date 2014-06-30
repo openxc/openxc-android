@@ -2,6 +2,7 @@ package com.openxc.messages;
 
 import java.util.Arrays;
 import java.util.HashMap;
+
 import android.os.Parcel;
 
 import com.google.gson.annotations.SerializedName;

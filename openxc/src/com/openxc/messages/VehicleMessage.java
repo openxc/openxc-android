@@ -11,8 +11,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class VehicleMessage implements Parcelable {
     public interface Listener {

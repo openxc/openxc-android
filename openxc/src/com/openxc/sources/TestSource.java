@@ -1,7 +1,5 @@
 package com.openxc.sources;
 
-import com.openxc.sources.BaseVehicleDataSource;
-import com.openxc.sources.SourceCallback;
 import com.openxc.messages.SimpleVehicleMessage;
 
 public class TestSource extends BaseVehicleDataSource {

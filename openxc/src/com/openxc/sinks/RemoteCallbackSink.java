@@ -1,7 +1,5 @@
 package com.openxc.sinks;
 
-import java.util.Map;
-
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;

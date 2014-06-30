@@ -8,15 +8,12 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-
-import com.openxc.VehicleManager;
-import com.openxc.NoValueException;
-import com.openxc.remote.VehicleServiceException;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.remote.VehicleServiceException;
 
 /**
  * Propagate GPS and vehicle speed updates from OpenXC to the normal Android

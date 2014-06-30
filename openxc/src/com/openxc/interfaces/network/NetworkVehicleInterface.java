@@ -16,11 +16,11 @@ import com.openxc.interfaces.VehicleInterface;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
-import com.openxc.sinks.DataSinkException;
 
 /**
  * A vehicle data source reading measurements from an OpenXC network device.
