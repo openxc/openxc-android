@@ -21,7 +21,6 @@ import com.openxc.messages.streamers.VehicleMessageStreamer;
  */
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
-    // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;

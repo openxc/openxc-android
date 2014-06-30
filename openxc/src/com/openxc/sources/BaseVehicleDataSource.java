@@ -90,9 +90,11 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * @param message the new message object.
      */
     protected void handleMessage(VehicleMessage message) {
-        message.timestamp();
-        if(mCallback != null && message != null) {
-            mCallback.receive(message);
+        if(message != null) {
+            message.timestamp();
+            if(mCallback != null) {
+                mCallback.receive(message);
+            }
         }
     }
 
