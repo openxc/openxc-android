@@ -1,19 +1,15 @@
 language: android
-android:
-  components:
-    - platform-tools
-    - android-19
-    - sysimg-19
-    - build-tools-19.0.1
-    - extra-android-support
-    # TODO SDK tools v22.6.4 has a bug, once Travis updates to v23 this will work
-    # I tried updating the tools manually but that wipes the Travis-specific
-    # scripts.
-    - extra-android-m2repository
-  licenses:
-    - android-sdk-license-5be876d5
-    - android-sdk-license-598b93a6
 before_install:
+  # workaround for travis-ci/travis-ci#2279
+  - 'sudo mv /usr/local/android-sdk/tools/android-* /usr/local/bin'
+  # Accept all licenses (workaround for travis-ci/travis-ci#2466)
+  # Upgrade 'platform-tools' before 'tools' (workaround for travis-ci/travis-ci#2470)
+  # Run dinstinct 'android update sdk' commands
+  - "android-update-sdk --components='platform-tools,tools' --accept-licenses='.+'"
+  - "android-update-sdk --components='build-tools-19.1.0' --accept-licenses='.+'"
+  - "android-update-sdk --components='android-19,sysimg-19,extra-android-support' --accept-licenses='.+'"
+  - "android-update-sdk --components='extra-android-m2repository' --accept-licenses='.+'"
+  - mkdir -p ~/.m2/repository
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 install:
   - mvn clean install -DskipTests=true -pl openxc -am
