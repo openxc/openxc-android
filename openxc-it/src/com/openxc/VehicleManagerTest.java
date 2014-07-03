@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
+import static org.mockito.Mockito.*;
+import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.SteeringWheelAngle;
@@ -14,6 +18,7 @@ import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.messages.MessageKey;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
@@ -21,6 +26,8 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.TestSource;
+import com.openxc.interfaces.VehicleInterface;
+import com.openxc.sinks.DataSinkException;
 
 public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
@@ -29,6 +36,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     String receivedMessageId;
     TestSource source = new TestSource();
     VehicleMessage messageReceived;
+    VehicleInterface mTestInterface;
 
     VehicleMessage.Listener messageListener = new VehicleMessage.Listener() {
         public void receive(VehicleMessage message) {
@@ -57,6 +65,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     protected void setUp() throws Exception {
         super.setUp();
 
+        mTestInterface = mock(VehicleInterface.class);
         speedReceived = null;
         steeringAngleReceived = null;
 
@@ -77,6 +86,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
                 bindService(startIntent)).getService();
         service.waitUntilBound();
         service.addSource(source);
+        service.addLocalVehicleInterface(mTestInterface);
     }
 
     @Override
@@ -208,16 +218,23 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testWrite() throws UnrecognizedMeasurementTypeException {
+    public void testSendMeasurement() throws
+            UnrecognizedMeasurementTypeException, DataSinkException {
         prepareServices();
         service.send(new TurnSignalStatus(
                     TurnSignalStatus.TurnSignalPosition.LEFT));
-        // TODO how can we actually test that it gets written? might need to do
-        // smaller unit tests.
+        verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
     }
 
     @MediumTest
-    public void testGetSpeed() throws UnrecognizedMeasurementTypeException,
+    public void testSendMessage() throws DataSinkException {
+        prepareServices();
+        service.send(new SimpleVehicleMessage("foo", "bar"));
+        verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
+    }
+
+    @MediumTest
+    public void testGetMeasurement() throws UnrecognizedMeasurementTypeException,
             NoValueException {
         prepareServices();
         source.inject(VehicleSpeed.ID, 42.0);
@@ -227,21 +244,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertEquals(measurement.getValue().doubleValue(), 42.0);
     }
 
-    // TODO get(Measurement)
-    // TODO send(VehicleMessage)
-    // TODO send(Measurement)
-    // TODO add listener for measurement with class
-    // TODO add listener for message with keyedmessage
-    // TODO add listener for message with keymatcher
-    // TODO add listener for message with message key
-    // TODO remove measurement listener by class
-    // TODO remove message listener by keyedmessage
-    // TODO remove message listener by keymatcher
-    // TODO remove message listener by messagekey
-    // TODO add ousrce (already implicitly tested?)
     // TODO remove source
-    // TODO add sink
-    // TODO remove sink
     // TODO add vehicle interface by class
     // TODO remove vehicle interface by class
     // TODO set bluetooth polling
@@ -252,6 +255,8 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     // TODO get local vehicle interface
     // TODO remove local vehicle interface
     // TODO tostring
+    // TODO UsbVehicleInterface - test that receive throws an exception if not
+    //      connected
 
     private VehicleDataSink mCustomSink = new VehicleDataSink() {
         public void receive(VehicleMessage message) {

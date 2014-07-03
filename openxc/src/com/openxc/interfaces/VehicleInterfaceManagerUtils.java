@@ -10,7 +10,7 @@ import com.openxc.sinks.DataSinkException;
 /**
  * Utilities for interacting with a number of VehicleInterface objects.
  *
- * These functions are shared by the {@link com.openxc.VehicleManager} an
+ * These functions are shared by the {@link com.openxc.VehicleManager} and
  * {@link com.openxc.remote.VehicleService} which do not share a common
  * ancestor, so they are encapsulated in this mixin.
  */
@@ -33,7 +33,8 @@ public class VehicleInterfaceManagerUtils {
                         vehicleInterface);
                 return true;
             } catch(DataSinkException e) {
-                continue;
+                Log.v(TAG, "Interface " + vehicleInterface
+                        + " unable to send command", e);
             }
         }
         Log.d(TAG, "No interfaces able to send " + command);

@@ -175,6 +175,8 @@ public class UsbVehicleInterface extends BytestreamDataSource
             if(!write(sStreamer.serializeForStream(command))) {
                 throw new DataSinkException("Unable to write command");
             }
+        } else {
+            throw new DataSinkException("Not connected");
         }
     }
 

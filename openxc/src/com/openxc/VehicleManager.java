@@ -31,10 +31,10 @@ import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.remote.RemoteServiceVehicleInterface;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -122,7 +122,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private boolean mIsBound;
     private VehicleServiceInterface mRemoteService;
     private RemoteListenerSource mRemoteSource;
-    private VehicleInterface mRemoteController;
     private MessageListenerSink mNotifier = new MessageListenerSink();
     private UserSink mUserSink;
 
@@ -247,9 +246,21 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @param command The desired command to send to the vehicle.
      * @return true if the message was sent successfully
      */
-    public boolean send(VehicleMessage message) throws
-                UnrecognizedMeasurementTypeException {
-        return VehicleInterfaceManagerUtils.send(mInterfaces, message);
+    public boolean send(VehicleMessage message) {
+        // TODO I'm not sure how much value this return value has - we don't
+        // really know if the remote service was able to actually send it
+        boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);
+        // Don't want to keep this in the same list as local interfaces because
+        // if that quits after the first interface reports success.
+        if(mRemoteService == null) {
+            try {
+                mRemoteService.send(message);
+            } catch(RemoteException e) {
+                Log.v(TAG, "Unable to propagate command to remote interface", e);
+                sent = sent || false;
+            }
+        }
+        return sent;
     }
 
     public boolean send(Measurement command) throws
@@ -687,9 +698,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
             mRemoteService = VehicleServiceInterface.Stub.asInterface(service);
-            mRemoteController = new RemoteServiceVehicleInterface(
-                    mRemoteService);
-            mInterfaces.add(mRemoteController);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mRemoteOriginPipeline.addSource(mRemoteSource);
@@ -704,7 +712,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
-            mInterfaces.remove(mRemoteController);
             mRemoteService = null;
             mRemoteOriginPipeline.removeSource(mRemoteSource);
             mUserOriginPipeline.removeSink(mUserSink);
