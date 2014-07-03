@@ -1,6 +1,6 @@
 package com.openxc.measurements;
 
-import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
 
@@ -51,7 +51,7 @@ public interface Measurement {
      */
     public Unit getValue();
 
-    public VehicleMessage toVehicleMessage();
+    public SimpleVehicleMessage toVehicleMessage();
 
     /**
      * Return the creation time of this measurement;

@@ -216,6 +216,43 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // smaller unit tests.
     }
 
+    @MediumTest
+    public void testGetSpeed() throws UnrecognizedMeasurementTypeException,
+            NoValueException {
+        prepareServices();
+        source.inject(VehicleSpeed.ID, 42.0);
+        VehicleSpeed measurement = (VehicleSpeed)
+                service.get(VehicleSpeed.class);
+        assertNotNull(measurement);
+        assertEquals(measurement.getValue().doubleValue(), 42.0);
+    }
+
+    // TODO get(Measurement)
+    // TODO send(VehicleMessage)
+    // TODO send(Measurement)
+    // TODO add listener for measurement with class
+    // TODO add listener for message with keyedmessage
+    // TODO add listener for message with keymatcher
+    // TODO add listener for message with message key
+    // TODO remove measurement listener by class
+    // TODO remove message listener by keyedmessage
+    // TODO remove message listener by keymatcher
+    // TODO remove message listener by messagekey
+    // TODO add ousrce (already implicitly tested?)
+    // TODO remove source
+    // TODO add sink
+    // TODO remove sink
+    // TODO add vehicle interface by class
+    // TODO remove vehicle interface by class
+    // TODO set bluetooth polling
+    // TODO get source summaries
+    // TODO get sink summaries
+    // TODO get active source types
+    // TODO get message count
+    // TODO get local vehicle interface
+    // TODO remove local vehicle interface
+    // TODO tostring
+
     private VehicleDataSink mCustomSink = new VehicleDataSink() {
         public void receive(VehicleMessage message) {
             receivedMessageId = ((NamedVehicleMessage)message).getName();

@@ -202,6 +202,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Measurement instance of the specified type. The measurement can be
      * checked to see if it has a value.
      *
+     * TODO need VehicleMessage get(...)
+     *
      * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested Measurement which may or may
@@ -283,17 +285,17 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.register(measurementType, listener);
     }
 
-    public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
+    private void addListener(KeyMatcher matcher, Measurement.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " to " + matcher);
         mNotifier.register(matcher, listener);
     }
 
-    public void addListener(KeyedMessage keyedMessage,
+    private void addListener(KeyedMessage keyedMessage,
             Measurement.Listener listener) {
         addListener(keyedMessage.getKey(), listener);
     }
 
-    public void addListener(MessageKey key, Measurement.Listener listener) {
+    private void addListener(MessageKey key, Measurement.Listener listener) {
         addListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
@@ -334,11 +336,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.unregister(measurementType, listener);
     }
 
-    public void removeListener(KeyedMessage message, Measurement.Listener listener) {
+    private void removeListener(KeyedMessage message, Measurement.Listener listener) {
         removeListener(ExactKeyMatcher.buildExactMatcher(message), listener);
     }
 
-    public void removeListener(KeyMatcher matcher, Measurement.Listener listener) {
+    private void removeListener(KeyMatcher matcher, Measurement.Listener listener) {
         Log.i(TAG, "Removing listener " + listener + " from " + matcher);
         mNotifier.unregister(matcher, listener);
     }

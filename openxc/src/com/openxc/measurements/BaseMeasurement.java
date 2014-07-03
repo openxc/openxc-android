@@ -130,8 +130,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return getEvent();
     }
 
-    public VehicleMessage toVehicleMessage() {
-        VehicleMessage message = null;
+    public SimpleVehicleMessage toVehicleMessage() {
+        SimpleVehicleMessage message = null;
         if(hasEvent()) {
             message = new EventedSimpleVehicleMessage(mValue.getTimestamp(),
                     getGenericName(), getSerializedValue(),
