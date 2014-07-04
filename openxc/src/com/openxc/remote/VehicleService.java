@@ -279,7 +279,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 Log.w(TAG, "Unable to change resource", e);
             }
         }
-        Log.i(TAG, "Added vehicle interface  " + vehicleInterface);
+        Log.i(TAG, "Added vehicle interface " + vehicleInterface);
     }
 
     private void addVehicleInterface(String interfaceName, String resource) {

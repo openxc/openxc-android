@@ -224,13 +224,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
-            // TODO if no data is available, this will return a VehicleMessage
-            // and asSimpleMessage will fail because it cannot be cast.
-            SimpleVehicleMessage message = mRemoteService.get(
-                    BaseMeasurement.getKeyForMeasurement(measurementType))
-                    .asSimpleMessage();
+            VehicleMessage message = mRemoteService.get(
+                    BaseMeasurement.getKeyForMeasurement(measurementType));
+            if(!(message instanceof SimpleVehicleMessage)) {
+                // If there is no known value on the other end, VehicleService
+                // returns a blank VehicleMessage.
+                throw new NoValueException();
+            }
             return BaseMeasurement.getMeasurementFromMessage(
-                    measurementType, message);
+                    measurementType, message.asSimpleMessage());
         } catch(RemoteException | ClassCastException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             throw new NoValueException();
