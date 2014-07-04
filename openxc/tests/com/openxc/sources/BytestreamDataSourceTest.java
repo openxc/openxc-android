@@ -112,7 +112,7 @@ public class BytestreamDataSourceTest {
         source.connect();
         SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
         source.inject(new JsonStreamer().serializeForStream(message));
-        TestUtils.pause(30);
+        TestUtils.pause(100);
         ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
                 VehicleMessage.class);
         verify(callback).receive(argument.capture());
