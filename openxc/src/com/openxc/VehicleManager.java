@@ -224,6 +224,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
+            // TODO if no data is available, this will return a VehicleMessage
+            // and asSimpleMessage will fail because it cannot be cast.
             SimpleVehicleMessage message = mRemoteService.get(
                     BaseMeasurement.getKeyForMeasurement(measurementType))
                     .asSimpleMessage();
