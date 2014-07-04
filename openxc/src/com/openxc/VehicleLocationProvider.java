@@ -88,10 +88,13 @@ public class VehicleLocationProvider implements Measurement.Listener {
             try {
                 mLocationManager.removeTestProvider(
                         LocationManager.GPS_PROVIDER);
+                Log.d(TAG, "Disabled overwriting native GPS with OpenXC GPS");
             } catch(IllegalArgumentException e) {
                 Log.d(TAG, "Unable to remove GPS test provider - " +
                         "probably wasn't added yet");
             }
+        } else {
+            Log.d(TAG, "Enabled overwriting native GPS with OpenXC GPS");
         }
     }
 
@@ -156,6 +159,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 Log.w(TAG, "Unable to set test provider location", e);
             }
         } catch(NoValueException e) {
+                Log.w(TAG, "Can't update location, complete measuremnts not available yet");
         } catch(UnrecognizedMeasurementTypeException e) {
             // TODO this is dumb that we know these measurements are good, but
             // we still could get an exception
