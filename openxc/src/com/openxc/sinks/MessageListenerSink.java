@@ -31,12 +31,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private Multimap<KeyMatcher, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
 
-    public MessageListenerSink() {
-        mMessageListeners = Multimaps.synchronizedMultimap(mMessageListeners);
-        mMeasurementListeners = Multimaps.synchronizedMultimap(
-                mMeasurementListeners);
-    }
-
     public void register(Class<? extends Measurement> measurementType,
             Measurement.Listener listener)
             throws UnrecognizedMeasurementTypeException {
@@ -44,7 +38,8 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 listener);
     }
 
-    public void register(KeyMatcher matcher, Measurement.Listener listener) {
+    public synchronized void register(KeyMatcher matcher,
+            Measurement.Listener listener) {
         mMeasurementListeners.put(matcher, listener);
     }
 
@@ -59,7 +54,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 listener);
     }
 
-    public void unregister(KeyMatcher matcher, Measurement.Listener listener) {
+    public synchronized void unregister(KeyMatcher matcher, Measurement.Listener listener) {
         mMeasurementListeners.remove(matcher, listener);
     }
 
@@ -96,7 +91,8 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         }
     }
 
-    private void propagateMeasurementFromMessage(SimpleVehicleMessage message) {
+    private synchronized void propagateMeasurementFromMessage(
+            SimpleVehicleMessage message) {
         try {
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
