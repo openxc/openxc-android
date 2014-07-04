@@ -102,8 +102,6 @@
                             <argument>-Xms256m</argument>
                             <argument>-Xmx2048m</argument>
                         </jvmArguments>
-                        <preDex>true</preDex>
-                        <preDexLibLocation>/tmp/predexedLibs</preDexLibLocation>
                     </dex>
                     <sdk>
                         <platform>${android.platform}</platform>
