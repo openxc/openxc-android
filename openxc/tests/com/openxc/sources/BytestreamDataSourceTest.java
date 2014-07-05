@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
+
+import java.util.List;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -121,6 +123,31 @@ public class BytestreamDataSourceTest {
         assertEquals(received, message);
     }
 
+    @Test
+    public void readMultipleMessageAtOnceReceivesAll() {
+        source.start();
+        source.connect();
+        List<SimpleVehicleMessage> messages = new ArrayList<>();
+        messages.add(new SimpleVehicleMessage("1", "foo"));
+        messages.add(new SimpleVehicleMessage("2", "bar"));
+        messages.add(new SimpleVehicleMessage("3", "baz"));
+        for(SimpleVehicleMessage message : messages) {
+            source.inject(new JsonStreamer().serializeForStream(message), false);
+        }
+        source.signal();
+
+        TestUtils.pause(100);
+        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                VehicleMessage.class);
+        verify(callback, times(3)).receive(argument.capture());
+        List<VehicleMessage> capturedMessages = argument.getAllValues();
+        for(int i = 0; i < messages.size(); i++) {
+            VehicleMessage received = capturedMessages.get(i);
+            received.untimestamp();
+            assertEquals(received, messages.get(i));
+        }
+    }
+
     private class TestBytestreamSource extends BytestreamDataSource {
         public boolean connected = false;
         public ArrayList<byte[]> packets = new ArrayList<>();
@@ -138,11 +165,26 @@ public class BytestreamDataSourceTest {
             return connected;
         }
 
+        public void signal() {
+            try {
+                mPacketLock.lock();
+                mPacketReceived.signal();
+            } finally {
+                mPacketLock.unlock();
+            }
+        }
+
         public void inject(byte[] bytes) {
+            inject(bytes, true);
+        }
+
+        public void inject(byte[] bytes, boolean signal) {
             try {
                 mPacketLock.lock();
                 packets.add(bytes);
-                mPacketReceived.signal();
+                if(signal) {
+                    mPacketReceived.signal();
+                }
             } finally {
                 mPacketLock.unlock();
             }
