@@ -77,6 +77,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                     massageUri(uriString)));
     }
 
+    @Override
     public boolean setResource(String otherResource) throws DataSourceException {
         if(!UriBasedVehicleInterfaceMixin.sameResource(mUri,
                 massageUri(otherResource))) {
@@ -109,6 +110,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
+    @Override
     public void receive(VehicleMessage command) throws DataSinkException {
         if(!write(sStreamer.serializeForStream(command))) {
             throw new DataSinkException("Unable to send command");
@@ -123,6 +125,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return connected;
     }
 
+    @Override
     protected int read(byte[] bytes) throws IOException {
         mConnectionLock.readLock().lock();
         int bytesRead = -1;
@@ -136,6 +139,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
+    @Override
     protected void connect() throws NetworkSourceException {
         if(!isRunning()) {
             return;
@@ -168,6 +172,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected void disconnect() {
         mConnectionLock.writeLock().lock();
         try {
@@ -233,6 +238,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return success;
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }

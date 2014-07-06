@@ -66,6 +66,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
         }
     }
 
+    @Override
     public void receive(Measurement measurement) {
         // Not using the value, but using it to trigger polling for an update
         updateLocation();

@@ -26,10 +26,12 @@ public class TestSource extends BaseVehicleDataSource {
         }
     }
 
+    @Override
     public void setCallback(SourceCallback theCallback) {
         callback = theCallback;
     }
 
+    @Override
     public void stop() {
         callback = null;
     }

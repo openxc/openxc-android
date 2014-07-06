@@ -9,10 +9,12 @@ public abstract class ExactKeyMatcher extends KeyMatcher {
         return new ExactKeyMatcher() {
             private MessageKey mKey = key;
 
+            @Override
             public boolean matches(MessageKey other) {
                 return mKey.equals(other);
             }
 
+            @Override
             public MessageKey getKey() {
                 return mKey;
             }

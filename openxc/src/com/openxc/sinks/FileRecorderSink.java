@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.util.Log;
@@ -39,10 +38,11 @@ public class FileRecorderSink implements VehicleDataSink {
         mFileOpener = fileOpener;
     }
 
+    @Override
     public synchronized void receive(VehicleMessage message)
             throws DataSinkException {
         if(mLastMessageReceived == null ||
-                    GregorianCalendar.getInstance().getTimeInMillis()
+                    Calendar.getInstance().getTimeInMillis()
                     - mLastMessageReceived.getTimeInMillis()
                 > INTER_TRIP_THRESHOLD_MINUTES * 60 * 1000) {
             Log.i(TAG, "Detected a new trip, splitting recorded trace file");
@@ -59,7 +59,7 @@ public class FileRecorderSink implements VehicleDataSink {
                     "No valid writer - not recording trace line");
         }
 
-        mLastMessageReceived = GregorianCalendar.getInstance();
+        mLastMessageReceived = Calendar.getInstance();
         try {
             mWriter.write(new String(JsonFormatter.serialize(message)));
             mWriter.newLine();
@@ -68,6 +68,7 @@ public class FileRecorderSink implements VehicleDataSink {
         }
     }
 
+    @Override
     public synchronized void stop() {
         close();
         Log.i(TAG, "Shutting down");
@@ -95,7 +96,7 @@ public class FileRecorderSink implements VehicleDataSink {
     }
 
     private synchronized Calendar openTimestampedFile() throws IOException {
-        Calendar calendar = GregorianCalendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         String filename = sDateFormatter.format(
                 calendar.getTime()) + ".json";
         if(mWriter != null) {

@@ -12,6 +12,7 @@ import java.io.IOException;
 public class JavaFileOpener implements FileOpener {
     private final boolean APPEND = true;
 
+    @Override
     public BufferedWriter openForWriting(String path) throws IOException {
         try {
             return new BufferedWriter(new FileWriter(path, APPEND));

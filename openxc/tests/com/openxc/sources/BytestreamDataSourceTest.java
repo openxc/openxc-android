@@ -1,19 +1,16 @@
 package com.openxc.sources;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import org.mockito.Mockito;
+
+import org.mockito.Matchers;
 import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 
 import java.util.List;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.ArrayList;
 
 import java.util.concurrent.locks.Condition;
@@ -105,7 +102,7 @@ public class BytestreamDataSourceTest {
         source.connect();
         source.inject(new byte[] {1,2,3,4});
         TestUtils.pause(10);
-        verify(callback, never()).receive(Mockito.any(VehicleMessage.class));
+        verify(callback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
     @Test
@@ -190,6 +187,7 @@ public class BytestreamDataSourceTest {
             }
         }
 
+        @Override
         protected int read(byte[] bytes) throws IOException {
             try {
                 mPacketLock.lock();
@@ -212,6 +210,7 @@ public class BytestreamDataSourceTest {
             }
         }
 
+        @Override
         protected void disconnect() {
             mConnectionLock.writeLock().lock();
             connected = false;
@@ -219,6 +218,7 @@ public class BytestreamDataSourceTest {
             mConnectionLock.writeLock().unlock();
         }
 
+        @Override
         protected void connect() {
             mConnectionLock.writeLock().lock();
             connected = true;

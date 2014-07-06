@@ -41,6 +41,7 @@ public class NativeLocationSource extends ContextualVehicleDataSource
         this(null, context);
     }
 
+    @Override
     public void run() {
         Looper.prepare();
 
@@ -65,12 +66,14 @@ public class NativeLocationSource extends ContextualVehicleDataSource
         Looper.loop();
     }
 
+    @Override
     public void stop() {
         super.stop();
         Log.i(TAG, "Disabled native GPS passthrough");
         mLocationManager.removeUpdates(this);
     }
 
+    @Override
     public void onLocationChanged(final Location location) {
         handleMessage(new SimpleVehicleMessage(Latitude.ID,
                     location.getLatitude()));
@@ -78,9 +81,12 @@ public class NativeLocationSource extends ContextualVehicleDataSource
                     location.getLongitude()));
     }
 
+    @Override
     public void onStatusChanged(String provider, int status,
             Bundle extras) {}
+    @Override
     public void onProviderEnabled(String provider) {}
+    @Override
     public void onProviderDisabled(String provider) {}
 
     @Override

@@ -39,9 +39,9 @@ public class DiagnosticRequestTest {
     @Test
     public void checkRequiredFields() {
         Set<String> fields = new HashSet<>();
-        fields.add(DiagnosticRequest.ID_KEY);
-        fields.add(DiagnosticRequest.BUS_KEY);
-        fields.add(DiagnosticRequest.MODE_KEY);
+        fields.add(DiagnosticMessage.ID_KEY);
+        fields.add(DiagnosticMessage.BUS_KEY);
+        fields.add(DiagnosticMessage.MODE_KEY);
         assertTrue(DiagnosticRequest.containsRequiredFields(fields));
     }
 

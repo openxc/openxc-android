@@ -75,6 +75,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         out.writeValue(getValue());
     }
 
+    @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mValue = in.readValue(null);

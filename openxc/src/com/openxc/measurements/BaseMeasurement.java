@@ -14,7 +14,6 @@ import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
@@ -84,22 +83,27 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         mRange = range;
     }
 
+    @Override
     public void setTimestamp(long timestamp) {
         mValue.setTimestamp(timestamp);
     }
 
+    @Override
     public long getAge() {
         return mValue.getAge();
     }
 
+    @Override
     public long getBirthtime() {
         return mValue.getTimestamp();
     }
 
+    @Override
     public boolean hasRange() {
         return mRange != null;
     }
 
+    @Override
     public Range<TheUnit> getRange() throws NoRangeException {
         if(!hasRange()) {
             throw new NoRangeException();
@@ -107,6 +111,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mRange;
     }
 
+    @Override
     public TheUnit getValue() {
         return mValue.getValue();
     }
@@ -115,6 +120,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mEvent != null;
     }
 
+    @Override
     public Object getEvent() {
         if(hasEvent()) {
             return mEvent.getValue();
@@ -122,14 +128,17 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return null;
     }
 
+    @Override
     public Object getSerializedValue() {
         return getValue().getSerializedValue();
     }
 
+    @Override
     public Object getSerializedEvent() {
         return getEvent();
     }
 
+    @Override
     public SimpleVehicleMessage toVehicleMessage() {
         SimpleVehicleMessage message = null;
         if(hasEvent()) {
@@ -143,6 +152,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return message;
     }
 
+    @Override
     public String getGenericName() {
         return "base_measurement";
     }

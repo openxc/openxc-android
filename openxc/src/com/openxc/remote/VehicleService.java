@@ -158,6 +158,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
     private final VehicleServiceInterface.Stub mBinder =
         new VehicleServiceInterface.Stub() {
+            @Override
             public VehicleMessage get(MessageKey key) {
                 VehicleMessage message = mPipeline.get(key);
                 if(message == null) {
@@ -168,42 +169,51 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 return message;
             }
 
+            @Override
             public boolean send(VehicleMessage command) {
                 return VehicleInterfaceManagerUtils.send(mInterfaces, command);
             }
 
+            @Override
             public void receive(VehicleMessage measurement) {
                 mApplicationSource.handleMessage(measurement);
             }
 
+            @Override
             public void register(VehicleServiceListener listener) {
                 Log.i(TAG, "Adding listener " + listener);
                 mNotifier.register(listener);
             }
 
+            @Override
             public void unregister(VehicleServiceListener listener) {
                 Log.i(TAG, "Removing listener " + listener);
                 mNotifier.unregister(listener);
             }
 
+            @Override
             public int getMessageCount() {
                 return VehicleService.this.mPipeline.getMessageCount();
             }
 
+            @Override
             public void addVehicleInterface(String interfaceName,
                     String resource) {
                 VehicleService.this.addVehicleInterface(
                         interfaceName, resource);
             }
 
+            @Override
             public void setBluetoothPollingStatus(boolean enabled) {
                 VehicleService.this.setBluetoothPollingStatus(enabled);
             }
 
+            @Override
             public void removeVehicleInterface(String interfaceName) {
                 VehicleService.this.removeVehicleInterface(interfaceName);
             }
 
+            @Override
             public List<String> getSourceSummaries() {
                 ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
@@ -212,6 +222,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 return sources;
             }
 
+            @Override
             public List<String> getActiveSourceTypeStrings() {
                 ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
@@ -222,6 +233,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 return sources;
             }
 
+            @Override
             public List<String> getSinkSummaries() {
                 ArrayList<String> sinks = new ArrayList<String>();
                 for(VehicleDataSink sink : mPipeline.getSinks()) {
@@ -230,11 +242,13 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 return sinks;
             }
 
+            @Override
             public void userPipelineActivated() {
                 mUserPipelineActive = true;
                 VehicleService.this.onPipelineActivated();
             }
 
+            @Override
             public void userPipelineDeactivated() {
                 mUserPipelineActive = false;
                 if(!VehicleService.this.mPipeline.isActive()) {
@@ -330,11 +344,13 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         }
     }
 
+    @Override
     public void onPipelineActivated() {
         mWakeLocker.acquireWakeLock();
         moveToForeground();
     }
 
+    @Override
     public void onPipelineDeactivated() {
         if(!mUserPipelineActive) {
             mWakeLocker.releaseWakeLock();

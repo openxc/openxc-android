@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.HashMap;
-
 import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)

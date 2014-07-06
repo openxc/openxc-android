@@ -22,6 +22,7 @@ public abstract class KeyMatcher {
     }
 
     private static KeyMatcher sWildcardMatcher = new KeyMatcher() {
+        @Override
         public boolean matches(MessageKey other) {
             return true;
         }

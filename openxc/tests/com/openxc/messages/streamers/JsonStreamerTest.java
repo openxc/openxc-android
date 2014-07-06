@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -33,17 +32,17 @@ public class JsonStreamerTest {
 
     @Test
     public void jsonContainsJson() {
-        assertTrue(streamer.containsJson("{\"name\": \"foo\"}\u0000"));
+        assertTrue(JsonStreamer.containsJson("{\"name\": \"foo\"}\u0000"));
     }
 
     @Test
     public void paritalJsonDoesntContainJson() {
-        assertFalse(streamer.containsJson("{\"name\": \"foo\"}\u0000\u0001\u0002"));
+        assertFalse(JsonStreamer.containsJson("{\"name\": \"foo\"}\u0000\u0001\u0002"));
     }
 
     @Test
     public void notJsonDoesntContainJson() {
-        assertFalse(streamer.containsJson("\u0000\u0001\u0002"));
+        assertFalse(JsonStreamer.containsJson("\u0000\u0001\u0002"));
     }
 
     @Test

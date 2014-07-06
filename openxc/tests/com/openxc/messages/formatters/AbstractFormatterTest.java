@@ -4,11 +4,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 import org.junit.Assert;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -23,7 +20,6 @@ import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
-import com.openxc.messages.VehicleMessage;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)

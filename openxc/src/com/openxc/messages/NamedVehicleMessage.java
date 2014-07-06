@@ -44,6 +44,7 @@ public class NamedVehicleMessage extends KeyedMessage {
         return mName.equals(other.mName);
     }
 
+    @Override
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(NAME_KEY, getName());

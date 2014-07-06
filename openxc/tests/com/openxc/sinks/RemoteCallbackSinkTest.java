@@ -2,15 +2,11 @@ package com.openxc.sinks;
 
 import org.junit.Test;
 import org.junit.Before;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
 import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.Robolectric;
-
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -28,6 +24,7 @@ public class RemoteCallbackSinkTest {
     public void setUp() {
         notifier = new RemoteCallbackSink();
         listener = new VehicleServiceListener.Stub() {
+            @Override
             public void receive(VehicleMessage value) {
                 receivedId = ((NamedVehicleMessage)value).getName();
             }

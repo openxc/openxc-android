@@ -52,6 +52,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         }
     }
 
+    @Override
     public void stop() {
         if(mRunning.compareAndSet(true, false)) {
             Log.d(getTag(), "Stopping " + getTag() + " source");
@@ -118,6 +119,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         mReconnectionAttempts = 0;
     }
 
+    @Override
     public void run() {
         while(isRunning()) {
             try {
@@ -174,6 +176,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     /**
      * Must have the connection lock before calling this function
      */
+    @Override
     protected void disconnected() {
         mDeviceChanged.signal();
         super.disconnected();
@@ -182,6 +185,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     /**
      * Must have the connection lock before calling this function
      */
+    @Override
     protected void connected() {
         mDeviceChanged.signal();
         super.connected();

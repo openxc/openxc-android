@@ -127,6 +127,7 @@ public class VehicleMessage implements Parcelable {
             .toString();
     }
 
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -142,6 +143,7 @@ public class VehicleMessage implements Parcelable {
                 Objects.equal(mExtras, other.mExtras);
     }
 
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(getClass().getName());
         out.writeValue(getTimestamp());
@@ -157,6 +159,7 @@ public class VehicleMessage implements Parcelable {
 
     public static final Parcelable.Creator<VehicleMessage> CREATOR =
             new Parcelable.Creator<VehicleMessage>() {
+        @Override
         public VehicleMessage createFromParcel(Parcel in) {
             String messageClassName = in.readString();
             Constructor<? extends VehicleMessage> constructor = null;
@@ -189,6 +192,7 @@ public class VehicleMessage implements Parcelable {
             }
         }
 
+        @Override
         public VehicleMessage[] newArray(int size) {
             return new VehicleMessage[size];
         }

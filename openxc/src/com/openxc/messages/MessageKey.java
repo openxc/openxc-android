@@ -15,6 +15,7 @@ public class MessageKey implements Parcelable {
         mParts = parts;
     }
 
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -34,6 +35,7 @@ public class MessageKey implements Parcelable {
         return Objects.hashCode(mParts);
     }
 
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeMap(mParts);
     }
@@ -44,10 +46,12 @@ public class MessageKey implements Parcelable {
 
     public static final Parcelable.Creator<MessageKey> CREATOR =
             new Parcelable.Creator<MessageKey>() {
+        @Override
         public MessageKey createFromParcel(Parcel in) {
             return new MessageKey(in);
         }
 
+        @Override
         public MessageKey[] newArray(int size) {
             return new MessageKey[size];
         }

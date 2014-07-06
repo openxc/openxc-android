@@ -3,22 +3,17 @@ package com.openxc;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
-
-import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.openxc.messages.KeyedMessage;
-import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.sources.SourceCallback;
 import com.openxc.sources.TestSource;
 import com.openxc.sinks.TestSink;
 

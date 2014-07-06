@@ -38,7 +38,7 @@ public class JsonFormatterTest {
 
     @Test
     public void testDeserialize() throws UnrecognizedMessageTypeException {
-        VehicleMessage message = formatter.deserialize(
+        VehicleMessage message = JsonFormatter.deserialize(
                 "{\"name\": \"" + messageName + "\", \"value\": " +
                 value.toString() + "}");
         assertThat(message, instanceOf(SimpleVehicleMessage.class));
@@ -50,7 +50,7 @@ public class JsonFormatterTest {
     @Test
     public void testDeserializeInvalidJson() {
         try {
-            formatter.deserialize("{\"name\":");
+            JsonFormatter.deserialize("{\"name\":");
         } catch(UnrecognizedMessageTypeException e) {
             return;
         }
@@ -59,7 +59,7 @@ public class JsonFormatterTest {
 
     @Test
     public void testSerializedTimestamp() {
-        String serialized = new String(formatter.serialize(
+        String serialized = new String(JsonFormatter.serialize(
                     new SimpleVehicleMessage(
                         Long.valueOf(1332432977835L), messageName, value)));
         assertTrue(serialized.contains("1.332432977835E9"));
@@ -69,7 +69,7 @@ public class JsonFormatterTest {
     public void testSerializeWithoutTimestamp() {
         VehicleMessage message = new SimpleVehicleMessage(messageName, value);
         message.untimestamp();
-        String serialized = new String(formatter.serialize(message));
+        String serialized = new String(JsonFormatter.serialize(message));
         assertFalse(serialized.contains("timestamp"));
     }
 }

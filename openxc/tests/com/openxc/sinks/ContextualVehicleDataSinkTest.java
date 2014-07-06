@@ -6,8 +6,6 @@ import org.junit.runner.RunWith;
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Robolectric;
@@ -33,8 +31,10 @@ public class ContextualVehicleDataSinkTest {
             return getContext();
         }
 
+        @Override
         public void receive(VehicleMessage message) { }
 
+        @Override
         public void stop() { }
     }
 }

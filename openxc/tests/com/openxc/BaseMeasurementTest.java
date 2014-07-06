@@ -17,7 +17,6 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
 

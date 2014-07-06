@@ -3,14 +3,10 @@ package com.openxc.sinks;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 import org.junit.Before;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.Robolectric;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -109,6 +105,7 @@ public class FileRecorderSinkTest {
     }
 
     private class MockFileOpener implements FileOpener {
+        @Override
         public BufferedWriter openForWriting(String path) throws IOException {
             return new BufferedWriter(outputString);
         }

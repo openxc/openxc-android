@@ -12,6 +12,7 @@ import org.junit.Test;
 public class KeyMatcherTest {
     KeyedMessage keyed = new TestKeyedMessage();
     KeyedMessage different = new KeyedMessage() {
+        @Override
         public MessageKey getKey() {
             HashMap<String, Object> key = new HashMap<>();
             key.put("baz", "bing");
@@ -74,12 +75,14 @@ public class KeyMatcherTest {
     @Test
     public void inexactHashCodeNotEqual() {
         KeyMatcher matcher = new KeyMatcher() {
+            @Override
             public boolean matches(MessageKey message) {
                 return false;
             }
         };
 
         KeyMatcher anotherMatcher = new KeyMatcher() {
+            @Override
             public boolean matches(MessageKey message) {
                 return false;
             }
@@ -101,6 +104,7 @@ public class KeyMatcherTest {
     }
 
     private class TestKeyedMessage extends KeyedMessage {
+        @Override
         public MessageKey getKey() {
             HashMap<String, Object> key = new HashMap<>();
             // This is the same key as the other, but not the same instance

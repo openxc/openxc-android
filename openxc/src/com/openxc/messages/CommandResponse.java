@@ -64,6 +64,7 @@ public class CommandResponse extends KeyedMessage {
             .toString();
     }
 
+    @Override
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(COMMAND_RESPONSE_KEY, getCommand());

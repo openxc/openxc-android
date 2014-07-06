@@ -37,6 +37,7 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
         }
     }
 
+    @Override
     public void stop() {
         super.stop();
         try {
@@ -54,6 +55,7 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     private VehicleServiceListener mRemoteListener =
         new VehicleServiceListener.Stub() {
+            @Override
             public void receive(VehicleMessage message) {
                 handleMessage(message);
             }

@@ -87,6 +87,7 @@ public abstract class DiagnosticMessage extends KeyedMessage {
         }
     }
 
+    @Override
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(CanMessage.BUS_KEY, getBusId());

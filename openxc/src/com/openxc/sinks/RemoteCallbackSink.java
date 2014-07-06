@@ -50,6 +50,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
             .toString();
     }
 
+    @Override
     protected void propagateMessage(VehicleMessage message) {
         synchronized(mListeners) {
             int i = mListeners.beginBroadcast();

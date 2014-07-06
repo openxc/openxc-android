@@ -1,17 +1,10 @@
 package com.openxc.sources;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import org.mockito.Mockito;
-import org.mockito.ArgumentCaptor;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
+import org.mockito.Matchers;
+import org.mockito.ArgumentCaptor;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,26 +71,27 @@ public class BaseVehicleDataSourceTest {
     @Test
     public void receiveMessageSentToCallback() {
         mSource.inject(new VehicleMessage());
-        verify(mCallback).receive(Mockito.any(VehicleMessage.class));
+        verify(mCallback).receive(Matchers.any(VehicleMessage.class));
     }
 
     @Test
     public void nullMessageNotSentToCallback() {
         mSource.inject(null);
-        verify(mCallback, never()).receive(Mockito.any(VehicleMessage.class));
+        verify(mCallback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
     @Test
     public void handleWithNoCallback() {
         mSource.setCallback(null);
         mSource.inject(new VehicleMessage());
-        verify(mCallback, never()).receive(Mockito.any(VehicleMessage.class));
+        verify(mCallback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
     @Test
     public void waitForCallback() throws InterruptedException {
         mSource.setCallback(null);
         Thread thread = new Thread() {
+            @Override
             public void run() {
                 mSource.waitForCallback();
             }

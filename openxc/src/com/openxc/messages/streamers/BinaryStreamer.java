@@ -20,6 +20,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
 
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
+    @Override
     public VehicleMessage parseNextMessage() {
         // TODO we could move this to a separate thread and use a
         // piped input stream, where it would block on the
@@ -55,6 +56,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         return message;
     }
 
+    @Override
     public byte[] serializeForStream(VehicleMessage message) {
         // TODO
         return null;

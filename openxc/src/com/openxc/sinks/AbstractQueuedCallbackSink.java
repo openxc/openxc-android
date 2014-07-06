@@ -35,10 +35,12 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
         mNotificationThread.start();
     }
 
+    @Override
     public synchronized void stop() {
         mNotificationThread.done();
     }
 
+    @Override
     public void receive(VehicleMessage message)
             throws DataSinkException {
         try {
@@ -84,6 +86,7 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
             interrupt();
         }
 
+        @Override
         public void run() {
             Log.d(TAG, "Starting notification thread");
             while(isRunning()) {

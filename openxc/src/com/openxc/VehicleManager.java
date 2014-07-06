@@ -34,7 +34,6 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -677,6 +676,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             .toString();
     }
 
+    @Override
     public void onPipelineActivated() {
         if(mRemoteService != null) {
             try {
@@ -687,6 +687,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    @Override
     public void onPipelineDeactivated() {
         if(mRemoteService != null) {
             try {
@@ -698,6 +699,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
@@ -714,6 +716,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             mRemoteBoundLock.unlock();
         }
 
+        @Override
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
             mRemoteService = null;

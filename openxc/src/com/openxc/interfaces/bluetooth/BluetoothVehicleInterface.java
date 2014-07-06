@@ -103,6 +103,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         mUsePolling = enabled;
     }
 
+    @Override
     public void receive(VehicleMessage command) throws DataSinkException {
         // TODO who knows what the current serialization format is? only using
         // JSON right now
@@ -111,6 +112,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     public boolean setResource(String otherAddress) throws DataSourceException {
         boolean reconnect = false;
         if(isConnected()) {
@@ -247,6 +249,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             } catch (IOException e) { }
         }
     }
+    @Override
     protected void connect() {
         if(!mUsePolling || !isRunning()) {
             return;
@@ -344,6 +347,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected int read(byte[] bytes) throws IOException {
         mConnectionLock.readLock().lock();
         int bytesRead = -1;
@@ -395,6 +399,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected void disconnect() {
         closeSocket();
         mConnectionLock.writeLock().lock();
@@ -427,6 +432,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }
@@ -463,6 +469,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
             // Whenever discovery finishes or another Bluetooth device connects
             // (i.e. it might be a car's infotainment system), take the

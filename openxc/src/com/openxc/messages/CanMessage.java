@@ -52,6 +52,7 @@ public class CanMessage extends KeyedMessage {
         }
     }
 
+    @Override
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(BUS_KEY, getBus());
@@ -92,6 +93,7 @@ public class CanMessage extends KeyedMessage {
         out.writeByteArray(getData());
     }
 
+    @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mBusId = in.readInt();

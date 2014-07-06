@@ -29,6 +29,7 @@ public class Command extends KeyedMessage {
         return mCommand;
     }
 
+    @Override
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
         key.put(COMMAND_KEY, getCommand());

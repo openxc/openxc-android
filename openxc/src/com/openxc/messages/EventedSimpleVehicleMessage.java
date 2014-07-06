@@ -77,6 +77,7 @@ public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
         out.writeValue(getEvent());
     }
 
+    @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mEvent = in.readValue(null);

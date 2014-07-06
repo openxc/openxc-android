@@ -40,6 +40,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * @param callback a valid callback or null if you wish to stop the source
      *      from sending updates.
      */
+    @Override
     public void setCallback(SourceCallback callback) {
         try {
             mCallbackLock.lock();
@@ -62,6 +63,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         }
     }
 
+    @Override
     public boolean isConnected() {
         // TODO this is kind of weird, and probably says that this API needs
         // refactoring - we don't want to keep the Pipeline awake because it
@@ -79,6 +81,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * Subclasses should be sure to call super.stop() so they also stop sending
      * updates when killed by a user.
      */
+    @Override
     public void stop() {
         disconnected();
         setCallback(null);

@@ -73,10 +73,12 @@ public class UploaderSink extends ContextualVehicleDataSink {
         this(context, uriFromString(path));
     }
 
+    @Override
     public void stop() {
         mUploader.done();
     }
 
+    @Override
     public void receive(VehicleMessage message) {
         mRecordQueue.offer(new String(JsonFormatter.serialize(message)));
         if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
@@ -141,6 +143,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
             start();
         }
 
+        @Override
         public void run() {
             while(mRunning) {
                 try {

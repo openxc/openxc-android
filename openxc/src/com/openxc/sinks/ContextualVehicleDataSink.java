@@ -18,6 +18,8 @@ public abstract class ContextualVehicleDataSink implements VehicleDataSink {
         return mContext;
     }
 
+    @Override
     public abstract void stop();
+    @Override
     public abstract void receive(VehicleMessage message);
 }

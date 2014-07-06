@@ -65,6 +65,7 @@ public class DataPipeline implements SourceCallback {
      * If any data sink throws a DataSinkException when receiving data, it will
      * be removed from the list of sinks.
      */
+    @Override
     public void receive(VehicleMessage message) {
         if(message == null) {
             return;
@@ -218,6 +219,7 @@ public class DataPipeline implements SourceCallback {
      * At least one source is not active - if all sources are inactive, notify
      * the operator.
      */
+    @Override
     public void sourceDisconnected(VehicleDataSource source) {
         if(mOperator != null) {
             if(!isActive(source)) {
@@ -229,6 +231,7 @@ public class DataPipeline implements SourceCallback {
     /**
      * At least one source is active - notify the operator.
      */
+    @Override
     public void sourceConnected(VehicleDataSource source) {
         if(mOperator != null) {
             mOperator.onPipelineActivated();

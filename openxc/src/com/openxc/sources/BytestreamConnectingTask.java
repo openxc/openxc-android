@@ -11,6 +11,7 @@ public class BytestreamConnectingTask extends TimerTask {
         mSource = source;
     }
 
+    @Override
     public void run() {
         if(!mSource.isRunning() || mSource.isConnected()) {
             return;

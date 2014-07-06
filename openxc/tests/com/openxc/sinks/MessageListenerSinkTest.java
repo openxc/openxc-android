@@ -6,8 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.Robolectric;
-
 import org.junit.runner.RunWith;
 import org.junit.Before;
 import org.junit.After;
@@ -17,7 +15,6 @@ import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.KeyedMessage;
-import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
@@ -153,6 +150,7 @@ public class MessageListenerSinkTest {
     }
 
     private VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {
+        @Override
         public void receive(Measurement measurement) {
             speedReceived = (VehicleSpeed) measurement;
         }
@@ -161,6 +159,7 @@ public class MessageListenerSinkTest {
     private class SpyListener implements VehicleMessage.Listener {
         public VehicleMessage received;
 
+        @Override
         public void receive(VehicleMessage message) {
             received = message;
         }

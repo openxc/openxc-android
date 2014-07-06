@@ -27,6 +27,7 @@ public class UserSink implements VehicleDataSink {
         mService = service;
     }
 
+    @Override
     public void receive(VehicleMessage measurement) {
         if(mService != null) {
             try {
@@ -42,5 +43,6 @@ public class UserSink implements VehicleDataSink {
         return Objects.toStringHelper(this).toString();
     }
 
+    @Override
     public void stop() { }
 }

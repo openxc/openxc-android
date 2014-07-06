@@ -132,6 +132,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         this(null, context, createUri(uriString));
     }
 
+    @Override
     public synchronized void start() {
         super.start();
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
@@ -170,6 +171,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     public void receive(VehicleMessage command) throws DataSinkException {
         if(isConnected()) {
             if(!write(sStreamer.serializeForStream(command))) {
@@ -180,6 +182,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     public boolean setResource(String otherUri) throws DataSourceException {
         if(mDeviceUri == UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI
                     && otherUri != null &&
@@ -203,6 +206,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
+    @Override
     protected int read(byte[] bytes) throws IOException {
         mConnectionLock.readLock().lock();
         int bytesRead = 0;
@@ -216,6 +220,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }
@@ -369,13 +374,16 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected void connected() {
         super.connected();
         primeOutput();
     }
 
+    @Override
     protected void connect() throws DataSourceException { }
 
+    @Override
     protected void disconnect() {
         if(!isConnected()) {
             return;

@@ -28,6 +28,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
             .matchesAllOf(buffer);
     }
 
+    @Override
     public VehicleMessage parseNextMessage() {
         String line = readToDelimiter();
         if(line != null) {
@@ -50,6 +51,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
         mBuffer.append(new String(bytes, 0, length));
     }
 
+    @Override
     public byte[] serializeForStream(VehicleMessage message) {
         return (JsonFormatter.serialize(message) + DELIMITER).getBytes();
     }

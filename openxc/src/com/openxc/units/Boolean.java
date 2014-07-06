@@ -30,6 +30,7 @@ public class Boolean extends Unit {
         return mValue;
     }
 
+    @Override
     public java.lang.Boolean getSerializedValue() {
         return new java.lang.Boolean(booleanValue());
     }

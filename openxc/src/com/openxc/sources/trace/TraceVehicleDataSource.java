@@ -128,6 +128,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     /**
      * Stop trace file playback and the playback thread.
      */
+    @Override
     public void stop() {
         super.stop();
         Log.d(TAG, "Stopping trace playback");
@@ -141,6 +142,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      * If the callback is not set, this function will exit immediately and the
      * thread will die a quick death.
      */
+    @Override
     public void run() {
         while(mRunning) {
             waitForCallback();
@@ -253,6 +255,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }
