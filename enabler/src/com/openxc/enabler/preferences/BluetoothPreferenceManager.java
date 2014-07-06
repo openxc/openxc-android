@@ -18,6 +18,7 @@ import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.util.SupportSettingsUtils;
+import com.openxc.remote.VehicleServiceException;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth vehicle interface.
@@ -117,8 +118,13 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                 Log.d(TAG, "No Bluetooth vehicle interface selected -- " +
                         "starting in automatic mode");
             }
-            getVehicleManager().addVehicleInterface(
-                    BluetoothVehicleInterface.class, deviceAddress);
+
+            try {
+                getVehicleManager().addVehicleInterface(
+                        BluetoothVehicleInterface.class, deviceAddress);
+            } catch(VehicleServiceException e) {
+                Log.e(TAG, "Unable to start Bluetooth interface", e);
+            }
         } else {
             Log.i(TAG, "Disabling the Bluetooth vehicle interface");
             getVehicleManager().removeVehicleInterface(

@@ -567,21 +567,20 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * @return A list of the enabled vehicle interfaces.
      */
-    public List<VehicleInterfaceDescriptor> getActiveSourceTypes() {
-        ArrayList<VehicleInterfaceDescriptor> sources = new ArrayList<>();
+    public List<Class<? extends VehicleDataSource>> getActiveSources() {
+        // TODO bah, we need to return all sources, but along with the
+        // connection status so they can be displayed properly in the enabler
+        ArrayList<Class<? extends VehicleDataSource>> sources = new ArrayList<>();
 
         for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
-            if(source.isConnected()) {
-                // TODO
-                // sources.add(InterfaceType.interfaceTypeFromClass(source));
-            }
+            sources.add(source.getClass());
         }
 
         if(mRemoteService != null) {
             try {
                 for(VehicleInterfaceDescriptor descriptor :
                         mRemoteService.getEnabledVehicleInterfaces()) {
-                    sources.add(descriptor);
+                    sources.add(descriptor.getInterfaceClass());
                 }
             } catch(RemoteException e) {
                 Log.w(TAG, "Unable to retreive remote source summaries", e);

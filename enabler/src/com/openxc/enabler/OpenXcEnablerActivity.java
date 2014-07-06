@@ -29,6 +29,7 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
+import com.openxc.remote.VehicleServiceException;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
  * the reliability of OpenXC by handling background tasks on behalf of client
@@ -54,7 +55,6 @@ public class OpenXcEnablerActivity extends Activity {
 
     private View mServiceNotRunningWarningView;
     private TextView mMessageCountView;
-    private View mUnknownConnIV;
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -87,8 +87,8 @@ public class OpenXcEnablerActivity extends Activity {
                     OpenXcEnablerActivity.this, mMessageCountView);
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, OpenXcEnablerActivity.this,
-                    mUnknownConnIV, mFileConnIV, mNetworkConnIV,
-                    mBluetoothConnIV, mUsbConnIV, mNoneConnView);
+                    mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
+                    mNoneConnView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
@@ -145,7 +145,6 @@ public class OpenXcEnablerActivity extends Activity {
         mUsbConnIV = findViewById(R.id.connection_usb);
         mFileConnIV = findViewById(R.id.connection_file);
         mNetworkConnIV = findViewById(R.id.connection_network);
-        mUnknownConnIV = findViewById(R.id.connection_unknown);
         mNoneConnView = findViewById(R.id.connection_none);
 
         findViewById(R.id.view_vehicle_data_btn).setOnClickListener(
@@ -180,6 +179,8 @@ public class OpenXcEnablerActivity extends Activity {
                     Toast.makeText(OpenXcEnablerActivity.this,
                         "Bluetooth is disabled, can't search for devices",
                         Toast.LENGTH_LONG).show();
+                } catch(VehicleServiceException e) {
+                    Log.e(TAG, "Unable to enable Bluetooth vehicle interface", e);
                 }
             }
         });

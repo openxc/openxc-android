@@ -265,18 +265,16 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testUsbInterfaceEnabledByDefault()
             throws VehicleServiceException {
         prepareServices();
-        assertThat(service.getActiveSourceTypes(),
-                hasItem(new VehicleInterfaceDescriptor(
-                        UsbVehicleInterface.class, false)));
+        assertThat(service.getActiveSources(),
+                hasItem(UsbVehicleInterface.class));
     }
 
     @MediumTest
     public void testAddVehicleInterfaceByClass() throws VehicleServiceException {
         prepareServices();
         service.addVehicleInterface(UsbVehicleInterface.class, "");
-        assertThat(service.getActiveSourceTypes(),
-                hasItem(new VehicleInterfaceDescriptor(
-                        UsbVehicleInterface.class, false)));
+        assertThat(service.getActiveSources(),
+                hasItem(UsbVehicleInterface.class));
         // Not a whole lot we can test without an actual device attached and
         // without being able to mock the interface class out in the remote
         // process where the VehicleSevice runs, but at least we know this
@@ -289,9 +287,8 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         prepareServices();
         service.addVehicleInterface(NetworkVehicleInterface.class,
                 "localhost:8080");
-        assertThat(service.getActiveSourceTypes(),
-                hasItem(new VehicleInterfaceDescriptor(
-                        NetworkVehicleInterface.class, false)));
+        assertThat(service.getActiveSources(),
+                hasItem(NetworkVehicleInterface.class));
     }
 
     @MediumTest
@@ -303,7 +300,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // If the running on an emulator it will report  that it doesn't have a
         // Bluetooth adapter, and we will be unable to construct the
         // BluetoothVehicleInterface interface.
-        // assertThat(service.getActiveSourceTypes(),
+        // assertThat(service.getActiveSources(),
                 // hasItem(new VehicleInterfaceDescriptor(
                         // BluetoothVehicleInterface.class, false)));
     }
@@ -314,9 +311,8 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         prepareServices();
         service.addVehicleInterface(UsbVehicleInterface.class, "");
         service.removeVehicleInterface(UsbVehicleInterface.class);
-        assertThat(service.getActiveSourceTypes(),
-                not(hasItem(new VehicleInterfaceDescriptor(
-                        UsbVehicleInterface.class, false))));
+        assertThat(service.getActiveSources(),
+                not(hasItem(UsbVehicleInterface.class)));
     }
 
     @MediumTest

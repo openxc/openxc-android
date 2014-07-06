@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.openxc.enabler.R;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
+import com.openxc.remote.VehicleServiceException;
 
 /**
  * Enable or disable receiving vehicle data from a Network device
@@ -56,8 +57,12 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                         false);
                 editor.commit();
             } else {
-                getVehicleManager().addVehicleInterface(
-                        NetworkVehicleInterface.class, combinedAddress);
+                try {
+                    getVehicleManager().addVehicleInterface(
+                            NetworkVehicleInterface.class, combinedAddress);
+                } catch(VehicleServiceException e) {
+                    Log.e(TAG, "Unable to add network interface", e);
+                }
             }
         } else {
             getVehicleManager().removeVehicleInterface(

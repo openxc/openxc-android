@@ -26,6 +26,14 @@ public class VehicleInterfaceDescriptor implements Parcelable {
         mConnected = connected;
     }
 
+    public boolean isConnected() {
+        return mConnected;
+    }
+
+    public Class<? extends VehicleInterface> getInterfaceClass() {
+        return mInterfaceClass;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null) {

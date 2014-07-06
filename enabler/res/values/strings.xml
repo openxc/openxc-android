@@ -5,7 +5,6 @@
     <string name="active_connections">Active Connections:</string>
     <string name="recording_status_label">Recording Status: </string>
     <string name="message_count_label">Messages Received: </string>
-    <string name="connection_unknown">Unknown</string>
     <string name="connection_file">File</string>
     <string name="connection_bluetooth">Bluetooth</string>
     <string name="connection_usb">USB</string>

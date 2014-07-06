@@ -30,12 +30,6 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/connection_unknown"
-                style="@style/ItemDataImage"
-                android:contentDescription="@string/connection_unknown"
-                android:src="@drawable/questionmark_white" />
-
-            <ImageView
                 android:id="@+id/connection_file"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_file"
