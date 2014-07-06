@@ -445,7 +445,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     private static URI createUri(URI uri) throws DataSourceResourceException {
-        if(uri == null) {
+        if(uri == null || uri.toString().isEmpty()) {
             uri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
             Log.i(TAG, "No USB device specified -- using default " +
                     uri);

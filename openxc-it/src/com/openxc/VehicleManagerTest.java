@@ -6,8 +6,11 @@ import junit.framework.Assert;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 import org.mockito.Mockito;
 import org.mockito.ArgumentCaptor;
 
@@ -26,7 +29,11 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.TestSource;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.usb.UsbVehicleInterface;
+import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
+import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.sinks.DataSinkException;
 
 public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
@@ -244,19 +251,93 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertEquals(measurement.getValue().doubleValue(), 42.0);
     }
 
-    // TODO remove source
-    // TODO add vehicle interface by class
-    // TODO remove vehicle interface by class
+    @MediumTest
+    public void testNoDataAfterRemoveSource() {
+        prepareServices();
+        service.addListener(new NamedVehicleMessage("foo").getKey(),
+                messageListener);
+        service.removeSource(source);
+        source.inject("foo", 42.0);
+        assertNull(messageReceived);
+    }
+
+    @MediumTest
+    public void testUsbInterfaceEnabledByDefault()
+            throws VehicleServiceException {
+        prepareServices();
+        assertThat(service.getActiveSourceTypes(),
+                hasItem(new VehicleInterfaceDescriptor(
+                        UsbVehicleInterface.class, false)));
+    }
+
+    @MediumTest
+    public void testAddVehicleInterfaceByClass() throws VehicleServiceException {
+        prepareServices();
+        service.addVehicleInterface(UsbVehicleInterface.class, "");
+        assertThat(service.getActiveSourceTypes(),
+                hasItem(new VehicleInterfaceDescriptor(
+                        UsbVehicleInterface.class, false)));
+        // Not a whole lot we can test without an actual device attached and
+        // without being able to mock the interface class out in the remote
+        // process where the VehicleSevice runs, but at least we know this
+        // method didn't explode.
+    }
+
+    @MediumTest
+    public void testAddVehicleInterfaceByClassWithResource()
+            throws VehicleServiceException {
+        prepareServices();
+        service.addVehicleInterface(NetworkVehicleInterface.class,
+                "localhost:8080");
+        assertThat(service.getActiveSourceTypes(),
+                hasItem(new VehicleInterfaceDescriptor(
+                        NetworkVehicleInterface.class, false)));
+    }
+
+    @MediumTest
+    public void testAddBluetoothVehicleInterface()
+            throws VehicleServiceException {
+        prepareServices();
+        service.addVehicleInterface(BluetoothVehicleInterface.class,
+                "00:01:02:03:04:05");
+        // If the running on an emulator it will report  that it doesn't have a
+        // Bluetooth adapter, and we will be unable to construct the
+        // BluetoothVehicleInterface interface.
+        // assertThat(service.getActiveSourceTypes(),
+                // hasItem(new VehicleInterfaceDescriptor(
+                        // BluetoothVehicleInterface.class, false)));
+    }
+
+    @MediumTest
+    public void testRemoveVehicleInterfaceByClass()
+            throws VehicleServiceException {
+        prepareServices();
+        service.addVehicleInterface(UsbVehicleInterface.class, "");
+        service.removeVehicleInterface(UsbVehicleInterface.class);
+        assertThat(service.getActiveSourceTypes(),
+                not(hasItem(new VehicleInterfaceDescriptor(
+                        UsbVehicleInterface.class, false))));
+    }
+
+    @MediumTest
+    public void testRemoveVehicleInterfaceByClassWithoutAdding()
+            throws VehicleServiceException {
+        prepareServices();
+        service.removeVehicleInterface(UsbVehicleInterface.class);
+    }
+
+    @MediumTest
+    public void testToString() {
+        prepareServices();
+        assertThat(service.toString(), notNullValue());
+    }
+
     // TODO set bluetooth polling
     // TODO get source summaries
     // TODO get sink summaries
-    // TODO get active source types
     // TODO get message count
     // TODO get local vehicle interface
     // TODO remove local vehicle interface
-    // TODO tostring
-    // TODO UsbVehicleInterface - test that receive throws an exception if not
-    //      connected
 
     private VehicleDataSink mCustomSink = new VehicleDataSink() {
         public void receive(VehicleMessage message) {

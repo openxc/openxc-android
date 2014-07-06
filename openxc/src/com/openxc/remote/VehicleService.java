@@ -103,7 +103,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         return mBinder;
     }
 
-    private void moveToForeground(){
+    private void moveToForeground() {
         if(!mForeground) {
             Log.i(TAG, "Moving service to foreground.");
 
@@ -133,7 +133,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         }
     }
 
-    private void removeFromForeground(){
+    private void removeFromForeground() {
         if(mForeground) {
             Log.i(TAG, "Removing service from foreground.");
 

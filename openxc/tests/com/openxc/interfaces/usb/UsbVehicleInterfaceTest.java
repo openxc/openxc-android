@@ -69,4 +69,7 @@ public class UsbVehicleInterfaceTest {
         // source = new UsbVehicleInterface(getContext());
         // assertFalse(source.setResource(null));
     }
+
+    // TODO UsbVehicleInterface - test that receive throws an exception if not
+    //      connected
 }

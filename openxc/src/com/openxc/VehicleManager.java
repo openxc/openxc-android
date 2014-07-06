@@ -448,7 +448,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      */
     public void addVehicleInterface(
             Class<? extends VehicleInterface> vehicleInterfaceType,
-            String resource) {
+            String resource) throws VehicleServiceException {
         Log.i(TAG, "Adding interface: " + vehicleInterfaceType);
 
         if(mRemoteService != null) {
@@ -456,7 +456,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 mRemoteService.addVehicleInterface(
                         vehicleInterfaceType.getName(), resource);
             } catch(RemoteException e) {
-                Log.w(TAG, "Unable to add vehicle interface", e);
+                throw new VehicleServiceException(
+                        "Unable to add vehicle interface", e);
             }
         } else {
             Log.w(TAG, "Can't add vehicle interface, not connected to the " +
