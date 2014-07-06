@@ -12,6 +12,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Command extends KeyedMessage {
     public static final String COMMAND_KEY = "command";
+    // TODO this name should be made more specific
+    public static final String DIAGNOSTIC_REQUEST_KEY = "request";
+
+    public static final String DIAGNOSTIC_COMMAND = "diagnostic_request";
 
     public static final String[] sRequiredFieldsValues = new String[] {
             COMMAND_KEY };
@@ -21,12 +25,33 @@ public class Command extends KeyedMessage {
     @SerializedName(COMMAND_KEY)
     private String mCommand;
 
+    @SerializedName(DIAGNOSTIC_REQUEST_KEY)
+    private DiagnosticRequest mDiagnosticRequest;
+
     public Command(String command) {
         mCommand = command;
     }
 
+    // TODO this seems really odd, that we're combined these two things. it made
+    // more sense when I implemented it in Python. I can't remember...why we are
+    // wrapping the DiagRequest in a command? I think it was to make parsing
+    // easier on the other end, so you didn't have to try and infer what the
+    // incoming datatype was. should we require all input data to be wrapped in
+    // a command? that would make more sense but would increase a litle overhead
+    // for JSON writes. Let's get this working for now and then change the
+    // message format so that we don't use implicit types in JSON anymore - if
+    // you need maximum performance, use the binary encoding.
+    public Command(DiagnosticRequest request) {
+        mCommand = DIAGNOSTIC_COMMAND;
+        mDiagnosticRequest = request;
+    }
+
     public String getCommand() {
         return mCommand;
+    }
+
+    public DiagnosticRequest getDiagnosticRequest() {
+        return mDiagnosticRequest;
     }
 
     @Override

@@ -29,6 +29,8 @@ import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
+import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.Command;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
@@ -250,6 +252,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @return true if the message was sent successfully
      */
     public boolean send(VehicleMessage message) {
+        if(message instanceof DiagnosticRequest) {
+            // Wrap the request in a Command
+            message = new Command(message.asDiagnosticRequest());
+        }
+
         // TODO I'm not sure how much value this return value has - we don't
         // really know if the remote service was able to actually send it
         boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);

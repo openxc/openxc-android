@@ -21,6 +21,8 @@ import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.messages.MessageKey;
+import com.openxc.messages.Command;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -238,6 +240,20 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         prepareServices();
         service.send(new SimpleVehicleMessage("foo", "bar"));
         verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
+    }
+
+    @MediumTest
+    public void testSendDiagnosticRequest() throws DataSinkException {
+        prepareServices();
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        service.send(request);
+        ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(
+                Command.class);
+        verify(mTestInterface).receive(argument.capture());
+        Command command = argument.getValue();
+        assertEquals(command.getCommand(), Command.DIAGNOSTIC_COMMAND);
+        assertNotNull(command.getDiagnosticRequest());
+        assertThat(command.getDiagnosticRequest(), equalTo(request));
     }
 
     @MediumTest

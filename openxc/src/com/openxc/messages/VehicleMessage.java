@@ -115,6 +115,10 @@ public class VehicleMessage implements Parcelable {
         return (EventedSimpleVehicleMessage) this;
     }
 
+    public DiagnosticRequest asDiagnosticRequest() {
+        return (DiagnosticRequest) this;
+    }
+
     public KeyedMessage asKeyedMessage() {
         return (KeyedMessage) this;
     }
