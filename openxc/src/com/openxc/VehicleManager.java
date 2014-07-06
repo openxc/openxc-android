@@ -299,18 +299,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.register(measurementType, listener);
     }
 
-    private void addListener(KeyMatcher matcher, Measurement.Listener listener) {
+    public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " to " + matcher);
         mNotifier.register(matcher, listener);
-    }
-
-    private void addListener(KeyedMessage keyedMessage,
-            Measurement.Listener listener) {
-        addListener(keyedMessage.getKey(), listener);
-    }
-
-    private void addListener(MessageKey key, Measurement.Listener listener) {
-        addListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     public void addListener(KeyedMessage keyedMessage,
