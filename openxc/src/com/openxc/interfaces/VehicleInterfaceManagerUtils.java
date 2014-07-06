@@ -40,4 +40,10 @@ public class VehicleInterfaceManagerUtils {
         Log.d(TAG, "No interfaces able to send " + command);
         return false;
     }
+
+    public static VehicleInterfaceDescriptor getDescriptor(
+            VehicleInterface vi) {
+        return new VehicleInterfaceDescriptor(vi.getClass(),
+                vi.isConnected());
+    }
 }

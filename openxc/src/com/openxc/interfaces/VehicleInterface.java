@@ -3,6 +3,7 @@ package com.openxc.interfaces;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 
 /**
  * A connection to a physical vehicle interface that is capable of full duplex
@@ -32,4 +33,6 @@ public interface VehicleInterface extends VehicleDataSource, VehicleDataSink {
      *      restarted.
      */
     public boolean setResource(String resource) throws DataSourceException;
+
+    public boolean isConnected();
 }

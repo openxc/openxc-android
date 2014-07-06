@@ -3,6 +3,7 @@ package com.openxc.remote;
 import com.openxc.remote.VehicleServiceListener;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.MessageKey;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 
 /**
  * The AIDL interface for a VehicleService running in a separate process.
@@ -82,7 +83,12 @@ interface VehicleServiceInterface {
 
     List<String> getSourceSummaries();
     List<String> getSinkSummaries();
-    List<String> getActiveSourceTypeStrings();
+
+    /**
+     * Return list of tokens identifying the data sources that are enabled and
+     * the connection status for each.
+     */
+    List<VehicleInterfaceDescriptor> getEnabledVehicleInterfaces();
 
     void userPipelineActivated();
     void userPipelineDeactivated();

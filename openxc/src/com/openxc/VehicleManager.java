@@ -19,7 +19,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Objects;
-import com.openxc.interfaces.InterfaceType;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
@@ -564,29 +564,23 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Returns a list of all active interface types
      *
-     * @return A list of the InterfaceTypes actively connected.
+     * @return A list of the enabled vehicle interfaces.
      */
-    public List<InterfaceType> getActiveSourceTypes() {
-        ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
+    public List<VehicleInterfaceDescriptor> getActiveSourceTypes() {
+        ArrayList<VehicleInterfaceDescriptor> sources = new ArrayList<>();
 
         for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
             if(source.isConnected()) {
-                sources.add(InterfaceType.interfaceTypeFromClass(source));
-            }
-        }
-
-        for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
-            if(source.isConnected()) {
-                sources.add(InterfaceType.interfaceTypeFromClass(source));
+                // TODO
+                // sources.add(InterfaceType.interfaceTypeFromClass(source));
             }
         }
 
         if(mRemoteService != null) {
             try {
-                for(String sourceTypeString :
-                        mRemoteService.getActiveSourceTypeStrings()) {
-                    sources.add(InterfaceType.interfaceTypeFromString(
-                                sourceTypeString));
+                for(VehicleInterfaceDescriptor descriptor :
+                        mRemoteService.getEnabledVehicleInterfaces()) {
+                    sources.add(descriptor);
                 }
             } catch(RemoteException e) {
                 Log.w(TAG, "Unable to retreive remote source summaries", e);
