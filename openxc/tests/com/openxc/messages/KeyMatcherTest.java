@@ -36,7 +36,6 @@ public class KeyMatcherTest {
 
     @Test
     public void wildcardMatcherMatchesAll() {
-        KeyMatcher matcher = ExactKeyMatcher.buildExactMatcher(keyed);
         assertTrue(KeyMatcher.getWildcardMatcher().matches(keyed));
     }
 

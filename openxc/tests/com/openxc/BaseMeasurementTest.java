@@ -61,8 +61,7 @@ public class BaseMeasurementTest {
             throws NoValueException {
         message = new SimpleVehicleMessage("foo", value);
         try {
-            Measurement measurement =
-                BaseMeasurement.getMeasurementFromMessage(message);
+            BaseMeasurement.getMeasurementFromMessage(message);
         } catch(UnrecognizedMeasurementTypeException e) {
             return;
         }
