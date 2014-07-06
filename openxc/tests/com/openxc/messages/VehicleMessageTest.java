@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import org.junit.Before;
@@ -77,10 +77,12 @@ public class VehicleMessageTest {
         message = new VehicleMessage();
         message.timestamp();
         assertTrue(message.isTimestamped());
-        Date date = new Date(message.getTimestamp());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(message.getTimestamp());
         // Catch a regression where we didn't divide by 1000 before storing
         // timestamp as a double.
-        assertThat(date.getYear(), equalTo(new Date().getYear()));
+        assertThat(calendar.get(Calendar.YEAR),
+                equalTo(Calendar.getInstance().get(Calendar.YEAR)));
     }
 
     @Test
