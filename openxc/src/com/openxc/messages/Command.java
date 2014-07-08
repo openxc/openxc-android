@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 import android.os.Parcel;
 
-import com.google.common.base.Objects;
+import static com.google.common.base.Objects.toStringHelper;
 import com.google.gson.annotations.SerializedName;
 
 public class Command extends KeyedMessage {
@@ -74,14 +75,17 @@ public class Command extends KeyedMessage {
         }
 
         final Command other = (Command) obj;
-        return getCommand().equals(other.getCommand());
+        return Objects.equals(getCommand(), other.getCommand()) &&
+                Objects.equals(getDiagnosticRequest(),
+                        other.getDiagnosticRequest());
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("command", getCommand())
+            .add("diagnostic_request", getDiagnosticRequest())
             .add("extras", getExtras())
             .toString();
     }
@@ -90,12 +94,15 @@ public class Command extends KeyedMessage {
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
         out.writeSerializable(getCommand());
+        out.writeParcelable(getDiagnosticRequest(), flags);
     }
 
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mCommand = (CommandType) in.readSerializable();
+        mDiagnosticRequest = (DiagnosticRequest) in.readParcelable(
+                DiagnosticRequest.class.getClassLoader());
     }
 
     protected Command(Parcel in)

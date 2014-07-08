@@ -43,6 +43,10 @@ public class DiagnosticRequest extends DiagnosticMessage {
         mMultipleResponses = multipleResponses;
     }
 
+    public boolean hasFrequency() {
+        return getFrequency() != null;
+    }
+
     public void setFrequency(Double frequency) {
         mFrequency = frequency;
     }
@@ -57,6 +61,10 @@ public class DiagnosticRequest extends DiagnosticMessage {
 
     public Double getFrequency() {
         return mFrequency;
+    }
+
+    public boolean hasName() {
+        return getName() != null;
     }
 
     public String getName() {

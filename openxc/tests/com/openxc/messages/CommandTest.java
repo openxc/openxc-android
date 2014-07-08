@@ -19,6 +19,7 @@ import com.openxc.messages.Command.CommandType;
 public class CommandTest {
     Command message;
     CommandType command = CommandType.VERSION;
+    DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
 
     @Before
     public void setup() {
@@ -42,12 +43,41 @@ public class CommandTest {
     }
 
     @Test
+    public void sameDiagnosticRequestEqual() {
+        message = new Command(request);
+        Command anotherMessage = new Command(new DiagnosticRequest(1, 2, 3, 4));
+        assertEquals(message, anotherMessage);
+    }
+
+    @Test
+    public void differentDiagnosticRequestNotEqual() {
+        message = new Command(request);
+        Command anotherMessage = new Command(new DiagnosticRequest(5, 6, 7, 8));
+        assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
     public void toStringNotNull() {
         assertThat(message.toString(), notNullValue());
     }
 
     @Test
     public void writeAndReadFromParcel() {
+        Parcel parcel = Parcel.obtain();
+        message.writeToParcel(parcel, 0);
+
+        // Reset parcel for reading
+        parcel.setDataPosition(0);
+
+        VehicleMessage createdFromParcel =
+                VehicleMessage.CREATOR.createFromParcel(parcel);
+        assertThat(createdFromParcel, instanceOf(Command.class));
+        assertEquals(message, createdFromParcel);
+    }
+
+    @Test
+    public void writeAndReadFromParcelWithDiagnostic() {
+        message = new Command(request);
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);
 

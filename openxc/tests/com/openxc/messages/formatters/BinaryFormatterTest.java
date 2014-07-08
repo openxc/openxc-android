@@ -44,7 +44,7 @@ public class BinaryFormatterTest extends AbstractFormatterTest {
                     new ByteArrayInputStream(serialized));
             assertEquals(originalMessage, deserialized);
         } catch(UnrecognizedMessageTypeException | SerializationException e) {
-            Assert.fail(e.toString());
+            throw new RuntimeException(e);
         }
     }
 

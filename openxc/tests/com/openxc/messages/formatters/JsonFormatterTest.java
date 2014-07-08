@@ -18,9 +18,9 @@ import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
-import com.openxc.messages.SerializationException;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -115,5 +115,21 @@ public class JsonFormatterTest {
         String serialized = JsonFormatter.serialize(new CommandResponse(
                     Command.CommandType.VERSION));
         assertThat(serialized, containsString("version"));
+    }
+
+    @Test
+    public void serializeDiagnosticRequest() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        serializeDeserializeAndCheckEqual(request);
+    }
+
+    @Test
+    public void serializeDiagnosticRequestWithOptional() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        request.setPayload(new byte[]{1,2,3,4});
+        request.setMultipleResponses(false);
+        request.setFrequency(2.0);
+        request.setName("foo");
+        serializeDeserializeAndCheckEqual(request);
     }
 }

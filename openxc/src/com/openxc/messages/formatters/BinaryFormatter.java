@@ -51,24 +51,22 @@ public class BinaryFormatter {
         BinaryMessages.VehicleMessage.Builder builder =
             BinaryMessages.VehicleMessage.newBuilder();
         if(message instanceof CanMessage) {
-            buildCanMessage(builder, (CanMessage) message);
+            serializeCanMessage(builder, (CanMessage) message);
         } else if(message instanceof DiagnosticResponse) {
-            buildDiagnosticResponse(builder, (DiagnosticResponse) message);
-        } else if(message instanceof DiagnosticRequest) {
-            buildDiagnosticRequest(builder, (DiagnosticRequest) message);
+            serializeDiagnosticResponse(builder, (DiagnosticResponse) message);
         } else if(message instanceof Command) {
-            buildCommand(builder, (Command) message);
+            serializeCommand(builder, (Command) message);
         } else if(message instanceof CommandResponse) {
-            buildCommandResponse(builder, (CommandResponse) message);
+            serializeCommandResponse(builder, (CommandResponse) message);
         } else if(message instanceof EventedSimpleVehicleMessage) {
-            buildEventedSimpleVehicleMessage(builder,
+            serializeEventedSimpleVehicleMessage(builder,
                     (EventedSimpleVehicleMessage) message);
         } else if(message instanceof SimpleVehicleMessage) {
-            buildSimpleVehicleMessage(builder, (SimpleVehicleMessage) message);
+            serializeSimpleVehicleMessage(builder, (SimpleVehicleMessage) message);
         } else if(message instanceof NamedVehicleMessage) {
-            buildNamedVehicleMessage(builder, (NamedVehicleMessage) message);
+            serializeNamedVehicleMessage(builder, (NamedVehicleMessage) message);
         } else {
-            buildGenericVehicleMessage(builder, message);
+            serializeGenericVehicleMessage(builder, message);
         }
         return builder.build().toByteArray();
     }
@@ -151,9 +149,50 @@ public class BinaryFormatter {
                     "Command missing type");
         }
 
-        // TODO diagnostic request as a part of diag request
+        DiagnosticRequest request = null;
+        if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
+            if(command.hasDiagnosticRequest()) {
+                BinaryMessages.DiagnosticRequest serializedRequest =
+                        command.getDiagnosticRequest();
+                request = new DiagnosticRequest(
+                        serializedRequest.getBus(),
+                        serializedRequest.getMessageId(),
+                        serializedRequest.getMode());
 
-        return new Command(commandType);
+                if(serializedRequest.hasPayload()) {
+                    request.setPayload(
+                            serializedRequest.getPayload().toByteArray());
+                }
+
+                if(serializedRequest.hasPid()) {
+                    request.setPid(serializedRequest.getPid());
+                }
+
+                if(serializedRequest.hasMultipleResponses()) {
+                    request.setMultipleResponses(
+                            serializedRequest.getMultipleResponses());
+                }
+
+                if(serializedRequest.hasFrequency()) {
+                    request.setFrequency(serializedRequest.getFrequency());
+                }
+
+                if(serializedRequest.hasName()) {
+                    request.setName(serializedRequest.getName());
+                }
+            } else {
+                throw new UnrecognizedMessageTypeException(
+                        "Diagnostic command missing request details");
+            }
+        }
+
+        // TODO ugh, I don't like this
+        if(request == null) {
+            return new Command(commandType);
+        } else {
+            return new Command(request);
+        }
+
     }
 
     private static DiagnosticResponse deserializeDiagnosticResponse(
@@ -166,6 +205,7 @@ public class BinaryFormatter {
                 serializedResponse.getBus(),
                 serializedResponse.getMessageId(),
                 serializedResponse.getMode(),
+                // TODO pid should be optional, shouldn't it?
                 serializedResponse.getPid(),
                 payload);
 
@@ -231,7 +271,7 @@ public class BinaryFormatter {
         }
     }
 
-    private static void buildCanMessage(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeCanMessage(BinaryMessages.VehicleMessage.Builder builder,
             CanMessage message) {
         // TODO I'd like to change the "raw" language to explicitly be "can
         // message"
@@ -245,7 +285,7 @@ public class BinaryFormatter {
         builder.setRawMessage(messageBuilder);
     }
 
-    private static void buildDiagnosticResponse(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeDiagnosticResponse(BinaryMessages.VehicleMessage.Builder builder,
             DiagnosticResponse message) {
         builder.setType(BinaryMessages.VehicleMessage.Type.DIAGNOSTIC);
 
@@ -270,50 +310,63 @@ public class BinaryFormatter {
         builder.setDiagnosticResponse(messageBuilder);
     }
 
-    private static void buildDiagnosticRequest(BinaryMessages.VehicleMessage.Builder builder,
-            DiagnosticRequest message) {
-        builder.setType(BinaryMessages.VehicleMessage.Type.DIAGNOSTIC);
-
+    private static BinaryMessages.DiagnosticRequest.Builder
+            startSerializingDiagnosticRequest(DiagnosticRequest message) {
         BinaryMessages.DiagnosticRequest.Builder messageBuilder =
                 BinaryMessages.DiagnosticRequest.newBuilder();
         messageBuilder.setBus(message.getBusId());
         messageBuilder.setMessageId(message.getId());
         messageBuilder.setMode(message.getMode());
-        messageBuilder.setPid(message.getPid());
         messageBuilder.setMultipleResponses(message.getMultipleResponses());
-        messageBuilder.setFrequency(message.getFrequency());
-        messageBuilder.setName(message.getName());
+
+        if(message.hasPid()) {
+            messageBuilder.setPid(message.getPid());
+        }
+
+        if(message.hasFrequency()) {
+            messageBuilder.setFrequency(message.getFrequency());
+        }
+
+        if(message.hasName()) {
+            messageBuilder.setName(message.getName());
+        }
 
         if(message.hasPayload()) {
             messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
         }
         // TODO hmm, not sure this exists
         // messageBuilder.setDecodedType(message.getDecodedType());
-        // builder.setDiagnosticRequest(messageBuilder);
+        return messageBuilder;
     }
 
-    private static void buildCommand(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeCommand(BinaryMessages.VehicleMessage.Builder builder,
             Command message) throws SerializationException {
         builder.setType(BinaryMessages.VehicleMessage.Type.CONTROL_COMMAND);
 
         BinaryMessages.ControlCommand.Builder messageBuilder =
                 BinaryMessages.ControlCommand.newBuilder();
-        if(message.getCommand().equals(CommandType.VERSION)) {
+        CommandType commandType = message.getCommand();
+        if(commandType.equals(CommandType.VERSION)) {
             messageBuilder.setType(BinaryMessages.ControlCommand.Type.VERSION);
-        } else if(message.getCommand().equals(CommandType.DEVICE_ID)) {
+        } else if(commandType.equals(CommandType.DEVICE_ID)) {
             messageBuilder.setType(BinaryMessages.ControlCommand.Type.DEVICE_ID);
-        } else if(message.getCommand().equals(CommandType.DIAGNOSTIC_REQUEST)) {
+        } else if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
             messageBuilder.setType(BinaryMessages.ControlCommand.Type.DIAGNOSTIC);
         } else {
             throw new SerializationException(
-                    "Unrecognized command type in response: " +
-                    message.getCommand());
+                    "Unrecognized command type in response: " + commandType);
+        }
+
+        if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
+            messageBuilder.setDiagnosticRequest(
+                    startSerializingDiagnosticRequest(
+                        message.getDiagnosticRequest()));
         }
 
         builder.setControlCommand(messageBuilder);
     }
 
-    private static void buildCommandResponse(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeCommandResponse(BinaryMessages.VehicleMessage.Builder builder,
             CommandResponse message) throws SerializationException {
         builder.setType(BinaryMessages.VehicleMessage.Type.COMMAND_RESPONSE);
 
@@ -370,7 +423,7 @@ public class BinaryFormatter {
         return messageBuilder;
     }
 
-    private static void buildEventedSimpleVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeEventedSimpleVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             EventedSimpleVehicleMessage message) {
         BinaryMessages.TranslatedMessage.Builder messageBuilder =
                 startBuildingTranslated(builder, message);
@@ -379,7 +432,7 @@ public class BinaryFormatter {
         builder.setTranslatedMessage(messageBuilder);
     }
 
-    private static void buildSimpleVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeSimpleVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             SimpleVehicleMessage message) {
         BinaryMessages.TranslatedMessage.Builder messageBuilder =
                 startBuildingTranslated(builder, message);
@@ -387,14 +440,14 @@ public class BinaryFormatter {
         builder.setTranslatedMessage(messageBuilder);
     }
 
-    private static void buildNamedVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeNamedVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             NamedVehicleMessage message) {
         BinaryMessages.TranslatedMessage.Builder messageBuilder =
                 startBuildingTranslated(builder, message);
         builder.setTranslatedMessage(messageBuilder);
     }
 
-    private static void buildGenericVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
+    private static void serializeGenericVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             VehicleMessage message) throws SerializationException {
         // TODO actually the binary format doens't support arbitrary extra
         // fields right now - could support with protobuf extensions but that is

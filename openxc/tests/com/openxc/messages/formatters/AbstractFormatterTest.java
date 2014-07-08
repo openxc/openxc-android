@@ -41,24 +41,6 @@ public abstract class AbstractFormatterTest {
                     new byte[]{1,2,3,4}, null, 42.0));
     }
 
-    // TODO need to tweak these tests since diagrequest is only a part of
-    // ControlCommand, not VehicleMessages
-    // @Test
-    // public void serializeDiagnosticRequest() {
-        // DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
-        // serializeDeserializeAndCheckEqual(request);
-    // }
-
-    // @Test
-    // public void serializeDiagnosticRequestWithOptional() {
-        // DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
-        // request.setPayload(new byte[]{1,2,3,4});
-        // request.setMultipleResponses(false);
-        // request.setFrequency(2.0);
-        // request.setName("foo");
-        // serializeDeserializeAndCheckEqual(request);
-    // }
-
     @Test
     public void serializeCommandResponse() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
@@ -75,6 +57,12 @@ public abstract class AbstractFormatterTest {
     public void serializeCommand() {
         serializeDeserializeAndCheckEqual(new Command(
                     Command.CommandType.VERSION));
+    }
+
+    @Test
+    public void serializeCommandWithDiagnosticRequest() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        serializeDeserializeAndCheckEqual(new Command(request));
     }
 
     @Test
