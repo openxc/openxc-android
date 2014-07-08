@@ -22,6 +22,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
@@ -251,7 +252,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
                 Command.class);
         verify(mTestInterface).receive(argument.capture());
         Command command = argument.getValue();
-        assertEquals(command.getCommand(), Command.DIAGNOSTIC_COMMAND);
+        assertEquals(command.getCommand(), Command.CommandType.DIAGNOSTIC_REQUEST);
         assertNotNull(command.getDiagnosticRequest());
         assertThat(command.getDiagnosticRequest(), equalTo(request));
     }
