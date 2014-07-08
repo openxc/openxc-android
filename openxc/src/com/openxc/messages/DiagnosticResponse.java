@@ -60,8 +60,16 @@ public class DiagnosticResponse extends DiagnosticMessage {
         return mValue;
     }
 
+    public void setValue(Double value) {
+        mValue = value;
+    }
+
     public NegativeResponseCode getNegativeResponseCode() {
         return mNegativeResponseCode;
+    }
+
+    public void setNegativeResponseCode(NegativeResponseCode code) {
+        mNegativeResponseCode = code;
     }
 
     @Override

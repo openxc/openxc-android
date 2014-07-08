@@ -6,7 +6,6 @@ import java.io.InputStream;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
-
 import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
@@ -16,13 +15,15 @@ import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
-import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 
 public class BinaryFormatter {
     private final static String TAG = "BinaryFormatter";
+    // TODO split up into a serializer and deserializer class that are only used
+    // internally in this class as this file is too large
 
     public static VehicleMessage deserialize(InputStream data)
             throws UnrecognizedMessageTypeException {
@@ -155,6 +156,31 @@ public class BinaryFormatter {
         return new Command(commandType);
     }
 
+    private static DiagnosticResponse deserializeDiagnosticResponse(
+            BinaryMessages.VehicleMessage binaryMessage) {
+        BinaryMessages.DiagnosticResponse serializedResponse =
+                binaryMessage.getDiagnosticResponse();
+        // TODO check if all required values are present
+        byte[] payload = serializedResponse.getPayload().toByteArray();
+        DiagnosticResponse response = new DiagnosticResponse(
+                serializedResponse.getBus(),
+                serializedResponse.getMessageId(),
+                serializedResponse.getMode(),
+                serializedResponse.getPid(),
+                payload);
+
+        if(serializedResponse.hasNegativeResponseCode()) {
+            response.setNegativeResponseCode(
+                    DiagnosticResponse.NegativeResponseCode.get(
+                        serializedResponse.getNegativeResponseCode()));
+        }
+
+        if(serializedResponse.hasValue()) {
+            response.setValue(serializedResponse.getValue());
+        }
+        return response;
+    }
+
     private static CommandResponse deserializeCommandResponse(
             BinaryMessages.VehicleMessage binaryMessage)
             throws UnrecognizedMessageTypeException {
@@ -197,6 +223,8 @@ public class BinaryFormatter {
             return deserializeCommandResponse(binaryMessage);
         } else if(binaryMessage.hasControlCommand()) {
             return deserializeCommand(binaryMessage);
+        } else if(binaryMessage.hasDiagnosticResponse()) {
+            return deserializeDiagnosticResponse(binaryMessage);
         } else {
             throw new UnrecognizedMessageTypeException(
                     "Binary message type not recognized");
@@ -230,8 +258,15 @@ public class BinaryFormatter {
         messageBuilder.setPid(message.getPid());
         messageBuilder.setNegativeResponseCode(message.getNegativeResponseCode().code());
         messageBuilder.setSuccess(message.isSuccessful());
-        messageBuilder.setValue(message.getValue());
-        messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
+
+        if(message.hasValue()) {
+            messageBuilder.setValue(message.getValue());
+        }
+
+        if(message.hasPayload()) {
+            messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
+        }
+
         builder.setDiagnosticResponse(messageBuilder);
     }
 
@@ -245,14 +280,15 @@ public class BinaryFormatter {
         messageBuilder.setMessageId(message.getId());
         messageBuilder.setMode(message.getMode());
         messageBuilder.setPid(message.getPid());
-        messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
         messageBuilder.setMultipleResponses(message.getMultipleResponses());
         messageBuilder.setFrequency(message.getFrequency());
         messageBuilder.setName(message.getName());
+
+        if(message.hasPayload()) {
+            messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
+        }
         // TODO hmm, not sure this exists
         // messageBuilder.setDecodedType(message.getDecodedType());
-        // TODO need to figure out how this is serialiezd, to a control command
-        // or not
         // builder.setDiagnosticRequest(messageBuilder);
     }
 

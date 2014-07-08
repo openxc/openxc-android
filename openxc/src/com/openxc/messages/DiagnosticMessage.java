@@ -78,6 +78,10 @@ public abstract class DiagnosticMessage extends KeyedMessage {
         mPid = pid;
     }
 
+    public boolean hasPayload() {
+        return mPayload != null;
+    }
+
     public void setPayload(byte[] payload) {
         if(payload != null) {
             mPayload = new byte[payload.length];

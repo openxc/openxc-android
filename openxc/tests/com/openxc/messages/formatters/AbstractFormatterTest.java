@@ -27,20 +27,22 @@ public abstract class AbstractFormatterTest {
     protected abstract void serializeDeserializeAndCheckEqual(
             VehicleMessage message);
 
-    // @Test
-    // public void serializeDiagnosticResponse() {
-        // serializeDeserializeAndCheckEqual(new DiagnosticResponse(
-                    // 1, 2, 3, 4,
-                    // new byte[]{1,2,3,4}));
-    // }
+    @Test
+    public void serializeDiagnosticResponse() {
+        serializeDeserializeAndCheckEqual(new DiagnosticResponse(
+                    1, 2, 3, 4,
+                    new byte[]{1,2,3,4}));
+    }
 
-    // @Test
-    // public void serializeDiagnosticResponseWithValue() {
-        // serializeDeserializeAndCheckEqual(new DiagnosticResponse(
-                    // 1, 2, 3, 4,
-                    // new byte[]{1,2,3,4}, null, 42.0));
-    // }
+    @Test
+    public void serializeDiagnosticResponseWithValue() {
+        serializeDeserializeAndCheckEqual(new DiagnosticResponse(
+                    1, 2, 3, 4,
+                    new byte[]{1,2,3,4}, null, 42.0));
+    }
 
+    // TODO need to tweak these tests since diagrequest is only a part of
+    // ControlCommand, not VehicleMessages
     // @Test
     // public void serializeDiagnosticRequest() {
         // DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
