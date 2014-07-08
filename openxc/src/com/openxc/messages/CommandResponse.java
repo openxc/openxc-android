@@ -10,6 +10,8 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
+import com.openxc.messages.Command.CommandType;
+
 public class CommandResponse extends KeyedMessage {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
@@ -21,18 +23,18 @@ public class CommandResponse extends KeyedMessage {
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_RESPONSE_KEY)
-    private String mCommand;
+    private CommandType mCommand;
 
     // Message is optional
     @SerializedName(MESSAGE_KEY)
     private String mMessage;
 
-    public CommandResponse(String command, String message) {
+    public CommandResponse(CommandType command, String message) {
         mMessage = message;
         mCommand = command;
     }
 
-    public CommandResponse(String command) {
+    public CommandResponse(CommandType command) {
         this(command, null);
     }
 
@@ -40,7 +42,7 @@ public class CommandResponse extends KeyedMessage {
         return mMessage;
     }
 
-    public String getCommand() {
+    public CommandType getCommand() {
         return mCommand;
     }
 
@@ -79,14 +81,14 @@ public class CommandResponse extends KeyedMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeString(getCommand());
+        out.writeSerializable(getCommand());
         out.writeString(getMessage());
     }
 
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        mCommand = in.readString();
+        mCommand = (CommandType) in.readSerializable();
         mMessage = in.readString();
     }
 

@@ -57,10 +57,11 @@ public abstract class AbstractFormatterTest {
         // serializeDeserializeAndCheckEqual(request);
     // }
 
-    // @Test
-    // public void serializeCommandResponse() {
-        // serializeDeserializeAndCheckEqual(new CommandResponse("foo"));
-    // }
+    @Test
+    public void serializeCommandResponse() {
+        serializeDeserializeAndCheckEqual(new CommandResponse(
+                    Command.CommandType.VERSION));
+    }
 
     // @Test
     // public void serializeCommandResponseWithMessage() {

@@ -12,11 +12,13 @@ import org.robolectric.annotation.Config;
 
 import android.os.Parcel;
 
+import com.openxc.messages.Command.CommandType;
+
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class CommandTest {
     Command message;
-    String command = "foo";
+    CommandType command = CommandType.VERSION;
 
     @Before
     public void setup() {

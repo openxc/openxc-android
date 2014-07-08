@@ -15,7 +15,9 @@ public class Command extends KeyedMessage {
     // TODO this name should be made more specific
     public static final String DIAGNOSTIC_REQUEST_KEY = "request";
 
-    public static final String DIAGNOSTIC_COMMAND = "diagnostic_request";
+    public enum CommandType {
+        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST
+    };
 
     public static final String[] sRequiredFieldsValues = new String[] {
             COMMAND_KEY };
@@ -23,12 +25,12 @@ public class Command extends KeyedMessage {
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_KEY)
-    private String mCommand;
+    private CommandType mCommand;
 
     @SerializedName(DIAGNOSTIC_REQUEST_KEY)
     private DiagnosticRequest mDiagnosticRequest;
 
-    public Command(String command) {
+    public Command(CommandType command) {
         mCommand = command;
     }
 
@@ -42,11 +44,11 @@ public class Command extends KeyedMessage {
     // message format so that we don't use implicit types in JSON anymore - if
     // you need maximum performance, use the binary encoding.
     public Command(DiagnosticRequest request) {
-        mCommand = DIAGNOSTIC_COMMAND;
+        mCommand = CommandType.DIAGNOSTIC_REQUEST;
         mDiagnosticRequest = request;
     }
 
-    public String getCommand() {
+    public CommandType getCommand() {
         return mCommand;
     }
 
@@ -87,13 +89,13 @@ public class Command extends KeyedMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeString(getCommand());
+        out.writeSerializable(getCommand());
     }
 
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        mCommand = in.readString();
+        mCommand = (CommandType) in.readSerializable();
     }
 
     protected Command(Parcel in)

@@ -10,6 +10,7 @@ import com.google.protobuf.ByteString;
 import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
@@ -71,58 +72,93 @@ public class BinaryFormatter {
         return builder.build().toByteArray();
     }
 
+    private static NamedVehicleMessage deserializeNamedMessage(
+            BinaryMessages.VehicleMessage binaryMessage) throws UnrecognizedMessageTypeException {
+        BinaryMessages.TranslatedMessage translatedMessage =
+            binaryMessage.getTranslatedMessage();
+        String name;
+        if(translatedMessage.hasName()) {
+            name = translatedMessage.getName();
+        } else {
+            throw new UnrecognizedMessageTypeException(
+                    "Binary message is missing name");
+        }
+
+        Object value = null;
+        BinaryMessages.DynamicField field =
+            translatedMessage.getValue();
+        if(field.hasNumericValue()) {
+            value = field.getNumericValue();
+        } else if(field.hasBooleanValue()) {
+            value = field.getBooleanValue();
+        } else if(field.hasStringValue()) {
+            value = field.getStringValue();
+        }
+
+        Object event = null;
+        if(translatedMessage.hasEvent()) {
+            field = translatedMessage.getEvent();
+            if(field.hasNumericValue()) {
+                event = field.getNumericValue();
+            } else if(field.hasBooleanValue()) {
+                event = field.getBooleanValue();
+            } else if(field.hasStringValue()) {
+                event = field.getStringValue();
+            }
+        }
+
+        if(event == null) {
+            if(value == null) {
+                return new NamedVehicleMessage(name);
+            } else {
+                return new SimpleVehicleMessage(name, value);
+            }
+        } else {
+            return new EventedSimpleVehicleMessage(name, value, event);
+        }
+    }
+
+    private static CanMessage deserializeCanMessage(
+            BinaryMessages.VehicleMessage binaryMessage) {
+        BinaryMessages.RawMessage canMessage = binaryMessage.getRawMessage();
+        return new CanMessage(canMessage.getBus(),
+                canMessage.getMessageId(),
+                canMessage.getData().toByteArray());
+    }
+
+    private static CommandResponse deserializeCommandResponse(
+            BinaryMessages.VehicleMessage binaryMessage)
+            throws UnrecognizedMessageTypeException {
+        BinaryMessages.CommandResponse response =
+                binaryMessage.getCommandResponse();
+        CommandType commandType = null;
+        if(response.getType().equals(BinaryMessages.ControlCommand.Type.VERSION)) {
+            commandType = CommandType.VERSION;
+        } else if(response.getType().equals(BinaryMessages.ControlCommand.Type.DEVICE_ID)) {
+            commandType = CommandType.DEVICE_ID;
+        } else if(response.getType().equals(BinaryMessages.ControlCommand.Type.DIAGNOSTIC)) {
+            commandType = CommandType.DIAGNOSTIC_REQUEST;
+        } else {
+            throw new UnrecognizedMessageTypeException(
+                    "Unrecognized command type in response: " +
+                    response.getType());
+        }
+        String message = null;
+        if(response.hasMessage()) {
+            message = response.getMessage();
+        }
+        return new CommandResponse(commandType, message);
+    }
+
     private static VehicleMessage buildVehicleMessage(
             BinaryMessages.VehicleMessage binaryMessage)
-                throws UnrecognizedMessageTypeException{
+                throws UnrecognizedMessageTypeException {
         if(binaryMessage.hasTranslatedMessage()) {
-            BinaryMessages.TranslatedMessage translatedMessage =
-                    binaryMessage.getTranslatedMessage();
-            String name;
-            if(translatedMessage.hasName()) {
-                name = translatedMessage.getName();
-            } else {
-                throw new UnrecognizedMessageTypeException(
-                        "Binary message is missing name");
-            }
-
-            Object value = null;
-            BinaryMessages.DynamicField field =
-                    translatedMessage.getValue();
-            if(field.hasNumericValue()) {
-                value = field.getNumericValue();
-            } else if(field.hasBooleanValue()) {
-                value = field.getBooleanValue();
-            } else if(field.hasStringValue()) {
-                value = field.getStringValue();
-            }
-
-            Object event = null;
-            if(translatedMessage.hasEvent()) {
-                field = translatedMessage.getEvent();
-                if(field.hasNumericValue()) {
-                    event = field.getNumericValue();
-                } else if(field.hasBooleanValue()) {
-                    event = field.getBooleanValue();
-                } else if(field.hasStringValue()) {
-                    event = field.getStringValue();
-                }
-            }
-
-            if(event == null) {
-                if(value == null) {
-                    return new NamedVehicleMessage(name);
-                } else {
-                    return new SimpleVehicleMessage(name, value);
-                }
-            } else {
-               return new EventedSimpleVehicleMessage(name, value, event);
-            }
+            return deserializeNamedMessage(binaryMessage);
         } else if(binaryMessage.hasRawMessage()) {
-            BinaryMessages.RawMessage canMessage = binaryMessage.getRawMessage();
-            return new CanMessage(canMessage.getBus(),
-                    canMessage.getMessageId(),
-                    canMessage.getData().toByteArray());
-
+            return deserializeCanMessage(binaryMessage);
+        } else if(binaryMessage.hasCommandResponse()) {
+            return deserializeCommandResponse(binaryMessage);
         } else {
             throw new UnrecognizedMessageTypeException(
                     "Binary message type not recognized");

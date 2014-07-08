@@ -13,12 +13,14 @@ import org.robolectric.annotation.Config;
 
 import android.os.Parcel;
 
+import com.openxc.messages.Command.CommandType;
+
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class CommandResponseTest {
     CommandResponse response;
     String message = "bar";
-    String command = "foo";
+    CommandType command = CommandType.VERSION;
 
     @Before
     public void setup() {
@@ -57,7 +59,7 @@ public class CommandResponseTest {
     @Test
     public void differentCommandDoesntEqual() {
         CommandResponse anotherResponse = new CommandResponse(
-                command + " different");
+                CommandType.DEVICE_ID);
         assertFalse(response.equals(anotherResponse));
     }
 
