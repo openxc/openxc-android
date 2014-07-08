@@ -60,13 +60,14 @@ public abstract class AbstractFormatterTest {
     @Test
     public void serializeCommandResponse() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
-                    Command.CommandType.VERSION));
+                    Command.CommandType.DEVICE_ID));
     }
 
-    // @Test
-    // public void serializeCommandResponseWithMessage() {
-        // serializeDeserializeAndCheckEqual(new CommandResponse("foo", "bar"));
-    // }
+    @Test
+    public void serializeCommandResponseWithMessage() {
+        serializeDeserializeAndCheckEqual(new CommandResponse(
+                    Command.CommandType.DEVICE_ID, "bar"));
+    }
 
     // @Test
     // public void serializeCommand() {

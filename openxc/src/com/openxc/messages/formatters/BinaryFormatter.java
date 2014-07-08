@@ -32,7 +32,7 @@ public class BinaryFormatter {
                 BinaryMessages.VehicleMessage.parseFrom(data);
 
             if(message != null) {
-                result = buildVehicleMessage(message);
+                result = deserialize(message);
             }
         } catch(IOException e) {
             Log.w(TAG, "Unable to deserialize from binary stream", e);
@@ -132,17 +132,24 @@ public class BinaryFormatter {
         BinaryMessages.CommandResponse response =
                 binaryMessage.getCommandResponse();
         CommandType commandType = null;
-        if(response.getType().equals(BinaryMessages.ControlCommand.Type.VERSION)) {
-            commandType = CommandType.VERSION;
-        } else if(response.getType().equals(BinaryMessages.ControlCommand.Type.DEVICE_ID)) {
-            commandType = CommandType.DEVICE_ID;
-        } else if(response.getType().equals(BinaryMessages.ControlCommand.Type.DIAGNOSTIC)) {
-            commandType = CommandType.DIAGNOSTIC_REQUEST;
+        if(response.hasType()) {
+            BinaryMessages.ControlCommand.Type serializedType = response.getType();
+            if(serializedType.equals(BinaryMessages.ControlCommand.Type.VERSION)) {
+                commandType = CommandType.VERSION;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DEVICE_ID)) {
+                commandType = CommandType.DEVICE_ID;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DIAGNOSTIC)) {
+                commandType = CommandType.DIAGNOSTIC_REQUEST;
+            } else {
+                throw new UnrecognizedMessageTypeException(
+                        "Unrecognized command type in response: " +
+                        response.getType());
+            }
         } else {
             throw new UnrecognizedMessageTypeException(
-                    "Unrecognized command type in response: " +
-                    response.getType());
+                    "Command response missing type");
         }
+
         String message = null;
         if(response.hasMessage()) {
             message = response.getMessage();
@@ -150,7 +157,7 @@ public class BinaryFormatter {
         return new CommandResponse(commandType, message);
     }
 
-    private static VehicleMessage buildVehicleMessage(
+    private static VehicleMessage deserialize(
             BinaryMessages.VehicleMessage binaryMessage)
                 throws UnrecognizedMessageTypeException {
         if(binaryMessage.hasTranslatedMessage()) {
@@ -219,22 +226,48 @@ public class BinaryFormatter {
     }
 
     private static void buildCommand(BinaryMessages.VehicleMessage.Builder builder,
-            Command command) {
+            Command message) throws SerializationException {
         builder.setType(BinaryMessages.VehicleMessage.Type.CONTROL_COMMAND);
 
         BinaryMessages.ControlCommand.Builder messageBuilder =
                 BinaryMessages.ControlCommand.newBuilder();
-        // TODO
+        if(message.getCommand().equals(CommandType.VERSION)) {
+            messageBuilder.setType(BinaryMessages.ControlCommand.Type.VERSION);
+        } else if(message.getCommand().equals(CommandType.DEVICE_ID)) {
+            messageBuilder.setType(BinaryMessages.ControlCommand.Type.DEVICE_ID);
+        } else if(message.getCommand().equals(CommandType.DIAGNOSTIC_REQUEST)) {
+            messageBuilder.setType(BinaryMessages.ControlCommand.Type.DIAGNOSTIC);
+        } else {
+            throw new SerializationException(
+                    "Unrecognized command type in response: " +
+                    message.getCommand());
+        }
+
         builder.setControlCommand(messageBuilder);
     }
 
     private static void buildCommandResponse(BinaryMessages.VehicleMessage.Builder builder,
-            CommandResponse message) {
+            CommandResponse message) throws SerializationException {
         builder.setType(BinaryMessages.VehicleMessage.Type.COMMAND_RESPONSE);
 
         BinaryMessages.CommandResponse.Builder messageBuilder =
                 BinaryMessages.CommandResponse.newBuilder();
-        // TODO
+        if(message.getCommand().equals(CommandType.VERSION)) {
+            messageBuilder.setType(BinaryMessages.ControlCommand.Type.VERSION);
+        } else if(message.getCommand().equals(CommandType.DEVICE_ID)) {
+            messageBuilder.setType(BinaryMessages.ControlCommand.Type.DEVICE_ID);
+        } else if(message.getCommand().equals(CommandType.DIAGNOSTIC_REQUEST)) {
+            messageBuilder.setType(BinaryMessages.ControlCommand.Type.DIAGNOSTIC);
+        } else {
+            throw new SerializationException(
+                    "Unrecognized command type in response: " +
+                    message.getCommand());
+        }
+
+        if(message.hasMessage()) {
+            messageBuilder.setMessage(message.getMessage());
+        }
+
         builder.setCommandResponse(messageBuilder);
     }
 

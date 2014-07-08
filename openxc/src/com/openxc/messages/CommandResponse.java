@@ -38,6 +38,10 @@ public class CommandResponse extends KeyedMessage {
         this(command, null);
     }
 
+    public boolean hasMessage() {
+        return mMessage != null;
+    }
+
     public String getMessage() {
         return mMessage;
     }
