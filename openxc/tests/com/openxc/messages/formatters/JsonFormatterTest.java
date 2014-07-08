@@ -15,6 +15,7 @@ import org.robolectric.annotation.Config;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
+import com.openxc.messages.SerializationException;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -71,5 +72,11 @@ public class JsonFormatterTest {
         message.untimestamp();
         String serialized = new String(JsonFormatter.serialize(message));
         assertFalse(serialized.contains("timestamp"));
+    }
+
+    @Test
+    public void serializeEmptyVehicleMessage() {
+        // JsonFormatter allows blank messages
+        serializeDeserializeAndCheckEqual(new VehicleMessage());
     }
 }

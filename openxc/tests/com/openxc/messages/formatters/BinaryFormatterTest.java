@@ -1,8 +1,11 @@
 package com.openxc.messages.formatters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import org.junit.Assert;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,15 +19,31 @@ import org.robolectric.annotation.Config;
 
 import com.openxc.BinaryMessages;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
+import com.openxc.messages.SerializationException;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
-public class BinaryFormatterTest {
+public class BinaryFormatterTest extends AbstractFormatterTest {
     BinaryFormatter formatter = new BinaryFormatter();
     SimpleVehicleMessage message;
     String messageName = "foo";
     Double value = Double.valueOf(42);
+
+    protected void serializeDeserializeAndCheckEqual(
+            VehicleMessage originalMessage) {
+        try {
+            byte[] serialized = BinaryFormatter.serialize(originalMessage);
+            assertThat(serialized.length, greaterThan(0));
+
+            VehicleMessage deserialized = BinaryFormatter.deserialize(
+                    new ByteArrayInputStream(serialized));
+            assertEquals(originalMessage, deserialized);
+        } catch(UnrecognizedMessageTypeException | SerializationException e) {
+            Assert.fail(e.toString());
+        }
+    }
 
     @Test
     public void deserializeNoErrors() throws IOException,
@@ -50,7 +69,7 @@ public class BinaryFormatterTest {
         InputStream input = new ByteArrayInputStream(output.toByteArray());
 
         try {
-            message = (SimpleVehicleMessage) formatter.deserialize(input);
+            message = (SimpleVehicleMessage) BinaryFormatter.deserialize(input);
         } catch(UnrecognizedMessageTypeException e) {}
 
         assertEquals(message.getName(), messageName);
@@ -61,7 +80,7 @@ public class BinaryFormatterTest {
     public void deserializeInvalidReturnsNull() throws IOException,
            UnrecognizedMessageTypeException {
         InputStream input = new ByteArrayInputStream(new byte[]{0,1,2,3,4});
-        assertThat(formatter.deserialize(input), nullValue());
+        assertThat(BinaryFormatter.deserialize(input), nullValue());
     }
 
     @Test(expected=UnrecognizedMessageTypeException.class)
@@ -87,6 +106,13 @@ public class BinaryFormatterTest {
         serialized.writeTo(output);
         InputStream input = new ByteArrayInputStream(output.toByteArray());
 
-        formatter.deserialize(input);
+        BinaryFormatter.deserialize(input);
+    }
+
+    @Test(expected=SerializationException.class)
+    public void serializeEmptyVehicleMessage()
+            throws SerializationException {
+        // BinaryFormatter does not allow blank messages
+        BinaryFormatter.serialize(new VehicleMessage());
     }
 }

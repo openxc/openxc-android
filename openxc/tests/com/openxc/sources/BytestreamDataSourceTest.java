@@ -29,6 +29,7 @@ import com.openxc.TestUtils;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.BinaryStreamer;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -104,6 +105,22 @@ public class BytestreamDataSourceTest {
         TestUtils.pause(10);
         verify(callback, never()).receive(Matchers.any(VehicleMessage.class));
     }
+
+    // TODO
+    // @Test
+    // public void receiveValidBinaryTriggersCallback() {
+        // source.start();
+        // source.connect();
+        // SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        // source.inject(new BinaryStreamer().serializeForStream(message));
+        // TestUtils.pause(100);
+        // ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                // VehicleMessage.class);
+        // verify(callback).receive(argument.capture());
+        // VehicleMessage received = argument.getValue();
+        // received.untimestamp();
+        // assertEquals(received, message);
+    // }
 
     @Test
     public void receiveValidJsonTriggersCallback() {
@@ -200,8 +217,12 @@ public class BytestreamDataSourceTest {
                     throw new IOException();
                 } else {
                     byte[] data = packets.remove(0);
-                    System.arraycopy(data, 0, bytes, 0, data.length);
-                    return data.length;
+                    if(data != null) {
+                        System.arraycopy(data, 0, bytes, 0, data.length);
+                        return data.length;
+                    } else {
+                        return -1;
+                    }
                 }
             } catch(InterruptedException e) {
                 return -1;

@@ -85,6 +85,10 @@ public class VehicleMessage implements Parcelable {
         }
     }
 
+    public boolean hasExtras() {
+        return !mExtras.isEmpty();
+    }
+
     public Map<String, Object> getExtras() {
         return mExtras;
     }
