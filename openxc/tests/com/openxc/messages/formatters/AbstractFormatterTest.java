@@ -88,29 +88,10 @@ public abstract class AbstractFormatterTest {
                     "foo", "bar", "baz"));
     }
 
-    // @Test
-    // public void serializeNamedMessageWithExtras() {
-        // HashMap<String, Object> extras = new HashMap<>();
-        // extras.put("foo", "bar");
-        // extras.put("baz", 42.0);
-        // VehicleMessage message = new NamedVehicleMessage("foo");
-        // message.setExtras(extras);
-        // serializeDeserializeAndCheckEqual(message);
-    // }
-
     @Test
     public void serializeNamedMessage() {
         serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo"));
     }
-
-    // @Test
-    // public void serializeWithExtras() {
-        // HashMap<String, Object> extras = new HashMap<>();
-        // extras.put("foo", "bar");
-        // extras.put("baz", 42.0);
-        // VehicleMessage message = new VehicleMessage(extras);
-        // serializeDeserializeAndCheckEqual(message);
-    // }
 
     // TODO check timestamp gets serialized
 }

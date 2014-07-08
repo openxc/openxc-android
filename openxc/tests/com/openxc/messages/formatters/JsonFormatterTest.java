@@ -12,6 +12,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.HashMap;
+
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -78,5 +81,23 @@ public class JsonFormatterTest {
     public void serializeEmptyVehicleMessage() {
         // JsonFormatter allows blank messages
         serializeDeserializeAndCheckEqual(new VehicleMessage());
+    }
+
+    @Test
+    public void serializeNamedMessageWithExtras() {
+        HashMap<String, Object> extras = new HashMap<>();
+        extras.put("foo", "bar");
+        extras.put("baz", 42.0);
+        VehicleMessage message = new NamedVehicleMessage("foo");
+        message.setExtras(extras);
+        serializeDeserializeAndCheckEqual(message);
+    }
+
+    @Test
+    public void serializeWithExtras() {
+        HashMap<String, Object> extras = new HashMap<>();
+        extras.put("foo", "bar");
+        extras.put("baz", 42.0);
+        JsonFormatter.serialize(new VehicleMessage(extras));
     }
 }

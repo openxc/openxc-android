@@ -41,6 +41,11 @@ public class BinaryFormatter {
 
     public static byte[] serialize(VehicleMessage message)
             throws SerializationException {
+        if(message.hasExtras()) {
+            throw new SerializationException("Messages with extras cannot be " +
+                    "serialized to the binary format - use JSON instead");
+        }
+
         BinaryMessages.VehicleMessage.Builder builder =
             BinaryMessages.VehicleMessage.newBuilder();
         if(message instanceof CanMessage) {
