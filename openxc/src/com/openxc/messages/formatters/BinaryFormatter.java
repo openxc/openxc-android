@@ -126,6 +126,35 @@ public class BinaryFormatter {
                 canMessage.getData().toByteArray());
     }
 
+    private static Command deserializeCommand(
+            BinaryMessages.VehicleMessage binaryMessage)
+            throws UnrecognizedMessageTypeException {
+        BinaryMessages.ControlCommand command =
+                binaryMessage.getControlCommand();
+        CommandType commandType = null;
+        if(command.hasType()) {
+            BinaryMessages.ControlCommand.Type serializedType = command.getType();
+            if(serializedType.equals(BinaryMessages.ControlCommand.Type.VERSION)) {
+                commandType = CommandType.VERSION;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DEVICE_ID)) {
+                commandType = CommandType.DEVICE_ID;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DIAGNOSTIC)) {
+                commandType = CommandType.DIAGNOSTIC_REQUEST;
+            } else {
+                throw new UnrecognizedMessageTypeException(
+                        "Unrecognized command type in command: " +
+                        command.getType());
+            }
+        } else {
+            throw new UnrecognizedMessageTypeException(
+                    "Command missing type");
+        }
+
+        // TODO diagnostic request as a part of diag request
+
+        return new Command(commandType);
+    }
+
     private static CommandResponse deserializeCommandResponse(
             BinaryMessages.VehicleMessage binaryMessage)
             throws UnrecognizedMessageTypeException {
@@ -166,6 +195,8 @@ public class BinaryFormatter {
             return deserializeCanMessage(binaryMessage);
         } else if(binaryMessage.hasCommandResponse()) {
             return deserializeCommandResponse(binaryMessage);
+        } else if(binaryMessage.hasControlCommand()) {
+            return deserializeCommand(binaryMessage);
         } else {
             throw new UnrecognizedMessageTypeException(
                     "Binary message type not recognized");

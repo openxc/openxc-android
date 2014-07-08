@@ -69,10 +69,11 @@ public abstract class AbstractFormatterTest {
                     Command.CommandType.DEVICE_ID, "bar"));
     }
 
-    // @Test
-    // public void serializeCommand() {
-        // serializeDeserializeAndCheckEqual(new Command("foo"));
-    // }
+    @Test
+    public void serializeCommand() {
+        serializeDeserializeAndCheckEqual(new Command(
+                    Command.CommandType.VERSION));
+    }
 
     @Test
     public void serializeCanMessage() {
