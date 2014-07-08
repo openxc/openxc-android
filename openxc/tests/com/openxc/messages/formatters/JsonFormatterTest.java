@@ -1,7 +1,7 @@
 package com.openxc.messages.formatters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,6 +14,8 @@ import org.robolectric.annotation.Config;
 
 import java.util.HashMap;
 
+import com.openxc.messages.Command;
+import com.openxc.messages.CommandResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -99,5 +101,19 @@ public class JsonFormatterTest {
         extras.put("foo", "bar");
         extras.put("baz", 42.0);
         JsonFormatter.serialize(new VehicleMessage(extras));
+    }
+
+    @Test
+    public void serializeCommandUsesStringCommand() {
+        String serialized = JsonFormatter.serialize(new Command(
+                    Command.CommandType.VERSION));
+        assertThat(serialized, containsString("version"));
+    }
+
+    @Test
+    public void serializeCommandResponseUsesStringCommand() {
+        String serialized = JsonFormatter.serialize(new CommandResponse(
+                    Command.CommandType.VERSION));
+        assertThat(serialized, containsString("version"));
     }
 }

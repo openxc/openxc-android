@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -22,6 +23,12 @@ import com.openxc.messages.VehicleMessage;
 
 public class JsonFormatter {
     private static Gson sGson = new Gson();
+
+    static {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory());
+        sGson = builder.create();
+    }
 
     public static String serialize(VehicleMessage message) {
         return sGson.toJson(message);
@@ -68,4 +75,5 @@ public class JsonFormatter {
         }
         return message;
     }
+
 }
