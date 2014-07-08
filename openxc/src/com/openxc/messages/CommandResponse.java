@@ -51,7 +51,8 @@ public class CommandResponse extends KeyedMessage {
         }
 
         final CommandResponse other = (CommandResponse) obj;
-        return Objects.equal(mMessage, other.mMessage);
+        return Objects.equal(mCommand, other.mCommand) &&
+                Objects.equal(mMessage, other.mMessage);
     }
 
     @Override
@@ -78,12 +79,14 @@ public class CommandResponse extends KeyedMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
+        out.writeString(getCommand());
         out.writeString(getMessage());
     }
 
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        mCommand = in.readString();
         mMessage = in.readString();
     }
 

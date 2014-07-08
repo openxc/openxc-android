@@ -55,6 +55,13 @@ public class CommandResponseTest {
     }
 
     @Test
+    public void differentCommandDoesntEqual() {
+        CommandResponse anotherResponse = new CommandResponse(
+                command + " different");
+        assertFalse(response.equals(anotherResponse));
+    }
+
+    @Test
     public void toStringNotNull() {
         assertThat(response.toString(), notNullValue());
     }
