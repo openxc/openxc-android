@@ -262,7 +262,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);
         // Don't want to keep this in the same list as local interfaces because
         // if that quits after the first interface reports success.
-        if(mRemoteService == null) {
+        if(mRemoteService != null) {
             try {
                 mRemoteService.send(message);
             } catch(RemoteException e) {
