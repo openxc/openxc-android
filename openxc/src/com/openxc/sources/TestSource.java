@@ -35,4 +35,9 @@ public class TestSource extends BaseVehicleDataSource {
     public void stop() {
         callback = null;
     }
+
+    @Override
+    public boolean isConnected() {
+        return false;
+    }
 }

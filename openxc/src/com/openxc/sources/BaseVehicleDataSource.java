@@ -15,7 +15,7 @@ import com.openxc.messages.VehicleMessage;
  * {@link #handleMessage(VehicleMessage)} method for subclass to call
  * with each new message, regardless of its origin.
  */
-public class BaseVehicleDataSource implements VehicleDataSource {
+public abstract class BaseVehicleDataSource implements VehicleDataSource {
     private final static String TAG = "BaseVehicleDataSource";
     private SourceCallback mCallback;
     private final Lock mCallbackLock = new ReentrantLock();
@@ -63,17 +63,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         }
     }
 
-    @Override
-    public boolean isConnected() {
-        // TODO this is kind of weird, and probably says that this API needs
-        // refactoring - we don't want to keep the Pipeline awake because it
-        // thinks the sources like the RemoteListenerSource and
-        // ApplicationSource (which are always in the pipeline) are "connected"
-        // to a vehicle. maybe this isConnected method should only apply to the
-        // VehicleInterface type of sources, but we don't currently track those
-        // separately.
-        return false;
-    }
+    public abstract boolean isConnected();
 
     /**
      * Clear the callback so no further updates are sent.

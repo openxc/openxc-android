@@ -110,5 +110,10 @@ public class BaseVehicleDataSourceTest {
         public void inject(VehicleMessage message) {
             handleMessage(message);
         }
+
+        @Override
+        public boolean isConnected() {
+            return false;
+        }
     }
 }

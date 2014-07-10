@@ -49,6 +49,11 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
     }
 
     @Override
+    public boolean isConnected() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this).toString();
     }

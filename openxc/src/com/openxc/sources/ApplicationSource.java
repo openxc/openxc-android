@@ -23,6 +23,11 @@ public class ApplicationSource extends BaseVehicleDataSource {
     }
 
     @Override
+    public boolean isConnected() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this).toString();
     }
