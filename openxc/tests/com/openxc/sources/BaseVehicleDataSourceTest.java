@@ -88,6 +88,19 @@ public class BaseVehicleDataSourceTest {
     }
 
     @Test
+    public void waitForCallbackAlreadySet() throws InterruptedException {
+        mSource.setCallback(mCallback);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                mSource.waitForCallback();
+            }
+        };
+        thread.start();
+        thread.join(10);
+    }
+
+    @Test
     public void waitForCallback() throws InterruptedException {
         mSource.setCallback(null);
         Thread thread = new Thread() {
