@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import java.util.Locale;
+
 import com.openxc.units.State;
 
 public class TurnSignalStatus extends
@@ -21,7 +23,7 @@ public class TurnSignalStatus extends
     }
 
     public TurnSignalStatus(String value) {
-        this(TurnSignalPosition.valueOf(value));
+        this(TurnSignalPosition.valueOf(value.toUpperCase(Locale.US)));
     }
 
     @Override

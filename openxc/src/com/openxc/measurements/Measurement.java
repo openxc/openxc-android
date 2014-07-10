@@ -39,10 +39,9 @@ public interface Measurement {
     /**
      * Retrieve the valid range of the measurement.
      *
-     * @return the Range of the measurement
-     * @throws NoRangeException if the measurement doesn't have a range.
+     * @return the Range of the measurement or null if none.
      */
-    public Range<? extends Unit> getRange() throws NoRangeException;
+    public Range<? extends Unit> getRange();
 
     /**
      * Return the value of this measurement.

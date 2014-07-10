@@ -31,6 +31,12 @@ public class MeasurementsTest {
     }
 
     @Test
+    public void buildEngineSpeed()
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        checkDeserializeSerialize(new EngineSpeed(value));
+    }
+
+    @Test
     public void buildSteeringWheelAngle()
             throws UnrecognizedMeasurementTypeException, NoValueException {
         checkDeserializeSerialize(new SteeringWheelAngle(value));
@@ -85,6 +91,12 @@ public class MeasurementsTest {
     }
 
     @Test
+    public void buildParkingBrakeStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        checkDeserializeSerialize(new ParkingBrakeStatus(true));
+    }
+
+    @Test
     public void buildBrakePedalStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException {
         checkDeserializeSerialize(new BrakePedalStatus(true));
@@ -100,6 +112,20 @@ public class MeasurementsTest {
     public void buildHighBeamStatus()
             throws UnrecognizedMeasurementTypeException, NoValueException {
         checkDeserializeSerialize(new HighBeamStatus(true));
+    }
+
+    @Test
+    public void buildIgnitionStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        checkDeserializeSerialize(new IgnitionStatus(
+                    IgnitionStatus.IgnitionPosition.RUN));
+    }
+
+    @Test
+    public void buildTurnSignalStatus()
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        checkDeserializeSerialize(new TurnSignalStatus(
+                    TurnSignalStatus.TurnSignalPosition.LEFT));
     }
 
     @Test

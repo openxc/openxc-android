@@ -4,6 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import junit.framework.Assert;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +17,7 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -43,6 +47,13 @@ public class BaseMeasurementTest {
         assertThat(vehicleSpeed, equalTo(measurement));
     }
 
+    @Test(expected=NoValueException.class)
+    public void buildFromNull() throws NoValueException,
+           UnrecognizedMeasurementTypeException {
+        Measurement deserializedMeasurement =
+            BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
+    }
+
     @Test
     public void buildEventedFromMessage()
             throws UnrecognizedMeasurementTypeException, NoValueException {
@@ -66,5 +77,43 @@ public class BaseMeasurementTest {
             return;
         }
         Assert.fail();
+    }
+
+    @Test
+    public void getBirthtime() {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        assertThat(measurement.getBirthtime(), notNullValue());
+    }
+
+    @Test
+    public void setAndGetBirthtime() {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        measurement.setTimestamp(1000);
+        assertEquals(measurement.getBirthtime(), 1000);
+    }
+
+    @Test
+    public void sameEquals() {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        assertEquals(measurement, measurement);
+    }
+
+    @Test
+    public void nullNotEqual() {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        assertThat(measurement, not(equalTo(null)));
+    }
+
+    @Test
+    public void differentClassSameValueNotEqual() {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        EngineSpeed otherMeasurement = new EngineSpeed(value);
+        assertFalse(measurement.equals(otherMeasurement));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        assertThat(measurement.toString(), notNullValue());
     }
 }

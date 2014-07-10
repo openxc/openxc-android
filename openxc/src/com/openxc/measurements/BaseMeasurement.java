@@ -3,6 +3,8 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Objects;
+
 import android.util.Log;
 
 import com.google.common.collect.BiMap;
@@ -104,10 +106,7 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     }
 
     @Override
-    public Range<TheUnit> getRange() throws NoRangeException {
-        if(!hasRange()) {
-            throw new NoRangeException();
-        }
+    public Range<TheUnit> getRange() {
         return mRange;
     }
 
@@ -314,25 +313,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             return false;
         }
 
-        if(other.getEvent() != null && getEvent() != null) {
-            if(!other.getEvent().equals(getEvent())) {
-                return false;
-            }
-        } else if(other.getEvent() != getEvent()) {
-            return false;
-        }
-
-        if(other.hasRange() != hasRange()) {
-            return false;
-        } else {
-            try {
-                if(!other.getRange().equals(getRange())) {
-                    return false;
-                }
-            } catch(NoRangeException e) { }
-        }
-
-        return true;
+        return Objects.equals(getEvent(), other.getEvent()) &&
+            Objects.equals(other.getRange(), getRange());
     }
 
     @Override

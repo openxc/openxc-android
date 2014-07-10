@@ -11,7 +11,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import com.openxc.measurements.BaseMeasurement;
-import com.openxc.measurements.NoRangeException;
 import com.openxc.units.Meter;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
@@ -30,13 +29,8 @@ public class NoRangeMeasurementTest {
     }
 
     @Test
-    public void emptyRange() throws NoRangeException {
-        try {
-        measurement.getRange();
-        } catch(NoRangeException e) {
-            return;
-        }
-        Assert.fail();
+    public void emptyRange() {
+        assertThat(measurement.getRange(), nullValue());
     }
 
     @Test

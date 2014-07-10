@@ -17,4 +17,9 @@ public class EngineSpeedTest extends TestCase {
     public void testGet() {
         assertThat(measurement.getValue().doubleValue(), equalTo(1.0));
     }
+
+    public void testConstructFromNumber() {
+        EngineSpeed other = new EngineSpeed(1.0);
+        assertThat(other, equalTo(measurement));
+    }
 }

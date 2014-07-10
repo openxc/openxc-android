@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import com.openxc.measurements.BaseMeasurement;
-import com.openxc.measurements.NoRangeException;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -36,7 +35,7 @@ public class MeasurementTest {
     }
 
     @Test
-    public void getRange() throws NoRangeException {
+    public void getRange() {
         assertThat(measurement.getRange(), equalTo(range));
     }
 
