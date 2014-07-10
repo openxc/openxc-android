@@ -29,11 +29,15 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
     public RemoteListenerSource(VehicleServiceInterface service) {
         mService = service;
 
-        try {
-            mService.register(mRemoteListener);
-        } catch(RemoteException e) {
-            Log.w(TAG, "Unable to register to receive " +
-                    "message callbacks", e);
+        if(mService != null) {
+            try {
+                mService.register(mRemoteListener);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to register to receive " +
+                        "message callbacks", e);
+            }
+        } else {
+            Log.w(TAG, "Remote vehicle service is unexpectedly null");
         }
     }
 
