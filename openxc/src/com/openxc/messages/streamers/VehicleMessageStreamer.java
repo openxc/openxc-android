@@ -7,7 +7,7 @@ public abstract class VehicleMessageStreamer {
     public abstract VehicleMessage parseNextMessage();
     public abstract byte[] serializeForStream(VehicleMessage message);
 
-    private final static String TAG = "BytestreamBuffer";
+    private final static String TAG = "VehicleMessageStreamer";
     private final static int STATS_LOG_FREQUENCY_KB = 128;
 
     private double mBytesReceived = 0;
