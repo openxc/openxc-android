@@ -1,18 +1,12 @@
 package com.openxc.interfaces;
 
+import com.google.common.base.Objects;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.util.Objects;
-
 import static com.google.common.base.Objects.toStringHelper;
-
-import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
-import com.openxc.interfaces.network.NetworkVehicleInterface;
-import com.openxc.interfaces.usb.UsbVehicleInterface;
-import com.openxc.sources.VehicleDataSource;
-import com.openxc.sources.trace.TraceVehicleDataSource;
 
 public class VehicleInterfaceDescriptor implements Parcelable {
     private final static String TAG = VehicleInterfaceDescriptor.class.getName();
@@ -42,13 +36,13 @@ public class VehicleInterfaceDescriptor implements Parcelable {
 
         final VehicleInterfaceDescriptor other =
                 (VehicleInterfaceDescriptor) obj;
-        return Objects.equals(mConnected, other.mConnected) &&
-                Objects.equals(mInterfaceClass, other.mInterfaceClass);
+        return Objects.equal(mConnected, other.mConnected) &&
+                Objects.equal(mInterfaceClass, other.mInterfaceClass);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mConnected, mInterfaceClass);
+        return Objects.hashCode(mConnected, mInterfaceClass);
     }
 
     @Override

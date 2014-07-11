@@ -3,10 +3,9 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import java.util.Objects;
-
 import android.util.Log;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
@@ -313,8 +312,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             return false;
         }
 
-        return Objects.equals(getEvent(), other.getEvent()) &&
-            Objects.equals(other.getRange(), getRange());
+        return Objects.equal(getEvent(), other.getEvent()) &&
+            Objects.equal(other.getRange(), getRange());
     }
 
     @Override
