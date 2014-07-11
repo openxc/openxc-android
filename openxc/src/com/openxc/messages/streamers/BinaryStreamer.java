@@ -38,7 +38,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
 
                 int size = CodedInputStream.readRawVarint32(firstByte, input);
                 if(size > 0) {
-                    message = new BinaryFormatter().deserialize(
+                    message = BinaryFormatter.deserialize(
                             ByteStreams.limit(input, size));
                 }
 
