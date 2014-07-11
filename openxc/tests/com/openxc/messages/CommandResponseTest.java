@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -85,5 +86,12 @@ public class CommandResponseTest {
     @Test
     public void keyNotNull() {
         assertThat(response.getKey(), notNullValue());
+    }
+
+    @Test
+    public void matchesKeyFromCommand() {
+        Command originalCommand = new Command(command);
+        KeyMatcher matcher = ExactKeyMatcher.buildExactMatcher(originalCommand);
+        assertTrue(matcher.matches(response));
     }
 }
