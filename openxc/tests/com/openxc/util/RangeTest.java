@@ -1,22 +1,55 @@
 package com.openxc.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import junit.framework.TestCase;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
-public class RangeTest extends TestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+public class RangeTest {
     Range<Double> range;
 
-    @Override
+    @Before
     public void setUp() {
         range = new Range<Double>(0.0, 100.1);
     }
 
-    public void testMin() {
+    @Test
+    public void getMin() {
         assertThat(range.getMin(), equalTo(0.0));
     }
 
-    public void testMax() {
+    @Test
+    public void getMax() {
         assertThat(range.getMax(), equalTo(100.1));
+    }
+
+    @Test
+    public void sameEquals() {
+        assertThat(range, equalTo(range));
+    }
+
+    @Test
+    public void sameMinMaxEquals() {
+        Range another = new Range(range.getMin(), range.getMax());
+        assertThat(range, equalTo(another));
+    }
+
+    @Test
+    public void differentNotEqual() {
+        Range another = new Range(range.getMin() + 1, range.getMax());
+        assertThat(range, not(equalTo(another)));
+
+        another = new Range(range.getMin(), range.getMax() + 1);
+        assertThat(range, not(equalTo(another)));
+
+        another = new Range(range.getMin() + 1, range.getMax() + 1);
+        assertThat(range, not(equalTo(another)));
+    }
+
+    @Test
+    public void toStringNotNull() {
+        assertThat(range.toString(), notNullValue());
     }
 }

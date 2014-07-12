@@ -29,20 +29,24 @@ public class Range<T> {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if(object instanceof Range<?>)  {
-            @SuppressWarnings("unchecked")
-            final Range<T> that = (Range<T>) object;
-            return this == that || (
-                    that.getMin() == getMin() &&
-                    that.getMax() == getMax());
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
         }
-        return false;
+
+        if(obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        @SuppressWarnings("unchecked")
+        final Range<T> that = (Range<T>) obj;
+        return Objects.equal(getMin(), that.getMin()) &&
+                Objects.equal(getMax(), that.getMax());
     }
 
     @Override
     public int hashCode() {
-        return mMin.hashCode() + mMax.hashCode();
+        return Objects.hashCode(mMin, mMax);
     }
 
     @Override

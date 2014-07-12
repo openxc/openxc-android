@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+
 import com.openxc.NoValueException;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.ExactKeyMatcher;
@@ -308,11 +309,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
-        if(!other.getValue().equals(getValue())) {
-            return false;
-        }
-
-        return Objects.equal(getEvent(), other.getEvent()) &&
+        return Objects.equal(getValue(), other.getValue()) &&
+            Objects.equal(getEvent(), other.getEvent()) &&
             Objects.equal(other.getRange(), getRange());
     }
 
