@@ -164,4 +164,17 @@ public class JsonStreamerTest {
         VehicleMessage deserialized = streamer.parseNextMessage();
         assertEquals(message, deserialized);
     }
+
+    @Test
+    public void logTransferStatsAfterMegabyte() {
+        byte[] data = streamer.serializeForStream(message);
+        for(int i = 0; i < 10000; i++) {
+            streamer.receive(data, data.length);
+        }
+
+        for(int i = 0; i < 10000; i++) {
+            VehicleMessage deserialized = streamer.parseNextMessage();
+            assertEquals(message, deserialized);
+        }
+    }
 }
