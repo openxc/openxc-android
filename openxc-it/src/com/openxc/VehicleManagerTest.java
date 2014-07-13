@@ -1,44 +1,45 @@
 package com.openxc;
 
-import java.net.URI;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import junit.framework.Assert;
+
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+
 import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
-import org.mockito.Mockito;
-import org.mockito.ArgumentCaptor;
-
+import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
+import com.openxc.interfaces.network.NetworkVehicleInterface;
+import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.messages.MessageKey;
 import com.openxc.messages.Command;
-import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.DiagnosticRequest;
-import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.TestSource;
-import com.openxc.interfaces.VehicleInterfaceDescriptor;
-import com.openxc.interfaces.VehicleInterface;
-import com.openxc.interfaces.usb.UsbVehicleInterface;
-import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
-import com.openxc.interfaces.network.NetworkVehicleInterface;
-import com.openxc.sinks.DataSinkException;
 
 public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
