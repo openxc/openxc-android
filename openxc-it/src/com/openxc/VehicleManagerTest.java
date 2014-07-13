@@ -10,6 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 import org.mockito.Mockito;
 import org.mockito.ArgumentCaptor;
@@ -76,6 +77,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         super.setUp();
 
         mTestInterface = mock(VehicleInterface.class);
+        when(mTestInterface.isConnected()).thenReturn(true);
         speedReceived = null;
         steeringAngleReceived = null;
 
