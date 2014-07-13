@@ -28,6 +28,18 @@ public abstract class AbstractFormatterTest {
             VehicleMessage message);
 
     @Test
+    public void serializeFailedDiagnosticResponse() {
+        int id = 42;
+        int bus = 1;
+        int mode = 2;
+        int pid = 4;
+        byte[] payload = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
+        double value = 42.0;
+        serializeDeserializeAndCheckEqual(new DiagnosticResponse(bus, id, mode,
+                pid, payload, null, value));
+    }
+
+    @Test
     public void serializeDiagnosticResponse() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                     1, 2, 3, 4,
@@ -51,6 +63,8 @@ public abstract class AbstractFormatterTest {
     public void serializeCommandResponseWithMessage() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
                     Command.CommandType.DEVICE_ID, "bar"));
+        serializeDeserializeAndCheckEqual(new CommandResponse(
+                    Command.CommandType.VERSION, "bar"));
     }
 
     @Test
@@ -66,6 +80,12 @@ public abstract class AbstractFormatterTest {
     }
 
     @Test
+    public void serializeCommandWithDiagnosticRequestNoPid() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3);
+        serializeDeserializeAndCheckEqual(new Command(request));
+    }
+
+    @Test
     public void serializeCanMessage() {
         serializeDeserializeAndCheckEqual(new CanMessage(1, 2, new byte[]{1,2,3,4}));
     }
@@ -73,17 +93,33 @@ public abstract class AbstractFormatterTest {
     @Test
     public void serializeSimpleMessage() {
         serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", "bar"));
+        serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", false));
+        serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", 42.0));
     }
 
     @Test
     public void serializeEventedSimpleMessage() {
         serializeDeserializeAndCheckEqual(new EventedSimpleVehicleMessage(
                     "foo", "bar", "baz"));
+        serializeDeserializeAndCheckEqual(new EventedSimpleVehicleMessage(
+                    "foo", "bar", false));
+        serializeDeserializeAndCheckEqual(new EventedSimpleVehicleMessage(
+                    "foo", "bar", 42.0));
     }
 
     @Test
     public void serializeNamedMessage() {
         serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo"));
+    }
+
+    @Test
+    public void serializeDiagnosticRequestWithOptional() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        request.setPayload(new byte[]{1,2,3,4});
+        request.setMultipleResponses(false);
+        request.setFrequency(2.0);
+        request.setName("foo");
+        serializeDeserializeAndCheckEqual(new Command(request));
     }
 
     // TODO check timestamp gets serialized

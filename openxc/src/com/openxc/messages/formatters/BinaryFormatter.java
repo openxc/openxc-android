@@ -449,12 +449,10 @@ public class BinaryFormatter {
 
     private static void serializeGenericVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             VehicleMessage message) throws SerializationException {
-        // TODO actually the binary format doens't support arbitrary extra
-        // fields right now - could support with protobuf extensions but that is
-        // not something I want to do right now
-        if(!message.hasExtras()) {
-            throw new SerializationException(
-                    "Can't serialize empty VehicleMessage: " + message);
-        }
+        // The binary format doesn't support arbitrary extra fields right now -
+        // could support with protobuf extensions but that is not something I
+        // want to do right now
+        throw new SerializationException(
+                "Can't serialize generic VehicleMessage to binary: " + message);
     }
 }

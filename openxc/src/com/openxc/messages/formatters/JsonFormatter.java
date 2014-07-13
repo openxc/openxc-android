@@ -55,8 +55,6 @@ public class JsonFormatter {
             message = sGson.fromJson(root, CanMessage.class);
         } else if(DiagnosticResponse.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, DiagnosticResponse.class);
-        } else if(DiagnosticRequest.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, DiagnosticRequest.class);
         } else if(Command.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, Command.class);
         } else if(CommandResponse.containsRequiredFields(fields)) {
