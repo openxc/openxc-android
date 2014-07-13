@@ -19,6 +19,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.messages.CanMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Meter;
@@ -67,16 +68,11 @@ public class BaseMeasurementTest {
         assertThat(doorStatus, equalTo(measurement));
     }
 
-    @Test
+    @Test(expected=UnrecognizedMeasurementTypeException.class)
     public void buildFromUnrecognizedMessage()
-            throws NoValueException {
+            throws NoValueException, UnrecognizedMeasurementTypeException {
         message = new SimpleVehicleMessage("foo", value);
-        try {
-            BaseMeasurement.getMeasurementFromMessage(message);
-        } catch(UnrecognizedMeasurementTypeException e) {
-            return;
-        }
-        Assert.fail();
+        BaseMeasurement.getMeasurementFromMessage(message);
     }
 
     @Test

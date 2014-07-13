@@ -224,54 +224,52 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
         try {
             Measurement measurement = null;
-            if(message instanceof SimpleVehicleMessage) {
-                SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
-                Class<?> valueClass = simpleMessage.getValue().getClass();
-                if(valueClass == Double.class || valueClass == Integer.class) {
-                    valueClass = Number.class;
+            SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
+            Class<?> valueClass = simpleMessage.getValue().getClass();
+            if(valueClass == Double.class || valueClass == Integer.class) {
+                valueClass = Number.class;
+            }
+
+            if(message instanceof EventedSimpleVehicleMessage) {
+                EventedSimpleVehicleMessage eventedMessage =
+                        message.asEventedMessage();
+
+                Class<?> eventClass = eventedMessage.getEvent().getClass();
+                if(eventClass == Double.class || eventClass == Integer.class) {
+                    eventClass = Number.class;
                 }
 
-                if(message instanceof EventedSimpleVehicleMessage) {
-                    EventedSimpleVehicleMessage eventedMessage =
-                            message.asEventedMessage();
-
-                    Class<?> eventClass = eventedMessage.getEvent().getClass();
-                    if(eventClass == Double.class || eventClass == Integer.class) {
-                        eventClass = Number.class;
-                    }
-
-                    try {
-                        constructor = measurementType.getConstructor(
-                                valueClass, eventClass);
-                    } catch(NoSuchMethodException e) {
-                        throw new UnrecognizedMeasurementTypeException(
-                                measurementType +
-                                " doesn't have the expected constructor, " +
-                               measurementType + "(" +
-                               valueClass + ", " + eventClass + ")");
-                    }
-
-                    measurement = constructor.newInstance(
-                            eventedMessage.getValue(),
-                            eventedMessage.getEvent());
-                } else {
-                    try {
-                        constructor = measurementType.getConstructor(valueClass);
-                    } catch(NoSuchMethodException e) {
-                        throw new UnrecognizedMeasurementTypeException(
-                                measurementType +
-                                " doesn't have the expected constructor, " +
-                               measurementType + "(" +
-                               valueClass + ")");
-                    }
-
-                    measurement = constructor.newInstance(
-                            simpleMessage.getValue());
+                try {
+                    constructor = measurementType.getConstructor(
+                            valueClass, eventClass);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMeasurementTypeException(
+                            measurementType +
+                            " doesn't have the expected constructor, " +
+                           measurementType + "(" +
+                           valueClass + ", " + eventClass + ")");
                 }
 
-                if (simpleMessage.getTimestamp() != null) {
-                    measurement.setTimestamp(simpleMessage.getTimestamp());
+                measurement = constructor.newInstance(
+                        eventedMessage.getValue(),
+                        eventedMessage.getEvent());
+            } else {
+                try {
+                    constructor = measurementType.getConstructor(valueClass);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMeasurementTypeException(
+                            measurementType +
+                            " doesn't have the expected constructor, " +
+                           measurementType + "(" +
+                           valueClass + ")");
                 }
+
+                measurement = constructor.newInstance(
+                        simpleMessage.getValue());
+            }
+
+            if (simpleMessage.getTimestamp() != null) {
+                measurement.setTimestamp(simpleMessage.getTimestamp());
             }
             // TODO do we allow creating measurements from a generic values
             // map? need to make it public if so. i'm thinking that th
