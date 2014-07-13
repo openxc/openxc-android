@@ -148,6 +148,12 @@ public class DiagnosticRequestTest {
     }
 
     @Test
+    public void genericAsDiagnostic() {
+        VehicleMessage generic = request;
+        assertEquals(generic.asDiagnosticRequest(), request);
+    }
+
+    @Test
     public void toStringNotNull() {
         assertThat(request.toString(), notNullValue());
     }

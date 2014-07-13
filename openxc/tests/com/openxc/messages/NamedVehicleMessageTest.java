@@ -33,6 +33,12 @@ public class NamedVehicleMessageTest {
     }
 
     @Test
+    public void genericAsNamed() {
+        VehicleMessage generic = message;
+        assertEquals(generic.asNamedMessage(), message);
+    }
+
+    @Test
     public void differentNameDoesntEqual() {
         NamedVehicleMessage anotherMessage = new NamedVehicleMessage("bar");
         assertThat(message, not(equalTo(anotherMessage)));
