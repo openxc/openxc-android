@@ -17,10 +17,12 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
+import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
@@ -40,6 +42,71 @@ public class BaseMeasurementTest {
     @Test
     public void buildFromMessage()
             throws UnrecognizedMeasurementTypeException, NoValueException {
+        VehicleSpeed measurement = new VehicleSpeed(value);
+        Measurement deserializedMeasurement =
+            BaseMeasurement.getMeasurementFromMessage(message);
+        assertThat(deserializedMeasurement, instanceOf(VehicleSpeed.class));
+        VehicleSpeed vehicleSpeed = (VehicleSpeed) deserializedMeasurement;
+        assertThat(vehicleSpeed, equalTo(measurement));
+    }
+
+    public class NewMeasurement extends BaseMeasurement<Meter> {
+        public final static String ID = "new_measurement";
+
+        public NewMeasurement() {
+            super(new Meter(42.0));
+        }
+
+        public String getGenericName() {
+            return ID;
+        }
+    }
+
+    public class PrivateIdFieldMeasurement extends BaseMeasurement<Meter> {
+        private final static String ID = "new_measurement";
+
+        public PrivateIdFieldMeasurement() {
+            super(new Meter(42.0));
+        }
+
+        public String getGenericName() {
+            return "foo";
+        }
+    }
+
+    public class InvalidMeasurementType extends BaseMeasurement<Meter> {
+        public InvalidMeasurementType() {
+            super(new Meter(42.0));
+        }
+
+        public String getGenericName() {
+            return "foo";
+        }
+    }
+
+    @Test
+    public void getKeyForUnrecognizedMeasurementWithProperId()
+            throws UnrecognizedMeasurementTypeException {
+        assertThat(BaseMeasurement.getKeyForMeasurement(NewMeasurement.class),
+                equalTo(new NamedVehicleMessage(NewMeasurement.ID).getKey()));
+    }
+
+    @Test(expected=UnrecognizedMeasurementTypeException.class)
+    public void getKeyForMeasurementMissingIdField()
+            throws UnrecognizedMeasurementTypeException {
+        BaseMeasurement.getKeyForMeasurement(InvalidMeasurementType.class);
+    }
+
+    @Test(expected=UnrecognizedMeasurementTypeException.class)
+    public void getKeyForMeasurementPrivateID()
+            throws UnrecognizedMeasurementTypeException {
+        BaseMeasurement.getKeyForMeasurement(PrivateIdFieldMeasurement.class);
+    }
+
+    @Test
+    public void buildFromMessageWithInteger()
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        message = new SimpleVehicleMessage(VehicleSpeed.ID, new Integer(42));
         VehicleSpeed measurement = new VehicleSpeed(value);
         Measurement deserializedMeasurement =
             BaseMeasurement.getMeasurementFromMessage(message);
