@@ -1,16 +1,12 @@
-package com.openxc;
+package com.openxc.units;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-
 import com.openxc.units.Boolean;
 
 public class BooleanTest {
@@ -18,13 +14,13 @@ public class BooleanTest {
 
     @Before
     public void setUp() {
-        value = new Boolean(new Integer(1));
+        value = new Boolean(Integer.valueOf(1));
     }
 
     @Test
     public void constructFromNumber() {
         assertTrue(value.booleanValue());
-        value = new Boolean(new Integer(0));
+        value = new Boolean(Integer.valueOf(0));
         assertFalse(value.booleanValue());
     }
 

@@ -13,7 +13,6 @@ import com.google.gson.JsonSyntaxException;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
-import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;

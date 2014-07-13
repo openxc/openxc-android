@@ -2,8 +2,6 @@ package com.openxc.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,19 +30,19 @@ public class RangeTest {
 
     @Test
     public void sameMinMaxEquals() {
-        Range another = new Range(range.getMin(), range.getMax());
+        Range<Double> another = new Range<Double>(range.getMin(), range.getMax());
         assertThat(range, equalTo(another));
     }
 
     @Test
     public void differentNotEqual() {
-        Range another = new Range(range.getMin() + 1, range.getMax());
+        Range<Double> another = new Range<Double>(range.getMin() + 1, range.getMax());
         assertThat(range, not(equalTo(another)));
 
-        another = new Range(range.getMin(), range.getMax() + 1);
+        another = new Range<Double>(range.getMin(), range.getMax() + 1);
         assertThat(range, not(equalTo(another)));
 
-        another = new Range(range.getMin() + 1, range.getMax() + 1);
+        another = new Range<Double>(range.getMin() + 1, range.getMax() + 1);
         assertThat(range, not(equalTo(another)));
     }
 

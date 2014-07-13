@@ -18,7 +18,6 @@ import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 

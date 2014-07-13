@@ -348,15 +348,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.unregister(measurementType, listener);
     }
 
-    private void removeListener(KeyedMessage message, Measurement.Listener listener) {
-        removeListener(ExactKeyMatcher.buildExactMatcher(message), listener);
-    }
-
-    private void removeListener(KeyMatcher matcher, Measurement.Listener listener) {
-        Log.i(TAG, "Removing listener " + listener + " from " + matcher);
-        mNotifier.unregister(matcher, listener);
-    }
-
     public void removeListener(KeyedMessage message, VehicleMessage.Listener listener) {
         removeListener(message.getKey(), listener);
     }

@@ -3,7 +3,6 @@ package com.openxc.interfaces;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.VehicleDataSource;
-import com.openxc.interfaces.VehicleInterfaceDescriptor;
 
 /**
  * A connection to a physical vehicle interface that is capable of full duplex

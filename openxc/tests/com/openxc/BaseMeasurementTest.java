@@ -2,8 +2,6 @@ package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import junit.framework.Assert;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -17,10 +15,8 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.measurements.TransmissionGearPosition;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
-import com.openxc.messages.CanMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -63,7 +59,8 @@ public class BaseMeasurementTest {
     }
 
     public class PrivateIdFieldMeasurement extends BaseMeasurement<Meter> {
-        private final static String ID = "new_measurement";
+        @SuppressWarnings("unused")
+		private final static String ID = "new_measurement";
 
         public PrivateIdFieldMeasurement() {
             super(new Meter(42.0));
@@ -106,7 +103,7 @@ public class BaseMeasurementTest {
     @Test
     public void buildFromMessageWithInteger()
             throws UnrecognizedMeasurementTypeException, NoValueException {
-        message = new SimpleVehicleMessage(VehicleSpeed.ID, new Integer(42));
+        message = new SimpleVehicleMessage(VehicleSpeed.ID, Integer.valueOf(42));
         VehicleSpeed measurement = new VehicleSpeed(value);
         Measurement deserializedMeasurement =
             BaseMeasurement.getMeasurementFromMessage(message);
@@ -118,8 +115,7 @@ public class BaseMeasurementTest {
     @Test(expected=NoValueException.class)
     public void buildFromNull() throws NoValueException,
            UnrecognizedMeasurementTypeException {
-        Measurement deserializedMeasurement =
-            BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
+        BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
     }
 
     @Test

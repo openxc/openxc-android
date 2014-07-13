@@ -1,11 +1,6 @@
 package com.openxc.messages.formatters;
 
-import java.util.HashMap;
-
 import org.junit.Test;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;

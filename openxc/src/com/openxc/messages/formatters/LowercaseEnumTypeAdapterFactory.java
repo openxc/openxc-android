@@ -16,7 +16,8 @@ import com.google.gson.stream.JsonWriter;
 // Example of a lowercase enum adapter taken from Gson docs at
 // https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/TypeAdapterFactory.html
 public class LowercaseEnumTypeAdapterFactory implements TypeAdapterFactory {
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    @SuppressWarnings("unchecked")
+	public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         Class<T> rawType = (Class<T>) type.getRawType();
         if (!rawType.isEnum()) {
             return null;
