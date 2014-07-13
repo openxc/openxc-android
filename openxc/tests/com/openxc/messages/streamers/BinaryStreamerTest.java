@@ -34,6 +34,14 @@ public class BinaryStreamerTest {
         assertThat(streamer.parseNextMessage(), nullValue());
     }
 
+    @Test
+    public void deserializeBadLengthReturnsNull()
+            throws SerializationException {
+        byte[] data = new byte[]{0,1,2,3,4};
+        streamer.receive(data, data.length);
+        assertThat(streamer.parseNextMessage(), nullValue());
+    }
+
     @Test(expected=SerializationException.class)
     public void serializeEmptyFails()
             throws SerializationException {
