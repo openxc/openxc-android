@@ -258,8 +258,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         // TODO I'm not sure how much value this return value has - we don't
-        // really know if the remote service was able to actually send it
+        // really know if the remote service was able to actually send it, only
+        // the local ones, and I think most VIs in practice are tied to the
+        // remote service (USB, BT, Network)
         boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);
+
         // Don't want to keep this in the same list as local interfaces because
         // if that quits after the first interface reports success.
         if(mRemoteService != null) {

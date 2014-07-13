@@ -171,7 +171,13 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
             @Override
             public boolean send(VehicleMessage command) {
-                return VehicleInterfaceManagerUtils.send(mInterfaces, command);
+                boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces,
+                        command);
+                if(!sent) {
+                    Log.d(TAG, "No interfaces in remote service able " +
+                            "to send command \"" + command + "\"");
+                }
+                return sent;
             }
 
             @Override

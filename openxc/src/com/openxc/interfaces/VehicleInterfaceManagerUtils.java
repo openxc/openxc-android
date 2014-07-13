@@ -27,17 +27,18 @@ public class VehicleInterfaceManagerUtils {
             VehicleMessage command) {
         command.untimestamp();
         for(VehicleInterface vehicleInterface : interfaces) {
-            try {
-                vehicleInterface.receive(command);
-                Log.d(TAG, "Sent " + command + " using interface " +
-                        vehicleInterface);
-                return true;
-            } catch(DataSinkException e) {
-                Log.v(TAG, "Interface " + vehicleInterface
-                        + " unable to send command", e);
+            if(vehicleInterface.isConnected()) {
+                try {
+                    vehicleInterface.receive(command);
+                    Log.d(TAG, "Sent " + command + " using interface " +
+                            vehicleInterface);
+                    return true;
+                } catch(DataSinkException e) {
+                    Log.v(TAG, "Interface " + vehicleInterface
+                            + " unable to send command", e);
+                }
             }
         }
-        Log.d(TAG, "No interfaces able to send " + command);
         return false;
     }
 
