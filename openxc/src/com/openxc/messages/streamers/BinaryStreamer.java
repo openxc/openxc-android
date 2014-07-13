@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.common.io.ByteStreams;
 import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.MessageLite;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.BinaryFormatter;
@@ -58,8 +60,14 @@ public class BinaryStreamer extends VehicleMessageStreamer {
 
     @Override
     public byte[] serializeForStream(VehicleMessage message) {
-        // TODO
-        return null;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try {
+            MessageLite preSerialized = BinaryFormatter.preSerialize(message);
+            preSerialized.writeDelimitedTo(stream);
+        } catch(SerializationException | IOException e) {
+            Log.w(TAG, "Unable to serialize message to stream", e);
+        }
+        return stream.toByteArray();
     }
 
     @Override

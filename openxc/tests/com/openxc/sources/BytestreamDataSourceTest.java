@@ -71,7 +71,7 @@ public class BytestreamDataSourceTest {
         source.connect();
         source.nextReadIsError = true;
         source.inject(new byte[] {1,2,3,4});
-        TestUtils.pause(10);
+        TestUtils.pause(20);
         assertTrue(source.isRunning());
         assertFalse(source.isConnected());
     }
@@ -82,7 +82,7 @@ public class BytestreamDataSourceTest {
         source.connect();
         source.nextReadThrowsException = true;
         source.inject(new byte[] {1,2,3,4});
-        TestUtils.pause(10);
+        TestUtils.pause(20);
         assertTrue(source.isRunning());
         assertFalse(source.isConnected());
     }
@@ -93,7 +93,7 @@ public class BytestreamDataSourceTest {
         source.inject(new byte[] {1,2,3,4});
         assertFalse(source.packets.isEmpty());
         source.connect();
-        TestUtils.pause(10);
+        TestUtils.pause(20);
         assertTrue(source.packets.isEmpty());
     }
 
@@ -102,25 +102,24 @@ public class BytestreamDataSourceTest {
         source.start();
         source.connect();
         source.inject(new byte[] {1,2,3,4});
-        TestUtils.pause(10);
+        TestUtils.pause(20);
         verify(callback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
-    // TODO
-    // @Test
-    // public void receiveValidBinaryTriggersCallback() {
-        // source.start();
-        // source.connect();
-        // SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
-        // source.inject(new BinaryStreamer().serializeForStream(message));
-        // TestUtils.pause(100);
-        // ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
-                // VehicleMessage.class);
-        // verify(callback).receive(argument.capture());
-        // VehicleMessage received = argument.getValue();
-        // received.untimestamp();
-        // assertEquals(received, message);
-    // }
+    @Test
+    public void receiveValidBinaryTriggersCallback() {
+        source.start();
+        source.connect();
+        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        source.inject(new BinaryStreamer().serializeForStream(message));
+        TestUtils.pause(100);
+        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                VehicleMessage.class);
+        verify(callback).receive(argument.capture());
+        VehicleMessage received = argument.getValue();
+        received.untimestamp();
+        assertEquals(received, message);
+    }
 
     @Test
     public void receiveValidJsonTriggersCallback() {

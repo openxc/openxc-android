@@ -1,11 +1,7 @@
 package com.openxc.messages.formatters.binary;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import android.util.Log;
-
 import com.google.protobuf.ByteString;
+import com.google.protobuf.MessageLite;
 import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
@@ -17,13 +13,10 @@ import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SerializationException;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
 public class BinarySerializer {
-    private final static String TAG = "BinarySerializer";
-
-    public static byte[] serialize(VehicleMessage message)
+    public static MessageLite preSerialize(VehicleMessage message)
             throws SerializationException {
         if(message.hasExtras()) {
             throw new SerializationException("Messages with extras cannot be " +
@@ -50,7 +43,7 @@ public class BinarySerializer {
         } else {
             serializeGenericVehicleMessage(builder, message);
         }
-        return builder.build().toByteArray();
+        return builder.build();
     }
 
     private static void serializeCanMessage(BinaryMessages.VehicleMessage.Builder builder,
