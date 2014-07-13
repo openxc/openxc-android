@@ -28,17 +28,13 @@ public class VehicleInterfaceFactory {
      */
     public static Class<? extends VehicleInterface> findClass(
             String interfaceName) throws VehicleInterfaceException {
-        Log.d(TAG, "Looking up class for name " + interfaceName);
         Class<? extends VehicleInterface> interfaceType;
         try {
             interfaceType = Class.forName(interfaceName).asSubclass(
                     VehicleInterface.class);
-            Log.d(TAG, "Found " + interfaceType);
         } catch(ClassNotFoundException e) {
-            String message = "Couldn't find vehicle interface type " +
-                    interfaceName;
-            Log.w(TAG, message, e);
-            throw new VehicleInterfaceException(message, e);
+            throw new VehicleInterfaceException(
+                    "Couldn't find vehicle interface type " + interfaceName, e);
         }
         return interfaceType;
     }
@@ -78,10 +74,8 @@ public class VehicleInterfaceFactory {
             constructor = interfaceType.getConstructor(
                     Context.class, String.class);
         } catch(NoSuchMethodException e) {
-            String message = interfaceType +
-                    " doesn't have a proper constructor";
-            Log.w(TAG, message);
-            throw new VehicleInterfaceException(message, e);
+            throw new VehicleInterfaceException(interfaceType +
+                    " doesn't have a proper constructor", e);
         }
 
         String message;
@@ -100,7 +94,6 @@ public class VehicleInterfaceFactory {
             message = interfaceType + "'s constructor threw an exception";
             error = e;
         }
-        Log.w(TAG, message, error);
-        throw new VehicleInterfaceException(message);
+        throw new VehicleInterfaceException(message, error);
     }
 }

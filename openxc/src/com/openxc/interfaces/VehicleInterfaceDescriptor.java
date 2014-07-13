@@ -9,7 +9,8 @@ import android.util.Log;
 import static com.google.common.base.Objects.toStringHelper;
 
 public class VehicleInterfaceDescriptor implements Parcelable {
-    private final static String TAG = VehicleInterfaceDescriptor.class.getName();
+    private final static String TAG =
+            VehicleInterfaceDescriptor.class.getName();
     private boolean mConnected;
     private Class<? extends VehicleInterface> mInterfaceClass;
 
@@ -67,7 +68,8 @@ public class VehicleInterfaceDescriptor implements Parcelable {
     protected void readFromParcel(Parcel in) {
         mConnected = in.readInt() == 1;
         try {
-            mInterfaceClass = VehicleInterfaceFactory.findClass(in.readString());
+            mInterfaceClass = VehicleInterfaceFactory.findClass(
+                    in.readString());
         } catch(VehicleInterfaceException e) {
             Log.w(TAG, "Unable to load class for vehicle interface by name", e);
         }
