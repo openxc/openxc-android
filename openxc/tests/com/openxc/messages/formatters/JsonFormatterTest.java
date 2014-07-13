@@ -24,7 +24,7 @@ import com.openxc.messages.UnrecognizedMessageTypeException;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
-public class JsonFormatterTest {
+public class JsonFormatterTest extends AbstractFormatterTest {
     JsonFormatter formatter = new JsonFormatter();
     String messageName = "foo";
     Double value = Double.valueOf(42);
