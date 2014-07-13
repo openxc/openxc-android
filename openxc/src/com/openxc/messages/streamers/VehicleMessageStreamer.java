@@ -1,11 +1,13 @@
 package com.openxc.messages.streamers;
 
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.SourceLogger;
 
 public abstract class VehicleMessageStreamer {
     public abstract VehicleMessage parseNextMessage();
-    public abstract byte[] serializeForStream(VehicleMessage message);
+    public abstract byte[] serializeForStream(VehicleMessage message)
+            throws SerializationException;
 
     private final static String TAG = "VehicleMessageStreamer";
     private final static int STATS_LOG_FREQUENCY_KB = 128;

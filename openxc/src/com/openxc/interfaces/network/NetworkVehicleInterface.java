@@ -13,6 +13,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
@@ -112,8 +113,13 @@ public class NetworkVehicleInterface extends BytestreamDataSource
 
     @Override
     public void receive(VehicleMessage command) throws DataSinkException {
-        if(!write(sStreamer.serializeForStream(command))) {
-            throw new DataSinkException("Unable to send command");
+        try {
+            if(!write(sStreamer.serializeForStream(command))) {
+                throw new DataSinkException("Unable to send command");
+            }
+        } catch(SerializationException e) {
+            throw new DataSinkException(
+                    "Unable to serialize command for sending", e);
         }
     }
 

@@ -34,6 +34,12 @@ public class BinaryStreamerTest {
         assertThat(streamer.parseNextMessage(), nullValue());
     }
 
+    @Test(expected=SerializationException.class)
+    public void serializeEmptyFails()
+            throws SerializationException {
+        streamer.serializeForStream(new VehicleMessage());
+    }
+
     @Test
     public void receiveLessThanFullBufferDoesntGrabAll()
             throws SerializationException {
@@ -104,7 +110,7 @@ public class BinaryStreamerTest {
     }
 
     @Test
-    public void deserializeSerialized() {
+    public void deserializeSerialized() throws SerializationException {
         byte[] data = streamer.serializeForStream(message);
         streamer.receive(data, data.length);
         VehicleMessage deserialized = streamer.parseNextMessage();
@@ -112,7 +118,7 @@ public class BinaryStreamerTest {
     }
 
     @Test
-    public void logTransferStatsAfterMegabyte() {
+    public void logTransferStatsAfterMegabyte() throws SerializationException {
         byte[] data = streamer.serializeForStream(message);
         for(int i = 0; i < 10000; i++) {
             streamer.receive(data, data.length);

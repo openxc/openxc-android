@@ -21,6 +21,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
@@ -107,8 +108,13 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public void receive(VehicleMessage command) throws DataSinkException {
         // TODO who knows what the current serialization format is? only using
         // JSON right now
-        if(!write(new String(sStreamer.serializeForStream(command)))) {
-            throw new DataSinkException("Unable to write command");
+        try {
+            if(!write(new String(sStreamer.serializeForStream(command)))) {
+                throw new DataSinkException("Unable to write command");
+            }
+        } catch(SerializationException e) {
+            throw new DataSinkException(
+                    "Unable to serialize command for sending", e);
         }
     }
 

@@ -59,13 +59,15 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     }
 
     @Override
-    public byte[] serializeForStream(VehicleMessage message) {
+    public byte[] serializeForStream(VehicleMessage message)
+            throws SerializationException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
             MessageLite preSerialized = BinaryFormatter.preSerialize(message);
             preSerialized.writeDelimitedTo(stream);
-        } catch(SerializationException | IOException e) {
-            Log.w(TAG, "Unable to serialize message to stream", e);
+        } catch(IOException e) {
+            throw new SerializationException(
+                    "Unable to serialize message to stream", e);
         }
         return stream.toByteArray();
     }

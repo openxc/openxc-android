@@ -3,16 +3,14 @@ package com.openxc.sources;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-
-import org.mockito.Matchers;
-import org.mockito.ArgumentCaptor;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
-
-import java.util.List;
 import java.util.ArrayList;
-
+import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,15 +19,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.Robolectric;
 
 import com.openxc.TestUtils;
-import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.BinaryStreamer;
+import com.openxc.messages.streamers.JsonStreamer;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -107,7 +108,7 @@ public class BytestreamDataSourceTest {
     }
 
     @Test
-    public void receiveValidBinaryTriggersCallback() {
+    public void receiveValidBinaryTriggersCallback() throws SerializationException {
         source.start();
         source.connect();
         SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");

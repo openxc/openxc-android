@@ -20,6 +20,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
@@ -174,8 +175,13 @@ public class UsbVehicleInterface extends BytestreamDataSource
     @Override
     public void receive(VehicleMessage command) throws DataSinkException {
         if(isConnected()) {
-            if(!write(sStreamer.serializeForStream(command))) {
-                throw new DataSinkException("Unable to write command");
+            try {
+                if(!write(sStreamer.serializeForStream(command))) {
+                    throw new DataSinkException("Unable to write command");
+                }
+            } catch(SerializationException e) {
+                throw new DataSinkException(
+                        "Unable to serialize command for sending", e);
             }
         } else {
             throw new DataSinkException("Not connected");
