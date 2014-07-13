@@ -60,7 +60,7 @@ public class BaseMeasurementTest {
 
     public class PrivateIdFieldMeasurement extends BaseMeasurement<Meter> {
         @SuppressWarnings("unused")
-		private final static String ID = "new_measurement";
+        private final static String ID = "new_measurement";
 
         public PrivateIdFieldMeasurement() {
             super(new Meter(42.0));
