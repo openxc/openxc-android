@@ -229,7 +229,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         boolean success = true;
         try {
             if(isConnected()) {
-                Log.d(TAG, "Writing bytes to socket: " + bytes);
+                Log.v(TAG, "Writing " + bytes.length + " to socket");
                 mOutStream.write(bytes);
             } else {
                 Log.w(TAG, "No connection established, could not send anything.");
@@ -239,7 +239,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
             success = false;
         } finally {
-        mConnectionLock.readLock().unlock();
+            mConnectionLock.readLock().unlock();
         }
         return success;
     }
