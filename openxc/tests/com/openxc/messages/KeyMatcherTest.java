@@ -3,6 +3,7 @@ package com.openxc.messages;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
@@ -95,6 +96,23 @@ public class KeyMatcherTest {
         assertThat(ExactKeyMatcher.buildExactMatcher(keyed).hashCode(),
                 not(equalTo(ExactKeyMatcher.buildExactMatcher(
                             different).hashCode())));
+    }
+
+    @Test
+    public void nullNotEqualToExact() {
+        KeyMatcher matcher = ExactKeyMatcher.buildExactMatcher(keyed);
+        assertFalse(matcher.equals(null));
+    }
+
+    @Test
+    public void nullNotEqual() {
+        KeyMatcher matcher = new KeyMatcher() {
+            @Override
+            public boolean matches(MessageKey message) {
+                return false;
+            }
+        };
+        assertFalse(matcher.equals(null));
     }
 
     @Test
