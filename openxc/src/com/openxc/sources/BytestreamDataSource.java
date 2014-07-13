@@ -40,10 +40,6 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         super(callback, context);
     }
 
-    public BytestreamDataSource(Context context) {
-        this(null, context);
-    }
-
     public void start() {
         if(mRunning.compareAndSet(false, true)) {
             Log.d(getTag(), "Starting " + getTag() + " source");

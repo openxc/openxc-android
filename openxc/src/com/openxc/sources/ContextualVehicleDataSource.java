@@ -8,10 +8,6 @@ import android.content.Context;
 public abstract class ContextualVehicleDataSource extends BaseVehicleDataSource {
     private Context mContext;
 
-    public ContextualVehicleDataSource(Context context) {
-        this(null, context);
-    }
-
     public ContextualVehicleDataSource(SourceCallback callback,
             Context context) {
         super(callback);
