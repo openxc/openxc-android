@@ -20,7 +20,11 @@ public class NoRangeMeasurementTest {
 
     @Before
     public void setUp() {
-        measurement = new BaseMeasurement<Meter>(new Meter(10.0));
+        measurement = new BaseMeasurement<Meter>(new Meter(10.0)) {
+            public String getGenericName() {
+                return "foo";
+            }
+        };
     }
 
     @Test

@@ -37,11 +37,11 @@ import com.openxc.util.Range;
  * constructors to every child class because they aren't inherited from
  * Measurement. If you know of a better way, please say so.
  */
-public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
+public abstract class BaseMeasurement<TheUnit extends Unit>
+            implements Measurement {
     private static final String TAG = BaseMeasurement.class.toString();
 
-    private AgingData<TheUnit> mValue;
-    private AgingData<Unit> mEvent;
+    protected AgingData<TheUnit> mValue;
     private Range<TheUnit> mRange;
     private static BiMap<String, Class<? extends Measurement>>
             sMeasurementIdToClass;
@@ -49,6 +49,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
     static {
         sMeasurementIdToClass = HashBiMap.create();
     }
+
+    public abstract String getGenericName();
 
     /**
      * Construct a new Measurement with the given value.
@@ -64,11 +66,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
             }
         }
         mValue = new AgingData<TheUnit>(value);
-    }
-
-    public BaseMeasurement(TheUnit value, Unit event) {
-        this(value);
-        mEvent = new AgingData<Unit>(event);
     }
 
     /**
@@ -115,45 +112,15 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return mValue.getValue();
     }
 
-    public boolean hasEvent() {
-        return mEvent != null;
-    }
-
-    @Override
-    public Object getEvent() {
-        if(hasEvent()) {
-            return mEvent.getValue();
-        }
-        return null;
-    }
-
     @Override
     public Object getSerializedValue() {
         return getValue().getSerializedValue();
     }
 
     @Override
-    public Object getSerializedEvent() {
-        return getEvent();
-    }
-
-    @Override
     public SimpleVehicleMessage toVehicleMessage() {
-        SimpleVehicleMessage message = null;
-        if(hasEvent()) {
-            message = new EventedSimpleVehicleMessage(mValue.getTimestamp(),
-                    getGenericName(), getSerializedValue(),
-                    getSerializedEvent());
-        } else {
-            message = new SimpleVehicleMessage(mValue.getTimestamp(),
-                    getGenericName(), getSerializedValue());
-        }
-        return message;
-    }
-
-    @Override
-    public String getGenericName() {
-        return "base_measurement";
+        return new SimpleVehicleMessage(mValue.getTimestamp(),
+                getGenericName(), getSerializedValue());
     }
 
     private static void cacheMeasurementId(
@@ -308,7 +275,6 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
         return Objects.equal(getValue(), other.getValue()) &&
-            Objects.equal(getEvent(), other.getEvent()) &&
             Objects.equal(other.getRange(), getRange());
     }
 

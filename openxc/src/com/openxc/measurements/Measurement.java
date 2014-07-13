@@ -68,19 +68,4 @@ public interface Measurement {
      * @return something easily serializable - e.g. String, Double, Boolean.
      */
     public Object getSerializedValue();
-
-    /**
-     * Return an optional event associated with this measurement.
-     *
-     * TODO argh, no easy way to get a type for this without having two template
-     * parameters. can we have an optional template parameter in Java?
-     */
-    public Object getEvent();
-
-    /**
-     * Return the event of this measurement as a type good for serialization.
-     *
-     * @see #getSerializedValue()
-     */
-    public Object getSerializedEvent();
 }
