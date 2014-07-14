@@ -1,10 +1,14 @@
 package com.openxc.messages.formatters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,14 +16,13 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.HashMap;
-
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
+import com.openxc.messages.VehicleMessage;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -115,5 +118,19 @@ public class JsonFormatterTest extends AbstractFormatterTest {
         String serialized = JsonFormatter.serialize(new CommandResponse(
                     Command.CommandType.VERSION));
         assertThat(serialized, containsString("version"));
+    }
+
+    @Test
+    public void defaultsNotIncluded() {
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        String serialized = JsonFormatter.serialize(request);
+        assertThat(serialized, not(containsString("frequency")));
+        assertThat(serialized, not(containsString("name")));
+        assertThat(serialized, not(containsString("payload")));
+        assertThat(serialized, not(containsString("multiple_responses")));
+
+        request.setMultipleResponses(false);
+        serialized = JsonFormatter.serialize(request);
+        assertThat(serialized, containsString("multiple_responses"));
     }
 }

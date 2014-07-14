@@ -115,7 +115,7 @@ public class DiagnosticRequestTest {
     }
 
     @Test
-    public void differentMultipleResponsesNotequal() {
+    public void differentMultipleResponsesNotEqual() {
         DiagnosticRequest anotherRequest = new DiagnosticRequest(
                 bus, id, mode);
         anotherRequest.setMultipleResponses(true);

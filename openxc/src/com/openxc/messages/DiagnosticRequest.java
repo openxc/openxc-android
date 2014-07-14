@@ -21,7 +21,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(MULTIPLE_RESPONSES_KEY)
-    private boolean mMultipleResponses = false;
+    private Boolean mMultipleResponses;
 
     @SerializedName(FREQUENCY_KEY)
     // Frequency is an optional field, so it is stored as a Double so it can
@@ -40,7 +40,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
     }
 
     public void setMultipleResponses(boolean multipleResponses) {
-        mMultipleResponses = multipleResponses;
+        mMultipleResponses = Boolean.valueOf(multipleResponses);
     }
 
     public boolean hasFrequency() {
@@ -56,7 +56,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
     }
 
     public boolean getMultipleResponses() {
-        return mMultipleResponses;
+        return mMultipleResponses == null ? false : mMultipleResponses;
     }
 
     public Double getFrequency() {
@@ -82,7 +82,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
         }
 
         final DiagnosticRequest other = (DiagnosticRequest) obj;
-        return mMultipleResponses == other.mMultipleResponses
+        return getMultipleResponses() == other.getMultipleResponses()
                 && Objects.equal(mFrequency, other.mFrequency)
                 && Objects.equal(mName, other.mName);
     }
@@ -106,7 +106,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeByte((byte) (getMultipleResponses() ? 1 : 0));
+        out.writeValue(getMultipleResponses());
         out.writeValue(getFrequency());
         out.writeString(getName());
     }
@@ -114,7 +114,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        mMultipleResponses = in.readByte() != 0;
+        mMultipleResponses = (Boolean) in.readValue(Boolean.class.getClassLoader());
         mFrequency = (Double) in.readValue(Double.class.getClassLoader());
         mName = in.readString();
     }
