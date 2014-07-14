@@ -30,7 +30,7 @@ public class VehicleMessage implements Parcelable {
     private Double mTimestamp;
 
     @SerializedName(EXTRAS_KEY)
-    private Map<String, Object> mExtras = new HashMap<String, Object>();
+    private Map<String, Object> mExtras;
 
     public static final Set<String> sRequiredFields = new HashSet<String>();
 
@@ -80,13 +80,13 @@ public class VehicleMessage implements Parcelable {
     }
 
     public void setExtras(Map<String, Object> extras) {
-        if(extras != null) {
+        if(extras != null && !extras.isEmpty()) {
             mExtras = new HashMap<String, Object>(extras);
         }
     }
 
     public boolean hasExtras() {
-        return !mExtras.isEmpty();
+        return mExtras != null;
     }
 
     public Map<String, Object> getExtras() {
@@ -155,14 +155,15 @@ public class VehicleMessage implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(getClass().getName());
         out.writeValue(getTimestamp());
-        out.writeMap(getExtras());
+        out.writeValue(getExtras());
     }
 
     protected void readFromParcel(Parcel in) {
         // Not reading the derived class name as it is already pulled out of the
         // Parcel by the CREATOR.
         setTimestamp((Long)in.readValue(Long.class.getClassLoader()));
-        in.readMap(mExtras, null);
+        mExtras = (HashMap<String, Object>) in.readValue(
+                HashMap.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<VehicleMessage> CREATOR =

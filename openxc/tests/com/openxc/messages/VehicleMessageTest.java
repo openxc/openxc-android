@@ -39,14 +39,14 @@ public class VehicleMessageTest {
     @Test
     public void emptyMessageHasNoTimestamp() {
         message = new VehicleMessage();
-        assertTrue(message.getExtras() != null);
         assertTrue(!message.isTimestamped());
     }
 
     @Test
     public void emptyMessage() {
         message = new VehicleMessage(new HashMap<String, Object>());
-        assertTrue(message.getExtras() != null);
+        assertFalse(message.hasExtras());
+        assertThat(message.getExtras(), nullValue());
     }
 
     @Test
@@ -61,8 +61,16 @@ public class VehicleMessageTest {
     public void invalidExtras() {
         message = new VehicleMessage();
         message.setExtras(null);
-        assertThat(message.getExtras(), notNullValue());
-        assertTrue(message.getExtras().isEmpty());
+        assertFalse(message.hasExtras());
+        assertThat(message.getExtras(), nullValue());
+    }
+
+    @Test
+    public void emptyExtras() {
+        message = new VehicleMessage();
+        message.setExtras(new HashMap<String, Object>());
+        assertFalse(message.hasExtras());
+        assertThat(message.getExtras(), nullValue());
     }
 
     @Test

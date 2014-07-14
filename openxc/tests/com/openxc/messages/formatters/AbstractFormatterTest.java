@@ -5,15 +5,16 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
-import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -115,6 +116,12 @@ public abstract class AbstractFormatterTest {
         request.setFrequency(2.0);
         request.setName("foo");
         serializeDeserializeAndCheckEqual(new Command(request));
+    }
+
+    @Test(expected=SerializationException.class)
+    public void serializeEmptyVehicleMessage()
+            throws SerializationException {
+        BinaryFormatter.serialize(new VehicleMessage());
     }
 
     // TODO check timestamp gets serialized

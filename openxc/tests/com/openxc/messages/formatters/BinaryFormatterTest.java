@@ -109,13 +109,6 @@ public class BinaryFormatterTest extends AbstractFormatterTest {
     }
 
     @Test(expected=SerializationException.class)
-    public void serializeEmptyVehicleMessage()
-            throws SerializationException {
-        // BinaryFormatter does not allow blank messages
-        BinaryFormatter.serialize(new VehicleMessage());
-    }
-
-    @Test(expected=SerializationException.class)
     public void serializeNamedMessageWithExtras() throws SerializationException {
         HashMap<String, Object> extras = new HashMap<>();
         extras.put("foo", "bar");

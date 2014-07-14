@@ -79,9 +79,10 @@ public class JsonFormatterTest extends AbstractFormatterTest {
     }
 
     @Test
-    public void serializeEmptyVehicleMessage() {
-        // JsonFormatter allows blank messages
-        serializeDeserializeAndCheckEqual(new VehicleMessage());
+    public void blankExtrasNotInOutput() {
+        VehicleMessage message = new SimpleVehicleMessage(messageName, value);
+        String serialized = new String(JsonFormatter.serialize(message));
+        assertFalse(serialized.contains("extras"));
     }
 
     @Test
