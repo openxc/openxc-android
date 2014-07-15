@@ -96,16 +96,17 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
                         mNotificationsChanged.await();
                     }
 
-                    // This iterator is weakly consistent, so we don't need the lock
-                    Iterator<VehicleMessage> it = mNotifications.iterator();
-                    CopyOnWriteArrayList<VehicleMessage> deleted =
-                            new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
-                    while(it.hasNext()) {
-                        VehicleMessage message = it.next();
-                        propagateMessage(message);
-                        deleted.add(message);
+                    synchronized(mNotifications) {
+                        Iterator<VehicleMessage> it = mNotifications.iterator();
+                        CopyOnWriteArrayList<VehicleMessage> deleted =
+                                new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
+                        while(it.hasNext()) {
+                            VehicleMessage message = it.next();
+                            propagateMessage(message);
+                            deleted.add(message);
+                        }
+                        mNotifications.removeAll(deleted) ;
                     }
-                    mNotifications.removeAll(deleted);
 
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +

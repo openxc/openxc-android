@@ -9,6 +9,7 @@ import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -43,7 +44,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     }
 
     public void register(KeyMatcher matcher, VehicleMessage.Listener listener) {
-        mMessageListeners.put(matcher, listener);
+        synchronized (mMessageListeners) {
+            mMessageListeners.put(matcher, listener);
+        }
     }
 
     public void unregister(Class<? extends Measurement> measurementType,
@@ -59,7 +62,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public void unregister(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
-        mMessageListeners.remove(matcher, listener);
+        synchronized(mMessageListeners) {
+            mMessageListeners.remove(matcher, listener);
+        }
     }
 
     @Override
@@ -72,19 +77,22 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     @Override
     protected void propagateMessage(VehicleMessage message) {
+        
         if(message instanceof KeyedMessage) {
-            for (KeyMatcher matcher : mMessageListeners.keys()) {
-                if (matcher.matches(message.asKeyedMessage())) {
-                    for (VehicleMessage.Listener listener :
-                            mMessageListeners.get(matcher)) {
-                        listener.receive(message);
+            synchronized (mMessageListeners) {
+                for (KeyMatcher matcher : mMessageListeners.keys()) {
+                    if (matcher.matches(message.asKeyedMessage())) {
+                        for (VehicleMessage.Listener listener :
+                                mMessageListeners.get(matcher)) {
+                            listener.receive(message);
+                        }
                     }
                 }
             }
 
             // TODO how do we know when a a message is a measurement and should be
             // propagated as such? I think an event bus will take care of this as
-            // listners will become more generic
+            // listeners will become more generic
             if (message instanceof SimpleVehicleMessage) {
                 propagateMeasurementFromMessage(message.asSimpleMessage());
             }
