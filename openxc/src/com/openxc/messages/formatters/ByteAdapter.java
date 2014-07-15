@@ -8,6 +8,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 public class ByteAdapter extends TypeAdapter<byte[]> {
+    
     public byte[] read(JsonReader reader) throws IOException {
         if (reader.peek() == JsonToken.NULL) {
           reader.nextNull();
@@ -27,7 +28,7 @@ public class ByteAdapter extends TypeAdapter<byte[]> {
       }
       
       //adapted from stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
-      final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+      private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
       public static String byteArrayToHexString(byte[] bytes) {
           char[] hexChars = new char[bytes.length * 2];
           for (int j = 0; j < bytes.length; j++) {
