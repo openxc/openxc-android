@@ -1,5 +1,6 @@
 package com.openxc.messages.formatters;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +32,10 @@ public class JsonFormatter {
 
     public static String serialize(VehicleMessage message) {
         return sGson.toJson(message);
+    }
+
+    public static String serialize(Collection<VehicleMessage> messages) {
+        return sGson.toJson(messages);
     }
 
     public static VehicleMessage deserialize(String data)

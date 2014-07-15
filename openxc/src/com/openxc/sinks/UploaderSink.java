@@ -1,13 +1,12 @@
 package com.openxc.sinks;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -26,8 +25,6 @@ import org.apache.http.params.HttpParams;
 import android.content.Context;
 import android.util.Log;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.google.common.base.Objects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
@@ -53,8 +50,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
     private final static int HTTP_TIMEOUT = 5000;
 
     private URI mUri;
-    private BlockingQueue<String> mRecordQueue =
-            new LinkedBlockingQueue<String>(MAXIMUM_QUEUED_RECORDS);
+    private BlockingQueue<VehicleMessage> mRecordQueue =
+            new LinkedBlockingQueue<>(MAXIMUM_QUEUED_RECORDS);
     private Lock mQueueLock = new ReentrantLock();
     private Condition mRecordsQueued = mQueueLock.newCondition();
     private UploaderThread mUploader = new UploaderThread();
@@ -80,11 +77,14 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
     @Override
     public void receive(VehicleMessage message) {
-        mRecordQueue.offer(new String(JsonFormatter.serialize(message)));
+        mRecordQueue.offer(message);
         if(mRecordQueue.size() >= UPLOAD_BATCH_SIZE) {
-            mQueueLock.lock();
-            mRecordsQueued.signal();
-            mQueueLock.unlock();
+            try {
+                mQueueLock.lock();
+                mRecordsQueued.signal();
+            } finally {
+                mQueueLock.unlock();
+            }
         }
     }
 
@@ -147,8 +147,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
         public void run() {
             while(mRunning) {
                 try {
-                    ArrayList<String> records = getRecords();
-                    String data = constructRequestData(records);
+                    ArrayList<VehicleMessage> records = getRecords();
+                    String data = JsonFormatter.serialize(records);
                     HttpPost request = constructRequest(data);
                     makeRequest(request);
                 } catch(UploaderException e) {
@@ -162,34 +162,6 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
         public void done() {
             mRunning = false;
-        }
-
-        private String constructRequestData(ArrayList<String> records)
-                throws UploaderException {
-            StringWriter buffer = new StringWriter(512);
-            JsonFactory jsonFactory = new JsonFactory();
-            try {
-                JsonGenerator gen = jsonFactory.createGenerator(buffer);
-
-                gen.writeStartObject();
-                gen.writeArrayFieldStart("records");
-                Iterator<String> recordIterator = records.iterator();
-                while(recordIterator.hasNext()) {
-                    gen.writeRaw(recordIterator.next());
-                    if(recordIterator.hasNext()) {
-                        gen.writeRaw(",");
-                    }
-                }
-                gen.writeEndArray();
-                gen.writeEndObject();
-
-                gen.close();
-            } catch(IOException e) {
-                Log.w(TAG, "Unable to encode all data to JSON -- " +
-                        "message may be incomplete", e);
-                throw new UploaderException();
-            }
-            return buffer.toString();
         }
 
         private HttpPost constructRequest(String data)
@@ -230,21 +202,22 @@ public class UploaderSink extends ContextualVehicleDataSink {
             }
         }
 
-        private ArrayList<String> getRecords() throws InterruptedException {
-            mQueueLock.lock();
-            if(mRecordQueue.isEmpty()) {
-                // the queue is already thread safe, but we use this lock to get
-                // a condition variable we can use to signal when a batch has
-                // been queued.
-                mRecordsQueued.await();
+        private ArrayList<VehicleMessage> getRecords() throws InterruptedException {
+            try {
+                mQueueLock.lock();
+                while(mRecordQueue.isEmpty()) {
+                    // the queue is already thread safe, but we use this lock to get
+                    // a condition variable we can use to signal when a batch has
+                    // been queued.
+                    mRecordsQueued.await(5, TimeUnit.SECONDS);
+                }
+
+                ArrayList<VehicleMessage> records = new ArrayList<>();
+                mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
+                return records;
+            } finally {
+                mQueueLock.unlock();
             }
-
-            ArrayList<String> records = new ArrayList<String>();
-            mRecordQueue.drainTo(records, UPLOAD_BATCH_SIZE);
-
-            mQueueLock.unlock();
-            return records;
         }
     }
-
 }
