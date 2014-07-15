@@ -32,6 +32,10 @@ public class DiagnosticResponse extends DiagnosticMessage {
     @SerializedName(NEGATIVE_RESPONSE_CODE_KEY)
     private NegativeResponseCode mNegativeResponseCode = NegativeResponseCode.NONE;
 
+    public DiagnosticResponse(int busId, int id, int mode) {
+        super(busId, id, mode);
+    }
+    
     public DiagnosticResponse(int busId, int id, int mode, int pid,
             byte[] payload) {
         super(busId, id, mode, pid);

@@ -13,12 +13,15 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import com.openxc.messages.DiagnosticResponse;
+
 import android.os.Parcel;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class DiagnosticResponseTest {
     DiagnosticResponse response;
+    DiagnosticResponse simpleResponse;
     int id = 42;
     int bus = 1;
     int mode = 2;
@@ -28,6 +31,25 @@ public class DiagnosticResponseTest {
     @Before
     public void setup() {
         response = new DiagnosticResponse(bus, id, mode, pid, payload);
+        simpleResponse = new DiagnosticResponse(bus, id, mode);
+    }
+    
+    @Test
+    public void simpleComplexResponseNotEqual() {
+        assertThat(response, not(equalTo(simpleResponse)));
+    }
+    
+    @Test
+    public void requiredFieldsEqual() {
+        assertEquals(response.getBusId(), simpleResponse.getBusId());
+        assertEquals(response.getId(), simpleResponse.getId());
+        assertEquals(response.getMode(), simpleResponse.getMode());
+    }
+    
+    @Test
+    public void nonEssentialFieldsNotEqual() {
+        assertThat(response.getPid(), not(equalTo(simpleResponse.getPid())));
+        assertThat(response.getPayload(), not(equalTo(simpleResponse.getPayload())));
     }
 
     @Test
