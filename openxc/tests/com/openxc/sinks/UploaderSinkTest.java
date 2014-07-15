@@ -58,7 +58,7 @@ public class UploaderSinkTest {
         for(int i = 0; i < 25; i++) {
             sink.receive(message);
         }
-        TestUtils.pause(300);
+        TestUtils.pause(500);
         assertTrue(Robolectric.httpRequestWasMade());
 
         Type listType = new TypeToken<List<SimpleVehicleMessage>>() {}.getType();
