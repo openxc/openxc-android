@@ -27,6 +27,7 @@ public class JsonFormatter {
     static {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory());
+        builder.registerTypeAdapter(byte[].class, new ByteAdapter());
         sGson = builder.create();
     }
 

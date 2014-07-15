@@ -19,10 +19,14 @@ import org.robolectric.annotation.Config;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.DiagnosticResponse.NegativeResponseCode;
+import com.openxc.messages.formatters.ByteAdapter;
+import com.openxc.messages.formatters.JsonFormatter;
 
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -42,6 +46,30 @@ public class JsonFormatterTest extends AbstractFormatterTest {
         } catch(UnrecognizedMessageTypeException e) {
             Assert.fail(e.toString());
         }
+    }
+    
+    @Test
+    public void testDeserializeDiagnosticResponseFromJsonString() throws UnrecognizedMessageTypeException {
+        String data = "{\"bus\":1,\"id\":2028,\"mode\":1,\"success\":true,\"pid\":64,\"payload\":\"0x40800020\"}";
+        DiagnosticResponse response = (DiagnosticResponse) JsonFormatter.deserialize(data);
+        assertEquals(response.getBusId(), 1);
+        assertEquals(response.getId(), 2028);
+        assertEquals(response.getMode(), 1);
+        assertEquals(response.isSuccessful(), true);
+        assertEquals(response.getPid().intValue(), 64);
+        assertEquals(ByteAdapter.byteArrayToHexString(response.getPayload()), "40800020");
+    }
+    
+    @Test
+    public void testSerializeAndDeserializeDiagnosticResponse() throws UnrecognizedMessageTypeException {
+        serializeDeserializeAndCheckEqual(new DiagnosticResponse(
+                1, 2028, 1, 64, ByteAdapter.hexStringToByteArray("40800020"), null, 12 ));
+    }
+    
+    @Test
+    public void testSerializeAndDeserializeDiagnosticResponseNoPayload() throws UnrecognizedMessageTypeException {
+        serializeDeserializeAndCheckEqual(new DiagnosticResponse(
+                1, 2028, 1, 64, null, null, 12 ));
     }
 
     @Test
