@@ -79,10 +79,20 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>cobertura-maven-plugin</artifactId>
                     <version>2.6</version>
+                    <configuration>
+                        <format>xml</format>
+                        <format>html</format>
+                        <aggregate>true</aggregate>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>2.2.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

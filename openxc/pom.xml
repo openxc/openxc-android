@@ -105,6 +105,10 @@
                     <useStandardDocletOptions>false</useStandardDocletOptions>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+            </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
         <testSourceDirectory>tests</testSourceDirectory>
