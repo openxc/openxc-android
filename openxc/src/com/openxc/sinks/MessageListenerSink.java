@@ -9,7 +9,6 @@ import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
