@@ -39,6 +39,7 @@ public class ByteAdapter extends TypeAdapter<byte[]> {
       }
       
       //adapted from stackoverflow.com/questions/140131/convert-a-string-representation-of-a-hex-dump-to-a-byte-array-using-java
+      //the benefit of this over using a BigInteger(s, 16).toByteArray() is that leading zeroes are not lost
       public static byte[] hexStringToByteArray(String s) {
           int length = s.length();
           byte[] data = new byte[length / 2];
