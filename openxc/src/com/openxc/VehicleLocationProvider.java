@@ -40,18 +40,22 @@ public class VehicleLocationProvider implements Measurement.Listener {
         mVehicleManager = vehicleManager;
         mLocationManager = (LocationManager) context.getSystemService(
                 Context.LOCATION_SERVICE);
-        setupMockLocations();
+        if(mLocationManager == null) {
+            Log.w(TAG, "Cannot load location service from Android, won't be able to overwrite GPS");
+        } else {
+            setupMockLocations();
 
-        try {
-            mVehicleManager.addListener(Latitude.class, this);
-            mVehicleManager.addListener(Longitude.class, this);
-            mVehicleManager.addListener(VehicleSpeed.class, this);
-        } catch(VehicleServiceException e) {
-            Log.d(TAG, "Unable to register for GPS from vehicle," +
-                    "mocked location may not work");
-        } catch(UnrecognizedMeasurementTypeException e) {
-            // TODO this is dumb that we know these measurements are good, but
-            // we still could get an exception
+            try {
+                mVehicleManager.addListener(Latitude.class, this);
+                mVehicleManager.addListener(Longitude.class, this);
+                mVehicleManager.addListener(VehicleSpeed.class, this);
+            } catch(VehicleServiceException e) {
+                Log.d(TAG, "Unable to register for GPS from vehicle," +
+                        "mocked location may not work");
+            } catch(UnrecognizedMeasurementTypeException e) {
+                // TODO this is dumb that we know these measurements are good, but
+                // we still could get an exception
+            }
         }
     }
 
@@ -125,6 +129,10 @@ public class VehicleLocationProvider implements Measurement.Listener {
     }
 
     private void updateLocation() {
+        if(mLocationManager == null) {
+            return;
+        }
+
         try {
             Latitude latitude = (Latitude) mVehicleManager.get(Latitude.class);
             Longitude longitude = (Longitude) mVehicleManager.get(
@@ -168,7 +176,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
     }
 
     private void overwriteNativeProvider() {
-        if(mOverwriteNativeStatus && !mNativeGpsOverridden) {
+        if(mOverwriteNativeStatus && !mNativeGpsOverridden && mLocationManager != null) {
             try {
                 mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
                         false, false, false, false, false, true, false, 0, 5);
