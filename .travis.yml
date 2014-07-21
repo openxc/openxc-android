@@ -22,4 +22,4 @@ script:
   - mvn install -pl openxc-it
   - mvn package -pl enabler
 after_success:
-  - mvn clean cobertura:cobertura coveralls:cobertura
+  - mvn clean cobertura:cobertura coveralls:cobertura -pl openxc
