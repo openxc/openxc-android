@@ -244,12 +244,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Send a command to the vehicle through the first available active
      * {@link com.openxc.interfaces.VehicleInterface}.
      *
-     * This will attempt to send the message over all of the registered vehicle
-     * interfaces until one returns successfully. There is no guarantee about
-     * the order that the interfaces are attempted.
+     * This will attempt to send the message over at most one of the registered
+     * vehicle interfaces. It will first try all interfaces registered to the
+     * VehicleManager, then all of those register with the remote VehicleService
+     * (i.e. the USB, Network and Bluetooth sources) until one sends
+     * successfully. Besides that, there is no guarantee about the order that
+     * the interfaces are attempted.
      *
      * @param command The desired command to send to the vehicle.
-     * @return true if the message was sent successfully
+     * @return true if the message was sent successfully on an interface.
      */
     public boolean send(VehicleMessage message) {
         if(message instanceof DiagnosticRequest) {
@@ -257,20 +260,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             message = new Command(message.asDiagnosticRequest());
         }
 
-        // TODO I'm not sure how much value this return value has - we don't
-        // really know if the remote service was able to actually send it, only
-        // the local ones, and I think most VIs in practice are tied to the
-        // remote service (USB, BT, Network)
         boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);
 
         // Don't want to keep this in the same list as local interfaces because
         // if that quits after the first interface reports success.
         if(mRemoteService != null) {
             try {
-                mRemoteService.send(message);
+                sent = sent || mRemoteService.send(message);
             } catch(RemoteException e) {
                 Log.v(TAG, "Unable to propagate command to remote interface", e);
-                sent = sent || false;
             }
         }
         return sent;
