@@ -5,7 +5,9 @@ android:
     - tools
     - build-tools-19.1.0
     - android-19
+    - android-10
     - sys-img-armeabi-v7a-android-19
+    - sys-img-x86-android-10
     - extra-android-support
     - extra-android-m2repository
 before_install:
@@ -14,12 +16,17 @@ before_install:
 install:
   - mvn clean install -DskipTests=true -pl openxc -am
 before_script:
-  - echo no | android create avd --force -n test -c 128M -t android-19 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - ./wait_for_emulator
+  - echo no | android create avd --force -n android19 -c 128M -t android-19 --abi armeabi-v7a
+  - echo no | android create avd --force -n android10 -c 128M -t android-10 --abi x86
+  - emulator -avd android19 -port 5554 -no-skin -no-audio -no-window &
 script:
   - mvn test -pl openxc
-  - mvn install -pl openxc-it
   - mvn package -pl enabler
+  - ./wait_for_emulator 5554
+  - mvn install -pl openxc-it
+  - adb -s emulator-5556 emu kill
+  - emulator -avd android10 -port 5556 -no-skin -no-audio -no-window &
+  - ./wait_for_emulator 5556
+  - mvn install -pl openxc-it
 after_success:
-  - mvn clean cobertura:cobertura coveralls:cobertura -pl openxc
+  - mvn cobertura:cobertura coveralls:cobertura -pl openxc
