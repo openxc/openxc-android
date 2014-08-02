@@ -1,6 +1,8 @@
 OpenXC Android Library
 =========================
 
+[![Build Status](https://travis-ci.org/openxc/openxc-android.svg?branch=master)](https://travis-ci.org/openxc/openxc-android)
+
 This library is a part of the [OpenXC][] project.
 
 This Android library contains the tools required to read vehicle data from the
