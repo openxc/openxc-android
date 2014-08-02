@@ -75,26 +75,9 @@
                     <version>${android-maven.version}</version>
                     <extensions>true</extensions>
                 </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>2.6</version>
-                    <configuration>
-                        <formats>
-                            <format>xml</format>
-                            <format>html</format>
-                        </formats>
-                        <aggregate>true</aggregate>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>2.2.0</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -102,6 +85,36 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>2.2.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>com/openxc/BuildConfig.class</exclude>
+                            <exclude>com/openxc/BinaryMessages.class</exclude>
+                            <exclude>com/openxc/R.class</exclude>
+                            <exclude>com/openxc/remote/*</exclude>
+                            <exclude>com/openxc/interfaces/bluetooth/*</exclude>
+                            <exclude>com/openxc/interfaces/usb/*</exclude>
+                        </excludes>
+                        <ignores>
+                            <ignore>com.openxc.R</ignore>
+                        </ignores>
+                    </instrumentation>
+                    <formats>
+                        <format>xml</format>
+                        <format>html</format>
+                    </formats>
+                    <aggregate>true</aggregate>
                 </configuration>
             </plugin>
             <plugin>

@@ -104,6 +104,12 @@
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
+                <configuration>
+                    <sourceDirectories>
+                        <sourceDirectory>src</sourceDirectory>
+                        <sourceDirectory>target/generated-sources/r</sourceDirectory>
+                    </sourceDirectories>
+                </configuration>
             </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
@@ -143,38 +149,7 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <configuration>
-                        <instrumentation>
-                            <excludes>
-                                <exclude>com/openxc/BuildConfig.class</exclude>
-                                <exclude>com/openxc/BinaryMessages.class</exclude>
-                                <exclude>com/openxc/R.class</exclude>
-                                <exclude>com/openxc/remote/*.class</exclude>
-                                <exclude>com/openxc/interfaces/bluetooth/*.class</exclude>
-                                <exclude>com/openxc/interfaces/usb/*.class</exclude>
-                            </excludes>
-                        </instrumentation>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <configuration>
-                    <formats>
-                        <format>xml</format>
-                        <format>html</format>
-                    </formats>
-                    <aggregate>true</aggregate>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>
