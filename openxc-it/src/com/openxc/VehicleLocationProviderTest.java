@@ -95,7 +95,7 @@ public class VehicleLocationProviderTest
     public void testNoLocationWithOnlyLatitude() {
         prepareServices();
         source.inject(Latitude.ID, latitude);
-        TestUtils.pause(100);
+        TestUtils.pause(200);
         assertThat(mLocationManager.getLastKnownLocation(
                     VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
                 nullValue());
@@ -127,7 +127,7 @@ public class VehicleLocationProviderTest
         source.inject(Latitude.ID, latitude);
         source.inject(Longitude.ID, longitude);
         source.inject(VehicleSpeed.ID, speed);
-        TestUtils.pause(100);
+        TestUtils.pause(200);
         Location location = mLocationManager.getLastKnownLocation(
                     VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
         assertThat(location, notNullValue());
@@ -158,7 +158,7 @@ public class VehicleLocationProviderTest
         source.inject(Latitude.ID, latitude);
         source.inject(Longitude.ID, longitude);
         source.inject(VehicleSpeed.ID, speed);
-        TestUtils.pause(100);
+        TestUtils.pause(200);
         Location location = mLocationManager.getLastKnownLocation(
                 LocationManager.GPS_PROVIDER);
         assertThat(location, nullValue());
