@@ -17,4 +17,9 @@
     <string name="network_port_key">network_port</string>
     <string name="trace_source_checkbox_key">playback_trace_enabled</string>
     <string name="trace_source_file_key">playback_trace_file</string>
+
+    <!-- A default value for the token so we can still build the Enabler without
+      one - can be overridden in any app using this library. -->
+    <string name="bugsnag_token"></string>
+
 </resources>

@@ -23,7 +23,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import com.bugsnag.android.Bugsnag;
+
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.interfaces.bluetooth.BluetoothException;
@@ -105,32 +106,31 @@ public class OpenXcEnablerActivity extends Activity {
         }
     };
 
-    /**
-     * @return true if the Crashlytics API key is declared in AndroidManifest.xml metadata, otherwise return false.
-     */
-    static boolean hasCrashlyticsApiKey(Context context) {
+    static String getBugsnagToken(Context context) {
+        String key = null;
         try {
             Context appContext = context.getApplicationContext();
-            ApplicationInfo ai = appContext.getPackageManager().getApplicationInfo(
+            ApplicationInfo appInfo = appContext.getPackageManager().getApplicationInfo(
                     appContext.getPackageName(), PackageManager.GET_META_DATA);
-            Bundle bundle = ai.metaData;
-            return (bundle != null) && (bundle.getString("com.crashlytics.ApiKey") != null);
+            if(appInfo.metaData != null) {
+                key = appInfo.metaData.getString("com.bugsnag.token");
+            }
         } catch (NameNotFoundException e) {
             // Should not happen since the name was determined dynamically from the app context.
             Log.e(TAG, "Unexpected NameNotFound.", e);
         }
-        return false;
+        return key;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (hasCrashlyticsApiKey(this)) {
-            Crashlytics.start(this);
+        String bugsnagToken = getBugsnagToken(this);
+        if(bugsnagToken != null && !bugsnagToken.isEmpty()) {
+            Bugsnag.register(this, bugsnagToken);
         } else {
-            Log.e(TAG, "No Crashlytics API key found. Visit http://crashlytics.com to set up an account.");
-
+            Log.e(TAG, "No Bugsnag token found in AndroidManifest, not enabling Bugsnag");
         }
 
         setContentView(R.layout.main);

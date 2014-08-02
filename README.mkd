@@ -85,6 +85,24 @@ Finally, to deploy the packaged APK to an attached Android device and run it:
 If you want the tests to wait for a debugger to attach, change the `testDebug`
 setting in `openxc-android/pom.xml` to `true`.
 
+## Automatic Crash Reporting
+
+The Enabler includes optional support for automatic crash reporting via Bugsnag.
+If you wish to enable this, create a resources file in `enabler/res/values` with
+your Bugsnag token, e.g.:
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bugsnag_token">0123456789</string>
+</resources>
+
+If no token is found, Bugsnag will not be included in the build.
+
+The APK files upload to the GitHub releases page are built with Bugsnag
+included, reporting to an accout that the OpenXC maintainers can review to
+improve the project. If you wish to not have any crash reports collected from
+your device, please build the Enabler from the source code.
+
 ## Contributing
 
 Please see our [Contribution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
