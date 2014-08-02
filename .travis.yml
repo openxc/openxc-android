@@ -18,15 +18,15 @@ install:
 before_script:
   - echo no | android create avd --force -n android19 -c 128M -t android-19 --abi armeabi-v7a
   - echo no | android create avd --force -n android10 -c 128M -t android-10 --abi x86
-  - emulator -avd android19 -port 5554 -no-skin -no-audio -no-window &
+  - emulator -avd android19 -no-skin -no-audio -no-window &
 script:
   - mvn test -pl openxc
   - mvn package -pl enabler
-  - ./wait_for_emulator 5554
+  - ./wait_for_emulator
   - mvn install -pl openxc-it
-  - adb -s emulator-5554 emu kill
-  - emulator -avd android10 -port 5556 -no-skin -no-audio -no-window &
-  - ./wait_for_emulator 5556
+  - adb -e emu kill
+  - emulator -avd android10 -no-skin -no-audio -no-window &
+  - ./wait_for_emulator
   - mvn install -pl openxc-it
 after_success:
   - mvn cobertura:cobertura coveralls:cobertura -pl openxc
