@@ -1,14 +1,14 @@
 language: android
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-19.1.0
+    - android-19
+    - sys-img-armeabi-v7a-android-19
+    - extra-android-support
+    - extra-android-m2repository
 before_install:
-  # workaround for travis-ci/travis-ci#2279
-  - 'sudo mv /usr/local/android-sdk/tools/android-* /usr/local/bin'
-  # Accept all licenses (workaround for travis-ci/travis-ci#2466)
-  # Upgrade 'platform-tools' before 'tools' (workaround for travis-ci/travis-ci#2470)
-  # Run dinstinct 'android update sdk' commands
-  - "android-update-sdk --components='platform-tools,tools' --accept-licenses='.+'"
-  - "android-update-sdk --components='build-tools-19.1.0' --accept-licenses='.+'"
-  - "android-update-sdk --components='android-19,sys-img-armeabi-v7a-android-19,extra-android-support' --accept-licenses='.+'"
-  - "android-update-sdk --components='extra-android-m2repository' --accept-licenses='.+'"
   - mkdir -p ~/.m2/repository
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 install:
