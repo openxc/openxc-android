@@ -24,7 +24,7 @@ script:
   - mvn package -pl enabler
   - ./wait_for_emulator 5554
   - mvn install -pl openxc-it
-  - adb -s emulator-5556 emu kill
+  - adb -s emulator-5554 emu kill
   - emulator -avd android10 -port 5556 -no-skin -no-audio -no-window &
   - ./wait_for_emulator 5556
   - mvn install -pl openxc-it
