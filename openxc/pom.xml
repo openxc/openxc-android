@@ -151,6 +151,7 @@
                             <excludes>
                                 <exclude>com/openxc/BuildConfig.class</exclude>
                                 <exclude>com/openxc/BinaryMessages.class</exclude>
+                                <exclude>com/openxc/R.class</exclude>
                                 <exclude>com/openxc/remote/*.class</exclude>
                                 <exclude>com/openxc/interfaces/bluetooth/*.class</exclude>
                                 <exclude>com/openxc/interfaces/usb/*.class</exclude>
