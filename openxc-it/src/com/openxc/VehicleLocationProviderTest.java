@@ -1,5 +1,10 @@
 package com.openxc;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -7,17 +12,10 @@ import android.location.LocationManager;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
-
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.remote.VehicleService;
-import com.openxc.VehicleManager;
-import com.openxc.sources.BaseVehicleDataSource;
-import com.openxc.sources.SourceCallback;
 import com.openxc.sources.TestSource;
 
 public class VehicleLocationProviderTest
@@ -44,20 +42,6 @@ public class VehicleLocationProviderTest
                     VehicleService.class));
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
-        try {
-            // Remove it so that the VehicleLocationProvider re-adds it with fresh
-            // location history
-            mLocationManager.removeTestProvider(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
-        } catch(IllegalArgumentException e) {
-        }
-
-        try {
-            // Remove it so that the VehicleLocationProvider re-adds it with fresh
-            // location history
-            mLocationManager.removeTestProvider(LocationManager.GPS_PROVIDER);
-        } catch(IllegalArgumentException e) {
-        }
     }
 
     // Due to bugs and or general crappiness in the ServiceTestCase, you will
@@ -84,83 +68,49 @@ public class VehicleLocationProviderTest
     }
 
     @MediumTest
-    public void testNoLocationMessages() {
-        prepareServices();
-        assertThat(mLocationManager.getLastKnownLocation(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
-                nullValue());
-    }
-
-    @MediumTest
-    public void testNoLocationWithOnlyLatitude() {
-        prepareServices();
-        source.inject(Latitude.ID, latitude);
-        TestUtils.pause(200);
-        assertThat(mLocationManager.getLastKnownLocation(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
-                nullValue());
-    }
-
-    @MediumTest
-    public void testNoLocationWithOnlyLongitude() {
-        prepareServices();
-        source.inject(Longitude.ID, longitude);
-        TestUtils.pause(100);
-        assertThat(mLocationManager.getLastKnownLocation(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
-                nullValue());
-    }
-
-    @MediumTest
-    public void testNoLocationWithOnlySpeed() {
-        prepareServices();
-        source.inject(VehicleSpeed.ID, speed);
-        TestUtils.pause(100);
-        assertThat(mLocationManager.getLastKnownLocation(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER),
-                nullValue());
-    }
-
-    @MediumTest
-    public void testLocationWhenAllPresent() {
-        prepareServices();
-        source.inject(Latitude.ID, latitude);
-        source.inject(Longitude.ID, longitude);
-        source.inject(VehicleSpeed.ID, speed);
-        TestUtils.pause(200);
-        Location location = mLocationManager.getLastKnownLocation(
-                    VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
-        assertThat(location, notNullValue());
-        assertThat(location.getLatitude(), equalTo(latitude));
-        assertThat(location.getLongitude(), equalTo(longitude));
-        assertThat(location.getSpeed(), equalTo(speed.floatValue()));
-    }
-
-    @MediumTest
-    public void testOverwritesNativeGps() {
-        prepareServices();
-        source.inject(Latitude.ID, latitude);
-        source.inject(Longitude.ID, longitude);
-        source.inject(VehicleSpeed.ID, speed);
-        TestUtils.pause(100);
-        Location location = mLocationManager.getLastKnownLocation(
-                LocationManager.GPS_PROVIDER);
-        assertThat(location, notNullValue());
-        assertThat(location.getLatitude(), equalTo(latitude));
-        assertThat(location.getLongitude(), equalTo(longitude));
-        assertThat(location.getSpeed(), equalTo(speed.floatValue()));
-    }
-
-    @MediumTest
     public void testNotOverwrittenWhenDisabled() {
         prepareServices();
         locationProvider.setOverwritingStatus(false);
+        source.inject(Latitude.ID, latitude + 1);
+        source.inject(Longitude.ID, longitude);
+        source.inject(VehicleSpeed.ID, speed);
+        TestUtils.pause(100);
+        Location lastAndroidLocation = mLocationManager.getLastKnownLocation(
+                LocationManager.GPS_PROVIDER);
+        if(lastAndroidLocation != null) {
+            assertTrue(lastAndroidLocation.getLatitude() != latitude + 1);
+        }
+    }
+
+    @MediumTest
+    public void testLocationWhenAllPresent() throws InterruptedException {
+        prepareServices();
         source.inject(Latitude.ID, latitude);
         source.inject(Longitude.ID, longitude);
         source.inject(VehicleSpeed.ID, speed);
-        TestUtils.pause(200);
-        Location location = mLocationManager.getLastKnownLocation(
+        TestUtils.pause(1000);
+
+        Location lastVehicleLocation = mLocationManager.getLastKnownLocation(
+                VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER);
+        assertThat(lastVehicleLocation, notNullValue());
+        assertThat(lastVehicleLocation.getLatitude(), equalTo(latitude));
+        assertThat(lastVehicleLocation.getLongitude(), equalTo(longitude));
+        assertThat(lastVehicleLocation.getSpeed(), equalTo(speed.floatValue()));
+    }
+
+    @MediumTest
+    public void testOverwritesNativeGps() throws InterruptedException {
+        prepareServices();
+        source.inject(Latitude.ID, latitude);
+        source.inject(Longitude.ID, longitude);
+        source.inject(VehicleSpeed.ID, speed);
+        TestUtils.pause(1000);
+
+        Location lastAndroidLocation = mLocationManager.getLastKnownLocation(
                 LocationManager.GPS_PROVIDER);
-        assertThat(location, nullValue());
+        assertThat(lastAndroidLocation, notNullValue());
+        assertThat(lastAndroidLocation.getLatitude(), equalTo(latitude));
+        assertThat(lastAndroidLocation.getLongitude(), equalTo(longitude));
+        assertThat(lastAndroidLocation.getSpeed(), equalTo(speed.floatValue()));
     }
 }

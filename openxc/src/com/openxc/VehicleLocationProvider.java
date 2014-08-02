@@ -68,6 +68,11 @@ public class VehicleLocationProvider implements Measurement.Listener {
             } catch(VehicleServiceException | UnrecognizedMeasurementTypeException e) {
             }
         }
+
+        if(mLocationManager.getProvider(
+                    VEHICLE_LOCATION_PROVIDER) != null) {
+            mLocationManager.removeTestProvider(VEHICLE_LOCATION_PROVIDER);
+        }
     }
 
     @Override

@@ -285,30 +285,25 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testUsbInterfaceEnabledByDefault()
             throws VehicleServiceException {
         prepareServices();
-        assertThat(service.getActiveSources(),
-                hasItem(UsbVehicleInterface.class));
+        // When testing on a 2.3.x emulator, no USB available.
+        if(android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.HONEYCOMB) {
+            assertThat(service.getActiveSources(),
+                    hasItem(UsbVehicleInterface.class));
+        }
     }
 
     @MediumTest
     public void testAddVehicleInterfaceByClass() throws VehicleServiceException {
         prepareServices();
-        service.addVehicleInterface(UsbVehicleInterface.class, "");
-        assertThat(service.getActiveSources(),
-                hasItem(UsbVehicleInterface.class));
-        // Not a whole lot we can test without an actual device attached and
-        // without being able to mock the interface class out in the remote
-        // process where the VehicleSevice runs, but at least we know this
-        // method didn't explode.
-    }
-
-    @MediumTest
-    public void testAddVehicleInterfaceByClassWithResource()
-            throws VehicleServiceException {
-        prepareServices();
         service.addVehicleInterface(NetworkVehicleInterface.class,
                 "localhost:8080");
         assertThat(service.getActiveSources(),
                 hasItem(NetworkVehicleInterface.class));
+        // Not a whole lot we can test without an actual device attached and
+        // without being able to mock the interface class out in the remote
+        // process where the VehicleSevice runs, but at least we know this
+        // method didn't explode.
     }
 
     @MediumTest
@@ -329,17 +324,18 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     public void testRemoveVehicleInterfaceByClass()
             throws VehicleServiceException {
         prepareServices();
-        service.addVehicleInterface(UsbVehicleInterface.class, "");
-        service.removeVehicleInterface(UsbVehicleInterface.class);
+        service.addVehicleInterface(NetworkVehicleInterface.class,
+                "localhost:8080");
+        service.removeVehicleInterface(NetworkVehicleInterface.class);
         assertThat(service.getActiveSources(),
-                not(hasItem(UsbVehicleInterface.class)));
+                not(hasItem(NetworkVehicleInterface.class)));
     }
 
     @MediumTest
     public void testRemoveVehicleInterfaceByClassWithoutAdding()
             throws VehicleServiceException {
         prepareServices();
-        service.removeVehicleInterface(UsbVehicleInterface.class);
+        service.removeVehicleInterface(NetworkVehicleInterface.class);
     }
 
     @MediumTest
