@@ -163,7 +163,6 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         service.addListener(SteeringWheelAngle.class, steeringWheelListener);
         source.inject(VehicleSpeed.ID, 42.0);
         source.inject(SteeringWheelAngle.ID, 12.1);
-        TestUtils.pause(5);
         assertNotNull(steeringAngleReceived);
         assertNotNull(speedReceived);
     }

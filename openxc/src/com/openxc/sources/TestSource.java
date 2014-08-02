@@ -20,7 +20,7 @@ public class TestSource extends BaseVehicleDataSource {
                 // the injected measurement may not get to run before we make
                 // our assertions
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(1000);
                 } catch(InterruptedException e) {}
             }
         }
