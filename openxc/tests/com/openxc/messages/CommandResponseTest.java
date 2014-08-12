@@ -21,16 +21,22 @@ import com.openxc.messages.Command.CommandType;
 public class CommandResponseTest {
     CommandResponse response;
     String message = "bar";
+    boolean status = true;
     CommandType command = CommandType.VERSION;
 
     @Before
     public void setup() {
-        response = new CommandResponse(command, message);
+        response = new CommandResponse(command, status, message);
     }
 
     @Test
     public void getCommandReturnsCommand() {
         assertEquals(command, response.getCommand());
+    }
+
+    @Test
+    public void getStatusReturnsStatus() {
+        assertEquals(status, response.getStatus());
     }
 
     @Test
@@ -46,21 +52,28 @@ public class CommandResponseTest {
     @Test
     public void sameCommandAndMessageEquals() {
         CommandResponse anotherResponse = new CommandResponse(
-                command, message);
+                command, status, message);
         assertEquals(response, anotherResponse);
     }
 
     @Test
     public void differentMessageDoesntEqual() {
         CommandResponse anotherResponse = new CommandResponse(
-                command, message + " different");
+                command, status, message + " different");
+        assertFalse(response.equals(anotherResponse));
+    }
+
+    @Test
+    public void differentStatusDoesntEqual() {
+        CommandResponse anotherResponse = new CommandResponse(
+                command, !status, message);
         assertFalse(response.equals(anotherResponse));
     }
 
     @Test
     public void differentCommandDoesntEqual() {
         CommandResponse anotherResponse = new CommandResponse(
-                CommandType.DEVICE_ID);
+                CommandType.DEVICE_ID, status);
         assertFalse(response.equals(anotherResponse));
     }
 

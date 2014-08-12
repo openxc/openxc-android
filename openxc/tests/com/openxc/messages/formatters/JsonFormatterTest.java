@@ -47,7 +47,7 @@ public class JsonFormatterTest extends AbstractFormatterTest {
             Assert.fail(e.toString());
         }
     }
-    
+
     @Test
     public void testDeserializeDiagnosticResponseFromJsonString() throws UnrecognizedMessageTypeException {
         String data = "{\"bus\":1,\"id\":2028,\"mode\":1,\"success\":true,\"pid\":64,\"payload\":\"0x40800020\"}";
@@ -59,13 +59,13 @@ public class JsonFormatterTest extends AbstractFormatterTest {
         assertEquals(response.getPid().intValue(), 64);
         assertEquals(ByteAdapter.byteArrayToHexString(response.getPayload()), "40800020");
     }
-    
+
     @Test
     public void testSerializeAndDeserializeDiagnosticResponse() throws UnrecognizedMessageTypeException {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                 1, 2028, 1, 64, ByteAdapter.hexStringToByteArray("40800020"), null, 12 ));
     }
-    
+
     @Test
     public void testSerializeAndDeserializeDiagnosticResponseNoPayload() throws UnrecognizedMessageTypeException {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
@@ -143,9 +143,19 @@ public class JsonFormatterTest extends AbstractFormatterTest {
 
     @Test
     public void serializeCommandResponseUsesStringCommand() {
+        boolean status = true;
         String serialized = JsonFormatter.serialize(new CommandResponse(
-                    Command.CommandType.VERSION));
+                    Command.CommandType.VERSION, true));
         assertThat(serialized, containsString("version"));
+    }
+
+    @Test
+    public void serializeCommandResponseContainsStatus() {
+        boolean status = true;
+        String serialized = JsonFormatter.serialize(new CommandResponse(
+                    Command.CommandType.VERSION, true));
+        assertThat(serialized, containsString(CommandResponse.STATUS_KEY));
+        assertThat(serialized, containsString("true"));
     }
 
     @Test

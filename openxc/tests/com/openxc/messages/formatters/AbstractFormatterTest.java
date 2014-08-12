@@ -52,15 +52,15 @@ public abstract class AbstractFormatterTest {
     @Test
     public void serializeCommandResponse() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
-                    Command.CommandType.DEVICE_ID));
+                    Command.CommandType.DEVICE_ID, true));
     }
 
     @Test
     public void serializeCommandResponseWithMessage() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
-                    Command.CommandType.DEVICE_ID, "bar"));
+                    Command.CommandType.DEVICE_ID, true, "bar"));
         serializeDeserializeAndCheckEqual(new CommandResponse(
-                    Command.CommandType.VERSION, "bar"));
+                    Command.CommandType.VERSION, true, "bar"));
     }
 
     @Test

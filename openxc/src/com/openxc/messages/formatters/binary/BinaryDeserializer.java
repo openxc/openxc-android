@@ -211,11 +211,16 @@ public class BinaryDeserializer {
                     "Command response missing type");
         }
 
+        if(!response.hasStatus()) {
+            throw new UnrecognizedMessageTypeException(
+                    "Command response missing status");
+        }
+
         String message = null;
         if(response.hasMessage()) {
             message = response.getMessage();
         }
-        return new CommandResponse(commandType, message);
+        return new CommandResponse(commandType, response.getStatus(), message);
     }
 
     private static VehicleMessage deserialize(

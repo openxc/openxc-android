@@ -15,27 +15,32 @@ import com.openxc.messages.Command.CommandType;
 public class CommandResponse extends KeyedMessage {
 
     public static final String COMMAND_RESPONSE_KEY = "command_response";
+    public static final String STATUS_KEY = "status";
     public static final String MESSAGE_KEY = "message";
 
     public static final String[] sRequiredFieldsValues = new String[] {
-            COMMAND_RESPONSE_KEY };
+            COMMAND_RESPONSE_KEY, STATUS_KEY };
     public static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_RESPONSE_KEY)
     private CommandType mCommand;
 
+    @SerializedName(STATUS_KEY)
+    private boolean mStatus;
+
     // Message is optional
     @SerializedName(MESSAGE_KEY)
     private String mMessage;
 
-    public CommandResponse(CommandType command, String message) {
-        mMessage = message;
+    public CommandResponse(CommandType command, boolean status, String message) {
         mCommand = command;
+        mStatus = status;
+        mMessage = message;
     }
 
-    public CommandResponse(CommandType command) {
-        this(command, null);
+    public CommandResponse(CommandType command, boolean status) {
+        this(command, status, null);
     }
 
     public boolean hasMessage() {
@@ -50,6 +55,10 @@ public class CommandResponse extends KeyedMessage {
         return mCommand;
     }
 
+    public boolean getStatus() {
+        return mStatus;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null || !super.equals(obj)) {
@@ -58,7 +67,8 @@ public class CommandResponse extends KeyedMessage {
 
         final CommandResponse other = (CommandResponse) obj;
         return Objects.equal(mCommand, other.mCommand) &&
-                Objects.equal(mMessage, other.mMessage);
+                Objects.equal(mMessage, other.mMessage) &&
+                Objects.equal(mStatus, other.mStatus);
     }
 
     @Override
@@ -66,6 +76,7 @@ public class CommandResponse extends KeyedMessage {
         return Objects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("command", getCommand())
+            .add("status", getStatus())
             .add("message", getMessage())
             .add("extras", getExtras())
             .toString();
@@ -86,6 +97,7 @@ public class CommandResponse extends KeyedMessage {
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
         out.writeSerializable(getCommand());
+        out.writeInt(getStatus() ? 1 : 0);
         out.writeString(getMessage());
     }
 
@@ -93,6 +105,7 @@ public class CommandResponse extends KeyedMessage {
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mCommand = (CommandType) in.readSerializable();
+        mStatus = in.readInt() == 1;
         mMessage = in.readString();
     }
 

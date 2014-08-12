@@ -159,6 +159,8 @@ public class BinarySerializer {
                     message.getCommand());
         }
 
+        messageBuilder.setStatus(message.getStatus());
+
         if(message.hasMessage()) {
             messageBuilder.setMessage(message.getMessage());
         }
