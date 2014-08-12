@@ -26,26 +26,38 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     // TODO i'd like to somehow combine these - I think switching to an event
     // bus will solve it
     private Multimap<KeyMatcher, VehicleMessage.Listener>
+            mPersistentMessageListeners = HashMultimap.create();
+    // The non-persistent listeners will be removed after they receive their
+    // first message.
+    private Multimap<KeyMatcher, VehicleMessage.Listener>
             mMessageListeners = HashMultimap.create();
     private Multimap<KeyMatcher, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
-
-    public void register(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener)
-            throws UnrecognizedMeasurementTypeException {
-        register(BaseMeasurement.buildMatcherForMeasurement(measurementType),
-                listener);
-    }
 
     public synchronized void register(KeyMatcher matcher,
             Measurement.Listener listener) {
         mMeasurementListeners.put(matcher, listener);
     }
 
-    public void register(KeyMatcher matcher, VehicleMessage.Listener listener) {
-        synchronized (mMessageListeners) {
+    public synchronized void register(KeyMatcher matcher,
+            VehicleMessage.Listener listener, boolean persist) {
+        if(persist) {
+            mPersistentMessageListeners.put(matcher, listener);
+        } else {
             mMessageListeners.put(matcher, listener);
         }
+    }
+
+    public synchronized void register(KeyMatcher matcher,
+            VehicleMessage.Listener listener) {
+        register(matcher, listener, true);
+    }
+
+    public void register(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener)
+            throws UnrecognizedMeasurementTypeException {
+        register(BaseMeasurement.buildMatcherForMeasurement(measurementType),
+                listener);
     }
 
     public void unregister(Class<? extends Measurement> measurementType,
@@ -55,36 +67,44 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 listener);
     }
 
-    public synchronized void unregister(KeyMatcher matcher, Measurement.Listener listener) {
+    public synchronized void unregister(KeyMatcher matcher,
+            Measurement.Listener listener) {
         mMeasurementListeners.remove(matcher, listener);
     }
 
-    public void unregister(KeyMatcher matcher,
+    public synchronized void unregister(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
-        synchronized(mMessageListeners) {
-            mMessageListeners.remove(matcher, listener);
-        }
+        mPersistentMessageListeners.remove(matcher, listener);
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
             .add("numMessageListeners", mMessageListeners.size())
+            .add("numPersistentMessageListeners",
+                    mPersistentMessageListeners.size())
             .add("numMeasurementListeners", mMeasurementListeners.size())
             .toString();
     }
 
     @Override
-    protected void propagateMessage(VehicleMessage message) {
-        
+    protected synchronized void propagateMessage(VehicleMessage message) {
         if(message instanceof KeyedMessage) {
-            synchronized (mMessageListeners) {
-                for (KeyMatcher matcher : mMessageListeners.keys()) {
-                    if (matcher.matches(message.asKeyedMessage())) {
-                        for (VehicleMessage.Listener listener :
-                                mMessageListeners.get(matcher)) {
-                            listener.receive(message);
-                        }
+            for (KeyMatcher matcher : mPersistentMessageListeners.keys()) {
+                if (matcher.matches(message.asKeyedMessage())) {
+                    for (VehicleMessage.Listener listener :
+                            mPersistentMessageListeners.get(matcher)) {
+                        listener.receive(message);
+                    }
+                }
+            }
+
+            for (KeyMatcher matcher : mMessageListeners.keys()) {
+                if (matcher.matches(message.asKeyedMessage())) {
+                    for (VehicleMessage.Listener listener :
+                            mMessageListeners.get(matcher)) {
+                        listener.receive(message);
+                        mMessageListeners.remove(matcher, listener);
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.openxc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -19,18 +20,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Objects;
-import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.Command;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
-import com.openxc.messages.DiagnosticRequest;
-import com.openxc.messages.Command;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
@@ -241,8 +242,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
-     * Send a command to the vehicle through the first available active
-     * {@link com.openxc.interfaces.VehicleInterface}.
+     * Send a request or command to the vehicle through the first available
+     * active {@link com.openxc.interfaces.VehicleInterface} without waiting for
+     * any responses.
      *
      * This will attempt to send the message over at most one of the registered
      * vehicle interfaces. It will first try all interfaces registered to the
@@ -279,6 +281,34 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     public boolean send(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
         return send(command.toVehicleMessage());
+    }
+
+    /* Sends a request and registers the listener to receive the response.
+     * Returns immediately after sending.
+     *
+     * The listener is unregistered after the first response is received. If you
+     * need to accept multiple responses for the same request, you must manually
+     * register your own listener to control its lifecycle.
+     */
+    public void request(KeyedMessage message,
+            VehicleMessage.Listener listener) {
+        // Register the listener as non-persistent, so it is deleted after
+        // receiving the first response
+        mNotifier.register(ExactKeyMatcher.buildExactMatcher(message.getKey()),
+                listener, false);
+        send(message);
+    }
+
+    /* Sends a request and waits up to 2 seconds to receive a response. Returns
+     * a response or throw an exception if it times or out has an error.
+     * Blocking.
+     *
+     * Sets up a private listener and blocks waits for it to receive a response.
+     */
+    public VehicleMessage request(KeyedMessage message) {
+        BlockingMessageListener callback = new BlockingMessageListener();
+        request(message, callback);
+        return callback.waitForResponse();
     }
 
     /**
@@ -683,6 +713,37 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             }
         }
     }
+
+    private class BlockingMessageListener implements VehicleMessage.Listener {
+        private final static int RESPONSE_TIMEOUT_S = 2;
+        private Lock mLock = new ReentrantLock();
+        private Condition mResponseReceived = mLock.newCondition();
+        private VehicleMessage mResponse;
+
+        public void receive(VehicleMessage message) {
+            try {
+                mLock.lock();
+                mResponse = message;
+                mResponseReceived.signal();
+            } finally {
+                mLock.unlock();
+            }
+        }
+
+        public VehicleMessage waitForResponse() {
+            try {
+                mLock.lock();
+                while(mResponse == null) {
+                    mResponseReceived.await(RESPONSE_TIMEOUT_S, TimeUnit.SECONDS);
+                }
+            } catch(InterruptedException e) {
+            } finally {
+                mLock.unlock();
+            }
+
+            return mResponse;
+        }
+    };
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override

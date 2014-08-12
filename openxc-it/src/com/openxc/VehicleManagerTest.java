@@ -1,15 +1,14 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static junit.framework.Assert.assertEquals;
 
 import junit.framework.Assert;
+
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -30,6 +29,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.messages.Command;
 import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -257,6 +257,47 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertEquals(command.getCommand(), Command.CommandType.DIAGNOSTIC_REQUEST);
         assertNotNull(command.getDiagnosticRequest());
         assertThat(command.getDiagnosticRequest(), equalTo(request));
+    }
+
+    private class Requester implements Runnable {
+        private DiagnosticRequest mRequest;
+        public DiagnosticResponse response;
+
+        public Requester(DiagnosticRequest request) {
+            mRequest = request;
+        }
+
+        public void run() {
+            // This will block for up to 2 seconds waiting for the response
+            response = service.request(mRequest).asDiagnosticResponse();
+        }
+    };
+
+    @MediumTest
+    public void testRequestDiagnosticRequestGetsOne() throws DataSinkException,
+            InterruptedException {
+        prepareServices();
+        final DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        Requester requester = new Requester(request);
+        Thread t = new Thread(requester);
+        t.start();
+        TestUtils.pause(20);
+
+        source.inject(new DiagnosticResponse(1, 2, 3, 4, new byte[]{1,2,3,4}));
+        // don't wait longer than 2s
+        t.join(2000);
+
+        assertThat(requester.response, notNullValue());
+        assertThat(requester.response, instanceOf(DiagnosticResponse.class));
+        DiagnosticResponse diagnosticResponse = requester.response.asDiagnosticResponse();
+        assertEquals(diagnosticResponse.getBusId(), request.getBusId());
+        assertEquals(diagnosticResponse.getId(), request.getId());
+        assertEquals(diagnosticResponse.getMode(), request.getMode());
+        assertEquals(diagnosticResponse.getPid(), request.getPid());
+
+        requester.response = null;
+        source.inject(new DiagnosticResponse(1, 2, 3, 4, new byte[]{1,2,3,4}));
+        assertThat(requester.response, nullValue());
     }
 
     @MediumTest

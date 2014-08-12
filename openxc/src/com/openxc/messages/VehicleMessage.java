@@ -16,6 +16,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class VehicleMessage implements Parcelable {
     public interface Listener {
+        /* Public: Receive an incoming VehicleMessage.
+         */
         public void receive(VehicleMessage message);
     }
 
@@ -121,6 +123,10 @@ public class VehicleMessage implements Parcelable {
 
     public DiagnosticRequest asDiagnosticRequest() {
         return (DiagnosticRequest) this;
+    }
+
+    public DiagnosticResponse asDiagnosticResponse() {
+        return (DiagnosticResponse) this;
     }
 
     public KeyedMessage asKeyedMessage() {

@@ -86,6 +86,20 @@ public class MessageListenerSinkTest {
     }
 
     @Test
+    public void listenerRecievesMessageContinually() throws DataSinkException {
+        NamedVehicleMessage message = new NamedVehicleMessage("foo");
+        sink.register(ExactKeyMatcher.buildExactMatcher(message), listener);
+        sink.receive(message);
+        sink.clearQueue();
+        assertThat(listener.received, notNullValue());
+        assertEquals(listener.received, message);
+
+        listener.received = null;
+        sink.receive(message);
+        assertThat(listener.received, nullValue());
+    }
+
+    @Test
     public void listenerReceivesMeasurement() throws DataSinkException,
            UnrecognizedMeasurementTypeException {
         VehicleSpeed speed = new VehicleSpeed(42.0);
@@ -147,6 +161,20 @@ public class MessageListenerSinkTest {
     @Test
     public void toStringNotNull() {
         assertThat(sink.toString(), notNullValue());
+    }
+
+    @Test
+    public void nonpersistentRemovedAfterOne() throws DataSinkException {
+        NamedVehicleMessage message = new NamedVehicleMessage("foo");
+        sink.register(ExactKeyMatcher.buildExactMatcher(message), listener, false);
+        sink.receive(message);
+        sink.clearQueue();
+        assertThat(listener.received, notNullValue());
+        assertEquals(listener.received, message);
+
+        listener.received = null;
+        sink.receive(message);
+        assertThat(listener.received, nullValue());
     }
 
     private VehicleSpeed.Listener speedListener = new VehicleSpeed.Listener() {

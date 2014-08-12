@@ -1,20 +1,23 @@
 package com.openxc.sources;
 
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 
 public class TestSource extends BaseVehicleDataSource {
     public SourceCallback callback;
     public boolean delayAfterInject = true;
 
     public void sendTestMessage() {
-        if(callback != null) {
-            callback.receive(new SimpleVehicleMessage("message", "value"));
-        }
+        inject(new SimpleVehicleMessage("message", "value"));
     }
 
     public void inject(String name, Object value) {
+        inject(new SimpleVehicleMessage(name, value));
+    }
+
+    public void inject(VehicleMessage message) {
         if(callback != null) {
-            callback.receive(new SimpleVehicleMessage(name, value));
+            callback.receive(message);
             if(delayAfterInject) {
                 // If we don't pause here the background thread that processes
                 // the injected measurement may not get to run before we make
