@@ -19,6 +19,7 @@ import com.openxc.messages.Command.CommandType;
 public class CommandTest {
     Command message;
     CommandType command = CommandType.VERSION;
+    String action = DiagnosticRequest.ADD_ACTION_KEY;
     DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
 
     @Before
@@ -44,15 +45,30 @@ public class CommandTest {
 
     @Test
     public void sameDiagnosticRequestEqual() {
-        message = new Command(request);
-        Command anotherMessage = new Command(new DiagnosticRequest(1, 2, 3, 4));
+        message = new Command(request, action);
+        Command anotherMessage = new Command(new DiagnosticRequest(1, 2, 3, 4), action);
         assertEquals(message, anotherMessage);
     }
 
     @Test
     public void differentDiagnosticRequestNotEqual() {
-        message = new Command(request);
-        Command anotherMessage = new Command(new DiagnosticRequest(5, 6, 7, 8));
+        message = new Command(request, action);
+        Command anotherMessage = new Command(new DiagnosticRequest(5, 6, 7, 8), action);
+        assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
+    public void differentActionNotEqual() {
+        message = new Command(command, action);
+        Command anotherMessage = new Command(command, "another");
+        assertThat(message, not(equalTo(anotherMessage)));
+    }
+
+    @Test
+    public void differentDiagnosticRequestActionNotEqual() {
+        message = new Command(request, action);
+        Command anotherMessage = new Command(new DiagnosticRequest(5, 6, 7, 8),
+                "another");
         assertThat(message, not(equalTo(anotherMessage)));
     }
 
@@ -77,7 +93,7 @@ public class CommandTest {
 
     @Test
     public void writeAndReadFromParcelWithDiagnostic() {
-        message = new Command(request);
+        message = new Command(request, action);
         Parcel parcel = Parcel.obtain();
         message.writeToParcel(parcel, 0);
 

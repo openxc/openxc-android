@@ -16,6 +16,7 @@ public class Command extends KeyedMessage {
     public static final String COMMAND_KEY = "command";
     // TODO this name should be made more specific
     public static final String DIAGNOSTIC_REQUEST_KEY = "request";
+    public static final String ACTION_KEY = "action";
 
     public enum CommandType {
         VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST
@@ -29,11 +30,19 @@ public class Command extends KeyedMessage {
     @SerializedName(COMMAND_KEY)
     private CommandType mCommand;
 
+    @SerializedName(ACTION_KEY)
+    private String mAction;
+
     @SerializedName(DIAGNOSTIC_REQUEST_KEY)
     private DiagnosticRequest mDiagnosticRequest;
 
-    public Command(CommandType command) {
+    public Command(CommandType command, String action) {
         mCommand = command;
+        mAction = action;
+    }
+
+    public Command(CommandType command) {
+        this(command, null);
     }
 
     // TODO this seems really odd, that we're combined these two things. it made
@@ -45,13 +54,21 @@ public class Command extends KeyedMessage {
     // for JSON writes. Let's get this working for now and then change the
     // message format so that we don't use implicit types in JSON anymore - if
     // you need maximum performance, use the binary encoding.
-    public Command(DiagnosticRequest request) {
-        mCommand = CommandType.DIAGNOSTIC_REQUEST;
+    public Command(DiagnosticRequest request, String action) {
+        this(CommandType.DIAGNOSTIC_REQUEST, action);
         mDiagnosticRequest = request;
     }
 
     public CommandType getCommand() {
         return mCommand;
+    }
+
+    public boolean hasAction() {
+        return mAction != null && !mAction.isEmpty();
+    }
+
+    public String getAction() {
+        return mAction;
     }
 
     public DiagnosticRequest getDiagnosticRequest() {
@@ -78,7 +95,8 @@ public class Command extends KeyedMessage {
         final Command other = (Command) obj;
         return Objects.equal(getCommand(), other.getCommand()) &&
                 Objects.equal(getDiagnosticRequest(),
-                        other.getDiagnosticRequest());
+                        other.getDiagnosticRequest()) &&
+                Objects.equal(getAction(), other.getAction());
     }
 
     @Override
@@ -86,6 +104,7 @@ public class Command extends KeyedMessage {
         return toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("command", getCommand())
+            .add("action", getAction())
             .add("diagnostic_request", getDiagnosticRequest())
             .add("extras", getExtras())
             .toString();
@@ -95,6 +114,7 @@ public class Command extends KeyedMessage {
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
         out.writeSerializable(getCommand());
+        out.writeString(getAction());
         out.writeParcelable(getDiagnosticRequest(), flags);
     }
 
@@ -102,6 +122,7 @@ public class Command extends KeyedMessage {
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mCommand = (CommandType) in.readSerializable();
+        mAction = in.readString();
         mDiagnosticRequest = (DiagnosticRequest) in.readParcelable(
                 DiagnosticRequest.class.getClassLoader());
     }

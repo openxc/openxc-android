@@ -257,7 +257,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     public boolean send(VehicleMessage message) {
         if(message instanceof DiagnosticRequest) {
             // Wrap the request in a Command
-            message = new Command(message.asDiagnosticRequest());
+            // TODO need to support the CANCEL action, too
+            message = new Command(message.asDiagnosticRequest(),
+                    DiagnosticRequest.ADD_ACTION_KEY);
         }
 
         boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);

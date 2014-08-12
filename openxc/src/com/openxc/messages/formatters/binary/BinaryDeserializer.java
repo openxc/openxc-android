@@ -116,8 +116,23 @@ public class BinaryDeserializer {
         }
 
         DiagnosticRequest request = null;
+        String action = null;
         if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
             if(command.hasDiagnosticRequest()) {
+                if(!command.hasAction()) {
+                    throw new UnrecognizedMessageTypeException(
+                            "Diagnostic command missing action");
+                } else if(command.getAction() ==
+                        BinaryMessages.ControlCommand.Action.ADD) {
+                    action = DiagnosticRequest.ADD_ACTION_KEY;
+                } else if(command.getAction() ==
+                        BinaryMessages.ControlCommand.Action.CANCEL) {
+                    action = DiagnosticRequest.CANCEL_ACTION_KEY;
+                } else {
+                    throw new UnrecognizedMessageTypeException(
+                            "Unrecognized action: " + command.getAction());
+                }
+
                 BinaryMessages.DiagnosticRequest serializedRequest =
                         command.getDiagnosticRequest();
                 request = new DiagnosticRequest(
@@ -156,7 +171,7 @@ public class BinaryDeserializer {
         if(request == null) {
             return new Command(commandType);
         } else {
-            return new Command(request);
+            return new Command(request, action);
         }
 
     }

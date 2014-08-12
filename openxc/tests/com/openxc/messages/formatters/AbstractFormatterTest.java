@@ -72,13 +72,13 @@ public abstract class AbstractFormatterTest {
     @Test
     public void serializeCommandWithDiagnosticRequest() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
-        serializeDeserializeAndCheckEqual(new Command(request));
+        serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 
     @Test
     public void serializeCommandWithDiagnosticRequestNoPid() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3);
-        serializeDeserializeAndCheckEqual(new Command(request));
+        serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 
     @Test
@@ -115,7 +115,7 @@ public abstract class AbstractFormatterTest {
         request.setMultipleResponses(false);
         request.setFrequency(2.0);
         request.setName("foo");
-        serializeDeserializeAndCheckEqual(new Command(request));
+        serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 
     @Test(expected=SerializationException.class)

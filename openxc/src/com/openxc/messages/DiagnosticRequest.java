@@ -15,6 +15,9 @@ public class DiagnosticRequest extends DiagnosticMessage {
     public static final String FREQUENCY_KEY = "frequency";
     public static final String NAME_KEY = NamedVehicleMessage.NAME_KEY;
 
+    public static final String ADD_ACTION_KEY = "add";
+    public static final String CANCEL_ACTION_KEY = "cancel";
+
     public static final String[] sRequiredFieldsValues = new String[] {
             ID_KEY, BUS_KEY, MODE_KEY };
     public static final Set<String> sRequiredFields = new HashSet<String>(

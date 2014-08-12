@@ -138,6 +138,16 @@ public class BinarySerializer {
                         message.getDiagnosticRequest()));
         }
 
+        if(message.hasAction()) {
+            if(message.getAction().equals(DiagnosticRequest.ADD_ACTION_KEY)) {
+                messageBuilder.setAction(
+                        BinaryMessages.ControlCommand.Action.ADD);
+            } else if(message.getAction().equals(DiagnosticRequest.CANCEL_ACTION_KEY)) {
+                messageBuilder.setAction(
+                        BinaryMessages.ControlCommand.Action.CANCEL);
+            }
+        }
+
         builder.setControlCommand(messageBuilder);
     }
 
