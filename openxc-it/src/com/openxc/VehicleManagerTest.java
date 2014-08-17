@@ -274,7 +274,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     };
 
     @MediumTest
-    public void testRequestDiagnosticRequestGetsOne() throws DataSinkException,
+    public void testRequestDiagnosticRequest() throws DataSinkException,
             InterruptedException {
         prepareServices();
         final DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
@@ -294,11 +294,35 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertEquals(diagnosticResponse.getId(), request.getId());
         assertEquals(diagnosticResponse.getMode(), request.getMode());
         assertEquals(diagnosticResponse.getPid(), request.getPid());
-
-        requester.response = null;
-        source.inject(new DiagnosticResponse(1, 2, 3, 4, new byte[]{1,2,3,4}));
-        assertThat(requester.response, nullValue());
     }
+
+    private class RequestListener implements VehicleMessage.Listener {
+        public DiagnosticResponse response;
+
+        public void receive(VehicleMessage message) {
+            response = message.asDiagnosticResponse();
+        }
+    };
+
+    @MediumTest
+    public void testRequestDiagnosticRequestGetsOne() throws DataSinkException,
+            InterruptedException {
+        prepareServices();
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        DiagnosticResponse expectedResponse = new DiagnosticResponse(
+                1, 2, 3, 4, new byte[]{1,2,3,4});
+        RequestListener listener = new RequestListener();
+        service.request(request, listener);
+        source.inject(expectedResponse);
+
+        assertThat(listener.response, notNullValue());
+
+        listener.response = null;
+        source.inject(expectedResponse);
+        source.inject(expectedResponse);
+        assertThat(listener.response, nullValue());
+    }
+
 
     @MediumTest
     public void testGetMeasurement() throws UnrecognizedMeasurementTypeException,
