@@ -7,13 +7,6 @@
     android:paddingRight="5sp" >
 
     <TextView
-        android:id="@+id/service_not_running_bar"
-        style="@style/WarningText"
-        android:drawableLeft="@drawable/warning"
-        android:text="@string/service_not_running" >
-    </TextView>
-
-    <TextView
         style="@style/SectionHeader"
         android:layout_marginTop="0sp"
         android:text="@string/status_label" />
@@ -80,5 +73,12 @@
         android:id="@+id/view_vehicle_data_btn"
         style="@style/MinimalButton"
         android:text="@string/show_data_button" />
+
+    <TextView
+        android:id="@+id/service_not_running_bar"
+        style="@style/WarningText"
+        android:drawableLeft="@drawable/warning"
+        android:text="@string/service_not_running" >
+    </TextView>
 
 </LinearLayout>
