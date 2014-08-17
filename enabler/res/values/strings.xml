@@ -8,7 +8,6 @@
     <string name="connection_usb">USB</string>
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
-    <string name="show_data_button">View Vehicle Data</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
 
     <string name="settings">Settings</string>
