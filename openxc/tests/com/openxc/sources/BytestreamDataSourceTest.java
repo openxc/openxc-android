@@ -83,7 +83,7 @@ public class BytestreamDataSourceTest {
         source.connect();
         source.nextReadThrowsException = true;
         source.inject(new byte[] {1,2,3,4});
-        TestUtils.pause(20);
+        TestUtils.pause(50);
         assertTrue(source.isRunning());
         assertFalse(source.isConnected());
     }
