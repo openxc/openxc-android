@@ -7,10 +7,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +41,7 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
  * add much to your application's AndroidManifest.xml - just the
  * {@link com.openxc.VehicleManager} service.
 */
-public class OpenXcEnablerActivity extends FragmentActivity {
+public class OpenXcEnablerActivity extends ActionBarActivity {
     private static String TAG = "OpenXcEnablerActivity";
 
     static final int NUM_TABS = 2;
@@ -63,6 +65,27 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
 
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                mPager.setCurrentItem(tab.getPosition());
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            }
+        };
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Status")
+                .setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab()
+                .setText("Dashboard")
+                .setTabListener(tabListener));
 
         startService(new Intent(this, VehicleManager.class));
         startService(new Intent(this, PreferenceManagerService.class));
