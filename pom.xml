@@ -161,7 +161,7 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/../libs</outputDirectory>
                             <excludeScope>provided</excludeScope>
-                            <excludeArtifactIds>jsr305,openxc,openxc-it,openxc-enabler</excludeArtifactIds>
+                            <excludeArtifactIds>jsr305,openxc,openxc-it,openxc-enabler,hamcrest-all,junit,mockito-core,robolectric</excludeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
                         </configuration>
                     </execution>
