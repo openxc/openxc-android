@@ -2,7 +2,6 @@ package com.openxc.enabler;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +14,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.openxc.messages.CanMessage;
+import com.openxc.messages.ExactKeyMatcher;
+import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.MessageKey;
 
 public class CanMessageAdapter extends BaseAdapter {
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    private Map<Integer, CanMessage> mMessages;
+    private Map<MessageKey, CanMessage> mMessages;
     private List<CanMessage> mValues;
     private Context mContext;
 
@@ -30,9 +32,23 @@ public class CanMessageAdapter extends BaseAdapter {
 
     public void add(CanMessage message) {
         ThreadPreconditions.checkOnMainThread();
-        mMessages.put(message.getId(), message);
-        mValues = new ArrayList<>(mMessages.values());
-        Collections.sort(mValues);
+        MessageKey key = message.getKey();
+        if(mMessages.containsKey(key)) {
+            mMessages.put(key, message);
+            // Already exists in values, just need to update it
+            KeyMatcher exactMatcher = ExactKeyMatcher.buildExactMatcher(key);
+            for(int i = 0; i < mValues.size(); i++) {
+                if(exactMatcher.matches(mValues.get(i).getKey())) {
+                    mValues.set(i, message);
+                    break;
+                }
+            }
+        } else {
+            // Need to recreate values list because positions will be shifted
+            mMessages.put(key, message);
+            mValues = new ArrayList<>(mMessages.values());
+            Collections.sort(mValues);
+        }
         notifyDataSetChanged();
     }
 
