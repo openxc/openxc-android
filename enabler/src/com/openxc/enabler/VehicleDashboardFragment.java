@@ -1,6 +1,5 @@
 package com.openxc.enabler;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +10,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.openxc.VehicleManager;
@@ -38,7 +38,7 @@ import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.VehicleServiceException;
 
-public class VehicleDashboardActivity extends Activity {
+public class VehicleDashboardFragment extends Fragment {
 
     private static String TAG = "VehicleDashboard";
 
@@ -329,56 +329,59 @@ public class VehicleDashboardActivity extends Activity {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vehicle_dashboard);
-        Log.i(TAG, "Vehicle dashboard created");
+        View v = inflater.inflate(R.layout.vehicle_dashboard, container, false);
 
         mLocationManager = (LocationManager)
-            getSystemService(Context.LOCATION_SERVICE);
+            getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        mSteeringWheelAngleView = (TextView) findViewById(
+        mSteeringWheelAngleView = (TextView) v.findViewById(
                 R.id.steering_wheel_angle);
-        mVehicleSpeedView = (TextView) findViewById(
+        mVehicleSpeedView = (TextView) v.findViewById(
                 R.id.vehicle_speed);
-        mFuelConsumedView = (TextView) findViewById(
+        mFuelConsumedView = (TextView) v.findViewById(
                 R.id.fuel_consumed);
-        mFuelLevelView = (TextView) findViewById(
+        mFuelLevelView = (TextView) v.findViewById(
                 R.id.fuel_level);
-        mOdometerView = (TextView) findViewById(
+        mOdometerView = (TextView) v.findViewById(
                 R.id.odometer);
-        mWiperStatusView = (TextView) findViewById(
+        mWiperStatusView = (TextView) v.findViewById(
                 R.id.wiper_status);
-        mVehicleBrakeStatusView = (TextView) findViewById(
+        mVehicleBrakeStatusView = (TextView) v.findViewById(
                 R.id.brake_pedal_status);
-        mParkingBrakeStatusView = (TextView) findViewById(
+        mParkingBrakeStatusView = (TextView) v.findViewById(
                 R.id.parking_brake_status);
-        mHeadlampStatusView = (TextView) findViewById(
+        mHeadlampStatusView = (TextView) v.findViewById(
                 R.id.headlamp_status);
-        mVehicleEngineSpeedView = (TextView) findViewById(
+        mVehicleEngineSpeedView = (TextView) v.findViewById(
                 R.id.engine_speed);
-        mTorqueAtTransmissionView = (TextView) findViewById(
+        mTorqueAtTransmissionView = (TextView) v.findViewById(
                 R.id.torque_at_transmission);
-        mAcceleratorPedalPositionView = (TextView) findViewById(
+        mAcceleratorPedalPositionView = (TextView) v.findViewById(
                 R.id.accelerator_pedal_position);
-        mTransmissionGearPosView = (TextView) findViewById(
+        mTransmissionGearPosView = (TextView) v.findViewById(
                 R.id.transmission_gear_pos);
-        mIgnitionStatusView = (TextView) findViewById(
+        mIgnitionStatusView = (TextView) v.findViewById(
                 R.id.ignition);
-        mLatitudeView = (TextView) findViewById(
+        mLatitudeView = (TextView) v.findViewById(
                 R.id.latitude);
-        mLongitudeView = (TextView) findViewById(
+        mLongitudeView = (TextView) v.findViewById(
                 R.id.longitude);
-        mAndroidLatitudeView = (TextView) findViewById(
+        mAndroidLatitudeView = (TextView) v.findViewById(
                 R.id.android_latitude);
-        mAndroidLongitudeView = (TextView) findViewById(
+        mAndroidLongitudeView = (TextView) v.findViewById(
                 R.id.android_longitude);
+
+        return v;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        bindService(new Intent(this, VehicleManager.class),
+        getActivity().bindService(
+                new Intent(getActivity(), VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
 
         try {
@@ -395,28 +398,10 @@ public class VehicleDashboardActivity extends Activity {
         super.onPause();
         if(mIsBound) {
             Log.i(TAG, "Unbinding from vehicle service");
-            unbindService(mConnection);
+            getActivity().unbindService(mConnection);
             mIsBound = false;
         }
 
         mLocationManager.removeUpdates(mAndroidLocationListener);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.settings:
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
     }
 }
