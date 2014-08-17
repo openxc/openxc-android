@@ -43,7 +43,6 @@ public class VehicleDashboardFragment extends Fragment {
     private static String TAG = "VehicleDashboard";
 
     private VehicleManager mVehicleManager;
-    private boolean mIsBound;
     private final Handler mHandler = new Handler();
     private LocationManager mLocationManager;
     private TextView mSteeringWheelAngleView;
@@ -317,13 +316,11 @@ public class VehicleDashboardFragment extends Fragment {
             } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             }
-            mIsBound = true;
         }
 
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
-            mIsBound = false;
         }
     };
 
@@ -396,10 +393,10 @@ public class VehicleDashboardFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mIsBound) {
+        if(mVehicleManager != null) {
             Log.i(TAG, "Unbinding from vehicle service");
             getActivity().unbindService(mConnection);
-            mIsBound = false;
+            mVehicleManager = null;
         }
 
         mLocationManager.removeUpdates(mAndroidLocationListener);

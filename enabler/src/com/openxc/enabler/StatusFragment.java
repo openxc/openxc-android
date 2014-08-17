@@ -82,8 +82,8 @@ public class StatusFragment extends Fragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
         getActivity().bindService(
                 new Intent(getActivity(), VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
@@ -92,8 +92,9 @@ public class StatusFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mConnection != null) {
+        if(mVehicleManager != null) {
             getActivity().unbindService(mConnection);
+            mVehicleManager = null;
         }
     }
 
