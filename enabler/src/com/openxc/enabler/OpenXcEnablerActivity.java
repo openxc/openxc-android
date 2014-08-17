@@ -42,7 +42,6 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 public class OpenXcEnablerActivity extends FragmentActivity {
     private static String TAG = "OpenXcEnablerActivity";
 
-    static final int NUM_TABS = 2;
     private EnablerFragmentAdapter mAdapter;
     private ViewPager mPager;
 
@@ -87,7 +86,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     }
 
     public static class EnablerFragmentAdapter extends FragmentPagerAdapter {
-        private static final String[] mTitles = { "Status", "Dashboard" };
+        private static final String[] mTitles = { "Status", "Dashboard", "CAN" };
 
         public EnablerFragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -95,7 +94,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return NUM_TABS;
+            return mTitles.length;
         }
 
         @Override
@@ -109,6 +108,8 @@ public class OpenXcEnablerActivity extends FragmentActivity {
                 return new StatusFragment();
             } else if(position == 1) {
                 return new VehicleDashboardFragment();
+            } else if(position == 2) {
+                return new CanMessageViewFragment();
             }
             return new StatusFragment();
         }
