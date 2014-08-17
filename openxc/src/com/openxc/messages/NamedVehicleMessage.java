@@ -36,7 +36,7 @@ public class NamedVehicleMessage extends KeyedMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null || !super.equals(obj)) {
+        if(!super.equals(obj) || getClass() != obj.getClass()) {
             return false;
         }
 

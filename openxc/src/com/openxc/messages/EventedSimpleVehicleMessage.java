@@ -52,7 +52,7 @@ public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null || !super.equals(obj)) {
+        if(!super.equals(obj) || !(obj instanceof EventedSimpleVehicleMessage)) {
             return false;
         }
 

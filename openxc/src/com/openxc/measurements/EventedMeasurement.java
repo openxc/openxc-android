@@ -43,7 +43,7 @@ public abstract class EventedMeasurement<TheUnit extends Unit>
             return true;
         }
 
-        if(obj == null || !super.equals(obj) || getClass() != obj.getClass()) {
+        if(!super.equals(obj) || getClass() != obj.getClass()) {
             return false;
         }
 

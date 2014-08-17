@@ -51,7 +51,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null || !super.equals(obj)) {
+        if(!super.equals(obj) || !(obj instanceof SimpleVehicleMessage)) {
             return false;
         }
 

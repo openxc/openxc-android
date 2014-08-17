@@ -121,6 +121,10 @@ public class VehicleMessage implements Parcelable {
         return (EventedSimpleVehicleMessage) this;
     }
 
+    public CanMessage asCanMessage() {
+        return (CanMessage) this;
+    }
+
     public DiagnosticRequest asDiagnosticRequest() {
         return (DiagnosticRequest) this;
     }
@@ -150,6 +154,10 @@ public class VehicleMessage implements Parcelable {
     public boolean equals(Object obj) {
         if(obj == null) {
             return false;
+        }
+
+        if(this == obj) {
+            return true;
         }
 
         final VehicleMessage other = (VehicleMessage) obj;

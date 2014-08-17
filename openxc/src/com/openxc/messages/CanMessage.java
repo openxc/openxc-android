@@ -66,7 +66,7 @@ public class CanMessage extends KeyedMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null || !super.equals(obj)) {
+        if(!super.equals(obj) || !(obj instanceof CanMessage)) {
             return false;
         }
 

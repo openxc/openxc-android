@@ -35,7 +35,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
     public DiagnosticResponse(int busId, int id, int mode) {
         super(busId, id, mode);
     }
-    
+
     public DiagnosticResponse(int busId, int id, int mode, int pid,
             byte[] payload) {
         super(busId, id, mode, pid);
@@ -96,7 +96,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !super.equals(obj)) {
+        if (!super.equals(obj) || !(obj instanceof DiagnosticResponse)) {
             return false;
         }
 
