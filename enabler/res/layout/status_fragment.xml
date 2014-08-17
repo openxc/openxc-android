@@ -12,11 +12,6 @@
 
     </TextView>
 
-    <TextView
-        style="@style/SectionHeader"
-        android:layout_marginTop="0sp"
-        android:text="@string/status_label" />
-
     <LinearLayout
         style="@style/ItemRow"
         android:orientation="horizontal" >

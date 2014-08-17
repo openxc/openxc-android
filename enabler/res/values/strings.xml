@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">OpenXC Enabler</string>
-    <string name="status_label">Status</string>
     <string name="active_connections">Active Connections:</string>
     <string name="message_count_label">Messages Received: </string>
     <string name="connection_file">File</string>

@@ -87,6 +87,8 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     }
 
     public static class EnablerFragmentAdapter extends FragmentPagerAdapter {
+        private static final String[] mTitles = { "Status", "Dashboard" };
+
         public EnablerFragmentAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -94,6 +96,11 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         @Override
         public int getCount() {
             return NUM_TABS;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTitles[position];
         }
 
         @Override
