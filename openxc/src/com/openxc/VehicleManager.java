@@ -338,11 +338,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.register(measurementType, listener);
     }
 
-    public void addListener(KeyMatcher matcher, Measurement.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " to " + matcher);
-        mNotifier.register(matcher, listener);
-    }
-
     public void addListener(Class<? extends VehicleMessage> messageType,
             VehicleMessage.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " for " + messageType);

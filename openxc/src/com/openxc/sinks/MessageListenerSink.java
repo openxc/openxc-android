@@ -32,15 +32,8 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private Multimap<Class<? extends Measurement>, Measurement.Listener>
             mMeasurementTypeListeners = HashMultimap.create();
 
-    private Multimap<KeyMatcher, Measurement.Listener>
-            mMeasurementListeners = HashMultimap.create();
     private Multimap<Class<? extends VehicleMessage>, VehicleMessage.Listener>
             mMessageTypeListeners = HashMultimap.create();
-
-    public synchronized void register(KeyMatcher matcher,
-            Measurement.Listener listener) {
-        mMeasurementListeners.put(matcher, listener);
-    }
 
     public synchronized void register(KeyMatcher matcher,
             VehicleMessage.Listener listener, boolean persist) {
@@ -78,11 +71,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         mMeasurementTypeListeners.put(measurementType, listener);
     }
 
-    public synchronized void unregister(KeyMatcher matcher,
-            Measurement.Listener listener) {
-        mMeasurementListeners.remove(matcher, listener);
-    }
-
     public synchronized void unregister(
             Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
@@ -107,7 +95,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             .add("numMessageTypeListeners", mMessageTypeListeners.size())
             .add("numPersistentMessageListeners",
                     mPersistentMessageListeners.size())
-            .add("numMeasurementListeners", mMeasurementListeners.size())
             .add("numMeasurementTypeListeners", mMeasurementTypeListeners.size())
             .toString();
     }
@@ -155,14 +142,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         try {
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
-            for (KeyMatcher matcher : mMeasurementListeners.keys()) {
-                if (matcher.matches(message)) {
-                    for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
-                        listener.receive(measurement);
-                    }
-                }
-            }
-
             if(mMeasurementTypeListeners.containsKey(measurement.getClass())) {
                 for(Measurement.Listener listener :
                         mMeasurementTypeListeners.get(measurement.getClass())) {

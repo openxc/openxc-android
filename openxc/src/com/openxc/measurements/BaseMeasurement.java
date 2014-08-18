@@ -151,13 +151,6 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 sMeasurementIdToClass.inverse().get(measurementType)).getKey();
     }
 
-    public static KeyMatcher buildMatcherForMeasurement(
-            Class<? extends Measurement> measurementType)
-            throws UnrecognizedMeasurementTypeException {
-        return ExactKeyMatcher.buildExactMatcher(
-                getKeyForMeasurement(measurementType));
-    }
-
     public static Class<? extends Measurement>
             getClassForId(String measurementId)
             throws UnrecognizedMeasurementTypeException {
