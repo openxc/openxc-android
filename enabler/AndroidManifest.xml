@@ -35,6 +35,7 @@
       </activity>
 
       <activity android:name=".SettingsActivity" />
+      <activity android:name=".CanMessageDetailActivity" />
 
       <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity">
             <intent-filter>

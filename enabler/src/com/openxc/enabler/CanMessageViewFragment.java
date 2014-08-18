@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
@@ -91,4 +92,14 @@ public class CanMessageViewFragment extends ListFragment {
             mVehicleManager = null;
         }
     }
+
+    public void onListItemClick(ListView listView, View view,
+            int position, long id) {
+        Intent intent = new Intent(getActivity(),
+                CanMessageDetailActivity.class);
+        intent.putExtra(CanMessageDetailActivity.EXTRA_CAN_MESSAGE,
+                mAdapter.getItem(position));
+        startActivity(intent);
+    }
+
 }
