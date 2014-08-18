@@ -44,9 +44,6 @@ public class CanMessageViewFragment extends ListFragment {
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
-            // TODO would be nice to be able to register to receive a specific
-            // type, sorta like we do with Measurement -
-            // addListener(CanMessage.class, listener), for example
             mVehicleManager.addListener(CanMessage.class, mListener);
         }
 
