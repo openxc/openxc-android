@@ -381,6 +381,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.unregister(measurementType, listener);
     }
 
+    public void removeListener(Class<? extends VehicleMessage> messageType,
+            VehicleMessage.Listener listener) {
+        mNotifier.unregister(messageType, listener);
+    }
+
     public void removeListener(KeyedMessage message, VehicleMessage.Listener listener) {
         removeListener(message.getKey(), listener);
     }

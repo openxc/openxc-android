@@ -88,6 +88,7 @@ public class CanMessageViewFragment extends ListFragment {
         super.onPause();
         if(mVehicleManager != null) {
             Log.i(TAG, "Unbinding from vehicle service");
+            mVehicleManager.removeListener(CanMessage.class, mListener);
             getActivity().unbindService(mConnection);
             mVehicleManager = null;
         }
