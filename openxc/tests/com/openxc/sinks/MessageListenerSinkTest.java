@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.CanMessage;
+import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.ExactKeyMatcher;
@@ -28,6 +30,7 @@ public class MessageListenerSinkTest {
     MessageListenerSink sink;
     SpyListener listener = new SpyListener();
     VehicleSpeed speedReceived;
+    VehicleMessage messageReceived;
 
     @Before
     public void setUp() {
@@ -74,6 +77,37 @@ public class MessageListenerSinkTest {
         sink.clearQueue();
         assertThat(speedReceived, nullValue());
     }
+
+    @Test
+    public void receiveCanMessageByClass() throws
+            DataSinkException, UnrecognizedMeasurementTypeException {
+        CanMessage message = new CanMessage(1, 2, new byte[]{1,2,3,4,5,6,7,8});
+        sink.register(message.getClass(), messageListener);
+        sink.receive(message);
+        sink.clearQueue();
+        assertThat(messageReceived, notNullValue());
+        assertEquals(messageReceived, message);
+    }
+
+    @Test
+    public void removeMessageTypeListener() throws DataSinkException {
+        CanMessage message = new CanMessage(1, 2, new byte[]{1,2,3,4,5,6,7,8});
+        sink.register(message.getClass(), messageListener);
+        sink.unregister(message.getClass(), messageListener);
+        sink.receive(message);
+        sink.clearQueue();
+        assertThat(messageReceived, nullValue());
+    }
+
+    @Test
+    public void typeListenerDoesntReceiveOtherMessages() throws
+            DataSinkException, UnrecognizedMeasurementTypeException {
+        CanMessage message = new CanMessage(1, 2, new byte[]{1,2,3,4,5,6,7,8});
+        sink.register(DiagnosticResponse.class, messageListener);
+        assertThat(messageReceived, nullValue());
+    }
+
+    // TODO test removing listeners by message class
 
     @Test
     public void listenerRecievesMessage() throws DataSinkException {
@@ -126,9 +160,7 @@ public class MessageListenerSinkTest {
             throws UnrecognizedMeasurementTypeException, DataSinkException {
         VehicleSpeed speed = new VehicleSpeed(42.0);
         sink.register(speed.getClass(), speedListener);
-        sink.unregister(
-                BaseMeasurement.buildMatcherForMeasurement(speed.getClass()),
-                speedListener);
+        sink.unregister(speed.getClass(), speedListener);
         sink.receive(speed.toVehicleMessage());
         sink.clearQueue();
         assertThat(speedReceived, nullValue());
@@ -181,6 +213,13 @@ public class MessageListenerSinkTest {
         @Override
         public void receive(Measurement measurement) {
             speedReceived = (VehicleSpeed) measurement;
+        }
+    };
+
+    private VehicleMessage.Listener messageListener = new VehicleMessage.Listener() {
+        @Override
+        public void receive(VehicleMessage message) {
+            messageReceived = message;
         }
     };
 

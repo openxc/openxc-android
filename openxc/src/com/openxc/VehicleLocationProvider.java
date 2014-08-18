@@ -52,9 +52,6 @@ public class VehicleLocationProvider implements Measurement.Listener {
             } catch(VehicleServiceException e) {
                 Log.d(TAG, "Unable to register for GPS from vehicle," +
                         "mocked location may not work");
-            } catch(UnrecognizedMeasurementTypeException e) {
-                // TODO this is dumb that we know these measurements are good, but
-                // we still could get an exception
             }
         }
     }

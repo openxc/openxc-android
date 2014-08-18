@@ -33,7 +33,6 @@ import com.openxc.measurements.ParkingBrakeStatus;
 import com.openxc.measurements.SteeringWheelAngle;
 import com.openxc.measurements.TorqueAtTransmission;
 import com.openxc.measurements.TransmissionGearPosition;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.WindshieldWiperStatus;
 import com.openxc.remote.VehicleServiceException;
@@ -312,8 +311,6 @@ public class VehicleDashboardFragment extends Fragment {
                 mVehicleManager.addListener(Longitude.class,
                         mLongitude);
             } catch(VehicleServiceException e) {
-                Log.w(TAG, "Couldn't add listeners for measurements", e);
-            } catch(UnrecognizedMeasurementTypeException e) {
                 Log.w(TAG, "Couldn't add listeners for measurements", e);
             }
         }

@@ -23,16 +23,19 @@ import com.openxc.messages.VehicleMessage;
 public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MessageListenerSink";
 
-    // TODO i'd like to somehow combine these - I think switching to an event
-    // bus will solve it
     private Multimap<KeyMatcher, VehicleMessage.Listener>
             mPersistentMessageListeners = HashMultimap.create();
     // The non-persistent listeners will be removed after they receive their
     // first message.
     private Multimap<KeyMatcher, VehicleMessage.Listener>
             mMessageListeners = HashMultimap.create();
+    private Multimap<Class<? extends Measurement>, Measurement.Listener>
+            mMeasurementTypeListeners = HashMultimap.create();
+
     private Multimap<KeyMatcher, Measurement.Listener>
             mMeasurementListeners = HashMultimap.create();
+    private Multimap<Class<? extends VehicleMessage>, VehicleMessage.Listener>
+            mMessageTypeListeners = HashMultimap.create();
 
     public synchronized void register(KeyMatcher matcher,
             Measurement.Listener listener) {
@@ -53,23 +56,43 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         register(matcher, listener, true);
     }
 
-    public void register(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener)
-            throws UnrecognizedMeasurementTypeException {
-        register(BaseMeasurement.buildMatcherForMeasurement(measurementType),
-                listener);
+    public synchronized void register(
+            Class<? extends VehicleMessage> messageType,
+            VehicleMessage.Listener listener) {
+        mMessageTypeListeners.put(messageType, listener);
     }
 
-    public void unregister(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener)
-            throws UnrecognizedMeasurementTypeException {
-        unregister(BaseMeasurement.buildMatcherForMeasurement(measurementType),
-                listener);
+    public void register(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener) {
+        try {
+            // TODO A bit of a hack to cache this measurement's ID field so we
+            // can deserialize incoming measurements of this type. Why don't we
+            // have a getId() in the Measurement interface? Ah, because it would
+            // have to be static and you can't have static methods in an
+            // interface. It would work if we were passed an instance of the
+            // measurement in this function, but we don't really have that when
+            // adding a listener.
+            BaseMeasurement.getKeyForMeasurement(measurementType);
+        } catch(UnrecognizedMeasurementTypeException e) { }
+
+        mMeasurementTypeListeners.put(measurementType, listener);
     }
 
     public synchronized void unregister(KeyMatcher matcher,
             Measurement.Listener listener) {
         mMeasurementListeners.remove(matcher, listener);
+    }
+
+    public synchronized void unregister(
+            Class<? extends Measurement> measurementType,
+            Measurement.Listener listener) {
+        mMeasurementTypeListeners.remove(measurementType, listener);
+    }
+
+    public synchronized void unregister(
+            Class<? extends VehicleMessage> messageType,
+            VehicleMessage.Listener listener) {
+        mMessageTypeListeners.remove(messageType, listener);
     }
 
     public synchronized void unregister(KeyMatcher matcher,
@@ -81,9 +104,11 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     public String toString() {
         return Objects.toStringHelper(this)
             .add("numMessageListeners", mMessageListeners.size())
+            .add("numMessageTypeListeners", mMessageTypeListeners.size())
             .add("numPersistentMessageListeners",
                     mPersistentMessageListeners.size())
             .add("numMeasurementListeners", mMeasurementListeners.size())
+            .add("numMeasurementTypeListeners", mMeasurementTypeListeners.size())
             .toString();
     }
 
@@ -116,6 +141,13 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 propagateMeasurementFromMessage(message.asSimpleMessage());
             }
         }
+
+        if(mMessageTypeListeners.containsKey(message.getClass())) {
+            for(VehicleMessage.Listener listener :
+                    mMessageTypeListeners.get(message.getClass())) {
+                listener.receive(message);
+            }
+        }
     }
 
     private synchronized void propagateMeasurementFromMessage(
@@ -128,6 +160,13 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                     for (Measurement.Listener listener : mMeasurementListeners.get(matcher)) {
                         listener.receive(measurement);
                     }
+                }
+            }
+
+            if(mMeasurementTypeListeners.containsKey(measurement.getClass())) {
+                for(Measurement.Listener listener :
+                        mMeasurementTypeListeners.get(measurement.getClass())) {
+                    listener.receive(measurement);
                 }
             }
         } catch(UnrecognizedMeasurementTypeException e) {

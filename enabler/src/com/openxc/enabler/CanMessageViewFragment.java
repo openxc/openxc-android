@@ -11,11 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
-import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.VehicleMessage;
 
 public class CanMessageViewFragment extends ListFragment {
@@ -27,13 +25,12 @@ public class CanMessageViewFragment extends ListFragment {
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
         @Override
         public void receive(final VehicleMessage message) {
-            if(message instanceof CanMessage) {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        mAdapter.add(message.asCanMessage());
-                    }
-                });
-            }
+            // TODO getActiviy() can return null here if we paused the app?
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    mAdapter.add(message.asCanMessage());
+                }
+            });
         }
     };
 
@@ -47,8 +44,7 @@ public class CanMessageViewFragment extends ListFragment {
             // TODO would be nice to be able to register to receive a specific
             // type, sorta like we do with Measurement -
             // addListener(CanMessage.class, listener), for example
-            mVehicleManager.addListener(KeyMatcher.getWildcardMatcher(),
-                    mListener);
+            mVehicleManager.addListener(CanMessage.class, mListener);
         }
 
         public void onServiceDisconnected(ComponentName className) {
