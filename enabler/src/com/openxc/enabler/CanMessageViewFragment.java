@@ -1,5 +1,6 @@
 package com.openxc.enabler;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -25,12 +26,14 @@ public class CanMessageViewFragment extends ListFragment {
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
         @Override
         public void receive(final VehicleMessage message) {
-            // TODO getActiviy() can return null here if we paused the app?
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    mAdapter.add(message.asCanMessage());
-                }
-            });
+            Activity activity = getActivity();
+            if(activity != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        mAdapter.add(message.asCanMessage());
+                    }
+                });
+            }
         }
     };
 
