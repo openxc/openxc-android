@@ -1,5 +1,8 @@
 package com.openxc.measurements;
 
+import android.content.Context;
+
+import com.openxc.R;
 import com.openxc.units.KilometersPerHour;
 import com.openxc.util.Range;
 

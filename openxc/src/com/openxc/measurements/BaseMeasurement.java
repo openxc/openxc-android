@@ -3,16 +3,14 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-
 import com.openxc.NoValueException;
 import com.openxc.messages.EventedSimpleVehicleMessage;
-import com.openxc.messages.ExactKeyMatcher;
-import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -121,6 +119,18 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
     public SimpleVehicleMessage toVehicleMessage() {
         return new SimpleVehicleMessage(mValue.getTimestamp(),
                 getGenericName(), getSerializedValue());
+    }
+
+    public String getName(Context context) {
+        // Make sure to not use the package name here, we have to find the
+        // resource using the package name of the app using the library instead.
+        int identifier = context.getResources().getIdentifier(
+                getGenericName() + "_label", "string", context.getPackageName());
+        String name = "FOO " + getGenericName();
+        if(identifier != 0) {
+            name = context.getString(identifier);
+        }
+        return name;
     }
 
     private static void cacheMeasurementId(

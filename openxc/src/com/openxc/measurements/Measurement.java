@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import android.content.Context;
+
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
@@ -59,6 +61,8 @@ public interface Measurement {
      * measurement.
      */
     public long getBirthtime();
+
+    public String getName(Context context);
 
     public String getGenericName();
 

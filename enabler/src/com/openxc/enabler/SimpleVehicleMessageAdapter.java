@@ -35,7 +35,6 @@ public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
 
         SimpleVehicleMessage message = getItem(position);
         TextView nameView = (TextView) convertView.findViewById(R.id.name);
-        nameView.setText("" + message.getName());
 
         TextView valueView = (TextView) convertView.findViewById(R.id.value);
         try {
@@ -44,8 +43,10 @@ public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
             // to cache these on the fly
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
+            nameView.setText("" + measurement.getName(mContext));
             valueView.setText("" + measurement.toString());
         } catch(UnrecognizedMeasurementTypeException e) {
+            nameView.setText("" + message.getName());
             valueView.setText("" + message.getValue());
         } catch(NoValueException e) {
         }
