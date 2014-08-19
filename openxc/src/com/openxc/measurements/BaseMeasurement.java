@@ -126,7 +126,7 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
         // resource using the package name of the app using the library instead.
         int identifier = context.getResources().getIdentifier(
                 getGenericName() + "_label", "string", context.getPackageName());
-        String name = "FOO " + getGenericName();
+        String name = getGenericName();
         if(identifier != 0) {
             name = context.getString(identifier);
         }

@@ -11,7 +11,7 @@
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/name"
-        android:layout_width="256dp"
+        android:layout_width="224dp"
         android:layout_height="wrap_content"
     />
 
