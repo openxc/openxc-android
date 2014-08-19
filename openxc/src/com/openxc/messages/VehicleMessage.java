@@ -14,7 +14,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class VehicleMessage implements Parcelable {
+public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     public interface Listener {
         /* Public: Receive an incoming VehicleMessage.
          */
@@ -148,6 +148,10 @@ public class VehicleMessage implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public int compareTo(VehicleMessage other) {
+        return mTimestamp.compareTo(other.mTimestamp);
     }
 
     @Override

@@ -63,7 +63,6 @@ public class CanMessageViewFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.can_message_list_fragment,
                 container, false);
         return v;
@@ -104,5 +103,4 @@ public class CanMessageViewFragment extends ListFragment {
         // see https://github.com/openxc/openxc-android/issues/159
         // startActivity(intent);
     }
-
 }

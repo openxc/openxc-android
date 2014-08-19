@@ -10,7 +10,7 @@ import android.os.Parcel;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
-public class CanMessage extends KeyedMessage implements Comparable<CanMessage> {
+public class CanMessage extends KeyedMessage {
     public static final String ID_KEY = "id";
     public static final String BUS_KEY = "bus";
     public static final String DATA_KEY = "data";
@@ -65,21 +65,21 @@ public class CanMessage extends KeyedMessage implements Comparable<CanMessage> {
     }
 
     @Override
-    public int compareTo(CanMessage other) {
-        if(getBus() < other.getBus()) {
+    public int compareTo(VehicleMessage other) {
+        CanMessage otherMessage = (CanMessage) other;
+        if(getBus() < otherMessage.getBus()) {
             return -1;
-        } else if(getBus() > other.getBus()) {
+        } else if(getBus() > otherMessage.getBus()) {
             return 1;
         } else {
-            if(getId() < other.getId()) {
+            if(getId() < otherMessage.getId()) {
                 return -1;
-            } else if(getId() > other.getId()) {
+            } else if(getId() > otherMessage.getId()) {
                 return 1;
             }
         }
         return 0;
     }
-
 
     @Override
     public boolean equals(Object obj) {
