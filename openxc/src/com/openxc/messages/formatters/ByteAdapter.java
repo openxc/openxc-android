@@ -8,17 +8,17 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 public class ByteAdapter extends TypeAdapter<byte[]> {
-    
+
     public byte[] read(JsonReader reader) throws IOException {
         if (reader.peek() == JsonToken.NULL) {
           reader.nextNull();
           return null;
         }
         String payload = reader.nextString();
-        payload = payload.replace("\"", "").replace("0x", ""); 
+        payload = payload.replace("\"", "").replace("0x", "");
         return hexStringToByteArray(payload);
       }
-    
+
       public void write(JsonWriter writer, byte[] bytes) throws IOException {
         if (bytes == null) {
           writer.nullValue();
@@ -26,7 +26,7 @@ public class ByteAdapter extends TypeAdapter<byte[]> {
         }
         writer.value(byteArrayToHexString(bytes));
       }
-      
+
       //adapted from stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
       private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
       public static String byteArrayToHexString(byte[] bytes) {
@@ -38,7 +38,7 @@ public class ByteAdapter extends TypeAdapter<byte[]> {
           }
           return new String(hexChars);
       }
-      
+
       //adapted from stackoverflow.com/questions/140131/convert-a-string-representation-of-a-hex-dump-to-a-byte-array-using-java
       //the benefit of this over using a BigInteger(s, 16).toByteArray() is that leading zeroes are not lost
       public static byte[] hexStringToByteArray(String s) {

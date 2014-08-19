@@ -17,10 +17,9 @@ import com.openxc.messages.CanMessage;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.MessageKey;
+import com.openxc.messages.formatters.ByteAdapter;
 
 public class CanMessageAdapter extends BaseAdapter {
-    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-
     private Map<MessageKey, CanMessage> mMessages;
     private List<CanMessage> mValues;
     private Context mContext;
@@ -83,18 +82,9 @@ public class CanMessageAdapter extends BaseAdapter {
         idView.setText("0x" + Integer.toHexString(message.getId()));
 
         TextView dataView = (TextView) convertView.findViewById(R.id.can_message_data);
-        dataView.setText("0x" + bytesToHex(message.getData()));
+        dataView.setText("0x" + ByteAdapter.byteArrayToHexString(
+                    message.getData()));
 
         return convertView;
     }
-
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for ( int j = 0; j < bytes.length; j++ ) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
-        return new String(hexChars);
-}
 }
