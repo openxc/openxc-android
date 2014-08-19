@@ -4,9 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -43,7 +40,6 @@ public class VehicleDashboardFragment extends Fragment {
 
     private VehicleManager mVehicleManager;
     private final Handler mHandler = new Handler();
-    private LocationManager mLocationManager;
     private TextView mSteeringWheelAngleView;
     private TextView mVehicleSpeedView;
     private TextView mFuelConsumedView;
@@ -58,8 +54,6 @@ public class VehicleDashboardFragment extends Fragment {
     private TextView mIgnitionStatusView;
     private TextView mLatitudeView;
     private TextView mLongitudeView;
-    private TextView mAndroidLatitudeView;
-    private TextView mAndroidLongitudeView;
     private TextView mWiperStatusView;
     private TextView mHeadlampStatusView;
 
@@ -241,23 +235,6 @@ public class VehicleDashboardFragment extends Fragment {
         }
     };
 
-    LocationListener mAndroidLocationListener = new LocationListener() {
-        public void onLocationChanged(final Location location) {
-            mHandler.post(new Runnable() {
-                public void run() {
-                    mAndroidLatitudeView.setText("" +
-                        location.getLatitude());
-                    mAndroidLongitudeView.setText("" +
-                        location.getLongitude());
-                }
-            });
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-        public void onProviderEnabled(String provider) {}
-        public void onProviderDisabled(String provider) {}
-    };
-
     SteeringWheelAngle.Listener mSteeringWheelListener =
             new SteeringWheelAngle.Listener() {
         public void receive(Measurement measurement) {
@@ -328,9 +305,6 @@ public class VehicleDashboardFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.vehicle_dashboard, container, false);
 
-        mLocationManager = (LocationManager)
-            getActivity().getSystemService(Context.LOCATION_SERVICE);
-
         mSteeringWheelAngleView = (TextView) v.findViewById(
                 R.id.steering_wheel_angle);
         mVehicleSpeedView = (TextView) v.findViewById(
@@ -363,10 +337,6 @@ public class VehicleDashboardFragment extends Fragment {
                 R.id.latitude);
         mLongitudeView = (TextView) v.findViewById(
                 R.id.longitude);
-        mAndroidLatitudeView = (TextView) v.findViewById(
-                R.id.android_latitude);
-        mAndroidLongitudeView = (TextView) v.findViewById(
-                R.id.android_longitude);
 
         return v;
     }
@@ -377,14 +347,6 @@ public class VehicleDashboardFragment extends Fragment {
         getActivity().bindService(
                 new Intent(getActivity(), VehicleManager.class),
                 mConnection, Context.BIND_AUTO_CREATE);
-
-        try {
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 0, 0,
-                    mAndroidLocationListener);
-        } catch(IllegalArgumentException e) {
-            Log.w(TAG, "Vehicle location provider is unavailable");
-        }
     }
 
     @Override
@@ -395,7 +357,5 @@ public class VehicleDashboardFragment extends Fragment {
             getActivity().unbindService(mConnection);
             mVehicleManager = null;
         }
-
-        mLocationManager.removeUpdates(mAndroidLocationListener);
     }
 }

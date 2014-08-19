@@ -169,26 +169,6 @@
                 style="@style/ItemData" />
         </TableRow>
 
-        <TableRow style="@style/ItemRow">
-            <TextView
-                android:id="@+id/android_latitude_label"
-                style="@style/ItemLabel"
-                android:text="@string/android_latitude_label" />
-            <TextView
-                android:id="@+id/android_latitude"
-                style="@style/ItemData" />
-        </TableRow>
-
-        <TableRow style="@style/ItemRow">
-            <TextView
-                android:id="@+id/android_longitude_label"
-                style="@style/ItemLabel"
-                android:text="@string/android_longitude_label" />
-            <TextView
-                android:id="@+id/android_longitude"
-                style="@style/ItemData" />
-        </TableRow>
-
     </TableLayout>
 
 </ScrollView>
