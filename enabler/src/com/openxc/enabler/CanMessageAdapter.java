@@ -75,13 +75,13 @@ public class CanMessageAdapter extends BaseAdapter {
 
         CanMessage message = getItem(position);
 
-        TextView busView = (TextView) convertView.findViewById(R.id.can_message_bus);
+        TextView busView = (TextView) convertView.findViewById(R.id.bus);
         busView.setText("" + message.getBus());
 
-        TextView idView = (TextView) convertView.findViewById(R.id.can_message_id);
+        TextView idView = (TextView) convertView.findViewById(R.id.id);
         idView.setText("0x" + Integer.toHexString(message.getId()));
 
-        TextView dataView = (TextView) convertView.findViewById(R.id.can_message_data);
+        TextView dataView = (TextView) convertView.findViewById(R.id.data);
         dataView.setText("0x" + ByteAdapter.byteArrayToHexString(
                     message.getData()));
 

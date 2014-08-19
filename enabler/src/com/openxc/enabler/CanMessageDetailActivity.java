@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.openxc.messages.CanMessage;
+import com.openxc.messages.formatters.ByteAdapter;
 
 public class CanMessageDetailActivity extends Activity {
     public final static String EXTRA_CAN_MESSAGE = "EXTRA_CAN_MESSAGE";
@@ -21,14 +22,15 @@ public class CanMessageDetailActivity extends Activity {
             TextView timestampView = (TextView) findViewById(R.id.timestamp);
             timestampView.setText("" + message.getTimestamp());
 
-            TextView busView = (TextView) findViewById(R.id.can_message_bus);
+            TextView busView = (TextView) findViewById(R.id.bus);
             busView.setText("" + message.getBus());
 
-            TextView idView = (TextView) findViewById(R.id.can_message_id);
+            TextView idView = (TextView) findViewById(R.id.id);
             idView.setText("0x" + Integer.toHexString(message.getId()));
 
-            TextView dataView = (TextView) findViewById(R.id.can_message_data);
-            dataView.setText("0x" + CanMessageAdapter.bytesToHex(message.getData()));
+            TextView dataView = (TextView) findViewById(R.id.data);
+            dataView.setText("0x" + ByteAdapter.byteArrayToHexString(
+                        message.getData()));
         } else {
             finish();
         }

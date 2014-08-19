@@ -10,20 +10,20 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/can_message_bus"
+        android:id="@+id/bus"
         android:layout_width="24dp"
         android:layout_height="wrap_content"
     />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/can_message_id"
+        android:id="@+id/id"
         android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
     />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/can_message_data"
+        android:id="@+id/data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
