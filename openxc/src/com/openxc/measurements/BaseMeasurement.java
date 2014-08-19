@@ -46,6 +46,28 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
 
     static {
         sMeasurementIdToClass = HashBiMap.create();
+        try {
+            cacheMeasurementId(AcceleratorPedalPosition.class);
+            cacheMeasurementId(BrakePedalStatus.class);
+            cacheMeasurementId(EngineSpeed.class);
+            cacheMeasurementId(FuelConsumed.class);
+            cacheMeasurementId(FuelLevel.class);
+            cacheMeasurementId(HeadlampStatus.class);
+            cacheMeasurementId(HighBeamStatus.class);
+            cacheMeasurementId(IgnitionStatus.class);
+            cacheMeasurementId(Latitude.class);
+            cacheMeasurementId(Longitude.class);
+            cacheMeasurementId(Odometer.class);
+            cacheMeasurementId(ParkingBrakeStatus.class);
+            cacheMeasurementId(SteeringWheelAngle.class);
+            cacheMeasurementId(TorqueAtTransmission.class);
+            cacheMeasurementId(TransmissionGearPosition.class);
+            cacheMeasurementId(TurnSignalStatus.class);
+            cacheMeasurementId(VehicleButtonEvent.class);
+            cacheMeasurementId(VehicleDoorStatus.class);
+            cacheMeasurementId(VehicleSpeed.class);
+            cacheMeasurementId(WindshieldWiperStatus.class);
+        } catch(UnrecognizedMeasurementTypeException e) { }
     }
 
     public abstract String getGenericName();
