@@ -35,6 +35,13 @@ public class NamedVehicleMessage extends KeyedMessage {
     }
 
     @Override
+    public int compareTo(VehicleMessage other) {
+        NamedVehicleMessage otherMessage = (NamedVehicleMessage) other;
+        int nameComp = getName().compareTo(otherMessage.getName());
+        return nameComp == 0 ? super.compareTo(other) : nameComp;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if(!super.equals(obj) || getClass() != obj.getClass()) {
             return false;
