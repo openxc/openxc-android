@@ -86,7 +86,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     }
 
     public static class EnablerFragmentAdapter extends FragmentPagerAdapter {
-        private static final String[] mTitles = { "Status", "Dashboard", "CAN" };
+        private static final String[] mTitles = { "Status", "Dashboard", "CAN", "Diagnostic" };
 
         public EnablerFragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -110,6 +110,8 @@ public class OpenXcEnablerActivity extends FragmentActivity {
                 return new VehicleDashboardFragment();
             } else if(position == 2) {
                 return new CanMessageViewFragment();
+            } else if(position == 3) {
+                return new DiagnosticRequestFragment();
             }
             return new StatusFragment();
         }

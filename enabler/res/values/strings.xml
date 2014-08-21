@@ -9,6 +9,7 @@
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
+    <string name="send_diagnostic_request_button">Send</string>
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
@@ -50,5 +51,11 @@
     <string name="application_version_summary">Version Number</string>
     <string name="application_version_key">application_version</string>
     <string name="service_not_running">VehicleService not running.</string>
+
+    <string name="diag_request_bus_label">Bus</string>
+    <string name="diag_request_id_label">Message ID (hex)</string>
+    <string name="diag_request_mode_label">Mode (hex)</string>
+    <string name="diag_request_pid_label">PID (hex, optional)</string>
+    <string name="diag_request_payload_label">Payload (hex)</string>
 
 </resources>
