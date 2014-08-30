@@ -257,24 +257,32 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @return true if the message was sent successfully on an interface.
      */
     public boolean send(VehicleMessage message) {
+        VehicleMessage wrappedMessage = message;
         if(message instanceof DiagnosticRequest) {
             // Wrap the request in a Command
             // TODO need to support the CANCEL action, too
-            message = new Command(message.asDiagnosticRequest(),
+            wrappedMessage = new Command(message.asDiagnosticRequest(),
                     DiagnosticRequest.ADD_ACTION_KEY);
         }
 
-        boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces, message);
+        boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces,
+                wrappedMessage);
 
         // Don't want to keep this in the same list as local interfaces because
         // if that quits after the first interface reports success.
         if(mRemoteService != null) {
             try {
-                sent = sent || mRemoteService.send(message);
+                sent = sent || mRemoteService.send(wrappedMessage);
             } catch(RemoteException e) {
                 Log.v(TAG, "Unable to propagate command to remote interface", e);
             }
         }
+
+        if(sent) {
+            // Add a timestamp of when the message was actually sent
+            message.timestamp();
+        }
+
         return sent;
     }
 

@@ -58,4 +58,6 @@
     <string name="diag_request_pid_label">PID (hex, optional)</string>
     <string name="diag_request_payload_label">Payload (hex)</string>
 
+    <string name="last_diag_request_label">Last Request</string>
+
 </resources>

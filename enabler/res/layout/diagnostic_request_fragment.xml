@@ -101,6 +101,19 @@
         style="@style/MinimalButton"
         android:text="@string/send_diagnostic_request_button" />
 
+    <LinearLayout
+            style="@style/ItemRow"
+            android:orientation="vertical" >
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/last_diag_request_label" />
+
+        <include android:id="@+id/last_request"
+                layout="@layout/diagnostic_request_list_item"/>
+
+    </LinearLayout>
+
+
     <!-- The frame layout is here since we will be showing either
     the empty view or the list view.  -->
     <FrameLayout

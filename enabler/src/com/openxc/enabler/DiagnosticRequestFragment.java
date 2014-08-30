@@ -1,5 +1,7 @@
 package com.openxc.enabler;
 
+import java.text.SimpleDateFormat;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.openxc.VehicleManager;
 import com.openxc.messages.DiagnosticRequest;
@@ -27,6 +30,7 @@ public class DiagnosticRequestFragment extends ListFragment {
 
     private VehicleManager mVehicleManager;
     private DiagnosticResponseAdapter mAdapter;
+    private View mLastRequestView;
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
         @Override
@@ -93,6 +97,7 @@ public class DiagnosticRequestFragment extends ListFragment {
             }
         });
 
+        mLastRequestView = v.findViewById(R.id.last_request);
         return v;
     }
 
@@ -114,14 +119,49 @@ public class DiagnosticRequestFragment extends ListFragment {
                     Integer.valueOf(busSpinner.getSelectedItem().toString()),
                     Integer.valueOf(idView.getText().toString(), 16),
                     Integer.valueOf(modeView.getText().toString(), 16));
+            // Make sure to update after sending so the timestamp is set by the
+            // VehicleManager
             String pidString = pidView.getText().toString();
             if(!pidString.isEmpty()) {
                 request.setPid(Integer.valueOf(pidString, 16));
             }
             mVehicleManager.send(request);
+            // Make sure to update after sending so the timestamp is set by the
+            // VehicleManager
+            updateLastRequestView(request);
         } else {
             Log.i(TAG, "Form is invalid, not sending diagnostic request");
         }
+    }
+
+    private void updateLastRequestView(final DiagnosticRequest request) {
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                TextView timestampView = (TextView)
+                        mLastRequestView.findViewById(R.id.timestamp);
+                timestampView.setText(new SimpleDateFormat("HH:mm:ss").format(
+                            request.getDate()));
+
+                TextView busView = (TextView)
+                        mLastRequestView.findViewById(R.id.bus);
+                busView.setText("" + request.getBusId());
+
+                TextView idView = (TextView)
+                        mLastRequestView.findViewById(R.id.id);
+                idView.setText("0x" + Integer.toHexString(request.getId()));
+
+                TextView modeView = (TextView)
+                        mLastRequestView.findViewById(R.id.mode);
+                modeView.setText("0x" + Integer.toHexString(request.getMode()));
+
+                if(request.hasPid()) {
+                    TextView pidView = (TextView)
+                            mLastRequestView.findViewById(R.id.pid);
+                    pidView.setText("0x" + Integer.toHexString(
+                                request.getPid()));
+                }
+            }
+        });
     }
 
     @Override
