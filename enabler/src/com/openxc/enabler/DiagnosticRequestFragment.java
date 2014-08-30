@@ -13,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.openxc.VehicleManager;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.VehicleMessage;
 
@@ -64,10 +67,10 @@ public class DiagnosticRequestFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.diagnostic_request_fragment,
+        final View v = inflater.inflate(R.layout.diagnostic_request_fragment,
                 container, false);
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.bus_spinner);
+        final Spinner spinner = (Spinner) v.findViewById(R.id.bus_spinner);
         // Create an ArrayAdapter using the string array and a default spinner
         // layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -78,7 +81,47 @@ public class DiagnosticRequestFragment extends ListFragment {
                 android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        Button btn = (Button) v.findViewById(R.id.send_request);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View buttonView) {
+                onSendDiagnosticRequest(spinner,
+                        (EditText) v.findViewById(R.id.diag_request_id),
+                        (EditText) v.findViewById(R.id.diag_request_mode),
+                        (EditText) v.findViewById(R.id.diag_request_pid));
+            }
+        });
+
         return v;
+    }
+
+    private void onSendDiagnosticRequest(Spinner busSpinner,
+            EditText idView, EditText modeView, EditText pidView) {
+        boolean validInput = true;
+        if(idView.getText().toString().isEmpty()) {
+            idView.setError("ID is required");
+            validInput = false;
+        }
+
+        if(modeView.getText().toString().isEmpty()) {
+            modeView.setError("Mode is required");
+            validInput = false;
+        }
+
+        if(validInput) {
+            DiagnosticRequest request = new DiagnosticRequest(
+                    Integer.valueOf(busSpinner.getSelectedItem().toString()),
+                    Integer.valueOf(idView.getText().toString(), 16),
+                    Integer.valueOf(modeView.getText().toString(), 16));
+            String pidString = pidView.getText().toString();
+            if(!pidString.isEmpty()) {
+                request.setPid(Integer.valueOf(pidString, 16));
+            }
+            mVehicleManager.send(request);
+        } else {
+            Log.i(TAG, "Form is invalid, not sending diagnostic request");
+        }
     }
 
     @Override
