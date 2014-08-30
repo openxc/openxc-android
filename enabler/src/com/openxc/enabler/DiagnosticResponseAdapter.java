@@ -1,5 +1,7 @@
 package com.openxc.enabler;
 
+import java.text.SimpleDateFormat;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +28,14 @@ public class DiagnosticResponseAdapter extends KeyedMessageAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
             convertView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.can_message_list_item, parent, false);
+                    .inflate(R.layout.diagnostic_request_list_item, parent, false);
         }
 
         DiagnosticResponse message = getItem(position);
+
+        TextView timestampView = (TextView) convertView.findViewById(R.id.timestamp);
+        timestampView.setText(new SimpleDateFormat("HH:mm:ss").format(
+                    message.getDate()));
 
         TextView busView = (TextView) convertView.findViewById(R.id.bus);
         busView.setText("" + message.getBusId());

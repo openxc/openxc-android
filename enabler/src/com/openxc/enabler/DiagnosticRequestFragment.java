@@ -137,6 +137,8 @@ public class DiagnosticRequestFragment extends ListFragment {
     private void updateLastRequestView(final DiagnosticRequest request) {
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
+                // TODO This is duplicated in DiagnosticResponseAdapter - figure
+                // out the best way to share this rendering info
                 TextView timestampView = (TextView)
                         mLastRequestView.findViewById(R.id.timestamp);
                 timestampView.setText(new SimpleDateFormat("HH:mm:ss").format(
