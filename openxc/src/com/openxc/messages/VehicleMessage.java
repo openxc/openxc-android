@@ -2,6 +2,7 @@ package com.openxc.messages;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -79,6 +80,13 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
             return null;
         }
         return Double.valueOf(mTimestamp * 1000.0).longValue();
+    }
+
+    public Date getDate() {
+        if (!isTimestamped()) {
+            return null;
+        }
+        return new Date(getTimestamp());
     }
 
     public void setExtras(Map<String, Object> extras) {

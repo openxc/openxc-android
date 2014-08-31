@@ -11,8 +11,7 @@
     </TextView>
 
     <LinearLayout
-        style="@style/ItemRow"
-        android:orientation="horizontal" >
+            style="@style/ItemRow">
 
         <TextView
             style="@style/ItemLabel"

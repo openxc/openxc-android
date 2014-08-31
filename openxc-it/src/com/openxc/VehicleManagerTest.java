@@ -246,13 +246,25 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
+    public void testSentMessageTimestampped() throws DataSinkException {
+        prepareServices();
+        VehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        assertFalse(message.isTimestamped());
+        service.send(message);
+        assertTrue(message.isTimestamped());
+        verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
+    }
+
+    @MediumTest
     public void testSendDiagnosticRequest() throws DataSinkException {
         prepareServices();
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        assertFalse(request.isTimestamped());
         service.send(request);
         ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(
                 Command.class);
         verify(mTestInterface).receive(argument.capture());
+        assertTrue(request.isTimestamped());
         Command command = argument.getValue();
         assertEquals(command.getCommand(), Command.CommandType.DIAGNOSTIC_REQUEST);
         assertNotNull(command.getDiagnosticRequest());
