@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.formatters.ByteAdapter;
 
-public class DiagnosticResponseAdapter extends KeyedMessageAdapter {
+public class DiagnosticResponseAdapter extends VehicleMessageAdapter {
     private Context mContext;
 
     public DiagnosticResponseAdapter(Context context) {
