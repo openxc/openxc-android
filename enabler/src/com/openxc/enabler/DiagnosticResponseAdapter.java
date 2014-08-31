@@ -34,7 +34,7 @@ public class DiagnosticResponseAdapter extends VehicleMessageAdapter {
         DiagnosticResponse message = getItem(position);
 
         TextView timestampView = (TextView) convertView.findViewById(R.id.timestamp);
-        timestampView.setText(new SimpleDateFormat("HH:mm:ss").format(
+        timestampView.setText(new SimpleDateFormat("HH:mm:ss.S").format(
                     message.getDate()));
 
         TextView busView = (TextView) convertView.findViewById(R.id.bus);
