@@ -32,7 +32,7 @@ public class CanMessageAdapter extends KeyedMessageAdapter {
         CanMessage message = getItem(position);
 
         TextView busView = (TextView) convertView.findViewById(R.id.bus);
-        busView.setText("" + message.getBus());
+        busView.setText("" + message.getBusId());
 
         TextView idView = (TextView) convertView.findViewById(R.id.id);
         idView.setText("0x" + Integer.toHexString(message.getId()));

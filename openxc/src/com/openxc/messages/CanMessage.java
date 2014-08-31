@@ -35,7 +35,7 @@ public class CanMessage extends KeyedMessage {
         setPayload(data);
     }
 
-    public int getBus() {
+    public int getBusId() {
         return mBusId;
     }
     public int getId() {
@@ -55,7 +55,7 @@ public class CanMessage extends KeyedMessage {
     @Override
     public MessageKey getKey() {
         HashMap<String, Object> key = new HashMap<>();
-        key.put(BUS_KEY, getBus());
+        key.put(BUS_KEY, getBusId());
         key.put(ID_KEY, getId());
         return new MessageKey(key);
     }
@@ -67,9 +67,9 @@ public class CanMessage extends KeyedMessage {
     @Override
     public int compareTo(VehicleMessage other) {
         CanMessage otherMessage = (CanMessage) other;
-        if(getBus() < otherMessage.getBus()) {
+        if(getBusId() < otherMessage.getBusId()) {
             return -1;
-        } else if(getBus() > otherMessage.getBus()) {
+        } else if(getBusId() > otherMessage.getBusId()) {
             return 1;
         } else {
             if(getId() < otherMessage.getId()) {
@@ -96,7 +96,7 @@ public class CanMessage extends KeyedMessage {
     public String toString() {
         return Objects.toStringHelper(this)
             .add("timestamp", getTimestamp())
-            .add("bus", getBus())
+            .add("bus", getBusId())
             .add("id", getId())
             .add("data", Arrays.toString(getData()))
             .toString();
@@ -105,7 +105,7 @@ public class CanMessage extends KeyedMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeInt(getBus());
+        out.writeInt(getBusId());
         out.writeInt(getId());
         out.writeByteArray(getData());
     }
