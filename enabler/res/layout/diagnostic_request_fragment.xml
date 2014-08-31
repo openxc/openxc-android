@@ -12,7 +12,7 @@
             style="@style/ItemRow">
 
             <TextView
-                style="@style/ItemLabel"
+                style="@style/FormInputLabel"
                 android:text="@string/diag_request_bus_label" />
 
             <Spinner
@@ -33,7 +33,7 @@
             style="@style/ItemRow">
 
             <TextView
-                style="@style/ItemLabel"
+                style="@style/FormInputLabel"
                 android:text="@string/diag_request_id_label" />
 
             <EditText
@@ -57,7 +57,7 @@
             style="@style/ItemRow">
 
             <TextView
-                style="@style/ItemLabel"
+                style="@style/FormInputLabel"
                 android:text="@string/diag_request_mode_label" />
 
             <EditText
@@ -81,7 +81,7 @@
             style="@style/ItemRow">
 
             <TextView
-                style="@style/ItemLabel"
+                style="@style/FormInputLabel"
                 android:text="@string/diag_request_pid_label" />
 
             <EditText
