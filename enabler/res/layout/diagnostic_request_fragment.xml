@@ -113,28 +113,36 @@
 
     </LinearLayout>
 
+    <LinearLayout
+            style="@style/ItemRow"
+            android:orientation="vertical" >
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/diag_response_label" />
 
-    <!-- The frame layout is here since we will be showing either
-    the empty view or the list view.  -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" >
-        <!-- Here is the list. Since we are using a ListActivity, we
-             have to call it "@android:id/list" so ListActivity will
-             find it -->
-        <ListView android:id="@android:id/list"
+        <!-- The frame layout is here since we will be showing either
+        the empty view or the list view.  -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawSelectorOnTop="false"/>
+            android:layout_height="0dip"
+            android:layout_weight="1" >
+            <!-- Here is the list. Since we are using a ListActivity, we
+                 have to call it "@android:id/list" so ListActivity will
+                 find it -->
+            <ListView android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="false"/>
 
-        <!-- Here is the view to show if the list is empty -->
-        <TextView android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="No diagnostic responses received."/>
+            <!-- Here is the view to show if the list is empty -->
+            <TextView android:id="@android:id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="No diagnostic responses received."/>
 
-    </FrameLayout>
+        </FrameLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
