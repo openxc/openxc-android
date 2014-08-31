@@ -13,7 +13,7 @@
 
             <TextView
                 style="@style/FormInputLabel"
-                android:text="@string/diag_request_bus_label" />
+                android:text="@string/bus_label" />
 
             <Spinner
                 android:id="@+id/bus_spinner"
@@ -34,7 +34,7 @@
 
             <TextView
                 style="@style/FormInputLabel"
-                android:text="@string/diag_request_id_label" />
+                android:text="@string/message_id_label" />
 
             <EditText
                 android:id="@+id/diag_request_id"
@@ -99,7 +99,7 @@
     <Button
         android:id="@+id/send_request"
         style="@style/MinimalButton"
-        android:text="@string/send_diagnostic_request_button" />
+        android:text="@string/send_button" />
 
     <LinearLayout
             style="@style/ItemRow"
