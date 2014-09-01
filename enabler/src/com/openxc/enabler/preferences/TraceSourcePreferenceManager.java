@@ -27,7 +27,7 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.trace_source_checkbox_key,
+                R.string.vehicle_interface_key,
                 R.string.trace_source_file_key,
             };
 
@@ -36,8 +36,9 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
             }
 
             public void readStoredPreferences() {
-                setTraceSourceStatus(getPreferences().getBoolean(
-                        getString(R.string.trace_source_checkbox_key), false));
+                setTraceSourceStatus(getPreferences().getString(
+                            getString(R.string.vehicle_interface_key), "").equals(
+                            getString(R.string.trace_interface_option_value)));
             }
         };
     }

@@ -19,7 +19,6 @@ import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
 import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
-import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.RemoteCallbackSink;
@@ -43,11 +42,9 @@ import com.openxc.sources.WakeLockManager;
  * VehicleService is purposefully primative as there are a small set of
  * objects that can be natively marshalled through an AIDL interface.
  *
- * By default, if the Android device supports uSB, the
- * {@link UsbVehicleInterface} is activated as a {@link VehicleInterface}. Other
- * vehicle interfaces can be activated with the
- * {@link #addVehicleInterface(Class, String)} method and they can removed with
- * {@link #removeVehicleInterface(VehicleInterface)}.
+ * Vehicle interfaces can be activated with the {@link
+ * #addVehicleInterface(Class, String)} method and they can removed with {@link
+ * #removeVehicleInterface(VehicleInterface)}.
  *
  * This service uses the same {@link com.openxc.DataPipeline} as the
  * {@link com.openxc.VehicleManager} to move data from sources to sinks, but it
@@ -152,10 +149,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
     private void initializeDefaultSources() {
         mPipeline.addSource(mApplicationSource);
-        if(android.os.Build.VERSION.SDK_INT >=
-                android.os.Build.VERSION_CODES.HONEYCOMB) {
-            addVehicleInterface(UsbVehicleInterface.class);
-        }
     }
 
     private final VehicleServiceInterface.Stub mBinder =

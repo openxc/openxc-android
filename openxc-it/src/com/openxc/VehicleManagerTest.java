@@ -358,14 +358,14 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testUsbInterfaceEnabledByDefault()
+    public void testUsbInterfaceNotEnabledByDefault()
             throws VehicleServiceException {
         prepareServices();
         // When testing on a 2.3.x emulator, no USB available.
         if(android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.HONEYCOMB) {
             assertThat(service.getActiveSources(),
-                    hasItem(UsbVehicleInterface.class));
+                    not(hasItem(UsbVehicleInterface.class)));
         }
     }
 
