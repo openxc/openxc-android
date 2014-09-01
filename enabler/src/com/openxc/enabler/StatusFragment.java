@@ -29,6 +29,7 @@ public class StatusFragment extends Fragment {
     private static String TAG = "StatusFragment";
 
     private TextView mMessageCountView;
+    private TextView mViVersionView;
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -105,6 +106,7 @@ public class StatusFragment extends Fragment {
 
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) v.findViewById(R.id.message_count);
+        mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
         mFileConnIV = v.findViewById(R.id.connection_file);
