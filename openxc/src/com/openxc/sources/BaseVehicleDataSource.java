@@ -103,6 +103,11 @@ public abstract class BaseVehicleDataSource implements VehicleDataSource {
         }
     }
 
+    @Override
+    public void onPipelineActivated() { }
+
+    @Override
+    public void onPipelineDeactivated() { }
 
     /**
      * Return a string suitable as a tag for logging.

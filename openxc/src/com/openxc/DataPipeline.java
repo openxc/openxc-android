@@ -126,6 +126,11 @@ public class DataPipeline implements SourceCallback {
     public VehicleDataSource addSource(VehicleDataSource source) {
         source.setCallback(this);
         mSources.add(source);
+        if(isActive()) {
+            source.onPipelineActivated();
+        } else {
+            source.onPipelineDeactivated();
+        }
         return source;
     }
 
@@ -224,6 +229,9 @@ public class DataPipeline implements SourceCallback {
         if(mOperator != null) {
             if(!isActive(source)) {
                 mOperator.onPipelineDeactivated();
+                for(VehicleDataSource s : mSources) {
+                    s.onPipelineDeactivated();
+                }
             }
         }
     }
@@ -235,6 +243,9 @@ public class DataPipeline implements SourceCallback {
     public void sourceConnected(VehicleDataSource source) {
         if(mOperator != null) {
             mOperator.onPipelineActivated();
+            for(VehicleDataSource s : mSources) {
+                s.onPipelineActivated();
+            }
         }
     }
 

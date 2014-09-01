@@ -533,6 +533,26 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
+     * Control whether the device's built-in GPS is used to provide location.
+     *
+     * @param enabled True if GPS should be read from the Android device and
+     * injected as vehicle data whenever a vehicle interface is connected.
+     */
+    public void setNativeGpsStatus(boolean enabled) {
+        Log.i(TAG, (enabled ? "Enabling" : "Disabling") + " native GPS");
+
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.setNativeGpsStatus(enabled);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to change native GPS status", e);
+            }
+        } else {
+            Log.w(TAG, "Not connected to the VehicleService");
+        }
+    }
+
+    /**
      * Control whether polling is used to connect to a Bluetooth device or not.
      *
      * @param enabled True if polling should be used to connect to a Bluetooth

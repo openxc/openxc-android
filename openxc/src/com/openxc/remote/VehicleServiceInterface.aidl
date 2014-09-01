@@ -81,6 +81,12 @@ interface VehicleServiceInterface {
      */
     void setBluetoothPollingStatus(boolean enabled);
 
+    /**
+     * Set the VehicleService to use or not use the device's built-in GPS for
+     * location, to augment a vehicle that does no have GPS.
+     */
+    void setNativeGpsStatus(boolean enabled);
+
     List<String> getSourceSummaries();
     List<String> getSinkSummaries();
 

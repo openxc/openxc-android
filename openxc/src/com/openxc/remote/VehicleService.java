@@ -13,8 +13,8 @@ import android.util.Log;
 
 import com.openxc.DataPipeline;
 import com.openxc.R;
-import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
 import com.openxc.interfaces.VehicleInterfaceManagerUtils;
@@ -26,6 +26,7 @@ import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
+import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.WakeLockManager;
 
@@ -66,6 +67,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private boolean mForeground = false;
     private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
+    private VehicleDataSource mNativeLocationSource;
     private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
             new CopyOnWriteArrayList<VehicleInterface>();
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
@@ -215,6 +217,11 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
+            public void setNativeGpsStatus(boolean enabled) {
+                VehicleService.this.setNativeGpsStatus(enabled);
+            }
+
+            @Override
             public void removeVehicleInterface(String interfaceName) {
                 VehicleService.this.removeVehicleInterface(interfaceName);
             }
@@ -321,6 +328,17 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             vehicleInterface.stop();
             mInterfaces.remove(vehicleInterface);
             mPipeline.removeSource(vehicleInterface);
+        }
+    }
+
+    private void setNativeGpsStatus(boolean enabled) {
+        Log.i(TAG, "Setting native GPS to " + enabled);
+        if(enabled && mNativeLocationSource == null) {
+            mNativeLocationSource = new NativeLocationSource(this);
+            mPipeline.addSource(mNativeLocationSource);
+        } else if(!enabled) {
+            mPipeline.removeSource(mNativeLocationSource);
+            mNativeLocationSource = null;
         }
     }
 

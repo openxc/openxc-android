@@ -136,7 +136,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         mConnectionLock.readLock().lock();
         int bytesRead = -1;
         try {
-            if(isConnected()) {
+            if(isConnected() && mInStream != null) {
                 bytesRead = mInStream.read(bytes, 0, bytes.length);
             }
         } finally {

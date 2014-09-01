@@ -29,12 +29,12 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
 
     private LocationManager mLocationManager;
+    private Looper mLooper;
 
     public NativeLocationSource(SourceCallback callback, Context context) {
         super(callback, context);
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
-        new Thread(this).start();
     }
 
     public NativeLocationSource(Context context) {
@@ -63,14 +63,15 @@ public class NativeLocationSource extends ContextualVehicleDataSource
         } catch(IllegalArgumentException e) {
             Log.w(TAG, "GPS location provider is unavailable");
         }
+
+        mLooper = Looper.myLooper();
         Looper.loop();
     }
 
     @Override
     public void stop() {
         super.stop();
-        Log.i(TAG, "Disabled native GPS passthrough");
-        mLocationManager.removeUpdates(this);
+        onPipelineDeactivated();
     }
 
     @Override
@@ -86,14 +87,30 @@ public class NativeLocationSource extends ContextualVehicleDataSource
             Bundle extras) {}
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) { }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) { }
 
     @Override
     public boolean isConnected() {
+        // Always return false so we don't keep the pipeline awake if no actual
+        // vehicle interface is connected.
         return false;
+    }
+
+    @Override
+    public void onPipelineActivated() {
+        new Thread(this).start();
+    }
+
+    @Override
+    public void onPipelineDeactivated() {
+        Log.i(TAG, "Disabled native GPS passthrough");
+        if(mLooper != null) {
+            mLooper.quit();
+        }
+        mLocationManager.removeUpdates(this);
     }
 
     @Override
