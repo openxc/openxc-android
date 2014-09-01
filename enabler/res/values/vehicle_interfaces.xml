@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vehicle_interface_key">vehicle_interface</string>
+    <string name="vehicle_interface_title">Vehicle Interface</string>
+
+    <string name="bluetooth_interface_option">Bluetooth</string>
+    <string name="bluetooth_interface_option_value">bluetooth</string>
+    <string name="usb_interface_option">USB</string>
+    <string name="usb_interface_option_value">usb</string>
+    <string name="network_interface_option">Network</string>
+    <string name="network_interface_option_value">network</string>
+    <string name="trace_interface_option">Pre-recorded Trace</string>
+    <string name="trace_interface_option_value">trace</string>
+    <string name="disabled_interface_option">None</string>
+    <string name="disabled_interface_option_value">none</string>
+
+    <string-array name="vehicle_interface_types">
+        <item>@string/bluetooth_interface_option</item>
+        <item>@string/usb_interface_option</item>
+        <item>@string/network_interface_option</item>
+        <item>@string/trace_interface_option</item>
+        <item>@string/disabled_interface_option</item>
+    </string-array>
+
+    <string-array name="vehicle_interface_type_aliases">
+        <item>@string/bluetooth_interface_option_value</item>
+        <item>@string/usb_interface_option_value</item>
+        <item>@string/network_interface_option_value</item>
+        <item>@string/trace_interface_option_value</item>
+        <item>@string/disabled_interface_option_value</item>
+    </string-array>
+</resources>

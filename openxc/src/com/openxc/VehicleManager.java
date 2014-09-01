@@ -480,10 +480,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * not support bidirectional communication for any other applications
      * besides the one that instantiated the interface).
      *
-     * The {@link com.openxc.interfaces.usb.UsbVehicleInterface} is initialized
-     * by default when the remote service starts, but it can be disabled with
-     * {@link #removeVehicleInterface(Class)}.
-     *
      * @param vehicleInterfaceType A class implementing VehicleInterface that is
      *      included in the OpenXC library
      * @param resource A descriptor or a resource necessary to initialize the

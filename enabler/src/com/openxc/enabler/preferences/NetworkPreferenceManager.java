@@ -22,7 +22,7 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.network_checkbox_key,
+                R.string.vehicle_interface_key,
                 R.string.network_host_key,
                 R.string.network_port_key,
             };
@@ -32,8 +32,9 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
 
             }
             public void readStoredPreferences() {
-                setNetworkStatus(getPreferences().getBoolean(getString(
-                                R.string.network_checkbox_key), false));
+                setNetworkStatus(getPreferences().getString(
+                            getString(R.string.vehicle_interface_key), "").equals(
+                            getString(R.string.network_interface_option_value)));
             }
         };
     }

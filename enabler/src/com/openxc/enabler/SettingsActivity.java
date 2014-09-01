@@ -1,10 +1,12 @@
 package com.openxc.enabler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +22,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -48,16 +52,18 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.ABOUT";
     private final static int FILE_SELECTOR_RESULT = 100;
 
+    private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
-    private CheckBoxPreference mBluetoothPollingPrefernce;
     private CheckBoxPreference mUploadingPreference;
     private Preference mTraceFilePreference;
-    private CheckBoxPreference mTraceEnabledPreference;
-    private CheckBoxPreference mNetworkSourcePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
     private Preference mAboutVersionPreference;
     private PreferenceManagerService mPreferenceManager;
+
+    private PreferenceCategory mBluetoothPreferences;
+    private PreferenceCategory mNetworkPreferences;
+    private PreferenceCategory mTracePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +81,10 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected boolean isValidFragment(String fragmentName){
-        if(RecordingPreferences.class.getName().equals(fragmentName)){
-            return true;
-        } else if(OutputPreferences.class.getName().equals(fragmentName)){
-            return true;
-        } else if(DataSourcePreferences.class.getName().equals(fragmentName)){
-            return true;
-        } else if(AboutPreferences.class.getName().equals(fragmentName)){
-            return true;
-        }
-        return false;
+        return RecordingPreferences.class.getName().equals(fragmentName) ||
+                OutputPreferences.class.getName().equals(fragmentName) ||
+                DataSourcePreferences.class.getName().equals(fragmentName) ||
+                AboutPreferences.class.getName().equals(fragmentName);
     }
 
     @SuppressWarnings("deprecation")
@@ -93,34 +93,15 @@ public class SettingsActivity extends PreferenceActivity {
         if(action != null) {
             if(action.equals(RECORDING_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.recording_preferences);
-
-                initializeUploadingPreferences(
-                    findPreference(getString(R.string.uploading_checkbox_key)),
-                    findPreference(getString(R.string.uploading_path_key)));
-
+                initializeUploadingPreferences(getPreferenceManager());
             } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.data_source_preferences);
-
-                initializeBluetoothPreferences(
-                    findPreference(getString(R.string.bluetooth_mac_key)),
-                    findPreference(getString(R.string.bluetooth_checkbox_key)),
-                    findPreference(getString(R.string.bluetooth_polling_key)));
-
-                initializeNetwork(
-                    findPreference(getString(R.string.network_host_key)),
-                    findPreference(getString(R.string.network_port_key)),
-                    findPreference(getString(R.string.network_checkbox_key)));
-
-                initializeTracePreferences(
-                    findPreference(getString(R.string.trace_source_checkbox_key)),
-                    findPreference(getString(R.string.trace_source_file_key)));
+                initializeDataSourcePreferences(getPreferenceManager());
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             } else if(action.equals(ABOUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.about_preferences);
-
-                initializeAboutPreferences(
-                    findPreference(getString(R.string.application_version_key)));
+                initializeAboutPreferences(getPreferenceManager());
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
@@ -151,8 +132,7 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.recording_preferences);
             ((SettingsActivity)getActivity()).initializeUploadingPreferences(
-                findPreference(getString(R.string.uploading_checkbox_key)),
-                findPreference(getString(R.string.uploading_path_key)));
+                getPreferenceManager());
         }
     }
 
@@ -170,17 +150,8 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.data_source_preferences);
 
-            ((SettingsActivity)getActivity()).initializeBluetoothPreferences(
-                findPreference(getString(R.string.bluetooth_mac_key)),
-                findPreference(getString(R.string.bluetooth_checkbox_key)),
-                findPreference(getString(R.string.bluetooth_polling_key)));
-            ((SettingsActivity) getActivity()).initializeNetwork(
-                    findPreference(getString(R.string.network_host_key)),
-                    findPreference(getString(R.string.network_port_key)),
-                    findPreference(getString(R.string.network_checkbox_key)));
-            ((SettingsActivity)getActivity()).initializeTracePreferences(
-                findPreference(getString(R.string.trace_source_checkbox_key)),
-                findPreference(getString(R.string.trace_source_file_key)));
+            ((SettingsActivity)getActivity()).initializeDataSourcePreferences(
+                getPreferenceManager());
         }
     }
 
@@ -191,35 +162,30 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.about_preferences);
 
              ((SettingsActivity)getActivity()).initializeAboutPreferences(
-                     findPreference(getString(R.string.application_version_key)));
+                     getPreferenceManager());
         }
     }
 
-    protected void initializeTracePreferences(Preference traceEnabledPreference,
-            Preference traceFilePreference) {
-        mTraceEnabledPreference = (CheckBoxPreference) traceEnabledPreference;
-        mTraceFilePreference = traceFilePreference;
+    protected void initializeTracePreferences(PreferenceManager manager) {
+        mTraceFilePreference = manager.findPreference(
+                getString(R.string.trace_source_file_key));
         mTraceFilePreference.setOnPreferenceClickListener(
                 mTraceFileClickListener);
         mTraceFilePreference.setOnPreferenceChangeListener(
                 mUpdateSummaryListener);
-        mTraceEnabledPreference.setOnPreferenceChangeListener(
-                mTraceCheckboxListener);
-
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
-        mTraceFilePreference.setEnabled(preferences.getBoolean(
-                    getString(R.string.trace_source_checkbox_key), false));
         updateSummary(mTraceFilePreference,
                 preferences.getString(
                     getString(R.string.trace_source_file_key), null));
     }
 
-    protected void initializeUploadingPreferences(
-            Preference uploadingPreference,
-            Preference uploadingPathPreference) {
-        mUploadingPreference = (CheckBoxPreference) uploadingPreference;
+    protected void initializeUploadingPreferences(PreferenceManager manager) {
+        mUploadingPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.uploading_checkbox_key));
+        Preference uploadingPathPreference = manager.findPreference(
+                getString(R.string.uploading_path_key));
         uploadingPathPreference.setOnPreferenceChangeListener(
                 mUploadingPathPreferenceListener);
 
@@ -228,6 +194,144 @@ public class SettingsActivity extends PreferenceActivity {
         updateSummary(uploadingPathPreference,
                 preferences.getString(
                     getString(R.string.uploading_path_key), null));
+    }
+
+    protected void initializeVehicleInterfacePreference(PreferenceManager manager) {
+        mVehicleInterfaceListPreference = (ListPreference)
+                        manager.findPreference(getString(
+                                R.string.vehicle_interface_key));
+        PreferenceManager.setDefaultValues(this, R.xml.data_source_preferences, false);
+        mVehicleInterfaceListPreference.setOnPreferenceChangeListener(
+                mVehicleInterfaceUpdatedListener);
+
+        PreferenceScreen screen = (PreferenceScreen)
+                manager.findPreference("preference_screen");
+        mBluetoothPreferences = (PreferenceCategory) screen.findPreference(
+                getString(R.string.bluetooth_settings));
+        mNetworkPreferences = (PreferenceCategory) screen.findPreference(
+                getString(R.string.network_settings));
+        mTracePreferences = (PreferenceCategory) screen.findPreference(
+                getString(R.string.trace_source_settings));
+
+        List<String> entries = new ArrayList<>(Arrays.asList(getResources().
+                    getStringArray(R.array.vehicle_interface_types)));
+        List<String> values = new ArrayList<>(Arrays.asList(getResources().
+                    getStringArray(R.array.vehicle_interface_type_aliases)));
+        if(android.os.Build.VERSION.SDK_INT <
+                android.os.Build.VERSION_CODES.HONEYCOMB) {
+            // USB not supported, so re-load entries without that option
+            entries.remove(getString(R.string.usb_interface_option));
+            values.remove(getString(R.string.usb_interface_option_value));
+        }
+
+        if(BluetoothAdapter.getDefaultAdapter() == null) {
+            // No Bluetooth adapter, so remove those entries too
+            entries.remove(getString(R.string.bluetooth_interface_option));
+            values.remove(getString(R.string.bluetooth_interface_option_value));
+            screen.removePreference(mBluetoothPreferences);
+
+            // Bluetooth is the default, so we need to force it to None if the
+            // device has no adapter
+            if(mVehicleInterfaceListPreference.getValue().equals(
+                        getString(R.string.bluetooth_interface_option_value))) {
+                mVehicleInterfaceListPreference.setValueIndex(
+                        mVehicleInterfaceListPreference.findIndexOfValue(
+                            getString(
+                                R.string.disabled_interface_option_value)));
+            }
+        }
+
+        CharSequence[] prototype = {};
+        mVehicleInterfaceListPreference.setEntries(entries.toArray(prototype));
+        mVehicleInterfaceListPreference.setEntryValues(values.toArray(prototype));
+        mVehicleInterfaceListPreference.setSummary(
+                mVehicleInterfaceListPreference.getEntry());
+
+        mBluetoothPreferences.setEnabled(mVehicleInterfaceListPreference.
+                getValue().equals(
+                    getString(R.string.bluetooth_interface_option_value)));
+        mNetworkPreferences.setEnabled(mVehicleInterfaceListPreference.
+                getValue().equals(
+                    getString(R.string.network_interface_option_value)));
+        mTracePreferences.setEnabled(mVehicleInterfaceListPreference.
+                getValue().equals(
+                    getString(R.string.trace_interface_option_value)));
+    }
+
+    protected void initializeDataSourcePreferences(PreferenceManager manager) {
+        initializeVehicleInterfacePreference(manager);
+        initializeBluetoothPreferences(manager);
+        initializeNetwork(manager);
+        initializeTracePreferences(manager);
+    }
+
+    protected void initializeBluetoothPreferences(PreferenceManager manager) {
+        mBluetoothDeviceListPreference = (ListPreference)
+                    manager.findPreference(getString(R.string.bluetooth_mac_key));
+        // If the device doesn't have BT, we removed these preferences earlier
+        // in the initialization
+        if(mBluetoothDeviceListPreference != null) {
+            mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
+                    mUpdateSummaryListener);
+
+            bindService(new Intent(SettingsActivity.this,
+                        PreferenceManagerService.class), mConnection,
+                    Context.BIND_AUTO_CREATE);
+
+            List<String> entries = new ArrayList<String>();
+            entries.add(getString(R.string.bluetooth_mac_automatic_option));
+            List<String> values = new ArrayList<String>();
+            values.add(getString(R.string.bluetooth_mac_automatic_summary));
+
+            CharSequence[] prototype = {};
+            mBluetoothDeviceListPreference.setEntries(entries.toArray(prototype));
+            mBluetoothDeviceListPreference.setEntryValues(values.toArray(prototype));
+
+            SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+            updateSummary(mBluetoothDeviceListPreference,
+                    preferences.getString(getString(
+                            R.string.bluetooth_mac_key), null));
+        }
+    }
+
+    protected void initializeNetwork(PreferenceManager manager) {
+        mNetworkHostPreference = (EditTextPreference)
+                    manager.findPreference(getString(R.string.network_host_key));
+        mNetworkHostPreference.setOnPreferenceChangeListener(
+                mUpdateSummaryListener);
+
+        mNetworkPortPreference = (EditTextPreference)
+                    manager.findPreference(getString(R.string.network_port_key));
+        mNetworkPortPreference.setOnPreferenceChangeListener(
+                mUpdateSummaryListener);
+
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(this);
+
+        updateSummary(mNetworkHostPreference,
+                preferences.getString(getString(
+                        R.string.network_host_key), null));
+
+        updateSummary(mNetworkPortPreference,
+                preferences.getString(getString(
+                        R.string.network_port_key), null));
+    }
+
+    protected void initializeAboutPreferences(PreferenceManager manager) {
+        try {
+            mAboutVersionPreference = manager.findPreference(
+                    getString(R.string.application_version_key));
+
+            String versionNumber = getPackageManager().getPackageInfo(
+                getPackageName(), 0).versionName;
+
+            updateSummary(mAboutVersionPreference, versionNumber);
+
+        } catch (NameNotFoundException e) {
+            Log.e(TAG, "Could not get application version.", e);
+        }
     }
 
     protected void updateSummary(Preference preference, Object currentValue) {
@@ -240,144 +344,57 @@ public class SettingsActivity extends PreferenceActivity {
         preference.setSummary(summary);
     }
 
-    protected void initializeBluetoothPreferences(Preference listPreference,
-            Preference enabledPreference, Preference pollingPreference) {
-        mBluetoothPollingPrefernce = (CheckBoxPreference) pollingPreference;
-        mBluetoothDeviceListPreference = (ListPreference) listPreference;
-        mBluetoothDeviceListPreference.setOnPreferenceChangeListener(
-                mUpdateSummaryListener);
-
-        bindService(new Intent(SettingsActivity.this,
-                    PreferenceManagerService.class), mConnection,
-                Context.BIND_AUTO_CREATE);
-
-        List<String> entries = new ArrayList<String>();
-        entries.add(getString(R.string.bluetooth_mac_automatic_option));
-        List<String> values = new ArrayList<String>();
-        values.add(getString(R.string.bluetooth_mac_automatic_summary));
-
-        CharSequence[] prototype = {};
-        mBluetoothDeviceListPreference.setEntries(entries.toArray(prototype));
-        mBluetoothDeviceListPreference.setEntryValues(values.toArray(prototype));
-
-        enabledPreference.setOnPreferenceChangeListener(
-                mBluetoothCheckboxListener);
-
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        mBluetoothDeviceListPreference.setEnabled(preferences.getBoolean(
-                    getString(R.string.bluetooth_checkbox_key), false));
-        mBluetoothPollingPrefernce.setEnabled(preferences.getBoolean(
-                    getString(R.string.bluetooth_checkbox_key), false));
-
-        updateSummary(mBluetoothDeviceListPreference,
-                preferences.getString(getString(
-                        R.string.bluetooth_mac_key), null));
-    }
-
-    protected void initializeNetwork(Preference hostPreference,
-            Preference portPreference,
-            Preference checkboxPreference) {
-        mNetworkSourcePreference = (CheckBoxPreference) checkboxPreference;
-        mNetworkSourcePreference.setOnPreferenceChangeListener(
-                mNetworkCheckboxListener);
-
-        mNetworkHostPreference = (EditTextPreference) hostPreference;
-        mNetworkHostPreference.setOnPreferenceChangeListener(
-                mUpdateSummaryListener);
-
-        mNetworkPortPreference = (EditTextPreference) portPreference;
-        mNetworkPortPreference.setOnPreferenceChangeListener(
-                mUpdateSummaryListener);
-
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        mNetworkHostPreference.setEnabled(preferences.getBoolean(
-                    getString(R.string.network_checkbox_key), false));
-        mNetworkPortPreference.setEnabled(preferences.getBoolean(
-                    getString(R.string.network_checkbox_key), false));
-
-        updateSummary(mNetworkHostPreference,
-                preferences.getString(getString(
-                        R.string.network_host_key), null));
-
-        updateSummary(mNetworkPortPreference,
-                preferences.getString(getString(
-                        R.string.network_port_key), null));
-    }
-
-    protected void initializeAboutPreferences(
-            Preference aboutVersionPreference) {
-        try {
-            mAboutVersionPreference = aboutVersionPreference;
-
-            String versionNumber = getPackageManager().getPackageInfo(
-                getPackageName(), 0).versionName;
-
-            updateSummary(mAboutVersionPreference, versionNumber);
-
-        } catch (NameNotFoundException e) {
-            Log.e(TAG, "Could not get application version.", e);
-        }
-    }
-
-
-    private OnPreferenceChangeListener mNetworkCheckboxListener =
+    private OnPreferenceChangeListener mVehicleInterfaceUpdatedListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            mNetworkHostPreference.setEnabled((Boolean)newValue);
-            mNetworkPortPreference.setEnabled((Boolean)newValue);
+            // Can't just call preference.getSummary() because this callback
+            // happens bofore newValue is actually set.
+            ListPreference listPreference = (ListPreference) preference;
+            String newSummary = listPreference.getEntries()[
+                    listPreference.findIndexOfValue(
+                            newValue.toString())].toString();
+            preference.setSummary(newSummary);
+
+            mNetworkPreferences.setEnabled(newValue.equals(
+                    getString(R.string.network_interface_option_value)));
+            mBluetoothPreferences.setEnabled(newValue.equals(
+                    getString(R.string.bluetooth_interface_option_value)));
+            mTracePreferences.setEnabled(newValue.equals(
+                    getString(R.string.trace_interface_option_value)));
+
             return true;
         }
     };
 
     private OnPreferenceChangeListener mUpdateSummaryListener =
-        new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference,
-                    Object newValue) {
-                updateSummary(preference, newValue);
-                return true;
-            }
-        };
-
-    private OnPreferenceChangeListener mBluetoothCheckboxListener =
-        new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference,
-                    Object newValue) {
-                mBluetoothDeviceListPreference.setEnabled((Boolean)newValue);
-                mBluetoothPollingPrefernce.setEnabled((Boolean)newValue);
-                return true;
-            }
-        };
-
-    private OnPreferenceChangeListener mUploadingPathPreferenceListener =
-        new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference,
-                    Object newValue) {
-                String path = (String) newValue;
-                if(!UploaderSink.validatePath(path)) {
-                    String error = "Invalid target URL \"" + path +
-                        "\" -- must be an absolute URL " +
-                        "with http:// prefix";
-                    Toast.makeText(getApplicationContext(), error,
-                            Toast.LENGTH_SHORT).show();
-                    Log.w(TAG, error);
-                    mUploadingPreference.setChecked(false);
-                }
-                updateSummary(preference, newValue);
-                return true;
-            }
-        };
-
-    private OnPreferenceChangeListener mTraceCheckboxListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
-            mTraceFilePreference.setEnabled((Boolean)newValue);
+            updateSummary(preference, newValue);
             return true;
         }
     };
+
+    private OnPreferenceChangeListener mUploadingPathPreferenceListener =
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference,
+                Object newValue) {
+            String path = (String) newValue;
+            if(!UploaderSink.validatePath(path)) {
+                String error = "Invalid target URL \"" + path +
+                    "\" -- must be an absolute URL " +
+                    "with http:// prefix";
+                Toast.makeText(getApplicationContext(), error,
+                        Toast.LENGTH_SHORT).show();
+                Log.w(TAG, error);
+                mUploadingPreference.setChecked(false);
+            }
+            updateSummary(preference, newValue);
+            return true;
+        }
+    };
+
 
     private Preference.OnPreferenceClickListener mTraceFileClickListener =
             new Preference.OnPreferenceClickListener() {

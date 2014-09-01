@@ -1,5 +1,15 @@
 <PreferenceScreen
+        android:key="preference_screen"
         xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+            android:key="@string/vehicle_interface_key"
+            android:title="@string/vehicle_interface_title"
+            android:entries="@array/vehicle_interface_types"
+            android:entryValues="@array/vehicle_interface_type_aliases"
+            android:defaultValue="@string/bluetooth_interface_option_value"
+            android:persistent="true"/>
+
     <PreferenceCategory
             android:title="@string/gps_settings">
         <CheckBoxPreference
@@ -8,13 +18,10 @@
                 android:summary="@string/native_gps_checkbox_summary"
                 android:defaultValue="false" />
     </PreferenceCategory>
+
     <PreferenceCategory
+            android:key="@string/bluetooth_settings"
             android:title="@string/bluetooth_settings">
-        <CheckBoxPreference
-                android:key="@string/bluetooth_checkbox_key"
-                android:title="@string/bluetooth_checkbox_title"
-                android:summary="@string/bluetooth_checkbox_summary"
-                android:defaultValue="true" />
         <CheckBoxPreference
                 android:key="@string/bluetooth_polling_key"
                 android:title="@string/bluetooth_polling_title"
@@ -26,13 +33,10 @@
                 android:defaultValue="@string/bluetooth_mac_automatic_option"
                 android:persistent="true"/>
     </PreferenceCategory>
+
     <PreferenceCategory
+            android:key="@string/network_settings"
             android:title="@string/network_settings">
-        <CheckBoxPreference
-                android:key="@string/network_checkbox_key"
-                android:title="@string/network_checkbox_title"
-                android:summary="@string/network_checkbox_summary"
-                android:defaultValue="false" />
         <EditTextPreference
                 android:key="@string/network_host_key"
                 android:title="@string/network_host_title"
@@ -42,13 +46,10 @@
                 android:title="@string/network_port_title"
                 android:inputType="number" />
     </PreferenceCategory>
+
     <PreferenceCategory
+            android:key="@string/trace_source_settings"
             android:title="@string/trace_source_settings">
-        <CheckBoxPreference
-                android:key="@string/trace_source_checkbox_key"
-                android:title="@string/trace_source_checkbox_title"
-                android:summary="@string/trace_source_checkbox_summary"
-                android:defaultValue="false" />
         <Preference
                 android:key="@string/trace_source_file_key"
                 android:title="@string/trace_source_file_title" />

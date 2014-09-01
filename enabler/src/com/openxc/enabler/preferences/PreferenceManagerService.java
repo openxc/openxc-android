@@ -49,6 +49,7 @@ public class PreferenceManagerService extends Service {
         mPreferenceManagers.add(new UploadingPreferenceManager(this));
         mPreferenceManagers.add(new NetworkPreferenceManager(this));
         mPreferenceManagers.add(new TraceSourcePreferenceManager(this));
+        mPreferenceManagers.add(new UsbPreferenceManager(this));
     }
 
     @Override
