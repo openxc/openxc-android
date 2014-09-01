@@ -59,15 +59,12 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                 editor.commit();
             } else {
                 try {
-                    getVehicleManager().addVehicleInterface(
+                    getVehicleManager().setVehicleInterface(
                             NetworkVehicleInterface.class, combinedAddress);
                 } catch(VehicleServiceException e) {
                     Log.e(TAG, "Unable to add network interface", e);
                 }
             }
-        } else {
-            getVehicleManager().removeVehicleInterface(
-                    NetworkVehicleInterface.class);
         }
     }
 }

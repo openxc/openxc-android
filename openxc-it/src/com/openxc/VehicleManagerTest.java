@@ -1,38 +1,30 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import junit.framework.Assert;
-
-
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 
 import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.SteeringWheelAngle;
-import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
-import com.openxc.messages.Command;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
-import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
@@ -48,7 +40,6 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     String receivedMessageId;
     TestSource source = new TestSource();
     VehicleMessage messageReceived;
-    VehicleInterface mTestInterface;
 
     VehicleMessage.Listener messageListener = new VehicleMessage.Listener() {
         public void receive(VehicleMessage message) {
@@ -77,8 +68,6 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     protected void setUp() throws Exception {
         super.setUp();
 
-        mTestInterface = mock(VehicleInterface.class);
-        when(mTestInterface.isConnected()).thenReturn(true);
         speedReceived = null;
         steeringAngleReceived = null;
 
@@ -99,7 +88,6 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
                 bindService(startIntent)).getService();
         service.waitUntilBound();
         service.addSource(source);
-        service.addLocalVehicleInterface(mTestInterface);
     }
 
     @Override
@@ -229,48 +217,6 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
                 age > 5);
     }
 
-    @MediumTest
-    public void testSendMeasurement() throws
-            UnrecognizedMeasurementTypeException, DataSinkException {
-        prepareServices();
-        service.send(new TurnSignalStatus(
-                    TurnSignalStatus.TurnSignalPosition.LEFT));
-        verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
-    }
-
-    @MediumTest
-    public void testSendMessage() throws DataSinkException {
-        prepareServices();
-        service.send(new SimpleVehicleMessage("foo", "bar"));
-        verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
-    }
-
-    @MediumTest
-    public void testSentMessageTimestampped() throws DataSinkException {
-        prepareServices();
-        VehicleMessage message = new SimpleVehicleMessage("foo", "bar");
-        assertFalse(message.isTimestamped());
-        service.send(message);
-        assertTrue(message.isTimestamped());
-        verify(mTestInterface).receive(Mockito.any(VehicleMessage.class));
-    }
-
-    @MediumTest
-    public void testSendDiagnosticRequest() throws DataSinkException {
-        prepareServices();
-        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
-        assertFalse(request.isTimestamped());
-        service.send(request);
-        ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(
-                Command.class);
-        verify(mTestInterface).receive(argument.capture());
-        assertTrue(request.isTimestamped());
-        Command command = argument.getValue();
-        assertEquals(command.getCommand(), Command.CommandType.DIAGNOSTIC_REQUEST);
-        assertNotNull(command.getDiagnosticRequest());
-        assertThat(command.getDiagnosticRequest(), equalTo(request));
-    }
-
     private class Requester implements Runnable {
         private DiagnosticRequest mRequest;
         public DiagnosticResponse response;
@@ -370,9 +316,9 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testAddVehicleInterfaceByClass() throws VehicleServiceException {
+    public void testSetVehicleInterfaceByClass() throws VehicleServiceException {
         prepareServices();
-        service.addVehicleInterface(NetworkVehicleInterface.class,
+        service.setVehicleInterface(NetworkVehicleInterface.class,
                 "localhost:8080");
         assertThat(service.getActiveSources(),
                 hasItem(NetworkVehicleInterface.class));
@@ -383,10 +329,10 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     @MediumTest
-    public void testAddBluetoothVehicleInterface()
+    public void testSetBluetoothVehicleInterface()
             throws VehicleServiceException {
         prepareServices();
-        service.addVehicleInterface(BluetoothVehicleInterface.class,
+        service.setVehicleInterface(BluetoothVehicleInterface.class,
                 "00:01:02:03:04:05");
         // If the running on an emulator it will report  that it doesn't have a
         // Bluetooth adapter, and we will be unable to construct the
@@ -394,24 +340,6 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // assertThat(service.getActiveSources(),
                 // hasItem(new VehicleInterfaceDescriptor(
                         // BluetoothVehicleInterface.class, false)));
-    }
-
-    @MediumTest
-    public void testRemoveVehicleInterfaceByClass()
-            throws VehicleServiceException {
-        prepareServices();
-        service.addVehicleInterface(NetworkVehicleInterface.class,
-                "localhost:8080");
-        service.removeVehicleInterface(NetworkVehicleInterface.class);
-        assertThat(service.getActiveSources(),
-                not(hasItem(NetworkVehicleInterface.class)));
-    }
-
-    @MediumTest
-    public void testRemoveVehicleInterfaceByClassWithoutAdding()
-            throws VehicleServiceException {
-        prepareServices();
-        service.removeVehicleInterface(NetworkVehicleInterface.class);
     }
 
     @MediumTest

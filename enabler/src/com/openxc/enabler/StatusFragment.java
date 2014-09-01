@@ -120,7 +120,7 @@ public class StatusFragment extends Fragment {
                             deviceManager.startDiscovery();
                             // Re-adding the interface with a null address triggers
                             // automatic mode 1 time
-                            mVehicleManager.addVehicleInterface(
+                            mVehicleManager.setVehicleInterface(
                                     BluetoothVehicleInterface.class, null);
 
                             // clears the existing explicitly set Bluetooth device.

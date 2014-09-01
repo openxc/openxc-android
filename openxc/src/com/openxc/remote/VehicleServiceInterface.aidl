@@ -67,8 +67,13 @@ interface VehicleServiceInterface {
      */
     int getMessageCount();
 
-    void addVehicleInterface(String interfaceName, String resource);
-    void removeVehicleInterface(String interfaceName);
+    void setVehicleInterface(String interfaceName, String resource);
+
+    /**
+     * Return list of tokens identifying the data sources that are enabled and
+     * the connection status for each.
+     */
+    VehicleInterfaceDescriptor getVehicleInterfaceDescriptor();
 
     /**
      * The one vehicle interface specific function, control whether polling is
@@ -89,12 +94,6 @@ interface VehicleServiceInterface {
 
     List<String> getSourceSummaries();
     List<String> getSinkSummaries();
-
-    /**
-     * Return list of tokens identifying the data sources that are enabled and
-     * the connection status for each.
-     */
-    List<VehicleInterfaceDescriptor> getEnabledVehicleInterfaces();
 
     void userPipelineActivated();
     void userPipelineDeactivated();

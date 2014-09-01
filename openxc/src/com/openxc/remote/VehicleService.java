@@ -2,7 +2,6 @@ package com.openxc.remote;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -17,10 +16,10 @@ import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterfaceException;
 import com.openxc.interfaces.VehicleInterfaceFactory;
-import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.RemoteCallbackSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
@@ -42,9 +41,8 @@ import com.openxc.sources.WakeLockManager;
  * VehicleService is purposefully primative as there are a small set of
  * objects that can be natively marshalled through an AIDL interface.
  *
- * Vehicle interfaces can be activated with the {@link
- * #addVehicleInterface(Class, String)} method and they can removed with {@link
- * #removeVehicleInterface(VehicleInterface)}.
+ * Only one vehicle interface can be active at at time, and it can be set with
+ * the {@link #setVehicleInterface(Class, String)} method.
  *
  * This service uses the same {@link com.openxc.DataPipeline} as the
  * {@link com.openxc.VehicleManager} to move data from sources to sinks, but it
@@ -65,8 +63,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private VehicleDataSource mNativeLocationSource;
-    private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
-            new CopyOnWriteArrayList<VehicleInterface>();
+    private VehicleInterface mVehicleInterface;
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
     private boolean mUserPipelineActive;
@@ -166,11 +163,20 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
             @Override
             public boolean send(VehicleMessage command) {
-                boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces,
-                        command);
-                if(!sent) {
-                    Log.d(TAG, "No interfaces in remote service able " +
-                            "to send command \"" + command + "\"");
+                command.untimestamp();
+                boolean sent = false;
+                if(mVehicleInterface != null && mVehicleInterface.isConnected()) {
+                    try {
+                        mVehicleInterface.receive(command);
+                        Log.d(TAG, "Sent " + command + " using interface " +
+                                mVehicleInterface);
+                        sent = true;
+                    } catch(DataSinkException e) {
+                        Log.w(TAG, mVehicleInterface +
+                                " unable to send command", e);
+                    }
+                } else {
+                    Log.w(TAG, "No connected VI available to send command");
                 }
                 return sent;
             }
@@ -198,9 +204,9 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
-            public void addVehicleInterface(String interfaceName,
+            public void setVehicleInterface(String interfaceName,
                     String resource) {
-                VehicleService.this.addVehicleInterface(
+                VehicleService.this.setVehicleInterface(
                         interfaceName, resource);
             }
 
@@ -215,11 +221,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
-            public void removeVehicleInterface(String interfaceName) {
-                VehicleService.this.removeVehicleInterface(interfaceName);
-            }
-
-            @Override
             public List<String> getSourceSummaries() {
                 ArrayList<String> sources = new ArrayList<String>();
                 for(VehicleDataSource source : mPipeline.getSources()) {
@@ -229,15 +230,12 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
-            public List<VehicleInterfaceDescriptor>
-                    getEnabledVehicleInterfaces() {
-                ArrayList<VehicleInterfaceDescriptor> interfaces =
-                        new ArrayList<>();
-                for(VehicleInterface vi : mInterfaces) {
-                    interfaces.add(
-                            VehicleInterfaceManagerUtils.getDescriptor(vi));
+            public VehicleInterfaceDescriptor getVehicleInterfaceDescriptor() {
+                if(mVehicleInterface == null) {
+                    return null;
                 }
-                return interfaces;
+                return new VehicleInterfaceDescriptor(mVehicleInterface.getClass(),
+                        mVehicleInterface.isConnected());
             }
 
             @Override
@@ -264,35 +262,34 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
     };
 
-    private void addVehicleInterface(
-            Class<? extends VehicleInterface> interfaceType) {
-        addVehicleInterface(interfaceType, null);
-    }
-
-    private void addVehicleInterface(
+    private void setVehicleInterface(
             Class<? extends VehicleInterface> interfaceType,
             String resource) {
-        VehicleInterface vehicleInterface =
-            findActiveVehicleInterface(interfaceType);
+        if(mVehicleInterface == null || !(mVehicleInterface.getClass().
+                    isAssignableFrom(interfaceType))) {
+            if(mVehicleInterface != null) {
+                Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
+                mVehicleInterface.stop();
+                mPipeline.removeSource(mVehicleInterface);
+                mVehicleInterface = null;
+            }
 
-        if(vehicleInterface == null) {
             try {
-                vehicleInterface = VehicleInterfaceFactory.build(
+                mVehicleInterface = VehicleInterfaceFactory.build(
                         interfaceType, VehicleService.this, resource);
             } catch(VehicleInterfaceException e) {
-                Log.w(TAG, "Unable to add vehicle interface", e);
+                Log.w(TAG, "Unable to set vehicle interface", e);
                 return;
             }
 
-            mInterfaces.add(vehicleInterface);
-            mPipeline.addSource(vehicleInterface);
+            mPipeline.addSource(mVehicleInterface);
         } else {
             try {
-                if(vehicleInterface.setResource(resource)) {
+                if(mVehicleInterface.setResource(resource)) {
                     Log.d(TAG, "Changed resource of already active interface " +
-                            vehicleInterface + " to " + resource);
+                            mVehicleInterface + " to " + resource);
                 } else {
-                    Log.d(TAG, "Interface " + vehicleInterface +
+                    Log.d(TAG, "Interface " + mVehicleInterface +
                             " already had same active resource " + resource +
                             " -- not restarting");
                 }
@@ -300,27 +297,15 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 Log.w(TAG, "Unable to change resource", e);
             }
         }
-        Log.i(TAG, "Added vehicle interface " + vehicleInterface);
+        Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
     }
 
-    private void addVehicleInterface(String interfaceName, String resource) {
+    private void setVehicleInterface(String interfaceName, String resource) {
         try {
-            addVehicleInterface(
+            setVehicleInterface(
                     VehicleInterfaceFactory.findClass(interfaceName), resource);
         } catch(VehicleInterfaceException e) {
-            Log.w(TAG, "Unable to add vehicle interface", e);
-        }
-    }
-
-    private void removeVehicleInterface(String interfaceName) {
-        removeVehicleInterface(findActiveVehicleInterface(interfaceName));
-    }
-
-    private void removeVehicleInterface(VehicleInterface vehicleInterface) {
-        if(vehicleInterface != null) {
-            vehicleInterface.stop();
-            mInterfaces.remove(vehicleInterface);
-            mPipeline.removeSource(vehicleInterface);
+            Log.w(TAG, "Unable to set vehicle interface", e);
         }
     }
 
@@ -336,29 +321,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     }
 
     private void setBluetoothPollingStatus(boolean enabled) {
-        BluetoothVehicleInterface bluetoothInterface = (BluetoothVehicleInterface)
-                findActiveVehicleInterface(BluetoothVehicleInterface.class);
-        if(bluetoothInterface != null) {
-            bluetoothInterface.setPollingStatus(enabled);
-        }
-    }
-
-    private VehicleInterface findActiveVehicleInterface(
-            Class<? extends VehicleInterface> interfaceType) {
-        for(VehicleInterface vehicleInterface : mInterfaces) {
-            if(vehicleInterface.getClass().equals(interfaceType)) {
-                return vehicleInterface;
-            }
-        }
-        return null;
-    }
-
-    private VehicleInterface findActiveVehicleInterface(String interfaceName) {
-        try {
-            return findActiveVehicleInterface(
-                    VehicleInterfaceFactory.findClass(interfaceName));
-        } catch(VehicleInterfaceException e) {
-            return null;
+        if(mVehicleInterface != null &&
+                mVehicleInterface instanceof BluetoothVehicleInterface) {
+            ((BluetoothVehicleInterface)mVehicleInterface).setPollingStatus(
+                    enabled);
         }
     }
 

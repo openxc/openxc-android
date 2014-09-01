@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
-import com.openxc.interfaces.VehicleInterfaceManagerUtils;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
@@ -62,20 +61,15 @@ import com.openxc.sources.VehicleDataSource;
  * {@link com.openxc.sinks.VehicleDataSink} and
  * {@link com.openxc.interfaces.VehicleInterface}.
  *
- * The list of {@link com.openxc.interfaces.VehicleInterface} is perhaps the
- * most important. These instances represent actual physical connections to the
- * vehicle, and are bi-directional - they can both provide data to an
+ * The instance of a {@link com.openxc.interfaces.VehicleInterface} is perhaps the
+ * most important. This represents the actual physical connections to the
+ * vehicle, and is bi-directional - it can both provide data to an
  * application and optionally send data back to the vehicle. In most cases,
- * these should not be instantiated by applications; the
- * {@link #addVehicleInterface(Class, String)} and
- * {@link #removeVehicleInterface(Class)} methods
- * take enough metadata from the remote {@link com.openxc.remote.VehicleService}
- * to instantiate the interface in a remove process. That way a single USB or
- * Bluetooth connection can be shared among many applications. If an application
- * really needs to use a custom VehicleInterface implementation and does not
- * mind if access to its write interface will be accessible only in the local
- * app process, the {@link #addLocalVehicleInterface(VehicleInterface)} and
- * {@link #removeLocalVehicleInterface(VehicleInterface)} can let you do that.
+ * this should not be instantiated by applications; the
+ * {@link #setVehicleInterface(Class, String)} method takes enough metadata for
+ * the remote {@link com.openxc.remote.VehicleService} to instantiate the
+ * interface in a remote process. That way a single USB or
+ * Bluetooth connection can be shared among many applications.
  *
  * The list of active data sources (e.g.
  * {@link com.openxc.sources.trace.TraceVehicleDataSource}) can be controlled
@@ -105,8 +99,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
-    private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
-            new CopyOnWriteArrayList<VehicleInterface>();
 
     // The mRemoteOriginPipeline in this class must only have 1 source - the
     // special RemoteListenerSource that receives measurements from the
@@ -265,9 +257,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                     DiagnosticRequest.ADD_ACTION_KEY);
         }
 
-        boolean sent = VehicleInterfaceManagerUtils.send(mInterfaces,
-                wrappedMessage);
-
+        boolean sent = false;
         // Don't want to keep this in the same list as local interfaces because
         // if that quits after the first interface reports success.
         if(mRemoteService != null) {
@@ -460,25 +450,26 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    public void setVehicleInterface(
+            Class<? extends VehicleInterface> vehicleInterfaceType)
+            throws VehicleServiceException {
+       setVehicleInterface(vehicleInterfaceType, null);
+    }
+
     /**
      * Activate a vehicle interface for both receiving data and sending commands
      * to the vehicle.
      *
      * For example, to use a Bluetooth vehicle interface in addition to a
-     * vehicle data source, call the addVehicleInterface method after binding
+     * vehicle data source, call the setVehicleInterface method after binding
      * with VehicleManager:
      *
-     *      service.addVehicleInterface(BluetoothVehicleInterface.class, "");
+     *      service.setVehicleInterface(BluetoothVehicleInterface.class, "");
      *
      * The only valid VehicleInteface types are those included with the library
      * - the vehicle service running in a remote process is the one to actually
      * instantiate the interfaces. Interfaces added with this method will be
-     * available for all other OpenXC applications running in the system. To use
-     * custom implementations of {@link com.openxc.interfaces.VehicleInterface},
-     * see {@link #addLocalVehicleInterface(VehicleInterface)} (but beware of
-     * the caveats described with that method - interfaces added "locally" do
-     * not support bidirectional communication for any other applications
-     * besides the one that instantiated the interface).
+     * available for all other OpenXC applications running in the system.
      *
      * @param vehicleInterfaceType A class implementing VehicleInterface that is
      *      included in the OpenXC library
@@ -486,44 +477,21 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      interface. See the specific implementation of {@link VehicleService}
      *      to find the required format of this parameter.
      */
-    public void addVehicleInterface(
+    public void setVehicleInterface(
             Class<? extends VehicleInterface> vehicleInterfaceType,
             String resource) throws VehicleServiceException {
-        Log.i(TAG, "Adding interface: " + vehicleInterfaceType);
+        Log.i(TAG, "Setting VI to: " + vehicleInterfaceType);
 
         if(mRemoteService != null) {
             try {
-                mRemoteService.addVehicleInterface(
+                mRemoteService.setVehicleInterface(
                         vehicleInterfaceType.getName(), resource);
             } catch(RemoteException e) {
                 throw new VehicleServiceException(
-                        "Unable to add vehicle interface", e);
+                        "Unable to set vehicle interface", e);
             }
         } else {
-            Log.w(TAG, "Can't add vehicle interface, not connected to the " +
-                    "VehicleService");
-        }
-    }
-
-    /**
-     * Disable a vehicle interface, stopping data flow in both directions.
-     *
-     * @param vehicleInterfaceType A class implementing VehicleInterface that is
-     *      included in the OpenXC library, should have been previously added.
-     */
-    public void removeVehicleInterface(
-            Class<? extends VehicleInterface> vehicleInterfaceType) {
-        Log.i(TAG, "Removing interface: " + vehicleInterfaceType);
-
-        if(mRemoteService != null) {
-            try {
-                mRemoteService.removeVehicleInterface(
-                        vehicleInterfaceType.getName());
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to remove vehicle interface", e);
-            }
-        } else {
-            Log.w(TAG, "Can't remove vehicle interface, not connected to the " +
+            Log.w(TAG, "Can't set vehicle interface, not connected to the " +
                     "VehicleService");
         }
     }
@@ -638,12 +606,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
         if(mRemoteService != null) {
             try {
-                for(VehicleInterfaceDescriptor descriptor :
-                        mRemoteService.getEnabledVehicleInterfaces()) {
+                // TODO this method should be changed to just return the
+                // descriptor, that would also help with the above TODO comment
+                VehicleInterfaceDescriptor descriptor =
+                        mRemoteService.getVehicleInterfaceDescriptor();
+                if(descriptor != null) {
                     sources.add(descriptor.getInterfaceClass());
                 }
             } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive remote source summaries", e);
+                Log.w(TAG, "Unable to retreive VI descriptor", e);
             }
 
         }
@@ -668,49 +639,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         } else {
             throw new VehicleServiceException(
                     "Unable to retrieve message count");
-        }
-    }
-
-    /**
-     * Add a new local vehicle interface to the service.
-     *
-     * This method will accept any implementation of {@link VehicleInterface},
-     * so completely custom implementations are possible beyond the few built-in
-     * to the OpenXC library.
-     *
-     * However, interfaces added with this method cannot
-     * be used to send commands to the vehicle by any other active OpenXC
-     * application besides the one that instantiates the
-     * {@link VehicleInterface} object.
-     *
-     * That limitation does not apply to data received from the VehicleInterface
-     * - it will be propagated to all other applications, although there is an
-     * additional performance hit when compared to the built-in VehicleInterface
-     * types because Android's AIDL barrier must be crossed twice instead of
-     * once to communicate with the remote {@link VehicleService}.
-     *
-     * @param vehicleInterface an instance of a VehicleInteface
-     */
-    public void addLocalVehicleInterface(VehicleInterface vehicleInterface) {
-        if(vehicleInterface != null) {
-            Log.i(TAG, "Adding local vehicle interface " + vehicleInterface);
-            mInterfaces.add(vehicleInterface);
-            mRemoteOriginPipeline.addSource(vehicleInterface);
-        }
-    }
-
-    /**
-     * Remove a previously registered local vehicle interface from the
-     * service.
-     *
-     * Data from the {@link VehicleInterface} will no longer be propagated to
-     * applications, and it will no longer be available for sending commands to
-     * the vehicle.
-     */
-    public void removeLocalVehicleInterface(VehicleInterface vehicleInterface) {
-        if(vehicleInterface != null) {
-            mInterfaces.remove(vehicleInterface);
-            mRemoteOriginPipeline.removeSource(vehicleInterface);
         }
     }
 
