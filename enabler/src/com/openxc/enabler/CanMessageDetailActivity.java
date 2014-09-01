@@ -23,7 +23,7 @@ public class CanMessageDetailActivity extends Activity {
             timestampView.setText("" + message.getTimestamp());
 
             TextView busView = (TextView) findViewById(R.id.bus);
-            busView.setText("" + message.getBus());
+            busView.setText("" + message.getBusId());
 
             TextView idView = (TextView) findViewById(R.id.id);
             idView.setText("0x" + Integer.toHexString(message.getId()));

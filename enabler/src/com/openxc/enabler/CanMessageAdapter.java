@@ -1,5 +1,7 @@
 package com.openxc.enabler;
 
+import java.text.SimpleDateFormat;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +33,13 @@ public class CanMessageAdapter extends KeyedMessageAdapter {
 
         CanMessage message = getItem(position);
 
+        TextView timestampView = (TextView)
+                convertView.findViewById(R.id.timestamp);
+        timestampView.setText(new SimpleDateFormat("HH:mm:ss.S").format(
+                    message.getDate()));
+
         TextView busView = (TextView) convertView.findViewById(R.id.bus);
-        busView.setText("" + message.getBus());
+        busView.setText("" + message.getBusId());
 
         TextView idView = (TextView) convertView.findViewById(R.id.id);
         idView.setText("0x" + Integer.toHexString(message.getId()));

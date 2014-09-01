@@ -33,7 +33,7 @@ public class CanMessageTest {
 
     @Test
     public void getBusReturnsBus() {
-        assertEquals(bus, message.getBus());
+        assertEquals(bus, message.getBusId());
     }
 
     @Test

@@ -37,7 +37,7 @@
                 android:text="@string/message_id_label" />
 
             <EditText
-                android:id="@+id/diag_request_id"
+                android:id="@+id/message_id"
                 android:maxLength="3"
                 style="@style/HexTextField">
 
@@ -54,39 +54,17 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            style="@style/ItemRow">
+            style="@style/ItemRow"
+            android:orientation="vertical" >
 
             <TextView
                 style="@style/FormInputLabel"
-                android:text="@string/diag_request_mode_label" />
+                android:text="@string/message_payload_label" />
 
             <EditText
-                android:id="@+id/diag_request_mode"
-                android:maxLength="2"
-                style="@style/HexTextField">
-
-                <requestFocus />
-            </EditText>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            style="@style/ItemRow">
-
-            <TextView
-                style="@style/FormInputLabel"
-                android:text="@string/diag_request_pid_label" />
-
-            <EditText
-                android:id="@+id/diag_request_pid"
-                android:maxLength="2"
+                android:id="@+id/message_payload"
+                android:maxLength="16"
+                android:layout_width="match_parent"
                 style="@style/HexTextField">
 
                 <requestFocus />
@@ -106,19 +84,7 @@
             android:orientation="vertical" >
         <TextView
             style="@style/ItemLabel"
-            android:text="@string/last_diag_request_label" />
-
-        <include android:id="@+id/last_request"
-                layout="@layout/diagnostic_request_list_item"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            style="@style/ItemRow"
-            android:orientation="vertical" >
-        <TextView
-            style="@style/ItemLabel"
-            android:text="@string/diag_response_label" />
+            android:text="@string/last_can_message_sent_label" />
 
         <!-- The frame layout is here since we will be showing either
         the empty view or the list view.  -->
@@ -139,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="No diagnostic responses received."/>
+                android:text="No CAN messages sent."/>
 
         </FrameLayout>
 

@@ -54,7 +54,7 @@ public class BinarySerializer {
 
         BinaryMessages.RawMessage.Builder messageBuilder =
                 BinaryMessages.RawMessage.newBuilder();
-        messageBuilder.setBus(message.getBus());
+        messageBuilder.setBus(message.getBusId());
         messageBuilder.setMessageId(message.getId());
         messageBuilder.setData(ByteString.copyFrom(message.getData()));
         builder.setRawMessage(messageBuilder);
