@@ -109,7 +109,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeValue(getMultipleResponses());
+        out.writeValue(mMultipleResponses);
         out.writeValue(getFrequency());
         out.writeString(getName());
     }

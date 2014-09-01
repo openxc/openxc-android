@@ -17,6 +17,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.formatters.JsonFormatter;
 
 import android.os.Parcel;
 
@@ -83,6 +84,19 @@ public class DiagnosticRequestTest {
     @Test
     public void getPayloadReturnsPayload() {
         assertArrayEquals(payload, request.getPayload());
+    }
+
+    @Test
+    public void getMultipleReturnsFalseIfNotSetOrFalse() {
+        assertFalse(request.getMultipleResponses());
+        request.setMultipleResponses(false);
+        assertFalse(request.getMultipleResponses());
+    }
+
+    @Test
+    public void getMultipleWhenTrue() {
+        request.setMultipleResponses(true);
+        assertTrue(request.getMultipleResponses());
     }
 
     @Test
@@ -156,6 +170,22 @@ public class DiagnosticRequestTest {
     @Test
     public void toStringNotNull() {
         assertThat(request.toString(), notNullValue());
+    }
+
+    @Test
+    public void writeAndReadFromParcelRetainsNulls() {
+        Parcel parcel = Parcel.obtain();
+        request.writeToParcel(parcel, 0);
+
+        // Reset parcel for reading
+        parcel.setDataPosition(0);
+
+        VehicleMessage createdFromParcel =
+                VehicleMessage.CREATOR.createFromParcel(parcel);
+        assertThat(createdFromParcel, instanceOf(DiagnosticRequest.class));
+        assertEquals(request, createdFromParcel);
+        String serialized = JsonFormatter.serialize(createdFromParcel);
+        assertThat(serialized, not(containsString("multiple_responses")));
     }
 
     @Test
