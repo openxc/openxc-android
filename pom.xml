@@ -125,7 +125,7 @@
                     <dex>
                         <jvmArguments>
                             <argument>-Xms256m</argument>
-                            <argument>-Xmx2048m</argument>
+                            <argument>-Xmx1052m</argument>
                         </jvmArguments>
                     </dex>
                     <sdk>
