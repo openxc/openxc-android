@@ -1,15 +1,12 @@
 package com.openxc.enabler;
 
-import java.text.SimpleDateFormat;
-
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +15,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
-import com.openxc.messages.DiagnosticRequest;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.ByteAdapter;
 
-public class SendCanMessageFragment extends Fragment {
+public class SendCanMessageFragment extends ListFragment {
     private static String TAG = "SendCanMessageFragment";
 
     private VehicleManager mVehicleManager;
-    private View mLastMessageView;
+    private VehicleMessageAdapter mAdapter;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -45,6 +39,12 @@ public class SendCanMessageFragment extends Fragment {
             mVehicleManager = null;
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter = new CanMessageAdapter(getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,9 +73,13 @@ public class SendCanMessageFragment extends Fragment {
                         (EditText) v.findViewById(R.id.message_payload));
             }
         });
-
-        mLastMessageView = v.findViewById(R.id.last_message);
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setListAdapter(mAdapter);
     }
 
     private void onSendCanMessage(Spinner busSpinner,
@@ -105,39 +109,10 @@ public class SendCanMessageFragment extends Fragment {
             mVehicleManager.send(message);
             // Make sure to update after sending so the timestamp is set by the
             // VehicleManager
-            updateLastMessage(message);
+            mAdapter.add(message.asCanMessage());
         } else {
             Log.i(TAG, "Form is invalid, not sending message");
         }
-    }
-
-    private void updateLastMessage(final CanMessage message) {
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                // TODO This is duplicated in CanMessageAdapter - figure
-                // out the best way to share this rendering info
-                TextView timestampView = (TextView)
-                        mLastMessageView.findViewById(R.id.timestamp);
-                timestampView.setText(new SimpleDateFormat("HH:mm:ss.S").format(
-                            message.getDate()));
-
-                TextView busView = (TextView)
-                        mLastMessageView.findViewById(R.id.bus);
-                busView.setText("" + message.getBusId());
-
-                TextView idView = (TextView)
-                        mLastMessageView.findViewById(R.id.id);
-                idView.setText("0x" + Integer.toHexString(message.getId()));
-
-                TextView payloadView = (TextView) mLastMessageView.findViewById(
-                        R.id.data);
-                System.out.println(message.getData());
-                if(message.getData() != null) {
-                    payloadView.setText("0x" + ByteAdapter.byteArrayToHexString(
-                                message.getData()));
-                }
-            }
-        });
     }
 
     @Override

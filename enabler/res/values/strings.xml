@@ -60,6 +60,6 @@
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>
     <string name="send_button">Send</string>
-    <string name="last_can_message_sent_label">Last Sent Message</string>
+    <string name="last_can_message_sent_label">Sent Messages</string>
 
 </resources>
