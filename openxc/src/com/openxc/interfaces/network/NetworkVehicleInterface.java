@@ -100,8 +100,13 @@ public class NetworkVehicleInterface extends BytestreamDataSource
      * @return true if the address and port are valid.
      */
     public static boolean validateResource(String uriString) {
-        return UriBasedVehicleInterfaceMixin.validateResource(
-                massageUri(uriString));
+        try {
+            URI uri = UriBasedVehicleInterfaceMixin.createUri(massageUri(uriString));
+            return UriBasedVehicleInterfaceMixin.validateResource(uri) &&
+                uri.getPort() < 65536;
+        } catch(DataSourceException e) {
+            return false;
+        }
     }
 
     @Override

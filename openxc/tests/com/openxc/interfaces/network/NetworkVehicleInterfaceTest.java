@@ -67,6 +67,21 @@ public class NetworkVehicleInterfaceTest {
     }
 
     @Test
+    public void testValidateInvalidPort() throws DataSourceException {
+        assertFalse(NetworkVehicleInterface.validateResource("http://localhost:70000"));
+    }
+
+    @Test
+    public void testInvalidPort() throws DataSourceException {
+        try {
+            source = new NetworkVehicleInterface(getContext(), "http://localhost:70000");
+        } catch(DataSourceResourceException e) {
+            return;
+        }
+        Assert.fail("Expected a DataSourceResourceException");
+    }
+
+    @Test
     public void testMalformedUri() throws DataSourceException {
         try {
             source = new NetworkVehicleInterface(getContext(), missingPortUri);
