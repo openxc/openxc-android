@@ -62,9 +62,18 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
 
+        if (savedInstanceState != null) {
+            mPager.setCurrentItem(savedInstanceState.getInt("tab", 0));
+        }
 
         startService(new Intent(this, VehicleManager.class));
         startService(new Intent(this, PreferenceManagerService.class));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("tab", mPager.getCurrentItem());
     }
 
     @Override
