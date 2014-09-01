@@ -54,11 +54,10 @@ public class UploaderSinkTest {
 
     @Test
     public void testUploadBatch() throws DataSinkException, IOException {
-        TestUtils.pause(10);
         for(int i = 0; i < 25; i++) {
             sink.receive(message);
         }
-        TestUtils.pause(500);
+        TestUtils.pause(1000);
         assertTrue(Robolectric.httpRequestWasMade());
 
         Type listType = new TypeToken<List<SimpleVehicleMessage>>() {}.getType();
