@@ -121,15 +121,11 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             }
 
             try {
-                getVehicleManager().addVehicleInterface(
+                getVehicleManager().setVehicleInterface(
                         BluetoothVehicleInterface.class, deviceAddress);
             } catch(VehicleServiceException e) {
                 Log.e(TAG, "Unable to start Bluetooth interface", e);
             }
-        } else {
-            Log.i(TAG, "Disabling the Bluetooth vehicle interface");
-            getVehicleManager().removeVehicleInterface(
-                    BluetoothVehicleInterface.class);
         }
     }
 

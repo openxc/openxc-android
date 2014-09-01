@@ -39,15 +39,11 @@ public class UsbPreferenceManager extends VehiclePreferenceManager {
         if(enabled) {
             Log.i(TAG, "Enabling the USB vehicle interface");
             try {
-                getVehicleManager().addVehicleInterface(
+                getVehicleManager().setVehicleInterface(
                         UsbVehicleInterface.class, "");
             } catch(VehicleServiceException e) {
                 Log.e(TAG, "Unable to add USB interface");
             }
-        } else {
-            Log.i(TAG, "Disabling the Bluetooth vehicle interface");
-            getVehicleManager().removeVehicleInterface(
-                    UsbVehicleInterface.class);
         }
     }
 }
