@@ -139,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="No diagnostic responses received."/>
+                android:text="@string/no_diagnostic_responses_received"/>
 
         </FrameLayout>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:baselineAligned="false"
         style="@style/EnablerFragment">
 
     <!-- The frame layout is here since we will be showing either
@@ -21,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="No CAN messages received."/>
+            android:text="@string/no_can_messages_received"/>
 
     </FrameLayout>
 

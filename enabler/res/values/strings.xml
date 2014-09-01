@@ -62,4 +62,8 @@
     <string name="send_button">Send</string>
     <string name="last_can_message_sent_label">Sent Messages</string>
 
+    <string name="no_can_messages_received">No CAN messages received.</string>
+    <string name="no_can_messages_sent">No CAN messages sent.</string>
+    <string name="no_diagnostic_responses_received">No diagnostic responses received.</string>
+
 </resources>
