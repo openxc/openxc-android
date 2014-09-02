@@ -269,8 +269,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
     };
 
-    private void setViConnectionListener(
-            ViConnectionListener listener) {
+    private void setViConnectionListener(ViConnectionListener listener) {
         mViConnectionListener = listener;
     }
 
@@ -348,8 +347,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 mViConnectionListener != null) {
             try {
                 // The VI may have been the one to wake up the pipeline
-                mViConnectionListener.onConnected(new VehicleInterfaceDescriptor(mVehicleInterface));
+                mViConnectionListener.onConnected(
+                        new VehicleInterfaceDescriptor(mVehicleInterface));
             } catch(RemoteException e) {
+                Log.w(TAG, "Unable to notify VI connection listener", e);
             }
         }
     }
@@ -366,6 +367,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                     // The VI may have been the last to shut down
                     mViConnectionListener.onDisconnected();
                 } catch(RemoteException e) {
+                    Log.w(TAG, "Unable to notify VI connection listener", e);
                 }
             }
         }
