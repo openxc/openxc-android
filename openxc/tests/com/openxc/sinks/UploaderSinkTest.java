@@ -54,6 +54,7 @@ public class UploaderSinkTest {
 
     @Test
     public void testUploadBatch() throws DataSinkException, IOException {
+        TestUtils.pause(50);
         for(int i = 0; i < 25; i++) {
             sink.receive(message);
         }
