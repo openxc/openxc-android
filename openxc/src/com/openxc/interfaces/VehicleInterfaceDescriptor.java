@@ -12,27 +12,21 @@ public class VehicleInterfaceDescriptor implements Parcelable {
     private final static String TAG =
             VehicleInterfaceDescriptor.class.getName();
     private boolean mConnected;
-    private String mVersion;
     private Class<? extends VehicleInterface> mInterfaceClass;
 
     public VehicleInterfaceDescriptor(
             Class<? extends VehicleInterface> interfaceClass,
-            boolean connected, String version) {
+            boolean connected) {
         mInterfaceClass = interfaceClass;
         mConnected = connected;
-        mVersion = version;
     }
 
     public VehicleInterfaceDescriptor(VehicleInterface vi) {
-        this(vi.getClass(), vi.isConnected(), vi.getVersion());
+        this(vi.getClass(), vi.isConnected());
     }
 
     public boolean isConnected() {
         return mConnected;
-    }
-
-    public String getVersion() {
-        return mVersion;
     }
 
     public Class<? extends VehicleInterface> getInterfaceClass() {

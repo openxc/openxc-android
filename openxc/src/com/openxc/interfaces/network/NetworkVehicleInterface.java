@@ -249,11 +249,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return success;
     }
 
-    public String getVersion() {
-        // TODO
-        return null;
-    }
-
     @Override
     protected String getTag() {
         return TAG;

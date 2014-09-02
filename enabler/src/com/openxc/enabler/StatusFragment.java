@@ -55,9 +55,10 @@ public class StatusFragment extends Fragment {
                     new ViConnectionListener.Stub() {
                 public void onConnected(final VehicleInterfaceDescriptor descriptor) {
                     Log.d(TAG, descriptor + " is now connected");
+                    final String version = mVehicleManager.getVehicleInterfaceVersion();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
-                            mViVersionView.setText(descriptor.getVersion());
+                            mViVersionView.setText(version);
                         }
                     });
                 }

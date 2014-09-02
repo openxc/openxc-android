@@ -29,6 +29,7 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
@@ -40,6 +41,7 @@ import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.ViConnectionListener;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -456,6 +458,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             mRemoteOriginPipeline.removeSink(sink);
             sink.stop();
         }
+    }
+
+    public String getVehicleInterfaceVersion() {
+        VehicleMessage response = request(new Command(CommandType.VERSION));
+        String version = null;
+        if(response != null) {
+            version = response.asCommandResponse().getMessage();
+        }
+        return version;
     }
 
     public void setVehicleInterface(

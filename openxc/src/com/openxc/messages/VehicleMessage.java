@@ -133,6 +133,10 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         return (CanMessage) this;
     }
 
+    public CommandResponse asCommandResponse() {
+        return (CommandResponse) this;
+    }
+
     public DiagnosticRequest asDiagnosticRequest() {
         return (DiagnosticRequest) this;
     }

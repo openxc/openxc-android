@@ -229,13 +229,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
-    public String getVersion() {
-        byte buffer[] = new byte[256];
-        int received = mConnection.controlTransfer(VERSION_CONTROL_COMMAND,
-                0, 0, 0, buffer, buffer.length, CONTROL_COMMAND_TIMEOUT_S);
-        return new String(buffer, 0, received);
-    }
-
     @Override
     protected String getTag() {
         return TAG;
