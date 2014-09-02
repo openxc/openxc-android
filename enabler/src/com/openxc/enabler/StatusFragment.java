@@ -47,7 +47,7 @@ public class StatusFragment extends Fragment {
     private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
         public void onConnected(final VehicleInterfaceDescriptor descriptor) {
             Log.d(TAG, descriptor + " is now connected");
-            final String version = mVehicleManager.getVehicleInterfaceVersion();
+            final String version = StatusFragment.this.mVehicleManager.getVehicleInterfaceVersion();
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     mViVersionView.setText(version);
@@ -75,6 +75,7 @@ public class StatusFragment extends Fragment {
                 mVehicleManager.addOnVehicleInterfaceConnectedListener(
                         mConnectionListener);
             } catch(VehicleServiceException e) {
+                Log.e(TAG, "Unable to register VI connection listener", e);
             }
 
             new Thread(new Runnable() {

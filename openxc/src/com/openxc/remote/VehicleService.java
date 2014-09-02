@@ -70,7 +70,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private WakeLockManager mWakeLocker;
     private boolean mUserPipelineActive;
     private RemoteCallbackList<ViConnectionListener> mViConnectionListeners =
-            new RemoteCallbackList<ViConnectionListener>();
+            new RemoteCallbackList<>();
 
     @Override
     public void onCreate() {
