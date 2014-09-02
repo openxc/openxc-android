@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -28,7 +29,6 @@ import com.openxc.sources.DataSourceException;
 import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.WakeLockManager;
-import com.openxc.remote.ViConnectionListener;
 
 /**
  * The VehicleService is the centralized source of all vehicle data.
@@ -69,7 +69,8 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
     private boolean mUserPipelineActive;
-    private ViConnectionListener mViConnectionListener;
+    private RemoteCallbackList<ViConnectionListener> mViConnectionListeners =
+            new RemoteCallbackList<ViConnectionListener>();
 
     @Override
     public void onCreate() {
@@ -214,8 +215,8 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
-            public void setViConnectionListener(ViConnectionListener listener) {
-                VehicleService.this.setViConnectionListener(listener);
+            public void addViConnectionListener(ViConnectionListener listener) {
+                VehicleService.this.addViConnectionListener(listener);
             }
 
             @Override
@@ -269,8 +270,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
     };
 
-    private void setViConnectionListener(ViConnectionListener listener) {
-        mViConnectionListener = listener;
+    private void addViConnectionListener(ViConnectionListener listener) {
+        synchronized(mViConnectionListeners) {
+            mViConnectionListeners.register(listener);
+        }
     }
 
     private void setVehicleInterface(String interfaceName, String resource) {
@@ -343,14 +346,21 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     public void onPipelineActivated() {
         mWakeLocker.acquireWakeLock();
         moveToForeground();
-        if(mVehicleInterface != null && mVehicleInterface.isConnected() &&
-                mViConnectionListener != null) {
-            try {
-                // The VI may have been the one to wake up the pipeline
-                mViConnectionListener.onConnected(
-                        new VehicleInterfaceDescriptor(mVehicleInterface));
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to notify VI connection listener", e);
+        if(mVehicleInterface != null && mVehicleInterface.isConnected()) {
+            VehicleInterfaceDescriptor descriptor =
+                        new VehicleInterfaceDescriptor(mVehicleInterface);
+            synchronized(mViConnectionListeners) {
+                int i = mViConnectionListeners.beginBroadcast();
+                while(i > 0) {
+                    i--;
+                    try {
+                        mViConnectionListeners.getBroadcastItem(i).onConnected(descriptor);
+                    } catch(RemoteException e) {
+                        Log.w(TAG, "Couldn't notify VI connection " +
+                                "listener -- did it crash?", e);
+                    }
+                }
+                mViConnectionListeners.finishBroadcast();
             }
         }
     }
@@ -361,14 +371,20 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             mWakeLocker.releaseWakeLock();
             removeFromForeground();
 
-            if((mVehicleInterface == null || !mVehicleInterface.isConnected()) &&
-                    mViConnectionListener != null) {
-                try {
-                    // The VI may have been the last to shut down
-                    mViConnectionListener.onDisconnected();
-                } catch(RemoteException e) {
-                    Log.w(TAG, "Unable to notify VI connection listener", e);
+            if(mVehicleInterface == null || !mVehicleInterface.isConnected()) {
+            synchronized(mViConnectionListeners) {
+                int i = mViConnectionListeners.beginBroadcast();
+                while(i > 0) {
+                    i--;
+                    try {
+                        mViConnectionListeners.getBroadcastItem(i).onDisconnected();
+                    } catch(RemoteException e) {
+                        Log.w(TAG, "Couldn't notify VI connection " +
+                                "listener -- did it crash?", e);
+                    }
                 }
+                mViConnectionListeners.finishBroadcast();
+            }
             }
         }
     }

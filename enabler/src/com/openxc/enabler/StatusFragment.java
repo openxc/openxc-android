@@ -44,6 +44,26 @@ public class StatusFragment extends Fragment {
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
 
+    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
+        public void onConnected(final VehicleInterfaceDescriptor descriptor) {
+            Log.d(TAG, descriptor + " is now connected");
+            final String version = mVehicleManager.getVehicleInterfaceVersion();
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    mViVersionView.setText(version);
+                }
+            });
+        }
+
+        public void onDisconnected() {
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    mViVersionView.setText("");
+                }
+            });
+        }
+    };
+
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
@@ -51,26 +71,11 @@ public class StatusFragment extends Fragment {
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
-            mVehicleManager.addOnVehicleInterfaceConnectedListener(
-                    new ViConnectionListener.Stub() {
-                public void onConnected(final VehicleInterfaceDescriptor descriptor) {
-                    Log.d(TAG, descriptor + " is now connected");
-                    final String version = mVehicleManager.getVehicleInterfaceVersion();
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mViVersionView.setText(version);
-                        }
-                    });
-                }
-
-                public void onDisconnected() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mViVersionView.setText("");
-                        }
-                    });
-                }
-            });
+            try {
+                mVehicleManager.addOnVehicleInterfaceConnectedListener(
+                        mConnectionListener);
+            } catch(VehicleServiceException e) {
+            }
 
             new Thread(new Runnable() {
                 public void run() {

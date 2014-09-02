@@ -1,11 +1,7 @@
 package com.openxc;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -41,7 +37,6 @@ import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.ViConnectionListener;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -105,10 +100,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
-
-    private Set<WeakReference<ViConnectionListener>>
-            mViConnectionListeners = Collections.newSetFromMap(
-                new ConcurrentHashMap<WeakReference<ViConnectionListener>, Boolean>());
 
     // The mRemoteOriginPipeline in this class must only have 1 source - the
     // special RemoteListenerSource that receives measurements from the
@@ -476,8 +467,14 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     public void addOnVehicleInterfaceConnectedListener(
-            ViConnectionListener listener) {
-        mViConnectionListeners.add(new WeakReference<>(listener));
+            ViConnectionListener listener) throws VehicleServiceException {
+        try {
+            mRemoteService.addViConnectionListener(listener);
+        } catch(RemoteException e) {
+            throw new VehicleServiceException(
+                    "Unable to add connection status listener", e);
+        }
+
     }
 
     /**
@@ -673,43 +670,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
-    private ViConnectionListener mViConnectionListener =
-            new ViConnectionListener.Stub() {
-        public void onConnected(VehicleInterfaceDescriptor descriptor) {
-            for(WeakReference<ViConnectionListener> callbackRef
-                    : mViConnectionListeners) {
-                if(callbackRef.get() == null) {
-                    mViConnectionListeners.remove(callbackRef);
-                } else {
-                    try {
-                        callbackRef.get().onConnected(descriptor);
-                    } catch(RemoteException e) {
-                    }
-                }
-            }
-        }
-
-        public void onDisconnected() {
-            for(WeakReference<ViConnectionListener> callbackRef
-                    : mViConnectionListeners) {
-                if(callbackRef.get() == null) {
-                    mViConnectionListeners.remove(callbackRef);
-                } else {
-                    try {
-                        callbackRef.get().onDisconnected();
-                    } catch(RemoteException e) {
-                    }
-                }
-            }
-        }
-    };
-
-    public void onVehicleInterfaceConnected() {
-    }
-
-    public void onVehicleInterfaceDisconnected() {
-    }
-
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -776,14 +736,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
             mRemoteService = VehicleServiceInterface.Stub.asInterface(service);
-
-            if(mRemoteService != null) {
-                try {
-                    mRemoteService.setViConnectionListener(mViConnectionListener);
-                } catch(RemoteException e) {
-                    Log.w(TAG, "Unable to set VI connection listener", e);
-                }
-            }
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mRemoteOriginPipeline.addSource(mRemoteSource);

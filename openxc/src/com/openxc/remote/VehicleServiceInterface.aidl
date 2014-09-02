@@ -99,5 +99,5 @@ interface VehicleServiceInterface {
     void userPipelineActivated();
     void userPipelineDeactivated();
 
-    void setViConnectionListener(in ViConnectionListener listener);
+    void addViConnectionListener(in ViConnectionListener listener);
 }
