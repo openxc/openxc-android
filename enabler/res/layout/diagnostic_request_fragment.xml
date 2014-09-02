@@ -4,95 +4,68 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <LinearLayout
             style="@style/ItemRow">
 
-            <TextView
+        <TextView
                 style="@style/FormInputLabel"
                 android:text="@string/bus_label" />
 
-            <Spinner
+        <Spinner
                 android:id="@+id/bus_spinner"
                 style="@style/ItemData"
                 android:layout_weight="1" />
 
-        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/ItemRow">
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/message_id_label" />
+
+        <EditText
+            android:id="@+id/diag_request_id"
+            android:maxLength="3"
+            style="@style/HexTextField">
+
+            <requestFocus />
+        </EditText>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        style="@style/ItemRow">
 
-        <LinearLayout
-            style="@style/ItemRow">
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/diag_request_mode_label" />
 
-            <TextView
-                style="@style/FormInputLabel"
-                android:text="@string/message_id_label" />
+        <EditText
+            android:id="@+id/diag_request_mode"
+            android:maxLength="2"
+            style="@style/HexTextField">
 
-            <EditText
-                android:id="@+id/diag_request_id"
-                android:maxLength="3"
-                style="@style/HexTextField">
-
-                <requestFocus />
-            </EditText>
-
-        </LinearLayout>
+            <requestFocus />
+        </EditText>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        style="@style/ItemRow">
 
-        <LinearLayout
-            style="@style/ItemRow">
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/diag_request_pid_label" />
 
-            <TextView
-                style="@style/FormInputLabel"
-                android:text="@string/diag_request_mode_label" />
+        <EditText
+            android:id="@+id/diag_request_pid"
+            android:maxLength="2"
+            style="@style/HexTextField">
 
-            <EditText
-                android:id="@+id/diag_request_mode"
-                android:maxLength="2"
-                style="@style/HexTextField">
-
-                <requestFocus />
-            </EditText>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            style="@style/ItemRow">
-
-            <TextView
-                style="@style/FormInputLabel"
-                android:text="@string/diag_request_pid_label" />
-
-            <EditText
-                android:id="@+id/diag_request_pid"
-                android:maxLength="2"
-                style="@style/HexTextField">
-
-                <requestFocus />
-            </EditText>
-
-        </LinearLayout>
+            <requestFocus />
+        </EditText>
 
     </LinearLayout>
 
