@@ -40,7 +40,7 @@ public class UsbPreferenceManager extends VehiclePreferenceManager {
             Log.i(TAG, "Enabling the USB vehicle interface");
             try {
                 getVehicleManager().setVehicleInterface(
-                        UsbVehicleInterface.class, "");
+                        UsbVehicleInterface.class);
             } catch(VehicleServiceException e) {
                 Log.e(TAG, "Unable to add USB interface");
             }

@@ -262,9 +262,16 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
     };
 
-    private void setVehicleInterface(
-            Class<? extends VehicleInterface> interfaceType,
-            String resource) {
+
+    private void setVehicleInterface(String interfaceName, String resource) {
+        Class<? extends VehicleInterface> interfaceType = null;
+        try {
+            interfaceType = VehicleInterfaceFactory.findClass(interfaceName);
+        } catch(VehicleInterfaceException e) {
+            Log.w(TAG, "Unable to find VI matching " + interfaceName +
+                    " -- disabling current interface");
+        }
+
         if(mVehicleInterface == null || !(mVehicleInterface.getClass().
                     isAssignableFrom(interfaceType))) {
             if(mVehicleInterface != null) {
@@ -274,15 +281,17 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 mVehicleInterface = null;
             }
 
-            try {
-                mVehicleInterface = VehicleInterfaceFactory.build(
-                        interfaceType, VehicleService.this, resource);
-            } catch(VehicleInterfaceException e) {
-                Log.w(TAG, "Unable to set vehicle interface", e);
-                return;
-            }
+            if(interfaceType != null) {
+                try {
+                    mVehicleInterface = VehicleInterfaceFactory.build(
+                            interfaceType, VehicleService.this, resource);
+                } catch(VehicleInterfaceException e) {
+                    Log.w(TAG, "Unable to set vehicle interface", e);
+                    return;
+                }
 
-            mPipeline.addSource(mVehicleInterface);
+                mPipeline.addSource(mVehicleInterface);
+            }
         } else {
             try {
                 if(mVehicleInterface.setResource(resource)) {
@@ -297,16 +306,8 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 Log.w(TAG, "Unable to change resource", e);
             }
         }
-        Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
-    }
 
-    private void setVehicleInterface(String interfaceName, String resource) {
-        try {
-            setVehicleInterface(
-                    VehicleInterfaceFactory.findClass(interfaceName), resource);
-        } catch(VehicleInterfaceException e) {
-            Log.w(TAG, "Unable to set vehicle interface", e);
-        }
+        Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
     }
 
     private void setNativeGpsStatus(boolean enabled) {

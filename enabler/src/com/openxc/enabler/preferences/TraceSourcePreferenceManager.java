@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.openxc.enabler.R;
+import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.trace.TraceVehicleDataSource;
 
@@ -46,6 +47,12 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     private synchronized void setTraceSourceStatus(boolean enabled) {
         Log.i(TAG, "Setting trace data source to " + enabled);
         if(enabled) {
+            try {
+                getVehicleManager().setVehicleInterface(null);
+            } catch(VehicleServiceException e) {
+                Log.e(TAG, "Unable to remove existing vehicle interface");
+            }
+
             String traceFile = getPreferenceString(
                     R.string.trace_source_file_key);
             if(traceFile != null ) {
