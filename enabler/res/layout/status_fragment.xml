@@ -62,6 +62,19 @@
         <TextView
             android:id="@+id/message_count"
             style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/vi_version_label" />
+
+        <TextView
+            android:id="@+id/vi_version"
+            style="@style/ItemData" />
+
     </LinearLayout>
 
     <Button

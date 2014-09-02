@@ -60,4 +60,6 @@
     <string name="no_can_messages_sent">No CAN messages sent.</string>
     <string name="no_diagnostic_responses_received">No diagnostic responses received.</string>
 
+    <string name="vi_version_label">VI Version</string>
+
 </resources>
