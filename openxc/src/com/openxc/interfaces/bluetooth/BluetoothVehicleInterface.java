@@ -438,6 +438,11 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    public String getVersion() {
+        // TODO
+        return null;
+    }
+
     @Override
     protected String getTag() {
         return TAG;

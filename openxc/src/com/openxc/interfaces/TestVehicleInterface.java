@@ -33,4 +33,8 @@ public class TestVehicleInterface implements VehicleInterface {
 
     @Override
     public void onPipelineDeactivated() { }
+
+    public String getVersion() {
+        return "v1.0";
+    }
 }

@@ -1,8 +1,11 @@
 package com.openxc;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -36,6 +39,7 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
+import com.openxc.remote.ViConnectionListener;
 import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -99,6 +103,10 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
+
+    private Set<WeakReference<ViConnectionListener>>
+            mViConnectionListeners = Collections.newSetFromMap(
+                new ConcurrentHashMap<WeakReference<ViConnectionListener>, Boolean>());
 
     // The mRemoteOriginPipeline in this class must only have 1 source - the
     // special RemoteListenerSource that receives measurements from the
@@ -456,6 +464,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
        setVehicleInterface(vehicleInterfaceType, null);
     }
 
+    public void addOnVehicleInterfaceConnectedListener(
+            ViConnectionListener listener) {
+        mViConnectionListeners.add(new WeakReference<>(listener));
+    }
+
     /**
      * Activate a vehicle interface for both receiving data and sending commands
      * to the vehicle.
@@ -482,10 +495,16 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             String resource) throws VehicleServiceException {
         Log.i(TAG, "Setting VI to: " + vehicleInterfaceType);
 
+        String interfaceName;
+        if(vehicleInterfaceType == null) {
+            interfaceName = "disabled";
+        } else {
+            interfaceName = vehicleInterfaceType.getName();
+        }
+
         if(mRemoteService != null) {
             try {
-                mRemoteService.setVehicleInterface(
-                        vehicleInterfaceType.getName(), resource);
+                mRemoteService.setVehicleInterface(interfaceName, resource);
             } catch(RemoteException e) {
                 throw new VehicleServiceException(
                         "Unable to set vehicle interface", e);
@@ -546,8 +565,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * @return A list of the names and status of all sources.
      */
-    public List<String> getSourceSummaries() { ArrayList<String> sources = new
-        ArrayList<String>(); for(VehicleDataSource source :
+    public List<String> getSourceSummaries() {
+        ArrayList<String> sources = new ArrayList<String>();
+        for(VehicleDataSource source :
                 mRemoteOriginPipeline.getSources()) {
             sources.add(source.toString()); }
 
@@ -642,6 +662,43 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    private ViConnectionListener mViConnectionListener =
+            new ViConnectionListener.Stub() {
+        public void onConnected(VehicleInterfaceDescriptor descriptor) {
+            for(WeakReference<ViConnectionListener> callbackRef
+                    : mViConnectionListeners) {
+                if(callbackRef.get() == null) {
+                    mViConnectionListeners.remove(callbackRef);
+                } else {
+                    try {
+                        callbackRef.get().onConnected(descriptor);
+                    } catch(RemoteException e) {
+                    }
+                }
+            }
+        }
+
+        public void onDisconnected() {
+            for(WeakReference<ViConnectionListener> callbackRef
+                    : mViConnectionListeners) {
+                if(callbackRef.get() == null) {
+                    mViConnectionListeners.remove(callbackRef);
+                } else {
+                    try {
+                        callbackRef.get().onDisconnected();
+                    } catch(RemoteException e) {
+                    }
+                }
+            }
+        }
+    };
+
+    public void onVehicleInterfaceConnected() {
+    }
+
+    public void onVehicleInterfaceDisconnected() {
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -708,6 +765,14 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
             mRemoteService = VehicleServiceInterface.Stub.asInterface(service);
+
+            if(mRemoteService != null) {
+                try {
+                    mRemoteService.setViConnectionListener(mViConnectionListener);
+                } catch(RemoteException e) {
+                    Log.w(TAG, "Unable to set VI connection listener", e);
+                }
+            }
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mRemoteOriginPipeline.addSource(mRemoteSource);

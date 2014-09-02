@@ -226,6 +226,11 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
+    public String getVersion() {
+        // TODO
+        return null;
+    }
+
     @Override
     protected String getTag() {
         return TAG;

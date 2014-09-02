@@ -20,10 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.openxc.VehicleManager;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
+import com.openxc.remote.ViConnectionListener;
 
 public class StatusFragment extends Fragment {
     private static String TAG = "StatusFragment";
@@ -48,6 +50,26 @@ public class StatusFragment extends Fragment {
             Log.i(TAG, "Bound to VehicleManager");
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
+
+            mVehicleManager.addOnVehicleInterfaceConnectedListener(
+                    new ViConnectionListener.Stub() {
+                public void onConnected(final VehicleInterfaceDescriptor descriptor) {
+                    Log.d(TAG, descriptor + " is now connected");
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mViVersionView.setText(descriptor.getVersion());
+                        }
+                    });
+                }
+
+                public void onDisconnected() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mViVersionView.setText("");
+                        }
+                    });
+                }
+            });
 
             new Thread(new Runnable() {
                 public void run() {

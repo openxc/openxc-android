@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -27,6 +28,7 @@ import com.openxc.sources.DataSourceException;
 import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.WakeLockManager;
+import com.openxc.remote.ViConnectionListener;
 
 /**
  * The VehicleService is the centralized source of all vehicle data.
@@ -67,6 +69,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
     private boolean mUserPipelineActive;
+    private ViConnectionListener mViConnectionListener;
 
     @Override
     public void onCreate() {
@@ -211,6 +214,11 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
+            public void setViConnectionListener(ViConnectionListener listener) {
+                VehicleService.this.setViConnectionListener(listener);
+            }
+
+            @Override
             public void setBluetoothPollingStatus(boolean enabled) {
                 VehicleService.this.setBluetoothPollingStatus(enabled);
             }
@@ -234,8 +242,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 if(mVehicleInterface == null) {
                     return null;
                 }
-                return new VehicleInterfaceDescriptor(mVehicleInterface.getClass(),
-                        mVehicleInterface.isConnected());
+                return new VehicleInterfaceDescriptor(mVehicleInterface);
             }
 
             @Override
@@ -262,6 +269,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
     };
 
+    private void setViConnectionListener(
+            ViConnectionListener listener) {
+        mViConnectionListener = listener;
+    }
 
     private void setVehicleInterface(String interfaceName, String resource) {
         Class<? extends VehicleInterface> interfaceType = null;
@@ -333,6 +344,14 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     public void onPipelineActivated() {
         mWakeLocker.acquireWakeLock();
         moveToForeground();
+        if(mVehicleInterface != null && mVehicleInterface.isConnected() &&
+                mViConnectionListener != null) {
+            try {
+                // The VI may have been the one to wake up the pipeline
+                mViConnectionListener.onConnected(new VehicleInterfaceDescriptor(mVehicleInterface));
+            } catch(RemoteException e) {
+            }
+        }
     }
 
     @Override
@@ -340,6 +359,15 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         if(!mUserPipelineActive) {
             mWakeLocker.releaseWakeLock();
             removeFromForeground();
+
+            if((mVehicleInterface == null || !mVehicleInterface.isConnected()) &&
+                    mViConnectionListener != null) {
+                try {
+                    // The VI may have been the last to shut down
+                    mViConnectionListener.onDisconnected();
+                } catch(RemoteException e) {
+                }
+            }
         }
     }
 }
