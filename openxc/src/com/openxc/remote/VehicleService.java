@@ -278,22 +278,27 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
     private void setVehicleInterface(String interfaceName, String resource) {
         Class<? extends VehicleInterface> interfaceType = null;
-        try {
-            interfaceType = VehicleInterfaceFactory.findClass(interfaceName);
-        } catch(VehicleInterfaceException e) {
-            Log.w(TAG, "Unable to find VI matching " + interfaceName +
-                    " -- disabling current interface");
+
+        if(interfaceName != null) {
+            try {
+                interfaceType = VehicleInterfaceFactory.findClass(interfaceName);
+            } catch(VehicleInterfaceException e) {
+                Log.w(TAG, "Unable to find VI matching " + interfaceName +
+                        " -- disabling current interface");
+            }
         }
 
-        if(mVehicleInterface == null || !(mVehicleInterface.getClass().
-                    isAssignableFrom(interfaceType))) {
-            if(mVehicleInterface != null) {
-                Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
-                mVehicleInterface.stop();
-                mPipeline.removeSource(mVehicleInterface);
-                mVehicleInterface = null;
-            }
+        if(mVehicleInterface != null && (interfaceName == null ||
+                (interfaceType != null &&
+                 !mVehicleInterface.getClass().isAssignableFrom(
+                     interfaceType)))) {
+            Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
+            mVehicleInterface.stop();
+            mPipeline.removeSource(mVehicleInterface);
+            mVehicleInterface = null;
+        }
 
+        if(interfaceName != null) {
             if(interfaceType != null) {
                 try {
                     mVehicleInterface = VehicleInterfaceFactory.build(
@@ -304,22 +309,21 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 }
 
                 mPipeline.addSource(mVehicleInterface);
-            }
-        } else {
-            try {
-                if(mVehicleInterface.setResource(resource)) {
-                    Log.d(TAG, "Changed resource of already active interface " +
-                            mVehicleInterface + " to " + resource);
-                } else {
-                    Log.d(TAG, "Interface " + mVehicleInterface +
-                            " already had same active resource " + resource +
-                            " -- not restarting");
+            } else {
+                try {
+                    if(mVehicleInterface.setResource(resource)) {
+                        Log.d(TAG, "Changed resource of already active interface " +
+                                mVehicleInterface + " to " + resource);
+                    } else {
+                        Log.d(TAG, "Interface " + mVehicleInterface +
+                                " already had same active resource " + resource +
+                                " -- not restarting");
+                    }
+                } catch(DataSourceException e) {
+                    Log.w(TAG, "Unable to change resource", e);
                 }
-            } catch(DataSourceException e) {
-                Log.w(TAG, "Unable to change resource", e);
             }
         }
-
         Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
     }
 

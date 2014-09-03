@@ -503,10 +503,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             String resource) throws VehicleServiceException {
         Log.i(TAG, "Setting VI to: " + vehicleInterfaceType);
 
-        String interfaceName;
-        if(vehicleInterfaceType == null) {
-            interfaceName = "disabled";
-        } else {
+        String interfaceName = null;
+        if(vehicleInterfaceType != null) {
             interfaceName = vehicleInterfaceType.getName();
         }
 

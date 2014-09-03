@@ -157,6 +157,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     };
 
     private void persistCandidateDiscoveredDevices() {
+        // TODO I don't think the MULTI_PROCESS flag is necessary
         SharedPreferences.Editor editor =
                 getContext().getSharedPreferences(
                         DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
