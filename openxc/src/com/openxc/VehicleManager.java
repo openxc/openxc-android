@@ -716,7 +716,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         public VehicleMessage waitForResponse() {
             try {
                 mLock.lock();
-                while(mResponse == null) {
+                if(mResponse == null) {
                     mResponseReceived.await(RESPONSE_TIMEOUT_S, TimeUnit.SECONDS);
                 }
             } catch(InterruptedException e) {
