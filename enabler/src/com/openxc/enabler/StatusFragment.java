@@ -47,17 +47,25 @@ public class StatusFragment extends Fragment {
     private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
         public void onConnected(final VehicleInterfaceDescriptor descriptor) {
             Log.d(TAG, descriptor + " is now connected");
-            final String version = StatusFragment.this.mVehicleManager.getVehicleInterfaceVersion();
-            getActivity().runOnUiThread(new Runnable() {
+            // Must run in another thread or we get circular references to
+            // VehicleService -> StatusFragment -> VehicleService and the
+            // callback will just fail silently and be removed forever.
+            new Thread(new Runnable() {
                 public void run() {
-                    mViVersionView.setText(version);
+                    final String version = mVehicleManager.getVehicleInterfaceVersion();
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mViVersionView.setText(version);
+                        }
+                    });
                 }
-            });
+            }).start();
         }
 
         public void onDisconnected() {
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
+                    Log.d(TAG, "VI disconnected");
                     mViVersionView.setText("");
                 }
             });
