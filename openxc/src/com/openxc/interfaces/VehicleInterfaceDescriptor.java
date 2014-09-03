@@ -21,6 +21,10 @@ public class VehicleInterfaceDescriptor implements Parcelable {
         mConnected = connected;
     }
 
+    public VehicleInterfaceDescriptor(VehicleInterface vi) {
+        this(vi.getClass(), vi.isConnected());
+    }
+
     public boolean isConnected() {
         return mConnected;
     }

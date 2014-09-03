@@ -21,6 +21,8 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
+import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;

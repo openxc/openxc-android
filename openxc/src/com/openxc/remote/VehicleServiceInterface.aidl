@@ -3,6 +3,7 @@ package com.openxc.remote;
 import com.openxc.remote.VehicleServiceListener;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.MessageKey;
+import com.openxc.remote.ViConnectionListener;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 
 /**
@@ -97,4 +98,6 @@ interface VehicleServiceInterface {
 
     void userPipelineActivated();
     void userPipelineDeactivated();
+
+    void addViConnectionListener(in ViConnectionListener listener);
 }

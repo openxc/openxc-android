@@ -20,15 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.openxc.VehicleManager;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
+import com.openxc.remote.ViConnectionListener;
 
 public class StatusFragment extends Fragment {
     private static String TAG = "StatusFragment";
 
     private TextView mMessageCountView;
+    private TextView mViVersionView;
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -41,12 +44,47 @@ public class StatusFragment extends Fragment {
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
 
+    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
+        public void onConnected(final VehicleInterfaceDescriptor descriptor) {
+            Log.d(TAG, descriptor + " is now connected");
+            // Must run in another thread or we get circular references to
+            // VehicleService -> StatusFragment -> VehicleService and the
+            // callback will just fail silently and be removed forever.
+            new Thread(new Runnable() {
+                public void run() {
+                    final String version = mVehicleManager.getVehicleInterfaceVersion();
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mViVersionView.setText(version);
+                        }
+                    });
+                }
+            }).start();
+        }
+
+        public void onDisconnected() {
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.d(TAG, "VI disconnected");
+                    mViVersionView.setText("");
+                }
+            });
+        }
+    };
+
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleManager");
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
+
+            try {
+                mVehicleManager.addOnVehicleInterfaceConnectedListener(
+                        mConnectionListener);
+            } catch(VehicleServiceException e) {
+                Log.e(TAG, "Unable to register VI connection listener", e);
+            }
 
             new Thread(new Runnable() {
                 public void run() {
@@ -105,6 +143,7 @@ public class StatusFragment extends Fragment {
 
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) v.findViewById(R.id.message_count);
+        mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
         mFileConnIV = v.findViewById(R.id.connection_file);

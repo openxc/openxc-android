@@ -50,6 +50,7 @@ public class PreferenceManagerService extends Service {
         mPreferenceManagers.add(new NetworkPreferenceManager(this));
         mPreferenceManagers.add(new TraceSourcePreferenceManager(this));
         mPreferenceManagers.add(new UsbPreferenceManager(this));
+        mPreferenceManagers.add(new VehicleInterfacePreferenceManager(this));
     }
 
     @Override

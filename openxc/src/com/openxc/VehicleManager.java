@@ -2,7 +2,6 @@ package com.openxc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -26,6 +25,7 @@ import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
@@ -36,6 +36,7 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
+import com.openxc.remote.ViConnectionListener;
 import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
@@ -450,10 +451,30 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    public String getVehicleInterfaceVersion() {
+        VehicleMessage response = request(new Command(CommandType.VERSION));
+        String version = null;
+        if(response != null) {
+            version = response.asCommandResponse().getMessage();
+        }
+        return version;
+    }
+
     public void setVehicleInterface(
             Class<? extends VehicleInterface> vehicleInterfaceType)
             throws VehicleServiceException {
        setVehicleInterface(vehicleInterfaceType, null);
+    }
+
+    public void addOnVehicleInterfaceConnectedListener(
+            ViConnectionListener listener) throws VehicleServiceException {
+        try {
+            mRemoteService.addViConnectionListener(listener);
+        } catch(RemoteException e) {
+            throw new VehicleServiceException(
+                    "Unable to add connection status listener", e);
+        }
+
     }
 
     /**
@@ -482,10 +503,14 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             String resource) throws VehicleServiceException {
         Log.i(TAG, "Setting VI to: " + vehicleInterfaceType);
 
+        String interfaceName = null;
+        if(vehicleInterfaceType != null) {
+            interfaceName = vehicleInterfaceType.getName();
+        }
+
         if(mRemoteService != null) {
             try {
-                mRemoteService.setVehicleInterface(
-                        vehicleInterfaceType.getName(), resource);
+                mRemoteService.setVehicleInterface(interfaceName, resource);
             } catch(RemoteException e) {
                 throw new VehicleServiceException(
                         "Unable to set vehicle interface", e);
@@ -546,8 +571,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * @return A list of the names and status of all sources.
      */
-    public List<String> getSourceSummaries() { ArrayList<String> sources = new
-        ArrayList<String>(); for(VehicleDataSource source :
+    public List<String> getSourceSummaries() {
+        ArrayList<String> sources = new ArrayList<String>();
+        for(VehicleDataSource source :
                 mRemoteOriginPipeline.getSources()) {
             sources.add(source.toString()); }
 
