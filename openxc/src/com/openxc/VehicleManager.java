@@ -26,6 +26,7 @@ import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.Command;
 import com.openxc.messages.Command.CommandType;
+import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
@@ -451,13 +452,24 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
-    public String getVehicleInterfaceVersion() {
-        VehicleMessage response = request(new Command(CommandType.VERSION));
-        String version = null;
-        if(response != null) {
-            version = response.asCommandResponse().getMessage();
+    public String requestCommandMessage(CommandType type) {
+        VehicleMessage message = request(new Command(type));
+        String value = null;
+        if(message != null) {
+            CommandResponse response = message.asCommandResponse();
+            if(response.getStatus()) {
+                value = response.getMessage();
+            }
         }
-        return version;
+        return value;
+    }
+
+    public String getVehicleInterfaceDeviceId() {
+        return requestCommandMessage(CommandType.DEVICE_ID);
+    }
+
+    public String getVehicleInterfaceVersion() {
+        return requestCommandMessage(CommandType.VERSION);
     }
 
     public void setVehicleInterface(

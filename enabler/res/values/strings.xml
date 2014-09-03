@@ -61,5 +61,6 @@
     <string name="no_diagnostic_responses_received">No diagnostic responses received.</string>
 
     <string name="vi_version_label">VI Version</string>
+    <string name="vi_device_id_label">VI Device ID</string>
 
 </resources>
