@@ -1,10 +1,14 @@
 package com.openxc.sinks;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import android.util.Log;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
@@ -31,9 +35,16 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             mMessageListeners = HashMultimap.create();
     private Multimap<Class<? extends Measurement>, Measurement.Listener>
             mMeasurementTypeListeners = HashMultimap.create();
-
     private Multimap<Class<? extends VehicleMessage>, VehicleMessage.Listener>
             mMessageTypeListeners = HashMultimap.create();
+
+    public MessageListenerSink() {
+        super();
+        mMessageListeners = Multimaps.synchronizedMultimap(mMessageListeners);
+        mMeasurementTypeListeners = Multimaps.synchronizedMultimap(mMeasurementTypeListeners);
+        mMessageTypeListeners = Multimaps.synchronizedMultimap(mMessageTypeListeners);
+        mPersistentMessageListeners = Multimaps.synchronizedMultimap(mPersistentMessageListeners);
+    }
 
     public synchronized void register(KeyMatcher matcher,
             VehicleMessage.Listener listener, boolean persist) {
@@ -111,14 +122,19 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 }
             }
 
+            Set<KeyMatcher> matchedKeys = new HashSet<>();
             for (KeyMatcher matcher : mMessageListeners.keys()) {
                 if (matcher.matches(message.asKeyedMessage())) {
                     for (VehicleMessage.Listener listener :
                             mMessageListeners.get(matcher)) {
                         listener.receive(message);
-                        mMessageListeners.remove(matcher, listener);
                     }
+                    matchedKeys.add(matcher);
                 }
+            }
+
+            for(KeyMatcher matcher : matchedKeys) {
+                mMessageListeners.removeAll(matcher);
             }
 
             // TODO how do we know when a a message is a measurement and should be
