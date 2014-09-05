@@ -66,7 +66,6 @@ public class BinarySerializer {
 
         BinaryMessages.DiagnosticResponse.Builder messageBuilder =
                 BinaryMessages.DiagnosticResponse.newBuilder();
-        // TODO need to standardize - getBus or getBusId
         messageBuilder.setBus(message.getBusId());
         messageBuilder.setMessageId(message.getId());
         messageBuilder.setMode(message.getMode());
