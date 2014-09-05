@@ -310,8 +310,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // When testing on a 2.3.x emulator, no USB available.
         if(android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.HONEYCOMB) {
-            assertThat(service.getActiveSources(),
-                    not(hasItem(UsbVehicleInterface.class)));
+            assertThat(service.getActiveVehicleInterface(), nullValue());
         }
     }
 
@@ -320,8 +319,8 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         prepareServices();
         service.setVehicleInterface(NetworkVehicleInterface.class,
                 "localhost:8080");
-        assertThat(service.getActiveSources(),
-                hasItem(NetworkVehicleInterface.class));
+        assertEquals(service.getActiveVehicleInterface().getInterfaceClass(),
+                NetworkVehicleInterface.class);
         // Not a whole lot we can test without an actual device attached and
         // without being able to mock the interface class out in the remote
         // process where the VehicleSevice runs, but at least we know this

@@ -605,34 +605,22 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
-     * Returns a list of all active interface types
+     * Returns a descriptor of the active vehicle interface.
      *
-     * @return A list of the enabled vehicle interfaces.
+     * @return A VehicleInterfaceDescriptor for the active VI or null if none is
+     * enabled.
      */
-    public List<Class<? extends VehicleDataSource>> getActiveSources() {
-        // TODO bah, we need to return all sources, but along with the
-        // connection status so they can be displayed properly in the enabler
-        ArrayList<Class<? extends VehicleDataSource>> sources = new ArrayList<>();
-
-        for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
-            sources.add(source.getClass());
-        }
-
+    public VehicleInterfaceDescriptor getActiveVehicleInterface() {
+        VehicleInterfaceDescriptor descriptor = null;
         if(mRemoteService != null) {
             try {
-                // TODO this method should be changed to just return the
-                // descriptor, that would also help with the above TODO comment
-                VehicleInterfaceDescriptor descriptor =
-                        mRemoteService.getVehicleInterfaceDescriptor();
-                if(descriptor != null) {
-                    sources.add(descriptor.getInterfaceClass());
-                }
+                descriptor = mRemoteService.getVehicleInterfaceDescriptor();
             } catch(RemoteException e) {
                 Log.w(TAG, "Unable to retreive VI descriptor", e);
             }
 
         }
-        return sources;
+        return descriptor;
     }
 
     /**

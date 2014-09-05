@@ -1,18 +1,17 @@
 package com.openxc.enabler;
 
-import java.util.List;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.view.View;
 
 import com.openxc.VehicleManager;
-import com.openxc.sources.VehicleDataSource;
-import com.openxc.sources.trace.TraceVehicleDataSource;
-import com.openxc.interfaces.usb.UsbVehicleInterface;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
-
-import android.view.View;
+import com.openxc.interfaces.usb.UsbVehicleInterface;
+import com.openxc.sources.VehicleDataSource;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 public class PipelineStatusUpdateTask extends TimerTask {
     private VehicleManager mVehicleManager;
@@ -36,37 +35,37 @@ public class PipelineStatusUpdateTask extends TimerTask {
         mNoneConnView = noneConnView;
     }
 
-    private void setIconVisibility(Class<? extends VehicleDataSource> source,
-            final View icon,
-            List<Class<? extends VehicleDataSource>> activeSources){
-        // If active and not visible => make visible
-        if(activeSources.contains(source)
-                && icon.getVisibility() != View.VISIBLE){
-            mActivity.runOnUiThread(new Runnable(){
-                @Override
-                public void run() {
-                    icon.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-
-        // If not active and not gone => make gone
-        if(!activeSources.contains(source)
-                && (icon.getVisibility() != View.GONE)){
-            mActivity.runOnUiThread(new Runnable(){
-                @Override
-                public void run() {
-                    icon.setVisibility(View.GONE);
-                }
-            });
+    private void setIconVisibility(
+            Class<? extends VehicleDataSource> vehicleInterface,
+            final View icon, VehicleInterfaceDescriptor viDescriptor) {
+        if(viDescriptor.getInterfaceClass() == vehicleInterface) {
+            if(icon.getVisibility() != View.VISIBLE) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO if connected, use white icon else red. or change
+                        // opacity.
+                        icon.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        } else {
+            if(icon.getVisibility() != View.GONE) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        icon.setVisibility(View.GONE);
+                    }
+                });
+            }
         }
     }
 
     public void run() {
-        List<Class<? extends VehicleDataSource>> activeSources =
-            mVehicleManager.getActiveSources();
+        VehicleInterfaceDescriptor viDescriptor =
+                mVehicleManager.getActiveVehicleInterface();
 
-        if(activeSources.isEmpty()){
+        if(viDescriptor == null) {
             mActivity.runOnUiThread(new Runnable(){
                 @Override
                 public void run() {
@@ -87,13 +86,13 @@ public class PipelineStatusUpdateTask extends TimerTask {
             });
 
             setIconVisibility(BluetoothVehicleInterface.class,
-                    mBluetoothConnView, activeSources);
+                    mBluetoothConnView, viDescriptor);
             setIconVisibility(TraceVehicleDataSource.class, mFileConnView,
-                    activeSources);
+                    viDescriptor);
             setIconVisibility(NetworkVehicleInterface.class, mNetworkConnView,
-                    activeSources);
+                    viDescriptor);
             setIconVisibility(UsbVehicleInterface.class, mUsbConnView,
-                    activeSources);
+                    viDescriptor);
         }
     }
 }
