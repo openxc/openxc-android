@@ -38,7 +38,8 @@ public class PipelineStatusUpdateTask extends TimerTask {
     private void setIconVisibility(
             Class<? extends VehicleDataSource> vehicleInterface,
             final View icon, VehicleInterfaceDescriptor viDescriptor) {
-        if(viDescriptor.getInterfaceClass() == vehicleInterface) {
+        if(viDescriptor != null &&
+                viDescriptor.getInterfaceClass() == vehicleInterface) {
             if(icon.getVisibility() != View.VISIBLE) {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -49,50 +50,41 @@ public class PipelineStatusUpdateTask extends TimerTask {
                     }
                 });
             }
-        } else {
-            if(icon.getVisibility() != View.GONE) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        icon.setVisibility(View.GONE);
-                    }
-                });
-            }
+        } else if(icon.getVisibility() != View.GONE) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    icon.setVisibility(View.GONE);
+                }
+            });
         }
     }
 
     public void run() {
-        VehicleInterfaceDescriptor viDescriptor =
+        final VehicleInterfaceDescriptor viDescriptor =
                 mVehicleManager.getActiveVehicleInterface();
-
-        if(viDescriptor == null) {
-            mActivity.runOnUiThread(new Runnable(){
-                @Override
-                public void run() {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(viDescriptor == null) {
                     mNoneConnView.setVisibility(View.VISIBLE);
-
-                    mBluetoothConnView.setVisibility(View.GONE);
-                    mFileConnView.setVisibility(View.GONE);
-                    mNetworkConnView.setVisibility(View.GONE);
-                    mUsbConnView.setVisibility(View.GONE);
-                }
-            });
-        } else {
-            mActivity.runOnUiThread(new Runnable(){
-                @Override
-                public void run() {
+                } else {
                     mNoneConnView.setVisibility(View.GONE);
                 }
-            });
+            }
+        });
 
-            setIconVisibility(BluetoothVehicleInterface.class,
-                    mBluetoothConnView, viDescriptor);
-            setIconVisibility(TraceVehicleDataSource.class, mFileConnView,
-                    viDescriptor);
-            setIconVisibility(NetworkVehicleInterface.class, mNetworkConnView,
-                    viDescriptor);
-            setIconVisibility(UsbVehicleInterface.class, mUsbConnView,
-                    viDescriptor);
-        }
+        setIconVisibility(BluetoothVehicleInterface.class,
+                mBluetoothConnView, viDescriptor);
+        setIconVisibility(NetworkVehicleInterface.class, mNetworkConnView,
+                viDescriptor);
+        setIconVisibility(UsbVehicleInterface.class, mUsbConnView,
+                viDescriptor);
+
+        // TODO since the trace is not an official veh interface it will
+        // never be returned from getActiveVehicleInterface - we'll need
+        // some other way of checking in the Enabler
+        setIconVisibility(TraceVehicleDataSource.class, mFileConnView,
+                viDescriptor);
     }
 }

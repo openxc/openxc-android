@@ -170,7 +170,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 Log.w(TAG, "Unable to set test provider location", e);
             }
         } catch(NoValueException e) {
-                Log.w(TAG, "Can't update location, complete measuremnts not available yet");
+                Log.w(TAG, "Can't update location, complete measurents not available yet");
         } catch(UnrecognizedMeasurementTypeException e) {
             // TODO this is dumb that we know these measurements are good, but
             // we still could get an exception
