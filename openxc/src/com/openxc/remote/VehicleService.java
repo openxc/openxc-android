@@ -108,7 +108,9 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             Log.i(TAG, "Moving service to foreground.");
 
             try {
-                // TODO any way to not tie this to an Activity from the Enabler?
+                // I'd like to not have to depend on the EnablerActivity, but
+                // the notification needs to have some application it starts
+                // when the users clicks the notification.
                 Intent intent = new Intent(this,
                         Class.forName("com.openxc.enabler.OpenXcEnablerActivity"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
