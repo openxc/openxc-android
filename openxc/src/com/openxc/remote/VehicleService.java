@@ -249,15 +249,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
-            public List<String> getSinkSummaries() {
-                ArrayList<String> sinks = new ArrayList<String>();
-                for(VehicleDataSink sink : mPipeline.getSinks()) {
-                    sinks.add(sink.toString());
-                }
-                return sinks;
-            }
-
-            @Override
             public void userPipelineActivated() {
                 mUserPipelineActive = true;
                 VehicleService.this.onPipelineActivated();

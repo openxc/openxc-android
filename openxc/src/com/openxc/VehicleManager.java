@@ -605,30 +605,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
-     * Return a list of all sinks active in the system.
-     *
-     * The motivation for this method is the same as
-     * {@link #getSinkSummaries()}.
-     *
-     * @return A list of the names and status of all sinks.
-     */
-    public List<String> getSinkSummaries() {
-        ArrayList<String> sinks = new ArrayList<String>();
-        for(VehicleDataSink sink : mRemoteOriginPipeline.getSinks()) {
-            sinks.add(sink.toString());
-        }
-
-        if(mRemoteService != null) {
-            try {
-                sinks.addAll(mRemoteService.getSinkSummaries());
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive remote sink summaries", e);
-            }
-        }
-        return sinks;
-    }
-
-    /**
      * Returns a list of all active interface types
      *
      * @return A list of the enabled vehicle interfaces.
