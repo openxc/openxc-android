@@ -51,27 +51,30 @@ public class StatusFragment extends Fragment {
             // Must run in another thread or we get circular references to
             // VehicleService -> StatusFragment -> VehicleService and the
             // callback will just fail silently and be removed forever.
-            new Thread(new Runnable() {
-                public void run() {
-                    final String version = mVehicleManager.getVehicleInterfaceVersion();
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mViVersionView.setText(version);
-                        }
-                    });
-                }
-            }).start();
+            if(mVehicleManager != null) {
+                // TODO sometimes this is null, but why?
+                new Thread(new Runnable() {
+                    public void run() {
+                        final String version = mVehicleManager.getVehicleInterfaceVersion();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                mViVersionView.setText(version);
+                            }
+                        });
+                    }
+                }).start();
 
-            new Thread(new Runnable() {
-                public void run() {
-                    final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mViDeviceIdView.setText(deviceId);
-                        }
-                    });
-                }
-            }).start();
+                new Thread(new Runnable() {
+                    public void run() {
+                        final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                mViDeviceIdView.setText(deviceId);
+                            }
+                        });
+                    }
+                }).start();
+            }
         }
 
         public void onDisconnected() {
