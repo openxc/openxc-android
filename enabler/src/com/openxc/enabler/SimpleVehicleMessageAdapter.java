@@ -37,9 +37,6 @@ public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
 
         TextView valueView = (TextView) convertView.findViewById(R.id.value);
         try {
-            // TODO most measurements are missing from the ID cache because we
-            // haven't set up an explicit listener before - use a class loader
-            // to cache these on the fly
             Measurement measurement =
                 BaseMeasurement.getMeasurementFromMessage(message);
             nameView.setText("" + measurement.getName(mContext));
