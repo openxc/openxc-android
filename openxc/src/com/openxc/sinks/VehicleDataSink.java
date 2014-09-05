@@ -1,6 +1,6 @@
 package com.openxc.sinks;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * The interface for all vehicle data destination endpoints.
@@ -23,7 +23,7 @@ public interface VehicleDataSink {
      *
      * @param measurement The new measurement.
      */
-    public boolean receive(RawMeasurement measurement) throws DataSinkException;
+    public void receive(VehicleMessage measurement) throws DataSinkException;
 
     /**
      * Release any acquired resources and either stop sending measurements (if a

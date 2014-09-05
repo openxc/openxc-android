@@ -4,27 +4,13 @@
     <parent>
         <groupId>com.openxcplatform</groupId>
         <artifactId>openxc-parent</artifactId>
-        <version>5.3.2</version>
+        <version>5.3.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>openxc-enabler</artifactId>
     <packaging>apk</packaging>
     <name>OpenXC - Enabler App</name>
     <description>Enabler Android application for OpenXC</description>
-
-    <repositories>
-        <repository>
-            <id>crashlytics-repo</id>
-            <url>http://download.crashlytics.com/maven</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>crashlytics-plugin-repo</id>
-            <url>http://download.crashlytics.com/maven</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <dependency>
@@ -39,13 +25,9 @@
             <type>apklib</type>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.crashlytics.android</groupId>
-            <artifactId>crashlytics</artifactId>
-            <version>[1.0.2,)</version>
+            <groupId>com.bugsnag</groupId>
+            <artifactId>bugsnag-android</artifactId>
+            <version>2.2.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -55,25 +37,6 @@
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
-            </plugin>
-            <plugin>
-                <groupId>com.crashlytics</groupId>
-                <artifactId>crashlytics-maven</artifactId>
-                <version>1.0.3</version>
-                <executions>
-                    <execution>
-                        <id>GenerateResources</id>
-                        <goals>
-                            <goal>GenerateResources</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>CleanupResources</id>
-                        <goals>
-                            <goal>CleanupResources</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
@@ -140,27 +103,6 @@
                                         </versionRange>
                                         <goals>
                                             <goal>consume-aar</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            com.crashlytics
-                                        </groupId>
-                                        <artifactId>
-                                            crashlytics-maven
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.0.3,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>
-                                                GenerateResources
-                                            </goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>

@@ -1,6 +1,12 @@
 OpenXC Android Library
 =========================
 
+[![Build Status](https://travis-ci.org/openxc/openxc-android.svg?branch=master)](https://travis-ci.org/openxc/openxc-android)
+
+[![Coverage Status](https://coveralls.io/repos/openxc/openxc-android/badge.png?branch=master)](https://coveralls.io/r/openxc/openxc-android?branch=master)
+
+[![Stories in Ready](https://badge.waffle.io/openxc/openxc-android.png?label=ready&title=Ready)](http://waffle.io/openxc/openxc-android)
+
 This library is a part of the [OpenXC][] project.
 
 This Android library contains the tools required to read vehicle data from the
@@ -21,6 +27,22 @@ Source`. Browse to the `openxc-android` folder and it should detect the 4
 Android projects within the repository. At the minimum, add the `openxc` project
 (the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
 required to run OpenXC applications).
+
+## Tests
+
+To run the unit tests suite:
+
+    $ mvn test -pl openxc
+
+To generate a code coverage report for the test suite:
+
+    $ mvn cobertura:cobertura -pl openxc
+
+To run the instrumentation tests (must have an attached Android device or
+emulator):
+
+    $ mvn install -pl openxc -am
+    $ mvn install -pl openxc-it
 
 ## Building from Command Line
 
@@ -64,6 +86,24 @@ Finally, to deploy the packaged APK to an attached Android device and run it:
 
 If you want the tests to wait for a debugger to attach, change the `testDebug`
 setting in `openxc-android/pom.xml` to `true`.
+
+## Automatic Crash Reporting
+
+The Enabler includes optional support for automatic crash reporting via Bugsnag.
+If you wish to enable this, create a resources file in `enabler/res/values` with
+your Bugsnag token, e.g.:
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bugsnag_token">0123456789</string>
+</resources>
+
+If no token is found, Bugsnag will not be included in the build.
+
+The APK files upload to the GitHub releases page are built with Bugsnag
+included, reporting to an accout that the OpenXC maintainers can review to
+improve the project. If you wish to not have any crash reports collected from
+your device, please build the Enabler from the source code.
 
 ## Contributing
 

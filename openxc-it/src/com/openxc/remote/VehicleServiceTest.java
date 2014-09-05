@@ -1,11 +1,7 @@
 package com.openxc.remote;
 
-import com.openxc.remote.VehicleService;
-
 import android.content.Intent;
-
 import android.test.ServiceTestCase;
-
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 

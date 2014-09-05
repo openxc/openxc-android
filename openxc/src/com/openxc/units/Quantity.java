@@ -34,6 +34,7 @@ public abstract class Quantity<T extends Number> extends Unit {
         return mValue.doubleValue();
     }
 
+    @Override
     public Object getSerializedValue() {
         return doubleValue();
     }

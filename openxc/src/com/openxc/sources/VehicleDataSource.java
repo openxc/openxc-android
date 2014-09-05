@@ -1,6 +1,6 @@
 package com.openxc.sources;
 
-import com.openxc.sources.SourceCallback;
+import com.openxc.DataPipeline;
 
 /**
  * The interface for all sources of raw vehicle measurements.
@@ -9,7 +9,7 @@ import com.openxc.sources.SourceCallback;
  * implements the DataPipeline - its receive() methods are
  * passed values from the data source.
  */
-public interface VehicleDataSource {
+public interface VehicleDataSource extends DataPipeline.Operator {
     /**
      * Set the callback for receiving raw measurements as they are received.
      *

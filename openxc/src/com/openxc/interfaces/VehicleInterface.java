@@ -22,7 +22,6 @@ import com.openxc.sources.VehicleDataSource;
  * implementer (e.g. a URI, a MAC address, etc).
  */
 public interface VehicleInterface extends VehicleDataSource, VehicleDataSink {
-
     /**
      * Change the resource used by the instance to connect to the interface,
      * restarting any neccessary services.
@@ -32,4 +31,6 @@ public interface VehicleInterface extends VehicleDataSource, VehicleDataSink {
      *      restarted.
      */
     public boolean setResource(String resource) throws DataSourceException;
+
+    public boolean isConnected();
 }

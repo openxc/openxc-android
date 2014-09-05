@@ -1,7 +1,10 @@
 package com.openxc.remote;
 
 import com.openxc.remote.VehicleServiceListener;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.MessageKey;
+import com.openxc.remote.ViConnectionListener;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 
 /**
  * The AIDL interface for a VehicleService running in a separate process.
@@ -18,19 +21,21 @@ interface VehicleServiceInterface {
     /**
      * Retreive the most recent value for the measurement.
      *
-     * @param measurementType must match the ID field of a known Measurement
-     *                        subclass.
-     * @return a RawMeasurement which may or may not have a value. This function
+     * TODO can we have this return null or does that cause problems with the
+     * AIDL?
+     *
+     * @param key the key of the message to retreive.
+     * @return a VehicleMessage which may or may not have a value. This function
      *         will never return null, even if no value is available.
      */
-    RawMeasurement get(String measurementType);
+    VehicleMessage get(in MessageKey key);
 
     /**
      * Set a new value for the measurement class on the vehicle.
      *
      * @param measurement The measurement to set on the vehicle.
      */
-    boolean send(in RawMeasurement measurement);
+    boolean send(in VehicleMessage measurement);
 
     /**
      * Register to receive asynchronous updates when measurements are received.
@@ -56,15 +61,20 @@ interface VehicleServiceInterface {
      * As an application's source receive updates, it can pass them back into
      * the remote process using this method.
      */
-    void receive(in RawMeasurement measurement);
+    void receive(in VehicleMessage measurement);
 
     /**
      * @return number of messages received since instantiation.
      */
     int getMessageCount();
 
-    void addVehicleInterface(String interfaceName, String resource);
-    void removeVehicleInterface(String interfaceName);
+    void setVehicleInterface(String interfaceName, String resource);
+
+    /**
+     * Return list of tokens identifying the data sources that are enabled and
+     * the connection status for each.
+     */
+    VehicleInterfaceDescriptor getVehicleInterfaceDescriptor();
 
     /**
      * The one vehicle interface specific function, control whether polling is
@@ -77,10 +87,14 @@ interface VehicleServiceInterface {
      */
     void setBluetoothPollingStatus(boolean enabled);
 
-    List<String> getSourceSummaries();
-    List<String> getSinkSummaries();
-    List<String> getActiveSourceTypeStrings();
+    /**
+     * Set the VehicleService to use or not use the device's built-in GPS for
+     * location, to augment a vehicle that does no have GPS.
+     */
+    void setNativeGpsStatus(boolean enabled);
 
     void userPipelineActivated();
     void userPipelineDeactivated();
+
+    void addViConnectionListener(in ViConnectionListener listener);
 }

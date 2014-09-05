@@ -10,7 +10,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.KeyedMessage;
+import com.openxc.messages.MessageKey;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.SourceCallback;
@@ -21,7 +23,7 @@ import com.openxc.sources.VehicleDataSource;
  *
  * A DataPipeline accepts two types of components - sources and sinks. The
  * sources (implementing {@link VehicleDataSource} call the
- * {@link #receive(RawMeasurement)} method on the this class when new
+ * {@link #receive(VehicleMessage)} method on the this class when new
  * values arrive. The DataPipeline then passes this value on to all currently
  * registered data sinks.
  *
@@ -34,12 +36,12 @@ public class DataPipeline implements SourceCallback {
 
     private Operator mOperator;
     private int mMessagesReceived = 0;
-    private Map<String, RawMeasurement> mMeasurements =
-            new ConcurrentHashMap<String, RawMeasurement>();
+    private Map<MessageKey, KeyedMessage> mKeyedMessages =
+            new ConcurrentHashMap<>();
     private CopyOnWriteArrayList<VehicleDataSink> mSinks =
-            new CopyOnWriteArrayList<VehicleDataSink>();
+            new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<VehicleDataSource> mSources =
-            new CopyOnWriteArrayList<VehicleDataSource>();
+            new CopyOnWriteArrayList<>();
 
     public interface Operator {
         public void onPipelineDeactivated();
@@ -63,22 +65,22 @@ public class DataPipeline implements SourceCallback {
      * If any data sink throws a DataSinkException when receiving data, it will
      * be removed from the list of sinks.
      */
-    public void receive(RawMeasurement measurement) {
-        if(measurement == null) {
+    @Override
+    public void receive(VehicleMessage message) {
+        if(message == null) {
             return;
         }
 
-        if(measurement.getName() == null) {
-            Log.d(TAG, "Measurement's name was null - that shouldn't have made it this far");
-            return;
+        if(message instanceof KeyedMessage) {
+            KeyedMessage keyedMessage = message.asKeyedMessage();
+            mKeyedMessages.put(keyedMessage.getKey(), keyedMessage);
         }
 
-        mMeasurements.put(measurement.getName(), measurement);
-        List<VehicleDataSink> deadSinks = new ArrayList<VehicleDataSink>();
+        List<VehicleDataSink> deadSinks = new ArrayList<>();
         for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
             VehicleDataSink sink = i.next();
             try {
-                sink.receive(measurement);
+                sink.receive(message);
             } catch(DataSinkException e) {
                 Log.w(TAG, this.getClass().getName() + ": The sink " +
                         sink + " exploded when we sent a new message " +
@@ -103,7 +105,7 @@ public class DataPipeline implements SourceCallback {
     /**
      * Remove a previously added sink from the pipeline.
      *
-     * Once removed, the sink will no longer receive any new measurements from
+     * Once removed, the sink will no longer receive any new messages from
      * the pipeline's sources. The sink's {@link VehicleDataSink#stop()} method
      * is also called.
      *
@@ -124,6 +126,11 @@ public class DataPipeline implements SourceCallback {
     public VehicleDataSource addSource(VehicleDataSource source) {
         source.setCallback(this);
         mSources.add(source);
+        if(isActive()) {
+            source.onPipelineActivated();
+        } else {
+            source.onPipelineDeactivated();
+        }
         return source;
     }
 
@@ -179,13 +186,14 @@ public class DataPipeline implements SourceCallback {
     }
 
     /**
-     * Return the last received value for the measurement if known.
+     * Return the last received value for the keyed message if known.
      *
-     * @return a RawMeasurement with the last known value, or null if no value
+     * @param key the key of the message to retreive, if any available.
+     * @return a VehicleMessage with the last known value, or null if no value
      *          has been received.
      */
-    public RawMeasurement get(String measurementId) {
-        return mMeasurements.get(measurementId);
+    public KeyedMessage get(MessageKey key) {
+        return mKeyedMessages.get(key);
     }
 
     /**
@@ -216,10 +224,14 @@ public class DataPipeline implements SourceCallback {
      * At least one source is not active - if all sources are inactive, notify
      * the operator.
      */
+    @Override
     public void sourceDisconnected(VehicleDataSource source) {
         if(mOperator != null) {
             if(!isActive(source)) {
                 mOperator.onPipelineDeactivated();
+                for(VehicleDataSource s : mSources) {
+                    s.onPipelineDeactivated();
+                }
             }
         }
     }
@@ -227,9 +239,13 @@ public class DataPipeline implements SourceCallback {
     /**
      * At least one source is active - notify the operator.
      */
+    @Override
     public void sourceConnected(VehicleDataSource source) {
         if(mOperator != null) {
             mOperator.onPipelineActivated();
+            for(VehicleDataSource s : mSources) {
+                s.onPipelineActivated();
+            }
         }
     }
 
@@ -238,7 +254,7 @@ public class DataPipeline implements SourceCallback {
         return Objects.toStringHelper(this)
             .add("sources", mSources)
             .add("sinks", mSinks)
-            .add("numMeasurementTypes", mMeasurements.size())
+            .add("numKeyedMessageTypes", mKeyedMessages.size())
             .toString();
     }
 }

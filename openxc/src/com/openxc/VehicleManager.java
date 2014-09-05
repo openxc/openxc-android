@@ -2,7 +2,7 @@ package com.openxc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -19,19 +19,26 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Objects;
-import com.openxc.interfaces.InterfaceType;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.interfaces.VehicleInterfaceManagerUtils;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.remote.RawMeasurement;
-import com.openxc.remote.RemoteServiceVehicleInterface;
+import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
+import com.openxc.messages.CommandResponse;
+import com.openxc.messages.DiagnosticRequest;
+import com.openxc.messages.ExactKeyMatcher;
+import com.openxc.messages.KeyMatcher;
+import com.openxc.messages.KeyedMessage;
+import com.openxc.messages.MessageKey;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.VehicleServiceInterface;
-import com.openxc.sinks.MeasurementListenerSink;
-import com.openxc.sinks.MockedLocationSink;
+import com.openxc.remote.ViConnectionListener;
+import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.RemoteListenerSource;
@@ -56,20 +63,15 @@ import com.openxc.sources.VehicleDataSource;
  * {@link com.openxc.sinks.VehicleDataSink} and
  * {@link com.openxc.interfaces.VehicleInterface}.
  *
- * The list of {@link com.openxc.interfaces.VehicleInterface} is perhaps the
- * most important. These instances represent actual physical connections to the
- * vehicle, and are bi-directional - they can both provide data to an
+ * The instance of a {@link com.openxc.interfaces.VehicleInterface} is perhaps the
+ * most important. This represents the actual physical connections to the
+ * vehicle, and is bi-directional - it can both provide data to an
  * application and optionally send data back to the vehicle. In most cases,
- * these should not be instantiated by applications; the
- * {@link #addVehicleInterface(Class, String)} and
- * {@link #removeVehicleInterface(Class)} methods
- * take enough metadata from the remote {@link com.openxc.remote.VehicleService}
- * to instantiate the interface in a remove process. That way a single USB or
- * Bluetooth connection can be shared among many applications. If an application
- * really needs to use a custom VehicleInterface implementation and does not
- * mind if access to its write interface will be accessible only in the local
- * app process, the {@link #addLocalVehicleInterface(VehicleInterface)} and
- * {@link #removeLocalVehicleInterface(VehicleInterface)} can let you do that.
+ * this should not be instantiated by applications; the
+ * {@link #setVehicleInterface(Class, String)} method takes enough metadata for
+ * the remote {@link com.openxc.remote.VehicleService} to instantiate the
+ * interface in a remote process. That way a single USB or
+ * Bluetooth connection can be shared among many applications.
  *
  * The list of active data sources (e.g.
  * {@link com.openxc.sources.trace.TraceVehicleDataSource}) can be controlled
@@ -94,13 +96,11 @@ import com.openxc.sources.VehicleDataSource;
  */
 public class VehicleManager extends Service implements DataPipeline.Operator {
     public final static String VEHICLE_LOCATION_PROVIDER =
-            MockedLocationSink.VEHICLE_LOCATION_PROVIDER;
+            VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
-    private CopyOnWriteArrayList<VehicleInterface> mInterfaces =
-            new CopyOnWriteArrayList<VehicleInterface>();
 
     // The mRemoteOriginPipeline in this class must only have 1 source - the
     // special RemoteListenerSource that receives measurements from the
@@ -118,8 +118,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     private boolean mIsBound;
     private VehicleServiceInterface mRemoteService;
     private RemoteListenerSource mRemoteSource;
-    private VehicleInterface mRemoteController;
-    private MeasurementListenerSink mNotifier = new MeasurementListenerSink();
+    private MessageListenerSink mNotifier = new MessageListenerSink();
     private UserSink mUserSink;
 
     /**
@@ -128,7 +127,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * This class is used in the onServiceConnected method of a
      * ServiceConnection in a client of this service - the IBinder given to the
      * application can be cast to the VehicleBinder to retrieve the actual
-     * service instance. This is required to actaully call any of its methods.
+     * service instance. This is required to actually call any of its methods.
      */
     public class VehicleBinder extends Binder {
         /**
@@ -167,7 +166,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     @Override
-    public boolean onUnbind(Intent intent){
+    public boolean onUnbind(Intent intent) {
         Log.i(TAG, "Service unbinding in response to " + intent);
         return true;
     }
@@ -198,6 +197,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Measurement instance of the specified type. The measurement can be
      * checked to see if it has a value.
      *
+     * TODO need VehicleMessage get(...)
+     *
      * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested Measurement which may or may
@@ -219,30 +220,95 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
-            RawMeasurement rawMeasurement = mRemoteService.get(
-                    BaseMeasurement.getIdForClass(measurementType));
-            return BaseMeasurement.getMeasurementFromRaw(measurementType,
-                    rawMeasurement);
-        } catch(RemoteException e) {
+            VehicleMessage message = mRemoteService.get(
+                    BaseMeasurement.getKeyForMeasurement(measurementType));
+            if(!(message instanceof SimpleVehicleMessage)) {
+                // If there is no known value on the other end, VehicleService
+                // returns a blank VehicleMessage.
+                throw new NoValueException();
+            }
+            return BaseMeasurement.getMeasurementFromMessage(
+                    measurementType, message.asSimpleMessage());
+        } catch(RemoteException | ClassCastException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             throw new NoValueException();
         }
     }
 
     /**
-     * Send a command to the vehicle through the first available active
-     * {@link com.openxc.interfaces.VehicleInterface}.
+     * Send a request or command to the vehicle through the first available
+     * active {@link com.openxc.interfaces.VehicleInterface} without waiting for
+     * any responses.
      *
-     * This will attempt to send the message over all of the registered vehicle
-     * interfaces until one returns successfully. There is no guarantee about
-     * the order that the interfaces are attempted.
+     * This will attempt to send the message over at most one of the registered
+     * vehicle interfaces. It will first try all interfaces registered to the
+     * VehicleManager, then all of those register with the remote VehicleService
+     * (i.e. the USB, Network and Bluetooth sources) until one sends
+     * successfully. Besides that, there is no guarantee about the order that
+     * the interfaces are attempted.
      *
      * @param command The desired command to send to the vehicle.
-     * @return true if the message was sent successfully
+     * @return true if the message was sent successfully on an interface.
      */
+    public boolean send(VehicleMessage message) {
+        VehicleMessage wrappedMessage = message;
+        if(message instanceof DiagnosticRequest) {
+            // Wrap the request in a Command
+            // TODO need to support the CANCEL action, too
+            wrappedMessage = new Command(message.asDiagnosticRequest(),
+                    DiagnosticRequest.ADD_ACTION_KEY);
+        }
+
+        boolean sent = false;
+        // Don't want to keep this in the same list as local interfaces because
+        // if that quits after the first interface reports success.
+        if(mRemoteService != null) {
+            try {
+                sent = sent || mRemoteService.send(wrappedMessage);
+            } catch(RemoteException e) {
+                Log.v(TAG, "Unable to propagate command to remote interface", e);
+            }
+        }
+
+        if(sent) {
+            // Add a timestamp of when the message was actually sent
+            message.timestamp();
+        }
+
+        return sent;
+    }
+
     public boolean send(Measurement command) throws
                 UnrecognizedMeasurementTypeException {
-        return VehicleInterfaceManagerUtils.send(mInterfaces, command);
+        return send(command.toVehicleMessage());
+    }
+
+    /* Sends a request and registers the listener to receive the response.
+     * Returns immediately after sending.
+     *
+     * The listener is unregistered after the first response is received. If you
+     * need to accept multiple responses for the same request, you must manually
+     * register your own listener to control its lifecycle.
+     */
+    public void request(KeyedMessage message,
+            VehicleMessage.Listener listener) {
+        // Register the listener as non-persistent, so it is deleted after
+        // receiving the first response
+        mNotifier.register(ExactKeyMatcher.buildExactMatcher(message.getKey()),
+                listener, false);
+        send(message);
+    }
+
+    /* Sends a request and waits up to 2 seconds to receive a response. Returns
+     * a response or throw an exception if it times or out has an error.
+     * Blocking.
+     *
+     * Sets up a private listener and blocks waits for it to receive a response.
+     */
+    public VehicleMessage request(KeyedMessage message) {
+        BlockingMessageListener callback = new BlockingMessageListener();
+        request(message, callback);
+        return callback.waitForResponse();
     }
 
     /**
@@ -267,16 +333,35 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      not extend Measurement
      */
     public void addListener(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener) throws VehicleServiceException,
-                UnrecognizedMeasurementTypeException {
-        Log.i(TAG, "Adding listener " + listener + " to " + measurementType);
+            Measurement.Listener listener) throws VehicleServiceException {
+        Log.i(TAG, "Adding listener " + listener + " for " + measurementType);
         mNotifier.register(measurementType, listener);
     }
 
+    public void addListener(Class<? extends VehicleMessage> messageType,
+            VehicleMessage.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener + " for " + messageType);
+        mNotifier.register(messageType, listener);
+    }
+
+    public void addListener(KeyedMessage keyedMessage,
+            VehicleMessage.Listener listener) {
+        addListener(keyedMessage.getKey(), listener);
+    }
+
+    public void addListener(MessageKey key, VehicleMessage.Listener listener) {
+        addListener(ExactKeyMatcher.buildExactMatcher(key), listener);
+    }
+
+    public void addListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
+        Log.i(TAG, "Adding listener " + listener + " to " + matcher);
+        mNotifier.register(matcher, listener);
+    }
+
     /**
-     * Unregister a previously reigstered Measurement.Listener instance.
+     * Unregister a previously registered Measurement.Listener instance.
      *
-     * When an application is no longer interested in received measurement
+     * When an application is no longer interested in receiving measurement
      * updates (e.g. when it's pausing or exiting) it should unregister all
      * previously registered listeners to save on CPU.
      *
@@ -288,12 +373,29 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      registered with the library internals - an exceptional situation
      *      that shouldn't occur.
      */
-    public void removeListener(Class<? extends Measurement>
-            measurementType, Measurement.Listener listener)
-            throws VehicleServiceException {
-        Log.i(TAG, "Removing listener " + listener + " from " +
-                measurementType);
+    public void removeListener(Class<? extends Measurement> measurementType,
+            Measurement.Listener listener)
+            throws VehicleServiceException,
+                UnrecognizedMeasurementTypeException {
+        Log.i(TAG, "Removing listener " + listener + " for " + measurementType);
         mNotifier.unregister(measurementType, listener);
+    }
+
+    public void removeListener(Class<? extends VehicleMessage> messageType,
+            VehicleMessage.Listener listener) {
+        mNotifier.unregister(messageType, listener);
+    }
+
+    public void removeListener(KeyedMessage message, VehicleMessage.Listener listener) {
+        removeListener(message.getKey(), listener);
+    }
+
+    public void removeListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
+        mNotifier.unregister(matcher, listener);
+    }
+
+    public void removeListener(MessageKey key, VehicleMessage.Listener listener) {
+        removeListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
     /**
@@ -350,29 +452,57 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    public String requestCommandMessage(CommandType type) {
+        VehicleMessage message = request(new Command(type));
+        String value = null;
+        if(message != null) {
+            CommandResponse response = message.asCommandResponse();
+            if(response.getStatus()) {
+                value = response.getMessage();
+            }
+        }
+        return value;
+    }
+
+    public String getVehicleInterfaceDeviceId() {
+        return requestCommandMessage(CommandType.DEVICE_ID);
+    }
+
+    public String getVehicleInterfaceVersion() {
+        return requestCommandMessage(CommandType.VERSION);
+    }
+
+    public void setVehicleInterface(
+            Class<? extends VehicleInterface> vehicleInterfaceType)
+            throws VehicleServiceException {
+       setVehicleInterface(vehicleInterfaceType, null);
+    }
+
+    public void addOnVehicleInterfaceConnectedListener(
+            ViConnectionListener listener) throws VehicleServiceException {
+        try {
+            mRemoteService.addViConnectionListener(listener);
+        } catch(RemoteException e) {
+            throw new VehicleServiceException(
+                    "Unable to add connection status listener", e);
+        }
+
+    }
+
     /**
      * Activate a vehicle interface for both receiving data and sending commands
      * to the vehicle.
      *
      * For example, to use a Bluetooth vehicle interface in addition to a
-     * vehicle data source, call the addVehicleInterface method after binding
+     * vehicle data source, call the setVehicleInterface method after binding
      * with VehicleManager:
      *
-     *      service.addVehicleInterface(BluetoothVehicleInterface.class, "");
+     *      service.setVehicleInterface(BluetoothVehicleInterface.class, "");
      *
      * The only valid VehicleInteface types are those included with the library
      * - the vehicle service running in a remote process is the one to actually
      * instantiate the interfaces. Interfaces added with this method will be
-     * available for all other OpenXC applications running in the system. To use
-     * custom implementations of {@link com.openxc.interfaces.VehicleInterface},
-     * see {@link #addLocalVehicleInterface(VehicleInterface)} (but beware of
-     * the caveats described with that method - interfaces added "locally" do
-     * not support bidirectional communication for any other applications
-     * besides the one that instantiated the interface).
-     *
-     * The {@link com.openxc.interfaces.usb.UsbVehicleInterface} is initialized
-     * by default when the remote service starts, but it can be disabled with
-     * {@link #removeVehicleInterface(Class)}.
+     * available for all other OpenXC applications running in the system.
      *
      * @param vehicleInterfaceType A class implementing VehicleInterface that is
      *      included in the OpenXC library
@@ -380,44 +510,46 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      interface. See the specific implementation of {@link VehicleService}
      *      to find the required format of this parameter.
      */
-    public void addVehicleInterface(
+    public void setVehicleInterface(
             Class<? extends VehicleInterface> vehicleInterfaceType,
-            String resource) {
-        Log.i(TAG, "Adding interface: " + vehicleInterfaceType);
+            String resource) throws VehicleServiceException {
+        Log.i(TAG, "Setting VI to: " + vehicleInterfaceType);
+
+        String interfaceName = null;
+        if(vehicleInterfaceType != null) {
+            interfaceName = vehicleInterfaceType.getName();
+        }
 
         if(mRemoteService != null) {
             try {
-                mRemoteService.addVehicleInterface(
-                        vehicleInterfaceType.getName(), resource);
+                mRemoteService.setVehicleInterface(interfaceName, resource);
             } catch(RemoteException e) {
-                Log.w(TAG, "Unable to add vehicle interface", e);
+                throw new VehicleServiceException(
+                        "Unable to set vehicle interface", e);
             }
         } else {
-            Log.w(TAG, "Can't add vehicle interface, not connected to the " +
+            Log.w(TAG, "Can't set vehicle interface, not connected to the " +
                     "VehicleService");
         }
     }
 
     /**
-     * Disable a vehicle interface, stopping data flow in both directions.
+     * Control whether the device's built-in GPS is used to provide location.
      *
-     * @param vehicleInterfaceType A class implementing VehicleInterface that is
-     *      included in the OpenXC library, should have been previously added.
+     * @param enabled True if GPS should be read from the Android device and
+     * injected as vehicle data whenever a vehicle interface is connected.
      */
-    public void removeVehicleInterface(
-            Class<? extends VehicleInterface> vehicleInterfaceType) {
-        Log.i(TAG, "Removing interface: " + vehicleInterfaceType);
+    public void setNativeGpsStatus(boolean enabled) {
+        Log.i(TAG, (enabled ? "Enabling" : "Disabling") + " native GPS");
 
         if(mRemoteService != null) {
             try {
-                mRemoteService.removeVehicleInterface(
-                        vehicleInterfaceType.getName());
+                mRemoteService.setNativeGpsStatus(enabled);
             } catch(RemoteException e) {
-                Log.w(TAG, "Unable to remove vehicle interface", e);
+                Log.w(TAG, "Unable to change native GPS status", e);
             }
         } else {
-            Log.w(TAG, "Can't remove vehicle interface, not connected to the " +
-                    "VehicleService");
+            Log.w(TAG, "Not connected to the VehicleService");
         }
     }
 
@@ -442,94 +574,22 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
-     * Return a list of all sources active in the system, suitable for
-     * displaying in a status view.
+     * Returns a descriptor of the active vehicle interface.
      *
-     * This method is soley for being able to peek into the system to see what's
-     * active, which is why it returns strings intead of the actual source
-     * objects. We don't want applications to be able to modify the sources
-     * through this method.
-     *
-     * @return A list of the names and status of all sources.
+     * @return A VehicleInterfaceDescriptor for the active VI or null if none is
+     * enabled.
      */
-    public List<String> getSourceSummaries() {
-        ArrayList<String> sources = new ArrayList<String>();
-        for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
-            sources.add(source.toString());
-        }
-
-        for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
-            sources.add(source.toString());
-        }
-
+    public VehicleInterfaceDescriptor getActiveVehicleInterface() {
+        VehicleInterfaceDescriptor descriptor = null;
         if(mRemoteService != null) {
             try {
-                sources.addAll(mRemoteService.getSourceSummaries());
+                descriptor = mRemoteService.getVehicleInterfaceDescriptor();
             } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive remote source summaries", e);
+                Log.w(TAG, "Unable to retreive VI descriptor", e);
             }
 
         }
-        return sources;
-    }
-
-    /**
-     * Return a list of all sinks active in the system.
-     *
-     * The motivation for this method is the same as
-     * {@link #getSinkSummaries()}.
-     *
-     * @return A list of the names and status of all sinks.
-     */
-    public List<String> getSinkSummaries() {
-        ArrayList<String> sinks = new ArrayList<String>();
-        for(VehicleDataSink sink : mRemoteOriginPipeline.getSinks()) {
-            sinks.add(sink.toString());
-        }
-
-        if(mRemoteService != null) {
-            try {
-                sinks.addAll(mRemoteService.getSinkSummaries());
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive remote sink summaries", e);
-            }
-        }
-        return sinks;
-    }
-
-    /**
-     * Returns a list of all active interface types
-     *
-     * @return A list of the InterfaceTypes actively connected.
-     */
-    public List<InterfaceType> getActiveSourceTypes(){
-        ArrayList<InterfaceType> sources = new ArrayList<InterfaceType>();
-
-        for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
-            if(source.isConnected()){
-                sources.add(InterfaceType.interfaceTypeFromClass(source));
-            }
-        }
-
-        for(VehicleDataSource source : mRemoteOriginPipeline.getSources()) {
-            if(source.isConnected()){
-                sources.add(InterfaceType.interfaceTypeFromClass(source));
-            }
-        }
-
-        if(mRemoteService != null) {
-            try {
-                for(String sourceTypeString :
-                        mRemoteService.getActiveSourceTypeStrings()) {
-                    sources.add(InterfaceType.interfaceTypeFromString(
-                                sourceTypeString));
-                }
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive remote source summaries", e);
-            }
-
-        }
-        return sources;
+        return descriptor;
     }
 
     /**
@@ -553,49 +613,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
-    /**
-     * Add a new local vehicle interface to the service.
-     *
-     * This method will accept any implementation of {@link VehicleInterface},
-     * so completely custom implementations are possible beyond the few built-in
-     * to the OpenXC library.
-     *
-     * However, interfaces added with this method cannot
-     * be used to send commands to the vehicle by any other active OpenXC
-     * application besides the one that instantiates the
-     * {@link VehicleInterface} object.
-     *
-     * That limitation does not apply to data received from the VehicleInterface
-     * - it will be propagated to all other applications, although there is an
-     * additional performance hit when compared to the built-in VehicleInterface
-     * types because Android's AIDL barrier must be crossed twice instead of
-     * once to communicate with the remote {@link VehicleService}.
-     *
-     * @param vehicleInterface an instance of a VehicleInteface
-     */
-    public void addLocalVehicleInterface(VehicleInterface vehicleInterface) {
-        if(vehicleInterface != null) {
-            Log.i(TAG, "Adding local vehicle interface " + vehicleInterface);
-            mInterfaces.add(vehicleInterface);
-            mRemoteOriginPipeline.addSource(vehicleInterface);
-        }
-    }
-
-    /**
-     * Remove a previously registered local vehicle interface from the
-     * service.
-     *
-     * Data from the {@link VehicleInterface} will no longer be propagated to
-     * applications, and it will no longer be available for sending commands to
-     * the vehicle.
-     */
-    public void removeLocalVehicleInterface(VehicleInterface vehicleInterface) {
-        if(vehicleInterface != null) {
-            mInterfaces.remove(vehicleInterface);
-            mRemoteOriginPipeline.removeSource(vehicleInterface);
-        }
-    }
-
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -603,6 +620,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             .toString();
     }
 
+    @Override
     public void onPipelineActivated() {
         if(mRemoteService != null) {
             try {
@@ -613,6 +631,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    @Override
     public void onPipelineDeactivated() {
         if(mRemoteService != null) {
             try {
@@ -623,14 +642,43 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    private class BlockingMessageListener implements VehicleMessage.Listener {
+        private final static int RESPONSE_TIMEOUT_S = 2;
+        private Lock mLock = new ReentrantLock();
+        private Condition mResponseReceived = mLock.newCondition();
+        private VehicleMessage mResponse;
+
+        public void receive(VehicleMessage message) {
+            try {
+                mLock.lock();
+                mResponse = message;
+                mResponseReceived.signal();
+            } finally {
+                mLock.unlock();
+            }
+        }
+
+        public VehicleMessage waitForResponse() {
+            try {
+                mLock.lock();
+                if(mResponse == null) {
+                    mResponseReceived.await(RESPONSE_TIMEOUT_S, TimeUnit.SECONDS);
+                }
+            } catch(InterruptedException e) {
+            } finally {
+                mLock.unlock();
+            }
+
+            return mResponse;
+        }
+    };
+
     private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
             Log.i(TAG, "Bound to VehicleService");
             mRemoteService = VehicleServiceInterface.Stub.asInterface(service);
-            mRemoteController = new RemoteServiceVehicleInterface(
-                    mRemoteService);
-            mInterfaces.add(mRemoteController);
 
             mRemoteSource = new RemoteListenerSource(mRemoteService);
             mRemoteOriginPipeline.addSource(mRemoteSource);
@@ -643,9 +691,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             mRemoteBoundLock.unlock();
         }
 
+        @Override
         public void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
-            mInterfaces.remove(mRemoteController);
             mRemoteService = null;
             mRemoteOriginPipeline.removeSource(mRemoteSource);
             mUserOriginPipeline.removeSink(mUserSink);

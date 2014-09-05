@@ -4,11 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import android.util.Log;
-
-import com.openxc.BinaryMessages;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * A common parent for all vehicle data sources.
@@ -16,10 +12,10 @@ import com.openxc.remote.RawMeasurement;
  * This class encapsulates funcationaliy common to most data sources. It accepts
  * and stores a SourceCallback reference (required by the
  * {@link com.openxc.sources.VehicleDataSource} interface) and implements a
- * {@link #handleMessage(RawMeasurement)} method for subclass to call
- * with each new measurement, regardless of its origin.
+ * {@link #handleMessage(VehicleMessage)} method for subclass to call
+ * with each new message, regardless of its origin.
  */
-public class BaseVehicleDataSource implements VehicleDataSource {
+public abstract class BaseVehicleDataSource implements VehicleDataSource {
     private final static String TAG = "BaseVehicleDataSource";
     private SourceCallback mCallback;
     private final Lock mCallbackLock = new ReentrantLock();
@@ -44,11 +40,15 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * @param callback a valid callback or null if you wish to stop the source
      *      from sending updates.
      */
+    @Override
     public void setCallback(SourceCallback callback) {
-        mCallbackLock.lock();
-        mCallback = callback;
-        mCallbackChanged.signal();
-        mCallbackLock.unlock();
+        try {
+            mCallbackLock.lock();
+            mCallback = callback;
+            mCallbackChanged.signal();
+        } finally {
+            mCallbackLock.unlock();
+        }
     }
 
     protected void disconnected() {
@@ -63,16 +63,7 @@ public class BaseVehicleDataSource implements VehicleDataSource {
         }
     }
 
-    public boolean isConnected() {
-        // TODO this is kind of weird, and probably says that this API needs
-        // refactoring - we don't want to keep the Pipeline awake because it
-        // thinks the sources like the RemoteListenerSource and
-        // ApplicationSource (which are always in the pipeline) are "connected"
-        // to a vehicle. maybe this isConnected method should only apply to the
-        // VehicleInterface type of sources, but we don't currently track those
-        // separately.
-        return false;
-    }
+    public abstract boolean isConnected();
 
     /**
      * Clear the callback so no further updates are sent.
@@ -80,36 +71,43 @@ public class BaseVehicleDataSource implements VehicleDataSource {
      * Subclasses should be sure to call super.stop() so they also stop sending
      * updates when killed by a user.
      */
+    @Override
     public void stop() {
         disconnected();
         setCallback(null);
     }
 
     /**
-     * Pass a new measurement to the callback, if set.
+     * Pass a new message to the callback, if set.
      *
-     * @param measurement the new measurement object.
+     * @param message the new message object.
      */
-    protected void handleMessage(RawMeasurement measurement) {
-        if(mCallback != null && measurement != null) {
-            mCallback.receive(measurement);
+    protected void handleMessage(VehicleMessage message) {
+        if(message != null) {
+            message.timestamp();
+            if(mCallback != null) {
+                mCallback.receive(message);
+            }
         }
     }
 
-    protected void handleMessage(String serializedMeasurement) {
+    protected void waitForCallback() {
         try {
-          handleMessage(new RawMeasurement(serializedMeasurement));
-        } catch(UnrecognizedMeasurementTypeException e) {
+            mCallbackLock.lock();
+            if(mCallback == null) {
+                mCallbackChanged.await();
+            }
+        } catch(InterruptedException e) {
+        } finally {
+            mCallbackLock.unlock();
         }
     }
 
-    protected void handleMessage(BinaryMessages.VehicleMessage message) {
-        try {
-          handleMessage(new RawMeasurement(message));
-        } catch(UnrecognizedMeasurementTypeException e) {
-            Log.d(TAG, "Unable to handle binary message", e);
-        }
-    }
+    @Override
+    public void onPipelineActivated() { }
+
+    @Override
+    public void onPipelineDeactivated() { }
 
     /**
      * Return a string suitable as a tag for logging.

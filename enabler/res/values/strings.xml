@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">OpenXC Enabler</string>
-    <string name="status_label">Status</string>
     <string name="active_connections">Active Connections:</string>
-    <string name="recording_status_label">Recording Status: </string>
     <string name="message_count_label">Messages Received: </string>
-    <string name="connection_unknown">Unknown</string>
     <string name="connection_file">File</string>
     <string name="connection_bluetooth">Bluetooth</string>
     <string name="connection_usb">USB</string>
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
-    <string name="show_data_button">View Vehicle Data</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
 
     <string name="settings">Settings</string>
@@ -33,58 +29,38 @@
     <string name="native_gps_checkbox_summary">For vehicles without a GPS receiver, send the host\'s built-in GPS location instead</string>
     <string name="gps_overwrite_checkbox_title">Overwrite Native GPS</string>
     <string name="gps_overwrite_checkbox_summary">Overwrite Android native GPS values with those from the vehicle (if available)</string>
-    <string name="bluetooth_checkbox_title">Use a Bluetooth vehicle interface</string>
-    <string name="bluetooth_checkbox_summary">Read vehicle data from a vehicle interface connected wirelessly via Bluetooth</string>
     <string name="bluetooth_polling_title">Use background polling to detect a BT VI</string>
     <string name="bluetooth_polling_summary">To save battery life, disable this if your VI can act as a Bluetooth master</string>
     <string name="bluetooth_mac_title">Bluetooth device address</string>
     <string name="bluetooth_mac_automatic_option">Automatically detect</string>
     <string name="bluetooth_mac_automatic_summary">Automatically connect to paired OpenXC-VI device</string>
     <string name="network_settings">Network</string>
-    <string name="network_checkbox_title">Use a network device</string>
-    <string name="network_checkbox_summary">Read vehicle data from the network</string>
     <string name="network_host_title">Network host address</string>
     <string name="network_port_title">Network port</string>
     <string name="trace_source_settings">Trace file playback</string>
-    <string name="trace_source_checkbox_title">Use a pre-recorded trace file</string>
-    <string name="trace_source_checkbox_summary">Use an OpenXC vehicle data trace file as the source</string>
     <string name="trace_source_file_title">Select a trace file for playback</string>
-    <string name="trace_source_file_summary">Select an existing trace file</string>
-    <string name="source_list_label">Data Sources</string>
-    <string name="sink_list_label">Data Sinks</string>
-    <string name="about_summary">About OpenXCEnabler</string>
+    <string name="about_summary">About OpenXC</string>
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>
     <string name="application_version_key">application_version</string>
     <string name="service_not_running">VehicleService not running.</string>
-    <string name="warning">Warning</string>
 
-    <!-- Vehicle Dashboard Strings -->
-    <string name="steering_wheel_angle_label">Steering Wheel</string>
-    <string name="vehicle_speed_label">Vehicle Speed</string>
-    <string name="fuel_consumed_label">Fuel Consumed</string>
-    <string name="fuel_level_label">Fuel Level</string>
-    <string name="odometer_label">Odometer</string>
-    <string name="wiper_status_label">Windshield Wiper</string>
-    <string name="brake_pedal_status_label">Brake Pedal</string>
-    <string name="headlamp_status_label">Headlamp</string>
-    <string name="engine_speed_label">Engine Speed</string>
-    <string name="torque_at_transmission_label">Transmission Torque</string>
-    <string name="accelerator_pedal_position_label">
-        Accelerator Pedal
-    </string>
-    <string name="transmission_gear_pos_label">
-        Transmission Gear
-    </string>
-    <string name="ignition_label">Ignition Status</string>
-    <string name="latitude_label">Latitude</string>
-    <string name="longitude_label">Longitude</string>
-    <string name="android_latitude_label">Android Latitude</string>
-    <string name="android_longitude_label">Android Longitude</string>
-    <string name="parking_brake_status_label">Parking Brake</string>
-    <string name="button_event_label">Button Event</string>
-    <string name="door_status_label">Door Status</string>
-    <string name="left_turn">Left Turn</string>
-    <string name="right_turn">Right Turn</string>
+    <string name="bus_label">Bus</string>
+    <string name="message_id_label">Message ID (hex)</string>
+    <string name="message_payload_label">Payload (hex)</string>
+    <string name="diag_request_mode_label">Mode (hex)</string>
+    <string name="diag_request_pid_label">PID (hex, optional)</string>
+
+    <string name="last_diag_request_label">Last Request</string>
+    <string name="diag_response_label">Responses</string>
+    <string name="send_button">Send</string>
+    <string name="last_can_message_sent_label">Sent Messages</string>
+
+    <string name="no_can_messages_received">No CAN messages received.</string>
+    <string name="no_can_messages_sent">No CAN messages sent.</string>
+    <string name="no_diagnostic_responses_received">No diagnostic responses received.</string>
+
+    <string name="vi_version_label">VI Version</string>
+    <string name="vi_device_id_label">VI Device ID</string>
 
 </resources>

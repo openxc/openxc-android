@@ -1,13 +1,13 @@
 package com.openxc.sources;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
- * A receipient of measurement updates from a vehicle data source.
+ * A recipient of measurement updates from a vehicle data source.
  *
  * A VehicleDataSource is given a callback that implements this interface. When
  * new measurements arrive from the source, it uses the
- * {@link #receive(RawMeasurement)} method to pass along the new value.
+ * {@link #receive(VehicleMessage)} method to pass along the new value.
  */
 public interface SourceCallback {
     /**
@@ -15,7 +15,7 @@ public interface SourceCallback {
      *
      * @param measurement the new measurement.
      */
-    public void receive(RawMeasurement measurement);
+    public void receive(VehicleMessage measurement);
 
     /**
      * The data source is connected, so if necessary, keep the device awake.

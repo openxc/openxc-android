@@ -13,7 +13,11 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SerializationException;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -31,6 +35,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     private static final int SOCKET_TIMEOUT = 10000;
     private static final String SCHEMA_SPECIFIC_PREFIX = "//";
 
+    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private Socket mSocket;
     private InputStream mInStream;
     private OutputStream mOutStream;
@@ -73,6 +78,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                     massageUri(uriString)));
     }
 
+    @Override
     public boolean setResource(String otherResource) throws DataSourceException {
         if(!UriBasedVehicleInterfaceMixin.sameResource(mUri,
                 massageUri(otherResource))) {
@@ -94,8 +100,13 @@ public class NetworkVehicleInterface extends BytestreamDataSource
      * @return true if the address and port are valid.
      */
     public static boolean validateResource(String uriString) {
-        return UriBasedVehicleInterfaceMixin.validateResource(
-                massageUri(uriString));
+        try {
+            URI uri = UriBasedVehicleInterfaceMixin.createUri(massageUri(uriString));
+            return UriBasedVehicleInterfaceMixin.validateResource(uri) &&
+                uri.getPort() < 65536;
+        } catch(DataSourceException e) {
+            return false;
+        }
     }
 
     @Override
@@ -105,10 +116,16 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
-    public boolean receive(RawMeasurement command) {
-        String message = command.serialize() + "\u0000";
-        byte[] bytes = message.getBytes();
-        return write(bytes);
+    @Override
+    public void receive(VehicleMessage command) throws DataSinkException {
+        try {
+            if(!write(sStreamer.serializeForStream(command))) {
+                throw new DataSinkException("Unable to send command");
+            }
+        } catch(SerializationException e) {
+            throw new DataSinkException(
+                    "Unable to serialize command for sending", e);
+        }
     }
 
     @Override
@@ -119,11 +136,12 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return connected;
     }
 
+    @Override
     protected int read(byte[] bytes) throws IOException {
         mConnectionLock.readLock().lock();
         int bytesRead = -1;
         try {
-            if(isConnected()) {
+            if(isConnected() && mInStream != null) {
                 bytesRead = mInStream.read(bytes, 0, bytes.length);
             }
         } finally {
@@ -132,6 +150,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
+    @Override
     protected void connect() throws NetworkSourceException {
         if(!isRunning()) {
             return;
@@ -164,6 +183,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected void disconnect() {
         mConnectionLock.writeLock().lock();
         try {
@@ -214,7 +234,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         boolean success = true;
         try {
             if(isConnected()) {
-                Log.d(TAG, "Writing bytes to socket: " + bytes);
+                Log.v(TAG, "Writing " + bytes.length + " to socket");
                 mOutStream.write(bytes);
             } else {
                 Log.w(TAG, "No connection established, could not send anything.");
@@ -224,11 +244,12 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             Log.w(TAG, "Unable to write CAN message to Network. Error: " + e.toString());
             success = false;
         } finally {
-        mConnectionLock.readLock().unlock();
+            mConnectionLock.readLock().unlock();
         }
         return success;
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }

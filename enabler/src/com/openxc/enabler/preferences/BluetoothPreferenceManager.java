@@ -18,6 +18,7 @@ import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.util.SupportSettingsUtils;
+import com.openxc.remote.VehicleServiceException;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth vehicle interface.
@@ -87,7 +88,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.bluetooth_checkbox_key,
+                R.string.vehicle_interface_key,
                 R.string.bluetooth_polling_key,
                 R.string.bluetooth_mac_key,
             };
@@ -97,8 +98,9 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
             }
 
             public void readStoredPreferences() {
-                setBluetoothStatus(getPreferences().getBoolean(
-                            getString(R.string.bluetooth_checkbox_key), true));
+                setBluetoothStatus(getPreferences().getString(
+                            getString(R.string.vehicle_interface_key), "").equals(
+                            getString(R.string.bluetooth_interface_option_value)));
                 getVehicleManager().setBluetoothPollingStatus(
                         getPreferences().getBoolean(
                             getString(R.string.bluetooth_polling_key), true));
@@ -117,12 +119,13 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                 Log.d(TAG, "No Bluetooth vehicle interface selected -- " +
                         "starting in automatic mode");
             }
-            getVehicleManager().addVehicleInterface(
-                    BluetoothVehicleInterface.class, deviceAddress);
-        } else {
-            Log.i(TAG, "Disabling the Bluetooth vehicle interface");
-            getVehicleManager().removeVehicleInterface(
-                    BluetoothVehicleInterface.class);
+
+            try {
+                getVehicleManager().setVehicleInterface(
+                        BluetoothVehicleInterface.class, deviceAddress);
+            } catch(VehicleServiceException e) {
+                Log.e(TAG, "Unable to start Bluetooth interface", e);
+            }
         }
     }
 
@@ -154,6 +157,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     };
 
     private void persistCandidateDiscoveredDevices() {
+        // TODO I don't think the MULTI_PROCESS flag is necessary
         SharedPreferences.Editor editor =
                 getContext().getSharedPreferences(
                         DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,

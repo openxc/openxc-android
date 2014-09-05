@@ -1,56 +1,72 @@
 package com.openxc.sinks;
 
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import android.util.Log;
 
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 
 /**
  * Functionality to notify multiple clients asynchronously of new measurements.
  *
  * This class encapsulates the functionality to keep a thread-safe list of
- * listeners that want to be notified of updates asyncronously. Subclasses need
- * only to implement the {@link #propagateMeasurement(String, RawMeasurement)}
+ * listeners that want to be notified of updates asynchronously. Subclasses need
+ * only to implement the {@link #propagateMessage(VehicleMessage)}
  * to add the actual logic for looping over the list of receivers and send them
  * new values.
  *
- * New measurments are queued up and propagated to receivers in a separate
+ * New measurements are queued up and propagated to receivers in a separate
  * thread, to avoid blocking the original sender of the data.
  */
-public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
+public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
     private final static String TAG = "AbstractQueuedCallbackSink";
 
     private NotificationThread mNotificationThread = new NotificationThread();
     private Lock mNotificationsLock = new ReentrantLock();
-    private Condition mNotificationReceived = mNotificationsLock.newCondition();
-    private ConcurrentHashMap<String, RawMeasurement> mNotifications =
-            new ConcurrentHashMap<String, RawMeasurement>(32);
+    private Condition mNotificationsChanged = mNotificationsLock.newCondition();
+    private CopyOnWriteArrayList<VehicleMessage> mNotifications =
+            new CopyOnWriteArrayList<VehicleMessage>();
 
     public AbstractQueuedCallbackSink() {
         mNotificationThread.start();
     }
 
+    @Override
     public synchronized void stop() {
         mNotificationThread.done();
     }
 
-    public boolean receive(RawMeasurement rawMeasurement)
+    @Override
+    public void receive(VehicleMessage message)
             throws DataSinkException {
-        super.receive(rawMeasurement);
-        mNotificationsLock.lock();
-        mNotifications.put(rawMeasurement.getName(), rawMeasurement);
-        mNotificationReceived.signal();
-        mNotificationsLock.unlock();
-        return true;
+        try {
+            mNotificationsLock.lock();
+            mNotifications.add(message);
+            mNotificationsChanged.signal();
+        } finally {
+            mNotificationsLock.unlock();
+        }
     }
 
-    abstract protected void propagateMeasurement(String measurementId,
-            RawMeasurement measurement);
+    /* Block until the notifications queue is cleared.
+     */
+    public void clearQueue() {
+        try {
+            mNotificationsLock.lock();
+            while(!mNotifications.isEmpty()) {
+                mNotificationsChanged.await();
+            }
+        } catch(InterruptedException e) {
+        } finally {
+            mNotificationsLock.unlock();
+        }
+    }
+
+    abstract protected void propagateMessage(VehicleMessage message);
 
     private class NotificationThread extends Thread {
         private boolean mRunning = true;
@@ -60,7 +76,7 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
         }
 
         public synchronized void done() {
-            Log.d(TAG, "Stopping notification thread");
+            Log.d(TAG, "Stopping message notifier");
             mRunning = false;
             // A context switch right can cause a race condition if we
             // used take() instead of poll(): when mRunning is set to
@@ -70,30 +86,38 @@ public abstract class AbstractQueuedCallbackSink extends BaseVehicleDataSink {
             interrupt();
         }
 
+        @Override
         public void run() {
+            Log.d(TAG, "Starting notification thread");
             while(isRunning()) {
                 mNotificationsLock.lock();
                 try {
                     if(mNotifications.isEmpty()) {
-                        mNotificationReceived.await();
+                        mNotificationsChanged.await();
                     }
+
+                    synchronized(mNotifications) {
+                        Iterator<VehicleMessage> it = mNotifications.iterator();
+                        CopyOnWriteArrayList<VehicleMessage> deleted =
+                                new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
+                        while(it.hasNext()) {
+                            VehicleMessage message = it.next();
+                            propagateMessage(message);
+                            deleted.add(message);
+                        }
+                        mNotifications.removeAll(deleted) ;
+                    }
+
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +
                             "item for notification -- likely shutting down");
-                    return;
+                    break;
                 } finally {
+                    mNotificationsChanged.signal();
                     mNotificationsLock.unlock();
                 }
-
-                // This iterator is weakly consistent, so we don't need the lock
-                Iterator<RawMeasurement> it = mNotifications.values().iterator();
-                while(it.hasNext()) {
-                    RawMeasurement measurement = it.next();
-                    propagateMeasurement(measurement.getName(), measurement);
-                    it.remove();
-                }
             }
-            Log.d(TAG, "Stopped measurement notifier");
+            Log.d(TAG, "Stopped notification thread");
         }
     }
 }

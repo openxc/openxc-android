@@ -21,7 +21,7 @@ import com.openxc.units.State;
  * need to ignore and let live?
  */
 public class VehicleButtonEvent
-        extends BaseMeasurement<State<VehicleButtonEvent.ButtonId>> {
+        extends EventedMeasurement<State<VehicleButtonEvent.ButtonId>> {
     public final static String ID = "button_event";
 
     /**

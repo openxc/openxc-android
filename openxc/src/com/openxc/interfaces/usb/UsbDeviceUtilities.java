@@ -23,8 +23,6 @@ public class UsbDeviceUtilities {
         } catch(URISyntaxException e) { }
     }
 
-    private UsbDeviceUtilities() { }
-
     /**
      * Return an integer vendor ID from a URI specifying a USB device.
      *

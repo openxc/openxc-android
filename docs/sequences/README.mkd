@@ -1,0 +1,5 @@
+Sequence Diagrams
+=================
+
+These are sequence diagrams stored in plaintext that can be visualized with at
+[websequencediagrams.com](https://www.websequencediagrams.com).

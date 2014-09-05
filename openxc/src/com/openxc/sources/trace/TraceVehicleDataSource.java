@@ -1,32 +1,27 @@
 package com.openxc.sources.trace;
 
-import com.google.common.base.Objects;
-
-import java.util.concurrent.TimeUnit;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
-
 import java.net.URI;
-
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-
-import com.openxc.sources.ContextualVehicleDataSource;
-import com.openxc.sources.SourceCallback;
-import com.openxc.sources.DataSourceException;
-
-import com.openxc.remote.RawMeasurement;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.res.Resources;
-
 import android.util.Log;
+
+import com.google.common.base.Objects;
+import com.openxc.messages.UnrecognizedMessageTypeException;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.formatters.JsonFormatter;
+import com.openxc.sources.ContextualVehicleDataSource;
+import com.openxc.sources.DataSourceException;
+import com.openxc.sources.SourceCallback;
 
 /**
  * A vehicle data source that reads measurements from a pre-recorded trace file.
@@ -133,6 +128,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     /**
      * Stop trace file playback and the playback thread.
      */
+    @Override
     public void stop() {
         super.stop();
         Log.d(TAG, "Stopping trace playback");
@@ -146,8 +142,10 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      * If the callback is not set, this function will exit immediately and the
      * thread will die a quick death.
      */
+    @Override
     public void run() {
         while(mRunning) {
+            waitForCallback();
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader;
             try {
@@ -159,12 +157,13 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
             String line = null;
             long startingTime = System.nanoTime();
+            // In the future may want to support binary traces
             try {
                 while(mRunning && (line = reader.readLine()) != null) {
-                    RawMeasurement measurement;
+                    VehicleMessage measurement;
                     try {
-                        measurement = new RawMeasurement(line);
-                    } catch(UnrecognizedMeasurementTypeException e) {
+                        measurement = JsonFormatter.deserialize(line);
+                    } catch(UnrecognizedMessageTypeException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
                         continue;
@@ -256,6 +255,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }

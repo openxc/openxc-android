@@ -8,12 +8,13 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.BLUETOOTH"/>
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
   <uses-feature android:name="android.hardware.usb.host"
           android:required="true" />
-  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
+  <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="20" />
 
   <application android:label="@string/app_name" android:allowBackup="true"
             android:icon="@drawable/open_xc_launcher_icon_black">
@@ -33,10 +34,8 @@
           </intent-filter>
       </activity>
 
-      <activity android:name=".VehicleDashboardActivity">
-      </activity>
-
       <activity android:name=".SettingsActivity" />
+      <activity android:name=".CanMessageDetailActivity" />
 
       <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity">
             <intent-filter>
@@ -61,10 +60,7 @@
               <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
           </intent-filter>
       </receiver>
-      <!-- Must have a valid API key to use Crashlytics - this is a bogus API
-        key included just to make sure you can still build and install the app
-        from the open source repository. ! -->
-      <meta-data android:name="com.crashlytics.ApiKey" android:value="0000000000000000000000000000000000000000"/>
+      <meta-data android:name="com.bugsnag.token" android:value="@string/bugsnag_token"/>
   </application>
 
 </manifest>

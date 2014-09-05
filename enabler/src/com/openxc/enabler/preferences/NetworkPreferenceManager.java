@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.openxc.enabler.R;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
+import com.openxc.remote.VehicleServiceException;
 
 /**
  * Enable or disable receiving vehicle data from a Network device
@@ -21,7 +22,7 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.network_checkbox_key,
+                R.string.vehicle_interface_key,
                 R.string.network_host_key,
                 R.string.network_port_key,
             };
@@ -31,8 +32,9 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
 
             }
             public void readStoredPreferences() {
-                setNetworkStatus(getPreferences().getBoolean(getString(
-                                R.string.network_checkbox_key), false));
+                setNetworkStatus(getPreferences().getString(
+                            getString(R.string.vehicle_interface_key), "").equals(
+                            getString(R.string.network_interface_option_value)));
             }
         };
     }
@@ -56,12 +58,13 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                         false);
                 editor.commit();
             } else {
-                getVehicleManager().addVehicleInterface(
-                        NetworkVehicleInterface.class, combinedAddress);
+                try {
+                    getVehicleManager().setVehicleInterface(
+                            NetworkVehicleInterface.class, combinedAddress);
+                } catch(VehicleServiceException e) {
+                    Log.e(TAG, "Unable to add network interface", e);
+                }
             }
-        } else {
-            getVehicleManager().removeVehicleInterface(
-                    NetworkVehicleInterface.class);
         }
     }
 }

@@ -4,15 +4,15 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.common.base.Objects;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListener;
 
 /**
- * Pass measurements from a VehicleService to an in-process callback.
+ * Pass messages from a VehicleService to an in-process callback.
  *
  * This source is a bit of a special case - it's used by the
- * {@link com.openxc.VehicleManager} to inject measurement updates from a
+ * {@link com.openxc.VehicleManager} to inject message updates from a
  * {@link com.openxc.remote.VehicleService} into an in-process data
  * pipeline. By using the same workflow as on the remote process side, we can
  * share code between remote and in-process data sources and sinks. This makes
@@ -24,27 +24,37 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
     private VehicleServiceInterface mService;
 
     /**
-     * Registers a measurement listener with the remote service.
+     * Registers a message listener with the remote service.
      */
     public RemoteListenerSource(VehicleServiceInterface service) {
         mService = service;
 
-        try {
-            mService.register(mRemoteListener);
-        } catch(RemoteException e) {
-            Log.w(TAG, "Unable to register to receive " +
-                    "measurement callbacks", e);
+        if(mService != null) {
+            try {
+                mService.register(mRemoteListener);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to register to receive " +
+                        "message callbacks", e);
+            }
+        } else {
+            Log.w(TAG, "Remote vehicle service is unexpectedly null");
         }
     }
 
+    @Override
     public void stop() {
         super.stop();
         try {
             mService.unregister(mRemoteListener);
         } catch(RemoteException e) {
             Log.w(TAG, "Unable to register to receive " +
-                    "measurement callbacks", e);
+                    "message callbacks", e);
         }
+    }
+
+    @Override
+    public boolean isConnected() {
+        return false;
     }
 
     @Override
@@ -54,8 +64,9 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     private VehicleServiceListener mRemoteListener =
         new VehicleServiceListener.Stub() {
-            public void receive(RawMeasurement rawMeasurement) {
-                handleMessage(rawMeasurement);
+            @Override
+            public void receive(VehicleMessage message) {
+                handleMessage(message);
             }
         };
 }

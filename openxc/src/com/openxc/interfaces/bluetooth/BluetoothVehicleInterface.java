@@ -21,7 +21,13 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.Command;
+import com.openxc.messages.Command.CommandType;
+import com.openxc.messages.SerializationException;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -43,6 +49,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private static final String TAG = "BluetoothVehicleInterface";
     public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
 
+    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private DeviceManager mDeviceManager;
     private Thread mAcceptThread;
     private String mExplicitAddress;
@@ -99,11 +106,21 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         mUsePolling = enabled;
     }
 
-    public boolean receive(RawMeasurement command) {
-        String message = command.serialize() + "\u0000";
-        return write(message);
+    @Override
+    public void receive(VehicleMessage command) throws DataSinkException {
+        // TODO who knows what the current serialization format is? only using
+        // JSON right now
+        try {
+            if(!write(new String(sStreamer.serializeForStream(command)))) {
+                throw new DataSinkException("Unable to write command");
+            }
+        } catch(SerializationException e) {
+            throw new DataSinkException(
+                    "Unable to serialize command for sending", e);
+        }
     }
 
+    @Override
     public boolean setResource(String otherAddress) throws DataSourceException {
         boolean reconnect = false;
         if(isConnected()) {
@@ -188,7 +205,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     } catch(InterruptedException e) {
 
                     } finally {
-                    	mConnectionLock.writeLock().unlock();
+                        mConnectionLock.writeLock().unlock();
                     }
                 }
 
@@ -234,10 +251,13 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         public void stop() {
             try {
-                mmServerSocket.close();
+                if(mmServerSocket != null)  {
+                    mmServerSocket.close();
+                }
             } catch (IOException e) { }
         }
     }
+    @Override
     protected void connect() {
         if(!mUsePolling || !isRunning()) {
             return;
@@ -335,6 +355,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected int read(byte[] bytes) throws IOException {
         mConnectionLock.readLock().lock();
         int bytesRead = -1;
@@ -386,6 +407,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected void disconnect() {
         closeSocket();
         mConnectionLock.writeLock().lock();
@@ -418,6 +440,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }
@@ -454,6 +477,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     }
 
     private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
             // Whenever discovery finishes or another Bluetooth device connects
             // (i.e. it might be a car's infotainment system), take the

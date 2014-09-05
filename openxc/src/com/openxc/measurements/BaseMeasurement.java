@@ -3,17 +3,24 @@ package com.openxc.measurements;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.MessageKey;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
 
 /**
  * The BaseMeasurement is the base implementation of the Measurement, and
- * wraps wraps an instance of a {@link Unit}, and the value it returns is always
+ * wraps an instance of a {@link Unit}, and the value it returns is always
  * in terms of this Unit.
  *
  * The Unit wrapper might seem annoying at first, but it is critical to avoid
@@ -23,21 +30,47 @@ import com.openxc.util.Range;
  * Most applications will not use this class directly, but will import specific
  * child classes that correspond to specific types of measurements - i.e. the
  * parameterized instances of this class with a Unit. That may seem like a
- * "psuedo-typedef" but we're using it it to enforce the binding between
+ * "psuedo-typedef" but we're using it to enforce the binding between
  * the measurement and its unit type. This unfortunately means we have to add
  * constructors to every child class because they aren't inherited from
  * Measurement. If you know of a better way, please say so.
  */
-public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
-    private AgingData<TheUnit> mValue;
-    private AgingData<Unit> mEvent;
+public abstract class BaseMeasurement<TheUnit extends Unit>
+            implements Measurement {
+    private static final String TAG = BaseMeasurement.class.toString();
+
+    protected AgingData<TheUnit> mValue;
     private Range<TheUnit> mRange;
     private static BiMap<String, Class<? extends Measurement>>
             sMeasurementIdToClass;
 
     static {
         sMeasurementIdToClass = HashBiMap.create();
+        try {
+            cacheMeasurementId(AcceleratorPedalPosition.class);
+            cacheMeasurementId(BrakePedalStatus.class);
+            cacheMeasurementId(EngineSpeed.class);
+            cacheMeasurementId(FuelConsumed.class);
+            cacheMeasurementId(FuelLevel.class);
+            cacheMeasurementId(HeadlampStatus.class);
+            cacheMeasurementId(HighBeamStatus.class);
+            cacheMeasurementId(IgnitionStatus.class);
+            cacheMeasurementId(Latitude.class);
+            cacheMeasurementId(Longitude.class);
+            cacheMeasurementId(Odometer.class);
+            cacheMeasurementId(ParkingBrakeStatus.class);
+            cacheMeasurementId(SteeringWheelAngle.class);
+            cacheMeasurementId(TorqueAtTransmission.class);
+            cacheMeasurementId(TransmissionGearPosition.class);
+            cacheMeasurementId(TurnSignalStatus.class);
+            cacheMeasurementId(VehicleButtonEvent.class);
+            cacheMeasurementId(VehicleDoorStatus.class);
+            cacheMeasurementId(VehicleSpeed.class);
+            cacheMeasurementId(WindshieldWiperStatus.class);
+        } catch(UnrecognizedMeasurementTypeException e) { }
     }
+
+    public abstract String getGenericName();
 
     /**
      * Construct a new Measurement with the given value.
@@ -45,12 +78,14 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
      * @param value the TheUnit this measurement represents.
      */
     public BaseMeasurement(TheUnit value) {
+        if(!sMeasurementIdToClass.inverse().containsKey(this.getClass())) {
+            try {
+                cacheMeasurementId(this.getClass());
+            } catch(UnrecognizedMeasurementTypeException e) {
+                Log.w(TAG, "Incomplete BaseMeasurement subclass", e);
+            }
+        }
         mValue = new AgingData<TheUnit>(value);
-    }
-
-    public BaseMeasurement(TheUnit value, Unit event) {
-        this(value);
-        mEvent = new AgingData<Unit>(event);
     }
 
     /**
@@ -67,65 +102,57 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         mRange = range;
     }
 
+    @Override
     public void setTimestamp(long timestamp) {
         mValue.setTimestamp(timestamp);
     }
 
+    @Override
     public long getAge() {
         return mValue.getAge();
     }
 
+    @Override
     public long getBirthtime() {
         return mValue.getTimestamp();
     }
 
+    @Override
     public boolean hasRange() {
         return mRange != null;
     }
 
-    public Range<TheUnit> getRange() throws NoRangeException {
-        if(!hasRange()) {
-            throw new NoRangeException();
-        }
+    @Override
+    public Range<TheUnit> getRange() {
         return mRange;
     }
 
+    @Override
     public TheUnit getValue() {
         return mValue.getValue();
     }
 
-    public Object getEvent() {
-        if(mEvent != null) {
-            return mEvent.getValue();
-        }
-        return null;
-    }
-
+    @Override
     public Object getSerializedValue() {
         return getValue().getSerializedValue();
     }
 
-    public Object getSerializedEvent() {
-        return getEvent();
+    @Override
+    public SimpleVehicleMessage toVehicleMessage() {
+        return new SimpleVehicleMessage(mValue.getTimestamp(),
+                getGenericName(), getSerializedValue());
     }
 
-    public String serialize() {
-        return toRaw().serialize();
-    }
-
-    public RawMeasurement toRaw() {
-        return new RawMeasurement(getGenericName(), getSerializedValue(),
-                getSerializedEvent(), mValue.getTimestamp());
-    }
-
-    public static Measurement deserialize(String measurementString)
-            throws NoValueException, UnrecognizedMeasurementTypeException {
-        RawMeasurement rawMeasurement = new RawMeasurement(measurementString);
-        return BaseMeasurement.getMeasurementFromRaw(rawMeasurement);
-    }
-
-    public String getGenericName() {
-        return "base_measurement";
+    public String getName(Context context) {
+        // Make sure to not use the package name here, we have to find the
+        // resource using the package name of the app using the library instead.
+        int identifier = context.getResources().getIdentifier(
+                getGenericName() + "_label", "string", context.getPackageName());
+        String name = getGenericName();
+        if(identifier != 0) {
+            name = context.getString(identifier);
+        }
+        return name;
     }
 
     private static void cacheMeasurementId(
@@ -146,19 +173,21 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         }
     }
 
-    public static String getIdForClass(
+    public static MessageKey getKeyForMeasurement(
             Class<? extends Measurement> measurementType)
             throws UnrecognizedMeasurementTypeException {
         if(!sMeasurementIdToClass.inverse().containsKey(measurementType)) {
             cacheMeasurementId(measurementType);
         }
-        return sMeasurementIdToClass.inverse().get(measurementType);
+        return new NamedVehicleMessage(
+                sMeasurementIdToClass.inverse().get(measurementType)).getKey();
     }
 
     public static Class<? extends Measurement>
             getClassForId(String measurementId)
             throws UnrecognizedMeasurementTypeException {
-        Class<? extends Measurement> result = sMeasurementIdToClass.get(measurementId);
+        Class<? extends Measurement> result = sMeasurementIdToClass.get(
+                measurementId);
         if(result == null) {
             throw new UnrecognizedMeasurementTypeException(
                     "Didn't have a measurement with ID " + measurementId +
@@ -167,76 +196,91 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
         return result;
     }
 
-    public static Measurement getMeasurementFromRaw(
-            RawMeasurement rawMeasurement)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
+    public static Measurement getMeasurementFromMessage(
+            SimpleVehicleMessage message)
+                throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
-            BaseMeasurement.getClassForId(rawMeasurement.getName());
-        return BaseMeasurement.getMeasurementFromRaw(measurementClass,
-                rawMeasurement);
+            BaseMeasurement.getClassForId(message.getName());
+        return BaseMeasurement.getMeasurementFromMessage(measurementClass,
+                message);
     }
 
-    public static Measurement getMeasurementFromRaw(
+    public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
-            RawMeasurement rawMeasurement)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
+            SimpleVehicleMessage message)
+                throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor = null;
-        if(rawMeasurement != null && rawMeasurement.getValue() != null) {
-            Class<?> valueClass = rawMeasurement.getValue().getClass();
+        if(message == null) {
+            throw new NoValueException();
+        }
+
+        try {
+            Measurement measurement = null;
+            SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
+            Class<?> valueClass = simpleMessage.getValue().getClass();
             if(valueClass == Double.class || valueClass == Integer.class) {
                 valueClass = Number.class;
             }
 
-            Class<?> eventClass = rawMeasurement.hasEvent() ?
-                                rawMeasurement.getEvent().getClass()
-                                : null;
-            if(eventClass == Double.class || eventClass == Integer.class) {
-                eventClass = Number.class;
-            }
+            if(message instanceof EventedSimpleVehicleMessage) {
+                EventedSimpleVehicleMessage eventedMessage =
+                        message.asEventedMessage();
 
-            try {
-                if(eventClass != null) {
+                Class<?> eventClass = eventedMessage.getEvent().getClass();
+                if(eventClass == Double.class || eventClass == Integer.class) {
+                    eventClass = Number.class;
+                }
+
+                try {
                     constructor = measurementType.getConstructor(
                             valueClass, eventClass);
-                } else {
-                    constructor = measurementType.getConstructor(valueClass);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMeasurementTypeException(
+                            measurementType +
+                            " doesn't have the expected constructor, " +
+                           measurementType + "(" +
+                           valueClass + ", " + eventClass + ")");
                 }
-            } catch(NoSuchMethodException e) {
-                throw new UnrecognizedMeasurementTypeException(measurementType +
-                        " doesn't have the expected constructor, " +
-                       measurementType + "(" +
-                       valueClass +
-                       (eventClass != null ? ", " + eventClass : "") + ")");
+
+                measurement = constructor.newInstance(
+                        eventedMessage.getValue(),
+                        eventedMessage.getEvent());
+            } else {
+                try {
+                    constructor = measurementType.getConstructor(valueClass);
+                } catch(NoSuchMethodException e) {
+                    throw new UnrecognizedMeasurementTypeException(
+                            measurementType +
+                            " doesn't have the expected constructor, " +
+                           measurementType + "(" +
+                           valueClass + ")");
+                }
+
+                measurement = constructor.newInstance(
+                        simpleMessage.getValue());
             }
 
-            Measurement measurement;
-            try {
-                if(eventClass != null) {
-                    measurement = constructor.newInstance(
-                            rawMeasurement.getValue(),
-                            rawMeasurement.getEvent());
-                } else {
-                    measurement = constructor.newInstance(
-                            rawMeasurement.getValue());
-                }
-                measurement.setTimestamp(rawMeasurement.getTimestamp());
-                return measurement;
-            } catch(InstantiationException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " is abstract", e);
-            } catch(IllegalAccessException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " has a private constructor", e);
-            } catch(IllegalArgumentException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + " has unexpected arguments", e);
-            } catch(InvocationTargetException e) {
-                throw new UnrecognizedMeasurementTypeException(
-                        measurementType + "'s constructor threw an exception",
-                        e);
+            if (simpleMessage.getTimestamp() != null) {
+                measurement.setTimestamp(simpleMessage.getTimestamp());
             }
+            // TODO do we allow creating measurements from a generic values
+            // map? need to make it public if so. i'm thinking that th
+            // measurement should subclass simplevehiclemessage
+            return measurement;
+        } catch(InstantiationException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " is abstract", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has a private constructor", e);
+        } catch(IllegalArgumentException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has unexpected arguments", e);
+        } catch(InvocationTargetException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + "'s constructor threw an exception",
+                    e);
         }
-        throw new NoValueException();
     }
 
     @Override
@@ -255,29 +299,8 @@ public class BaseMeasurement<TheUnit extends Unit> implements Measurement {
 
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
-        if(!other.getValue().equals(getValue())) {
-            return false;
-        }
-
-        if(other.getEvent() != null && getEvent() != null) {
-            if(!other.getEvent().equals(getEvent())) {
-                return false;
-            }
-        } else if(other.getEvent() != getEvent()) {
-            return false;
-        }
-
-        if(other.hasRange() != hasRange()) {
-            return false;
-        } else {
-            try {
-                if(!other.getRange().equals(getRange())) {
-                    return false;
-                }
-            } catch(NoRangeException e) { }
-        }
-
-        return true;
+        return Objects.equal(getValue(), other.getValue()) &&
+            Objects.equal(other.getRange(), getRange());
     }
 
     @Override

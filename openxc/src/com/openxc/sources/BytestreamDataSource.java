@@ -10,7 +10,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import android.content.Context;
 import android.util.Log;
 
-import com.openxc.BinaryMessages;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.BinaryStreamer;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
 
 /**
  * Common functionality for data sources that read a stream of newline-separated
@@ -18,7 +21,6 @@ import com.openxc.BinaryMessages;
  */
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
-    // TODO could let subclasses override this
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
@@ -31,19 +33,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private Thread mThread;
     private Timer mTimer;
     private BytestreamConnectingTask mConnectionCheckTask;
-    private PayloadFormat mCurrentPayloadFormat = null;
+    private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
-
-    private enum PayloadFormat {
-        JSON, PROTO
-    }
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
-    }
-
-    public BytestreamDataSource(Context context) {
-        this(null, context);
     }
 
     public void start() {
@@ -54,6 +48,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         }
     }
 
+    @Override
     public void stop() {
         if(mRunning.compareAndSet(true, false)) {
             Log.d(getTag(), "Stopping " + getTag() + " source");
@@ -120,8 +115,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         mReconnectionAttempts = 0;
     }
 
+    @Override
     public void run() {
-        BytestreamBuffer buffer = new BytestreamBuffer();
         while(isRunning()) {
             try {
                 waitForConnection();
@@ -148,29 +143,20 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                buffer.receive(bytes, received);
-                if(mCurrentPayloadFormat == null) {
-                    if(buffer.containsJson()) {
-                        mCurrentPayloadFormat = PayloadFormat.JSON;
+                if(mStreamHandler == null) {
+                    if(JsonStreamer.containsJson(new String(bytes))) {
+                        mStreamHandler = new JsonStreamer();
                         Log.i(getTag(), "Source is sending JSON");
                     } else {
-                        mCurrentPayloadFormat = PayloadFormat.PROTO;
+                        mStreamHandler = new BinaryStreamer();
                         Log.i(getTag(), "Source is sending protocol buffers");
                     }
                 }
 
-                switch(mCurrentPayloadFormat) {
-                    case JSON:
-                        for(String record : buffer.readLines()) {
-                            handleMessage(record);
-                        }
-                        break;
-                    case PROTO:
-                        BinaryMessages.VehicleMessage message = null;
-                        while((message = buffer.readBinaryMessage()) != null) {
-                            handleMessage(message);
-                        }
-                        break;
+                mStreamHandler.receive(bytes, received);
+                VehicleMessage message = null;
+                while((message = mStreamHandler.parseNextMessage()) != null) {
+                    handleMessage(message);
                 }
             }
         }
@@ -186,6 +172,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     /**
      * Must have the connection lock before calling this function
      */
+    @Override
     protected void disconnected() {
         mDeviceChanged.signal();
         super.disconnected();
@@ -194,6 +181,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     /**
      * Must have the connection lock before calling this function
      */
+    @Override
     protected void connected() {
         mDeviceChanged.signal();
         super.connected();

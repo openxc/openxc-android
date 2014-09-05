@@ -10,5 +10,5 @@ reference
 .classpath
 *.releaseBackup
 release.properties
-com_crashlytics_export_strings.xml
 assets
+tokens.xml

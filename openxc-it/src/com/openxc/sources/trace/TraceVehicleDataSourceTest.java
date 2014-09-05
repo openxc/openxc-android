@@ -10,7 +10,8 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.openxc.R;
 import com.openxc.TestUtils;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
@@ -31,10 +32,11 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         malformedTraceUri = TestUtils.copyToStorage(getContext(),
                 R.raw.tracetxt, "malformed-trace.json");
         callback = new SourceCallback() {
-            public void receive(RawMeasurement measurement) {
-                if(measurement.getValue().getClass() == Boolean.class) {
+            public void receive(VehicleMessage message) {
+                SimpleVehicleMessage simpleMessage = (SimpleVehicleMessage) message;
+                if(simpleMessage.getValue().getClass() == Boolean.class) {
                     receivedBooleanCallback = true;
-                } else if(measurement.getValue().getClass() == Double.class)  {
+                } else if(simpleMessage.getValue().getClass() == Double.class)  {
                     receivedNumericalCallback = true;
                 }
             }
@@ -62,7 +64,7 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
         thread = new Thread(source);
         thread.start();
         try {
-            Thread.sleep(300);
+            Thread.sleep(500);
         } catch(InterruptedException e){ }
     }
 

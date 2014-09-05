@@ -2,9 +2,8 @@ package com.openxc.measurements;
 
 import java.util.Locale;
 
-import com.openxc.units.State;
-
 import com.openxc.units.Boolean;
+import com.openxc.units.State;
 
 /**
  * A DoorStatus represents a door's ajar status.
@@ -18,7 +17,7 @@ import com.openxc.units.Boolean;
  * synchronously?
  */
 public class VehicleDoorStatus
-        extends BaseMeasurement<State<VehicleDoorStatus.DoorId>> {
+        extends EventedMeasurement<State<VehicleDoorStatus.DoorId>> {
     public final static String ID = "door_status";
 
     /**
@@ -38,6 +37,10 @@ public class VehicleDoorStatus
 
     public VehicleDoorStatus(DoorId value, Boolean event) {
         this(new State<DoorId>(value), event);
+    }
+
+    public VehicleDoorStatus(DoorId value, java.lang.Boolean event) {
+        this(value, new Boolean(event));
     }
 
     public VehicleDoorStatus(String value, java.lang.Boolean event) {

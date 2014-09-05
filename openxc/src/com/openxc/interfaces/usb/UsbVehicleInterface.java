@@ -20,7 +20,11 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SerializationException;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -45,12 +49,16 @@ import com.openxc.sources.SourceCallback;
 public class UsbVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
     private static final String TAG = "UsbVehicleInterface";
+    private static final int VERSION_CONTROL_COMMAND = 0x80;
+    private static final int CONTROL_COMMAND_TIMEOUT_S = 1;
     private static final int ENDPOINT_COUNT = 2;
+
     public static final String ACTION_USB_PERMISSION =
             "com.ford.openxc.USB_PERMISSION";
     public static final String ACTION_USB_DEVICE_ATTACHED =
             "com.ford.openxc.USB_DEVICE_ATTACHED";
 
+    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
     private UsbInterface mInterface;
@@ -84,12 +92,16 @@ public class UsbVehicleInterface extends BytestreamDataSource
         try {
             mManager = (UsbManager) getContext().getSystemService(
                     Context.USB_SERVICE);
+            if(mManager == null) {
+                throw new NoClassDefFoundError();
+            }
         } catch(NoClassDefFoundError e) {
             String message = "No USB service found on this device -- " +
                 "can't use USB vehicle interface";
             Log.w(TAG, message);
             throw new DataSourceException(message);
         }
+
         mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0,
                 new Intent(ACTION_USB_PERMISSION), 0);
 
@@ -124,6 +136,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         this(null, context, createUri(uriString));
     }
 
+    @Override
     public synchronized void start() {
         super.start();
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
@@ -162,16 +175,23 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
-    public boolean receive(RawMeasurement command) {
+    @Override
+    public void receive(VehicleMessage command) throws DataSinkException {
         if(isConnected()) {
-            String message = command.serialize() + "\u0000";
-            Log.d(TAG, "Writing string to USB: " + message);
-            byte[] bytes = message.getBytes();
-            return write(bytes);
+            try {
+                if(!write(sStreamer.serializeForStream(command))) {
+                    throw new DataSinkException("Unable to write command");
+                }
+            } catch(SerializationException e) {
+                throw new DataSinkException(
+                        "Unable to serialize command for sending", e);
+            }
+        } else {
+            throw new DataSinkException("Not connected");
         }
-        return false;
     }
 
+    @Override
     public boolean setResource(String otherUri) throws DataSourceException {
         if(mDeviceUri == UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI
                     && otherUri != null &&
@@ -195,6 +215,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
             .toString();
     }
 
+    @Override
     protected int read(byte[] bytes) throws IOException {
         mConnectionLock.readLock().lock();
         int bytesRead = 0;
@@ -208,6 +229,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
+    @Override
     protected String getTag() {
         return TAG;
     }
@@ -361,13 +383,16 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
+    @Override
     protected void connected() {
         super.connected();
         primeOutput();
     }
 
+    @Override
     protected void connect() throws DataSourceException { }
 
+    @Override
     protected void disconnect() {
         if(!isConnected()) {
             return;
@@ -418,7 +443,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     };
 
-    private static URI createUri(String uriString) throws DataSourceException {
+    public static URI createUri(String uriString) throws DataSourceException {
         URI uri;
         if(uriString == null) {
             uri = null;
@@ -429,7 +454,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     private static URI createUri(URI uri) throws DataSourceResourceException {
-        if(uri == null) {
+        if(uri == null || uri.toString().isEmpty()) {
             uri = UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI;
             Log.i(TAG, "No USB device specified -- using default " +
                     uri);

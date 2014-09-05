@@ -11,7 +11,7 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
-import com.openxc.remote.RawMeasurement;
+import com.openxc.messages.SimpleVehicleMessage;
 
 /**
  * Generate location measurements based on native GPS updates.
@@ -29,18 +29,19 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     private final static int NATIVE_GPS_UPDATE_INTERVAL = 5000;
 
     private LocationManager mLocationManager;
+    private Looper mLooper;
 
     public NativeLocationSource(SourceCallback callback, Context context) {
         super(callback, context);
         mLocationManager = (LocationManager) getContext().getSystemService(
                     Context.LOCATION_SERVICE);
-        new Thread(this).start();
     }
 
     public NativeLocationSource(Context context) {
         this(null, context);
     }
 
+    @Override
     public void run() {
         Looper.prepare();
 
@@ -62,24 +63,55 @@ public class NativeLocationSource extends ContextualVehicleDataSource
         } catch(IllegalArgumentException e) {
             Log.w(TAG, "GPS location provider is unavailable");
         }
+
+        mLooper = Looper.myLooper();
         Looper.loop();
     }
 
+    @Override
     public void stop() {
         super.stop();
-        Log.i(TAG, "Disabled native GPS passthrough");
-        mLocationManager.removeUpdates(this);
+        onPipelineDeactivated();
     }
 
+    @Override
     public void onLocationChanged(final Location location) {
-        handleMessage(new RawMeasurement(Latitude.ID, location.getLatitude()));
-        handleMessage(new RawMeasurement(Longitude.ID, location.getLongitude()));
+        handleMessage(new SimpleVehicleMessage(Latitude.ID,
+                    location.getLatitude()));
+        handleMessage(new SimpleVehicleMessage(Longitude.ID,
+                    location.getLongitude()));
     }
 
+    @Override
     public void onStatusChanged(String provider, int status,
             Bundle extras) {}
-    public void onProviderEnabled(String provider) {}
-    public void onProviderDisabled(String provider) {}
+
+    @Override
+    public void onProviderEnabled(String provider) { }
+
+    @Override
+    public void onProviderDisabled(String provider) { }
+
+    @Override
+    public boolean isConnected() {
+        // Always return false so we don't keep the pipeline awake if no actual
+        // vehicle interface is connected.
+        return false;
+    }
+
+    @Override
+    public void onPipelineActivated() {
+        new Thread(this).start();
+    }
+
+    @Override
+    public void onPipelineDeactivated() {
+        Log.i(TAG, "Disabled native GPS passthrough");
+        if(mLooper != null) {
+            mLooper.quit();
+        }
+        mLocationManager.removeUpdates(this);
+    }
 
     @Override
     public String toString() {

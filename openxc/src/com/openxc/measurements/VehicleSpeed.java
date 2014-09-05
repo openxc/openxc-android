@@ -17,7 +17,7 @@ public class VehicleSpeed extends BaseMeasurement<KilometersPerHour> {
     }
 
     public VehicleSpeed(Number value) {
-        this(new KilometersPerHour(value));
+        this(new KilometersPerHour(value.doubleValue()));
     }
 
     @Override

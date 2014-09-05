@@ -1,7 +1,7 @@
 package com.openxc.util;
 
-import java.io.IOException;
 import java.io.BufferedWriter;
+import java.io.IOException;
 
 /**
  * A generic interface for opening a file for writing.

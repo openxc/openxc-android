@@ -1,7 +1,8 @@
 package com.openxc.measurements;
 
-import com.openxc.remote.RawMeasurement;
+import android.content.Context;
 
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.Range;
 
@@ -40,10 +41,9 @@ public interface Measurement {
     /**
      * Retrieve the valid range of the measurement.
      *
-     * @return the Range of the measurement
-     * @throws NoRangeException if the measurement doesn't have a range.
+     * @return the Range of the measurement or null if none.
      */
-    public Range<? extends Unit> getRange() throws NoRangeException;
+    public Range<? extends Unit> getRange();
 
     /**
      * Return the value of this measurement.
@@ -52,9 +52,7 @@ public interface Measurement {
      */
     public Unit getValue();
 
-    public String serialize();
-
-    public RawMeasurement toRaw();
+    public SimpleVehicleMessage toVehicleMessage();
 
     /**
      * Return the creation time of this measurement;
@@ -64,6 +62,8 @@ public interface Measurement {
      */
     public long getBirthtime();
 
+    public String getName(Context context);
+
     public String getGenericName();
 
     /**
@@ -72,19 +72,4 @@ public interface Measurement {
      * @return something easily serializable - e.g. String, Double, Boolean.
      */
     public Object getSerializedValue();
-
-    /**
-     * Return an optional event associated with this measurement.
-     *
-     * TODO argh, no easy way to get a type for this without having two template
-     * parameters. can we have an optional template parameter in Java?
-     */
-    public Object getEvent();
-
-    /**
-     * Return the event of this measurement as a type good for serialization.
-     *
-     * @see #getSerializedValue()
-     */
-    public Object getSerializedEvent();
 }
