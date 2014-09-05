@@ -573,37 +573,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
-    /** Return a list of all sources active in the system, suitable for
-     * displaying in a status view.
-     *
-     * This method is solely for being able to peek into the system to see
-     * what's active, which is why it returns strings instead of the actual
-     * source objects. We don't want applications to be able to modify the
-     * sources through this method.
-     *
-     * @return A list of the names and status of all sources.
-     */
-    public List<String> getSourceSummaries() {
-        ArrayList<String> sources = new ArrayList<String>();
-        for(VehicleDataSource source :
-                mRemoteOriginPipeline.getSources()) {
-            sources.add(source.toString()); }
-
-        for(VehicleDataSource source : mUserOriginPipeline.getSources()) {
-            sources.add(source.toString());
-        }
-
-        if(mRemoteService != null) {
-            try {
-                sources.addAll(mRemoteService.getSourceSummaries());
-            } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive remote source summaries", e);
-            }
-
-        }
-        return sources;
-    }
-
     /**
      * Returns a descriptor of the active vehicle interface.
      *

@@ -232,15 +232,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
-            public List<String> getSourceSummaries() {
-                ArrayList<String> sources = new ArrayList<String>();
-                for(VehicleDataSource source : mPipeline.getSources()) {
-                    sources.add(source.toString());
-                }
-                return sources;
-            }
-
-            @Override
             public VehicleInterfaceDescriptor getVehicleInterfaceDescriptor() {
                 if(mVehicleInterface == null) {
                     return null;

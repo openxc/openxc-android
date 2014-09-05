@@ -93,8 +93,6 @@ interface VehicleServiceInterface {
      */
     void setNativeGpsStatus(boolean enabled);
 
-    List<String> getSourceSummaries();
-
     void userPipelineActivated();
     void userPipelineDeactivated();
 
