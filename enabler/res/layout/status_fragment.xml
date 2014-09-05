@@ -5,7 +5,7 @@
     <TextView
         android:id="@+id/service_not_running_bar"
         style="@style/WarningText"
-        android:drawableLeft="@drawable/warning"
+        android:drawableLeft="@drawable/ic_action_warning"
         android:text="@string/service_not_running" >
 
     </TextView>
@@ -26,25 +26,25 @@
                 android:id="@+id/connection_file"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_file"
-                android:src="@drawable/play_from_file_white" />
+                android:src="@drawable/ic_action_storage" />
 
             <ImageView
                 android:id="@+id/connection_bluetooth"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_bluetooth"
-                android:src="@drawable/bluetooth_white" />
+                android:src="@drawable/ic_action_network_wifi" />
 
             <ImageView
                 android:id="@+id/connection_network"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_network"
-                android:src="@drawable/network_white" />
+                android:src="@drawable/ic_action_network_wifi" />
 
             <ImageView
                 android:id="@+id/connection_usb"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_usb"
-                android:src="@drawable/usb_white" />
+                android:src="@drawable/ic_action_usb" />
 
             <TextView
                 android:id="@+id/connection_none"

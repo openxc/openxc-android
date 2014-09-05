@@ -27,7 +27,7 @@
     <TextView
         android:id="@+id/service_not_running_bar"
         style="@style/WarningText"
-        android:drawableLeft="@drawable/warning"
+        android:drawableLeft="@drawable/ic_action_warning"
         android:text="@string/service_not_running" >
     </TextView>
 
