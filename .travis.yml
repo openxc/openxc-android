@@ -15,18 +15,18 @@ before_install:
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
 install:
   - mvn clean install -DskipTests=true -pl openxc -am
-before_script:
-  - echo no | android create avd --force -n android19 -c 128M -t android-19 --abi armeabi-v7a
-  - echo no | android create avd --force -n android10 -c 128M -t android-10 --abi x86
-  - emulator -avd android19 -no-skin -no-audio -no-window &
+#before_script:
+#- echo no | android create avd --force -n android19 -c 128M -t android-19 --abi armeabi-v7a
+#- echo no | android create avd --force -n android10 -c 128M -t android-10 --abi x86
+#- emulator -avd android19 -no-skin -no-audio -no-window &
 script:
   - mvn test -pl openxc
   - mvn package -pl enabler
-  - ./wait_for_emulator
-  - mvn install -pl openxc-it
-  - adb -e emu kill
-  - emulator -avd android10 -no-skin -no-audio -no-window &
-  - ./wait_for_emulator
-  - mvn install -pl openxc-it
+    #- ./wait_for_emulator
+    #- mvn install -pl openxc-it
+    #- adb -e emu kill
+    #- emulator -avd android10 -no-skin -no-audio -no-window &
+    #- ./wait_for_emulator
+    #- mvn install -pl openxc-it
 after_success:
   - mvn cobertura:cobertura coveralls:cobertura -pl openxc
