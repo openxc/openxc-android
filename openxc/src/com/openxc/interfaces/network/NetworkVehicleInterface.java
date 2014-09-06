@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.util.Log;
@@ -130,9 +131,15 @@ public class NetworkVehicleInterface extends BytestreamDataSource
 
     @Override
     public boolean isConnected() {
-        mConnectionLock.readLock().lock();
-        boolean connected = mSocket != null && mSocket.isConnected() && super.isConnected();
-        mConnectionLock.readLock().unlock();
+        boolean connected = false;
+        // If we can't get the lock in 100ms, must be blocked waiting for a
+        // connection so we consider it disconnected.
+        try {
+            if(mConnectionLock.readLock().tryLock(100, TimeUnit.MILLISECONDS)) {
+                connected = mSocket != null && mSocket.isConnected() && super.isConnected();
+                mConnectionLock.readLock().unlock();
+            }
+        } catch(InterruptedException e) {}
         return connected;
     }
 

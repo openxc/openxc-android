@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -21,8 +22,6 @@ import android.util.Log;
 import com.google.common.base.Objects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.Command;
-import com.openxc.messages.Command.CommandType;
 import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
@@ -149,21 +148,26 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     @Override
     public boolean isConnected() {
-        mConnectionLock.readLock().lock();
-
-        boolean connected = super.isConnected();
-        if(mSocket == null) {
-            connected = false;
-        } else {
-            try {
-                connected &= mSocket.isConnected();
-            } catch (NoSuchMethodError e) {
-                // Cannot get isConnected() result before API 14
-                // Assume previous result is correct.
+        boolean connected = false;
+        // If we can't get the lock in 100ms, must be blocked waiting for a
+        // connection so we consider it disconnected.
+        try {
+            if(mConnectionLock.readLock().tryLock(100, TimeUnit.MILLISECONDS)) {
+                connected = super.isConnected();
+                if(mSocket == null) {
+                    connected = false;
+                } else {
+                    try {
+                        connected &= mSocket.isConnected();
+                    } catch (NoSuchMethodError e) {
+                        // Cannot get isConnected() result before API 14
+                        // Assume previous result is correct.
+                    }
+                }
+                mConnectionLock.readLock().unlock();
             }
-        }
+        } catch(InterruptedException e) { }
 
-        mConnectionLock.readLock().unlock();
         return connected;
     }
 
