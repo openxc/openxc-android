@@ -98,7 +98,7 @@ public class JsonFormatterTest extends AbstractFormatterTest {
         String serialized = new String(JsonFormatter.serialize(
                     new SimpleVehicleMessage(
                         Long.valueOf(1332432977835L), messageName, value)));
-        assertTrue(serialized.contains("1.332432977835E9"));
+        assertTrue(serialized.contains("1332432977835"));
     }
 
     @Test

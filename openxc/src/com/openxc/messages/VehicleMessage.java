@@ -26,11 +26,8 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     public static final String TIMESTAMP_KEY = "timestamp";
     public static final String EXTRAS_KEY = "extras";
 
-    // We store this as a double in the class so it's simpler to serialize (as a
-    // floating point number), even though when you call getTimestamp() we
-    // return a long to match the standard Java UNIX time interface.
     @SerializedName(TIMESTAMP_KEY)
-    private Double mTimestamp;
+    private Long mTimestamp;
 
     @SerializedName(EXTRAS_KEY)
     private Map<String, Object> mExtras;
@@ -60,7 +57,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
 
     public void setTimestamp(Long timestamp) {
         if(timestamp != null) {
-            mTimestamp = timestamp / 1000.0;
+            mTimestamp = timestamp;
         }
     }
 
@@ -76,10 +73,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
      * epoch.
      */
     public Long getTimestamp() {
-        if (!isTimestamped()) {
-            return null;
-        }
-        return Double.valueOf(mTimestamp * 1000.0).longValue();
+        return mTimestamp;
     }
 
     public Date getDate() {
@@ -113,7 +107,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
 
     public void timestamp() {
         if(!isTimestamped()) {
-            mTimestamp = Double.valueOf(System.currentTimeMillis() / 1000.0);
+            mTimestamp = System.currentTimeMillis();
         }
     }
 
