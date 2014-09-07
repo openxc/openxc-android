@@ -107,8 +107,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     @Override
     public void receive(VehicleMessage command) throws DataSinkException {
-        // TODO who knows what the current serialization format is? only using
-        // JSON right now
+        // See https://github.com/openxc/openxc-android/issues/181
         try {
             if(!write(new String(sStreamer.serializeForStream(command)))) {
                 throw new DataSinkException("Unable to write command");
