@@ -220,9 +220,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         try {
             VehicleMessage message = mRemoteService.get(
                     BaseMeasurement.getKeyForMeasurement(measurementType));
-            if(!(message instanceof SimpleVehicleMessage)) {
-                // If there is no known value on the other end, VehicleService
-                // returns a blank VehicleMessage.
+            if(message == null || !(message instanceof SimpleVehicleMessage)) {
                 throw new NoValueException();
             }
             return BaseMeasurement.getMeasurementFromMessage(

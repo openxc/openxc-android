@@ -158,13 +158,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         new VehicleServiceInterface.Stub() {
             @Override
             public VehicleMessage get(MessageKey key) {
-                VehicleMessage message = mPipeline.get(key);
-                if(message == null) {
-                    // We can't return null via the AIDL so we return a blank
-                    // VehicleMessage intsead
-                    message = new VehicleMessage();
-                }
-                return message;
+                return mPipeline.get(key);
             }
 
             @Override

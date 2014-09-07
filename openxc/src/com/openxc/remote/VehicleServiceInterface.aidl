@@ -21,12 +21,9 @@ interface VehicleServiceInterface {
     /**
      * Retreive the most recent value for the measurement.
      *
-     * TODO can we have this return null or does that cause problems with the
-     * AIDL?
-     *
      * @param key the key of the message to retreive.
-     * @return a VehicleMessage which may or may not have a value. This function
-     *         will never return null, even if no value is available.
+     * @return the last VehicleMessage received with this key, or null if neve
+     *      received.
      */
     VehicleMessage get(in MessageKey key);
 
