@@ -40,10 +40,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public MessageListenerSink() {
         super();
-        mMessageListeners = Multimaps.synchronizedMultimap(mMessageListeners);
-        mMeasurementTypeListeners = Multimaps.synchronizedMultimap(mMeasurementTypeListeners);
-        mMessageTypeListeners = Multimaps.synchronizedMultimap(mMessageTypeListeners);
-        mPersistentMessageListeners = Multimaps.synchronizedMultimap(mPersistentMessageListeners);
     }
 
     public synchronized void register(KeyMatcher matcher,
