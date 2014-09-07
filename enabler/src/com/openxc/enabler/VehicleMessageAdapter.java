@@ -1,7 +1,9 @@
 package com.openxc.enabler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import com.openxc.messages.VehicleMessage;
 
 public abstract class VehicleMessageAdapter extends BaseAdapter {
     protected List<VehicleMessage> mValues = new ArrayList<>();
+    private static SimpleDateFormat sDateFormatter =
+            new SimpleDateFormat( "HH:mm:ss.S", Locale.US);
 
     public void add(VehicleMessage message) {
         ThreadPreconditions.checkOnMainThread();
@@ -18,6 +22,10 @@ public abstract class VehicleMessageAdapter extends BaseAdapter {
         // be the same as sorting by timestamp.
         mValues.add(0, message);
         notifyDataSetChanged();
+    }
+
+    protected String formatTimestamp(VehicleMessage message) {
+        return sDateFormatter.format(message.getDate());
     }
 
     @Override
