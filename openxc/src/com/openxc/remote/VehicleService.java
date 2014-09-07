@@ -282,8 +282,10 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             mVehicleInterface = null;
         }
 
-        if(interfaceName != null) {
-            if(interfaceType != null) {
+        if(interfaceName != null && interfaceType != null) {
+            if(mVehicleInterface == null ||
+                    !mVehicleInterface.getClass().isAssignableFrom(
+                        interfaceType)) {
                 try {
                     mVehicleInterface = VehicleInterfaceFactory.build(
                             interfaceType, VehicleService.this, resource);
@@ -296,8 +298,8 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             } else {
                 try {
                     if(mVehicleInterface.setResource(resource)) {
-                        Log.d(TAG, "Changed resource of already active interface " +
-                                mVehicleInterface + " to " + resource);
+                        Log.d(TAG, "Changed resource of already " +
+                                "active interface " + mVehicleInterface);
                     } else {
                         Log.d(TAG, "Interface " + mVehicleInterface +
                                 " already had same active resource " + resource +
