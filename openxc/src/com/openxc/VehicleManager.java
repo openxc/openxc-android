@@ -197,8 +197,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * Measurement instance of the specified type. The measurement can be
      * checked to see if it has a value.
      *
-     * TODO need VehicleMessage get(...)
-     *
      * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested Measurement which may or may
@@ -254,7 +252,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         VehicleMessage wrappedMessage = message;
         if(message instanceof DiagnosticRequest) {
             // Wrap the request in a Command
-            // TODO need to support the CANCEL action, too
             wrappedMessage = new Command(message.asDiagnosticRequest(),
                     DiagnosticRequest.ADD_ACTION_KEY);
         }
