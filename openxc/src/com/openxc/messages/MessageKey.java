@@ -10,6 +10,7 @@ import com.google.common.base.Objects;
 
 public class MessageKey implements Parcelable {
     private Map<String, Object> mParts = new HashMap<>();
+    private int mHashCode;
 
     public MessageKey(Map<String, Object> parts) {
         mParts = parts;
@@ -32,7 +33,10 @@ public class MessageKey implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mParts);
+        if(mHashCode == 0) {
+            mHashCode = Objects.hashCode(mParts);
+        }
+        return mHashCode;
     }
 
     @Override
