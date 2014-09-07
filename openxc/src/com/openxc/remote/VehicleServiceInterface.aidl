@@ -76,11 +76,6 @@ interface VehicleServiceInterface {
     /**
      * The one vehicle interface specific function, control whether polling is
      * used to find Bluetooth vehicle interfaces.
-     *
-     * TODO The add/remove vehicle interface API should probably be refactored
-     * since it doesn't well support extra interface-specific parameters such as
-     * this one, and inter-process communication via shared preferences isn't
-     * very reliable.
      */
     void setBluetoothPollingStatus(boolean enabled);
 
