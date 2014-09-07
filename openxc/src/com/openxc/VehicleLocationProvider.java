@@ -74,8 +74,12 @@ public class VehicleLocationProvider implements Measurement.Listener {
 
     @Override
     public void receive(Measurement measurement) {
-        // Not using the value, but using it to trigger polling for an update
-        updateLocation();
+        if(measurement instanceof Latitude || measurement instanceof Longitude) {
+            // To keep down the number of times we touch the Android location
+            // system to update the location, only update if we have a change in
+            // lat or lon.
+            updateLocation();
+        }
     }
 
     /**
