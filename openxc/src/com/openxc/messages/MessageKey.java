@@ -27,8 +27,9 @@ public class MessageKey implements Parcelable {
             return false;
         }
 
-        final MessageKey other = (MessageKey) obj;
-        return mParts.equals(other.mParts);
+        // Take advantage of the fact that we likely already calculated and
+        // cached the hash code and use that for the equality comparison.
+        return obj != null && hashCode() == obj.hashCode();
     }
 
     @Override
