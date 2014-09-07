@@ -10,6 +10,7 @@ import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 
 public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
@@ -48,5 +49,13 @@ public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
         }
 
         return convertView;
+    }
+
+    @Override
+    public boolean shouldRefreshView(KeyedMessage message, KeyedMessage existingMessage) {
+        // We don't display timestamps in the Enabler for simple messages, don't
+        // bother updating unless the value changed.
+        return (((SimpleVehicleMessage)message).getValue()).equals(
+                ((SimpleVehicleMessage)existingMessage).getValue());
     }
 }

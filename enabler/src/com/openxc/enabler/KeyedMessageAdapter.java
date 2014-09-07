@@ -22,14 +22,16 @@ public abstract class KeyedMessageAdapter extends VehicleMessageAdapter {
     public void add(KeyedMessage message) {
         ThreadPreconditions.checkOnMainThread();
         MessageKey key = message.getKey();
+        boolean dataSetChanged = false;
         if(mMessages.containsKey(key)) {
             mMessages.put(key, message);
             // Already exists in values, just need to update it
             KeyMatcher exactMatcher = ExactKeyMatcher.buildExactMatcher(key);
             for(int i = 0; i < mValues.size(); i++) {
-                if(exactMatcher.matches(
-                            ((KeyedMessage)mValues.get(i)).getKey())) {
+                KeyedMessage existingMessage = ((KeyedMessage)mValues.get(i));
+                if(exactMatcher.matches(existingMessage.getKey())) {
                     mValues.set(i, message);
+                    dataSetChanged |= shouldRefreshView(message, existingMessage);
                     break;
                 }
             }
@@ -38,7 +40,20 @@ public abstract class KeyedMessageAdapter extends VehicleMessageAdapter {
             mMessages.put(key, message);
             mValues = new ArrayList<VehicleMessage>(mMessages.values());
             Collections.sort(mValues);
+            dataSetChanged = true;
         }
-        notifyDataSetChanged();
+
+        if(dataSetChanged) {
+            notifyDataSetChanged();
+        }
+    }
+
+    /** Public: Determine if an update to a message should cause the view to be
+     * refreshed.
+     */
+    public boolean shouldRefreshView(KeyedMessage message, KeyedMessage existingMessage) {
+        // By default, we always refresh. Subclasses can do deeper inspection if
+        // they want.
+        return true;
     }
 }
