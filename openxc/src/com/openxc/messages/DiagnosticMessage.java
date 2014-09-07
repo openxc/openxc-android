@@ -93,12 +93,15 @@ public abstract class DiagnosticMessage extends KeyedMessage {
 
     @Override
     public MessageKey getKey() {
-        HashMap<String, Object> key = new HashMap<>();
-        key.put(CanMessage.BUS_KEY, getBusId());
-        key.put(CanMessage.ID_KEY, getId());
-        key.put(MODE_KEY, getMode());
-        key.put(PID_KEY, getPid());
-        return new MessageKey(key);
+        if(super.getKey() == null) {
+            HashMap<String, Object> key = new HashMap<>();
+            key.put(CanMessage.BUS_KEY, getBusId());
+            key.put(CanMessage.ID_KEY, getId());
+            key.put(MODE_KEY, getMode());
+            key.put(PID_KEY, getPid());
+            setKey(new MessageKey(key));
+        }
+        return super.getKey();
     }
 
     @Override

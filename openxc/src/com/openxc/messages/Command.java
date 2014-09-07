@@ -77,9 +77,12 @@ public class Command extends KeyedMessage {
 
     @Override
     public MessageKey getKey() {
-        HashMap<String, Object> key = new HashMap<>();
-        key.put(COMMAND_KEY, getCommand());
-        return new MessageKey(key);
+        if(super.getKey() == null) {
+            HashMap<String, Object> key = new HashMap<>();
+            key.put(COMMAND_KEY, getCommand());
+            setKey(new MessageKey(key));
+        }
+        return super.getKey();
     }
 
     public static boolean containsRequiredFields(Set<String> fields) {

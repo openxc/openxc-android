@@ -1,6 +1,8 @@
 package com.openxc.messages;
 
 public abstract class KeyedMessage extends VehicleMessage {
+    private MessageKey mKey;
+
     public KeyedMessage() {
         super();
     }
@@ -9,5 +11,11 @@ public abstract class KeyedMessage extends VehicleMessage {
         super(timestamp);
     }
 
-    public abstract MessageKey getKey();
+    public MessageKey getKey() {
+        return mKey;
+    }
+
+    protected void setKey(MessageKey key) {
+        mKey = key;
+    }
 }

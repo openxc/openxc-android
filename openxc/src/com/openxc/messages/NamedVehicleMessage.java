@@ -53,9 +53,12 @@ public class NamedVehicleMessage extends KeyedMessage {
 
     @Override
     public MessageKey getKey() {
-        HashMap<String, Object> key = new HashMap<>();
-        key.put(NAME_KEY, getName());
-        return new MessageKey(key);
+        if(super.getKey() == null) {
+            HashMap<String, Object> key = new HashMap<>();
+            key.put(NAME_KEY, getName());
+            setKey(new MessageKey(key));
+        }
+        return super.getKey();
     }
 
     public static boolean containsRequiredFields(Set<String> fields) {
