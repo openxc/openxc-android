@@ -23,6 +23,42 @@ public class VehicleDashboardFragment extends ListFragment {
     private VehicleManager mVehicleManager;
     private SimpleVehicleMessageAdapter mAdapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter = new SimpleVehicleMessageAdapter(getActivity());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.vehicle_dashboard, container, false);
+        return v;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getActivity().bindService(
+                    new Intent(getActivity(), VehicleManager.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        } else {
+            if(mVehicleManager != null) {
+                Log.i(TAG, "Unbinding from vehicle service");
+                mVehicleManager.removeListener(SimpleVehicleMessage.class, mListener);
+                getActivity().unbindService(mConnection);
+                mVehicleManager = null;
+            }
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setListAdapter(mAdapter);
+    }
+
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
         @Override
         public void receive(final VehicleMessage message) {
@@ -30,8 +66,7 @@ public class VehicleDashboardFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        // TODO if it's a  measurement, try and build
-                        // measurement in adapter
+                        // TODO we're losing SimpleEventedMessage type
                         mAdapter.add(message.asSimpleMessage());
                     }
                 });
@@ -54,42 +89,4 @@ public class VehicleDashboardFragment extends ListFragment {
             mVehicleManager = null;
         }
     };
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mAdapter = new SimpleVehicleMessageAdapter(getActivity());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vehicle_dashboard, container, false);
-        return v;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setListAdapter(mAdapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().bindService(
-                new Intent(getActivity(), VehicleManager.class),
-                mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(mVehicleManager != null) {
-            Log.i(TAG, "Unbinding from vehicle service");
-            mVehicleManager.removeListener(SimpleVehicleMessage.class, mListener);
-            getActivity().unbindService(mConnection);
-            mVehicleManager = null;
-        }
-    }
 }
