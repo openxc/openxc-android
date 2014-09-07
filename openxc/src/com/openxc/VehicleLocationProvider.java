@@ -135,7 +135,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
     }
 
     private void updateLocation() {
-        if(mLocationManager == null) {
+        if(mLocationManager == null || !mOverwriteNativeStatus) {
             return;
         }
 
@@ -159,10 +159,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
 
             makeLocationComplete(location);
             try {
-                if(mOverwriteNativeStatus) {
-                    mLocationManager.setTestProviderLocation(
-                            LocationManager.GPS_PROVIDER, location);
-                }
+                mLocationManager.setTestProviderLocation(
+                        LocationManager.GPS_PROVIDER, location);
                 location.setProvider(VEHICLE_LOCATION_PROVIDER);
                 mLocationManager.setTestProviderLocation(
                         VEHICLE_LOCATION_PROVIDER, location);
