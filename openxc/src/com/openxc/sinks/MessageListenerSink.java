@@ -65,7 +65,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     public void register(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
         try {
-            // TODO A bit of a hack to cache this measurement's ID field so we
+            // A bit of a hack to cache this measurement's ID field so we
             // can deserialize incoming measurements of this type. Why don't we
             // have a getId() in the Measurement interface? Ah, because it would
             // have to be static and you can't have static methods in an
@@ -133,9 +133,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 mMessageListeners.removeAll(matcher);
             }
 
-            // TODO how do we know when a a message is a measurement and should be
-            // propagated as such? I think an event bus will take care of this as
-            // listeners will become more generic
             if (message instanceof SimpleVehicleMessage) {
                 propagateMeasurementFromMessage(message.asSimpleMessage());
             }
@@ -161,9 +158,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 }
             }
         } catch(UnrecognizedMeasurementTypeException e) {
-            // This happens quite often if nobody has registered to receive
-            // updates for the specific signal. It can be an error, but if we
-            // log here it's really, really noisy.
+            // The message is not a recognized Measurement, we don't propagate
+            // it as a Measurement (only as a Message, which is handled
+            // earlier).
         } catch(NoValueException e) {
             Log.w(TAG, "Received notification for a blank measurement", e);
         }
