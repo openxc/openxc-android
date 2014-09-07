@@ -75,21 +75,19 @@ public class CanMessageViewFragment extends ListFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().bindService(
-                new Intent(getActivity(), VehicleManager.class),
-                mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(mVehicleManager != null) {
-            Log.i(TAG, "Unbinding from vehicle service");
-            mVehicleManager.removeListener(CanMessage.class, mListener);
-            getActivity().unbindService(mConnection);
-            mVehicleManager = null;
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getActivity().bindService(
+                    new Intent(getActivity(), VehicleManager.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        } else {
+            if(mVehicleManager != null) {
+                Log.i(TAG, "Unbinding from vehicle service");
+                mVehicleManager.removeListener(CanMessage.class, mListener);
+                getActivity().unbindService(mConnection);
+                mVehicleManager = null;
+            }
         }
     }
 
