@@ -44,8 +44,6 @@ public class PipelineStatusUpdateTask extends TimerTask {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO if connected, use white icon else red. or change
-                        // opacity.
                         icon.setVisibility(View.VISIBLE);
                     }
                 });

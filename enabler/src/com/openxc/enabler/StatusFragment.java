@@ -52,7 +52,6 @@ public class StatusFragment extends Fragment {
             // VehicleService -> StatusFragment -> VehicleService and the
             // callback will just fail silently and be removed forever.
             if(mVehicleManager != null) {
-                // TODO sometimes this is null, but why?
                 new Thread(new Runnable() {
                     public void run() {
                         final String version = mVehicleManager.getVehicleInterfaceVersion();

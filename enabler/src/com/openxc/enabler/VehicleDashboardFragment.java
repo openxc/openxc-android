@@ -66,7 +66,6 @@ public class VehicleDashboardFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        // TODO we're losing SimpleEventedMessage type
                         mAdapter.add(message.asSimpleMessage());
                     }
                 });

@@ -175,8 +175,12 @@ public class VehicleLocationProvider implements Measurement.Listener {
         } catch(NoValueException e) {
                 Log.w(TAG, "Can't update location, complete measurents not available yet");
         } catch(UnrecognizedMeasurementTypeException e) {
-            // TODO this is dumb that we know these measurements are good, but
-            // we still could get an exception
+            // This is dumb that we know these measurements are good, but
+            // we still could get an exception. One of the annoying things about
+            // allowing such a flexible API for Measurements. If they all had
+            // the same parent class instead of the same Interface, we could
+            // have a static method that returned the ID and you'd be able to
+            // get rid of this exception type.
         }
     }
 

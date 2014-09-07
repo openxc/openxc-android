@@ -348,11 +348,8 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
     }
 
     // TODO set bluetooth polling
-    // TODO get source summaries
-    // TODO get sink summaries
     // TODO get message count
-    // TODO get local vehicle interface
-    // TODO remove local vehicle interface
+    // TODO get vehicle interface
 
     private VehicleDataSink mCustomSink = new VehicleDataSink() {
         public void receive(VehicleMessage message) {

@@ -123,6 +123,4 @@ public abstract class AbstractFormatterTest {
             throws SerializationException {
         BinaryFormatter.serialize(new VehicleMessage());
     }
-
-    // TODO check timestamp gets serialized
 }

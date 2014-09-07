@@ -107,8 +107,6 @@ public class MessageListenerSinkTest {
         assertThat(messageReceived, nullValue());
     }
 
-    // TODO test removing listeners by message class
-
     @Test
     public void listenerRecievesMessage() throws DataSinkException {
         NamedVehicleMessage message = new NamedVehicleMessage("foo");
