@@ -14,7 +14,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Command extends KeyedMessage {
     public static final String COMMAND_KEY = "command";
-    // TODO this name should be made more specific
     public static final String DIAGNOSTIC_REQUEST_KEY = "request";
     public static final String ACTION_KEY = "action";
 

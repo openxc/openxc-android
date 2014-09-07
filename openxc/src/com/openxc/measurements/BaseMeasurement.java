@@ -272,9 +272,7 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
             if (simpleMessage.getTimestamp() != null) {
                 measurement.setTimestamp(simpleMessage.getTimestamp());
             }
-            // TODO do we allow creating measurements from a generic values
-            // map? need to make it public if so. i'm thinking that th
-            // measurement should subclass simplevehiclemessage
+            // https://github.com/openxc/openxc-android/issues/185
             return measurement;
         } catch(InstantiationException e) {
             throw new UnrecognizedMeasurementTypeException(

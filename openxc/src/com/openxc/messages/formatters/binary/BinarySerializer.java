@@ -48,8 +48,6 @@ public class BinarySerializer {
 
     private static void serializeCanMessage(BinaryMessages.VehicleMessage.Builder builder,
             CanMessage message) {
-        // TODO I'd like to change the "raw" language to explicitly be "can
-        // message"
         builder.setType(BinaryMessages.VehicleMessage.Type.RAW);
 
         BinaryMessages.RawMessage.Builder messageBuilder =
@@ -108,7 +106,8 @@ public class BinarySerializer {
         if(message.hasPayload()) {
             messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
         }
-        // TODO hmm, not sure this exists
+        // TODO add decoded_type when it hits the spec:
+        // https://github.com/openxc/openxc-message-format/issues/17
         // messageBuilder.setDecodedType(message.getDecodedType());
         return messageBuilder;
     }
@@ -190,8 +189,6 @@ public class BinarySerializer {
         } else if(value instanceof Boolean) {
             fieldBuilder.setType(BinaryMessages.DynamicField.Type.BOOL);
             fieldBuilder.setBooleanValue((Boolean) value);
-        } else {
-            // TODO
         }
         return fieldBuilder;
     }
@@ -199,8 +196,6 @@ public class BinarySerializer {
     private static BinaryMessages.TranslatedMessage.Builder startBuildingTranslated(
             BinaryMessages.VehicleMessage.Builder builder,
             NamedVehicleMessage message) {
-        // TODO I'd like to get rid of the 'translated' language and switch to
-        // Simple and EventedSimple
         builder.setType(BinaryMessages.VehicleMessage.Type.TRANSLATED);
 
         BinaryMessages.TranslatedMessage.Builder messageBuilder =

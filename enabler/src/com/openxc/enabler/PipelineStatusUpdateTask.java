@@ -79,9 +79,7 @@ public class PipelineStatusUpdateTask extends TimerTask {
         setIconVisibility(UsbVehicleInterface.class, mUsbConnView,
                 viDescriptor);
 
-        // TODO since the trace is not an official veh interface it will
-        // never be returned from getActiveVehicleInterface - we'll need
-        // some other way of checking in the Enabler
+        // https://github.com/openxc/openxc-android/issues/184
         setIconVisibility(TraceVehicleDataSource.class, mFileConnView,
                 viDescriptor);
     }
