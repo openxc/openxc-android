@@ -2,6 +2,8 @@ package com.openxc.measurements;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.util.Log;
@@ -41,6 +43,8 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
 
     protected AgingData<TheUnit> mValue;
     private Range<TheUnit> mRange;
+    private static Map<Class<? extends Measurement>, String>
+            sCachedPrettyNames = new HashMap<>();
     private static BiMap<String, Class<? extends Measurement>>
             sMeasurementIdToClass;
 
@@ -144,13 +148,18 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
     }
 
     public String getName(Context context) {
-        // Make sure to not use the package name here, we have to find the
-        // resource using the package name of the app using the library instead.
-        int identifier = context.getResources().getIdentifier(
-                getGenericName() + "_label", "string", context.getPackageName());
         String name = getGenericName();
-        if(identifier != 0) {
-            name = context.getString(identifier);
+        if(!sCachedPrettyNames.containsKey(getClass())) {
+            // Make sure to not use the package name here, we have to find the
+            // resource using the package name of the app using the library instead.
+            int identifier = context.getResources().getIdentifier(
+                    getGenericName() + "_label", "string", context.getPackageName());
+            if(identifier != 0) {
+                name = context.getString(identifier);
+                sCachedPrettyNames.put(getClass(), name);
+            }
+        } else if(sCachedPrettyNames.get(getClass()) != null) {
+            name = sCachedPrettyNames.get(getClass());
         }
         return name;
     }
