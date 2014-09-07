@@ -231,6 +231,8 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                     eventClass = Number.class;
                 }
 
+                // TODO cache the constructor in the key -> class map so we
+                // don't have to keep looking it up
                 try {
                     constructor = measurementType.getConstructor(
                             valueClass, eventClass);
