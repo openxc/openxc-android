@@ -97,8 +97,8 @@ public class CanMessageViewFragment extends ListFragment {
                 CanMessageDetailActivity.class);
         intent.putExtra(CanMessageDetailActivity.EXTRA_CAN_MESSAGE,
                 mAdapter.getItem(position));
-        // TODO This activity is not very useful or performant right now -
-        // see https://github.com/openxc/openxc-android/issues/159
+        // This activity is not very useful or performant right now so it isn't
+        // enabled - see https://github.com/openxc/openxc-android/issues/159
         // startActivity(intent);
     }
 }
