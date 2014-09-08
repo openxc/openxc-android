@@ -3,6 +3,7 @@ package com.openxc.enabler;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.openxc.VehicleManager;
@@ -11,7 +12,6 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sources.VehicleDataSource;
-import com.openxc.sources.trace.TraceVehicleDataSource;
 
 public class PipelineStatusUpdateTask extends TimerTask {
     private VehicleManager mVehicleManager;
@@ -35,24 +35,26 @@ public class PipelineStatusUpdateTask extends TimerTask {
         mNoneConnView = noneConnView;
     }
 
-    private void setIconVisibility(
+    private void setVisibility(
             Class<? extends VehicleDataSource> vehicleInterface,
-            final View icon, VehicleInterfaceDescriptor viDescriptor) {
-        if(viDescriptor != null &&
-                viDescriptor.getInterfaceClass() == vehicleInterface) {
-            if(icon.getVisibility() != View.VISIBLE) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        icon.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        } else if(icon.getVisibility() != View.GONE) {
+            final View view, VehicleInterfaceDescriptor viDescriptor) {
+        setVisibility(view, viDescriptor != null &&
+                viDescriptor.getInterfaceClass() == vehicleInterface);
+    }
+
+    private void setVisibility(final View view, boolean visible) {
+        if(visible && view.getVisibility() != View.VISIBLE) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    icon.setVisibility(View.GONE);
+                    view.setVisibility(View.VISIBLE);
+                }
+            });
+        } else if(!visible && view.getVisibility() != View.GONE) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    view.setVisibility(View.GONE);
                 }
             });
         }
@@ -61,26 +63,22 @@ public class PipelineStatusUpdateTask extends TimerTask {
     public void run() {
         final VehicleInterfaceDescriptor viDescriptor =
                 mVehicleManager.getActiveVehicleInterface();
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(viDescriptor == null) {
-                    mNoneConnView.setVisibility(View.VISIBLE);
-                } else {
-                    mNoneConnView.setVisibility(View.GONE);
-                }
-            }
-        });
 
-        setIconVisibility(BluetoothVehicleInterface.class,
+        setVisibility(BluetoothVehicleInterface.class,
                 mBluetoothConnView, viDescriptor);
-        setIconVisibility(NetworkVehicleInterface.class, mNetworkConnView,
+        setVisibility(NetworkVehicleInterface.class, mNetworkConnView,
                 viDescriptor);
-        setIconVisibility(UsbVehicleInterface.class, mUsbConnView,
+        setVisibility(UsbVehicleInterface.class, mUsbConnView,
                 viDescriptor);
 
-        // https://github.com/openxc/openxc-android/issues/184
-        setIconVisibility(TraceVehicleDataSource.class, mFileConnView,
-                viDescriptor);
+        setVisibility(mNoneConnView,
+                !traceEnabled() && viDescriptor == null);
+        setVisibility(mFileConnView, traceEnabled());
+    }
+
+    private boolean traceEnabled() {
+        return PreferenceManager.getDefaultSharedPreferences(mActivity).getString(
+                mActivity.getString(R.string.vehicle_interface_key), "").equals(
+                mActivity.getString(R.string.trace_interface_option_value));
     }
 }
