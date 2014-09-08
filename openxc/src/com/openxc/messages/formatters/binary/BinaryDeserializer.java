@@ -91,6 +91,60 @@ public class BinaryDeserializer {
                 canMessage.getData().toByteArray());
     }
 
+    private static Command deserializeDiagnosticCommand(
+            BinaryMessages.ControlCommand command)
+            throws UnrecognizedMessageTypeException {
+        if(!command.hasDiagnosticRequest()) {
+            throw new UnrecognizedMessageTypeException(
+                    "Diagnostic command missing request details");
+        }
+
+        String action = null;
+        if(!command.hasAction()) {
+            throw new UnrecognizedMessageTypeException(
+                    "Diagnostic command missing action");
+        } else if(command.getAction() ==
+                BinaryMessages.ControlCommand.Action.ADD) {
+            action = DiagnosticRequest.ADD_ACTION_KEY;
+        } else if(command.getAction() ==
+                BinaryMessages.ControlCommand.Action.CANCEL) {
+            action = DiagnosticRequest.CANCEL_ACTION_KEY;
+        } else {
+            throw new UnrecognizedMessageTypeException(
+                    "Unrecognized action: " + command.getAction());
+        }
+
+        BinaryMessages.DiagnosticRequest serializedRequest =
+                command.getDiagnosticRequest();
+        DiagnosticRequest request = new DiagnosticRequest(
+                serializedRequest.getBus(),
+                serializedRequest.getMessageId(),
+                serializedRequest.getMode());
+
+        if(serializedRequest.hasPayload()) {
+            request.setPayload(
+                    serializedRequest.getPayload().toByteArray());
+        }
+
+        if(serializedRequest.hasPid()) {
+            request.setPid(serializedRequest.getPid());
+        }
+
+        if(serializedRequest.hasMultipleResponses()) {
+            request.setMultipleResponses(
+                    serializedRequest.getMultipleResponses());
+        }
+
+        if(serializedRequest.hasFrequency()) {
+            request.setFrequency(serializedRequest.getFrequency());
+        }
+
+        if(serializedRequest.hasName()) {
+            request.setName(serializedRequest.getName());
+        }
+        return new Command(request, action);
+    }
+
     private static Command deserializeCommand(
             BinaryMessages.VehicleMessage binaryMessage)
             throws UnrecognizedMessageTypeException {
@@ -115,65 +169,13 @@ public class BinaryDeserializer {
                     "Command missing type");
         }
 
-        DiagnosticRequest request = null;
-        String action = null;
+        Command deserializedCommand = null;
         if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
-            if(command.hasDiagnosticRequest()) {
-                if(!command.hasAction()) {
-                    throw new UnrecognizedMessageTypeException(
-                            "Diagnostic command missing action");
-                } else if(command.getAction() ==
-                        BinaryMessages.ControlCommand.Action.ADD) {
-                    action = DiagnosticRequest.ADD_ACTION_KEY;
-                } else if(command.getAction() ==
-                        BinaryMessages.ControlCommand.Action.CANCEL) {
-                    action = DiagnosticRequest.CANCEL_ACTION_KEY;
-                } else {
-                    throw new UnrecognizedMessageTypeException(
-                            "Unrecognized action: " + command.getAction());
-                }
-
-                BinaryMessages.DiagnosticRequest serializedRequest =
-                        command.getDiagnosticRequest();
-                request = new DiagnosticRequest(
-                        serializedRequest.getBus(),
-                        serializedRequest.getMessageId(),
-                        serializedRequest.getMode());
-
-                if(serializedRequest.hasPayload()) {
-                    request.setPayload(
-                            serializedRequest.getPayload().toByteArray());
-                }
-
-                if(serializedRequest.hasPid()) {
-                    request.setPid(serializedRequest.getPid());
-                }
-
-                if(serializedRequest.hasMultipleResponses()) {
-                    request.setMultipleResponses(
-                            serializedRequest.getMultipleResponses());
-                }
-
-                if(serializedRequest.hasFrequency()) {
-                    request.setFrequency(serializedRequest.getFrequency());
-                }
-
-                if(serializedRequest.hasName()) {
-                    request.setName(serializedRequest.getName());
-                }
-            } else {
-                throw new UnrecognizedMessageTypeException(
-                        "Diagnostic command missing request details");
-            }
-        }
-
-        // TODO ugh, I don't like this
-        if(request == null) {
-            return new Command(commandType);
+            deserializedCommand = deserializeDiagnosticCommand(command);
         } else {
-            return new Command(request, action);
+            deserializedCommand = new Command(commandType);
         }
-
+        return deserializedCommand;
     }
 
     private static DiagnosticResponse deserializeDiagnosticResponse(
