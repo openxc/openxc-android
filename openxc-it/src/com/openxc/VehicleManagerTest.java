@@ -347,9 +347,31 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertThat(service.toString(), notNullValue());
     }
 
-    // TODO set bluetooth polling
-    // TODO get message count
-    // TODO get vehicle interface
+    @MediumTest
+    public void testSetBluetoothPollingStatus()
+            throws VehicleServiceException {
+        prepareServices();
+        service.setVehicleInterface(BluetoothVehicleInterface.class,
+                "00:01:02:03:04:05");
+        service.setBluetoothPollingStatus(true);
+        service.setBluetoothPollingStatus(false);
+        // Nothing much we can assert becuase we can't easily check in on the
+        // classes being instantiated in the remote service
+    }
+
+    @MediumTest
+    public void testGetMessageCount() throws VehicleServiceException {
+        prepareServices();
+        assertEquals(service.getMessageCount(), 0);
+        source.inject("foo", 42.0);
+        assertEquals(service.getMessageCount(), 1);
+    }
+
+    @MediumTest
+    public void testGetVehicleInterfaceNullWhenNotSet() {
+        prepareServices();
+        assertThat(service.getActiveVehicleInterface(), nullValue());
+    }
 
     private VehicleDataSink mCustomSink = new VehicleDataSink() {
         public void receive(VehicleMessage message) {
