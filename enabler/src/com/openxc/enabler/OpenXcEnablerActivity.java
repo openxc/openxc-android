@@ -114,9 +114,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if(position == 0) {
-                return new StatusFragment();
-            } else if(position == 1) {
+            if(position == 1) {
                 return new VehicleDashboardFragment();
             } else if(position == 2) {
                 return new CanMessageViewFragment();
@@ -125,6 +123,8 @@ public class OpenXcEnablerActivity extends FragmentActivity {
             } else if(position == 4) {
                 return new SendCanMessageFragment();
             }
+
+            // For position 0 or anything unrecognized, go to Status
             return new StatusFragment();
         }
     }
