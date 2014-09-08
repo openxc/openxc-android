@@ -212,11 +212,11 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     }
                 }
 
-                // TODO clear up the threading here - the issue is that if we
-                // are connected, then disable the BT vehicle interface, it
-                // breaks the socket connecetion so we come out here - but we
-                // don't check to see if we're still running before creating
-                // another socket.
+                // If the BT interface has been disabled, the socket wlil be
+                // disconnected and we will break out of the above
+                // while(isConnected()) loop and land here - double check that
+                // this interface should still be running before trying to make
+                // another connection.
                 if(!isRunning()) {
                     break;
                 }
@@ -247,7 +247,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 }
             }
             Log.d(TAG, "SocketAccepter is stopping");
-            // TODO clean up so we aren't duplicating shutdown logic
             closeSocket();
             stop();
         }
