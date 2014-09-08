@@ -44,15 +44,6 @@ public class Command extends KeyedMessage {
         this(command, null);
     }
 
-    // TODO this seems really odd, that we're combined these two things. it made
-    // more sense when I implemented it in Python. I can't remember...why we are
-    // wrapping the DiagRequest in a command? I think it was to make parsing
-    // easier on the other end, so you didn't have to try and infer what the
-    // incoming datatype was. should we require all input data to be wrapped in
-    // a command? that would make more sense but would increase a litle overhead
-    // for JSON writes. Let's get this working for now and then change the
-    // message format so that we don't use implicit types in JSON anymore - if
-    // you need maximum performance, use the binary encoding.
     public Command(DiagnosticRequest request, String action) {
         this(CommandType.DIAGNOSTIC_REQUEST, action);
         mDiagnosticRequest = request;
