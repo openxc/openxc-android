@@ -210,7 +210,29 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     public Measurement get(
             Class<? extends Measurement> measurementType)
             throws UnrecognizedMeasurementTypeException, NoValueException {
+        return BaseMeasurement.getMeasurementFromMessage(measurementType,
+                get(BaseMeasurement.getKeyForMeasurement(measurementType)).asSimpleMessage());
+    }
 
+    /**
+     * Retrieve the most current value of a keyed message.
+     *
+     * Regardless of if a measurement is available or not, return a
+     * Measurement instance of the specified type. The measurement can be
+     * checked to see if it has a value.
+     *
+     * @param measurementType The class of the requested Measurement
+     *      (e.g. VehicleSpeed.class)
+     * @return An instance of the requested Measurement which may or may
+     *      not have a value.
+     * @throws UnrecognizedMeasurementTypeException if passed a measurementType
+     *      that does not extend Measurement
+     * @throws NoValueException if no value has yet been received for this
+     *      measurementType
+     * @see BaseMeasurement
+     */
+    public VehicleMessage get(MessageKey key)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the VehicleService -- " +
                     "throwing a NoValueException");
@@ -218,13 +240,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
 
         try {
-            VehicleMessage message = mRemoteService.get(
-                    BaseMeasurement.getKeyForMeasurement(measurementType));
-            if(message == null || !(message instanceof SimpleVehicleMessage)) {
+            VehicleMessage message = mRemoteService.get(key);
+            if(message == null) {
                 throw new NoValueException();
             }
-            return BaseMeasurement.getMeasurementFromMessage(
-                    measurementType, message.asSimpleMessage());
+            return message;
         } catch(RemoteException | ClassCastException e) {
             Log.w(TAG, "Unable to get value from remote vehicle service", e);
             throw new NoValueException();

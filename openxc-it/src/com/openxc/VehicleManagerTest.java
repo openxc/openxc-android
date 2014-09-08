@@ -281,6 +281,16 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertThat(listener.response, nullValue());
     }
 
+    @MediumTest
+    public void testGetMessage() throws UnrecognizedMeasurementTypeException,
+            NoValueException {
+        prepareServices();
+        source.inject("foo", 42.0);
+        VehicleMessage message = service.get(
+                new NamedVehicleMessage("foo").getKey());
+        assertNotNull(message);
+        assertEquals(message.asSimpleMessage().getValue(), 42.0);
+    }
 
     @MediumTest
     public void testGetMeasurement() throws UnrecognizedMeasurementTypeException,
