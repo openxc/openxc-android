@@ -177,18 +177,28 @@ public class BinaryDeserializer {
     }
 
     private static DiagnosticResponse deserializeDiagnosticResponse(
-            BinaryMessages.VehicleMessage binaryMessage) {
+            BinaryMessages.VehicleMessage binaryMessage)
+            throws UnrecognizedMessageTypeException {
         BinaryMessages.DiagnosticResponse serializedResponse =
                 binaryMessage.getDiagnosticResponse();
-        // TODO check if all required values are present
-        byte[] payload = serializedResponse.getPayload().toByteArray();
+        if(!serializedResponse.hasBus() || !serializedResponse.hasMessageId() ||
+                !serializedResponse.hasMode()) {
+            throw new UnrecognizedMessageTypeException(
+                    "Diagnostic response missing one or more required fields");
+        }
+
         DiagnosticResponse response = new DiagnosticResponse(
                 serializedResponse.getBus(),
                 serializedResponse.getMessageId(),
-                serializedResponse.getMode(),
-                // TODO pid should be optional, shouldn't it?
-                serializedResponse.getPid(),
-                payload);
+                serializedResponse.getMode());
+
+        if(serializedResponse.hasPid()) {
+            response.setPid(serializedResponse.getPid());
+        }
+
+        if(serializedResponse.hasPayload()) {
+            response.setPayload(serializedResponse.getPayload().toByteArray());
+        }
 
         if(serializedResponse.hasNegativeResponseCode()) {
             response.setNegativeResponseCode(
