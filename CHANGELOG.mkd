@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v6.0.0-dev
+
 ## v5.3.2
 
 * Be less strict about incoming JSON messages (allow whitespace).
