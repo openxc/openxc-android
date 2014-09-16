@@ -32,7 +32,7 @@
                 android:id="@+id/connection_bluetooth"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_bluetooth"
-                android:src="@drawable/ic_action_network_wifi" />
+                android:src="@drawable/ic_action_bluetooth_connected" />
 
             <ImageView
                 android:id="@+id/connection_network"
