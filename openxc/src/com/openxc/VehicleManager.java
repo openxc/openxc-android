@@ -1,7 +1,5 @@
 package com.openxc;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -32,7 +30,6 @@ import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
-import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;

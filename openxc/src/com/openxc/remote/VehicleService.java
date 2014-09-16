@@ -1,8 +1,5 @@
 package com.openxc.remote;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -23,7 +20,6 @@ import com.openxc.messages.MessageKey;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.RemoteCallbackSink;
-import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.ApplicationSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.NativeLocationSource;
