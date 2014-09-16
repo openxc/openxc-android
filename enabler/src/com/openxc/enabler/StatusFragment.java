@@ -104,11 +104,13 @@ public class StatusFragment extends Fragment {
             new Thread(new Runnable() {
                 public void run() {
                     mVehicleManager.waitUntilBound();
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mServiceNotRunningWarningView.setVisibility(View.GONE);
-                        }
-                    });
+                    if(getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                mServiceNotRunningWarningView.setVisibility(View.GONE);
+                            }
+                        });
+                    }
                 }
             }).start();
 
