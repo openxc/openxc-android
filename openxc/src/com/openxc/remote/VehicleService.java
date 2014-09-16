@@ -246,12 +246,18 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                     VehicleService.this.onPipelineDeactivated();
                 }
             }
+
+            @Override
+            public boolean isViConnected() {
+                return VehicleService.this.mPipeline.isActive();
+            }
     };
 
     private void addViConnectionListener(ViConnectionListener listener) {
         synchronized(mViConnectionListeners) {
             mViConnectionListeners.register(listener);
         }
+        onPipelineActivated();
     }
 
     private void setVehicleInterface(String interfaceName, String resource) {

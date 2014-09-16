@@ -89,4 +89,6 @@ interface VehicleServiceInterface {
     void userPipelineDeactivated();
 
     void addViConnectionListener(in ViConnectionListener listener);
+
+    boolean isViConnected();
 }

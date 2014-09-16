@@ -628,6 +628,17 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    public boolean isViConnected() {
+        if(mRemoteService != null) {
+            try {
+                return mUserOriginPipeline.isActive() || mRemoteService.isViConnected();
+            } catch(RemoteException e) {
+                Log.d(TAG, "Unable to send message to remote service", e);
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

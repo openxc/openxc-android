@@ -45,35 +45,30 @@ public class StatusFragment extends Fragment {
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
 
-    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
-        public void onConnected(final VehicleInterfaceDescriptor descriptor) {
-            Log.d(TAG, descriptor + " is now connected");
+    private void updateViInfo() {
+        if(mVehicleManager != null) {
             // Must run in another thread or we get circular references to
             // VehicleService -> StatusFragment -> VehicleService and the
             // callback will just fail silently and be removed forever.
-            if(mVehicleManager != null) {
-                new Thread(new Runnable() {
-                    public void run() {
-                        final String version = mVehicleManager.getVehicleInterfaceVersion();
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                mViVersionView.setText(version);
-                            }
-                        });
-                    }
-                }).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    final String version = mVehicleManager.getVehicleInterfaceVersion();
+                    final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mViDeviceIdView.setText(deviceId);
+                            mViVersionView.setText(version);
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
 
-                new Thread(new Runnable() {
-                    public void run() {
-                        final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                mViDeviceIdView.setText(deviceId);
-                            }
-                        });
-                    }
-                }).start();
-            }
+    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
+        public void onConnected(final VehicleInterfaceDescriptor descriptor) {
+            Log.d(TAG, descriptor + " is now connected");
+            updateViInfo();
         }
 
         public void onDisconnected() {
@@ -99,6 +94,10 @@ public class StatusFragment extends Fragment {
                         mConnectionListener);
             } catch(VehicleServiceException e) {
                 Log.e(TAG, "Unable to register VI connection listener", e);
+            }
+
+            if(mVehicleManager.isViConnected()) {
+                updateViInfo();
             }
 
             new Thread(new Runnable() {
