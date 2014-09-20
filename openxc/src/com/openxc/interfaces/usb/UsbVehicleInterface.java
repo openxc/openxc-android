@@ -49,7 +49,6 @@ import com.openxc.sources.SourceCallback;
 public class UsbVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
     private static final String TAG = "UsbVehicleInterface";
-    private static final int VERSION_CONTROL_COMMAND = 0x80;
     private static final int CONTROL_COMMAND_TIMEOUT_S = 1;
     private static final int ENDPOINT_COUNT = 2;
 
