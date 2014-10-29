@@ -2,6 +2,30 @@
 
 ## v6.0.0-dev
 
+* BREAKING: Refactor RawMeasurement class into more useful message types in the
+    openxc.messages package, all based on a VehicleMessage.
+* BREAKING: Increase minimum Android API version from 8 to 9.
+* BREAKING: Refactor VehicleManager's API for retreiving the active vehicle
+    interface. The number of active VIs is now capped at 1.
+* Feature: Support sending diagnostic requests to a VI.
+* Feature: Support receiving diagnostic responses from a VI.
+* Feature: Add new KeyMatcher class to support matching multiple types of
+    messages from VI with a single handler.
+* Feature: Redesign Enabler UI to use swipable view panels, cycling through
+     viewing simple messages, CAN messages, sending CAN messages and sending
+     diagnostic requests.
+* Improvement: Add full support for receiving and sending protobuf encoded
+    messages to a VI.
+* Improvement: Use Gson for JSON (de)serialization to greatly decrease code
+    complexity in exchange for a small performance hit.
+* Improvement: Use message injection instead of trace file playback in test
+    suite for quicker, more reliable tests.
+* Improvement: Only attempt to send commands to a VI if it claims to be
+    connected.
+* Improvement: Don't display Android's GPS location in Enabler to avoid battery
+    drain.
+* Fix: Warning displayed properly when remote vehicle service is not running.
+
 ## v5.3.2
 
 * Be less strict about incoming JSON messages (allow whitespace).
