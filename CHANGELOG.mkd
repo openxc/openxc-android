@@ -112,8 +112,8 @@
 * Push core physical vehicle interfaces back into the realm of the remote
   VehicleService process for performance and to accomodate a new API for writing
   back to the vehicle.
-* Refactor message writing API - VehicleManager.set(VehicleMessage) is now
-  send(VehicleMessage).
+* Refactor message writing API - VehicleManager.set(RawMeasurement) is now
+  send(RawMeasurement).
 * Fix build error in Eclipse, hopefully once and for all.
 
 ## v2.1.2
