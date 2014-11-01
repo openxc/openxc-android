@@ -1,9 +1,7 @@
 package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -15,7 +13,6 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
-import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.SteeringWheelAngle;
