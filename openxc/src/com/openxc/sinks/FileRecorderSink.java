@@ -61,7 +61,7 @@ public class FileRecorderSink implements VehicleDataSink {
 
         mLastMessageReceived = Calendar.getInstance();
         try {
-            mWriter.write(new String(JsonFormatter.serialize(message)));
+            mWriter.write(JsonFormatter.serialize(message));
             mWriter.newLine();
         } catch(IOException e) {
             throw new DataSinkException("Unable to write message to file");
