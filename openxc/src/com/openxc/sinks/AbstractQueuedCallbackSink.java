@@ -41,8 +41,7 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
     }
 
     @Override
-    public void receive(VehicleMessage message)
-            throws DataSinkException {
+    public void receive(VehicleMessage message) throws DataSinkException {
         try {
             mNotificationsLock.lock();
             mNotifications.add(message);

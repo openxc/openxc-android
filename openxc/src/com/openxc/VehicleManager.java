@@ -222,14 +222,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested Measurement which may or may
      *      not have a value.
-     * @throws UnrecognizedMeasurementTypeException if passed a measurementType
-     *      that does not extend Measurement
      * @throws NoValueException if no value has yet been received for this
      *      measurementType
      * @see BaseMeasurement
      */
-    public VehicleMessage get(MessageKey key)
-            throws UnrecognizedMeasurementTypeException, NoValueException {
+    public VehicleMessage get(MessageKey key) throws NoValueException {
         if(mRemoteService == null) {
             Log.w(TAG, "Not connected to the VehicleService -- " +
                     "throwing a NoValueException");
@@ -290,8 +287,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         return sent;
     }
 
-    public boolean send(Measurement command) throws
-                UnrecognizedMeasurementTypeException {
+    public boolean send(Measurement command) {
         return send(command.toVehicleMessage());
     }
 
@@ -338,14 +334,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      (e.g. VehicleSpeed.class) the listener was listening for
      * @param listener An Measurement.Listener instance that was
      *      previously registered with addListener
-     * @throws VehicleServiceException if the listener is unable to be
-     *      unregistered with the library internals - an exceptional situation
-     *      that shouldn't occur.
-     * @throws UnrecognizedMeasurementTypeException if passed a measurementType
-     *      not extend Measurement
      */
     public void addListener(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener) throws VehicleServiceException {
+            Measurement.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " for " + measurementType);
         mNotifier.register(measurementType, listener);
     }
@@ -381,14 +372,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *      (e.g. VehicleSpeed.class)
      * @param listener An object implementing the Measurement.Listener
      *      interface that should be called with any new measurements.
-     * @throws VehicleServiceException if the listener is unable to be
-     *      registered with the library internals - an exceptional situation
-     *      that shouldn't occur.
      */
     public void removeListener(Class<? extends Measurement> measurementType,
-            Measurement.Listener listener)
-            throws VehicleServiceException,
-                UnrecognizedMeasurementTypeException {
+            Measurement.Listener listener) {
         Log.i(TAG, "Removing listener " + listener + " for " + measurementType);
         mNotifier.unregister(measurementType, listener);
     }
@@ -398,11 +384,13 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.unregister(messageType, listener);
     }
 
-    public void removeListener(KeyedMessage message, VehicleMessage.Listener listener) {
+    public void removeListener(KeyedMessage message,
+            VehicleMessage.Listener listener) {
         removeListener(message.getKey(), listener);
     }
 
-    public void removeListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
+    public void removeListener(KeyMatcher matcher,
+            VehicleMessage.Listener listener) {
         mNotifier.unregister(matcher, listener);
     }
 

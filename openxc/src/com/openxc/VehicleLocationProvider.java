@@ -45,25 +45,17 @@ public class VehicleLocationProvider implements Measurement.Listener {
         } else {
             setupMockLocations();
 
-            try {
-                mVehicleManager.addListener(Latitude.class, this);
-                mVehicleManager.addListener(Longitude.class, this);
-                mVehicleManager.addListener(VehicleSpeed.class, this);
-            } catch(VehicleServiceException e) {
-                Log.d(TAG, "Unable to register for GPS from vehicle," +
-                        "mocked location may not work");
-            }
+            mVehicleManager.addListener(Latitude.class, this);
+            mVehicleManager.addListener(Longitude.class, this);
+            mVehicleManager.addListener(VehicleSpeed.class, this);
         }
     }
 
     public void stop() {
         if(mVehicleManager != null) {
-            try {
-                mVehicleManager.removeListener(Latitude.class, this);
-                mVehicleManager.removeListener(Longitude.class, this);
-                mVehicleManager.removeListener(VehicleSpeed.class, this);
-            } catch(VehicleServiceException | UnrecognizedMeasurementTypeException e) {
-            }
+            mVehicleManager.removeListener(Latitude.class, this);
+            mVehicleManager.removeListener(Longitude.class, this);
+            mVehicleManager.removeListener(VehicleSpeed.class, this);
         }
 
         if(mLocationManager.getProvider(
