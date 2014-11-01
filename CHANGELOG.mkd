@@ -3,19 +3,43 @@
 ## v6.0.0-dev
 
 * BREAKING: Refactor RawMeasurement class into more useful message types in the
-    openxc.messages package, all based on a VehicleMessage.
+    openxc.messages package, all based on a VehicleMessage. This requires
+    updates to all code that uses the VehicleManager.
+    * Renamed `addVehicleInterface` -> `setVehicleInterface`, only allow 1 VI at
+        a time.
+    * `getSourceSummaries` and `getSinkSummaries` are removed in favor of
+        `getActiveVehicleInterface`.
+* BREAKING: Classes implemeting `VehicleInterface` must now implement an
+    `isConnected()` method.
 * BREAKING: Increase minimum Android API version from 8 to 9.
-* BREAKING: Refactor VehicleManager's API for retreiving the active vehicle
-    interface. The number of active VIs is now capped at 1.
+* BREAKING: Refactor VehicleManager's API for retrieving the active vehicle
+    interface.
+* BREAKING: Limit the VehicleManager (and Enabler) to only 1 active VI at at
+    time, making the API and UI much more clear. Because of this change, the USB
+    VI is no longer enabled by default - it must be explicitly selected.
+* BREAKING: `MockedLocationSink` is renamed to `VehicleLocationProvider`, and it
+    no longer implements `VehicleDataSink`. It is simply a VehicleMessage
+    receiver and is instantiate explicitly in the VehicleManager.
+* BREAKING: Message listeners will no longer receive the last known value of the
+    message when they register. The complexity of maintaining this was not worth
+    it since there is a synchronous API you can get to get the current value on
+    startup anyway.
 * Feature: Support sending diagnostic requests to a VI.
 * Feature: Support receiving diagnostic responses from a VI.
 * Feature: Add new KeyMatcher class to support matching multiple types of
     messages from VI with a single handler.
-* Feature: Redesign Enabler UI to use swipable view panels, cycling through
-     viewing simple messages, CAN messages, sending CAN messages and sending
-     diagnostic requests.
+* Feature: Redesign Enabler UI for clarity and add new swipeable view panels
+    * Dynamically list all received simple vehicle messages in Enabler
+        instead of hard-coding a subset. Supports anything being sent by the VI with
+        a `name` and `value`.
+    * View a list of all received CAN messages, with timestamp, ID and data.
+    * Send an arbitrary CAN message.
+    * Send a diagnostic request.
+    * View diagnostic responses.
 * Improvement: Add full support for receiving and sending protobuf encoded
-    messages to a VI.
+    messages to a VI (although the vi-firmware does not yet have full support
+    for receiving commands encoded as protobufs, see
+    [vi-firmware#313](https://github.com/openxc/vi-firmware/issues/313).
 * Improvement: Use Gson for JSON (de)serialization to greatly decrease code
     complexity in exchange for a small performance hit.
 * Improvement: Use message injection instead of trace file playback in test
@@ -24,6 +48,19 @@
     connected.
 * Improvement: Don't display Android's GPS location in Enabler to avoid battery
     drain.
+* Improvement: Use more standard icons to show vehicle interface connectivity in
+    Enabler, and include multiple resolutions for high-DPI displays.
+* Improvement: Switch from Crashlytics to Bugsnag for crash reporting as it
+    doesn't require an Eclipse plugin to get going.
+* Improvement: If native GPS overwriting is disabled, fully disable the vehicle
+    location provider instead of just leaving it on.
+* Improvement: If native GPS injection is enabled, only register for GPS updates
+    from the phone if connected to a vehicle interface. If not connected, don't
+    keep GPS alive to avoid battery drain.
+* Improvement: Greatly increase unit test coverage, from 8% to 57%.
+* Improvement: Add a callback for VehicleDataSource instances registered with
+    the VehicleManager to be notified when the pipeline is activated or
+    deactivated.
 * Fix: Warning displayed properly when remote vehicle service is not running.
 
 ## v5.3.2
