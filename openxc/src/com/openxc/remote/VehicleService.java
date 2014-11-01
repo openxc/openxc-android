@@ -253,7 +253,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         synchronized(mViConnectionListeners) {
             mViConnectionListeners.register(listener);
         }
-        onPipelineActivated();
     }
 
     private void setVehicleInterface(String interfaceName, String resource) {
