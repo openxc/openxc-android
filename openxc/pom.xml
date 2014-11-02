@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>openxc</artifactId>
-    <packaging>apklib</packaging>
+    <packaging>aar</packaging>
     <name>OpenXC Android Library</name>
     <description>Android library for the OpenXC Platform</description>
 
@@ -72,9 +72,14 @@
         <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+                    <resourceDirectory>res</resourceDirectory>
+                    <nativeLibrariesDirectory>libs</nativeLibrariesDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

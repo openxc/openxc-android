@@ -26,7 +26,7 @@
             <groupId>com.openxcplatform</groupId>
             <artifactId>openxc</artifactId>
             <version>${project.version}</version>
-            <type>apklib</type>
+            <type>aar</type>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -71,9 +71,14 @@
         <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+                    <resourceDirectory>res</resourceDirectory>
+                    <nativeLibrariesDirectory>libs</nativeLibrariesDirectory>
+                </configuration>
             </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
@@ -112,7 +117,7 @@
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>
-                                            com.jayway.maven.plugins.android.generation2
+                                            com.simpligility.maven.plugins
                                         </groupId>
                                         <artifactId>
                                             android-maven-plugin

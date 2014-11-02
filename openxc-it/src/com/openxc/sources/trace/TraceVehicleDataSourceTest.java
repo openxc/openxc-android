@@ -8,7 +8,7 @@ import java.net.URL;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.openxc.R;
+import com.openxc.instrumentationtests.R;
 import com.openxc.TestUtils;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
