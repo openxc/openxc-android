@@ -51,9 +51,13 @@ public class OpenXcEnablerActivity extends FragmentActivity {
 
         String bugsnagToken = getBugsnagToken(this);
         if(bugsnagToken != null && !bugsnagToken.isEmpty()) {
-            Bugsnag.register(this, bugsnagToken);
+            try {
+                Bugsnag.register(this, bugsnagToken);
+            } catch(NoClassDefFoundError e) {
+                Log.w(TAG, "Busgnag is unsupported when building from Eclipse", e);
+            }
         } else {
-            Log.e(TAG, "No Bugsnag token found in AndroidManifest, not enabling Bugsnag");
+            Log.i(TAG, "No Bugsnag token found in AndroidManifest, not enabling Bugsnag");
         }
 
         Log.i(TAG, "OpenXC Enabler created");
