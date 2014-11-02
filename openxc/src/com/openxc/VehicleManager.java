@@ -50,10 +50,9 @@ import com.openxc.sources.VehicleDataSource;
  * will shut down when no more clients are bound to it.
  *
  * Synchronous measurements are obtained by passing the type of the desired
- * measurement to the {@link #get(Class)} method.
- * Asynchronous measurements are obtained by defining a Measurement.Listener
- * object and passing it to the service via the addListener method.
- *
+ * measurement to the {@link #get(Class)} method. Asynchronous measurements are
+ * obtained by defining a Measurement.Listener or VehicleMessage.Listener object
+ * and passing it to the service via the addListener method.
  *
  * There are three major components in the VehicleManager:
  * {@link com.openxc.sources.VehicleDataSource},
@@ -61,33 +60,31 @@ import com.openxc.sources.VehicleDataSource;
  * {@link com.openxc.interfaces.VehicleInterface}.
  *
  * The instance of a {@link com.openxc.interfaces.VehicleInterface} is perhaps the
- * most important. This represents the actual physical connections to the
+ * most important. This represents the actual physical connection to the
  * vehicle, and is bi-directional - it can both provide data to an
- * application and optionally send data back to the vehicle. In most cases,
+ * application and send data back to the vehicle. In most cases,
  * this should not be instantiated by applications; the
  * {@link #setVehicleInterface(Class, String)} method takes enough metadata for
  * the remote {@link com.openxc.remote.VehicleService} to instantiate the
  * interface in a remote process. That way a single USB or
  * Bluetooth connection can be shared among many applications.
  *
- * The list of active data sources (e.g.
- * {@link com.openxc.sources.trace.TraceVehicleDataSource}) can be controlled
- * with the {@link #addSource(VehicleDataSource)} and
- * {@link #removeSource(VehicleDataSource)} methods. Each active
- * {@link com.openxc.interfaces.VehicleInterface} is also an active data source,
- * so there is no need to add them twice. Even though data sources are
- * instantiated by the application (and thus can be entirely customized), their
- * data is still shared among all OpenXC applications using the same remove
- * process {@link com.openxc.remote.VehicleService}
+ * The VehicleManager also supports custom user-defined data sources, which can
+ * be controlled with {@link #addSource(VehicleDataSource)} and
+ * {@link #removeSource(VehicleDataSource)} methods. Even though data sources are
+ * instantiated by the application, their data is still shared among all OpenXC
+ * applications using the same remove process {@link
+ * com.openxc.remote.VehicleService}
  *
- * The list of active data sinks (e.g.
- * {@link com.openxc.sinks.FileRecorderSink}) can be controlled with the
+ * In addition to applications registered to receive updates as a Measurement
+ * or VehicleMessage listener, the VehicleManager supports custom data sinks (e.g.
+ * {@link com.openxc.sinks.FileRecorderSink}) that be controlled with the
  * {@link #addSink(VehicleDataSink)} and {@link #removeSink(VehicleDataSink)}
  * methods.
  *
  * When a message is received from a
- * {@link com.openxc.sources.VehicleDataSource}, it is passed to all active
- * {@link com.openxc.sinks.VehicleDataSink}s. There will always be at
+ * {@link com.openxc.sources.VehicleDataSource}, it is passed to every active
+ * {@link com.openxc.sinks.VehicleDataSink}. There will always be at
  * least one sink that stores the latest messages and handles passing on data to
  * users of this service.
  */
@@ -190,10 +187,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Retrieve the most current value of a measurement.
      *
-     * Regardless of if a measurement is available or not, return a
-     * Measurement instance of the specified type. The measurement can be
-     * checked to see if it has a value.
-     *
      * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested Measurement which may or may
@@ -213,10 +206,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     /**
      * Retrieve the most current value of a keyed message.
-     *
-     * Regardless of if a measurement is available or not, return a
-     * Measurement instance of the specified type. The measurement can be
-     * checked to see if it has a value.
      *
      * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
@@ -246,18 +235,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
-     * Send a request or command to the vehicle through the first available
-     * active {@link com.openxc.interfaces.VehicleInterface} without waiting for
-     * any responses.
+     * Send a message to the vehicle through the active
+     * {@link com.openxc.interfaces.VehicleInterface} without waiting for
+     * a response.
      *
-     * This will attempt to send the message over at most one of the registered
-     * vehicle interfaces. It will first try all interfaces registered to the
-     * VehicleManager, then all of those register with the remote VehicleService
-     * (i.e. the USB, Network and Bluetooth sources) until one sends
-     * successfully. Besides that, there is no guarantee about the order that
-     * the interfaces are attempted.
-     *
-     * @param command The desired command to send to the vehicle.
+     * @param message The desired message to send to the vehicle.
      * @return true if the message was sent successfully on an interface.
      */
     public boolean send(VehicleMessage message) {
@@ -273,7 +255,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         // if that quits after the first interface reports success.
         if(mRemoteService != null) {
             try {
-                sent = sent || mRemoteService.send(wrappedMessage);
+                sent = mRemoteService.send(wrappedMessage);
             } catch(RemoteException e) {
                 Log.v(TAG, "Unable to propagate command to remote interface", e);
             }
@@ -287,16 +269,31 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         return sent;
     }
 
-    public boolean send(Measurement command) {
-        return send(command.toVehicleMessage());
+    /**
+     * Convert a Measurement to a SimpleVehicleMessage and send it through the
+     * active VehicleInterface.
+     *
+     * @param message The desired message to send to the vehicle.
+     * @return true if the message was sent successfully on an interface.
+     */
+    public boolean send(Measurement message) {
+        return send(message.toVehicleMessage());
     }
 
-    /* Sends a request and registers the listener to receive the response.
-     * Returns immediately after sending.
+    /**
+     * Send a message to the VehicleInterface and register the given listener to
+     * receive the first response matching the message's key.
+     *
+     * This function is non-blocking.
      *
      * The listener is unregistered after the first response is received. If you
      * need to accept multiple responses for the same request, you must manually
      * register your own listener to control its lifecycle.
+     *
+     * @param message The desired message to send to the vehicle.
+     * @param listener The message listener that should receive a callback when
+     *      a response matching the outgoing message's key is received from the
+     *      VI.
      */
     public void request(KeyedMessage message,
             VehicleMessage.Listener listener) {
@@ -307,11 +304,14 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         send(message);
     }
 
-    /* Sends a request and waits up to 2 seconds to receive a response. Returns
-     * a response or throw an exception if it times or out has an error.
-     * Blocking.
+    /**
+     * Send a message to the VehicleInterface and wait up to 2 seconds to
+     * receive a response.
      *
-     * Sets up a private listener and blocks waits for it to receive a response.
+     * This is a blocking version of the other request(...) method.
+     *
+     * @return The response if one is received before the timeout, otherwise
+     *      null.
      */
     public VehicleMessage request(KeyedMessage message) {
         BlockingMessageListener callback = new BlockingMessageListener();
@@ -321,6 +321,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     /**
      * Register to receive asynchronous updates for a specific Measurement type.
+     *
+     * A Measurement is a specific, known VehicleMessage subtype.
      *
      * Use this method to register an object implementing the
      * Measurement.Listener interface to receive real-time updates
@@ -332,8 +334,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * @param measurementType The class of the Measurement
      *      (e.g. VehicleSpeed.class) the listener was listening for
-     * @param listener An Measurement.Listener instance that was
-     *      previously registered with addListener
+     * @param listener An listener instance to receive the callback.
      */
     public void addListener(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
@@ -341,21 +342,64 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.register(measurementType, listener);
     }
 
+    /**
+     * Register to receive asynchronous updates for a specific VehicleMessage
+     * type.
+     *
+     * Use this method to register an object implementing the
+     * VehicleMessage.Listener interface to receive real-time updates
+     * whenever a new value is received for the specified message type.
+     *
+     * Make sure you unregister your listeners with
+     * VehicleManager.removeListener(...) when your activity or service closes
+     * and no longer requires updates.
+     *
+     * @param messageType The class of the VehicleMessage
+     *      (e.g. SimpleVehicleMessage.class) the listener is listening for
+     * @param listener An listener instance to receive the callback.
+     */
     public void addListener(Class<? extends VehicleMessage> messageType,
             VehicleMessage.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " for " + messageType);
         mNotifier.register(messageType, listener);
     }
 
+    /**
+     * Register to receive a callback when a message with same key as the given
+     * KeyedMessage is received.
+     *
+     * @param keyedMessage A message with the key you want to receive updates
+     *      for - the response to a command typically has the same key as the
+     *      request, so you can use the outgoing message's KeyedMessage to
+     *      register to receive a response.
+     * @param listener An listener instance to receive the callback.
+     */
     public void addListener(KeyedMessage keyedMessage,
             VehicleMessage.Listener listener) {
         addListener(keyedMessage.getKey(), listener);
     }
 
+    /**
+     * Register to receive a callback when a message with the given key is
+     * received.
+     *
+     * @param key The key you want to receive updates.
+     * @param listener An listener instance to receive the callback.
+     */
     public void addListener(MessageKey key, VehicleMessage.Listener listener) {
         addListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
 
+    /**
+     * Register to receive a callback when a message with key matching the given
+     * KeyMatcher is received.
+     *
+     * This function can be used to set up a wildcard listener, or one that
+     * receives a wider range of responses than just a 1 to 1 match of keys.
+     *
+     * @param matcher A KeyMatcher implement the desired filtering logic.
+     * @param listener An listener instance to receive the callback.
+     */
     public void addListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
         Log.i(TAG, "Adding listener " + listener + " to " + matcher);
         mNotifier.register(matcher, listener);
@@ -370,8 +414,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * @param measurementType The class of the requested Measurement
      *      (e.g. VehicleSpeed.class)
-     * @param listener An object implementing the Measurement.Listener
-     *      interface that should be called with any new measurements.
+     * @param listener The listener to remove.
      */
     public void removeListener(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
@@ -379,21 +422,51 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         mNotifier.unregister(measurementType, listener);
     }
 
+    /**
+     * Unregister a previously registered message type listener.
+     *
+     * @param messageType The class of the VehicleMessage this listener was
+     *      registered to receive. A listener can be registered to receive
+     *      multiple message types, which is why this must be specified when
+     *      removing a listener.
+     * @param listener The listener to remove.
+     */
     public void removeListener(Class<? extends VehicleMessage> messageType,
             VehicleMessage.Listener listener) {
         mNotifier.unregister(messageType, listener);
     }
 
+    /**
+     * Unregister a previously registered keyed message listener.
+     *
+     * @param messageType The message with the key this listener was previously
+     *      registered to receive.
+     * @param listener The listener to remove.
+     */
     public void removeListener(KeyedMessage message,
             VehicleMessage.Listener listener) {
         removeListener(message.getKey(), listener);
     }
 
+    /**
+     * Unregister a previously registered key matcher listener.
+     *
+     * @param messageType The KeyMatcher this listener was previously registered
+     *      to receive matches from.
+     * @param listener The listener to remove.
+     */
     public void removeListener(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
         mNotifier.unregister(matcher, listener);
     }
 
+    /**
+     * Unregister a previously registered key listener.
+     *
+     * @param messageType The key this listener was previously registered to
+     *      receive updates on.
+     * @param listener The listener to remove.
+     */
     public void removeListener(MessageKey key, VehicleMessage.Listener listener) {
         removeListener(ExactKeyMatcher.buildExactMatcher(key), listener);
     }
@@ -452,6 +525,13 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    /**
+     * Send a command request to the vehicle that does not require any metadata.
+     *
+     * @param type The command request type to send to the VI.
+     * @return The message returned by the VI in response to this command or
+     *      null if none was received.
+     */
     public String requestCommandMessage(CommandType type) {
         VehicleMessage message = request(new Command(type));
         String value = null;
@@ -464,20 +544,30 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         return value;
     }
 
+    /**
+     * Query for the unique device ID of the active VI.
+     *
+     * @return the device ID string or null if not known.
+     */
     public String getVehicleInterfaceDeviceId() {
         return requestCommandMessage(CommandType.DEVICE_ID);
     }
 
+    /**
+     * Query for the firmware version of the active VI.
+     *
+     * @return the firmware version string or null if not known.
+     */
     public String getVehicleInterfaceVersion() {
         return requestCommandMessage(CommandType.VERSION);
     }
 
-    public void setVehicleInterface(
-            Class<? extends VehicleInterface> vehicleInterfaceType)
-            throws VehicleServiceException {
-       setVehicleInterface(vehicleInterfaceType, null);
-    }
-
+    /**
+     * Register a listener to receive a callback when the selected VI is
+     * connected.
+     *
+     * @param listener The listener that should receive the callback.
+     */
     public void addOnVehicleInterfaceConnectedListener(
             ViConnectionListener listener) throws VehicleServiceException {
         if(mRemoteService != null) {
@@ -491,14 +581,26 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
-     * Activate a vehicle interface for both receiving data and sending commands
-     * to the vehicle.
+     * Change the active vehicle interface to a new type using its default
+     * resource identifier.
      *
-     * For example, to use a Bluetooth vehicle interface in addition to a
-     * vehicle data source, call the setVehicleInterface method after binding
-     * with VehicleManager:
+     * To disable all vehicle interfaces, pass null to this function.
      *
-     *      service.setVehicleInterface(BluetoothVehicleInterface.class, "");
+     * @param vehicleInterfaceType the VI type to activate or null to disable
+     *      all VIs.
+     */
+    public void setVehicleInterface(
+            Class<? extends VehicleInterface> vehicleInterfaceType)
+            throws VehicleServiceException {
+       setVehicleInterface(vehicleInterfaceType, null);
+    }
+
+
+    /**
+     * Change the active vehicle interface to a new type using the given
+     * resource.
+     *
+     * To disable all vehicle interfaces, pass null to this function.
      *
      * The only valid VehicleInteface types are those included with the library
      * - the vehicle service running in a remote process is the one to actually
@@ -614,6 +716,12 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+    /**
+     * Return the connection status of the selected VI.
+     *
+     * @return true if the selected VI reports that it is connected to the
+     * vehicle.
+     */
     public boolean isViConnected() {
         if(mRemoteService != null) {
             try {
