@@ -10,6 +10,11 @@ import android.os.Parcel;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * A VehicleMessage that is a low-level CAN message.
+ *
+ * A CAN message is keyed on the bus and message ID.
+ */
 public class CanMessage extends KeyedMessage {
     protected static final String ID_KEY = "id";
     protected static final String BUS_KEY = "bus";
@@ -38,6 +43,7 @@ public class CanMessage extends KeyedMessage {
     public int getBusId() {
         return mBusId;
     }
+
     public int getId() {
         return mId;
     }
@@ -67,6 +73,9 @@ public class CanMessage extends KeyedMessage {
         return fields.containsAll(sRequiredFields);
     }
 
+    /**
+     * Sort by bus, then by message ID.
+     */
     @Override
     public int compareTo(VehicleMessage other) {
         CanMessage otherMessage = (CanMessage) other;

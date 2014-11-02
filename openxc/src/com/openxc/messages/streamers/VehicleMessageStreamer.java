@@ -4,8 +4,26 @@ import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.SourceLogger;
 
+/**
+ * A base class for VehicleMessage streamers that defines the interface and
+ * handles counting the amount of data received.
+ */
 public abstract class VehicleMessageStreamer {
+    /**
+     * Deserialize and return the next messages from the internally buffered
+     * stream.
+     *
+     * @return the next deserialized VehicleMessage.
+     */
     public abstract VehicleMessage parseNextMessage();
+
+    /**
+     * Serialize the message and insert any required delimiters for insertion
+     * into a message stream.
+     *
+     * @param message the message to serialize.
+     * @throws SerializationException if the message cannot be serialized.
+     */
     public abstract byte[] serializeForStream(VehicleMessage message)
             throws SerializationException;
 

@@ -11,6 +11,9 @@ import android.os.Parcel;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * A diagnostic request message, for example an OBD-II request.
+ */
 public class DiagnosticRequest extends DiagnosticMessage {
 
     private static final String MULTIPLE_RESPONSES_KEY = "multiple_responses";

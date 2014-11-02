@@ -9,6 +9,12 @@ import android.os.Parcel;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * A simple vehicle message also with an event field.
+ *
+ * An EventedSimpleVehicleMessage can optionally be converted into a
+ * Measurement, e.g. a VehicleDoorStatus measurement.
+ */
 public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
     private static final String EVENT_KEY = "event";
 

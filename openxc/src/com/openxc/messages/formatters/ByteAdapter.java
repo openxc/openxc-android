@@ -7,6 +7,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
+/**
+ * Utility functions to read byte arrays from JSON strings.
+ */
 public class ByteAdapter extends TypeAdapter<byte[]> {
 
     public byte[] read(JsonReader reader) throws IOException {

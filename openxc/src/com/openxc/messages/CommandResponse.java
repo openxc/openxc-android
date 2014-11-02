@@ -14,6 +14,11 @@ import com.google.gson.annotations.SerializedName;
 
 import com.openxc.messages.Command.CommandType;
 
+/**
+ * A response to a Command from the vehicle interface.
+ *
+ * Command responses have the same key as the original command request.
+ */
 public class CommandResponse extends KeyedMessage {
 
     private static final String COMMAND_RESPONSE_KEY = "command_response";

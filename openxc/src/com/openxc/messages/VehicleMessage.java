@@ -19,6 +19,10 @@ import com.google.gson.annotations.SerializedName;
  * The VehicleMessage is the most basic, root form of data going back and forth
  * between the OpenXC library and a vehicle interface. The VI's data stream is
  * message based, where each message is a subtype of a VehicleMessage.
+ *
+ * This base class implements Parcelable, so it can be sent over an AIDL
+ * interface, i.e. between the singleton VehicleService and the VehicleManager
+ * instance in each app's process.
  */
 public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     private static final String TAG = "VehicleMessage";
@@ -45,24 +49,39 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     public VehicleMessage() { }
 
     /**
+     * Construct a new empty VehicleMessage.
+     *
      * @param timestamp timestamp as milliseconds since unix epoch
      */
     public VehicleMessage(Long timestamp) {
         setTimestamp(timestamp);
     }
 
+    /**
+     * Construct a new VehicleMessage with the given extra data and an
+     * overridden timestamp.
+     */
     public VehicleMessage(Long timestamp, Map<String, Object> extras) {
         this(extras);
         setTimestamp(timestamp);
     }
 
     /**
+     * Construct a new VehicleMessage with the given extra data.
+     *
+     * The extras field can hold any arbitrary key/value pairs.
+     *
      * @param extras A map of any extra data to attach to this message.
      */
     public VehicleMessage(Map<String, Object> extras) {
         setExtras(extras);
     }
 
+    /**
+     * Override the timestamp of the message.
+     *
+     * @param timestamp the timestamp to set for this message.
+     */
     public void setTimestamp(Long timestamp) {
         if(timestamp != null) {
             mTimestamp = timestamp;

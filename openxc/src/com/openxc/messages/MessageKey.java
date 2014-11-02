@@ -8,6 +8,14 @@ import java.util.Map;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * A MessageKey is an identifying key for a VehicleMessage.
+ *
+ * The key is a simple map of string names to arbitrary objects.
+ *
+ * This is used to filter incoming messages to send them to the proper
+ * listeners.
+ */
 public class MessageKey implements Parcelable {
     private Map<String, Object> mParts = new HashMap<>();
     private int mHashCode;

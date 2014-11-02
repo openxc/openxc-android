@@ -2,6 +2,10 @@ package com.openxc.messages;
 
 import java.util.Objects;
 
+/**
+ * A helper base class for a KeyMatcher that matches exactly one key, e.g.
+ * receiving the response for a command.
+ */
 public abstract class ExactKeyMatcher extends KeyMatcher {
     public abstract MessageKey getKey();
 

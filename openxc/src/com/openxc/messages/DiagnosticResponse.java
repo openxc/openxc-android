@@ -14,6 +14,9 @@ import android.os.Parcel;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * A diagnostic response message from the vehicle interface.
+ */
 public class DiagnosticResponse extends DiagnosticMessage {
 
     private static final String VALUE_KEY = "value";

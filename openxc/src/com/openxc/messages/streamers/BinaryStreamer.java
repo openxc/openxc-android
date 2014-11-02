@@ -17,6 +17,18 @@ import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.BinaryFormatter;
 
+/**
+ * A class to deserialize and serialize binary-formatted vehicle messages from
+ * byte streams.
+ *
+ * The BinaryStreamer wraps the BinaryFormatter and handles messages delimiting.
+ * It uses standard message length delimiters as recommended by the protobuf
+ * docs and specific in the OpenXC message format.
+ *
+ * Unlike the BinaryFormatter, the BinaryStreamer is not stateless. It maintains
+ * an internal buffer of bytes so that if partial messages is received it can
+ * eventually receive an parse the entire thing.
+ */
 public class BinaryStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";
 

@@ -9,6 +9,10 @@ import android.os.Parcel;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The SimpleVehicleMessage is a simple vehicle message as defined by the OpenXC
+ * message format - it has a name and a value field.
+ */
 public class SimpleVehicleMessage extends NamedVehicleMessage {
     protected static final String VALUE_KEY = "value";
 

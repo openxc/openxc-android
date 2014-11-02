@@ -8,6 +8,12 @@ import android.os.Parcel;
 import com.google.gson.annotations.SerializedName;
 import com.openxc.util.Range;
 
+/**
+ * An abstract base class to hold common fields and logic for diagnostic
+ * requests and responses.
+ *
+ * Diagnostic messages are keyed on the bus, message ID, mode and PID (if set).
+ */
 public abstract class DiagnosticMessage extends KeyedMessage {
 
     protected static final String ID_KEY = CanMessage.ID_KEY;

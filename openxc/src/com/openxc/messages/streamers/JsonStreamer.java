@@ -7,6 +7,17 @@ import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
 
+/**
+ * A class to deserialize and serialize JSON-formatted vehicle messages from
+ * byte streams.
+ *
+ * The JsonStreamer wraps the JsonFormatter and handles messages delimiting.
+ * It uses a \u0000 delimiter as specified by the OpenXC message format.
+ *
+ * Unlike the JsonFormatter, the JsonStreamer is not stateless. It maintains
+ * an internal buffer of bytes so that if partial messages is received it can
+ * eventually receive an parse the entire thing.
+ */
 public class JsonStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";
     private final static String DELIMITER = "\u0000";

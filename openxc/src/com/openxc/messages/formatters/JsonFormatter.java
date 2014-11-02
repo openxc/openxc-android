@@ -21,6 +21,9 @@ import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
+/**
+ * A formatter for serializing and deserializing JSON OpenXC messages.
+ */
 public class JsonFormatter {
     private static Gson sGson = new Gson();
 
@@ -31,14 +34,37 @@ public class JsonFormatter {
         sGson = builder.create();
     }
 
+    /**
+     * Serialize a vehicle message to a string.
+     *
+     * @param message the message to serialize
+     * @return the message serialized to a String.
+     */
     public static String serialize(VehicleMessage message) {
         return sGson.toJson(message);
     }
 
+    /**
+     * Serialize a collection of messages to a string.
+     *
+     * Each message will be serialized to a JSON object, and they will all be
+     * included in a JSON array in the result.
+     *
+     * @param messages the messages to serialize.
+     * @return the messages serialized individually and in a JSON array.
+     */
     public static String serialize(Collection<VehicleMessage> messages) {
         return sGson.toJson(messages);
     }
 
+    /**
+     * Deserialize a single vehicle messages from the string.
+     *
+     * @param data a String containing the JSON serialized vehicle message.
+     * @throws UnrecognizedMessageTypeException if no message could be
+     *  deserialized.
+     * @return the deserialized VehicleMessage.
+     */
     public static VehicleMessage deserialize(String data)
             throws UnrecognizedMessageTypeException {
         JsonObject root;
@@ -78,5 +104,4 @@ public class JsonFormatter {
         }
         return message;
     }
-
 }

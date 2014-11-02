@@ -10,6 +10,11 @@ import android.os.Parcel;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * A NamedVehicleMessage is a VehicleMessage with a name field.
+ *
+ * Named messages are keyed on the name.
+ */
 public class NamedVehicleMessage extends KeyedMessage {
     protected static final String NAME_KEY = "name";
 

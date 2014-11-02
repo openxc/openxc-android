@@ -13,6 +13,11 @@ import static com.google.common.base.MoreObjects.toStringHelper;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * A Command message defined by the OpenXC message format.
+ *
+ * Commands are keyed on the command name.
+ */
 public class Command extends KeyedMessage {
     protected static final String COMMAND_KEY = "command";
     protected static final String DIAGNOSTIC_REQUEST_KEY = "request";
@@ -127,5 +132,4 @@ public class Command extends KeyedMessage {
     }
 
     protected Command() { }
-
 }
