@@ -13,7 +13,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.VehicleManager;
 
 public class PreferenceManagerService extends Service {
@@ -76,7 +76,7 @@ public class PreferenceManagerService extends Service {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).toString();
+        return MoreObjects.toStringHelper(this).toString();
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {

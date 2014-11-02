@@ -1,6 +1,6 @@
 package com.openxc.messages;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 public abstract class ExactKeyMatcher extends KeyMatcher {
     public abstract MessageKey getKey();

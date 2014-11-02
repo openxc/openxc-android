@@ -1,5 +1,7 @@
 package com.openxc.messages;
 
+import java.util.Objects;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
@@ -12,7 +14,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
@@ -145,7 +147,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("extras", getExtras())
             .toString();
@@ -171,8 +173,8 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         }
 
         final VehicleMessage other = (VehicleMessage) obj;
-        return Objects.equal(mTimestamp, other.mTimestamp) &&
-                Objects.equal(mExtras, other.mExtras);
+        return Objects.equals(mTimestamp, other.mTimestamp) &&
+                Objects.equals(mExtras, other.mExtras);
     }
 
     @Override

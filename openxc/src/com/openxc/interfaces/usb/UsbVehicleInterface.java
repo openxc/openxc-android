@@ -17,7 +17,7 @@ import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.messages.SerializationException;
@@ -205,7 +205,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("device", mDeviceUri)
             .add("connection", mConnection)
             .add("in_endpoint", mInEndpoint)

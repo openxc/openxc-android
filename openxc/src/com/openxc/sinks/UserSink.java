@@ -3,7 +3,7 @@ package com.openxc.sinks;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceInterface;
 
@@ -40,7 +40,7 @@ public class UserSink implements VehicleDataSink {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).toString();
+        return MoreObjects.toStringHelper(this).toString();
     }
 
     @Override

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -115,7 +115,7 @@ public class NativeLocationSource extends ContextualVehicleDataSource
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("updateInterval", NATIVE_GPS_UPDATE_INTERVAL)
             .toString();
     }

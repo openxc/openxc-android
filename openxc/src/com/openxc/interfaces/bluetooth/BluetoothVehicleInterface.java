@@ -19,7 +19,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.messages.SerializationException;
@@ -186,7 +186,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("explicitDeviceAddress", mExplicitAddress)
             .add("connectedDeviceAddress", mConnectedAddress)
             .add("socket", mSocket)

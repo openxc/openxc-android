@@ -1,6 +1,6 @@
 package com.openxc.sources;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.VehicleMessage;
 
 /**
@@ -29,6 +29,6 @@ public class ApplicationSource extends BaseVehicleDataSource {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).toString();
+        return MoreObjects.toStringHelper(this).toString();
     }
 }

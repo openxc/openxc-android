@@ -5,7 +5,7 @@ import java.util.Set;
 
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.openxc.NoValueException;
@@ -96,7 +96,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("numMessageListeners", mMessageListeners.size())
             .add("numMessageTypeListeners", mMessageTypeListeners.size())
             .add("numPersistentMessageListeners",

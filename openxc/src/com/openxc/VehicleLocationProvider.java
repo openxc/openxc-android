@@ -7,7 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.Measurement;
@@ -103,7 +103,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("enabled", mOverwriteNativeStatus)
             .toString();
     }

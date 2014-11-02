@@ -1,5 +1,7 @@
 package com.openxc.messages;
 
+import java.util.Objects;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,7 +9,7 @@ import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 import com.openxc.messages.Command.CommandType;
@@ -66,14 +68,14 @@ public class CommandResponse extends KeyedMessage {
         }
 
         final CommandResponse other = (CommandResponse) obj;
-        return Objects.equal(mCommand, other.mCommand) &&
-                Objects.equal(mMessage, other.mMessage) &&
-                Objects.equal(mStatus, other.mStatus);
+        return Objects.equals(mCommand, other.mCommand) &&
+                Objects.equals(mMessage, other.mMessage) &&
+                Objects.equals(mStatus, other.mStatus);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("command", getCommand())
             .add("status", getStatus())

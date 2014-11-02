@@ -1,12 +1,14 @@
 package com.openxc.messages;
 
+import java.util.Objects;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class DiagnosticRequest extends DiagnosticMessage {
@@ -86,13 +88,13 @@ public class DiagnosticRequest extends DiagnosticMessage {
 
         final DiagnosticRequest other = (DiagnosticRequest) obj;
         return getMultipleResponses() == other.getMultipleResponses()
-                && Objects.equal(mFrequency, other.mFrequency)
-                && Objects.equal(mName, other.mName);
+                && Objects.equals(mFrequency, other.mFrequency)
+                && Objects.equals(mName, other.mName);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("bus", getBusId())
             .add("id", getId())

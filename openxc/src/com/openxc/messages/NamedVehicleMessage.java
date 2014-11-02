@@ -7,7 +7,7 @@ import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class NamedVehicleMessage extends KeyedMessage {
@@ -67,7 +67,7 @@ public class NamedVehicleMessage extends KeyedMessage {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("name", getName())
             .add("extras", getExtras())

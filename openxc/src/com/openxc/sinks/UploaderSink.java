@@ -25,7 +25,7 @@ import org.apache.http.params.HttpParams;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
 
@@ -111,7 +111,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("uri", mUri)
             .add("queuedRecords", mRecordQueue.size())
             .toString();

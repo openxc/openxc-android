@@ -3,7 +3,7 @@ package com.openxc.sources;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceInterface;
 import com.openxc.remote.VehicleServiceListener;
@@ -59,7 +59,7 @@ public class RemoteListenerSource extends BaseVehicleDataSource {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).toString();
+        return MoreObjects.toStringHelper(this).toString();
     }
 
     private VehicleServiceListener mRemoteListener =

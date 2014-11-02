@@ -2,7 +2,7 @@ package com.openxc.util;
 
 import java.util.Date;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.units.Unit;
 
 /**
@@ -59,7 +59,7 @@ public class AgingData<TheUnit extends Unit> {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("value", mValue)
             .add("birthdate", mBirthdate)
             .toString();

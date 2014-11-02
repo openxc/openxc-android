@@ -1,5 +1,7 @@
 package com.openxc.measurements;
 
+import java.util.Objects;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -8,7 +10,6 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
@@ -306,8 +307,8 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
 
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
-        return Objects.equal(getValue(), other.getValue()) &&
-            Objects.equal(other.getRange(), getRange());
+        return Objects.equals(getValue(), other.getValue()) &&
+            Objects.equals(other.getRange(), getRange());
     }
 
     @Override

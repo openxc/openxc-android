@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.VehicleMessage;
@@ -251,7 +251,7 @@ public class DataPipeline implements SourceCallback {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("sources", mSources)
             .add("sinks", mSinks)
             .add("numKeyedMessageTypes", mKeyedMessages.size())

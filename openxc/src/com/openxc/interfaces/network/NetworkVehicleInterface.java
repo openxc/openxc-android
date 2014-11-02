@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.messages.SerializationException;
@@ -112,7 +112,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("uri", mUri)
             .toString();
     }

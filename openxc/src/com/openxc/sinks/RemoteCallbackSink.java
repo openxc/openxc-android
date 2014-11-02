@@ -4,7 +4,7 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceListener;
 
@@ -45,7 +45,7 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("numListeners", getListenerCount())
             .toString();
     }

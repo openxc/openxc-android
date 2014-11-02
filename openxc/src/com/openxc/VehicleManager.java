@@ -16,7 +16,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.measurements.BaseMeasurement;
@@ -735,7 +735,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("remoteService", mRemoteService)
             .toString();
     }

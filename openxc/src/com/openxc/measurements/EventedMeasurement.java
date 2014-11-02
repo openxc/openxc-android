@@ -1,6 +1,6 @@
 package com.openxc.measurements;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -49,6 +49,6 @@ public abstract class EventedMeasurement<TheUnit extends Unit>
 
         @SuppressWarnings("unchecked")
         final EventedMeasurement<TheUnit> other = (EventedMeasurement<TheUnit>) obj;
-        return Objects.equal(getEvent(), other.getEvent());
+        return Objects.equals(getEvent(), other.getEvent());
     }
 }

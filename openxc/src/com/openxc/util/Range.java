@@ -1,6 +1,7 @@
 package com.openxc.util;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
+import com.google.common.base.MoreObjects;
 
 /**
  * A Range is a pair of T values that represent a range of values.
@@ -40,18 +41,18 @@ public class Range<T> {
 
         @SuppressWarnings("unchecked")
         final Range<T> that = (Range<T>) obj;
-        return Objects.equal(getMin(), that.getMin()) &&
-                Objects.equal(getMax(), that.getMax());
+        return Objects.equals(getMin(), that.getMin()) &&
+                Objects.equals(getMax(), that.getMax());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mMin, mMax);
+        return Objects.hash(mMin, mMax);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("min", getMin())
             .add("max", getMax())
             .toString();

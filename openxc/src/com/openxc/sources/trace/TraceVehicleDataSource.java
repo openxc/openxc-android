@@ -15,7 +15,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
@@ -241,7 +241,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("filename", mFilename)
             .toString();
     }

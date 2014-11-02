@@ -1,5 +1,7 @@
 package com.openxc.messages;
 
+import java.util.Objects;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +11,7 @@ import java.util.Set;
 
 import android.os.Parcel;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class DiagnosticResponse extends DiagnosticMessage {
@@ -78,7 +80,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("id", getId())
             .add("mode", getMode())
@@ -101,8 +103,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
         }
 
         final DiagnosticResponse other = (DiagnosticResponse) obj;
-        return Objects.equal(mValue, other.mValue)
-                && Objects.equal(mNegativeResponseCode, other.mNegativeResponseCode);
+        return Objects.equals(mValue, other.mValue)
+                && Objects.equals(mNegativeResponseCode, other.mNegativeResponseCode);
     }
 
     public static enum NegativeResponseCode {
