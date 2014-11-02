@@ -45,21 +45,27 @@ public class StatusFragment extends Fragment {
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
 
-    private void updateViInfo() {
+    private synchronized void updateViInfo() {
         if(mVehicleManager != null) {
             // Must run in another thread or we get circular references to
             // VehicleService -> StatusFragment -> VehicleService and the
             // callback will just fail silently and be removed forever.
             new Thread(new Runnable() {
                 public void run() {
-                    final String version = mVehicleManager.getVehicleInterfaceVersion();
-                    final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mViDeviceIdView.setText(deviceId);
-                            mViVersionView.setText(version);
-                        }
-                    });
+                    try {
+                        final String version = mVehicleManager.getVehicleInterfaceVersion();
+                        final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                mViDeviceIdView.setText(deviceId);
+                                mViVersionView.setText(version);
+                            }
+                        });
+                    } catch(NullPointerException e) {
+                        // A bit of a hack, should probably use a lock - but
+                        // this can happen if this view is being paused and it's
+                        // not really a problem.
+                    }
                 }
             }).start();
         }
@@ -72,13 +78,15 @@ public class StatusFragment extends Fragment {
         }
 
         public void onDisconnected() {
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    Log.d(TAG, "VI disconnected");
-                    mViVersionView.setText("");
-                    mViDeviceIdView.setText("");
-                }
-            });
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d(TAG, "VI disconnected");
+                        mViVersionView.setText("");
+                        mViDeviceIdView.setText("");
+                    }
+                });
+            }
         }
     };
 
@@ -124,27 +132,31 @@ public class StatusFragment extends Fragment {
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
         }
 
-        public void onServiceDisconnected(ComponentName className) {
+        public synchronized void onServiceDisconnected(ComponentName className) {
             Log.w(TAG, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
-                }
-            });
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
         }
     };
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().bindService(
-                new Intent(getActivity(), VehicleManager.class),
-                mConnection, Context.BIND_AUTO_CREATE);
+        if(getActivity() != null) {
+            getActivity().bindService(
+                    new Intent(getActivity(), VehicleManager.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Override
-    public void onPause() {
+    public synchronized void onPause() {
         super.onPause();
         if(mVehicleManager != null) {
             getActivity().unbindService(mConnection);

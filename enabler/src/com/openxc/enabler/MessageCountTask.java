@@ -29,10 +29,12 @@ public class MessageCountTask extends TimerTask {
         }
 
         final String messageText = Integer.toString(messageCount);
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                mMessageCountView.setText(messageText);
-            }
-        });
+        if(mActivity != null) {
+            mActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    mMessageCountView.setText(messageText);
+                }
+            });
+        }
     }
 }
