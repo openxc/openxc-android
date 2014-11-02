@@ -10,17 +10,18 @@ import com.openxc.util.Range;
 
 public abstract class DiagnosticMessage extends KeyedMessage {
 
-    public static final String ID_KEY = CanMessage.ID_KEY;
-    public static final String BUS_KEY = CanMessage.BUS_KEY;
-    public static final String MODE_KEY = "mode";
-    public static final String PID_KEY = "pid";
-    public static final String PAYLOAD_KEY = "payload";
+    protected static final String ID_KEY = CanMessage.ID_KEY;
+    protected static final String BUS_KEY = CanMessage.BUS_KEY;
+    protected static final String MODE_KEY = "mode";
+    protected static final String PID_KEY = "pid";
+    protected static final String PAYLOAD_KEY = "payload";
 
-    public static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
-    public static final Range<Integer> MODE_RANGE = new Range<>(1, 0xff);
+    protected static final Range<Integer> BUS_RANGE = new Range<>(1, 2);
+    protected static final Range<Integer> MODE_RANGE = new Range<>(1, 0xff);
     // Note that this is a limit of the OpenXC Vi firmware at the moment - a
     // diagnostic request can technically have a much larger payload.
-    public static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
+    // TODO this is not checked anywhere!
+    private static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
 
     @SerializedName(BUS_KEY)
     private int mBusId;

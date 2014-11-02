@@ -154,7 +154,7 @@ public class JsonFormatterTest extends AbstractFormatterTest {
         boolean status = true;
         String serialized = JsonFormatter.serialize(new CommandResponse(
                     Command.CommandType.VERSION, true));
-        assertThat(serialized, containsString(CommandResponse.STATUS_KEY));
+        assertThat(serialized, containsString("status"));
         assertThat(serialized, containsString("true"));
     }
 

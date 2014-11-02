@@ -10,11 +10,11 @@ import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class SimpleVehicleMessage extends NamedVehicleMessage {
-    public static final String VALUE_KEY = "value";
+    protected static final String VALUE_KEY = "value";
 
-    public static final String[] sRequiredFieldsValues = new String[] {
+    private static final String[] sRequiredFieldsValues = new String[] {
             NAME_KEY, VALUE_KEY };
-    public static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(VALUE_KEY)

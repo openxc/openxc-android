@@ -88,6 +88,7 @@ public class DataPipeline implements SourceCallback {
                 deadSinks.add(sink);
             }
         }
+
         mMessagesReceived++;
         for(VehicleDataSink sink : deadSinks) {
             removeSink(sink);
@@ -209,6 +210,9 @@ public class DataPipeline implements SourceCallback {
 
     /**
      * Return true if at least one source is active.
+     *
+     * @param skipSource don't consider this data source when determining if the
+     *      pipeline is active.
      */
     public boolean isActive(VehicleDataSource skipSource) {
         boolean connected = false;

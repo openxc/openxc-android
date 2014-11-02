@@ -11,9 +11,9 @@ import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class CanMessage extends KeyedMessage {
-    public static final String ID_KEY = "id";
-    public static final String BUS_KEY = "bus";
-    public static final String DATA_KEY = "data";
+    protected static final String ID_KEY = "id";
+    protected static final String BUS_KEY = "bus";
+    protected static final String DATA_KEY = "data";
 
     @SerializedName(BUS_KEY)
     private int mBusId;
@@ -24,9 +24,9 @@ public class CanMessage extends KeyedMessage {
     @SerializedName(DATA_KEY)
     private byte[] mData = new byte[8];
 
-    public static final String[] sRequiredFieldsValues = new String[] {
+    private static final String[] sRequiredFieldsValues = new String[] {
             BUS_KEY, ID_KEY, DATA_KEY };
-    public static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     public CanMessage(int canBus, int id, byte[] data) {

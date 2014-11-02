@@ -6,9 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,15 +15,25 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The VehicleMessage is the most basic, root form of data going back and forth
+ * between the OpenXC library and a vehicle interface. The VI's data stream is
+ * message based, where each message is a subtype of a VehicleMessage.
+ */
 public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
+    private static final String TAG = "VehicleMessage";
+
     public interface Listener {
         /* Public: Receive an incoming VehicleMessage.
          */
         public void receive(VehicleMessage message);
     }
 
-    private static final String TAG = "VehicleMessage";
-    public static final String TIMESTAMP_KEY = "timestamp";
+    /**
+     * The field names for the timsetamp and extra data, defined in the OpenXC
+     * Message Format specification.
+     */
+    private static final String TIMESTAMP_KEY = "timestamp";
     public static final String EXTRAS_KEY = "extras";
 
     @SerializedName(TIMESTAMP_KEY)
@@ -33,8 +41,6 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
 
     @SerializedName(EXTRAS_KEY)
     private Map<String, Object> mExtras;
-
-    public static final Set<String> sRequiredFields = new HashSet<String>();
 
     public VehicleMessage() { }
 

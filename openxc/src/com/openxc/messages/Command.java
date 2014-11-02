@@ -14,17 +14,17 @@ import static com.google.common.base.MoreObjects.toStringHelper;
 import com.google.gson.annotations.SerializedName;
 
 public class Command extends KeyedMessage {
-    public static final String COMMAND_KEY = "command";
-    public static final String DIAGNOSTIC_REQUEST_KEY = "request";
-    public static final String ACTION_KEY = "action";
+    protected static final String COMMAND_KEY = "command";
+    protected static final String DIAGNOSTIC_REQUEST_KEY = "request";
+    protected static final String ACTION_KEY = "action";
 
     public enum CommandType {
         VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST
     };
 
-    public static final String[] sRequiredFieldsValues = new String[] {
+    private static final String[] sRequiredFieldsValues = new String[] {
             COMMAND_KEY };
-    public static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_KEY)

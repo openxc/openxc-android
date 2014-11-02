@@ -16,13 +16,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class DiagnosticResponse extends DiagnosticMessage {
 
-    public static final String VALUE_KEY = "value";
-    public static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
-    public static final String SUCCESS_KEY = "success";
+    private static final String VALUE_KEY = "value";
+    private static final String NEGATIVE_RESPONSE_CODE_KEY = "negative_response_code";
+    private static final String SUCCESS_KEY = "success";
 
-    public static final String[] sRequiredFieldsValues = new String[] {
+    private static final String[] sRequiredFieldsValues = new String[] {
             BUS_KEY, ID_KEY, MODE_KEY, SUCCESS_KEY };
-    public static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(SUCCESS_KEY)

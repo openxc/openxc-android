@@ -11,14 +11,14 @@ import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 public class NamedVehicleMessage extends KeyedMessage {
-    public static final String NAME_KEY = "name";
+    protected static final String NAME_KEY = "name";
 
     @SerializedName(NAME_KEY)
     private String mName;
 
-    public static final String[] sRequiredFieldsValues = new String[] {
+    private static final String[] sRequiredFieldsValues = new String[] {
             NAME_KEY };
-    public static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     public NamedVehicleMessage(String name) {

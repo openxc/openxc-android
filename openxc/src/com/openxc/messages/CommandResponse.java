@@ -16,13 +16,13 @@ import com.openxc.messages.Command.CommandType;
 
 public class CommandResponse extends KeyedMessage {
 
-    public static final String COMMAND_RESPONSE_KEY = "command_response";
-    public static final String STATUS_KEY = "status";
-    public static final String MESSAGE_KEY = "message";
+    private static final String COMMAND_RESPONSE_KEY = "command_response";
+    private static final String STATUS_KEY = "status";
+    private static final String MESSAGE_KEY = "message";
 
-    public static final String[] sRequiredFieldsValues = new String[] {
+    private static final String[] sRequiredFieldsValues = new String[] {
             COMMAND_RESPONSE_KEY, STATUS_KEY };
-    public static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<String>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_RESPONSE_KEY)

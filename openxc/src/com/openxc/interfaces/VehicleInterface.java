@@ -32,5 +32,8 @@ public interface VehicleInterface extends VehicleDataSource, VehicleDataSink {
      */
     public boolean setResource(String resource) throws DataSourceException;
 
+    /**
+     * Return true if the interface is actively connected to the vehicle.
+     */
     public boolean isConnected();
 }
