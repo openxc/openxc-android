@@ -72,7 +72,7 @@
         <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
             </plugin>
@@ -106,14 +106,11 @@
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <configuration>
                     <sourceDirectories>
-                        <sourceDirectory>src</sourceDirectory>
                         <sourceDirectory>target/generated-sources/r</sourceDirectory>
                     </sourceDirectories>
                 </configuration>
             </plugin>
         </plugins>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>tests</testSourceDirectory>
         <pluginManagement>
             <plugins>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->

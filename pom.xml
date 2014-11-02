@@ -42,7 +42,7 @@
         <android.platform>19</android.platform>
 
         <java.version>1.7</java.version>
-        <android-maven.version>3.8.1</android-maven.version>
+        <android-maven.version>4.0.0-rc.3</android-maven.version>
     </properties>
 
     <dependencyManagement>
@@ -70,7 +70,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <groupId>com.simpligility.maven.plugins</groupId>
                     <artifactId>android-maven-plugin</artifactId>
                     <version>${android-maven.version}</version>
                     <extensions>true</extensions>
@@ -118,7 +118,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <configuration>
                     <dexOptimize>false</dexOptimize>
@@ -159,7 +159,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/../libs</outputDirectory>
+                            <outputDirectory>${project.build.directory}/../src/main/libs</outputDirectory>
                             <excludeScope>provided</excludeScope>
                             <excludeArtifactIds>jsr305,openxc,openxc-it,openxc-enabler,hamcrest-all,junit,mockito-core,robolectric</excludeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
