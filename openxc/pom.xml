@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.2.4</version>
+            <version>2.3</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>2.5.0</version>
+            <version>2.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.robolectric</groupId>
@@ -57,13 +57,13 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.9.5</version>
+            <version>1.10.8</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12-beta-2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -84,14 +84,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>2.10.1</version>
                 <configuration>
                     <overview>${basedir}/javadoc/overview.html</overview>
                     <docfilessubdirs>true</docfilessubdirs>
                     <docletArtifact>
                         <groupId>com.google.doclava</groupId>
                         <artifactId>doclava</artifactId>
-                        <version>1.0.5</version>
+                        <version>1.0.6</version>
                     </docletArtifact>
                     <doclet>com.google.doclava.Doclava</doclet>
                     <!-- bootclasspath required by Sun's JVM -->
