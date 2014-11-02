@@ -38,6 +38,11 @@
                 <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+                    <resourceDirectory>res</resourceDirectory>
+                    <nativeLibrariesDirectory>libs</nativeLibrariesDirectory>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
