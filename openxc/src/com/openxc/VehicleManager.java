@@ -480,13 +480,14 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     public void addOnVehicleInterfaceConnectedListener(
             ViConnectionListener listener) throws VehicleServiceException {
-        try {
-            mRemoteService.addViConnectionListener(listener);
-        } catch(RemoteException e) {
-            throw new VehicleServiceException(
-                    "Unable to add connection status listener", e);
+        if(mRemoteService != null) {
+            try {
+                mRemoteService.addViConnectionListener(listener);
+            } catch(RemoteException e) {
+                throw new VehicleServiceException(
+                        "Unable to add connection status listener", e);
+            }
         }
-
     }
 
     /**
