@@ -1,6 +1,6 @@
 package com.openxc.messages;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 /**
  * A helper base class for a KeyMatcher that matches exactly one key, e.g.

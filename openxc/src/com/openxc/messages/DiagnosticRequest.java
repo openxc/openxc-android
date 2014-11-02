@@ -1,6 +1,6 @@
 package com.openxc.messages;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -91,8 +91,8 @@ public class DiagnosticRequest extends DiagnosticMessage {
 
         final DiagnosticRequest other = (DiagnosticRequest) obj;
         return getMultipleResponses() == other.getMultipleResponses()
-                && Objects.equals(mFrequency, other.mFrequency)
-                && Objects.equals(mName, other.mName);
+                && Objects.equal(mFrequency, other.mFrequency)
+                && Objects.equal(mName, other.mName);
     }
 
     @Override

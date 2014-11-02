@@ -1,6 +1,6 @@
 package com.openxc.interfaces;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -41,13 +41,13 @@ public class VehicleInterfaceDescriptor implements Parcelable {
 
         final VehicleInterfaceDescriptor other =
                 (VehicleInterfaceDescriptor) obj;
-        return Objects.equals(mConnected, other.mConnected) &&
-                Objects.equals(mInterfaceClass, other.mInterfaceClass);
+        return Objects.equal(mConnected, other.mConnected) &&
+                Objects.equal(mInterfaceClass, other.mInterfaceClass);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mConnected, mInterfaceClass);
+        return Objects.hashCode(mConnected, mInterfaceClass);
     }
 
     @Override

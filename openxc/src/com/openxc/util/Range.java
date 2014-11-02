@@ -1,6 +1,6 @@
 package com.openxc.util;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects;
 
 /**
@@ -41,13 +41,13 @@ public class Range<T> {
 
         @SuppressWarnings("unchecked")
         final Range<T> that = (Range<T>) obj;
-        return Objects.equals(getMin(), that.getMin()) &&
-                Objects.equals(getMax(), that.getMax());
+        return Objects.equal(getMin(), that.getMin()) &&
+                Objects.equal(getMax(), that.getMax());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mMin, mMax);
+        return Objects.hashCode(mMin, mMax);
     }
 
     @Override

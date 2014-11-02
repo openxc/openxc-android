@@ -1,6 +1,6 @@
 package com.openxc.messages;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -198,8 +198,8 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         }
 
         final VehicleMessage other = (VehicleMessage) obj;
-        return Objects.equals(mTimestamp, other.mTimestamp) &&
-                Objects.equals(mExtras, other.mExtras);
+        return Objects.equal(mTimestamp, other.mTimestamp) &&
+                Objects.equal(mExtras, other.mExtras);
     }
 
     @Override

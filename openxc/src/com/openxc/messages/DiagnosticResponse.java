@@ -1,6 +1,6 @@
 package com.openxc.messages;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,8 +106,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
         }
 
         final DiagnosticResponse other = (DiagnosticResponse) obj;
-        return Objects.equals(mValue, other.mValue)
-                && Objects.equals(mNegativeResponseCode, other.mNegativeResponseCode);
+        return Objects.equal(mValue, other.mValue)
+                && Objects.equal(mNegativeResponseCode, other.mNegativeResponseCode);
     }
 
     public static enum NegativeResponseCode {

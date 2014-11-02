@@ -1,6 +1,6 @@
 package com.openxc.measurements;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -307,8 +307,8 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
 
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
-        return Objects.equals(getValue(), other.getValue()) &&
-            Objects.equals(other.getRange(), getRange());
+        return Objects.equal(getValue(), other.getValue()) &&
+            Objects.equal(other.getRange(), getRange());
     }
 
     @Override

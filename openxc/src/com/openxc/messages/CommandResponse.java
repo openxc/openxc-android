@@ -1,6 +1,6 @@
 package com.openxc.messages;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -73,9 +73,9 @@ public class CommandResponse extends KeyedMessage {
         }
 
         final CommandResponse other = (CommandResponse) obj;
-        return Objects.equals(mCommand, other.mCommand) &&
-                Objects.equals(mMessage, other.mMessage) &&
-                Objects.equals(mStatus, other.mStatus);
+        return Objects.equal(mCommand, other.mCommand) &&
+                Objects.equal(mMessage, other.mMessage) &&
+                Objects.equal(mStatus, other.mStatus);
     }
 
     @Override
