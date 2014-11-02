@@ -244,7 +244,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
     private boolean write(byte[] bytes) {
         if(mConnection != null) {
             if(mOutEndpoint != null) {
-                Log.d(TAG, "Writing bytes to USB: " + bytes);
                 int transferred = mConnection.bulkTransfer(
                         mOutEndpoint, bytes, bytes.length, 0);
                 if(transferred < 0) {
@@ -400,7 +399,9 @@ public class UsbVehicleInterface extends BytestreamDataSource
                 " with USB device");
         mConnectionLock.writeLock().lock();
         try {
-            mConnection.close();
+            if(mConnection != null) {
+                mConnection.close();
+            }
             mConnection = null;
             mInEndpoint = null;
             mOutEndpoint = null;
