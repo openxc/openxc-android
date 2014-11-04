@@ -215,14 +215,15 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     @Override
     protected int read(byte[] bytes) throws IOException {
-        mConnectionLock.readLock().lock();
+        mConnectionLock.writeLock().lock();
         int bytesRead = 0;
         try {
             if(isConnected()) {
-                bytesRead = mConnection.bulkTransfer(mInEndpoint, bytes, bytes.length, 0);
+                bytesRead = mConnection.bulkTransfer(
+                        mInEndpoint, bytes, bytes.length, 1000);
             }
         } finally {
-            mConnectionLock.readLock().unlock();
+            mConnectionLock.writeLock().unlock();
         }
         return bytesRead;
     }
@@ -242,13 +243,13 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     private boolean write(byte[] bytes) {
-        if(mConnection != null) {
+        mConnectionLock.writeLock().lock();
+        try {
             if(mOutEndpoint != null) {
                 int transferred = mConnection.bulkTransfer(
-                        mOutEndpoint, bytes, bytes.length, 0);
+                        mOutEndpoint, bytes, bytes.length, 1000);
                 if(transferred < 0) {
-                    Log.w(TAG, "Unable to write CAN message to USB endpoint, error "
-                            + transferred);
+                    Log.w(TAG, "Unable to write to USB endpoint");
                     return false;
                 }
             } else {
@@ -256,10 +257,10 @@ public class UsbVehicleInterface extends BytestreamDataSource
                         "can't send write command");
                 return false;
             }
-        } else {
-            return false;
+            return true;
+        } finally {
+            mConnectionLock.writeLock().unlock();
         }
-        return true;
     }
 
     private void connectToDevice(UsbManager manager, URI deviceUri)
