@@ -352,16 +352,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         return connection;
     }
 
-    /**
-     * TODO we oddly need to "prime" this endpoint from Android because the
-     * first message we send, if it's over 1 packet in size, we only get the
-     * last packet.
-     */
-    private void primeOutput() {
-        Log.d(TAG, "Priming output endpoint");
-        write(new String("prime\u0000").getBytes());
-    }
-
     private void openConnection(UsbDevice device) {
         if (device != null) {
             mConnectionLock.writeLock().lock();
@@ -378,12 +368,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
         } else {
             Log.d(TAG, "Permission denied for device " + device);
         }
-    }
-
-    @Override
-    protected void connected() {
-        super.connected();
-        primeOutput();
     }
 
     @Override
