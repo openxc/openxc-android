@@ -48,14 +48,14 @@ public class BinarySerializer {
 
     private static void serializeCanMessage(BinaryMessages.VehicleMessage.Builder builder,
             CanMessage message) {
-        builder.setType(BinaryMessages.VehicleMessage.Type.RAW);
+        builder.setType(BinaryMessages.VehicleMessage.Type.CAN);
 
-        BinaryMessages.RawMessage.Builder messageBuilder =
-                BinaryMessages.RawMessage.newBuilder();
+        BinaryMessages.CanMessage.Builder messageBuilder =
+                BinaryMessages.CanMessage.newBuilder();
         messageBuilder.setBus(message.getBusId());
         messageBuilder.setMessageId(message.getId());
         messageBuilder.setData(ByteString.copyFrom(message.getData()));
-        builder.setRawMessage(messageBuilder);
+        builder.setCanMessage(messageBuilder);
     }
 
     private static void serializeDiagnosticResponse(BinaryMessages.VehicleMessage.Builder builder,
@@ -82,33 +82,49 @@ public class BinarySerializer {
         builder.setDiagnosticResponse(messageBuilder);
     }
 
-    private static BinaryMessages.DiagnosticRequest.Builder
-            startSerializingDiagnosticRequest(DiagnosticRequest message) {
-        BinaryMessages.DiagnosticRequest.Builder messageBuilder =
+    private static BinaryMessages.DiagnosticControlCommand.Builder
+            startSerializingDiagnosticRequest(Command message) {
+        DiagnosticRequest diagnosticRequest = message.getDiagnosticRequest();
+        BinaryMessages.DiagnosticControlCommand.Builder messageBuilder =
+                BinaryMessages.DiagnosticControlCommand.newBuilder();
+
+        BinaryMessages.DiagnosticRequest.Builder requestBuilder =
                 BinaryMessages.DiagnosticRequest.newBuilder();
-        messageBuilder.setBus(message.getBusId());
-        messageBuilder.setMessageId(message.getId());
-        messageBuilder.setMode(message.getMode());
-        messageBuilder.setMultipleResponses(message.getMultipleResponses());
+        requestBuilder.setBus(diagnosticRequest.getBusId());
+        requestBuilder.setMessageId(diagnosticRequest.getId());
+        requestBuilder.setMode(diagnosticRequest.getMode());
+        requestBuilder.setMultipleResponses(diagnosticRequest.getMultipleResponses());
 
-        if(message.hasPid()) {
-            messageBuilder.setPid(message.getPid());
+        if(diagnosticRequest.hasPid()) {
+            requestBuilder.setPid(diagnosticRequest.getPid());
         }
 
-        if(message.hasFrequency()) {
-            messageBuilder.setFrequency(message.getFrequency());
+        if(diagnosticRequest.hasFrequency()) {
+            requestBuilder.setFrequency(diagnosticRequest.getFrequency());
         }
 
-        if(message.hasName()) {
-            messageBuilder.setName(message.getName());
+        if(diagnosticRequest.hasName()) {
+            requestBuilder.setName(diagnosticRequest.getName());
         }
 
-        if(message.hasPayload()) {
-            messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
+        if(diagnosticRequest.hasPayload()) {
+            requestBuilder.setPayload(ByteString.copyFrom(diagnosticRequest.getPayload()));
         }
         // TODO add decoded_type when it hits the spec:
         // https://github.com/openxc/openxc-message-format/issues/17
-        // messageBuilder.setDecodedType(message.getDecodedType());
+        // messageBuilder.setDecodedType(diagnosticRequest.getDecodedType());
+
+        messageBuilder.setRequest(requestBuilder);
+
+        if(message.hasAction()) {
+            if(message.getAction().equals(DiagnosticRequest.ADD_ACTION_KEY)) {
+                messageBuilder.setAction(
+                        BinaryMessages.DiagnosticControlCommand.Action.ADD);
+            } else if(message.getAction().equals(DiagnosticRequest.CANCEL_ACTION_KEY)) {
+                messageBuilder.setAction(
+                        BinaryMessages.DiagnosticControlCommand.Action.CANCEL);
+            }
+        }
         return messageBuilder;
     }
 
@@ -125,25 +141,11 @@ public class BinarySerializer {
             messageBuilder.setType(BinaryMessages.ControlCommand.Type.DEVICE_ID);
         } else if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
             messageBuilder.setType(BinaryMessages.ControlCommand.Type.DIAGNOSTIC);
+            messageBuilder.setDiagnosticRequest(
+                    startSerializingDiagnosticRequest(message));
         } else {
             throw new SerializationException(
                     "Unrecognized command type in response: " + commandType);
-        }
-
-        if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
-            messageBuilder.setDiagnosticRequest(
-                    startSerializingDiagnosticRequest(
-                        message.getDiagnosticRequest()));
-        }
-
-        if(message.hasAction()) {
-            if(message.getAction().equals(DiagnosticRequest.ADD_ACTION_KEY)) {
-                messageBuilder.setAction(
-                        BinaryMessages.ControlCommand.Action.ADD);
-            } else if(message.getAction().equals(DiagnosticRequest.CANCEL_ACTION_KEY)) {
-                messageBuilder.setAction(
-                        BinaryMessages.ControlCommand.Action.CANCEL);
-            }
         }
 
         builder.setControlCommand(messageBuilder);
@@ -193,39 +195,39 @@ public class BinarySerializer {
         return fieldBuilder;
     }
 
-    private static BinaryMessages.TranslatedMessage.Builder startBuildingTranslated(
+    private static BinaryMessages.SimpleMessage.Builder startBuildingSimple(
             BinaryMessages.VehicleMessage.Builder builder,
             NamedVehicleMessage message) {
-        builder.setType(BinaryMessages.VehicleMessage.Type.TRANSLATED);
+        builder.setType(BinaryMessages.VehicleMessage.Type.SIMPLE);
 
-        BinaryMessages.TranslatedMessage.Builder messageBuilder =
-                BinaryMessages.TranslatedMessage.newBuilder();
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                BinaryMessages.SimpleMessage.newBuilder();
         messageBuilder.setName(message.getName());
         return messageBuilder;
     }
 
     private static void serializeEventedSimpleVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             EventedSimpleVehicleMessage message) {
-        BinaryMessages.TranslatedMessage.Builder messageBuilder =
-                startBuildingTranslated(builder, message);
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                startBuildingSimple(builder, message);
         messageBuilder.setValue(buildDynamicField(message.getValue()));
         messageBuilder.setEvent(buildDynamicField(message.getEvent()));
-        builder.setTranslatedMessage(messageBuilder);
+        builder.setSimpleMessage(messageBuilder);
     }
 
     private static void serializeSimpleVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             SimpleVehicleMessage message) {
-        BinaryMessages.TranslatedMessage.Builder messageBuilder =
-                startBuildingTranslated(builder, message);
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                startBuildingSimple(builder, message);
         messageBuilder.setValue(buildDynamicField(message.getValue()));
-        builder.setTranslatedMessage(messageBuilder);
+        builder.setSimpleMessage(messageBuilder);
     }
 
     private static void serializeNamedVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,
             NamedVehicleMessage message) {
-        BinaryMessages.TranslatedMessage.Builder messageBuilder =
-                startBuildingTranslated(builder, message);
-        builder.setTranslatedMessage(messageBuilder);
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                startBuildingSimple(builder, message);
+        builder.setSimpleMessage(messageBuilder);
     }
 
     private static void serializeGenericVehicleMessage(BinaryMessages.VehicleMessage.Builder builder,

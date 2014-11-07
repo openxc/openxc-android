@@ -39,11 +39,11 @@ public class BinaryDeserializer {
 
     private static NamedVehicleMessage deserializeNamedMessage(
             BinaryMessages.VehicleMessage binaryMessage) throws UnrecognizedMessageTypeException {
-        BinaryMessages.TranslatedMessage translatedMessage =
-            binaryMessage.getTranslatedMessage();
+        BinaryMessages.SimpleMessage simpleMessage =
+            binaryMessage.getSimpleMessage();
         String name;
-        if(translatedMessage.hasName()) {
-            name = translatedMessage.getName();
+        if(simpleMessage.hasName()) {
+            name = simpleMessage.getName();
         } else {
             throw new UnrecognizedMessageTypeException(
                     "Binary message is missing name");
@@ -51,7 +51,7 @@ public class BinaryDeserializer {
 
         Object value = null;
         BinaryMessages.DynamicField field =
-            translatedMessage.getValue();
+            simpleMessage.getValue();
         if(field.hasNumericValue()) {
             value = field.getNumericValue();
         } else if(field.hasBooleanValue()) {
@@ -61,8 +61,8 @@ public class BinaryDeserializer {
         }
 
         Object event = null;
-        if(translatedMessage.hasEvent()) {
-            field = translatedMessage.getEvent();
+        if(simpleMessage.hasEvent()) {
+            field = simpleMessage.getEvent();
             if(field.hasNumericValue()) {
                 event = field.getNumericValue();
             } else if(field.hasBooleanValue()) {
@@ -85,7 +85,7 @@ public class BinaryDeserializer {
 
     private static CanMessage deserializeCanMessage(
             BinaryMessages.VehicleMessage binaryMessage) {
-        BinaryMessages.RawMessage canMessage = binaryMessage.getRawMessage();
+        BinaryMessages.CanMessage canMessage = binaryMessage.getCanMessage();
         return new CanMessage(canMessage.getBus(),
                 canMessage.getMessageId(),
                 canMessage.getData().toByteArray());
@@ -99,23 +99,25 @@ public class BinaryDeserializer {
                     "Diagnostic command missing request details");
         }
 
+        BinaryMessages.DiagnosticControlCommand diagnosticCommand =
+                command.getDiagnosticRequest();
         String action = null;
-        if(!command.hasAction()) {
+        if(!diagnosticCommand.hasAction()) {
             throw new UnrecognizedMessageTypeException(
                     "Diagnostic command missing action");
-        } else if(command.getAction() ==
-                BinaryMessages.ControlCommand.Action.ADD) {
+        } else if(diagnosticCommand.getAction() ==
+                BinaryMessages.DiagnosticControlCommand.Action.ADD) {
             action = DiagnosticRequest.ADD_ACTION_KEY;
-        } else if(command.getAction() ==
-                BinaryMessages.ControlCommand.Action.CANCEL) {
+        } else if(diagnosticCommand.getAction() ==
+                BinaryMessages.DiagnosticControlCommand.Action.CANCEL) {
             action = DiagnosticRequest.CANCEL_ACTION_KEY;
         } else {
             throw new UnrecognizedMessageTypeException(
-                    "Unrecognized action: " + command.getAction());
+                    "Unrecognized action: " + diagnosticCommand.getAction());
         }
 
         BinaryMessages.DiagnosticRequest serializedRequest =
-                command.getDiagnosticRequest();
+                diagnosticCommand.getRequest();
         DiagnosticRequest request = new DiagnosticRequest(
                 serializedRequest.getBus(),
                 serializedRequest.getMessageId(),
@@ -253,9 +255,9 @@ public class BinaryDeserializer {
     private static VehicleMessage deserialize(
             BinaryMessages.VehicleMessage binaryMessage)
                 throws UnrecognizedMessageTypeException {
-        if(binaryMessage.hasTranslatedMessage()) {
+        if(binaryMessage.hasSimpleMessage()) {
             return deserializeNamedMessage(binaryMessage);
-        } else if(binaryMessage.hasRawMessage()) {
+        } else if(binaryMessage.hasCanMessage()) {
             return deserializeCanMessage(binaryMessage);
         } else if(binaryMessage.hasCommandResponse()) {
             return deserializeCommandResponse(binaryMessage);

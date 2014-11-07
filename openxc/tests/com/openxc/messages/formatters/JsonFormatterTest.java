@@ -50,7 +50,7 @@ public class JsonFormatterTest extends AbstractFormatterTest {
 
     @Test
     public void testDeserializeDiagnosticResponseFromJsonString() throws UnrecognizedMessageTypeException {
-        String data = "{\"bus\":1,\"id\":2028,\"mode\":1,\"success\":true,\"pid\":64,\"payload\":\"0x40800020\"}";
+        String data = "{\"bus\":1,\"message_id\":2028,\"mode\":1,\"success\":true,\"pid\":64,\"payload\":\"0x40800020\"}";
         DiagnosticResponse response = (DiagnosticResponse) JsonFormatter.deserialize(data);
         assertEquals(response.getBusId(), 1);
         assertEquals(response.getId(), 2028);

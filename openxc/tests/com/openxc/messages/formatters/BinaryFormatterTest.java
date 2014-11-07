@@ -49,10 +49,10 @@ public class BinaryFormatterTest extends AbstractFormatterTest {
             UnrecognizedMessageTypeException {
         BinaryMessages.VehicleMessage.Builder builder =
             BinaryMessages.VehicleMessage.newBuilder();
-        builder.setType(BinaryMessages.VehicleMessage.Type.TRANSLATED);
+        builder.setType(BinaryMessages.VehicleMessage.Type.SIMPLE);
 
-        BinaryMessages.TranslatedMessage.Builder messageBuilder =
-                BinaryMessages.TranslatedMessage.newBuilder();
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                BinaryMessages.SimpleMessage.newBuilder();
         messageBuilder.setName(messageName);
         BinaryMessages.DynamicField.Builder fieldBuilder =
                 BinaryMessages.DynamicField.newBuilder();
@@ -60,7 +60,7 @@ public class BinaryFormatterTest extends AbstractFormatterTest {
         fieldBuilder.setNumericValue(42);
 
         messageBuilder.setValue(fieldBuilder);
-        builder.setTranslatedMessage(messageBuilder);
+        builder.setSimpleMessage(messageBuilder);
 
         BinaryMessages.VehicleMessage serialized = builder.build();
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -85,20 +85,20 @@ public class BinaryFormatterTest extends AbstractFormatterTest {
     @Test(expected=UnrecognizedMessageTypeException.class)
     public void deserializeWellFormedButConfusedMessage() throws IOException,
            UnrecognizedMessageTypeException {
-        // Build a translated message that's missing a name
+        // Build a simple message that's missing a name
         BinaryMessages.VehicleMessage.Builder builder =
             BinaryMessages.VehicleMessage.newBuilder();
-        builder.setType(BinaryMessages.VehicleMessage.Type.TRANSLATED);
+        builder.setType(BinaryMessages.VehicleMessage.Type.SIMPLE);
 
-        BinaryMessages.TranslatedMessage.Builder messageBuilder =
-                BinaryMessages.TranslatedMessage.newBuilder();
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                BinaryMessages.SimpleMessage.newBuilder();
         BinaryMessages.DynamicField.Builder fieldBuilder =
                 BinaryMessages.DynamicField.newBuilder();
         fieldBuilder.setType(BinaryMessages.DynamicField.Type.NUM);
         fieldBuilder.setNumericValue(42);
 
         messageBuilder.setValue(fieldBuilder);
-        builder.setTranslatedMessage(messageBuilder);
+        builder.setSimpleMessage(messageBuilder);
 
         BinaryMessages.VehicleMessage serialized = builder.build();
         ByteArrayOutputStream output = new ByteArrayOutputStream();
