@@ -87,7 +87,7 @@ public class BinaryDeserializer {
             BinaryMessages.VehicleMessage binaryMessage) {
         BinaryMessages.CanMessage canMessage = binaryMessage.getCanMessage();
         return new CanMessage(canMessage.getBus(),
-                canMessage.getMessageId(),
+                canMessage.getId(),
                 canMessage.getData().toByteArray());
     }
 

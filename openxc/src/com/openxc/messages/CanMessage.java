@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
  * A CAN message is keyed on the bus and message ID.
  */
 public class CanMessage extends KeyedMessage {
-    protected static final String ID_KEY = "message_id";
+    protected static final String ID_KEY = "id";
     protected static final String BUS_KEY = "bus";
     protected static final String DATA_KEY = "data";
 

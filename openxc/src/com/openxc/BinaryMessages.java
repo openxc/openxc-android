@@ -8,10 +8,10 @@ public final class BinaryMessages {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface VehicleMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface VehicleMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.VehicleMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .openxc.VehicleMessage.Type type = 1;
     /**
      * <code>optional .openxc.VehicleMessage.Type type = 1;</code>
      */
@@ -21,7 +21,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.VehicleMessage.Type getType();
 
-    // optional .openxc.CanMessage can_message = 2;
     /**
      * <code>optional .openxc.CanMessage can_message = 2;</code>
      */
@@ -35,7 +34,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.CanMessageOrBuilder getCanMessageOrBuilder();
 
-    // optional .openxc.SimpleMessage simple_message = 3;
     /**
      * <code>optional .openxc.SimpleMessage simple_message = 3;</code>
      */
@@ -49,7 +47,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.SimpleMessageOrBuilder getSimpleMessageOrBuilder();
 
-    // optional .openxc.DiagnosticResponse diagnostic_response = 4;
     /**
      * <code>optional .openxc.DiagnosticResponse diagnostic_response = 4;</code>
      */
@@ -63,7 +60,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.DiagnosticResponseOrBuilder getDiagnosticResponseOrBuilder();
 
-    // optional .openxc.ControlCommand control_command = 5;
     /**
      * <code>optional .openxc.ControlCommand control_command = 5;</code>
      */
@@ -77,7 +73,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.ControlCommandOrBuilder getControlCommandOrBuilder();
 
-    // optional .openxc.CommandResponse command_response = 6;
     /**
      * <code>optional .openxc.CommandResponse command_response = 6;</code>
      */
@@ -95,8 +90,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.VehicleMessage}
    */
   public static final class VehicleMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements VehicleMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.VehicleMessage)
+      VehicleMessageOrBuilder {
     // Use VehicleMessage.newBuilder() to construct.
     private VehicleMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -367,7 +363,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional .openxc.VehicleMessage.Type type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
     private com.openxc.BinaryMessages.VehicleMessage.Type type_;
     /**
@@ -383,7 +378,6 @@ public final class BinaryMessages {
       return type_;
     }
 
-    // optional .openxc.CanMessage can_message = 2;
     public static final int CAN_MESSAGE_FIELD_NUMBER = 2;
     private com.openxc.BinaryMessages.CanMessage canMessage_;
     /**
@@ -405,7 +399,6 @@ public final class BinaryMessages {
       return canMessage_;
     }
 
-    // optional .openxc.SimpleMessage simple_message = 3;
     public static final int SIMPLE_MESSAGE_FIELD_NUMBER = 3;
     private com.openxc.BinaryMessages.SimpleMessage simpleMessage_;
     /**
@@ -427,7 +420,6 @@ public final class BinaryMessages {
       return simpleMessage_;
     }
 
-    // optional .openxc.DiagnosticResponse diagnostic_response = 4;
     public static final int DIAGNOSTIC_RESPONSE_FIELD_NUMBER = 4;
     private com.openxc.BinaryMessages.DiagnosticResponse diagnosticResponse_;
     /**
@@ -449,7 +441,6 @@ public final class BinaryMessages {
       return diagnosticResponse_;
     }
 
-    // optional .openxc.ControlCommand control_command = 5;
     public static final int CONTROL_COMMAND_FIELD_NUMBER = 5;
     private com.openxc.BinaryMessages.ControlCommand controlCommand_;
     /**
@@ -471,7 +462,6 @@ public final class BinaryMessages {
       return controlCommand_;
     }
 
-    // optional .openxc.CommandResponse command_response = 6;
     public static final int COMMAND_RESPONSE_FIELD_NUMBER = 6;
     private com.openxc.BinaryMessages.CommandResponse commandResponse_;
     /**
@@ -504,7 +494,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -646,8 +637,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.VehicleMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.VehicleMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.VehicleMessage)
+        com.openxc.BinaryMessages.VehicleMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_VehicleMessage_descriptor;
@@ -850,7 +842,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional .openxc.VehicleMessage.Type type = 1;
       private com.openxc.BinaryMessages.VehicleMessage.Type type_ = com.openxc.BinaryMessages.VehicleMessage.Type.CAN;
       /**
        * <code>optional .openxc.VehicleMessage.Type type = 1;</code>
@@ -886,7 +877,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional .openxc.CanMessage can_message = 2;
       private com.openxc.BinaryMessages.CanMessage canMessage_ = com.openxc.BinaryMessages.CanMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.CanMessage, com.openxc.BinaryMessages.CanMessage.Builder, com.openxc.BinaryMessages.CanMessageOrBuilder> canMessageBuilder_;
@@ -995,7 +985,7 @@ public final class BinaryMessages {
         if (canMessageBuilder_ == null) {
           canMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.CanMessage, com.openxc.BinaryMessages.CanMessage.Builder, com.openxc.BinaryMessages.CanMessageOrBuilder>(
-                  canMessage_,
+                  getCanMessage(),
                   getParentForChildren(),
                   isClean());
           canMessage_ = null;
@@ -1003,7 +993,6 @@ public final class BinaryMessages {
         return canMessageBuilder_;
       }
 
-      // optional .openxc.SimpleMessage simple_message = 3;
       private com.openxc.BinaryMessages.SimpleMessage simpleMessage_ = com.openxc.BinaryMessages.SimpleMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.SimpleMessage, com.openxc.BinaryMessages.SimpleMessage.Builder, com.openxc.BinaryMessages.SimpleMessageOrBuilder> simpleMessageBuilder_;
@@ -1112,7 +1101,7 @@ public final class BinaryMessages {
         if (simpleMessageBuilder_ == null) {
           simpleMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.SimpleMessage, com.openxc.BinaryMessages.SimpleMessage.Builder, com.openxc.BinaryMessages.SimpleMessageOrBuilder>(
-                  simpleMessage_,
+                  getSimpleMessage(),
                   getParentForChildren(),
                   isClean());
           simpleMessage_ = null;
@@ -1120,7 +1109,6 @@ public final class BinaryMessages {
         return simpleMessageBuilder_;
       }
 
-      // optional .openxc.DiagnosticResponse diagnostic_response = 4;
       private com.openxc.BinaryMessages.DiagnosticResponse diagnosticResponse_ = com.openxc.BinaryMessages.DiagnosticResponse.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.DiagnosticResponse, com.openxc.BinaryMessages.DiagnosticResponse.Builder, com.openxc.BinaryMessages.DiagnosticResponseOrBuilder> diagnosticResponseBuilder_;
@@ -1229,7 +1217,7 @@ public final class BinaryMessages {
         if (diagnosticResponseBuilder_ == null) {
           diagnosticResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.DiagnosticResponse, com.openxc.BinaryMessages.DiagnosticResponse.Builder, com.openxc.BinaryMessages.DiagnosticResponseOrBuilder>(
-                  diagnosticResponse_,
+                  getDiagnosticResponse(),
                   getParentForChildren(),
                   isClean());
           diagnosticResponse_ = null;
@@ -1237,7 +1225,6 @@ public final class BinaryMessages {
         return diagnosticResponseBuilder_;
       }
 
-      // optional .openxc.ControlCommand control_command = 5;
       private com.openxc.BinaryMessages.ControlCommand controlCommand_ = com.openxc.BinaryMessages.ControlCommand.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.ControlCommand, com.openxc.BinaryMessages.ControlCommand.Builder, com.openxc.BinaryMessages.ControlCommandOrBuilder> controlCommandBuilder_;
@@ -1346,7 +1333,7 @@ public final class BinaryMessages {
         if (controlCommandBuilder_ == null) {
           controlCommandBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.ControlCommand, com.openxc.BinaryMessages.ControlCommand.Builder, com.openxc.BinaryMessages.ControlCommandOrBuilder>(
-                  controlCommand_,
+                  getControlCommand(),
                   getParentForChildren(),
                   isClean());
           controlCommand_ = null;
@@ -1354,7 +1341,6 @@ public final class BinaryMessages {
         return controlCommandBuilder_;
       }
 
-      // optional .openxc.CommandResponse command_response = 6;
       private com.openxc.BinaryMessages.CommandResponse commandResponse_ = com.openxc.BinaryMessages.CommandResponse.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.CommandResponse, com.openxc.BinaryMessages.CommandResponse.Builder, com.openxc.BinaryMessages.CommandResponseOrBuilder> commandResponseBuilder_;
@@ -1463,7 +1449,7 @@ public final class BinaryMessages {
         if (commandResponseBuilder_ == null) {
           commandResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.CommandResponse, com.openxc.BinaryMessages.CommandResponse.Builder, com.openxc.BinaryMessages.CommandResponseOrBuilder>(
-                  commandResponse_,
+                  getCommandResponse(),
                   getParentForChildren(),
                   isClean());
           commandResponse_ = null;
@@ -1482,10 +1468,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.VehicleMessage)
   }
 
-  public interface CanMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface CanMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.CanMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 bus = 1;
     /**
      * <code>optional int32 bus = 1;</code>
      */
@@ -1495,17 +1481,15 @@ public final class BinaryMessages {
      */
     int getBus();
 
-    // optional uint32 message_id = 2;
     /**
-     * <code>optional uint32 message_id = 2;</code>
+     * <code>optional uint32 id = 2;</code>
      */
-    boolean hasMessageId();
+    boolean hasId();
     /**
-     * <code>optional uint32 message_id = 2;</code>
+     * <code>optional uint32 id = 2;</code>
      */
-    int getMessageId();
+    int getId();
 
-    // optional bytes data = 3;
     /**
      * <code>optional bytes data = 3;</code>
      */
@@ -1515,7 +1499,6 @@ public final class BinaryMessages {
      */
     com.google.protobuf.ByteString getData();
 
-    // optional .openxc.CanMessage.FrameFormat frame_format = 4;
     /**
      * <code>optional .openxc.CanMessage.FrameFormat frame_format = 4;</code>
      */
@@ -1529,8 +1512,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.CanMessage}
    */
   public static final class CanMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements CanMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.CanMessage)
+      CanMessageOrBuilder {
     // Use CanMessage.newBuilder() to construct.
     private CanMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1583,7 +1567,7 @@ public final class BinaryMessages {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              messageId_ = input.readUInt32();
+              id_ = input.readUInt32();
               break;
             }
             case 26: {
@@ -1724,7 +1708,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional int32 bus = 1;
     public static final int BUS_FIELD_NUMBER = 1;
     private int bus_;
     /**
@@ -1740,23 +1723,21 @@ public final class BinaryMessages {
       return bus_;
     }
 
-    // optional uint32 message_id = 2;
-    public static final int MESSAGE_ID_FIELD_NUMBER = 2;
-    private int messageId_;
+    public static final int ID_FIELD_NUMBER = 2;
+    private int id_;
     /**
-     * <code>optional uint32 message_id = 2;</code>
+     * <code>optional uint32 id = 2;</code>
      */
-    public boolean hasMessageId() {
+    public boolean hasId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional uint32 message_id = 2;</code>
+     * <code>optional uint32 id = 2;</code>
      */
-    public int getMessageId() {
-      return messageId_;
+    public int getId() {
+      return id_;
     }
 
-    // optional bytes data = 3;
     public static final int DATA_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString data_;
     /**
@@ -1772,7 +1753,6 @@ public final class BinaryMessages {
       return data_;
     }
 
-    // optional .openxc.CanMessage.FrameFormat frame_format = 4;
     public static final int FRAME_FORMAT_FIELD_NUMBER = 4;
     private com.openxc.BinaryMessages.CanMessage.FrameFormat frameFormat_;
     /**
@@ -1790,14 +1770,15 @@ public final class BinaryMessages {
 
     private void initFields() {
       bus_ = 0;
-      messageId_ = 0;
+      id_ = 0;
       data_ = com.google.protobuf.ByteString.EMPTY;
       frameFormat_ = com.openxc.BinaryMessages.CanMessage.FrameFormat.STANDARD;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -1810,7 +1791,7 @@ public final class BinaryMessages {
         output.writeInt32(1, bus_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, messageId_);
+        output.writeUInt32(2, id_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, data_);
@@ -1833,7 +1814,7 @@ public final class BinaryMessages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, messageId_);
+          .computeUInt32Size(2, id_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1925,8 +1906,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.CanMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.CanMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.CanMessage)
+        com.openxc.BinaryMessages.CanMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_CanMessage_descriptor;
@@ -1961,7 +1943,7 @@ public final class BinaryMessages {
         super.clear();
         bus_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        messageId_ = 0;
+        id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         data_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -2002,7 +1984,7 @@ public final class BinaryMessages {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.messageId_ = messageId_;
+        result.id_ = id_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
@@ -2030,8 +2012,8 @@ public final class BinaryMessages {
         if (other.hasBus()) {
           setBus(other.getBus());
         }
-        if (other.hasMessageId()) {
-          setMessageId(other.getMessageId());
+        if (other.hasId()) {
+          setId(other.getId());
         }
         if (other.hasData()) {
           setData(other.getData());
@@ -2066,7 +2048,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional int32 bus = 1;
       private int bus_ ;
       /**
        * <code>optional int32 bus = 1;</code>
@@ -2099,40 +2080,38 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 message_id = 2;
-      private int messageId_ ;
+      private int id_ ;
       /**
-       * <code>optional uint32 message_id = 2;</code>
+       * <code>optional uint32 id = 2;</code>
        */
-      public boolean hasMessageId() {
+      public boolean hasId() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional uint32 message_id = 2;</code>
+       * <code>optional uint32 id = 2;</code>
        */
-      public int getMessageId() {
-        return messageId_;
+      public int getId() {
+        return id_;
       }
       /**
-       * <code>optional uint32 message_id = 2;</code>
+       * <code>optional uint32 id = 2;</code>
        */
-      public Builder setMessageId(int value) {
+      public Builder setId(int value) {
         bitField0_ |= 0x00000002;
-        messageId_ = value;
+        id_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint32 message_id = 2;</code>
+       * <code>optional uint32 id = 2;</code>
        */
-      public Builder clearMessageId() {
+      public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        messageId_ = 0;
+        id_ = 0;
         onChanged();
         return this;
       }
 
-      // optional bytes data = 3;
       private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>optional bytes data = 3;</code>
@@ -2168,7 +2147,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional .openxc.CanMessage.FrameFormat frame_format = 4;
       private com.openxc.BinaryMessages.CanMessage.FrameFormat frameFormat_ = com.openxc.BinaryMessages.CanMessage.FrameFormat.STANDARD;
       /**
        * <code>optional .openxc.CanMessage.FrameFormat frame_format = 4;</code>
@@ -2215,10 +2193,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.CanMessage)
   }
 
-  public interface ControlCommandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ControlCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.ControlCommand)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .openxc.ControlCommand.Type type = 1;
     /**
      * <code>optional .openxc.ControlCommand.Type type = 1;</code>
      */
@@ -2228,7 +2206,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.ControlCommand.Type getType();
 
-    // optional .openxc.DiagnosticControlCommand diagnostic_request = 2;
     /**
      * <code>optional .openxc.DiagnosticControlCommand diagnostic_request = 2;</code>
      */
@@ -2242,7 +2219,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.DiagnosticControlCommandOrBuilder getDiagnosticRequestOrBuilder();
 
-    // optional .openxc.PassthroughModeControlCommand passthrough_mode_request = 3;
     /**
      * <code>optional .openxc.PassthroughModeControlCommand passthrough_mode_request = 3;</code>
      */
@@ -2256,7 +2232,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.PassthroughModeControlCommandOrBuilder getPassthroughModeRequestOrBuilder();
 
-    // optional .openxc.AcceptanceFilterBypassCommand acceptance_filter_bypass_command = 4;
     /**
      * <code>optional .openxc.AcceptanceFilterBypassCommand acceptance_filter_bypass_command = 4;</code>
      */
@@ -2270,7 +2245,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.AcceptanceFilterBypassCommandOrBuilder getAcceptanceFilterBypassCommandOrBuilder();
 
-    // optional .openxc.PayloadFormatCommand payload_format_command = 5;
     /**
      * <code>optional .openxc.PayloadFormatCommand payload_format_command = 5;</code>
      */
@@ -2284,7 +2258,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.PayloadFormatCommandOrBuilder getPayloadFormatCommandOrBuilder();
 
-    // optional .openxc.PredefinedObd2RequestsCommand predefined_obd2_requests_command = 6;
     /**
      * <code>optional .openxc.PredefinedObd2RequestsCommand predefined_obd2_requests_command = 6;</code>
      */
@@ -2302,8 +2275,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.ControlCommand}
    */
   public static final class ControlCommand extends
-      com.google.protobuf.GeneratedMessage
-      implements ControlCommandOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.ControlCommand)
+      ControlCommandOrBuilder {
     // Use ControlCommand.newBuilder() to construct.
     private ControlCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -2592,7 +2566,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional .openxc.ControlCommand.Type type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
     private com.openxc.BinaryMessages.ControlCommand.Type type_;
     /**
@@ -2608,7 +2581,6 @@ public final class BinaryMessages {
       return type_;
     }
 
-    // optional .openxc.DiagnosticControlCommand diagnostic_request = 2;
     public static final int DIAGNOSTIC_REQUEST_FIELD_NUMBER = 2;
     private com.openxc.BinaryMessages.DiagnosticControlCommand diagnosticRequest_;
     /**
@@ -2630,7 +2602,6 @@ public final class BinaryMessages {
       return diagnosticRequest_;
     }
 
-    // optional .openxc.PassthroughModeControlCommand passthrough_mode_request = 3;
     public static final int PASSTHROUGH_MODE_REQUEST_FIELD_NUMBER = 3;
     private com.openxc.BinaryMessages.PassthroughModeControlCommand passthroughModeRequest_;
     /**
@@ -2652,7 +2623,6 @@ public final class BinaryMessages {
       return passthroughModeRequest_;
     }
 
-    // optional .openxc.AcceptanceFilterBypassCommand acceptance_filter_bypass_command = 4;
     public static final int ACCEPTANCE_FILTER_BYPASS_COMMAND_FIELD_NUMBER = 4;
     private com.openxc.BinaryMessages.AcceptanceFilterBypassCommand acceptanceFilterBypassCommand_;
     /**
@@ -2674,7 +2644,6 @@ public final class BinaryMessages {
       return acceptanceFilterBypassCommand_;
     }
 
-    // optional .openxc.PayloadFormatCommand payload_format_command = 5;
     public static final int PAYLOAD_FORMAT_COMMAND_FIELD_NUMBER = 5;
     private com.openxc.BinaryMessages.PayloadFormatCommand payloadFormatCommand_;
     /**
@@ -2696,7 +2665,6 @@ public final class BinaryMessages {
       return payloadFormatCommand_;
     }
 
-    // optional .openxc.PredefinedObd2RequestsCommand predefined_obd2_requests_command = 6;
     public static final int PREDEFINED_OBD2_REQUESTS_COMMAND_FIELD_NUMBER = 6;
     private com.openxc.BinaryMessages.PredefinedObd2RequestsCommand predefinedObd2RequestsCommand_;
     /**
@@ -2729,7 +2697,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -2871,8 +2840,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.ControlCommand}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.ControlCommandOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.ControlCommand)
+        com.openxc.BinaryMessages.ControlCommandOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_ControlCommand_descriptor;
@@ -3075,7 +3045,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional .openxc.ControlCommand.Type type = 1;
       private com.openxc.BinaryMessages.ControlCommand.Type type_ = com.openxc.BinaryMessages.ControlCommand.Type.VERSION;
       /**
        * <code>optional .openxc.ControlCommand.Type type = 1;</code>
@@ -3111,7 +3080,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional .openxc.DiagnosticControlCommand diagnostic_request = 2;
       private com.openxc.BinaryMessages.DiagnosticControlCommand diagnosticRequest_ = com.openxc.BinaryMessages.DiagnosticControlCommand.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.DiagnosticControlCommand, com.openxc.BinaryMessages.DiagnosticControlCommand.Builder, com.openxc.BinaryMessages.DiagnosticControlCommandOrBuilder> diagnosticRequestBuilder_;
@@ -3220,7 +3188,7 @@ public final class BinaryMessages {
         if (diagnosticRequestBuilder_ == null) {
           diagnosticRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.DiagnosticControlCommand, com.openxc.BinaryMessages.DiagnosticControlCommand.Builder, com.openxc.BinaryMessages.DiagnosticControlCommandOrBuilder>(
-                  diagnosticRequest_,
+                  getDiagnosticRequest(),
                   getParentForChildren(),
                   isClean());
           diagnosticRequest_ = null;
@@ -3228,7 +3196,6 @@ public final class BinaryMessages {
         return diagnosticRequestBuilder_;
       }
 
-      // optional .openxc.PassthroughModeControlCommand passthrough_mode_request = 3;
       private com.openxc.BinaryMessages.PassthroughModeControlCommand passthroughModeRequest_ = com.openxc.BinaryMessages.PassthroughModeControlCommand.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.PassthroughModeControlCommand, com.openxc.BinaryMessages.PassthroughModeControlCommand.Builder, com.openxc.BinaryMessages.PassthroughModeControlCommandOrBuilder> passthroughModeRequestBuilder_;
@@ -3337,7 +3304,7 @@ public final class BinaryMessages {
         if (passthroughModeRequestBuilder_ == null) {
           passthroughModeRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.PassthroughModeControlCommand, com.openxc.BinaryMessages.PassthroughModeControlCommand.Builder, com.openxc.BinaryMessages.PassthroughModeControlCommandOrBuilder>(
-                  passthroughModeRequest_,
+                  getPassthroughModeRequest(),
                   getParentForChildren(),
                   isClean());
           passthroughModeRequest_ = null;
@@ -3345,7 +3312,6 @@ public final class BinaryMessages {
         return passthroughModeRequestBuilder_;
       }
 
-      // optional .openxc.AcceptanceFilterBypassCommand acceptance_filter_bypass_command = 4;
       private com.openxc.BinaryMessages.AcceptanceFilterBypassCommand acceptanceFilterBypassCommand_ = com.openxc.BinaryMessages.AcceptanceFilterBypassCommand.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.AcceptanceFilterBypassCommand, com.openxc.BinaryMessages.AcceptanceFilterBypassCommand.Builder, com.openxc.BinaryMessages.AcceptanceFilterBypassCommandOrBuilder> acceptanceFilterBypassCommandBuilder_;
@@ -3454,7 +3420,7 @@ public final class BinaryMessages {
         if (acceptanceFilterBypassCommandBuilder_ == null) {
           acceptanceFilterBypassCommandBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.AcceptanceFilterBypassCommand, com.openxc.BinaryMessages.AcceptanceFilterBypassCommand.Builder, com.openxc.BinaryMessages.AcceptanceFilterBypassCommandOrBuilder>(
-                  acceptanceFilterBypassCommand_,
+                  getAcceptanceFilterBypassCommand(),
                   getParentForChildren(),
                   isClean());
           acceptanceFilterBypassCommand_ = null;
@@ -3462,7 +3428,6 @@ public final class BinaryMessages {
         return acceptanceFilterBypassCommandBuilder_;
       }
 
-      // optional .openxc.PayloadFormatCommand payload_format_command = 5;
       private com.openxc.BinaryMessages.PayloadFormatCommand payloadFormatCommand_ = com.openxc.BinaryMessages.PayloadFormatCommand.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.PayloadFormatCommand, com.openxc.BinaryMessages.PayloadFormatCommand.Builder, com.openxc.BinaryMessages.PayloadFormatCommandOrBuilder> payloadFormatCommandBuilder_;
@@ -3571,7 +3536,7 @@ public final class BinaryMessages {
         if (payloadFormatCommandBuilder_ == null) {
           payloadFormatCommandBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.PayloadFormatCommand, com.openxc.BinaryMessages.PayloadFormatCommand.Builder, com.openxc.BinaryMessages.PayloadFormatCommandOrBuilder>(
-                  payloadFormatCommand_,
+                  getPayloadFormatCommand(),
                   getParentForChildren(),
                   isClean());
           payloadFormatCommand_ = null;
@@ -3579,7 +3544,6 @@ public final class BinaryMessages {
         return payloadFormatCommandBuilder_;
       }
 
-      // optional .openxc.PredefinedObd2RequestsCommand predefined_obd2_requests_command = 6;
       private com.openxc.BinaryMessages.PredefinedObd2RequestsCommand predefinedObd2RequestsCommand_ = com.openxc.BinaryMessages.PredefinedObd2RequestsCommand.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.PredefinedObd2RequestsCommand, com.openxc.BinaryMessages.PredefinedObd2RequestsCommand.Builder, com.openxc.BinaryMessages.PredefinedObd2RequestsCommandOrBuilder> predefinedObd2RequestsCommandBuilder_;
@@ -3688,7 +3652,7 @@ public final class BinaryMessages {
         if (predefinedObd2RequestsCommandBuilder_ == null) {
           predefinedObd2RequestsCommandBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.PredefinedObd2RequestsCommand, com.openxc.BinaryMessages.PredefinedObd2RequestsCommand.Builder, com.openxc.BinaryMessages.PredefinedObd2RequestsCommandOrBuilder>(
-                  predefinedObd2RequestsCommand_,
+                  getPredefinedObd2RequestsCommand(),
                   getParentForChildren(),
                   isClean());
           predefinedObd2RequestsCommand_ = null;
@@ -3707,10 +3671,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.ControlCommand)
   }
 
-  public interface DiagnosticControlCommandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface DiagnosticControlCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.DiagnosticControlCommand)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .openxc.DiagnosticRequest request = 1;
     /**
      * <code>optional .openxc.DiagnosticRequest request = 1;</code>
      */
@@ -3724,7 +3688,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.DiagnosticRequestOrBuilder getRequestOrBuilder();
 
-    // optional .openxc.DiagnosticControlCommand.Action action = 2;
     /**
      * <code>optional .openxc.DiagnosticControlCommand.Action action = 2;</code>
      */
@@ -3738,8 +3701,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.DiagnosticControlCommand}
    */
   public static final class DiagnosticControlCommand extends
-      com.google.protobuf.GeneratedMessage
-      implements DiagnosticControlCommandOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.DiagnosticControlCommand)
+      DiagnosticControlCommandOrBuilder {
     // Use DiagnosticControlCommand.newBuilder() to construct.
     private DiagnosticControlCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -3931,7 +3895,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional .openxc.DiagnosticRequest request = 1;
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.openxc.BinaryMessages.DiagnosticRequest request_;
     /**
@@ -3953,7 +3916,6 @@ public final class BinaryMessages {
       return request_;
     }
 
-    // optional .openxc.DiagnosticControlCommand.Action action = 2;
     public static final int ACTION_FIELD_NUMBER = 2;
     private com.openxc.BinaryMessages.DiagnosticControlCommand.Action action_;
     /**
@@ -3976,7 +3938,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -4090,8 +4053,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.DiagnosticControlCommand}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.DiagnosticControlCommandOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.DiagnosticControlCommand)
+        com.openxc.BinaryMessages.DiagnosticControlCommandOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_DiagnosticControlCommand_descriptor;
@@ -4222,7 +4186,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional .openxc.DiagnosticRequest request = 1;
       private com.openxc.BinaryMessages.DiagnosticRequest request_ = com.openxc.BinaryMessages.DiagnosticRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.DiagnosticRequest, com.openxc.BinaryMessages.DiagnosticRequest.Builder, com.openxc.BinaryMessages.DiagnosticRequestOrBuilder> requestBuilder_;
@@ -4331,7 +4294,7 @@ public final class BinaryMessages {
         if (requestBuilder_ == null) {
           requestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.DiagnosticRequest, com.openxc.BinaryMessages.DiagnosticRequest.Builder, com.openxc.BinaryMessages.DiagnosticRequestOrBuilder>(
-                  request_,
+                  getRequest(),
                   getParentForChildren(),
                   isClean());
           request_ = null;
@@ -4339,7 +4302,6 @@ public final class BinaryMessages {
         return requestBuilder_;
       }
 
-      // optional .openxc.DiagnosticControlCommand.Action action = 2;
       private com.openxc.BinaryMessages.DiagnosticControlCommand.Action action_ = com.openxc.BinaryMessages.DiagnosticControlCommand.Action.ADD;
       /**
        * <code>optional .openxc.DiagnosticControlCommand.Action action = 2;</code>
@@ -4386,10 +4348,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.DiagnosticControlCommand)
   }
 
-  public interface PassthroughModeControlCommandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface PassthroughModeControlCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.PassthroughModeControlCommand)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 bus = 1;
     /**
      * <code>optional int32 bus = 1;</code>
      */
@@ -4399,7 +4361,6 @@ public final class BinaryMessages {
      */
     int getBus();
 
-    // optional bool enabled = 2;
     /**
      * <code>optional bool enabled = 2;</code>
      */
@@ -4413,8 +4374,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.PassthroughModeControlCommand}
    */
   public static final class PassthroughModeControlCommand extends
-      com.google.protobuf.GeneratedMessage
-      implements PassthroughModeControlCommandOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.PassthroughModeControlCommand)
+      PassthroughModeControlCommandOrBuilder {
     // Use PassthroughModeControlCommand.newBuilder() to construct.
     private PassthroughModeControlCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4510,7 +4472,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional int32 bus = 1;
     public static final int BUS_FIELD_NUMBER = 1;
     private int bus_;
     /**
@@ -4526,7 +4487,6 @@ public final class BinaryMessages {
       return bus_;
     }
 
-    // optional bool enabled = 2;
     public static final int ENABLED_FIELD_NUMBER = 2;
     private boolean enabled_;
     /**
@@ -4549,7 +4509,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -4663,8 +4624,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.PassthroughModeControlCommand}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.PassthroughModeControlCommandOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.PassthroughModeControlCommand)
+        com.openxc.BinaryMessages.PassthroughModeControlCommandOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_PassthroughModeControlCommand_descriptor;
@@ -4786,7 +4748,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional int32 bus = 1;
       private int bus_ ;
       /**
        * <code>optional int32 bus = 1;</code>
@@ -4819,7 +4780,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bool enabled = 2;
       private boolean enabled_ ;
       /**
        * <code>optional bool enabled = 2;</code>
@@ -4863,10 +4823,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.PassthroughModeControlCommand)
   }
 
-  public interface AcceptanceFilterBypassCommandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AcceptanceFilterBypassCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.AcceptanceFilterBypassCommand)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 bus = 1;
     /**
      * <code>optional int32 bus = 1;</code>
      */
@@ -4876,7 +4836,6 @@ public final class BinaryMessages {
      */
     int getBus();
 
-    // optional bool bypass = 2;
     /**
      * <code>optional bool bypass = 2;</code>
      */
@@ -4890,8 +4849,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.AcceptanceFilterBypassCommand}
    */
   public static final class AcceptanceFilterBypassCommand extends
-      com.google.protobuf.GeneratedMessage
-      implements AcceptanceFilterBypassCommandOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.AcceptanceFilterBypassCommand)
+      AcceptanceFilterBypassCommandOrBuilder {
     // Use AcceptanceFilterBypassCommand.newBuilder() to construct.
     private AcceptanceFilterBypassCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4987,7 +4947,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional int32 bus = 1;
     public static final int BUS_FIELD_NUMBER = 1;
     private int bus_;
     /**
@@ -5003,7 +4962,6 @@ public final class BinaryMessages {
       return bus_;
     }
 
-    // optional bool bypass = 2;
     public static final int BYPASS_FIELD_NUMBER = 2;
     private boolean bypass_;
     /**
@@ -5026,7 +4984,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -5140,8 +5099,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.AcceptanceFilterBypassCommand}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.AcceptanceFilterBypassCommandOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.AcceptanceFilterBypassCommand)
+        com.openxc.BinaryMessages.AcceptanceFilterBypassCommandOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_AcceptanceFilterBypassCommand_descriptor;
@@ -5263,7 +5223,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional int32 bus = 1;
       private int bus_ ;
       /**
        * <code>optional int32 bus = 1;</code>
@@ -5296,7 +5255,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bool bypass = 2;
       private boolean bypass_ ;
       /**
        * <code>optional bool bypass = 2;</code>
@@ -5340,10 +5298,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.AcceptanceFilterBypassCommand)
   }
 
-  public interface PayloadFormatCommandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface PayloadFormatCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.PayloadFormatCommand)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .openxc.PayloadFormatCommand.PayloadFormat format = 1;
     /**
      * <code>optional .openxc.PayloadFormatCommand.PayloadFormat format = 1;</code>
      */
@@ -5357,8 +5315,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.PayloadFormatCommand}
    */
   public static final class PayloadFormatCommand extends
-      com.google.protobuf.GeneratedMessage
-      implements PayloadFormatCommandOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.PayloadFormatCommand)
+      PayloadFormatCommandOrBuilder {
     // Use PayloadFormatCommand.newBuilder() to construct.
     private PayloadFormatCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -5537,7 +5496,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional .openxc.PayloadFormatCommand.PayloadFormat format = 1;
     public static final int FORMAT_FIELD_NUMBER = 1;
     private com.openxc.BinaryMessages.PayloadFormatCommand.PayloadFormat format_;
     /**
@@ -5559,7 +5517,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -5666,8 +5625,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.PayloadFormatCommand}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.PayloadFormatCommandOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.PayloadFormatCommand)
+        com.openxc.BinaryMessages.PayloadFormatCommandOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_PayloadFormatCommand_descriptor;
@@ -5780,7 +5740,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional .openxc.PayloadFormatCommand.PayloadFormat format = 1;
       private com.openxc.BinaryMessages.PayloadFormatCommand.PayloadFormat format_ = com.openxc.BinaryMessages.PayloadFormatCommand.PayloadFormat.JSON;
       /**
        * <code>optional .openxc.PayloadFormatCommand.PayloadFormat format = 1;</code>
@@ -5827,10 +5786,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.PayloadFormatCommand)
   }
 
-  public interface PredefinedObd2RequestsCommandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface PredefinedObd2RequestsCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.PredefinedObd2RequestsCommand)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional bool enabled = 1;
     /**
      * <code>optional bool enabled = 1;</code>
      */
@@ -5844,8 +5803,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.PredefinedObd2RequestsCommand}
    */
   public static final class PredefinedObd2RequestsCommand extends
-      com.google.protobuf.GeneratedMessage
-      implements PredefinedObd2RequestsCommandOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.PredefinedObd2RequestsCommand)
+      PredefinedObd2RequestsCommandOrBuilder {
     // Use PredefinedObd2RequestsCommand.newBuilder() to construct.
     private PredefinedObd2RequestsCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -5936,7 +5896,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional bool enabled = 1;
     public static final int ENABLED_FIELD_NUMBER = 1;
     private boolean enabled_;
     /**
@@ -5958,7 +5917,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -6065,8 +6025,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.PredefinedObd2RequestsCommand}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.PredefinedObd2RequestsCommandOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.PredefinedObd2RequestsCommand)
+        com.openxc.BinaryMessages.PredefinedObd2RequestsCommandOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_PredefinedObd2RequestsCommand_descriptor;
@@ -6179,7 +6140,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional bool enabled = 1;
       private boolean enabled_ ;
       /**
        * <code>optional bool enabled = 1;</code>
@@ -6223,10 +6183,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.PredefinedObd2RequestsCommand)
   }
 
-  public interface CommandResponseOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface CommandResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.CommandResponse)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .openxc.ControlCommand.Type type = 1;
     /**
      * <code>optional .openxc.ControlCommand.Type type = 1;</code>
      */
@@ -6236,7 +6196,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.ControlCommand.Type getType();
 
-    // optional string message = 2;
     /**
      * <code>optional string message = 2;</code>
      */
@@ -6251,7 +6210,6 @@ public final class BinaryMessages {
     com.google.protobuf.ByteString
         getMessageBytes();
 
-    // optional bool status = 3;
     /**
      * <code>optional bool status = 3;</code>
      */
@@ -6265,8 +6223,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.CommandResponse}
    */
   public static final class CommandResponse extends
-      com.google.protobuf.GeneratedMessage
-      implements CommandResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.CommandResponse)
+      CommandResponseOrBuilder {
     // Use CommandResponse.newBuilder() to construct.
     private CommandResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -6324,8 +6283,9 @@ public final class BinaryMessages {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              message_ = input.readBytes();
+              message_ = bs;
               break;
             }
             case 24: {
@@ -6373,7 +6333,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional .openxc.ControlCommand.Type type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
     private com.openxc.BinaryMessages.ControlCommand.Type type_;
     /**
@@ -6389,7 +6348,6 @@ public final class BinaryMessages {
       return type_;
     }
 
-    // optional string message = 2;
     public static final int MESSAGE_FIELD_NUMBER = 2;
     private java.lang.Object message_;
     /**
@@ -6432,7 +6390,6 @@ public final class BinaryMessages {
       }
     }
 
-    // optional bool status = 3;
     public static final int STATUS_FIELD_NUMBER = 3;
     private boolean status_;
     /**
@@ -6456,7 +6413,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -6577,8 +6535,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.CommandResponse}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.CommandResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.CommandResponse)
+        com.openxc.BinaryMessages.CommandResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_CommandResponse_descriptor;
@@ -6711,7 +6670,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional .openxc.ControlCommand.Type type = 1;
       private com.openxc.BinaryMessages.ControlCommand.Type type_ = com.openxc.BinaryMessages.ControlCommand.Type.VERSION;
       /**
        * <code>optional .openxc.ControlCommand.Type type = 1;</code>
@@ -6747,7 +6705,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional string message = 2;
       private java.lang.Object message_ = "";
       /**
        * <code>optional string message = 2;</code>
@@ -6761,9 +6718,12 @@ public final class BinaryMessages {
       public java.lang.String getMessage() {
         java.lang.Object ref = message_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          message_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            message_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -6821,7 +6781,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bool status = 3;
       private boolean status_ ;
       /**
        * <code>optional bool status = 3;</code>
@@ -6865,10 +6824,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.CommandResponse)
   }
 
-  public interface DiagnosticRequestOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface DiagnosticRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.DiagnosticRequest)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 bus = 1;
     /**
      * <code>optional int32 bus = 1;</code>
      */
@@ -6878,7 +6837,6 @@ public final class BinaryMessages {
      */
     int getBus();
 
-    // optional uint32 message_id = 2;
     /**
      * <code>optional uint32 message_id = 2;</code>
      */
@@ -6888,7 +6846,6 @@ public final class BinaryMessages {
      */
     int getMessageId();
 
-    // optional uint32 mode = 3;
     /**
      * <code>optional uint32 mode = 3;</code>
      */
@@ -6898,7 +6855,6 @@ public final class BinaryMessages {
      */
     int getMode();
 
-    // optional uint32 pid = 4;
     /**
      * <code>optional uint32 pid = 4;</code>
      */
@@ -6908,7 +6864,6 @@ public final class BinaryMessages {
      */
     int getPid();
 
-    // optional bytes payload = 5;
     /**
      * <code>optional bytes payload = 5;</code>
      *
@@ -6928,7 +6883,6 @@ public final class BinaryMessages {
      */
     com.google.protobuf.ByteString getPayload();
 
-    // optional bool multiple_responses = 6;
     /**
      * <code>optional bool multiple_responses = 6;</code>
      */
@@ -6938,7 +6892,6 @@ public final class BinaryMessages {
      */
     boolean getMultipleResponses();
 
-    // optional double frequency = 7;
     /**
      * <code>optional double frequency = 7;</code>
      */
@@ -6948,7 +6901,6 @@ public final class BinaryMessages {
      */
     double getFrequency();
 
-    // optional string name = 8;
     /**
      * <code>optional string name = 8;</code>
      */
@@ -6963,7 +6915,6 @@ public final class BinaryMessages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional .openxc.DiagnosticRequest.DecodedType decoded_type = 9;
     /**
      * <code>optional .openxc.DiagnosticRequest.DecodedType decoded_type = 9;</code>
      */
@@ -6977,8 +6928,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.DiagnosticRequest}
    */
   public static final class DiagnosticRequest extends
-      com.google.protobuf.GeneratedMessage
-      implements DiagnosticRequestOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.DiagnosticRequest)
+      DiagnosticRequestOrBuilder {
     // Use DiagnosticRequest.newBuilder() to construct.
     private DiagnosticRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -7060,8 +7012,9 @@ public final class BinaryMessages {
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 72: {
@@ -7197,7 +7150,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional int32 bus = 1;
     public static final int BUS_FIELD_NUMBER = 1;
     private int bus_;
     /**
@@ -7213,7 +7165,6 @@ public final class BinaryMessages {
       return bus_;
     }
 
-    // optional uint32 message_id = 2;
     public static final int MESSAGE_ID_FIELD_NUMBER = 2;
     private int messageId_;
     /**
@@ -7229,7 +7180,6 @@ public final class BinaryMessages {
       return messageId_;
     }
 
-    // optional uint32 mode = 3;
     public static final int MODE_FIELD_NUMBER = 3;
     private int mode_;
     /**
@@ -7245,7 +7195,6 @@ public final class BinaryMessages {
       return mode_;
     }
 
-    // optional uint32 pid = 4;
     public static final int PID_FIELD_NUMBER = 4;
     private int pid_;
     /**
@@ -7261,7 +7210,6 @@ public final class BinaryMessages {
       return pid_;
     }
 
-    // optional bytes payload = 5;
     public static final int PAYLOAD_FIELD_NUMBER = 5;
     private com.google.protobuf.ByteString payload_;
     /**
@@ -7287,7 +7235,6 @@ public final class BinaryMessages {
       return payload_;
     }
 
-    // optional bool multiple_responses = 6;
     public static final int MULTIPLE_RESPONSES_FIELD_NUMBER = 6;
     private boolean multipleResponses_;
     /**
@@ -7303,7 +7250,6 @@ public final class BinaryMessages {
       return multipleResponses_;
     }
 
-    // optional double frequency = 7;
     public static final int FREQUENCY_FIELD_NUMBER = 7;
     private double frequency_;
     /**
@@ -7319,7 +7265,6 @@ public final class BinaryMessages {
       return frequency_;
     }
 
-    // optional string name = 8;
     public static final int NAME_FIELD_NUMBER = 8;
     private java.lang.Object name_;
     /**
@@ -7362,7 +7307,6 @@ public final class BinaryMessages {
       }
     }
 
-    // optional .openxc.DiagnosticRequest.DecodedType decoded_type = 9;
     public static final int DECODED_TYPE_FIELD_NUMBER = 9;
     private com.openxc.BinaryMessages.DiagnosticRequest.DecodedType decodedType_;
     /**
@@ -7392,7 +7336,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -7555,8 +7500,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.DiagnosticRequest}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.DiagnosticRequestOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.DiagnosticRequest)
+        com.openxc.BinaryMessages.DiagnosticRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_DiagnosticRequest_descriptor;
@@ -7743,7 +7689,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional int32 bus = 1;
       private int bus_ ;
       /**
        * <code>optional int32 bus = 1;</code>
@@ -7776,7 +7721,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 message_id = 2;
       private int messageId_ ;
       /**
        * <code>optional uint32 message_id = 2;</code>
@@ -7809,7 +7753,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 mode = 3;
       private int mode_ ;
       /**
        * <code>optional uint32 mode = 3;</code>
@@ -7842,7 +7785,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 pid = 4;
       private int pid_ ;
       /**
        * <code>optional uint32 pid = 4;</code>
@@ -7875,7 +7817,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bytes payload = 5;
       private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>optional bytes payload = 5;</code>
@@ -7931,7 +7872,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bool multiple_responses = 6;
       private boolean multipleResponses_ ;
       /**
        * <code>optional bool multiple_responses = 6;</code>
@@ -7964,7 +7904,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional double frequency = 7;
       private double frequency_ ;
       /**
        * <code>optional double frequency = 7;</code>
@@ -7997,7 +7936,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional string name = 8;
       private java.lang.Object name_ = "";
       /**
        * <code>optional string name = 8;</code>
@@ -8011,9 +7949,12 @@ public final class BinaryMessages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -8071,7 +8012,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional .openxc.DiagnosticRequest.DecodedType decoded_type = 9;
       private com.openxc.BinaryMessages.DiagnosticRequest.DecodedType decodedType_ = com.openxc.BinaryMessages.DiagnosticRequest.DecodedType.NONE;
       /**
        * <code>optional .openxc.DiagnosticRequest.DecodedType decoded_type = 9;</code>
@@ -8118,10 +8058,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.DiagnosticRequest)
   }
 
-  public interface DiagnosticResponseOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface DiagnosticResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.DiagnosticResponse)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 bus = 1;
     /**
      * <code>optional int32 bus = 1;</code>
      */
@@ -8131,7 +8071,6 @@ public final class BinaryMessages {
      */
     int getBus();
 
-    // optional uint32 message_id = 2;
     /**
      * <code>optional uint32 message_id = 2;</code>
      */
@@ -8141,7 +8080,6 @@ public final class BinaryMessages {
      */
     int getMessageId();
 
-    // optional uint32 mode = 3;
     /**
      * <code>optional uint32 mode = 3;</code>
      */
@@ -8151,7 +8089,6 @@ public final class BinaryMessages {
      */
     int getMode();
 
-    // optional uint32 pid = 4;
     /**
      * <code>optional uint32 pid = 4;</code>
      */
@@ -8161,7 +8098,6 @@ public final class BinaryMessages {
      */
     int getPid();
 
-    // optional bool success = 5;
     /**
      * <code>optional bool success = 5;</code>
      */
@@ -8171,7 +8107,6 @@ public final class BinaryMessages {
      */
     boolean getSuccess();
 
-    // optional uint32 negative_response_code = 6;
     /**
      * <code>optional uint32 negative_response_code = 6;</code>
      */
@@ -8181,7 +8116,6 @@ public final class BinaryMessages {
      */
     int getNegativeResponseCode();
 
-    // optional bytes payload = 7;
     /**
      * <code>optional bytes payload = 7;</code>
      *
@@ -8201,7 +8135,6 @@ public final class BinaryMessages {
      */
     com.google.protobuf.ByteString getPayload();
 
-    // optional double value = 8;
     /**
      * <code>optional double value = 8;</code>
      */
@@ -8215,8 +8148,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.DiagnosticResponse}
    */
   public static final class DiagnosticResponse extends
-      com.google.protobuf.GeneratedMessage
-      implements DiagnosticResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.DiagnosticResponse)
+      DiagnosticResponseOrBuilder {
     // Use DiagnosticResponse.newBuilder() to construct.
     private DiagnosticResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -8342,7 +8276,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional int32 bus = 1;
     public static final int BUS_FIELD_NUMBER = 1;
     private int bus_;
     /**
@@ -8358,7 +8291,6 @@ public final class BinaryMessages {
       return bus_;
     }
 
-    // optional uint32 message_id = 2;
     public static final int MESSAGE_ID_FIELD_NUMBER = 2;
     private int messageId_;
     /**
@@ -8374,7 +8306,6 @@ public final class BinaryMessages {
       return messageId_;
     }
 
-    // optional uint32 mode = 3;
     public static final int MODE_FIELD_NUMBER = 3;
     private int mode_;
     /**
@@ -8390,7 +8321,6 @@ public final class BinaryMessages {
       return mode_;
     }
 
-    // optional uint32 pid = 4;
     public static final int PID_FIELD_NUMBER = 4;
     private int pid_;
     /**
@@ -8406,7 +8336,6 @@ public final class BinaryMessages {
       return pid_;
     }
 
-    // optional bool success = 5;
     public static final int SUCCESS_FIELD_NUMBER = 5;
     private boolean success_;
     /**
@@ -8422,7 +8351,6 @@ public final class BinaryMessages {
       return success_;
     }
 
-    // optional uint32 negative_response_code = 6;
     public static final int NEGATIVE_RESPONSE_CODE_FIELD_NUMBER = 6;
     private int negativeResponseCode_;
     /**
@@ -8438,7 +8366,6 @@ public final class BinaryMessages {
       return negativeResponseCode_;
     }
 
-    // optional bytes payload = 7;
     public static final int PAYLOAD_FIELD_NUMBER = 7;
     private com.google.protobuf.ByteString payload_;
     /**
@@ -8464,7 +8391,6 @@ public final class BinaryMessages {
       return payload_;
     }
 
-    // optional double value = 8;
     public static final int VALUE_FIELD_NUMBER = 8;
     private double value_;
     /**
@@ -8493,7 +8419,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -8649,8 +8576,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.DiagnosticResponse}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.DiagnosticResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.DiagnosticResponse)
+        com.openxc.BinaryMessages.DiagnosticResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_DiagnosticResponse_descriptor;
@@ -8826,7 +8754,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional int32 bus = 1;
       private int bus_ ;
       /**
        * <code>optional int32 bus = 1;</code>
@@ -8859,7 +8786,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 message_id = 2;
       private int messageId_ ;
       /**
        * <code>optional uint32 message_id = 2;</code>
@@ -8892,7 +8818,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 mode = 3;
       private int mode_ ;
       /**
        * <code>optional uint32 mode = 3;</code>
@@ -8925,7 +8850,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 pid = 4;
       private int pid_ ;
       /**
        * <code>optional uint32 pid = 4;</code>
@@ -8958,7 +8882,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bool success = 5;
       private boolean success_ ;
       /**
        * <code>optional bool success = 5;</code>
@@ -8991,7 +8914,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional uint32 negative_response_code = 6;
       private int negativeResponseCode_ ;
       /**
        * <code>optional uint32 negative_response_code = 6;</code>
@@ -9024,7 +8946,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bytes payload = 7;
       private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>optional bytes payload = 7;</code>
@@ -9080,7 +9001,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional double value = 8;
       private double value_ ;
       /**
        * <code>optional double value = 8;</code>
@@ -9124,10 +9044,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.DiagnosticResponse)
   }
 
-  public interface DynamicFieldOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface DynamicFieldOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.DynamicField)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .openxc.DynamicField.Type type = 1;
     /**
      * <code>optional .openxc.DynamicField.Type type = 1;</code>
      */
@@ -9137,7 +9057,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.DynamicField.Type getType();
 
-    // optional string string_value = 2;
     /**
      * <code>optional string string_value = 2;</code>
      */
@@ -9152,7 +9071,6 @@ public final class BinaryMessages {
     com.google.protobuf.ByteString
         getStringValueBytes();
 
-    // optional double numeric_value = 3;
     /**
      * <code>optional double numeric_value = 3;</code>
      */
@@ -9162,7 +9080,6 @@ public final class BinaryMessages {
      */
     double getNumericValue();
 
-    // optional bool boolean_value = 4;
     /**
      * <code>optional bool boolean_value = 4;</code>
      */
@@ -9176,8 +9093,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.DynamicField}
    */
   public static final class DynamicField extends
-      com.google.protobuf.GeneratedMessage
-      implements DynamicFieldOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.DynamicField)
+      DynamicFieldOrBuilder {
     // Use DynamicField.newBuilder() to construct.
     private DynamicField(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -9235,8 +9153,9 @@ public final class BinaryMessages {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              stringValue_ = input.readBytes();
+              stringValue_ = bs;
               break;
             }
             case 25: {
@@ -9380,7 +9299,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional .openxc.DynamicField.Type type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
     private com.openxc.BinaryMessages.DynamicField.Type type_;
     /**
@@ -9396,7 +9314,6 @@ public final class BinaryMessages {
       return type_;
     }
 
-    // optional string string_value = 2;
     public static final int STRING_VALUE_FIELD_NUMBER = 2;
     private java.lang.Object stringValue_;
     /**
@@ -9439,7 +9356,6 @@ public final class BinaryMessages {
       }
     }
 
-    // optional double numeric_value = 3;
     public static final int NUMERIC_VALUE_FIELD_NUMBER = 3;
     private double numericValue_;
     /**
@@ -9455,7 +9371,6 @@ public final class BinaryMessages {
       return numericValue_;
     }
 
-    // optional bool boolean_value = 4;
     public static final int BOOLEAN_VALUE_FIELD_NUMBER = 4;
     private boolean booleanValue_;
     /**
@@ -9480,7 +9395,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -9608,8 +9524,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.DynamicField}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.DynamicFieldOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.DynamicField)
+        com.openxc.BinaryMessages.DynamicFieldOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_DynamicField_descriptor;
@@ -9751,7 +9668,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional .openxc.DynamicField.Type type = 1;
       private com.openxc.BinaryMessages.DynamicField.Type type_ = com.openxc.BinaryMessages.DynamicField.Type.STRING;
       /**
        * <code>optional .openxc.DynamicField.Type type = 1;</code>
@@ -9787,7 +9703,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional string string_value = 2;
       private java.lang.Object stringValue_ = "";
       /**
        * <code>optional string string_value = 2;</code>
@@ -9801,9 +9716,12 @@ public final class BinaryMessages {
       public java.lang.String getStringValue() {
         java.lang.Object ref = stringValue_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          stringValue_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            stringValue_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -9861,7 +9779,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional double numeric_value = 3;
       private double numericValue_ ;
       /**
        * <code>optional double numeric_value = 3;</code>
@@ -9894,7 +9811,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional bool boolean_value = 4;
       private boolean booleanValue_ ;
       /**
        * <code>optional bool boolean_value = 4;</code>
@@ -9938,10 +9854,10 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.DynamicField)
   }
 
-  public interface SimpleMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface SimpleMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:openxc.SimpleMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string name = 1;
     /**
      * <code>optional string name = 1;</code>
      */
@@ -9956,7 +9872,6 @@ public final class BinaryMessages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional .openxc.DynamicField value = 2;
     /**
      * <code>optional .openxc.DynamicField value = 2;</code>
      */
@@ -9970,7 +9885,6 @@ public final class BinaryMessages {
      */
     com.openxc.BinaryMessages.DynamicFieldOrBuilder getValueOrBuilder();
 
-    // optional .openxc.DynamicField event = 3;
     /**
      * <code>optional .openxc.DynamicField event = 3;</code>
      */
@@ -9988,8 +9902,9 @@ public final class BinaryMessages {
    * Protobuf type {@code openxc.SimpleMessage}
    */
   public static final class SimpleMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements SimpleMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:openxc.SimpleMessage)
+      SimpleMessageOrBuilder {
     // Use SimpleMessage.newBuilder() to construct.
     private SimpleMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -10036,8 +9951,9 @@ public final class BinaryMessages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 18: {
@@ -10106,7 +10022,6 @@ public final class BinaryMessages {
     }
 
     private int bitField0_;
-    // optional string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
@@ -10149,7 +10064,6 @@ public final class BinaryMessages {
       }
     }
 
-    // optional .openxc.DynamicField value = 2;
     public static final int VALUE_FIELD_NUMBER = 2;
     private com.openxc.BinaryMessages.DynamicField value_;
     /**
@@ -10171,7 +10085,6 @@ public final class BinaryMessages {
       return value_;
     }
 
-    // optional .openxc.DynamicField event = 3;
     public static final int EVENT_FIELD_NUMBER = 3;
     private com.openxc.BinaryMessages.DynamicField event_;
     /**
@@ -10201,7 +10114,8 @@ public final class BinaryMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -10322,8 +10236,9 @@ public final class BinaryMessages {
      * Protobuf type {@code openxc.SimpleMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.openxc.BinaryMessages.SimpleMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:openxc.SimpleMessage)
+        com.openxc.BinaryMessages.SimpleMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.openxc.BinaryMessages.internal_static_openxc_SimpleMessage_descriptor;
@@ -10474,7 +10389,6 @@ public final class BinaryMessages {
       }
       private int bitField0_;
 
-      // optional string name = 1;
       private java.lang.Object name_ = "";
       /**
        * <code>optional string name = 1;</code>
@@ -10488,9 +10402,12 @@ public final class BinaryMessages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -10548,7 +10465,6 @@ public final class BinaryMessages {
         return this;
       }
 
-      // optional .openxc.DynamicField value = 2;
       private com.openxc.BinaryMessages.DynamicField value_ = com.openxc.BinaryMessages.DynamicField.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.DynamicField, com.openxc.BinaryMessages.DynamicField.Builder, com.openxc.BinaryMessages.DynamicFieldOrBuilder> valueBuilder_;
@@ -10657,7 +10573,7 @@ public final class BinaryMessages {
         if (valueBuilder_ == null) {
           valueBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.DynamicField, com.openxc.BinaryMessages.DynamicField.Builder, com.openxc.BinaryMessages.DynamicFieldOrBuilder>(
-                  value_,
+                  getValue(),
                   getParentForChildren(),
                   isClean());
           value_ = null;
@@ -10665,7 +10581,6 @@ public final class BinaryMessages {
         return valueBuilder_;
       }
 
-      // optional .openxc.DynamicField event = 3;
       private com.openxc.BinaryMessages.DynamicField event_ = com.openxc.BinaryMessages.DynamicField.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.openxc.BinaryMessages.DynamicField, com.openxc.BinaryMessages.DynamicField.Builder, com.openxc.BinaryMessages.DynamicFieldOrBuilder> eventBuilder_;
@@ -10774,7 +10689,7 @@ public final class BinaryMessages {
         if (eventBuilder_ == null) {
           eventBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.openxc.BinaryMessages.DynamicField, com.openxc.BinaryMessages.DynamicField.Builder, com.openxc.BinaryMessages.DynamicFieldOrBuilder>(
-                  event_,
+                  getEvent(),
                   getParentForChildren(),
                   isClean());
           event_ = null;
@@ -10793,67 +10708,67 @@ public final class BinaryMessages {
     // @@protoc_insertion_point(class_scope:openxc.SimpleMessage)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_VehicleMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_VehicleMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_CanMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_CanMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_ControlCommand_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_ControlCommand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_DiagnosticControlCommand_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_DiagnosticControlCommand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_PassthroughModeControlCommand_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_PassthroughModeControlCommand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_AcceptanceFilterBypassCommand_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_AcceptanceFilterBypassCommand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_PayloadFormatCommand_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_PayloadFormatCommand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_PredefinedObd2RequestsCommand_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_PredefinedObd2RequestsCommand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_CommandResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_CommandResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_DiagnosticRequest_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_DiagnosticRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_DiagnosticResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_DiagnosticResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_DynamicField_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_openxc_DynamicField_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_openxc_SimpleMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -10877,148 +10792,148 @@ public final class BinaryMessages {
       "\n\020command_response\030\006 \001(\0132\027.openxc.Comman" +
       "dResponse\"V\n\004Type\022\007\n\003CAN\020\001\022\n\n\006SIMPLE\020\002\022\016" +
       "\n\nDIAGNOSTIC\020\003\022\023\n\017CONTROL_COMMAND\020\004\022\024\n\020C",
-      "OMMAND_RESPONSE\020\005\"\234\001\n\nCanMessage\022\013\n\003bus\030" +
-      "\001 \001(\005\022\022\n\nmessage_id\030\002 \001(\r\022\014\n\004data\030\003 \001(\014\022" +
-      "4\n\014frame_format\030\004 \001(\0162\036.openxc.CanMessag" +
-      "e.FrameFormat\")\n\013FrameFormat\022\014\n\010STANDARD" +
-      "\020\001\022\014\n\010EXTENDED\020\002\"\270\004\n\016ControlCommand\022)\n\004t" +
-      "ype\030\001 \001(\0162\033.openxc.ControlCommand.Type\022<" +
-      "\n\022diagnostic_request\030\002 \001(\0132 .openxc.Diag" +
-      "nosticControlCommand\022G\n\030passthrough_mode" +
-      "_request\030\003 \001(\0132%.openxc.PassthroughModeC" +
-      "ontrolCommand\022O\n acceptance_filter_bypas",
-      "s_command\030\004 \001(\0132%.openxc.AcceptanceFilte" +
-      "rBypassCommand\022<\n\026payload_format_command" +
-      "\030\005 \001(\0132\034.openxc.PayloadFormatCommand\022O\n " +
-      "predefined_obd2_requests_command\030\006 \001(\0132%" +
-      ".openxc.PredefinedObd2RequestsCommand\"\223\001" +
-      "\n\004Type\022\013\n\007VERSION\020\001\022\r\n\tDEVICE_ID\020\002\022\016\n\nDI" +
-      "AGNOSTIC\020\003\022\017\n\013PASSTHROUGH\020\004\022\034\n\030ACCEPTANC" +
-      "E_FILTER_BYPASS\020\005\022\022\n\016PAYLOAD_FORMAT\020\006\022\034\n" +
-      "\030PREDEFINED_OBD2_REQUESTS\020\007\"\236\001\n\030Diagnost" +
-      "icControlCommand\022*\n\007request\030\001 \001(\0132\031.open",
-      "xc.DiagnosticRequest\0227\n\006action\030\002 \001(\0162\'.o" +
-      "penxc.DiagnosticControlCommand.Action\"\035\n" +
-      "\006Action\022\007\n\003ADD\020\001\022\n\n\006CANCEL\020\002\"=\n\035Passthro" +
-      "ughModeControlCommand\022\013\n\003bus\030\001 \001(\005\022\017\n\007en" +
-      "abled\030\002 \001(\010\"<\n\035AcceptanceFilterBypassCom" +
-      "mand\022\013\n\003bus\030\001 \001(\005\022\016\n\006bypass\030\002 \001(\010\"{\n\024Pay" +
-      "loadFormatCommand\022:\n\006format\030\001 \001(\0162*.open" +
-      "xc.PayloadFormatCommand.PayloadFormat\"\'\n" +
-      "\rPayloadFormat\022\010\n\004JSON\020\001\022\014\n\010PROTOBUF\020\002\"0" +
-      "\n\035PredefinedObd2RequestsCommand\022\017\n\007enabl",
-      "ed\030\001 \001(\010\"]\n\017CommandResponse\022)\n\004type\030\001 \001(" +
-      "\0162\033.openxc.ControlCommand.Type\022\017\n\007messag" +
-      "e\030\002 \001(\t\022\016\n\006status\030\003 \001(\010\"\375\001\n\021DiagnosticRe" +
-      "quest\022\013\n\003bus\030\001 \001(\005\022\022\n\nmessage_id\030\002 \001(\r\022\014" +
-      "\n\004mode\030\003 \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007payload\030\005 \001" +
-      "(\014\022\032\n\022multiple_responses\030\006 \001(\010\022\021\n\tfreque" +
-      "ncy\030\007 \001(\001\022\014\n\004name\030\010 \001(\t\022;\n\014decoded_type\030" +
-      "\t \001(\0162%.openxc.DiagnosticRequest.Decoded" +
-      "Type\"!\n\013DecodedType\022\010\n\004NONE\020\001\022\010\n\004OBD2\020\002\"" +
-      "\241\001\n\022DiagnosticResponse\022\013\n\003bus\030\001 \001(\005\022\022\n\nm",
-      "essage_id\030\002 \001(\r\022\014\n\004mode\030\003 \001(\r\022\013\n\003pid\030\004 \001" +
-      "(\r\022\017\n\007success\030\005 \001(\010\022\036\n\026negative_response" +
-      "_code\030\006 \001(\r\022\017\n\007payload\030\007 \001(\014\022\r\n\005value\030\010 " +
-      "\001(\001\"\242\001\n\014DynamicField\022\'\n\004type\030\001 \001(\0162\031.ope" +
-      "nxc.DynamicField.Type\022\024\n\014string_value\030\002 " +
-      "\001(\t\022\025\n\rnumeric_value\030\003 \001(\001\022\025\n\rboolean_va" +
-      "lue\030\004 \001(\010\"%\n\004Type\022\n\n\006STRING\020\001\022\007\n\003NUM\020\002\022\010" +
-      "\n\004BOOL\020\003\"g\n\rSimpleMessage\022\014\n\004name\030\001 \001(\t\022" +
-      "#\n\005value\030\002 \001(\0132\024.openxc.DynamicField\022#\n\005" +
-      "event\030\003 \001(\0132\024.openxc.DynamicFieldB\034\n\ncom",
-      ".openxcB\016BinaryMessages"
+      "OMMAND_RESPONSE\020\005\"\224\001\n\nCanMessage\022\013\n\003bus\030" +
+      "\001 \001(\005\022\n\n\002id\030\002 \001(\r\022\014\n\004data\030\003 \001(\014\0224\n\014frame" +
+      "_format\030\004 \001(\0162\036.openxc.CanMessage.FrameF" +
+      "ormat\")\n\013FrameFormat\022\014\n\010STANDARD\020\001\022\014\n\010EX" +
+      "TENDED\020\002\"\270\004\n\016ControlCommand\022)\n\004type\030\001 \001(" +
+      "\0162\033.openxc.ControlCommand.Type\022<\n\022diagno" +
+      "stic_request\030\002 \001(\0132 .openxc.DiagnosticCo" +
+      "ntrolCommand\022G\n\030passthrough_mode_request" +
+      "\030\003 \001(\0132%.openxc.PassthroughModeControlCo" +
+      "mmand\022O\n acceptance_filter_bypass_comman",
+      "d\030\004 \001(\0132%.openxc.AcceptanceFilterBypassC" +
+      "ommand\022<\n\026payload_format_command\030\005 \001(\0132\034" +
+      ".openxc.PayloadFormatCommand\022O\n predefin" +
+      "ed_obd2_requests_command\030\006 \001(\0132%.openxc." +
+      "PredefinedObd2RequestsCommand\"\223\001\n\004Type\022\013" +
+      "\n\007VERSION\020\001\022\r\n\tDEVICE_ID\020\002\022\016\n\nDIAGNOSTIC" +
+      "\020\003\022\017\n\013PASSTHROUGH\020\004\022\034\n\030ACCEPTANCE_FILTER" +
+      "_BYPASS\020\005\022\022\n\016PAYLOAD_FORMAT\020\006\022\034\n\030PREDEFI" +
+      "NED_OBD2_REQUESTS\020\007\"\236\001\n\030DiagnosticContro" +
+      "lCommand\022*\n\007request\030\001 \001(\0132\031.openxc.Diagn",
+      "osticRequest\0227\n\006action\030\002 \001(\0162\'.openxc.Di" +
+      "agnosticControlCommand.Action\"\035\n\006Action\022" +
+      "\007\n\003ADD\020\001\022\n\n\006CANCEL\020\002\"=\n\035PassthroughModeC" +
+      "ontrolCommand\022\013\n\003bus\030\001 \001(\005\022\017\n\007enabled\030\002 " +
+      "\001(\010\"<\n\035AcceptanceFilterBypassCommand\022\013\n\003" +
+      "bus\030\001 \001(\005\022\016\n\006bypass\030\002 \001(\010\"{\n\024PayloadForm" +
+      "atCommand\022:\n\006format\030\001 \001(\0162*.openxc.Paylo" +
+      "adFormatCommand.PayloadFormat\"\'\n\rPayload" +
+      "Format\022\010\n\004JSON\020\001\022\014\n\010PROTOBUF\020\002\"0\n\035Predef" +
+      "inedObd2RequestsCommand\022\017\n\007enabled\030\001 \001(\010",
+      "\"]\n\017CommandResponse\022)\n\004type\030\001 \001(\0162\033.open" +
+      "xc.ControlCommand.Type\022\017\n\007message\030\002 \001(\t\022" +
+      "\016\n\006status\030\003 \001(\010\"\375\001\n\021DiagnosticRequest\022\013\n" +
+      "\003bus\030\001 \001(\005\022\022\n\nmessage_id\030\002 \001(\r\022\014\n\004mode\030\003" +
+      " \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007payload\030\005 \001(\014\022\032\n\022mu" +
+      "ltiple_responses\030\006 \001(\010\022\021\n\tfrequency\030\007 \001(" +
+      "\001\022\014\n\004name\030\010 \001(\t\022;\n\014decoded_type\030\t \001(\0162%." +
+      "openxc.DiagnosticRequest.DecodedType\"!\n\013" +
+      "DecodedType\022\010\n\004NONE\020\001\022\010\n\004OBD2\020\002\"\241\001\n\022Diag" +
+      "nosticResponse\022\013\n\003bus\030\001 \001(\005\022\022\n\nmessage_i",
+      "d\030\002 \001(\r\022\014\n\004mode\030\003 \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007su" +
+      "ccess\030\005 \001(\010\022\036\n\026negative_response_code\030\006 " +
+      "\001(\r\022\017\n\007payload\030\007 \001(\014\022\r\n\005value\030\010 \001(\001\"\242\001\n\014" +
+      "DynamicField\022\'\n\004type\030\001 \001(\0162\031.openxc.Dyna" +
+      "micField.Type\022\024\n\014string_value\030\002 \001(\t\022\025\n\rn" +
+      "umeric_value\030\003 \001(\001\022\025\n\rboolean_value\030\004 \001(" +
+      "\010\"%\n\004Type\022\n\n\006STRING\020\001\022\007\n\003NUM\020\002\022\010\n\004BOOL\020\003" +
+      "\"g\n\rSimpleMessage\022\014\n\004name\030\001 \001(\t\022#\n\005value" +
+      "\030\002 \001(\0132\024.openxc.DynamicField\022#\n\005event\030\003 " +
+      "\001(\0132\024.openxc.DynamicFieldB\034\n\ncom.openxcB",
+      "\016BinaryMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_openxc_VehicleMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_openxc_VehicleMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_VehicleMessage_descriptor,
-              new java.lang.String[] { "Type", "CanMessage", "SimpleMessage", "DiagnosticResponse", "ControlCommand", "CommandResponse", });
-          internal_static_openxc_CanMessage_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_openxc_CanMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_CanMessage_descriptor,
-              new java.lang.String[] { "Bus", "MessageId", "Data", "FrameFormat", });
-          internal_static_openxc_ControlCommand_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_openxc_ControlCommand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_ControlCommand_descriptor,
-              new java.lang.String[] { "Type", "DiagnosticRequest", "PassthroughModeRequest", "AcceptanceFilterBypassCommand", "PayloadFormatCommand", "PredefinedObd2RequestsCommand", });
-          internal_static_openxc_DiagnosticControlCommand_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_openxc_DiagnosticControlCommand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_DiagnosticControlCommand_descriptor,
-              new java.lang.String[] { "Request", "Action", });
-          internal_static_openxc_PassthroughModeControlCommand_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_openxc_PassthroughModeControlCommand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_PassthroughModeControlCommand_descriptor,
-              new java.lang.String[] { "Bus", "Enabled", });
-          internal_static_openxc_AcceptanceFilterBypassCommand_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_openxc_AcceptanceFilterBypassCommand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_AcceptanceFilterBypassCommand_descriptor,
-              new java.lang.String[] { "Bus", "Bypass", });
-          internal_static_openxc_PayloadFormatCommand_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_openxc_PayloadFormatCommand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_PayloadFormatCommand_descriptor,
-              new java.lang.String[] { "Format", });
-          internal_static_openxc_PredefinedObd2RequestsCommand_descriptor =
-            getDescriptor().getMessageTypes().get(7);
-          internal_static_openxc_PredefinedObd2RequestsCommand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_PredefinedObd2RequestsCommand_descriptor,
-              new java.lang.String[] { "Enabled", });
-          internal_static_openxc_CommandResponse_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_openxc_CommandResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_CommandResponse_descriptor,
-              new java.lang.String[] { "Type", "Message", "Status", });
-          internal_static_openxc_DiagnosticRequest_descriptor =
-            getDescriptor().getMessageTypes().get(9);
-          internal_static_openxc_DiagnosticRequest_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_DiagnosticRequest_descriptor,
-              new java.lang.String[] { "Bus", "MessageId", "Mode", "Pid", "Payload", "MultipleResponses", "Frequency", "Name", "DecodedType", });
-          internal_static_openxc_DiagnosticResponse_descriptor =
-            getDescriptor().getMessageTypes().get(10);
-          internal_static_openxc_DiagnosticResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_DiagnosticResponse_descriptor,
-              new java.lang.String[] { "Bus", "MessageId", "Mode", "Pid", "Success", "NegativeResponseCode", "Payload", "Value", });
-          internal_static_openxc_DynamicField_descriptor =
-            getDescriptor().getMessageTypes().get(11);
-          internal_static_openxc_DynamicField_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_DynamicField_descriptor,
-              new java.lang.String[] { "Type", "StringValue", "NumericValue", "BooleanValue", });
-          internal_static_openxc_SimpleMessage_descriptor =
-            getDescriptor().getMessageTypes().get(12);
-          internal_static_openxc_SimpleMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_openxc_SimpleMessage_descriptor,
-              new java.lang.String[] { "Name", "Value", "Event", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_openxc_VehicleMessage_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_openxc_VehicleMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_VehicleMessage_descriptor,
+        new java.lang.String[] { "Type", "CanMessage", "SimpleMessage", "DiagnosticResponse", "ControlCommand", "CommandResponse", });
+    internal_static_openxc_CanMessage_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_openxc_CanMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_CanMessage_descriptor,
+        new java.lang.String[] { "Bus", "Id", "Data", "FrameFormat", });
+    internal_static_openxc_ControlCommand_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_openxc_ControlCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_ControlCommand_descriptor,
+        new java.lang.String[] { "Type", "DiagnosticRequest", "PassthroughModeRequest", "AcceptanceFilterBypassCommand", "PayloadFormatCommand", "PredefinedObd2RequestsCommand", });
+    internal_static_openxc_DiagnosticControlCommand_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_openxc_DiagnosticControlCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_DiagnosticControlCommand_descriptor,
+        new java.lang.String[] { "Request", "Action", });
+    internal_static_openxc_PassthroughModeControlCommand_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_openxc_PassthroughModeControlCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_PassthroughModeControlCommand_descriptor,
+        new java.lang.String[] { "Bus", "Enabled", });
+    internal_static_openxc_AcceptanceFilterBypassCommand_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_openxc_AcceptanceFilterBypassCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_AcceptanceFilterBypassCommand_descriptor,
+        new java.lang.String[] { "Bus", "Bypass", });
+    internal_static_openxc_PayloadFormatCommand_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_openxc_PayloadFormatCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_PayloadFormatCommand_descriptor,
+        new java.lang.String[] { "Format", });
+    internal_static_openxc_PredefinedObd2RequestsCommand_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_openxc_PredefinedObd2RequestsCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_PredefinedObd2RequestsCommand_descriptor,
+        new java.lang.String[] { "Enabled", });
+    internal_static_openxc_CommandResponse_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_openxc_CommandResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_CommandResponse_descriptor,
+        new java.lang.String[] { "Type", "Message", "Status", });
+    internal_static_openxc_DiagnosticRequest_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_openxc_DiagnosticRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_DiagnosticRequest_descriptor,
+        new java.lang.String[] { "Bus", "MessageId", "Mode", "Pid", "Payload", "MultipleResponses", "Frequency", "Name", "DecodedType", });
+    internal_static_openxc_DiagnosticResponse_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_openxc_DiagnosticResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_DiagnosticResponse_descriptor,
+        new java.lang.String[] { "Bus", "MessageId", "Mode", "Pid", "Success", "NegativeResponseCode", "Payload", "Value", });
+    internal_static_openxc_DynamicField_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_openxc_DynamicField_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_DynamicField_descriptor,
+        new java.lang.String[] { "Type", "StringValue", "NumericValue", "BooleanValue", });
+    internal_static_openxc_SimpleMessage_descriptor =
+      getDescriptor().getMessageTypes().get(12);
+    internal_static_openxc_SimpleMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_openxc_SimpleMessage_descriptor,
+        new java.lang.String[] { "Name", "Value", "Event", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

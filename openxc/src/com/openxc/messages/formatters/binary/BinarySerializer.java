@@ -53,7 +53,7 @@ public class BinarySerializer {
         BinaryMessages.CanMessage.Builder messageBuilder =
                 BinaryMessages.CanMessage.newBuilder();
         messageBuilder.setBus(message.getBusId());
-        messageBuilder.setMessageId(message.getId());
+        messageBuilder.setId(message.getId());
         messageBuilder.setData(ByteString.copyFrom(message.getData()));
         builder.setCanMessage(messageBuilder);
     }
