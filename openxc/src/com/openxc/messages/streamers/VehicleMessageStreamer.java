@@ -49,7 +49,7 @@ public abstract class VehicleMessageStreamer {
     private void logTransferStats() {
         if(mBytesReceived > mLastLoggedTransferStatsAtByte +
                 STATS_LOG_FREQUENCY_KB * 1024) {
-            SourceLogger.logTransferStats(TAG, mLastLoggedStatsTime, System.nanoTime(),
+            SourceLogger.logTransferStats(TAG, mLastLoggedStatsTime,
                     mBytesReceived - mLastLoggedTransferStatsAtByte);
             mLastLoggedTransferStatsAtByte = mBytesReceived;
             mLastLoggedStatsTime = System.nanoTime();

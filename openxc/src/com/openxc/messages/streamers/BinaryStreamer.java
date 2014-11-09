@@ -30,7 +30,7 @@ import com.openxc.messages.formatters.BinaryFormatter;
  * eventually receive an parse the entire thing.
  */
 public class BinaryStreamer extends VehicleMessageStreamer {
-    private static String TAG = "JsonStreamer";
+    private static String TAG = "BinaryStreamer";
 
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
