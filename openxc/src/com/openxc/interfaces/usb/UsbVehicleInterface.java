@@ -20,11 +20,8 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.SerializationException;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -174,22 +171,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
     }
 
     @Override
-    public void receive(VehicleMessage command) throws DataSinkException {
-        if(isConnected()) {
-            try {
-                if(!write(sStreamer.serializeForStream(command))) {
-                    throw new DataSinkException("Unable to write command");
-                }
-            } catch(SerializationException e) {
-                throw new DataSinkException(
-                        "Unable to serialize command for sending", e);
-            }
-        } else {
-            throw new DataSinkException("Not connected");
-        }
-    }
-
-    @Override
     public boolean setResource(String otherUri) throws DataSourceException {
         if(mDeviceUri == UsbDeviceUtilities.DEFAULT_USB_DEVICE_URI
                     && otherUri != null &&
@@ -241,7 +222,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         }
     }
 
-    private boolean write(byte[] bytes) {
+    protected boolean write(byte[] bytes) {
         if(mConnection != null) {
             if(mOutEndpoint != null) {
                 int transferred = mConnection.bulkTransfer(

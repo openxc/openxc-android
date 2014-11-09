@@ -10,10 +10,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import android.content.Context;
 import android.util.Log;
 
+import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.BinaryStreamer;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
 
 /**
  * Common functionality for data sources that read a stream of newline-separated
@@ -143,13 +145,15 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                if(mStreamHandler == null) {
-                    if(JsonStreamer.containsJson(new String(bytes))) {
-                        mStreamHandler = new JsonStreamer();
-                        Log.i(getTag(), "Source is sending JSON");
-                    } else {
-                        mStreamHandler = new BinaryStreamer();
-                        Log.i(getTag(), "Source is sending protocol buffers");
+                synchronized(this) {
+                    if(mStreamHandler == null) {
+                        if(JsonStreamer.containsJson(new String(bytes))) {
+                            mStreamHandler = new JsonStreamer();
+                            Log.i(getTag(), "Source is sending JSON");
+                        } else {
+                            mStreamHandler = new BinaryStreamer();
+                            Log.i(getTag(), "Source is sending protocol buffers");
+                        }
                     }
                 }
 
@@ -162,6 +166,31 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         }
         disconnect();
         Log.d(getTag(), "Stopped " + getTag());
+    }
+
+    public void receive(VehicleMessage command) throws DataSinkException {
+        if(isConnected()) {
+            VehicleMessageStreamer streamer;
+            synchronized(this) {
+                streamer = mStreamHandler;
+                if(streamer == null) {
+                    // See https://github.com/openxc/openxc-android/issues/181
+                    streamer = new JsonStreamer();
+                    Log.i(getTag(), "Payload format unknown, guessing JSON");
+                }
+            }
+
+            try {
+                if(!write(streamer.serializeForStream(command))) {
+                    throw new DataSinkException("Unable to send command");
+                }
+            } catch(SerializationException e) {
+                throw new DataSinkException(
+                        "Unable to serialize command for sending", e);
+            }
+        } else {
+            throw new DataSinkException("Not connected");
+        }
     }
 
     @Override
@@ -209,6 +238,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
      *      error.
      */
     protected abstract int read(byte[] bytes) throws IOException;
+
+    protected abstract boolean write(byte[] bytes);
 
     /**
      * Perform any cleanup necessary to disconnect from the interface.

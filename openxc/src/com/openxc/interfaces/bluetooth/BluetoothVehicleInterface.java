@@ -22,11 +22,8 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.SerializationException;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -103,19 +100,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
      */
     public void setPollingStatus(boolean enabled) {
         mUsePolling = enabled;
-    }
-
-    @Override
-    public void receive(VehicleMessage command) throws DataSinkException {
-        // See https://github.com/openxc/openxc-android/issues/181
-        try {
-            if(!write(new String(sStreamer.serializeForStream(command)))) {
-                throw new DataSinkException("Unable to write command");
-            }
-        } catch(SerializationException e) {
-            throw new DataSinkException(
-                    "Unable to serialize command for sending", e);
-        }
     }
 
     @Override
@@ -371,13 +355,12 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return bytesRead;
     }
 
-    private boolean write(String message) {
+    protected boolean write(byte[] bytes) {
         mConnectionLock.readLock().lock();
         boolean success = false;
         try {
             if(isConnected()) {
-                Log.d(TAG, "Writing message to Bluetooth: " + message);
-                mOutStream.write(message);
+                mOutStream.write(new String(bytes));
                 // TODO what if we didn't flush every time? might be faster for
                 // sustained writes.
                 mOutStream.flush();

@@ -14,11 +14,8 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.SerializationException;
-import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -115,18 +112,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         return MoreObjects.toStringHelper(this)
             .add("uri", mUri)
             .toString();
-    }
-
-    @Override
-    public void receive(VehicleMessage command) throws DataSinkException {
-        try {
-            if(!write(sStreamer.serializeForStream(command))) {
-                throw new DataSinkException("Unable to send command");
-            }
-        } catch(SerializationException e) {
-            throw new DataSinkException(
-                    "Unable to serialize command for sending", e);
-        }
     }
 
     @Override
@@ -236,7 +221,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
      * @param bytes data to write to the socket.
      * @return true if the data was written successfully.
      */
-    private synchronized boolean write(byte[] bytes) {
+    protected synchronized boolean write(byte[] bytes) {
         mConnectionLock.readLock().lock();
         boolean success = true;
         try {

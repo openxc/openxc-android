@@ -231,6 +231,10 @@ public class BytestreamDataSourceTest {
             }
         }
 
+        protected boolean write(byte[] bytes) {
+            return true;
+        }
+
         @Override
         protected void disconnect() {
             mConnectionLock.writeLock().lock();
