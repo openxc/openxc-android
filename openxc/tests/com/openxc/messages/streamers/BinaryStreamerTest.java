@@ -126,6 +126,36 @@ public class BinaryStreamerTest {
     }
 
     @Test
+    public void dontDeserializeIfStreamTooShort() throws SerializationException {
+        byte[] data = streamer.serializeForStream(message);
+        byte[] half = new byte[data.length];
+        System.arraycopy(data, 0, half, 0, data.length / 2);
+        streamer.receive(half, data.length / 2);
+        assertThat(streamer.parseNextMessage(), nullValue());
+        System.arraycopy(data, data.length / 2, half, 0,
+                data.length - data.length / 2);
+        streamer.receive(half, half.length);
+        VehicleMessage deserialized = streamer.parseNextMessage();
+        assertEquals(message, deserialized);
+    }
+
+    // @Test
+    // TODO the binary deserialization can get in a really messed up state if it
+    // gets too far off, but i can't seem to reliably trip it in a test. it's
+    // fixed in code now and works well over Bluetooth, but I think we could
+    // make it better.
+    // public void ignoreJunkDataInFront() throws SerializationException {
+        // byte[] data = streamer.serializeForStream(message);
+        // byte[] junk = new byte[] { 0x12, 0x0b };
+        // byte[] dataWithJunkPrefix = new byte[data.length + junk.length];
+        // System.arraycopy(junk, 0, dataWithJunkPrefix, 0, junk.length);
+        // System.arraycopy(data, 0, dataWithJunkPrefix, junk.length, data.length);
+        // streamer.receive(dataWithJunkPrefix, dataWithJunkPrefix.length);
+        // VehicleMessage deserialized = streamer.parseNextMessage();
+        // assertEquals(message, deserialized);
+    // }
+
+    @Test
     public void logTransferStatsAfterMegabyte() throws SerializationException {
         byte[] data = streamer.serializeForStream(message);
         for(int i = 0; i < 10000; i++) {

@@ -43,29 +43,36 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         // inefficient
         InputStream input = new ByteArrayInputStream(mBuffer.toByteArray());
         VehicleMessage message = null;
+        int bytesRemaining = mBuffer.size();
         while(message == null) {
             try {
                 int firstByte = input.read();
+                bytesRemaining -= 1;
                 if (firstByte == -1) {
                     return null;
                 }
 
                 int size = CodedInputStream.readRawVarint32(firstByte, input);
-                if(size > 0) {
+                if(size > 0 && bytesRemaining >= size) {
                     message = BinaryFormatter.deserialize(
                             ByteStreams.limit(input, size));
-                }
-
-                if(message != null) {
-                    mBuffer = new ByteArrayOutputStream();
-                    IOUtils.copy(input, mBuffer);
+                } else {
+                    break;
                 }
             } catch(IOException e) {
-                Log.w(TAG, "Unable to deserialize protobuf", e);
+                Log.e(TAG, "Unexpected errror copying buffers");
             } catch(UnrecognizedMessageTypeException e) {
                 Log.w(TAG, "Deserialized protobuf had was unrecognized message type", e);
             }
+        }
 
+        if(message != null) {
+            mBuffer = new ByteArrayOutputStream();
+            try {
+                IOUtils.copy(input, mBuffer);
+            } catch(IOException e) {
+                Log.e(TAG, "Unexpected errror copying buffers");
+            }
         }
         return message;
     }
