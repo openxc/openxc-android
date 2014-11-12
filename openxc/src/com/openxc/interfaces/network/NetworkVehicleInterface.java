@@ -14,8 +14,6 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.streamers.JsonStreamer;
-import com.openxc.messages.streamers.VehicleMessageStreamer;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -33,7 +31,6 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     private static final int SOCKET_TIMEOUT = 10000;
     private static final String SCHEMA_SPECIFIC_PREFIX = "//";
 
-    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private Socket mSocket;
     private InputStream mInStream;
     private OutputStream mOutStream;

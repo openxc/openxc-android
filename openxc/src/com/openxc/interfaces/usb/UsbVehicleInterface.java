@@ -20,8 +20,6 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.UriBasedVehicleInterfaceMixin;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.streamers.JsonStreamer;
-import com.openxc.messages.streamers.VehicleMessageStreamer;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -53,7 +51,6 @@ public class UsbVehicleInterface extends BytestreamDataSource
     public static final String ACTION_USB_DEVICE_ATTACHED =
             "com.ford.openxc.USB_DEVICE_ATTACHED";
 
-    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private UsbManager mManager;
     private UsbDeviceConnection mConnection;
     private UsbInterface mInterface;

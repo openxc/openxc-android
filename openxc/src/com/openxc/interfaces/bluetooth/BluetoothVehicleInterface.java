@@ -22,8 +22,6 @@ import android.util.Log;
 import com.google.common.base.MoreObjects;
 import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
-import com.openxc.messages.streamers.JsonStreamer;
-import com.openxc.messages.streamers.VehicleMessageStreamer;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
@@ -45,7 +43,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private static final String TAG = "BluetoothVehicleInterface";
     public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
 
-    private static VehicleMessageStreamer sStreamer = new JsonStreamer();
     private DeviceManager mDeviceManager;
     private Thread mAcceptThread;
     private String mExplicitAddress;
