@@ -44,11 +44,19 @@ public class DiagnosticResponseAdapter extends VehicleMessageAdapter {
         modeView.setText("0x" + Integer.toHexString(message.getMode()));
 
         TextView pidView = (TextView) convertView.findViewById(R.id.pid);
-        pidView.setText("0x" + Integer.toHexString(message.getPid()));
+        if(message.hasPid()) {
+            pidView.setText("0x" + Integer.toHexString(message.getPid()));
+        } else {
+            pidView.setText("None");
+        }
 
-        TextView payloadView = (TextView) convertView.findViewById(R.id.payload);
-        payloadView.setText("0x" + ByteAdapter.byteArrayToHexString(
-                    message.getPayload()));
+            TextView payloadView = (TextView) convertView.findViewById(R.id.payload);
+        if(message.hasPayload()) {
+            payloadView.setText("0x" + ByteAdapter.byteArrayToHexString(
+                        message.getPayload()));
+        } else {
+            payloadView.setText("None");
+        }
 
         return convertView;
     }

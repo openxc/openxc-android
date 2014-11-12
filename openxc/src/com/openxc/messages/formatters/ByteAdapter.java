@@ -33,13 +33,17 @@ public class ByteAdapter extends TypeAdapter<byte[]> {
       //adapted from stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
       private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
       public static String byteArrayToHexString(byte[] bytes) {
-          char[] hexChars = new char[bytes.length * 2];
-          for (int j = 0; j < bytes.length; j++) {
-              int v = bytes[j] & 0xFF;
-              hexChars[j * 2] = hexArray[v >>> 4];
-              hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+          if(bytes == null) {
+              return "";
+          } else {
           }
-          return new String(hexChars);
+              char[] hexChars = new char[bytes.length * 2];
+              for (int j = 0; j < bytes.length; j++) {
+                  int v = bytes[j] & 0xFF;
+                  hexChars[j * 2] = hexArray[v >>> 4];
+                  hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+              }
+              return new String(hexChars);
       }
 
       //adapted from stackoverflow.com/questions/140131/convert-a-string-representation-of-a-hex-dump-to-a-byte-array-using-java
