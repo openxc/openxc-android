@@ -107,13 +107,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     }
 
     private void resetConnectionAttempts(long delay, long period) {
-        if(mTimer != null) {
-            mTimer.cancel();
-        }
-
+        stopConnectionAttempts();
         mConnectionCheckTask = new BytestreamConnectingTask(this);
         mTimer = new Timer();
         mTimer.schedule(mConnectionCheckTask, delay * 1000, period * 1000);
+    }
+
+    protected void stopConnectionAttempts() {
+        if(mTimer != null) {
+            mTimer.cancel();
+        }
         mReconnectionAttempts = 0;
     }
 

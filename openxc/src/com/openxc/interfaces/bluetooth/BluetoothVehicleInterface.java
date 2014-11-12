@@ -52,6 +52,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private BluetoothSocket mSocket;
     private boolean mPerformAutomaticScan = true;
     private boolean mUsePolling = false;
+    private boolean mSocketAccepterRunning = true;
 
     public BluetoothVehicleInterface(SourceCallback callback, Context context,
             String address) throws DataSourceException {
@@ -65,9 +66,11 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         IntentFilter filter = new IntentFilter(
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        getContext().registerReceiver(mDiscoveryReceiver, filter);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
         filter = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
-        getContext().registerReceiver(mDiscoveryReceiver, filter);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
+        filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        getContext().registerReceiver(mBroadcastReceiver, filter);
 
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
@@ -155,7 +158,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     public synchronized void stop() {
         if(isRunning()) {
             try {
-                getContext().unregisterReceiver(mDiscoveryReceiver);
+                getContext().unregisterReceiver(mBroadcastReceiver);
             } catch(IllegalArgumentException e) {
                 Log.w(TAG, "Broadcast receiver not registered but we expected it to be");
             }
@@ -181,7 +184,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         public void run() {
             Log.d(TAG, "Socket accepter starting up");
             BluetoothSocket socket = null;
-            while(isRunning()) {
+            while(isRunning() && shouldAttemptConnection()) {
                 while(isConnected()) {
                     mConnectionLock.writeLock().lock();
                     try {
@@ -193,8 +196,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     }
                 }
 
-                // If the BT interface has been disabled, the socket wlil be
-                // disconnected and we will break out of the above
+                // If the BT vehicle interface has been disabled, the socket
+                // wlil be disconnected and we will break out of the above
                 // while(isConnected()) loop and land here - double check that
                 // this interface should still be running before trying to make
                 // another connection.
@@ -206,15 +209,16 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 mmServerSocket = mDeviceManager.listen();
 
                 if(mmServerSocket == null) {
-                    Log.i(TAG, "Unable to listen for Bluetooth connections - adapter may be off");
-                    continue;
+                    Log.i(TAG, "Unable to listen for Bluetooth connections " +
+                            "- adapter may be off");
+                    stopWhileBluetoothDisabled();
+                    break;
                 }
 
                 try {
                     Log.i(TAG, "Listening for inbound socket connections");
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
-                    // break;
                 }
 
                 if(socket != null) {
@@ -224,7 +228,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                         Log.d(TAG, "Closing listening server socket");
                         mmServerSocket.close();
                     } catch (IOException e) { }
-                    // break;
                 }
             }
             Log.d(TAG, "SocketAccepter is stopping");
@@ -458,22 +461,51 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return otherAddress != null && otherAddress.equals(address);
     }
 
-    private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
+    private boolean shouldAttemptConnection() {
+        return mSocketAccepterRunning;
+    }
+
+    private void stopWhileBluetoothDisabled() {
+        mSocketAccepterRunning = false;
+        stopConnectionAttempts();
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Whenever discovery finishes or another Bluetooth device connects
-            // (i.e. it might be a car's infotainment system), take the
-            // opportunity to try and connect to detected devices if we're not
-            // already connected. Discovery may have been initiated by the
-            // Enabler UI, or by some other user action or app.
-            if(mUsePolling && !isConnected() && !mDeviceManager.isConnecting()) {
-                Log.d(TAG, "Discovery finished or a device connected, but " +
-                        "we are not connected or attempting connections - " +
-                        "kicking off reconnection attempts");
-                if(mExplicitAddress == null) {
-                    mPerformAutomaticScan = true;
+            final String action = intent.getAction();
+            if(action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED) ||
+                    action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+                // Whenever discovery finishes or another Bluetooth device connects
+                // (i.e. it might be a car's infotainment system), take the
+                // opportunity to try and connect to detected devices if we're not
+                // already connected. Discovery may have been initiated by the
+                // Enabler UI, or by some other user action or app.
+                if(mUsePolling && !isConnected() && !mDeviceManager.isConnecting()) {
+                    Log.d(TAG, "Discovery finished or a device connected, but " +
+                            "we are not connected or attempting connections - " +
+                            "kicking off reconnection attempts");
+                    if(mExplicitAddress == null) {
+                        mPerformAutomaticScan = true;
+                    }
+                    setFastPolling(true);
                 }
-                setFastPolling(true);
+            } else if(action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR);
+                switch (state) {
+                case BluetoothAdapter.STATE_OFF:
+                    Log.d(TAG, "Bluetooth adapter turned off");
+                    stopWhileBluetoothDisabled();
+                    break;
+                case BluetoothAdapter.STATE_ON:
+                    Log.d(TAG, "Bluetooth adapter turned on");
+                    mSocketAccepterRunning = true;
+                    setFastPolling(true);
+                    mAcceptThread = new Thread(new SocketAccepter());
+                    mAcceptThread.start();
+                    break;
+                }
             }
         }
     };
