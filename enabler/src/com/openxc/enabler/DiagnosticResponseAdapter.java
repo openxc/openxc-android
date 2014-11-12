@@ -50,10 +50,12 @@ public class DiagnosticResponseAdapter extends VehicleMessageAdapter {
             pidView.setText("None");
         }
 
-            TextView payloadView = (TextView) convertView.findViewById(R.id.payload);
+        TextView payloadView = (TextView) convertView.findViewById(R.id.payload);
         if(message.hasPayload()) {
             payloadView.setText("0x" + ByteAdapter.byteArrayToHexString(
                         message.getPayload()));
+        } else if(message.hasValue()) {
+            payloadView.setText("Value: " + message.getValue());
         } else {
             payloadView.setText("None");
         }
