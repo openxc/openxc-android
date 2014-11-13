@@ -38,7 +38,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <android.version>4.1.1.4</android.version>
+        <android.version>5.0_r1</android.version>
         <android.platform>21</android.platform>
 
         <java.version>1.7</java.version>
@@ -48,14 +48,14 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.google.android</groupId>
+                <groupId>android</groupId>
                 <artifactId>android</artifactId>
                 <version>${android.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.android</groupId>
                 <artifactId>android-test</artifactId>
-                <version>${android.version}</version>
+                <version>4.1.1.4</version>
             </dependency>
           <dependency>
               <groupId>com.google.guava</groupId>

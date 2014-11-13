@@ -48,10 +48,20 @@ emulator):
 
 The build requires [Maven](http://maven.apache.org/download.html)
 v3.0.3+ and the [Android SDK](http://developer.android.com/sdk/index.html)
-to be installed in your development environment. In addition you'll need to set
-the `ANDROID_HOME` environment variable to the location of your SDK:
+to be installed in your development environment.
+
+Set the `ANDROID_HOME` environment variable to the location of your SDK:
 
     export ANDROID_HOME=/opt/tools/android-sdk
+
+Clone the maven-android-sdk-deployer tool and install the SDK to your local
+Maven repository for the latest SDK:
+
+    $ git clone git@github.com:mosabua/maven-android-sdk-deployer.git
+    $ cd maven-android-sdk-deployer
+    $ mvn install -P 5.0
+
+### Support Library
 
 You also need the Android support library, but unfortunately Google doesn't
 deploy the latest versions of this to the the Central Maven repository. Instead,

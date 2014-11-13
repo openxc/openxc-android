@@ -13,6 +13,8 @@ android:
 before_install:
   - mkdir -p ~/.m2/repository
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
+  - git clone https://github.com/mosabua/maven-android-sdk-deployer.git
+  - pushd maven-android-sdk-deployer; mvn install -P 5.0; popd
 install:
   - mvn clean install -DskipTests=true -pl openxc -am
 script:
