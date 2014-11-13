@@ -11,8 +11,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import junit.framework.Assert;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -94,7 +92,7 @@ public class FileRecorderSinkTest {
         measurement = new SimpleVehicleMessage("third", true);
         try {
             sink.receive(measurement);
-            Assert.fail("Expected a DataSinkException");
+            fail("Expected a DataSinkException");
         } catch(DataSinkException e) {
         }
 

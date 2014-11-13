@@ -1,6 +1,7 @@
 package com.openxc.sources;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.mockito.Matchers;

@@ -1,11 +1,11 @@
 package com.openxc;
 
+import static org.junit.Assert.*;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-
-import junit.framework.Assert;
 
 import android.content.Intent;
 import android.test.ServiceTestCase;
@@ -103,7 +103,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         } catch(NoValueException e) {
             return;
         }
-        Assert.fail("Expected a NoValueException");
+        fail("Expected a NoValueException");
     }
 
     @MediumTest

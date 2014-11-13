@@ -1,7 +1,7 @@
 package com.openxc.interfaces.network;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;

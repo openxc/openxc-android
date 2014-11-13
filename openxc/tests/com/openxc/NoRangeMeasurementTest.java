@@ -2,7 +2,7 @@ package com.openxc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class NoRangeMeasurementTest {
 
     @Test
     public void hasNoRange() {
-        Assert.assertFalse(measurement.hasRange());
+        assertFalse(measurement.hasRange());
     }
 
     @Test

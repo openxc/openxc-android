@@ -1,11 +1,11 @@
 package com.openxc;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
 
@@ -24,7 +24,7 @@ public class TestUtils {
         try {
             uri = new URI("file:///sdcard/com.openxc/" + filename);
         } catch(URISyntaxException e) {
-            Assert.fail("Couldn't construct resource URIs: " + e);
+            fail("Couldn't construct resource URIs: " + e);
         }
 
         try {
@@ -32,7 +32,7 @@ public class TestUtils {
                     context.getResources().openRawResource(resource),
                         new File(uri));
         } catch(IOException e) {
-            Assert.fail("Couldn't copy trace files to SD card" + e);
+            fail("Couldn't copy trace files to SD card" + e);
         }
         return uri;
     }

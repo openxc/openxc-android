@@ -2,10 +2,7 @@ package com.openxc.messages;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,19 +30,19 @@ public class DiagnosticResponseTest {
         response = new DiagnosticResponse(bus, id, mode, pid, payload);
         simpleResponse = new DiagnosticResponse(bus, id, mode);
     }
-    
+
     @Test
     public void simpleComplexResponseNotEqual() {
         assertThat(response, not(equalTo(simpleResponse)));
     }
-    
+
     @Test
     public void requiredFieldsEqual() {
         assertEquals(response.getBusId(), simpleResponse.getBusId());
         assertEquals(response.getId(), simpleResponse.getId());
         assertEquals(response.getMode(), simpleResponse.getMode());
     }
-    
+
     @Test
     public void nonEssentialFieldsNotEqual() {
         assertThat(response.getPid(), not(equalTo(simpleResponse.getPid())));

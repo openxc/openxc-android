@@ -1,12 +1,8 @@
 package com.openxc.messages.formatters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
@@ -22,7 +18,7 @@ import com.openxc.messages.formatters.ByteAdapter;
 @Config(emulateSdk = 18, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class ByteAdapterTest {
-    
+
     @Test
     public void testByteArrayToHex()  {
         assertEquals(ByteAdapter.byteArrayToHexString(new byte[] {0}), "00");
@@ -33,7 +29,7 @@ public class ByteAdapterTest {
         assertEquals(ByteAdapter.byteArrayToHexString(new byte[] {12, 15, 0, 1, 7, 9, 11}), "0C0F000107090B");
         assertEquals(ByteAdapter.byteArrayToHexString(new byte[] {100, 31, 3, 47, 22, 9, 120}), "641F032F160978");
     }
-    
+
     @Test
     public void testHexToByteArray()  {
         assertTrue(Arrays.equals(ByteAdapter.hexStringToByteArray("00"), new byte[] {0}));
@@ -44,5 +40,5 @@ public class ByteAdapterTest {
         assertTrue(Arrays.equals(ByteAdapter.hexStringToByteArray("0C0F000107090B"), new byte[] {12, 15, 0, 1, 7, 9, 11}));
         assertTrue(Arrays.equals(ByteAdapter.hexStringToByteArray("641F032F160978"), new byte[] {100, 31, 3, 47, 22, 9, 120}));
     }
-    
+
 }
