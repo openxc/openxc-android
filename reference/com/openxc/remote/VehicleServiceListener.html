@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="selected api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -180,16 +186,16 @@
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.html">VehicleServiceInterface</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/ViConnectionListener.html">ViConnectionListener</a></li>
       </ul>
     </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleService.html">VehicleService</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html">VehicleServiceInterface.Stub</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.Stub.html">VehicleServiceListener.Stub</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/ViConnectionListener.Stub.html">ViConnectionListener.Stub</a></li>
       </ul>
     </li>
               
@@ -197,7 +203,6 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/remote/RawMeasurementException.html">RawMeasurementException</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></li>
       </ul>
     </li>
@@ -206,9 +211,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -403,18 +408,19 @@ Summary:
 
   
     <tr class="alt-color api apilevel-" >
-      <td class="jd-typecol"><nobr>
+      <td class="jd-typecol">
         
          
          
         
-        class</nobr></td>
+        class</td>
       <td class="jd-linkcol"><a href="../../../com/openxc/remote/VehicleServiceListener.Stub.html">VehicleServiceListener.Stub</a></td>
       <td class="jd-descrcol" width="100%">Local-side IPC implementation stub class.&nbsp;</td>
     </tr>
     
     
 
+</table>
 
 
 
@@ -448,16 +454,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceListener.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> value)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleServiceListener.html#receive(com.openxc.messages.VehicleMessage)">receive</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> value)
         
   </td></tr>
 
@@ -498,16 +504,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            IBinder</nobr>
+            IBinder
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">asBinder</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">asBinder</span>()
         
   </td></tr>
 
@@ -560,7 +566,7 @@ From interface
 
 
 
-<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
+<a id="receive(com.openxc.messages.VehicleMessage)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -573,7 +579,7 @@ From interface
         void
       </span>
       <span class="sympad">receive</span>
-      <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> value)</span>
+      <span class="normal">(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> value)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -608,7 +614,7 @@ From interface
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

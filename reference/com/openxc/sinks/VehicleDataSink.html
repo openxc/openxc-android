@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="selected api apilevel-">
@@ -185,12 +191,11 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MessageListenerSink.html">MessageListenerSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sinks/TestSink.html">TestSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></li>
       </ul>
@@ -208,9 +213,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -330,23 +335,21 @@ Summary:
             
               <a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a>,
             
-              <a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a>,
-            
               <a href="../../../com/openxc/interfaces/bluetooth/BluetoothVehicleInterface.html">BluetoothVehicleInterface</a>,
             
               <a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a>,
             
               <a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a>,
             
-              <a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a>,
-            
-              <a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a>,
+              <a href="../../../com/openxc/sinks/MessageListenerSink.html">MessageListenerSink</a>,
             
               <a href="../../../com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a>,
             
               <a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a>,
             
-              <a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a>,
+              <a href="../../../com/openxc/sinks/TestSink.html">TestSink</a>,
+            
+              <a href="../../../com/openxc/interfaces/TestVehicleInterface.html">TestVehicleInterface</a>,
             
               <a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a>,
             
@@ -367,29 +370,21 @@ Summary:
               <td class="jd-descrcol" width="100%">Functionality to notify multiple clients asynchronously of new measurements.&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></td>
-              <td class="jd-descrcol" width="100%">A common parent class for all vehicle data sinks.&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/bluetooth/BluetoothVehicleInterface.html">BluetoothVehicleInterface</a></td>
               <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an Bluetooth-enabled
  OpenXC device.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></td>
               <td class="jd-descrcol" width="100%">A parent class for data sinks that require access to an Android context.&nbsp;</td>
           </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></td>
-              <td class="jd-descrcol" width="100%">Record raw vehicle measurements to a file as JSON.&nbsp;</td>
-          </tr>
         <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></td>
-              <td class="jd-descrcol" width="100%">A data sink that sends new measurements of specific types to listeners.&nbsp;</td>
+              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></td>
+              <td class="jd-descrcol" width="100%">Record raw vehicle messages to a file as JSON.&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></td>
-              <td class="jd-descrcol" width="100%">Propagate vehicle location updates through the Android location interface.&nbsp;</td>
+              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/MessageListenerSink.html">MessageListenerSink</a></td>
+              <td class="jd-descrcol" width="100%">A data sink that sends new measurements of specific types to listeners.&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a></td>
@@ -397,27 +392,30 @@ Summary:
           </tr>
         <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></td>
-              <td class="jd-descrcol" width="100%">A data sink that sends new measurements through an AIDL interface.&nbsp;</td>
+              <td class="jd-descrcol" width="100%">A data sink that sends new messages through an AIDL interface.&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></td>
-              <td class="jd-descrcol" width="100%">A VehicleInterface that sends commands to a VehicleService operating in a
- remote process.&nbsp;</td>
+              <td class="jd-linkcol"><a href="../../../com/openxc/sinks/TestSink.html">TestSink</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/TestVehicleInterface.html">TestVehicleInterface</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></td>
               <td class="jd-descrcol" width="100%">Upload a stream of all incoming vehicle data to a remote HTTP server.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></td>
               <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC USB device.&nbsp;</td>
           </tr>
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></td>
               <td class="jd-descrcol" width="100%">Pass measurements from a user-level data sources back to the remote
  VehicleService.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></td>
               <td class="jd-descrcol" width="100%">A connection to a physical vehicle interface that is capable of full duplex
  communication.&nbsp;</td>
@@ -502,16 +500,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.messages.VehicleMessage)">receive</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> measurement)
         
         <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
   
@@ -520,16 +518,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()
         
         <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
  source) or stop expecting to receive them (if a sink).</div>
@@ -585,7 +583,7 @@ Summary:
 
 
 
-<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
+<a id="receive(com.openxc.messages.VehicleMessage)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -595,10 +593,10 @@ Summary:
          
         abstract 
          
-        boolean
+        void
       </span>
       <span class="sympad">receive</span>
-      <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
+      <span class="normal">(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> measurement)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -619,7 +617,7 @@ Summary:
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>measurement</td>
+          <th>measurement</th>
           <td>The new measurement.
 </td>
         </tr>
@@ -639,7 +637,7 @@ Summary:
 </div>
 
 
-<A NAME="stop()"></A>
+<a id="stop()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -680,7 +678,7 @@ Summary:
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

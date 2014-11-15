@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="selected api apilevel-">
@@ -185,12 +191,11 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/ContextualVehicleDataSink.html">ContextualVehicleDataSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sinks/MessageListenerSink.html">MessageListenerSink</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sinks/TestSink.html">TestSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/UploaderSink.html">UploaderSink</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sinks/UserSink.html">UserSink</a></li>
       </ul>
@@ -208,9 +213,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -240,13 +245,6 @@
 <div id="api-info-block">
 
 
-
-  
-   
-  
-  
-  
-  
 
   
    
@@ -329,10 +327,6 @@ Summary:
   
 
   
-  
-  
-
-  
     extends <a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html">AbstractQueuedCallbackSink</a><br/>
   
   
@@ -353,21 +347,11 @@ Summary:
 
     <tr>
          	
-        <td colspan="4" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
     <tr>
-        
-            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
-         	
-        <td colspan="3" class="jd-inheritance-class-cell"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">com.openxc.sinks.BaseVehicleDataSink</a></td>
-    </tr>
-    
-
-    <tr>
-        
-            <td class="jd-inheritance-space">&nbsp;</td>
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
@@ -376,8 +360,6 @@ Summary:
     
 
     <tr>
-        
-            <td class="jd-inheritance-space">&nbsp;</td>
         
             <td class="jd-inheritance-space">&nbsp;</td>
         
@@ -399,11 +381,11 @@ Summary:
 
 
 <h2>Class Overview</h2>
-<p>A data sink that sends new measurements through an AIDL interface.
+<p>A data sink that sends new messages through an AIDL interface.
 
- This sink is used to send all new measurements over an AIDL interface in
+ This sink is used to send all new messages over an AIDL interface in
  Android to applications using <code><a href="../../../com/openxc/VehicleManager.html">VehicleManager</a></code>. Once
- registered, a receiver gets all measurements regardless of their type or
+ registered, a receiver gets all messages regardless of their type or
  value.
 </p>
 
@@ -462,16 +444,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            </nobr>
+            
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#RemoteCallbackSink()">RemoteCallbackSink</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#RemoteCallbackSink()">RemoteCallbackSink</a></span>()
         
   </td></tr>
 
@@ -491,64 +473,64 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#getListenerCount()">getListenerCount</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#getListenerCount()">getListenerCount</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             synchronized
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#register(com.openxc.remote.VehicleServiceListener)">register</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#register(com.openxc.remote.VehicleServiceListener)">register</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#toString()">toString</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#toString()">toString</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#unregister(com.openxc.remote.VehicleServiceListener)">unregister</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#unregister(com.openxc.remote.VehicleServiceListener)">unregister</a></span>(<a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a> listener)
         
   </td></tr>
 
@@ -566,16 +548,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#propagateMeasurement(java.lang.String, com.openxc.remote.RawMeasurement)">propagateMeasurement</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/RemoteCallbackSink.html#propagateMessage(com.openxc.messages.VehicleMessage)">propagateMessage</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)
         
   </td></tr>
 
@@ -614,161 +596,66 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#clearQueue()">clearQueue</a></span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#propagateMeasurement(java.lang.String, com.openxc.remote.RawMeasurement)">propagateMeasurement</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#propagateMessage(com.openxc.messages.VehicleMessage)">propagateMessage</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)
         
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> rawMeasurement)</nobr>
-        
-        <div class="jd-descrdiv">Receive a raw measurement, deserialized to primatives.</div>
-  
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#receive(com.openxc.messages.VehicleMessage)">receive</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)
+        
+        <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
             
             synchronized
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#stop()">stop</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
- source) or stop expecting to receive them (if a sink).</div>
-  
-  </td></tr>
-
-
-</table>
-  </div>
-</div>
-</td></tr>
-
-
-
-<tr class="api apilevel-" >
-<td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink-trigger"
-          src="../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>
-From class
-
-  <a href="../../../com/openxc/sinks/BaseVehicleDataSink.html">com.openxc.sinks.BaseVehicleDataSink</a>
-
-<div id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink">
-  <div id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink-list"
-        class="jd-inheritedlinks">
-  </div>
-  <div id="inherited-methods-com.openxc.sinks.BaseVehicleDataSink-summary" style="display: none;">
-    <table class="jd-sumtable-expando">
-    
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#containsMeasurement(java.lang.String)">containsMeasurement</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#get(java.lang.String)">get</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Set.html">Set</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Map.Entry.html">Entry</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>,&nbsp;<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a>&gt;&gt;</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#getMeasurements()">getMeasurements</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
-        
-        <div class="jd-descrdiv">Receive a raw measurement, deserialized to primatives.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/BaseVehicleDataSink.html#stop()">stop</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/AbstractQueuedCallbackSink.html#stop()">stop</a></span>()
         
         <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
  source) or stop expecting to receive them (if a sink).</div>
@@ -804,176 +691,176 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">clone</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">clone</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">finalize</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">finalize</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getClass</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getClass</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">hashCode</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">hashCode</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">notify</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notify</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">notifyAll</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notifyAll</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">toString</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">toString</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -1006,16 +893,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#receive(com.openxc.messages.VehicleMessage)">receive</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> measurement)
         
         <div class="jd-descrdiv">Receive a data point with a name, a value and a event value.</div>
   
@@ -1024,16 +911,16 @@ From interface
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sinks/VehicleDataSink.html#stop()">stop</a></span>()
         
         <div class="jd-descrdiv">Release any acquired resources and either stop sending measurements (if a
  source) or stop expecting to receive them (if a sink).</div>
@@ -1081,7 +968,7 @@ From interface
 
 
 
-<A NAME="RemoteCallbackSink()"></A>
+<a id="RemoteCallbackSink()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1127,7 +1014,7 @@ From interface
 
 
 
-<A NAME="getListenerCount()"></A>
+<a id="getListenerCount()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1158,7 +1045,7 @@ From interface
 </div>
 
 
-<A NAME="register(com.openxc.remote.VehicleServiceListener)"></A>
+<a id="register(com.openxc.remote.VehicleServiceListener)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1189,7 +1076,7 @@ From interface
 </div>
 
 
-<A NAME="toString()"></A>
+<a id="toString()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1220,7 +1107,7 @@ From interface
 </div>
 
 
-<A NAME="unregister(com.openxc.remote.VehicleServiceListener)"></A>
+<a id="unregister(com.openxc.remote.VehicleServiceListener)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1260,7 +1147,7 @@ From interface
 
 
 
-<A NAME="propagateMeasurement(java.lang.String, com.openxc.remote.RawMeasurement)"></A>
+<a id="propagateMessage(com.openxc.messages.VehicleMessage)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1272,8 +1159,8 @@ From interface
          
         void
       </span>
-      <span class="sympad">propagateMeasurement</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
+      <span class="sympad">propagateMessage</span>
+      <span class="normal">(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1295,7 +1182,7 @@ From interface
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

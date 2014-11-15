@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="selected api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -189,6 +195,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/BaseMeasurement.html">BaseMeasurement</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/BrakePedalStatus.html">BrakePedalStatus</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/EngineSpeed.html">EngineSpeed</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/measurements/EventedMeasurement.html">EventedMeasurement</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/FuelConsumed.html">FuelConsumed</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/FuelLevel.html">FuelLevel</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/HeadlampStatus.html">HeadlampStatus</a></li>
@@ -223,7 +230,6 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/measurements/NoRangeException.html">NoRangeException</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/UnrecognizedMeasurementTypeException.html">UnrecognizedMeasurementTypeException</a></li>
       </ul>
     </li>
@@ -232,9 +238,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -268,6 +274,25 @@
 
 <div class="sum-details-links">
 
+
+Summary:
+
+
+
+
+
+
+
+
+
+
+
+  <a href="#pubmethods">Methods</a>
+  
+
+
+
+&#124; <a href="#" onclick="return toggleAllClassInherited()" id="toggleAllClassInherited">[Expand All]</a>
 
 </div><!-- end sum-details-links -->
 <div class="api-level">
@@ -318,6 +343,38 @@
 
 
 
+
+<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-indirect" class="jd-expando-trigger closed"
+          ><img id="subclasses-indirect-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>Known Indirect Subclasses
+
+  <div id="subclasses-indirect">
+      <div id="subclasses-indirect-list"
+              class="jd-inheritedlinks"
+              
+              >
+          
+            
+              <a href="../../../com/openxc/VehicleLocationProvider.html">VehicleLocationProvider</a>
+            
+          
+      </div>
+      <div id="subclasses-indirect-summary"
+              style="display: none;"
+              >
+  <table class="jd-sumtable-expando">
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/VehicleLocationProvider.html">VehicleLocationProvider</a></td>
+              <td class="jd-descrcol" width="100%">Propagate GPS and vehicle speed updates from OpenXC to the normal Android
+ location system.&nbsp;</td>
+          </tr>
+  </table>
+      </div>
+  </div>
+</td></tr></table>
 
 
 <div class="jd-descr">
@@ -382,16 +439,16 @@
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.Listener.html#receive(com.openxc.measurements.Measurement)">receive</a></span>(<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a> measurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.Listener.html#receive(com.openxc.measurements.Measurement)">receive</a></span>(<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a> measurement)
         
   </td></tr>
 
@@ -444,7 +501,7 @@
 
 
 
-<A NAME="receive(com.openxc.measurements.Measurement)"></A>
+<a id="receive(com.openxc.measurements.Measurement)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -483,7 +540,7 @@
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

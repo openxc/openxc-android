@@ -137,9 +137,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="./packages.html"  >Package Index</a> | 
-                <a href="./classes.html" class="selected">Class Index</a></nobr>
+                <a href="./classes.html" class="selected">Class Index</a>
               </div>
               <ul>
                 
@@ -156,7 +156,13 @@
     <li class="api apilevel-">
   <a href="./com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="./com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="./com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="./com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="./com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -180,9 +186,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="./packages.html"  >Package Index</a> | 
-            <a href="./classes.html" class="selected">Class Index</a></nobr>
+            <a href="./classes.html" class="selected">Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -286,72 +292,313 @@
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/BaseMeasurement.html">BaseMeasurement</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="./com/openxc/units/Unit.html">Unit</a>&gt;</td>
             <td class="jd-descrcol" width="100%">The BaseMeasurement is the base implementation of the Measurement, and
- wraps wraps an instance of a <code><a href="./com/openxc/units/Unit.html">Unit</a></code>, and the value it returns is always
+ wraps an instance of a <code><a href="./com/openxc/units/Unit.html">Unit</a></code>, and the value it returns is always
  in terms of this Unit.&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sinks/BaseVehicleDataSink.html">BaseVehicleDataSink</a></td>
-            <td class="jd-descrcol" width="100%">A common parent class for all vehicle data sinks.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></td>
             <td class="jd-descrcol" width="100%">A common parent for all vehicle data sources.&nbsp;</td>
         </tr>
     
     
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/formatters/binary/BinaryDeserializer.html">BinaryDeserializer</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
         <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/formatters/BinaryFormatter.html">BinaryFormatter</a></td>
+            <td class="jd-descrcol" width="100%">A formatter for serializing and deserializing Protocol Buffers, i.e.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.html">BinaryMessages</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.AcceptanceFilterBypassCommand.html">BinaryMessages.AcceptanceFilterBypassCommand</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.AcceptanceFilterBypassCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.RawMessage.html">BinaryMessages.RawMessage</a></td>
-            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.RawMessage</code>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.AcceptanceFilterBypassCommand.Builder.html">BinaryMessages.AcceptanceFilterBypassCommand.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.AcceptanceFilterBypassCommand</code>
 &nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.RawMessage.Builder.html">BinaryMessages.RawMessage.Builder</a></td>
-            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.RawMessage</code>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.AcceptanceFilterBypassCommandOrBuilder.html">BinaryMessages.AcceptanceFilterBypassCommandOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CanMessage.html">BinaryMessages.CanMessage</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.CanMessage</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CanMessage.Builder.html">BinaryMessages.CanMessage.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.CanMessage</code>
 &nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.RawMessageOrBuilder.html">BinaryMessages.RawMessageOrBuilder</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CanMessage.FrameFormat.html">BinaryMessages.CanMessage.FrameFormat</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.CanMessage.FrameFormat</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CanMessageOrBuilder.html">BinaryMessages.CanMessageOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CommandResponse.html">BinaryMessages.CommandResponse</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.CommandResponse</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CommandResponse.Builder.html">BinaryMessages.CommandResponse.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.CommandResponse</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.CommandResponseOrBuilder.html">BinaryMessages.CommandResponseOrBuilder</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.TranslatedMessage.html">BinaryMessages.TranslatedMessage</a></td>
-            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.TranslatedMessage</code>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.ControlCommand.html">BinaryMessages.ControlCommand</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.ControlCommand</code>
 &nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.TranslatedMessage.Builder.html">BinaryMessages.TranslatedMessage.Builder</a></td>
-            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.TranslatedMessage</code>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.ControlCommand.Builder.html">BinaryMessages.ControlCommand.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.ControlCommand</code>
 &nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.TranslatedMessage.Type.html">BinaryMessages.TranslatedMessage.Type</a></td>
-            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.TranslatedMessage.Type</code>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.ControlCommand.Type.html">BinaryMessages.ControlCommand.Type</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.ControlCommand.Type</code>
 &nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.TranslatedMessageOrBuilder.html">BinaryMessages.TranslatedMessageOrBuilder</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.ControlCommandOrBuilder.html">BinaryMessages.ControlCommandOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticControlCommand.html">BinaryMessages.DiagnosticControlCommand</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DiagnosticControlCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticControlCommand.Action.html">BinaryMessages.DiagnosticControlCommand.Action</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.DiagnosticControlCommand.Action</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticControlCommand.Builder.html">BinaryMessages.DiagnosticControlCommand.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DiagnosticControlCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticControlCommandOrBuilder.html">BinaryMessages.DiagnosticControlCommandOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticRequest.html">BinaryMessages.DiagnosticRequest</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DiagnosticRequest</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticRequest.Builder.html">BinaryMessages.DiagnosticRequest.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DiagnosticRequest</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticRequest.DecodedType.html">BinaryMessages.DiagnosticRequest.DecodedType</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.DiagnosticRequest.DecodedType</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticRequestOrBuilder.html">BinaryMessages.DiagnosticRequestOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticResponse.html">BinaryMessages.DiagnosticResponse</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DiagnosticResponse</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticResponse.Builder.html">BinaryMessages.DiagnosticResponse.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DiagnosticResponse</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DiagnosticResponseOrBuilder.html">BinaryMessages.DiagnosticResponseOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DynamicField.html">BinaryMessages.DynamicField</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DynamicField</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DynamicField.Builder.html">BinaryMessages.DynamicField.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.DynamicField</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DynamicField.Type.html">BinaryMessages.DynamicField.Type</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.DynamicField.Type</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.DynamicFieldOrBuilder.html">BinaryMessages.DynamicFieldOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PassthroughModeControlCommand.html">BinaryMessages.PassthroughModeControlCommand</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.PassthroughModeControlCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PassthroughModeControlCommand.Builder.html">BinaryMessages.PassthroughModeControlCommand.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.PassthroughModeControlCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PassthroughModeControlCommandOrBuilder.html">BinaryMessages.PassthroughModeControlCommandOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PayloadFormatCommand.html">BinaryMessages.PayloadFormatCommand</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.PayloadFormatCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PayloadFormatCommand.Builder.html">BinaryMessages.PayloadFormatCommand.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.PayloadFormatCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PayloadFormatCommand.PayloadFormat.html">BinaryMessages.PayloadFormatCommand.PayloadFormat</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf enum <code>openxc.PayloadFormatCommand.PayloadFormat</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PayloadFormatCommandOrBuilder.html">BinaryMessages.PayloadFormatCommandOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PredefinedObd2RequestsCommand.html">BinaryMessages.PredefinedObd2RequestsCommand</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.PredefinedObd2RequestsCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PredefinedObd2RequestsCommand.Builder.html">BinaryMessages.PredefinedObd2RequestsCommand.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.PredefinedObd2RequestsCommand</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.PredefinedObd2RequestsCommandOrBuilder.html">BinaryMessages.PredefinedObd2RequestsCommandOrBuilder</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.SimpleMessage.html">BinaryMessages.SimpleMessage</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.SimpleMessage</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.SimpleMessage.Builder.html">BinaryMessages.SimpleMessage.Builder</a></td>
+            <td class="jd-descrcol" width="100%">Protobuf type <code>openxc.SimpleMessage</code>
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.SimpleMessageOrBuilder.html">BinaryMessages.SimpleMessageOrBuilder</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
@@ -380,6 +627,19 @@
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/BinaryMessages.VehicleMessageOrBuilder.html">BinaryMessages.VehicleMessageOrBuilder</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/formatters/binary/BinarySerializer.html">BinarySerializer</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/streamers/BinaryStreamer.html">BinaryStreamer</a></td>
+            <td class="jd-descrcol" width="100%">A class to deserialize and serialize binary-formatted vehicle messages from
+ byte streams.&nbsp;</td>
         </tr>
     
     
@@ -415,9 +675,8 @@
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></td>
-            <td class="jd-descrcol" width="100%">A "mixin" of sorts to be used with object composition, this contains
- functionality common to data sources that received streams of bytes.&nbsp;</td>
+            <td class="jd-linkcol"><a href="./com/openxc/messages/formatters/ByteAdapter.html">ByteAdapter</a></td>
+            <td class="jd-descrcol" width="100%">Utility functions to read byte arrays from JSON strings.&nbsp;</td>
         </tr>
     
     
@@ -439,6 +698,30 @@
 
 <h2 id="letter_C">C</h2>
 <table class="jd-sumtable">
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/CanMessage.html">CanMessage</a></td>
+            <td class="jd-descrcol" width="100%">A VehicleMessage that is a low-level CAN message.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/Command.html">Command</a></td>
+            <td class="jd-descrcol" width="100%">A Command message defined by the OpenXC message format.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/Command.CommandType.html">Command.CommandType</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/CommandResponse.html">CommandResponse</a></td>
+            <td class="jd-descrcol" width="100%">A response to a Command from the vehicle interface.&nbsp;</td>
+        </tr>
     
     
         <tr class="alt-color api apilevel-" >
@@ -503,6 +786,31 @@
         </tr>
     
     
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/DiagnosticMessage.html">DiagnosticMessage</a></td>
+            <td class="jd-descrcol" width="100%">An abstract base class to hold common fields and logic for diagnostic
+ requests and responses.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/DiagnosticRequest.html">DiagnosticRequest</a></td>
+            <td class="jd-descrcol" width="100%">A diagnostic request message, for example an OBD-II request.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/DiagnosticResponse.html">DiagnosticResponse</a></td>
+            <td class="jd-descrcol" width="100%">A diagnostic response message from the vehicle interface.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/DiagnosticResponse.NegativeResponseCode.html">DiagnosticResponse.NegativeResponseCode</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
 </table>
 
 
@@ -513,6 +821,24 @@
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/EngineSpeed.html">EngineSpeed</a></td>
             <td class="jd-descrcol" width="100%">The EngineSpeed measurement represents the speed of the engine.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/measurements/EventedMeasurement.html">EventedMeasurement</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="./com/openxc/units/Unit.html">Unit</a>&gt;</td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/EventedSimpleVehicleMessage.html">EventedSimpleVehicleMessage</a></td>
+            <td class="jd-descrcol" width="100%">A simple vehicle message also with an event field.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/ExactKeyMatcher.html">ExactKeyMatcher</a></td>
+            <td class="jd-descrcol" width="100%">A helper base class for a KeyMatcher that matches exactly one key, e.g.&nbsp;</td>
         </tr>
     
     
@@ -531,7 +857,7 @@
     
         <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sinks/FileRecorderSink.html">FileRecorderSink</a></td>
-            <td class="jd-descrcol" width="100%">Record raw vehicle measurements to a file as JSON.&nbsp;</td>
+            <td class="jd-descrcol" width="100%">Record raw vehicle messages to a file as JSON.&nbsp;</td>
         </tr>
     
     
@@ -585,12 +911,6 @@
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/interfaces/InterfaceType.html">InterfaceType</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
-        </tr>
-    
-    
 </table>
 
 
@@ -599,14 +919,15 @@
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/util/JavaFileOpener.html">JavaFileOpener</a></td>
-            <td class="jd-descrcol" width="100%">A file opener that uses the standard Java IO API.&nbsp;</td>
+            <td class="jd-linkcol"><a href="./com/openxc/messages/formatters/JsonFormatter.html">JsonFormatter</a></td>
+            <td class="jd-descrcol" width="100%">A formatter for serializing and deserializing JSON OpenXC messages.&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/measurements/serializers/JsonSerializer.html">JsonSerializer</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
+            <td class="jd-linkcol"><a href="./com/openxc/messages/streamers/JsonStreamer.html">JsonStreamer</a></td>
+            <td class="jd-descrcol" width="100%">A class to deserialize and serialize JSON-formatted vehicle messages from
+ byte streams.&nbsp;</td>
         </tr>
     
     
@@ -615,6 +936,20 @@
 
 <h2 id="letter_K">K</h2>
 <table class="jd-sumtable">
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/KeyedMessage.html">KeyedMessage</a></td>
+            <td class="jd-descrcol" width="100%">A KeyedMessage is a VehicleMessage with a unique key that identifies this
+ message, and potentailly responses to this message.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/KeyMatcher.html">KeyMatcher</a></td>
+            <td class="jd-descrcol" width="100%">A KeyMatcher is used to filter incoming vehicle messages to decide which
+ should be passed on to registered listeners.&nbsp;</td>
+        </tr>
     
     
         <tr class="alt-color api apilevel-" >
@@ -644,21 +979,21 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/units/Level.html">Level</a></td>
-            <td class="jd-descrcol" width="100%">A Level is a step in an arbitrary range of numerical values.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/units/Liter.html">Liter</a></td>
             <td class="jd-descrcol" width="100%">A Liter is a metric system unit of volume.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/Longitude.html">Longitude</a></td>
             <td class="jd-descrcol" width="100%">The Longitude is the current longitude of the vehicle in degrees according to
  GPS.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/formatters/LowercaseEnumTypeAdapterFactory.html">LowercaseEnumTypeAdapterFactory</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
@@ -682,32 +1017,20 @@
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sinks/MeasurementListenerSink.html">MeasurementListenerSink</a></td>
-            <td class="jd-descrcol" width="100%">A data sink that sends new measurements of specific types to listeners.&nbsp;</td>
+            <td class="jd-linkcol"><a href="./com/openxc/messages/MessageKey.html">MessageKey</a></td>
+            <td class="jd-descrcol" width="100%">A MessageKey is an identifying key for a VehicleMessage.&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/measurements/serializers/MeasurementSerializer.html">MeasurementSerializer</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
+            <td class="jd-linkcol"><a href="./com/openxc/sinks/MessageListenerSink.html">MessageListenerSink</a></td>
+            <td class="jd-descrcol" width="100%">A data sink that sends new measurements of specific types to listeners.&nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/units/Meter.html">Meter</a></td>
             <td class="jd-descrcol" width="100%">A Meter is the base unit of length in the SI.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/units/MetersPerSecond.html">MetersPerSecond</a></td>
-            <td class="jd-descrcol" width="100%">MetersPerSecond is an SI derived unit of velocity.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/sinks/MockedLocationSink.html">MockedLocationSink</a></td>
-            <td class="jd-descrcol" width="100%">Propagate vehicle location updates through the Android location interface.&nbsp;</td>
         </tr>
     
     
@@ -719,32 +1042,32 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/NamedVehicleMessage.html">NamedVehicleMessage</a></td>
+            <td class="jd-descrcol" width="100%">A NamedVehicleMessage is a VehicleMessage with a name field.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></td>
             <td class="jd-descrcol" width="100%">Generate location measurements based on native GPS updates.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/network/NetworkSourceException.html">NetworkSourceException</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/network/NetworkVehicleInterface.html">NetworkVehicleInterface</a></td>
             <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC network device.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/units/NewtonMeter.html">NewtonMeter</a></td>
             <td class="jd-descrcol" width="100%">A NewtonMeter is a unit of torque.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/measurements/NoRangeException.html">NoRangeException</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
@@ -837,37 +1160,18 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/remote/RawMeasurement.html">RawMeasurement</a></td>
-            <td class="jd-descrcol" width="100%">An untyped measurement used only for the AIDL VehicleService interface.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/remote/RawMeasurementException.html">RawMeasurementException</a></td>
-            <td class="jd-descrcol" width="100%">&nbsp;</td>
-        </tr>
-    
-    
-        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sinks/RemoteCallbackSink.html">RemoteCallbackSink</a></td>
-            <td class="jd-descrcol" width="100%">A data sink that sends new measurements through an AIDL interface.&nbsp;</td>
+            <td class="jd-descrcol" width="100%">A data sink that sends new messages through an AIDL interface.&nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></td>
-            <td class="jd-descrcol" width="100%">Pass measurements from a VehicleService to an in-process callback.&nbsp;</td>
+            <td class="jd-descrcol" width="100%">Pass messages from a VehicleService to an in-process callback.&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></td>
-            <td class="jd-descrcol" width="100%">A VehicleInterface that sends commands to a VehicleService operating in a
- remote process.&nbsp;</td>
-        </tr>
-    
-    
-        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/units/RotationsPerMinute.html">RotationsPerMinute</a></td>
             <td class="jd-descrcol" width="100%">RotationsPerMinute is a measure of the frequency of a rotation.&nbsp;</td>
         </tr>
@@ -881,8 +1185,21 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/SerializationException.html">SerializationException</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/SimpleVehicleMessage.html">SimpleVehicleMessage</a></td>
+            <td class="jd-descrcol" width="100%">The SimpleVehicleMessage is a simple vehicle message as defined by the OpenXC
+ message format - it has a name and a value field.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sources/SourceCallback.html">SourceCallback</a></td>
-            <td class="jd-descrcol" width="100%">A receipient of measurement updates from a vehicle data source.&nbsp;</td>
+            <td class="jd-descrcol" width="100%">A recipient of measurement updates from a vehicle data source.&nbsp;</td>
         </tr>
     
     
@@ -918,36 +1235,54 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/sinks/TestSink.html">TestSink</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/sources/TestSource.html">TestSource</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/TestVehicleInterface.html">TestVehicleInterface</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/TorqueAtTransmission.html">TorqueAtTransmission</a></td>
             <td class="jd-descrcol" width="100%">The TorqueAtTransmission is the actual current torque in the transmission.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sources/trace/TraceVehicleDataSource.html">TraceVehicleDataSource</a></td>
             <td class="jd-descrcol" width="100%">A vehicle data source that reads measurements from a pre-recorded trace file.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/TransmissionGearPosition.html">TransmissionGearPosition</a></td>
             <td class="jd-descrcol" width="100%">The TransmissionGearPosition is the actual current gear of the transmission.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/TransmissionGearPosition.GearPosition.html">TransmissionGearPosition.GearPosition</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/TurnSignalStatus.html">TurnSignalStatus</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/TurnSignalStatus.TurnSignalPosition.html">TurnSignalStatus.TurnSignalPosition</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
@@ -974,43 +1309,49 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/UnrecognizedMessageTypeException.html">UnrecognizedMessageTypeException</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sinks/UploaderSink.html">UploaderSink</a></td>
             <td class="jd-descrcol" width="100%">Upload a stream of all incoming vehicle data to a remote HTTP server.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/UriBasedVehicleInterfaceMixin.html">UriBasedVehicleInterfaceMixin</a></td>
             <td class="jd-descrcol" width="100%">A collection of utilites for vehicle interfaces that reference a physical
  device with a URI.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbDeviceAttachmentActivity.html">UsbDeviceAttachmentActivity</a></td>
             <td class="jd-descrcol" width="100%">The UsbDeviceActivity is a proxy to listen for USB_DEVICE_ATTACHED intents.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbDeviceException.html">UsbDeviceException</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbDeviceUtilities.html">UsbDeviceUtilities</a></td>
             <td class="jd-descrcol" width="100%">Stateless utilities for finding and opening USB devices.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></td>
             <td class="jd-descrcol" width="100%">A vehicle data source reading measurements from an OpenXC USB device.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/sinks/UserSink.html">UserSink</a></td>
             <td class="jd-descrcol" width="100%">Pass measurements from a user-level data sources back to the remote
  VehicleService.&nbsp;</td>
@@ -1075,34 +1416,61 @@
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceException.html">VehicleInterfaceException</a></td>
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceDescriptor.html">VehicleInterfaceDescriptor</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceException.html">VehicleInterfaceException</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceFactory.html">VehicleInterfaceFactory</a></td>
             <td class="jd-descrcol" width="100%">A factory that uses reflection to create instance of VehicleInterface
  implementations.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="./com/openxc/interfaces/VehicleInterfaceManagerUtils.html">VehicleInterfaceManagerUtils</a></td>
-            <td class="jd-descrcol" width="100%">Utilities for interacting with a number of VehicleInterface objects.&nbsp;</td>
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/VehicleLocationProvider.html">VehicleLocationProvider</a></td>
+            <td class="jd-descrcol" width="100%">Propagate GPS and vehicle speed updates from OpenXC to the normal Android
+ location system.&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/VehicleManager.html">VehicleManager</a></td>
             <td class="jd-descrcol" width="100%">The VehicleManager is an in-process Android service and the primary entry
  point into the OpenXC library.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/VehicleManager.VehicleBinder.html">VehicleManager.VehicleBinder</a></td>
             <td class="jd-descrcol" width="100%">Binder to connect IBinder in a ServiceConnection with the VehicleManager.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/VehicleMessage.html">VehicleMessage</a></td>
+            <td class="jd-descrcol" width="100%">The VehicleMessage is the most basic, root form of data going back and forth
+ between the OpenXC library and a vehicle interface.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/messages/streamers/VehicleMessageStreamer.html">VehicleMessageStreamer</a></td>
+            <td class="jd-descrcol" width="100%">A base class for VehicleMessage streamers that defines the interface and
+ handles counting the amount of data received.&nbsp;</td>
         </tr>
     
     
@@ -1146,6 +1514,18 @@
         <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="./com/openxc/measurements/VehicleSpeed.html">VehicleSpeed</a></td>
             <td class="jd-descrcol" width="100%">The VehicleSpeed is the current forward speed of the vehicle.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/remote/ViConnectionListener.html">ViConnectionListener</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="./com/openxc/remote/ViConnectionListener.Stub.html">ViConnectionListener.Stub</a></td>
+            <td class="jd-descrcol" width="100%">Local-side IPC implementation stub class.&nbsp;</td>
         </tr>
     
     

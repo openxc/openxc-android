@@ -320,6 +320,7 @@
 /* right alignment for the return type in sumtable */
 .jd-sumtable .jd-typecol {
   text-align:right;
+  white-space: nowrap;
 }
 
 /* adjustments for the expando table-in-table */
@@ -957,6 +958,7 @@ table ol.toc {
 }
 .jd-linktable .jd-typecol {
   text-align:right;
+  white-space: nowrap;
 }
 .jd-linktable .jd-valcol {
 }
@@ -1150,4 +1152,3 @@ body .ui-resizable-autohide .ui-resizable-handle { display: none; }
   table, img {
     page-break-inside: avoid;
   }
-}

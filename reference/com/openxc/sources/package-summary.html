@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -187,13 +193,13 @@
       <ul>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
-        <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/SourceLogger.html">SourceLogger</a></li>
+        <li class="api apilevel-"><a href="../../../com/openxc/sources/TestSource.html">TestSource</a></li>
         <li class="api apilevel-"><a href="../../../com/openxc/sources/WakeLockManager.html">WakeLockManager</a></li>
       </ul>
     </li>
@@ -211,9 +217,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -278,7 +284,7 @@
   <table class="jd-sumtable-expando">
         <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/SourceCallback.html">SourceCallback</a></td>
-              <td class="jd-descrcol" width="100%">A receipient of measurement updates from a vehicle data source.&nbsp;</td>
+              <td class="jd-descrcol" width="100%">A recipient of measurement updates from a vehicle data source.&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a></td>
@@ -303,33 +309,32 @@
               <td class="jd-descrcol" width="100%">A common parent for all vehicle data sources.&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></td>
-              <td class="jd-descrcol" width="100%">A "mixin" of sorts to be used with object composition, this contains
- functionality common to data sources that received streams of bytes.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></td>
               <td class="jd-descrcol" width="100%">&nbsp;</td>
           </tr>
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></td>
               <td class="jd-descrcol" width="100%">Common functionality for data sources that read a stream of newline-separated
  messages in a separate thread from the main activity.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></td>
               <td class="jd-descrcol" width="100%">A parent class for data sources that require access to an Android context.&nbsp;</td>
           </tr>
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></td>
               <td class="jd-descrcol" width="100%">Generate location measurements based on native GPS updates.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></td>
-              <td class="jd-descrcol" width="100%">Pass measurements from a VehicleService to an in-process callback.&nbsp;</td>
+              <td class="jd-descrcol" width="100%">Pass messages from a VehicleService to an in-process callback.&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../com/openxc/sources/SourceLogger.html">SourceLogger</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../com/openxc/sources/SourceLogger.html">SourceLogger</a></td>
+              <td class="jd-linkcol"><a href="../../../com/openxc/sources/TestSource.html">TestSource</a></td>
               <td class="jd-descrcol" width="100%">&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >

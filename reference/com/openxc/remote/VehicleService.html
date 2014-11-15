@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="selected api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -180,16 +186,16 @@
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.html">VehicleServiceInterface</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.html">VehicleServiceListener</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/ViConnectionListener.html">ViConnectionListener</a></li>
       </ul>
     </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/remote/RemoteServiceVehicleInterface.html">RemoteServiceVehicleInterface</a></li>
           <li class="selected api apilevel-"><a href="../../../com/openxc/remote/VehicleService.html">VehicleService</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceInterface.Stub.html">VehicleServiceInterface.Stub</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceListener.Stub.html">VehicleServiceListener.Stub</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/remote/ViConnectionListener.Stub.html">ViConnectionListener.Stub</a></li>
       </ul>
     </li>
               
@@ -197,7 +203,6 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/remote/RawMeasurementException.html">RawMeasurementException</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/remote/VehicleServiceException.html">VehicleServiceException</a></li>
       </ul>
     </li>
@@ -206,9 +211,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -462,11 +467,8 @@ Summary:
  VehicleService is purposefully primative as there are a small set of
  objects that can be natively marshalled through an AIDL interface.
 
- By default, if the Android device supports uSB, the
- <code><a href="../../../com/openxc/interfaces/usb/UsbVehicleInterface.html">UsbVehicleInterface</a></code> is activated as a <code><a href="../../../com/openxc/interfaces/VehicleInterface.html">VehicleInterface</a></code>. Other
- vehicle interfaces can be activated with the
- #addVehicleInterface(Class, String) method and they can removed with
- #removeVehicleInterface(VehicleInterface).
+ Only one vehicle interface can be active at at time, and it can be set with
+ the #setVehicleInterface(Class, String) method.
 
  This service uses the same <code><a href="../../../com/openxc/DataPipeline.html">DataPipeline</a></code> as the
  <code><a href="../../../com/openxc/VehicleManager.html">VehicleManager</a></code> to move data from sources to sinks, but it
@@ -644,63 +646,105 @@ android.content.Context
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">APPWIDGET_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">APP_OPS_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">AUDIO_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">BATTERY_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_ABOVE_CLIENT</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_ADJUST_WITH_ACTIVITY</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_ALLOW_OOM_MANAGEMENT</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_AUTO_CREATE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_DEBUG_UNBIND</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_IMPORTANT</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_NOT_FOREGROUND</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">BIND_WAIVE_PRIORITY</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">BLUETOOTH_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">CAMERA_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">CAPTIONING_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -720,29 +764,43 @@ android.content.Context
     
     
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">CONSUMER_IR_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">CONTEXT_IGNORE_SECURITY</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">CONTEXT_INCLUDE_CODE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol">CONTEXT_RESTRICTED</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">DEVICE_POLICY_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">DISPLAY_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -777,7 +835,21 @@ android.content.Context
     
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">JOB_SCHEDULER_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">KEYGUARD_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">LAUNCHER_APPS_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -798,7 +870,21 @@ android.content.Context
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">MEDIA_PROJECTION_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">MEDIA_ROUTER_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">MEDIA_SESSION_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -875,6 +961,20 @@ android.content.Context
     
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">PRINT_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">RESTRICTIONS_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">SEARCH_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
@@ -896,14 +996,28 @@ android.content.Context
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
-        <td class="jd-linkcol">TELEPHONY_SERVICE</td>
+        <td class="jd-linkcol">TELECOM_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">TELEPHONY_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">TEXT_SERVICES_MANAGER_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">TV_INPUT_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -924,33 +1038,40 @@ android.content.Context
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
-        <td class="jd-linkcol">VIBRATOR_SERVICE</td>
+        <td class="jd-linkcol">USER_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-linkcol">VIBRATOR_SERVICE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">WALLPAPER_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">WIFI_P2P_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">WIFI_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
         <td class="jd-linkcol">WINDOW_SERVICE</td>
         <td class="jd-descrcol" width="100%"></td>
@@ -1053,11 +1174,11 @@ android.content.ComponentCallbacks2
 
     
       <tr class="alt-color api apilevel-" >
-          <td class="jd-typecol"><nobr>
+          <td class="jd-typecol">
           public
           static
           
-          boolean</nobr></td>
+          boolean</td>
           <td class="jd-linkcol"><a href="../../../com/openxc/remote/VehicleService.html#sIsUnderTest">sIsUnderTest</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
@@ -1079,16 +1200,16 @@ android.content.ComponentCallbacks2
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            </nobr>
+            
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#VehicleService()">VehicleService</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#VehicleService()">VehicleService</a></span>()
         
   </td></tr>
 
@@ -1108,16 +1229,16 @@ android.content.ComponentCallbacks2
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            IBinder</nobr>
+            IBinder
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onBind(android.content.Intent)">onBind</a></span>(Intent intent)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onBind(android.content.Intent)">onBind</a></span>(Intent intent)
         
         <div class="jd-descrdiv">Initialize the service and data source when a client binds to us.</div>
   
@@ -1126,32 +1247,32 @@ android.content.ComponentCallbacks2
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onCreate()">onCreate</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onCreate()">onCreate</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onDestroy()">onDestroy</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onDestroy()">onDestroy</a></span>()
         
         <div class="jd-descrdiv">Shut down any associated services when this service is about to die.</div>
   
@@ -1160,32 +1281,32 @@ android.content.ComponentCallbacks2
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onPipelineActivated()">onPipelineActivated</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onPipelineActivated()">onPipelineActivated</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/remote/VehicleService.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()
         
   </td></tr>
 
@@ -1226,288 +1347,288 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">dump</span>(FileDescriptor arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/PrintWriter.html">PrintWriter</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a> arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">dump</span>(FileDescriptor arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/PrintWriter.html">PrintWriter</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            Application</nobr>
+            Application
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getApplication</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getApplication</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            IBinder</nobr>
+            IBinder
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onBind</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onBind</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onConfigurationChanged</span>(Configuration arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onConfigurationChanged</span>(Configuration arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onCreate</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onCreate</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onDestroy</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onDestroy</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onLowMemory</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onLowMemory</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onRebind</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onRebind</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onStart</span>(Intent arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onStart</span>(Intent arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onStartCommand</span>(Intent arg0, int arg1, int arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onStartCommand</span>(Intent arg0, int arg1, int arg2)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onTaskRemoved</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onTaskRemoved</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onTrimMemory</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onTrimMemory</span>(int arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onUnbind</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onUnbind</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startForeground</span>(int arg0, Notification arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startForeground</span>(int arg0, Notification arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">stopForeground</span>(boolean arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">stopForeground</span>(boolean arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">stopSelf</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">stopSelf</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">stopSelf</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">stopSelf</span>(int arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">stopSelfResult</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">stopSelfResult</span>(int arg0)
         
   </td></tr>
 
@@ -1540,1264 +1661,1488 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">attachBaseContext</span>(Context arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">attachBaseContext</span>(Context arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">bindService</span>(Intent arg0, ServiceConnection arg1, int arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">bindService</span>(Intent arg0, ServiceConnection arg1, int arg2)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingOrSelfUriPermission</span>(Uri arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingOrSelfUriPermission</span>(Uri arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingUriPermission</span>(Uri arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingUriPermission</span>(Uri arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">clearWallpaper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">clearWallpaper</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Context</nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">createPackageContext</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">createConfigurationContext</span>(Configuration arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a></nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">databaseList</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">createDisplayContext</span>(Display arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">deleteDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">createPackageContext</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">deleteFile</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">databaseList</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">deleteDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingOrSelfUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">deleteFile</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingOrSelfUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforcePermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforcePermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg3)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a></nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">fileList</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Context</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getApplicationContext</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            ApplicationInfo</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getApplicationInfo</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">fileList</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            AssetManager</nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getAssets</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getApplicationContext</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Context</nobr>
+            ApplicationInfo
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getBaseContext</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getApplicationInfo</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            AssetManager
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getCacheDir</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getAssets</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/ClassLoader.html">ClassLoader</a></nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getClassLoader</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getBaseContext</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            ContentResolver</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getContentResolver</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getCacheDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/ClassLoader.html">ClassLoader</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getDatabasePath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getClassLoader</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getCodeCacheDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            ContentResolver
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getExternalCacheDir</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getContentResolver</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getExternalFilesDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getDatabasePath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getFileStreamPath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getFilesDir</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalCacheDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Looper</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getMainLooper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalCacheDirs</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getObbDir</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalFilesDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageCodePath</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalFilesDirs</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            PackageManager</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageManager</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalMediaDirs</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageName</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getFileStreamPath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageResourcePath</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getFilesDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Resources</nobr>
+            Looper
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getResources</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getMainLooper</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            SharedPreferences</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getSharedPreferences</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getNoBackupFilesDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getSystemService</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getObbDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Resources.Theme</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getTheme</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getObbDirs</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Drawable</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getWallpaper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageCodePath</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            PackageManager
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getWallpaperDesiredMinimumHeight</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageManager</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getWallpaperDesiredMinimumWidth</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageName</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">grantUriPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, Uri arg1, int arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageResourcePath</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            Resources
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">isRestricted</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getResources</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileInputStream.html">FileInputStream</a></nobr>
+            SharedPreferences
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openFileInput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getSharedPreferences</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileOutputStream.html">FileOutputStream</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openFileOutput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getSystemService</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            SQLiteDatabase</nobr>
+            Resources.Theme
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getTheme</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            SQLiteDatabase</nobr>
+            Drawable
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2, DatabaseErrorHandler arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getWallpaper</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Drawable</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">peekWallpaper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getWallpaperDesiredMinimumHeight</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Intent</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getWallpaperDesiredMinimumWidth</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            Intent</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">grantUriPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, Uri arg1, int arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">removeStickyBroadcast</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">isRestricted</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileInputStream.html">FileInputStream</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">revokeUriPermission</span>(Uri arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openFileInput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileOutputStream.html">FileOutputStream</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openFileOutput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            SQLiteDatabase
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            SQLiteDatabase
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, BroadcastReceiver arg2, Handler arg3, int arg4, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg5, Bundle arg6)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2, DatabaseErrorHandler arg3)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            Drawable
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">peekWallpaper</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            Intent
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendStickyBroadcast</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            Intent
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendStickyOrderedBroadcast</span>(Intent arg0, BroadcastReceiver arg1, Handler arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4, Bundle arg5)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setTheme</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">removeStickyBroadcast</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setWallpaper</span>(Bitmap arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">removeStickyBroadcastAsUser</span>(Intent arg0, UserHandle arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setWallpaper</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">revokeUriPermission</span>(Uri arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcast</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivity</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcastAsUser</span>(Intent arg0, UserHandle arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivity</span>(Intent arg0, Bundle arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcastAsUser</span>(Intent arg0, UserHandle arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startInstrumentation</span>(ComponentName arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, Bundle arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, BroadcastReceiver arg2, Handler arg3, int arg4, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg5, Bundle arg6)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4, Bundle arg5)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendOrderedBroadcastAsUser</span>(Intent arg0, UserHandle arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, BroadcastReceiver arg3, Handler arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6, Bundle arg7)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            ComponentName</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startService</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyBroadcast</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">stopService</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyBroadcastAsUser</span>(Intent arg0, UserHandle arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">unbindService</span>(ServiceConnection arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyOrderedBroadcast</span>(Intent arg0, BroadcastReceiver arg1, Handler arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4, Bundle arg5)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">unregisterReceiver</span>(BroadcastReceiver arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyOrderedBroadcastAsUser</span>(Intent arg0, UserHandle arg1, BroadcastReceiver arg2, Handler arg3, int arg4, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg5, Bundle arg6)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">setTheme</span>(int arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">setWallpaper</span>(Bitmap arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">setWallpaper</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivities</span>(Intent[] arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivity</span>(Intent arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivity</span>(Intent arg0, Bundle arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            boolean
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startInstrumentation</span>(ComponentName arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, Bundle arg2)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4, Bundle arg5)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            ComponentName
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startService</span>(Intent arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            boolean
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">stopService</span>(Intent arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">unbindService</span>(ServiceConnection arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">unregisterReceiver</span>(BroadcastReceiver arg0)
         
   </td></tr>
 
@@ -2830,1376 +3175,1616 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">bindService</span>(Intent arg0, ServiceConnection arg1, int arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">bindService</span>(Intent arg0, ServiceConnection arg1, int arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingOrSelfUriPermission</span>(Uri arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingOrSelfUriPermission</span>(Uri arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkCallingUriPermission</span>(Uri arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkCallingUriPermission</span>(Uri arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">clearWallpaper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">clearWallpaper</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            Context</nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">createPackageContext</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">createConfigurationContext</span>(Configuration arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a></nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">databaseList</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">createDisplayContext</span>(Display arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">deleteDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">createPackageContext</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">deleteFile</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">databaseList</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">deleteDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingOrSelfUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">deleteFile</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingOrSelfPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceCallingUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingOrSelfUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforcePermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceCallingUriPermission</span>(Uri arg0, int arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforcePermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, int arg2, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg3)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a></nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">fileList</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            Context</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getApplicationContext</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            ApplicationInfo</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getApplicationInfo</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">fileList</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            AssetManager</nobr>
+            Context
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getAssets</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getApplicationContext</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            ApplicationInfo
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getCacheDir</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getApplicationInfo</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/ClassLoader.html">ClassLoader</a></nobr>
+            AssetManager
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getClassLoader</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getAssets</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            ContentResolver</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getContentResolver</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getCacheDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/ClassLoader.html">ClassLoader</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getDatabasePath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getClassLoader</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getCodeCacheDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            ContentResolver
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getExternalCacheDir</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getContentResolver</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getExternalFilesDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getDatabasePath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getFileStreamPath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getFilesDir</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            Looper</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getMainLooper</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getObbDir</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageCodePath</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            PackageManager</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageManager</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageName</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getPackageResourcePath</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            Resources</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getResources</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            SharedPreferences</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getSharedPreferences</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            Drawable
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getString</span>(int arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object...</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getDrawable</span>(int arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalCacheDir</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalCacheDirs</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalFilesDir</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalFilesDirs</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getExternalMediaDirs</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getFileStreamPath</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getFilesDir</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Looper
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getMainLooper</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getNoBackupFilesDir</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getObbDir</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/File.html">File[]</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getObbDirs</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageCodePath</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            PackageManager
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageManager</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageName</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getPackageResourcePath</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Resources
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getResources</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            SharedPreferences
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getSharedPreferences</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
             
             
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getString</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getString</span>(int arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getSystemService</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/CharSequence.html">CharSequence</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getText</span>(int arg0)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            Resources.Theme</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getTheme</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getString</span>(int arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object...</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            Drawable</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getWallpaper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getSystemService</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            int</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getWallpaperDesiredMinimumHeight</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            int</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getWallpaperDesiredMinimumWidth</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">grantUriPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, Uri arg1, int arg2)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">isRestricted</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            TypedArray</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/CharSequence.html">CharSequence</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getText</span>(int arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Resources.Theme
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getTheme</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Drawable
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getWallpaper</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            int
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getWallpaperDesiredMinimumHeight</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            int
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getWallpaperDesiredMinimumWidth</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">grantUriPermission</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, Uri arg1, int arg2)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            boolean
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">isRestricted</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
             
             
             final
             
             
-            TypedArray</nobr>
+            TypedArray
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1, int arg2, int arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">obtainStyledAttributes</span>(int[] arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            TypedArray</nobr>
+            TypedArray
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">obtainStyledAttributes</span>(int[] arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1, int arg2, int arg3)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            TypedArray</nobr>
+            TypedArray
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">obtainStyledAttributes</span>(int arg0, int[] arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
+        <td class="jd-typecol">
             
             
+            final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileInputStream.html">FileInputStream</a></nobr>
+            TypedArray
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openFileInput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">obtainStyledAttributes</span>(int arg0, int[] arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileOutputStream.html">FileOutputStream</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileInputStream.html">FileInputStream</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openFileOutput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openFileInput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            SQLiteDatabase</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/FileOutputStream.html">FileOutputStream</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openFileOutput</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            SQLiteDatabase</nobr>
+            SQLiteDatabase
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2, DatabaseErrorHandler arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            Drawable</nobr>
+            SQLiteDatabase
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">peekWallpaper</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2, DatabaseErrorHandler arg3)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
+            abstract
             
             
             
             
-            
-            void</nobr>
+            Drawable
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerComponentCallbacks</span>(ComponentCallbacks arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">peekWallpaper</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
+        <td class="jd-typecol">
             
             
             
             
-            Intent</nobr>
+            
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">registerComponentCallbacks</span>(ComponentCallbacks arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            Intent</nobr>
+            Intent
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            Intent
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">removeStickyBroadcast</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">revokeUriPermission</span>(Uri arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">removeStickyBroadcast</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">removeStickyBroadcastAsUser</span>(Intent arg0, UserHandle arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendBroadcast</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">revokeUriPermission</span>(Uri arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, BroadcastReceiver arg2, Handler arg3, int arg4, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg5, Bundle arg6)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcast</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendStickyBroadcast</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcastAsUser</span>(Intent arg0, UserHandle arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">sendStickyOrderedBroadcast</span>(Intent arg0, BroadcastReceiver arg1, Handler arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4, Bundle arg5)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendBroadcastAsUser</span>(Intent arg0, UserHandle arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setTheme</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, BroadcastReceiver arg2, Handler arg3, int arg4, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg5, Bundle arg6)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setWallpaper</span>(Bitmap arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendOrderedBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setWallpaper</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendOrderedBroadcastAsUser</span>(Intent arg0, UserHandle arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, BroadcastReceiver arg3, Handler arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6, Bundle arg7)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyBroadcast</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivities</span>(Intent[] arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyBroadcastAsUser</span>(Intent arg0, UserHandle arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivity</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyOrderedBroadcast</span>(Intent arg0, BroadcastReceiver arg1, Handler arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4, Bundle arg5)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startActivity</span>(Intent arg0, Bundle arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">sendStickyOrderedBroadcastAsUser</span>(Intent arg0, UserHandle arg1, BroadcastReceiver arg2, Handler arg3, int arg4, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg5, Bundle arg6)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startInstrumentation</span>(ComponentName arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, Bundle arg2)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">setTheme</span>(int arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4, Bundle arg5)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">setWallpaper</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">setWallpaper</span>(Bitmap arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            ComponentName</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">startService</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">stopService</span>(Intent arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivities</span>(Intent[] arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">unbindService</span>(ServiceConnection arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivity</span>(Intent arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
+            abstract
             
             
             
             
-            
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">unregisterComponentCallbacks</span>(ComponentCallbacks arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startActivity</span>(Intent arg0, Bundle arg1)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">unregisterReceiver</span>(BroadcastReceiver arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startInstrumentation</span>(ComponentName arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, Bundle arg2)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4, Bundle arg5)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            ComponentName
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">startService</span>(Intent arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            boolean
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">stopService</span>(Intent arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">unbindService</span>(ServiceConnection arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">unregisterComponentCallbacks</span>(ComponentCallbacks arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">unregisterReceiver</span>(BroadcastReceiver arg0)
         
   </td></tr>
 
@@ -4232,176 +4817,176 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">clone</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">clone</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">finalize</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">finalize</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getClass</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getClass</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">hashCode</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">hashCode</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">notify</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notify</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">notifyAll</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notifyAll</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">toString</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">toString</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -4434,32 +5019,32 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onConfigurationChanged</span>(Configuration arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onConfigurationChanged</span>(Configuration arg0)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onLowMemory</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onLowMemory</span>()
         
   </td></tr>
 
@@ -4492,16 +5077,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">onTrimMemory</span>(int arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">onTrimMemory</span>(int arg0)
         
   </td></tr>
 
@@ -4534,32 +5119,32 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/DataPipeline.Operator.html#onPipelineActivated()">onPipelineActivated</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/DataPipeline.Operator.html#onPipelineActivated()">onPipelineActivated</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/DataPipeline.Operator.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/DataPipeline.Operator.html#onPipelineDeactivated()">onPipelineDeactivated</a></span>()
         
   </td></tr>
 
@@ -4602,7 +5187,7 @@ From interface
 
 
 
-<A NAME="sIsUnderTest"></A>
+<a id="sIsUnderTest"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4641,7 +5226,7 @@ From interface
 
 
 
-<A NAME="VehicleService()"></A>
+<a id="VehicleService()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4687,7 +5272,7 @@ From interface
 
 
 
-<A NAME="onBind(android.content.Intent)"></A>
+<a id="onBind(android.content.Intent)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4719,7 +5304,7 @@ From interface
 </div>
 
 
-<A NAME="onCreate()"></A>
+<a id="onCreate()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4750,7 +5335,7 @@ From interface
 </div>
 
 
-<A NAME="onDestroy()"></A>
+<a id="onDestroy()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4785,7 +5370,7 @@ From interface
 </div>
 
 
-<A NAME="onPipelineActivated()"></A>
+<a id="onPipelineActivated()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4816,7 +5401,7 @@ From interface
 </div>
 
 
-<A NAME="onPipelineDeactivated()"></A>
+<a id="onPipelineDeactivated()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -4855,7 +5440,7 @@ From interface
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

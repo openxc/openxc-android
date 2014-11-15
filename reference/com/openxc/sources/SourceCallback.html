@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -187,13 +193,13 @@
       <ul>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ApplicationSource.html">ApplicationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BaseVehicleDataSource.html">BaseVehicleDataSource</a></li>
-          <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamBuffer.html">BytestreamBuffer</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamConnectingTask.html">BytestreamConnectingTask</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/BytestreamDataSource.html">BytestreamDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/ContextualVehicleDataSource.html">ContextualVehicleDataSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/NativeLocationSource.html">NativeLocationSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/RemoteListenerSource.html">RemoteListenerSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/SourceLogger.html">SourceLogger</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/sources/TestSource.html">TestSource</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/sources/WakeLockManager.html">WakeLockManager</a></li>
       </ul>
     </li>
@@ -211,9 +217,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -353,11 +359,11 @@ Summary:
 
 
 <h2>Class Overview</h2>
-<p>A receipient of measurement updates from a vehicle data source.
+<p>A recipient of measurement updates from a vehicle data source.
 
  A VehicleDataSource is given a callback that implements this interface. When
  new measurements arrive from the source, it uses the
- <code><a href="../../../com/openxc/sources/SourceCallback.html#receive(com.openxc.remote.RawMeasurement)">receive(RawMeasurement)</a></code> method to pass along the new value.
+ <code><a href="../../../com/openxc/sources/SourceCallback.html#receive(com.openxc.messages.VehicleMessage)">receive(VehicleMessage)</a></code> method to pass along the new value.
 </p>
 
 
@@ -419,16 +425,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#receive(com.openxc.remote.RawMeasurement)">receive</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#receive(com.openxc.messages.VehicleMessage)">receive</a></span>(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> measurement)
         
         <div class="jd-descrdiv">Receive a new measurement with at least a value and optionally an event.</div>
   
@@ -437,16 +443,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#sourceConnected(com.openxc.sources.VehicleDataSource)">sourceConnected</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)
         
         <div class="jd-descrdiv">The data source is connected, so if necessary, keep the device awake.</div>
   
@@ -455,16 +461,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/sources/SourceCallback.html#sourceDisconnected(com.openxc.sources.VehicleDataSource)">sourceDisconnected</a></span>(<a href="../../../com/openxc/sources/VehicleDataSource.html">VehicleDataSource</a> source)
         
         <div class="jd-descrdiv">The data source is connected, so if necessary, let the device go to
  sleep.</div>
@@ -520,7 +526,7 @@ Summary:
 
 
 
-<A NAME="receive(com.openxc.remote.RawMeasurement)"></A>
+<a id="receive(com.openxc.messages.VehicleMessage)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -533,7 +539,7 @@ Summary:
         void
       </span>
       <span class="sympad">receive</span>
-      <span class="normal">(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> measurement)</span>
+      <span class="normal">(<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> measurement)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -550,7 +556,7 @@ Summary:
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>measurement</td>
+          <th>measurement</th>
           <td>the new measurement.
 </td>
         </tr>
@@ -561,7 +567,7 @@ Summary:
 </div>
 
 
-<A NAME="sourceConnected(com.openxc.sources.VehicleDataSource)"></A>
+<a id="sourceConnected(com.openxc.sources.VehicleDataSource)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -593,7 +599,7 @@ Summary:
 </div>
 
 
-<A NAME="sourceDisconnected(com.openxc.sources.VehicleDataSource)"></A>
+<a id="sourceDisconnected(com.openxc.sources.VehicleDataSource)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -634,7 +640,7 @@ Summary:
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

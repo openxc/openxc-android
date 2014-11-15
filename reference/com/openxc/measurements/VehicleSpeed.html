@@ -138,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links"><nobr>
+              <div id="index-links">
                 <a href="../../../packages.html"  >Package Index</a> | 
-                <a href="../../../classes.html" >Class Index</a></nobr>
+                <a href="../../../classes.html" >Class Index</a>
               </div>
               <ul>
                 
@@ -157,7 +157,13 @@
     <li class="selected api apilevel-">
   <a href="../../../com/openxc/measurements/package-summary.html">com.openxc.measurements</a></li>
     <li class="api apilevel-">
-  <a href="../../../com/openxc/measurements/serializers/package-summary.html">com.openxc.measurements.serializers</a></li>
+  <a href="../../../com/openxc/messages/package-summary.html">com.openxc.messages</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/package-summary.html">com.openxc.messages.formatters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/formatters/binary/package-summary.html">com.openxc.messages.formatters.binary</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/openxc/messages/streamers/package-summary.html">com.openxc.messages.streamers</a></li>
     <li class="api apilevel-">
   <a href="../../../com/openxc/remote/package-summary.html">com.openxc.remote</a></li>
     <li class="api apilevel-">
@@ -189,6 +195,7 @@
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/BaseMeasurement.html">BaseMeasurement</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/BrakePedalStatus.html">BrakePedalStatus</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/EngineSpeed.html">EngineSpeed</a></li>
+          <li class="api apilevel-"><a href="../../../com/openxc/measurements/EventedMeasurement.html">EventedMeasurement</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/FuelConsumed.html">FuelConsumed</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/FuelLevel.html">FuelLevel</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/HeadlampStatus.html">HeadlampStatus</a></li>
@@ -223,7 +230,6 @@
               
     <li><h2>Exceptions</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../com/openxc/measurements/NoRangeException.html">NoRangeException</a></li>
           <li class="api apilevel-"><a href="../../../com/openxc/measurements/UnrecognizedMeasurementTypeException.html">UnrecognizedMeasurementTypeException</a></li>
       </ul>
     </li>
@@ -232,9 +238,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links"><nobr>
+          <div id="index-links">
             <a href="../../../packages.html"  >Package Index</a> | 
-            <a href="../../../classes.html" >Class Index</a></nobr>
+            <a href="../../../classes.html" >Class Index</a>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -270,6 +276,8 @@
   
   
   
+   
+  
   
 
   
@@ -301,6 +309,9 @@ Summary:
 
 
 
+
+  &#124; <a href="#inhfields">Inherited Fields</a>
+  
 
 
   &#124; <a href="#pubctors">Ctors</a>
@@ -465,6 +476,53 @@ Summary:
 
 
 
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="inhfields" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Fields</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-com.openxc.measurements.BaseMeasurement" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-com.openxc.measurements.BaseMeasurement-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../com/openxc/measurements/BaseMeasurement.html">com.openxc.measurements.BaseMeasurement</a>
+<div id="inherited-fields-com.openxc.measurements.BaseMeasurement">
+  <div id="inherited-fields-com.openxc.measurements.BaseMeasurement-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-com.openxc.measurements.BaseMeasurement-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol">
+          protected
+          
+          
+          <a href="../../../com/openxc/util/AgingData.html">AgingData</a>&lt;TheUnit&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</td>
+          <td class="jd-linkcol"><a href="../../../com/openxc/measurements/BaseMeasurement.html#mValue">mValue</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+</table>
+
+
 
 
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -474,32 +532,32 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            </nobr>
+            
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/VehicleSpeed.html#VehicleSpeed(com.openxc.units.KilometersPerHour)">VehicleSpeed</a></span>(<a href="../../../com/openxc/units/KilometersPerHour.html">KilometersPerHour</a> value)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/VehicleSpeed.html#VehicleSpeed(com.openxc.units.KilometersPerHour)">VehicleSpeed</a></span>(<a href="../../../com/openxc/units/KilometersPerHour.html">KilometersPerHour</a> value)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            </nobr>
+            
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/VehicleSpeed.html#VehicleSpeed(java.lang.Number)">VehicleSpeed</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Number.html">Number</a> value)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/VehicleSpeed.html#VehicleSpeed(java.lang.Number)">VehicleSpeed</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Number.html">Number</a> value)
         
   </td></tr>
 
@@ -519,16 +577,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/VehicleSpeed.html#getGenericName()">getGenericName</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/VehicleSpeed.html#getGenericName()">getGenericName</a></span>()
         
   </td></tr>
 
@@ -569,48 +627,32 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
-            static
             
-            <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a></nobr>
+            
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#deserialize(java.lang.String)">deserialize</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementString)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#equals(java.lang.Object)">equals</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> obj)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            long
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#equals(java.lang.Object)">equals</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> obj)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            long</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getAge()">getAge</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getAge()">getAge</a></span>()
         
         <div class="jd-descrdiv">Retreive the age of this measurement.</div>
   
@@ -618,17 +660,17 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
             
             
             
             
             
-            long</nobr>
+            long
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getBirthtime()">getBirthtime</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getBirthtime()">getBirthtime</a></span>()
         
         <div class="jd-descrdiv">Return the creation time of this measurement;</div>
   
@@ -636,115 +678,113 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
             
             
             
             static
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>&gt;</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>&gt;
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getClassForId(java.lang.String)">getClassForId</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getClassForId(java.lang.String)">getClassForId</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> measurementId)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getGenericName()">getGenericName</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
+            static
             
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="../../../com/openxc/messages/MessageKey.html">MessageKey</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getEvent()">getEvent</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getKeyForMeasurement(java.lang.Class<? extends com.openxc.measurements.Measurement>)">getKeyForMeasurement</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType)
         
-        <div class="jd-descrdiv">Return an optional event associated with this measurement.</div>
-  
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
+            static
             
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getGenericName()">getGenericName</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getMeasurementFromMessage(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.messages.SimpleVehicleMessage)">getMeasurementFromMessage</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../../com/openxc/messages/SimpleVehicleMessage.html">SimpleVehicleMessage</a> message)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             static
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getIdForClass(java.lang.Class<? extends com.openxc.measurements.Measurement>)">getIdForClass</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getMeasurementFromMessage(com.openxc.messages.SimpleVehicleMessage)">getMeasurementFromMessage</a></span>(<a href="../../../com/openxc/messages/SimpleVehicleMessage.html">SimpleVehicleMessage</a> message)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
-            static
             
-            <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a></nobr>
+            
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getMeasurementFromRaw(com.openxc.remote.RawMeasurement)">getMeasurementFromRaw</a></span>(<a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> rawMeasurement)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getName(android.content.Context)">getName</a></span>(Context context)
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
-            static
             
-            <a href="../../../com/openxc/measurements/Measurement.html">Measurement</a></nobr>
+            
+            <a href="../../../com/openxc/util/Range.html">Range</a>&lt;TheUnit&gt;
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getMeasurementFromRaw(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.remote.RawMeasurement)">getMeasurementFromRaw</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a> rawMeasurement)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="../../../com/openxc/util/Range.html">Range</a>&lt;TheUnit&gt;</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getRange()">getRange</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getRange()">getRange</a></span>()
         
         <div class="jd-descrdiv">Retrieve the valid range of the measurement.</div>
   
@@ -752,35 +792,17 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getSerializedEvent()">getSerializedEvent</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Return the event of this measurement as a type good for serialization.</div>
-  
-  </td></tr>
-
-
-	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getSerializedValue()">getSerializedValue</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getSerializedValue()">getSerializedValue</a></span>()
         
         <div class="jd-descrdiv">Return the value of this measurement as a type good for serialization.</div>
   
@@ -789,16 +811,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            TheUnit</nobr>
+            TheUnit
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getValue()">getValue</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#getValue()">getValue</a></span>()
         
         <div class="jd-descrdiv">Return the value of this measurement.</div>
   
@@ -807,16 +829,16 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#hasRange()">hasRange</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#hasRange()">hasRange</a></span>()
         
         <div class="jd-descrdiv">Determine if this measurement has a valid range.</div>
   
@@ -825,32 +847,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#serialize()">serialize</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#setTimestamp(long)">setTimestamp</a></span>(long timestamp)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#setTimestamp(long)">setTimestamp</a></span>(long timestamp)
         
         <div class="jd-descrdiv">Set the birth timestamp for this measurement.</div>
   
@@ -858,33 +864,33 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#toRaw()">toRaw</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#toString()">toString</a></span>()
         
   </td></tr>
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="../../../com/openxc/messages/SimpleVehicleMessage.html">SimpleVehicleMessage</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#toString()">toString</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/BaseMeasurement.html#toVehicleMessage()">toVehicleMessage</a></span>()
         
   </td></tr>
 
@@ -917,176 +923,176 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">clone</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">clone</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">finalize</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">finalize</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getClass</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getClass</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            int</nobr>
+            int
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">hashCode</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">hashCode</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">notify</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notify</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">notifyAll</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notifyAll</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">toString</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">toString</span>()
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>(long arg0)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             
             
             final
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">wait</span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -1119,16 +1125,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            long</nobr>
+            long
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getAge()">getAge</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getAge()">getAge</a></span>()
         
         <div class="jd-descrdiv">Retreive the age of this measurement.</div>
   
@@ -1137,16 +1143,16 @@ From interface
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            long</nobr>
+            long
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getBirthtime()">getBirthtime</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getBirthtime()">getBirthtime</a></span>()
         
         <div class="jd-descrdiv">Return the creation time of this measurement;</div>
   
@@ -1155,50 +1161,48 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getEvent()">getEvent</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getGenericName()">getGenericName</a></span>()
         
-        <div class="jd-descrdiv">Return an optional event associated with this measurement.</div>
-  
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getGenericName()">getGenericName</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getName(android.content.Context)">getName</a></span>(Context context)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="../../../com/openxc/util/Range.html">Range</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;</nobr>
+            <a href="../../../com/openxc/util/Range.html">Range</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/units/Unit.html">Unit</a>&gt;
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getRange()">getRange</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getRange()">getRange</a></span>()
         
         <div class="jd-descrdiv">Retrieve the valid range of the measurement.</div>
   
@@ -1207,34 +1211,16 @@ From interface
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getSerializedEvent()">getSerializedEvent</a></span>()</nobr>
-        
-        <div class="jd-descrdiv">Return the event of this measurement as a type good for serialization.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getSerializedValue()">getSerializedValue</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getSerializedValue()">getSerializedValue</a></span>()
         
         <div class="jd-descrdiv">Return the value of this measurement as a type good for serialization.</div>
   
@@ -1242,17 +1228,17 @@ From interface
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="../../../com/openxc/units/Unit.html">Unit</a></nobr>
+            <a href="../../../com/openxc/units/Unit.html">Unit</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getValue()">getValue</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#getValue()">getValue</a></span>()
         
         <div class="jd-descrdiv">Return the value of this measurement.</div>
   
@@ -1260,17 +1246,17 @@ From interface
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            boolean</nobr>
+            boolean
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#hasRange()">hasRange</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#hasRange()">hasRange</a></span>()
         
         <div class="jd-descrdiv">Determine if this measurement has a valid range.</div>
   
@@ -1278,33 +1264,17 @@ From interface
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#serialize()">serialize</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            void</nobr>
+            void
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#setTimestamp(long)">setTimestamp</a></span>(long timestamp)</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#setTimestamp(long)">setTimestamp</a></span>(long timestamp)
         
         <div class="jd-descrdiv">Set the birth timestamp for this measurement.</div>
   
@@ -1313,16 +1283,16 @@ From interface
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
+        <td class="jd-typecol">
             abstract
             
             
             
             
-            <a href="../../../com/openxc/remote/RawMeasurement.html">RawMeasurement</a></nobr>
+            <a href="../../../com/openxc/messages/SimpleVehicleMessage.html">SimpleVehicleMessage</a>
         </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#toRaw()">toRaw</a></span>()</nobr>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/openxc/measurements/Measurement.html#toVehicleMessage()">toVehicleMessage</a></span>()
         
   </td></tr>
 
@@ -1362,7 +1332,7 @@ From interface
 
 
 
-<A NAME="ID"></A>
+<a id="ID"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1413,7 +1383,7 @@ From interface
 
 
 
-<A NAME="VehicleSpeed(com.openxc.units.KilometersPerHour)"></A>
+<a id="VehicleSpeed(com.openxc.units.KilometersPerHour)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1444,7 +1414,7 @@ From interface
 </div>
 
 
-<A NAME="VehicleSpeed(java.lang.Number)"></A>
+<a id="VehicleSpeed(java.lang.Number)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1490,7 +1460,7 @@ From interface
 
 
 
-<A NAME="getGenericName()"></A>
+<a id="getGenericName()"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1529,7 +1499,7 @@ From interface
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
+<a id="navbar_top"></a>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
