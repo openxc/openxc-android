@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v6.0.1-dev
+
 ## v6.0.0
 
 * BREAKING: Refactor RawMeasurement class into more useful message types in the
