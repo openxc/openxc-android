@@ -2,8 +2,13 @@
 
 import os
 from fabric.api import *
-from fabric.colors import green
+from fabric.colors import green, yellow
+from fabric.contrib.console import confirm
 
+from prettyprint import pp
+import re
+
+VERSION_PATTERN = r'^v\d+(\.\d+)+?$'
 env.root_dir = os.path.abspath(os.path.dirname(__file__))
 env.release = "HEAD"
 
