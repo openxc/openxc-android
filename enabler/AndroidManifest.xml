@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000000" android:versionName="6.0.0" package="com.openxc.enabler">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000001" android:versionName="6.0.1-SNAPSHOT" package="com.openxc.enabler">
 
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
