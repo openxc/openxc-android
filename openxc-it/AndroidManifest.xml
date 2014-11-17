@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000001" android:versionName="6.0.1" package="com.openxcplatform.instrumentationtests">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000002" android:versionName="6.0.2-SNAPSHOT" package="com.openxcplatform.instrumentationtests">
 
   <supports-screens android:anyDensity="true" android:largeScreens="true" android:xlargeScreens="true"/>
 

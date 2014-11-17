@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v6.0.2-dev
+
 ## v6.0.1
 
 * Change Android package namespace from `com.openxc` to `com.openxcplatform`
