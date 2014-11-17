@@ -9,6 +9,7 @@ from prettyprint import pp
 import re
 
 VERSION_PATTERN = r'^v\d+(\.\d+)+?$'
+env.releases_directory = "release"
 env.root_dir = os.path.abspath(os.path.dirname(__file__))
 env.release = "HEAD"
 
@@ -26,7 +27,6 @@ def latest_git_tag():
     if not re.match(VERSION_PATTERN, latest_tag):
         latest_tag = None
     return latest_tag
-
 
 def compare_versions(x, y):
     """
@@ -81,7 +81,13 @@ def release():
     test()
     tag = make_tag()
     local("mvn package -pl enabler -am")
-    local("scripts/updatedocs.sh")
+    # Must have keystore info configured in ~/.m2/settings
+    local("mvn install -Prelease -pl enabler")
+    local("mkdir -p %(releases_directory)s" % env)
+    local("cp enabler/target/openxc-enabler.apk enabler/target/openxc-enabler-%s.apk" % tag)
+    local("cp enabler/target/openxc-enabler-signed-aligned.apk enabler/target/openxc-enabler-release-%s.apk" % tag)
+
+    # local("scripts/updatedocs.sh")
 
 @task
 def snapshot():
