@@ -67,10 +67,6 @@ def make_tag():
         local('git push origin', capture=True)
         local('git push --tags origin', capture=True)
         local('git fetch --tags origin', capture=True)
-    else:
-        env.tag = latest_git_tag()
-        print(green("Using latest tag %(tag)s" % env))
-    return env.tag
 
 @task(default=True)
 def test(args=None):
@@ -79,15 +75,17 @@ def test(args=None):
 @task
 def release():
     test()
-    tag = make_tag()
+    make_tag()
+    descriptor = release_descriptor(".")
+    print(green("Building release %s" % descriptor))
     local("mvn package -pl enabler -am")
     # Must have keystore info configured in ~/.m2/settings
     local("mvn install -Prelease -pl enabler")
     local("mkdir -p %(releases_directory)s" % env)
-    local("cp enabler/target/openxc-enabler.apk enabler/target/openxc-enabler-%s.apk" % tag)
-    local("cp enabler/target/openxc-enabler-signed-aligned.apk enabler/target/openxc-enabler-release-%s.apk" % tag)
+    local("cp enabler/target/openxc-enabler.apk %(releases_directory)s/openxc-enabler-%s.apk" % descriptor)
+    local("cp enabler/target/openxc-enabler-signed-aligned.apk %(releases_directory)s/openxc-enabler-release-%s.apk" % descriptor)
 
-    # local("scripts/updatedocs.sh")
+    local("scripts/updatedocs.sh")
 
 @task
 def snapshot():
