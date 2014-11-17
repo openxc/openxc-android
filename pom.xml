@@ -121,6 +121,10 @@
                 <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <configuration>
+                    <proguardFile>${project.build.directory}/proguard/proguard-file.txt</proguardFile>
+                    <manifest>
+                        <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
+                    </manifest>
                     <dexOptimize>false</dexOptimize>
                     <dex>
                         <jvmArguments>
