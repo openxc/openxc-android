@@ -10,5 +10,6 @@ reference
 .classpath
 *.releaseBackup
 release.properties
+release
 assets
 tokens.xml
