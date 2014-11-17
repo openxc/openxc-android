@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.formatters.ByteAdapter;
+import com.openxcplatform.enabler.R;
 
 public class CanMessageDetailActivity extends Activity {
     public final static String EXTRA_CAN_MESSAGE = "EXTRA_CAN_MESSAGE";

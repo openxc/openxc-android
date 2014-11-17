@@ -5,10 +5,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openxc.enabler.R;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.UploaderSink;
 import com.openxc.sinks.VehicleDataSink;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable uploading of a vehicle trace to a remote web server.

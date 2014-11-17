@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.formatters.ByteAdapter;
+import com.openxcplatform.enabler.R;
 
 public class DiagnosticResponseAdapter extends VehicleMessageAdapter {
     private Context mContext;

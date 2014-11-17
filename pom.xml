@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.openxcplatform</groupId>
     <artifactId>openxc-parent</artifactId>
-    <version>6.0.1-SNAPSHOT</version>
+    <version>6.0.1</version>
     <packaging>pom</packaging>
     <name>OpenXC - Parent</name>
     <description>Android library and Enabler application for the OpenXC Platform</description>
@@ -101,13 +101,13 @@
                         <excludes>
                             <exclude>com/openxc/BuildConfig.class</exclude>
                             <exclude>com/openxc/BinaryMessages.class</exclude>
-                            <exclude>com/openxc/R.class</exclude>
+                            <exclude>com/openxcplatform/R.class</exclude>
                             <exclude>com/openxc/remote/*</exclude>
                             <exclude>com/openxc/interfaces/bluetooth/*</exclude>
                             <exclude>com/openxc/interfaces/usb/*</exclude>
                         </excludes>
                         <ignores>
-                            <ignore>com.openxc.R</ignore>
+                            <ignore>com.openxcplatform.R</ignore>
                         </ignores>
                     </instrumentation>
                     <formats>

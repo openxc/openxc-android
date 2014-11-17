@@ -3,8 +3,8 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.util.Log;
 
-import com.openxc.enabler.R;
 import com.openxc.VehicleLocationProvider;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable overwriting native GPS measurements with those from the

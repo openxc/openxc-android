@@ -12,6 +12,7 @@ import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
+import com.openxcplatform.enabler.R;
 
 public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
     private Context mContext;

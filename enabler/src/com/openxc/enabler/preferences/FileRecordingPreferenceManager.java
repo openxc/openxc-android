@@ -3,11 +3,11 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.util.Log;
 
-import com.openxc.enabler.R;
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.util.AndroidFileOpener;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable recording of a trace file.

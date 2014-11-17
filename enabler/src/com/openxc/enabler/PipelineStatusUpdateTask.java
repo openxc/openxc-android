@@ -12,6 +12,7 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.sources.VehicleDataSource;
+import com.openxcplatform.enabler.R;
 
 public class PipelineStatusUpdateTask extends TimerTask {
     private VehicleManager mVehicleManager;

@@ -3,10 +3,10 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.util.Log;
 
-import com.openxc.enabler.R;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.trace.TraceVehicleDataSource;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable receiving vehicle data from a pre-recorded trace file.

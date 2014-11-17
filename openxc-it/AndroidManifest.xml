@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000001" android:versionName="6.0.1-SNAPSHOT" package="com.openxc.instrumentationtests">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000001" android:versionName="6.0.1" package="com.openxcplatform.instrumentationtests">
 
   <supports-screens android:anyDensity="true" android:largeScreens="true" android:xlargeScreens="true"/>
 
@@ -24,5 +24,5 @@
       </service>
   </application>
 
-  <instrumentation android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.openxc.instrumentationtests"/>
+  <instrumentation android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.openxcplatform.instrumentationtests"/>
 </manifest>

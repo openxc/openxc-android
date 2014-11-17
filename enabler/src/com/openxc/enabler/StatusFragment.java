@@ -26,6 +26,7 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
+import com.openxcplatform.enabler.R;
 
 public class StatusFragment extends Fragment {
     private static String TAG = "StatusFragment";

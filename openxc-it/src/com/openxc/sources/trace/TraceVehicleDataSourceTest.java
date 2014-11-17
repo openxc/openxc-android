@@ -8,13 +8,13 @@ import java.net.URL;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.openxc.instrumentationtests.R;
 import com.openxc.TestUtils;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
+import com.openxcplatform.instrumentationtests.R;
 
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
     URI traceUri;

@@ -2,11 +2,11 @@ package com.openxc.enabler;
 
 import java.util.TimerTask;
 
-import com.openxc.VehicleManager;
-import com.openxc.remote.VehicleServiceException;
-
 import android.app.Activity;
 import android.widget.TextView;
+
+import com.openxc.VehicleManager;
+import com.openxc.remote.VehicleServiceException;
 
 public class MessageCountTask extends TimerTask {
     private VehicleManager mVehicleManager;

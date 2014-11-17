@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
@@ -33,8 +34,10 @@ import android.preference.PreferenceScreen;
 import android.provider.DocumentsContract;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.sinks.UploaderSink;
+import com.openxcplatform.enabler.R;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.

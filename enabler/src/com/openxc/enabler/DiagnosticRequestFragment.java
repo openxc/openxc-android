@@ -25,6 +25,7 @@ import com.openxc.VehicleManager;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.VehicleMessage;
+import com.openxcplatform.enabler.R;
 
 public class DiagnosticRequestFragment extends ListFragment {
     private static String TAG = "DiagnosticRequestFragment";

@@ -3,9 +3,9 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.util.Log;
 
-import com.openxc.enabler.R;
 import com.openxc.interfaces.usb.UsbVehicleInterface;
 import com.openxc.remote.VehicleServiceException;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable receiving vehicle data from a USB vehicle interface.

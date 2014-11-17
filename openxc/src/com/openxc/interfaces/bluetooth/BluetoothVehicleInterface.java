@@ -20,7 +20,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
-import com.openxc.R;
+
+import com.openxcplatform.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;

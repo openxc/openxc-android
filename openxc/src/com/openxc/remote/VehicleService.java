@@ -9,8 +9,8 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.openxcplatform.R;
 import com.openxc.DataPipeline;
-import com.openxc.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.VehicleInterfaceException;

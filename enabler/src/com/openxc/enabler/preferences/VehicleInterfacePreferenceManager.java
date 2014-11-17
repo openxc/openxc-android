@@ -2,8 +2,8 @@ package com.openxc.enabler.preferences;
 
 import android.content.Context;
 
-import com.openxc.enabler.R;
 import com.openxc.remote.VehicleServiceException;
+import com.openxcplatform.enabler.R;
 
 public class VehicleInterfacePreferenceManager extends VehiclePreferenceManager {
     public VehicleInterfacePreferenceManager(Context context) {

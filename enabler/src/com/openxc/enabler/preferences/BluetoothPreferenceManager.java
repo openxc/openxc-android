@@ -13,12 +13,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.openxc.enabler.R;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
-import com.openxc.util.SupportSettingsUtils;
 import com.openxc.remote.VehicleServiceException;
+import com.openxc.util.SupportSettingsUtils;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth vehicle interface.

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.openxc.VehicleManager;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxcplatform.enabler.R;
 
 public class VehicleDashboardFragment extends ListFragment {
     private static String TAG = "VehicleDashboard";

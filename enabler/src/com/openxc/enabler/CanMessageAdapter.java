@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.formatters.ByteAdapter;
+import com.openxcplatform.enabler.R;
 
 public class CanMessageAdapter extends KeyedMessageAdapter {
     private Context mContext;

@@ -2,13 +2,12 @@ package com.openxc;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.TestVehicleInterface;
+import com.openxc.interfaces.VehicleInterface;
 import com.openxc.measurements.TurnSignalStatus;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.messages.DiagnosticRequest;

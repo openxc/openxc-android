@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxcplatform.enabler.R;
 
 public class CanMessageViewFragment extends ListFragment {
     private static String TAG = "CanMessageView";

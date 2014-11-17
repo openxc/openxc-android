@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openxc.enabler.R;
 import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.remote.VehicleServiceException;
+import com.openxcplatform.enabler.R;
 
 /**
  * Enable or disable receiving vehicle data from a Network device

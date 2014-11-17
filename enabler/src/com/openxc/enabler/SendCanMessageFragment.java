@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.formatters.ByteAdapter;
+import com.openxcplatform.enabler.R;
 
 public class SendCanMessageFragment extends ListFragment {
     private static String TAG = "SendCanMessageFragment";
