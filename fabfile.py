@@ -87,7 +87,7 @@ def release():
     local("cp enabler/target/openxc-enabler.apk enabler/target/openxc-enabler-%s.apk" % tag)
     local("cp enabler/target/openxc-enabler-signed-aligned.apk enabler/target/openxc-enabler-release-%s.apk" % tag)
 
-    # local("scripts/updatedocs.sh")
+    local("scripts/updatedocs.sh")
 
 @task
 def snapshot():

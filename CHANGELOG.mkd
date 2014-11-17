@@ -1,6 +1,8 @@
 # OpenXC Android Library Changelog
 
-## v6.0.2-dev
+## v6.0.2
+
+* Fix: Fix classpaths in Enabler manifest so it can find the activity class.
 
 ## v6.0.1
 
