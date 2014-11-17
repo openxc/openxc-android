@@ -132,7 +132,21 @@
                         <platform>${android.platform}</platform>
                     </sdk>
                     <undeployBeforeDeploy>false</undeployBeforeDeploy>
+                    <updatedManifestFile>AndroidManifest.xml</updatedManifestFile>
+                    <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+                    <resourceDirectory>res</resourceDirectory>
+                    <assetsDirectory>assets</assetsDirectory>
+                    <nativeLibrariesDirectory>libs</nativeLibrariesDirectory>
                 </configuration>
+                <executions>
+                  <execution>
+                    <id>manifestUpdate</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                      <goal>manifest-update</goal>
+                    </goals>
+                  </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

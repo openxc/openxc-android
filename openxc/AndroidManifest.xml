@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.openxc" android:versionCode="14" android:versionName="6.0.0">
-  <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000000" android:versionName="6.0.0" package="com.openxc">
+  <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <service android:name="com.openxc.VehicleManager"/>
   <service android:name="com.openxc.remote.VehicleService" android:process=":remote">
       <intent-filter>
-          <action android:name="com.openxc.remote.VehicleServiceInterface" />
+          <action android:name="com.openxc.remote.VehicleServiceInterface"/>
       </intent-filter>
   </service>
-  <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="21" />
+  <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="21"/>
 </manifest>
