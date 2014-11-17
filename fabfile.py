@@ -76,14 +76,14 @@ def test(args=None):
 def release():
     test()
     make_tag()
-    descriptor = release_descriptor(".")
-    print(green("Building release %s" % descriptor))
+    env.descriptor = release_descriptor(".")
+    print(green("Building release %(descriptor)s" % env))
     local("mvn package -pl enabler -am")
     # Must have keystore info configured in ~/.m2/settings
     local("mvn install -Prelease -pl enabler")
     local("mkdir -p %(releases_directory)s" % env)
-    local("cp enabler/target/openxc-enabler.apk %(releases_directory)s/openxc-enabler-%s.apk" % descriptor)
-    local("cp enabler/target/openxc-enabler-signed-aligned.apk %(releases_directory)s/openxc-enabler-release-%s.apk" % descriptor)
+    local("cp enabler/target/openxc-enabler.apk %(releases_directory)s/openxc-enabler-%(descriptor)s.apk" % env)
+    local("cp enabler/target/openxc-enabler-signed-aligned.apk %(releases_directory)s/openxc-enabler-release-%(descriptor)s.apk" % env)
 
     local("scripts/updatedocs.sh")
 
