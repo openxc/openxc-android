@@ -143,8 +143,8 @@ public class DiagnosticRequestFragment extends ListFragment {
                 // out the best way to share this rendering info
                 TextView timestampView = (TextView)
                         mLastRequestView.findViewById(R.id.timestamp);
-                timestampView.setText(new SimpleDateFormat(
-                            "HH:mm:ss.S", Locale.US).format(request.getDate()));
+                timestampView.setText(VehicleMessageAdapter.formatTimestamp(
+                            request));
 
                 TextView busView = (TextView)
                         mLastRequestView.findViewById(R.id.bus);

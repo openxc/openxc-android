@@ -24,8 +24,11 @@ public abstract class VehicleMessageAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    protected String formatTimestamp(VehicleMessage message) {
-        return sDateFormatter.format(message.getDate());
+    protected static String formatTimestamp(VehicleMessage message) {
+        if(message.isTimestamped()) {
+            return sDateFormatter.format(message.getDate());
+        }
+        return "";
     }
 
     @Override
