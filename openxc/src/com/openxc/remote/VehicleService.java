@@ -161,18 +161,20 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             public boolean send(VehicleMessage command) {
                 command.untimestamp();
                 boolean sent = false;
-                if(mVehicleInterface != null && mVehicleInterface.isConnected()) {
-                    try {
-                        mVehicleInterface.receive(command);
-                        Log.d(TAG, "Sent " + command + " using interface " +
-                                mVehicleInterface);
-                        sent = true;
-                    } catch(DataSinkException e) {
-                        Log.w(TAG, mVehicleInterface +
-                                " unable to send command", e);
+                synchronized(VehicleService.this) {
+                    if(mVehicleInterface != null && mVehicleInterface.isConnected()) {
+                        try {
+                            mVehicleInterface.receive(command);
+                            Log.d(TAG, "Sent " + command + " using interface " +
+                                    mVehicleInterface);
+                            sent = true;
+                        } catch(DataSinkException e) {
+                            Log.w(TAG, mVehicleInterface +
+                                    " unable to send command", e);
+                        }
+                    } else {
+                        Log.w(TAG, "No connected VI available to send command");
                     }
-                } else {
-                    Log.w(TAG, "No connected VI available to send command");
                 }
                 return sent;
             }
@@ -223,10 +225,13 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
             @Override
             public VehicleInterfaceDescriptor getVehicleInterfaceDescriptor() {
-                if(mVehicleInterface == null) {
-                    return null;
+                VehicleInterfaceDescriptor descriptor = null;
+                synchronized(VehicleService.this) {
+                    if(mVehicleInterface != null) {
+                        descriptor = new VehicleInterfaceDescriptor(mVehicleInterface);
+                    }
                 }
-                return new VehicleInterfaceDescriptor(mVehicleInterface);
+                return descriptor;
             }
 
             @Override
@@ -267,45 +272,47 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
         }
 
-        if(mVehicleInterface != null && (interfaceName == null ||
-                (interfaceType != null &&
-                 !mVehicleInterface.getClass().isAssignableFrom(
-                     interfaceType)))) {
-            Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
-            mVehicleInterface.stop();
-            mPipeline.removeSource(mVehicleInterface);
-            mVehicleInterface = null;
-        }
+        synchronized(this) {
+            if(mVehicleInterface != null && (interfaceName == null ||
+                    (interfaceType != null &&
+                     !mVehicleInterface.getClass().isAssignableFrom(
+                         interfaceType)))) {
+                Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
+                mVehicleInterface.stop();
+                mPipeline.removeSource(mVehicleInterface);
+                mVehicleInterface = null;
+            }
 
-        if(interfaceName != null && interfaceType != null) {
-            if(mVehicleInterface == null ||
-                    !mVehicleInterface.getClass().isAssignableFrom(
-                        interfaceType)) {
-                try {
-                    mVehicleInterface = VehicleInterfaceFactory.build(
-                            interfaceType, VehicleService.this, resource);
-                } catch(VehicleInterfaceException e) {
-                    Log.w(TAG, "Unable to set vehicle interface", e);
-                    return;
-                }
-
-                mPipeline.addSource(mVehicleInterface);
-            } else {
-                try {
-                    if(mVehicleInterface.setResource(resource)) {
-                        Log.d(TAG, "Changed resource of already " +
-                                "active interface " + mVehicleInterface);
-                    } else {
-                        Log.d(TAG, "Interface " + mVehicleInterface +
-                                " already had same active resource " + resource +
-                                " -- not restarting");
+            if(interfaceName != null && interfaceType != null) {
+                if(mVehicleInterface == null ||
+                        !mVehicleInterface.getClass().isAssignableFrom(
+                            interfaceType)) {
+                    try {
+                        mVehicleInterface = VehicleInterfaceFactory.build(
+                                interfaceType, VehicleService.this, resource);
+                    } catch(VehicleInterfaceException e) {
+                        Log.w(TAG, "Unable to set vehicle interface", e);
+                        return;
                     }
-                } catch(DataSourceException e) {
-                    Log.w(TAG, "Unable to change resource", e);
+
+                    mPipeline.addSource(mVehicleInterface);
+                } else {
+                    try {
+                        if(mVehicleInterface.setResource(resource)) {
+                            Log.d(TAG, "Changed resource of already " +
+                                    "active interface " + mVehicleInterface);
+                        } else {
+                            Log.d(TAG, "Interface " + mVehicleInterface +
+                                    " already had same active resource " + resource +
+                                    " -- not restarting");
+                        }
+                    } catch(DataSourceException e) {
+                        Log.w(TAG, "Unable to change resource", e);
+                    }
                 }
             }
+            Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
         }
-        Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
     }
 
     private void setNativeGpsStatus(boolean enabled) {
@@ -319,7 +326,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         }
     }
 
-    private void setBluetoothPollingStatus(boolean enabled) {
+    private synchronized void setBluetoothPollingStatus(boolean enabled) {
         if(mVehicleInterface != null &&
                 mVehicleInterface instanceof BluetoothVehicleInterface) {
             ((BluetoothVehicleInterface)mVehicleInterface).setPollingStatus(
@@ -328,7 +335,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     }
 
     @Override
-    public void onPipelineActivated() {
+    public synchronized void onPipelineActivated() {
         mWakeLocker.acquireWakeLock();
         moveToForeground();
         if(mVehicleInterface != null && mVehicleInterface.isConnected()) {
@@ -356,20 +363,22 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             mWakeLocker.releaseWakeLock();
             removeFromForeground();
 
-            if(mVehicleInterface == null || !mVehicleInterface.isConnected()) {
-            synchronized(mViConnectionListeners) {
-                int i = mViConnectionListeners.beginBroadcast();
-                while(i > 0) {
-                    i--;
-                    try {
-                        mViConnectionListeners.getBroadcastItem(i).onDisconnected();
-                    } catch(RemoteException e) {
-                        Log.w(TAG, "Couldn't notify VI connection " +
-                                "listener -- did it crash?", e);
+            synchronized(this) {
+                if(mVehicleInterface == null || !mVehicleInterface.isConnected()) {
+                    synchronized(mViConnectionListeners) {
+                        int i = mViConnectionListeners.beginBroadcast();
+                        while(i > 0) {
+                            i--;
+                            try {
+                                mViConnectionListeners.getBroadcastItem(i).onDisconnected();
+                            } catch(RemoteException e) {
+                                Log.w(TAG, "Couldn't notify VI connection " +
+                                        "listener -- did it crash?", e);
+                            }
+                        }
+                        mViConnectionListeners.finishBroadcast();
                     }
                 }
-                mViConnectionListeners.finishBroadcast();
-            }
             }
         }
     }
