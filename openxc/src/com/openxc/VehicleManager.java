@@ -823,10 +823,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     private void bindRemote() {
         Log.i(TAG, "Binding to VehicleService");
-        // TODO Android warns us that this implicit intent is unsafe, but if we
-        // try creating an explicit intent (with out context), the server is
-        // never bound. What gives?
-        Intent intent = new Intent(VehicleServiceInterface.class.getName());
+        Intent intent = new Intent(this, VehicleService.class);
         try {
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
             mIsBound = true;
