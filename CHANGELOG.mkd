@@ -1,5 +1,14 @@
 # OpenXC Android Library Changelog
 
+## v6.0.4-dev
+
+## v6.0.3
+
+* Improvement: Use an explicit intent to start services to avoid a security
+  hole.
+* Fix: Guard against a race condition when querying for an active VI.
+* Fix: Gaurd against missing timestamp when rendering diagnostic messages.
+
 ## v6.0.2
 
 * Fix: Fix classpaths in Enabler manifest so it can find the activity class.
