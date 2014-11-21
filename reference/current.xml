@@ -19047,7 +19047,7 @@
  return="void"
  abstract="false"
  native="false"
- synchronized="false"
+ synchronized="true"
  static="false"
  final="false"
  deprecated="not deprecated"
