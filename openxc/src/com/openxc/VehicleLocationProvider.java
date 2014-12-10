@@ -57,7 +57,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
             mVehicleManager.removeListener(VehicleSpeed.class, this);
         }
 
-        if(mLocationManager.getProvider(
+        if(mLocationManager != null && mLocationManager.getProvider(
                     VEHICLE_LOCATION_PROVIDER) != null) {
             mLocationManager.removeTestProvider(VEHICLE_LOCATION_PROVIDER);
         }
