@@ -53,7 +53,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
 
     private final static int SERVICE_NOTIFICATION_ID = 1000;
 
-    // Work around an issue with instruemtnation tests and foreground services
+    // Work around an issue with instrumentation tests and foreground services
     // https://code.google.com/p/android/issues/detail?id=12122
     public static boolean sIsUnderTest = false;
 
