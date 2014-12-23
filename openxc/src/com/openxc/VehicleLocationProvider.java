@@ -43,10 +43,6 @@ public class VehicleLocationProvider implements Measurement.Listener {
             Log.w(TAG, "Cannot load location service from Android, won't be able to overwrite GPS");
         } else {
             setupMockLocations();
-
-            mVehicleManager.addListener(Latitude.class, this);
-            mVehicleManager.addListener(Longitude.class, this);
-            mVehicleManager.addListener(VehicleSpeed.class, this);
         }
     }
 
@@ -96,8 +92,16 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 Log.d(TAG, "Unable to remove GPS test provider - " +
                         "probably wasn't added yet");
             }
+
+            mVehicleManager.removeListener(Latitude.class, this);
+            mVehicleManager.removeListener(Longitude.class, this);
+            mVehicleManager.removeListener(VehicleSpeed.class, this);
         } else {
             Log.d(TAG, "Enabled overwriting native GPS with OpenXC GPS");
+
+            mVehicleManager.addListener(Latitude.class, this);
+            mVehicleManager.addListener(Longitude.class, this);
+            mVehicleManager.addListener(VehicleSpeed.class, this);
         }
     }
 
