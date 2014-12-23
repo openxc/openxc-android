@@ -823,12 +823,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     private void bindRemote() {
         Log.i(TAG, "Binding to VehicleService");
-        // Android warns us that this implicit intent is unsafe, but if we
-        // try creating an explicit intent (with out context), the server is
-        // never bound. Using an explicit intent with VehicleService works for
-        // the Enabler, but then other apps are not able to connect to the
-        // single shared remote process.
-        Intent intent = new Intent(VehicleServiceInterface.class.getName());
+        Intent intent = new Intent(VehicleService.class.getName());
+        intent.setComponent(new ComponentName("com.openxcplatform.enabler", "com.openxc.remote.VehicleService"));
+
         try {
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
             mIsBound = true;

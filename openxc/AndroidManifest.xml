@@ -3,10 +3,6 @@
   <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <service android:name="com.openxc.VehicleManager"/>
-  <service android:name="com.openxc.remote.VehicleService" android:process=":remote">
-      <intent-filter>
-          <action android:name="com.openxc.remote.VehicleServiceInterface"/>
-      </intent-filter>
-  </service>
+  <service android:name="com.openxc.remote.VehicleService" android:process=":remote"/>
   <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="21"/>
 </manifest>
