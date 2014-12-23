@@ -17,11 +17,6 @@
   <application android:allowBackup="false" android:label="@string/app_name">
       <uses-library android:name="android.test.runner"/>
       <service android:exported="false" android:name=".VehicleManager"/>
-      <service android:exported="false" android:name=".remote.VehicleService" android:process=":remote">
-          <intent-filter>
-              <action android:name="com.openxc.remote.VehicleServiceInterface"/>
-          </intent-filter>
-      </service>
   </application>
 
   <instrumentation android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.openxcplatform.instrumentationtests"/>
