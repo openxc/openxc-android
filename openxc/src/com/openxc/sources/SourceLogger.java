@@ -20,7 +20,7 @@ public class SourceLogger {
         double kilobytesTransferred = bytesReceived / 1024.0;
         long elapsedTime = TimeUnit.SECONDS.convert(
             System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
-        Log.i(tag, "Transferred " + kilobytesTransferred + " KB in the last"
+        Log.i(tag, "Transferred " + kilobytesTransferred + " KB in the last "
             + elapsedTime + " seconds at an average of " +
             kilobytesTransferred / elapsedTime + " KB/s");
     }
