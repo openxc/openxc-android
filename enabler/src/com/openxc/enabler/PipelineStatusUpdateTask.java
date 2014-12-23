@@ -62,19 +62,21 @@ public class PipelineStatusUpdateTask extends TimerTask {
     }
 
     public void run() {
-        final VehicleInterfaceDescriptor viDescriptor =
-                mVehicleManager.getActiveVehicleInterface();
+        if(mVehicleManager != null) {
+            final VehicleInterfaceDescriptor viDescriptor =
+                    mVehicleManager.getActiveVehicleInterface();
 
-        setVisibility(BluetoothVehicleInterface.class,
-                mBluetoothConnView, viDescriptor);
-        setVisibility(NetworkVehicleInterface.class, mNetworkConnView,
-                viDescriptor);
-        setVisibility(UsbVehicleInterface.class, mUsbConnView,
-                viDescriptor);
+            setVisibility(BluetoothVehicleInterface.class,
+                    mBluetoothConnView, viDescriptor);
+            setVisibility(NetworkVehicleInterface.class, mNetworkConnView,
+                    viDescriptor);
+            setVisibility(UsbVehicleInterface.class, mUsbConnView,
+                    viDescriptor);
 
-        setVisibility(mNoneConnView,
-                !traceEnabled() && viDescriptor == null);
-        setVisibility(mFileConnView, traceEnabled());
+            setVisibility(mNoneConnView,
+                    !traceEnabled() && viDescriptor == null);
+            setVisibility(mFileConnView, traceEnabled());
+        }
     }
 
     private boolean traceEnabled() {
