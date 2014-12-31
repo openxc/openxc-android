@@ -482,7 +482,7 @@ Summary:
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#register(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">register</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#register(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener, boolean)">register</a></span>(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener, boolean persist)
         
   </td></tr>
 
@@ -498,7 +498,7 @@ Summary:
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#register(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener, boolean)">register</a></span>(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener, boolean persist)
+        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#register(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)">register</a></span>(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
   </td></tr>
 
@@ -514,7 +514,7 @@ Summary:
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#register(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)">register</a></span>(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#register(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">register</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
   </td></tr>
 
@@ -562,7 +562,7 @@ Summary:
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#unregister(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)">unregister</a></span>(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#unregister(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">unregister</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
   </td></tr>
 
@@ -594,7 +594,7 @@ Summary:
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#unregister(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">unregister</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../../com/openxc/sinks/MessageListenerSink.html#unregister(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)">unregister</a></span>(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
   </td></tr>
 
@@ -892,7 +892,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
@@ -908,7 +908,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -924,7 +924,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
@@ -1078,37 +1078,6 @@ From interface
 
 
 
-<a id="register(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-        synchronized 
-        void
-      </span>
-      <span class="sympad">register</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
 <a id="register(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener, boolean)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -1154,6 +1123,37 @@ From interface
       </span>
       <span class="sympad">register</span>
       <span class="normal">(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<a id="register(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+        synchronized 
+        void
+      </span>
+      <span class="sympad">register</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1233,7 +1233,7 @@ From interface
 </div>
 
 
-<a id="unregister(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)"></a>
+<a id="unregister(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1246,7 +1246,7 @@ From interface
         void
       </span>
       <span class="sympad">unregister</span>
-      <span class="normal">(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1295,7 +1295,7 @@ From interface
 </div>
 
 
-<a id="unregister(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)"></a>
+<a id="unregister(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1308,7 +1308,7 @@ From interface
         void
       </span>
       <span class="sympad">unregister</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
+      <span class="normal">(<a href="../../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
     </h4>
       <div class="api-level">
         <div>

@@ -452,9 +452,9 @@ Summary:
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/openxc/messages/formatters/JsonFormatter.html#serialize(java.util.Collection<com.openxc.messages.VehicleMessage>)">serialize</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Collection.html">Collection</a>&lt;<a href="../../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messages)
+        <span class="sympad"><a href="../../../../com/openxc/messages/formatters/JsonFormatter.html#serialize(com.openxc.messages.VehicleMessage)">serialize</a></span>(<a href="../../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)
         
-        <div class="jd-descrdiv">Serialize a collection of messages to a string.</div>
+        <div class="jd-descrdiv">Serialize a vehicle message to a string.</div>
   
   </td></tr>
 
@@ -470,9 +470,9 @@ Summary:
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/openxc/messages/formatters/JsonFormatter.html#serialize(com.openxc.messages.VehicleMessage)">serialize</a></span>(<a href="../../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)
+        <span class="sympad"><a href="../../../../com/openxc/messages/formatters/JsonFormatter.html#serialize(java.util.Collection<com.openxc.messages.VehicleMessage>)">serialize</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Collection.html">Collection</a>&lt;<a href="../../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messages)
         
-        <div class="jd-descrdiv">Serialize a vehicle message to a string.</div>
+        <div class="jd-descrdiv">Serialize a collection of messages to a string.</div>
   
   </td></tr>
 
@@ -650,7 +650,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
@@ -666,7 +666,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -682,7 +682,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
@@ -828,6 +828,51 @@ From class
 </div>
 
 
+<a id="serialize(com.openxc.messages.VehicleMessage)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+      </span>
+      <span class="sympad">serialize</span>
+      <span class="normal">(<a href="../../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Serialize a vehicle message to a string.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>message</th>
+          <td>the message to serialize</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the message serialized to a String.
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
 <a id="serialize(java.util.Collection<com.openxc.messages.VehicleMessage>)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -869,51 +914,6 @@ From class
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Returns</h5>
       <ul class="nolist"><li>the messages serialized individually and in a JSON array.
-</li></ul>
-  </div>
-
-    </div>
-</div>
-
-
-<a id="serialize(com.openxc.messages.VehicleMessage)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-        static 
-         
-         
-         
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
-      </span>
-      <span class="sympad">serialize</span>
-      <span class="normal">(<a href="../../../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a> message)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Serialize a vehicle message to a string.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>message</th>
-          <td>the message to serialize</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>the message serialized to a String.
 </li></ul>
   </div>
 

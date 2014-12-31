@@ -1259,7 +1259,7 @@ Summary:
             <a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html">BinaryMessages.DiagnosticRequest.Builder</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html#mergeFrom(com.google.protobuf.Message)">mergeFrom</a></span>(Message other)
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html#mergeFrom(com.openxc.BinaryMessages.DiagnosticRequest)">mergeFrom</a></span>(<a href="../../com/openxc/BinaryMessages.DiagnosticRequest.html">BinaryMessages.DiagnosticRequest</a> other)
         
   </td></tr>
 
@@ -1275,7 +1275,7 @@ Summary:
             <a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html">BinaryMessages.DiagnosticRequest.Builder</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html#mergeFrom(com.openxc.BinaryMessages.DiagnosticRequest)">mergeFrom</a></span>(<a href="../../com/openxc/BinaryMessages.DiagnosticRequest.html">BinaryMessages.DiagnosticRequest</a> other)
+        <span class="sympad"><a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html#mergeFrom(com.google.protobuf.Message)">mergeFrom</a></span>(Message other)
         
   </td></tr>
 
@@ -2195,7 +2195,7 @@ From class
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        <span class="sympad">mergeFrom</span>(CodedInputStream arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -2211,7 +2211,7 @@ From class
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
+        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -2243,55 +2243,23 @@ From class
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(ByteString arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
         <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(Message arg0)
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0)
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(ByteString arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -2323,7 +2291,7 @@ From class
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
         
   </td></tr>
 
@@ -2339,7 +2307,7 @@ From class
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(CodedInputStream arg0, ExtensionRegistryLite arg1)
+        <span class="sympad">mergeFrom</span>(Message arg0)
         
   </td></tr>
 
@@ -2355,7 +2323,39 @@ From class
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(ByteString arg0)
+        <span class="sympad">mergeFrom</span>(ByteString arg0, ExtensionRegistryLite arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(byte[] arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
         
   </td></tr>
 
@@ -2509,7 +2509,7 @@ From class
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
+        <span class="sympad">mergeFrom</span>(CodedInputStream arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -2525,7 +2525,7 @@ From class
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -2557,7 +2557,7 @@ From class
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
+        <span class="sympad">mergeFrom</span>(ByteString arg0)
         
   </td></tr>
 
@@ -2573,7 +2573,39 @@ From class
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0)
+        <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            MessageLite.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0, ExtensionRegistryLite arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            MessageLite.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
         
   </td></tr>
 
@@ -2605,7 +2637,7 @@ From class
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0, ExtensionRegistryLite arg1)
+        <span class="sympad">mergeFrom</span>(byte[] arg0)
         
   </td></tr>
 
@@ -2621,39 +2653,7 @@ From class
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(CodedInputStream arg0, ExtensionRegistryLite arg1)
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            MessageLite.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            MessageLite.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(ByteString arg0)
+        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
         
   </td></tr>
 
@@ -2839,7 +2839,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
@@ -2855,7 +2855,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -2871,7 +2871,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
@@ -3089,93 +3089,13 @@ From interface
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2)
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(Message arg0)
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0)
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
         <td class="jd-typecol">
             abstract
             
@@ -3191,22 +3111,6 @@ From interface
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            Message.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0, ExtensionRegistryLite arg1)
-        
-  </td></tr>
-
-
-	 
     <tr class=" api apilevel-" >
         <td class="jd-typecol">
             abstract
@@ -3217,7 +3121,7 @@ From interface
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
+        <span class="sympad">mergeFrom</span>(byte[] arg0)
         
   </td></tr>
 
@@ -3249,7 +3153,103 @@ From interface
             Message.Builder
         </td>
         <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
         <span class="sympad">mergeFrom</span>(ByteString arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(Message arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            Message.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
         
   </td></tr>
 
@@ -3467,7 +3467,7 @@ From interface
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        <span class="sympad">mergeFrom</span>(CodedInputStream arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -3483,7 +3483,7 @@ From interface
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
+        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
         
   </td></tr>
 
@@ -3515,7 +3515,7 @@ From interface
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
+        <span class="sympad">mergeFrom</span>(ByteString arg0)
         
   </td></tr>
 
@@ -3531,7 +3531,39 @@ From interface
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0)
+        <span class="sympad">mergeFrom</span>(CodedInputStream arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            MessageLite.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0, ExtensionRegistryLite arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            abstract
+            
+            
+            
+            
+            MessageLite.Builder
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
         
   </td></tr>
 
@@ -3563,7 +3595,7 @@ From interface
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0, ExtensionRegistryLite arg1)
+        <span class="sympad">mergeFrom</span>(byte[] arg0)
         
   </td></tr>
 
@@ -3579,39 +3611,7 @@ From interface
             MessageLite.Builder
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(CodedInputStream arg0, ExtensionRegistryLite arg1)
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            MessageLite.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(byte[] arg0, ExtensionRegistryLite arg1)
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
-            abstract
-            
-            
-            
-            
-            MessageLite.Builder
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">mergeFrom</span>(ByteString arg0)
+        <span class="sympad">mergeFrom</span>(byte[] arg0, int arg1, int arg2, ExtensionRegistryLite arg3)
         
   </td></tr>
 
@@ -5498,7 +5498,7 @@ From interface
 </div>
 
 
-<a id="mergeFrom(com.google.protobuf.Message)"></a>
+<a id="mergeFrom(com.openxc.BinaryMessages.DiagnosticRequest)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -5511,7 +5511,7 @@ From interface
         <a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html">BinaryMessages.DiagnosticRequest.Builder</a>
       </span>
       <span class="sympad">mergeFrom</span>
-      <span class="normal">(Message other)</span>
+      <span class="normal">(<a href="../../com/openxc/BinaryMessages.DiagnosticRequest.html">BinaryMessages.DiagnosticRequest</a> other)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -5529,7 +5529,7 @@ From interface
 </div>
 
 
-<a id="mergeFrom(com.openxc.BinaryMessages.DiagnosticRequest)"></a>
+<a id="mergeFrom(com.google.protobuf.Message)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -5542,7 +5542,7 @@ From interface
         <a href="../../com/openxc/BinaryMessages.DiagnosticRequest.Builder.html">BinaryMessages.DiagnosticRequest.Builder</a>
       </span>
       <span class="sympad">mergeFrom</span>
-      <span class="normal">(<a href="../../com/openxc/BinaryMessages.DiagnosticRequest.html">BinaryMessages.DiagnosticRequest</a> other)</span>
+      <span class="normal">(Message other)</span>
     </h4>
       <div class="api-level">
         <div>

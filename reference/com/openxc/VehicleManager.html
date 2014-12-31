@@ -1333,6 +1333,43 @@ android.content.ComponentCallbacks2
             void
         </td>
         <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.measurements.Measurement.Listener)">addListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../com/openxc/measurements/Measurement.Listener.html">Measurement.Listener</a> listener)
+        
+        <div class="jd-descrdiv">Register to receive asynchronous updates for a specific Measurement type.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">addListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        
+        <div class="jd-descrdiv">Register to receive asynchronous updates for a specific VehicleMessage
+ type.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
         <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)">addListener</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> keyedMessage, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
         <div class="jd-descrdiv">Register to receive a callback when a message with same key as the given
@@ -1371,47 +1408,10 @@ android.content.ComponentCallbacks2
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.measurements.Measurement.Listener)">addListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../com/openxc/measurements/Measurement.Listener.html">Measurement.Listener</a> listener)
-        
-        <div class="jd-descrdiv">Register to receive asynchronous updates for a specific Measurement type.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            void
-        </td>
-        <td class="jd-linkcol" width="100%">
         <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(com.openxc.messages.MessageKey, com.openxc.messages.VehicleMessage.Listener)">addListener</a></span>(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
         <div class="jd-descrdiv">Register to receive a callback when a message with the given key is
  received.</div>
-  
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
-            
-            
-            
-            
-            
-            void
-        </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#addListener(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">addListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
-        
-        <div class="jd-descrdiv">Register to receive asynchronous updates for a specific VehicleMessage
- type.</div>
   
   </td></tr>
 
@@ -1479,12 +1479,12 @@ android.content.ComponentCallbacks2
             
             
             
-            <a href="../../com/openxc/measurements/Measurement.html">Measurement</a>
+            <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#get(java.lang.Class<? extends com.openxc.measurements.Measurement>)">get</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#get(com.openxc.messages.MessageKey)">get</a></span>(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key)
         
-        <div class="jd-descrdiv">Retrieve the most current value of a measurement.</div>
+        <div class="jd-descrdiv">Retrieve the most current value of a keyed message.</div>
   
   </td></tr>
 
@@ -1497,12 +1497,12 @@ android.content.ComponentCallbacks2
             
             
             
-            <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
+            <a href="../../com/openxc/measurements/Measurement.html">Measurement</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#get(com.openxc.messages.MessageKey)">get</a></span>(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#get(java.lang.Class<? extends com.openxc.measurements.Measurement>)">get</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType)
         
-        <div class="jd-descrdiv">Retrieve the most current value of a keyed message.</div>
+        <div class="jd-descrdiv">Retrieve the most current value of a measurement.</div>
   
   </td></tr>
 
@@ -1704,9 +1704,9 @@ android.content.ComponentCallbacks2
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
-        <div class="jd-descrdiv">Unregister a previously registered key matcher listener.</div>
+        <div class="jd-descrdiv">Unregister a previously registered keyed message listener.</div>
   
   </td></tr>
 
@@ -1722,9 +1722,9 @@ android.content.ComponentCallbacks2
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
-        <div class="jd-descrdiv">Unregister a previously registered keyed message listener.</div>
+        <div class="jd-descrdiv">Unregister a previously registered key matcher listener.</div>
   
   </td></tr>
 
@@ -1740,9 +1740,9 @@ android.content.ComponentCallbacks2
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(com.openxc.messages.MessageKey, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
-        <div class="jd-descrdiv">Unregister a previously registered key listener.</div>
+        <div class="jd-descrdiv">Unregister a previously registered message type listener.</div>
   
   </td></tr>
 
@@ -1758,9 +1758,9 @@ android.content.ComponentCallbacks2
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#removeListener(com.openxc.messages.MessageKey, com.openxc.messages.VehicleMessage.Listener)">removeListener</a></span>(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
-        <div class="jd-descrdiv">Unregister a previously registered message type listener.</div>
+        <div class="jd-descrdiv">Unregister a previously registered key listener.</div>
   
   </td></tr>
 
@@ -1827,13 +1827,13 @@ android.content.ComponentCallbacks2
             
             
             
-            void
+            <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#request(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)">request</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#request(com.openxc.messages.KeyedMessage)">request</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message)
         
-        <div class="jd-descrdiv">Send a message to the VehicleInterface and register the given listener to
- receive the first response matching the message's key.</div>
+        <div class="jd-descrdiv">Send a message to the VehicleInterface and wait up to 2 seconds to
+ receive a response.</div>
   
   </td></tr>
 
@@ -1846,13 +1846,13 @@ android.content.ComponentCallbacks2
             
             
             
-            <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
+            void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#request(com.openxc.messages.KeyedMessage)">request</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message)
+        <span class="sympad"><a href="../../com/openxc/VehicleManager.html#request(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)">request</a></span>(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)
         
-        <div class="jd-descrdiv">Send a message to the VehicleInterface and wait up to 2 seconds to
- receive a response.</div>
+        <div class="jd-descrdiv">Send a message to the VehicleInterface and register the given listener to
+ receive the first response matching the message's key.</div>
   
   </td></tr>
 
@@ -2493,7 +2493,7 @@ From class
             int
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)
+        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)
         
   </td></tr>
 
@@ -2509,7 +2509,7 @@ From class
             int
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)
+        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)
         
   </td></tr>
 
@@ -2717,7 +2717,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)
         
   </td></tr>
 
@@ -2733,7 +2733,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)
         
   </td></tr>
 
@@ -3389,7 +3389,7 @@ From class
             Intent
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)
         
   </td></tr>
 
@@ -3405,7 +3405,7 @@ From class
             Intent
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, Handler arg3)
+        <span class="sympad">registerReceiver</span>(BroadcastReceiver arg0, IntentFilter arg1)
         
   </td></tr>
 
@@ -3469,7 +3469,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">sendBroadcast</span>(Intent arg0)
+        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
         
   </td></tr>
 
@@ -3485,7 +3485,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">sendBroadcast</span>(Intent arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1)
+        <span class="sympad">sendBroadcast</span>(Intent arg0)
         
   </td></tr>
 
@@ -3693,7 +3693,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">startActivities</span>(Intent[] arg0)
+        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)
         
   </td></tr>
 
@@ -3709,7 +3709,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">startActivities</span>(Intent[] arg0, Bundle arg1)
+        <span class="sympad">startActivities</span>(Intent[] arg0)
         
   </td></tr>
 
@@ -3991,7 +3991,7 @@ From class
             int
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)
+        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)
         
   </td></tr>
 
@@ -4007,7 +4007,7 @@ From class
             int
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">checkUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5)
+        <span class="sympad">checkUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3)
         
   </td></tr>
 
@@ -4215,7 +4215,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)
         
   </td></tr>
 
@@ -4231,7 +4231,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">enforceUriPermission</span>(Uri arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg1, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg2, int arg3, int arg4, int arg5, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg6)
+        <span class="sympad">enforceUriPermission</span>(Uri arg0, int arg1, int arg2, int arg3, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg4)
         
   </td></tr>
 
@@ -4695,7 +4695,7 @@ From class
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">getString</span>(int arg0)
+        <span class="sympad">getString</span>(int arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object...</a> arg1)
         
   </td></tr>
 
@@ -4711,7 +4711,7 @@ From class
             <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">getString</span>(int arg0, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object...</a> arg1)
+        <span class="sympad">getString</span>(int arg0)
         
   </td></tr>
 
@@ -4855,7 +4855,7 @@ From class
             TypedArray
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">obtainStyledAttributes</span>(int[] arg0)
+        <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1)
         
   </td></tr>
 
@@ -4887,7 +4887,7 @@ From class
             TypedArray
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">obtainStyledAttributes</span>(AttributeSet arg0, int[] arg1)
+        <span class="sympad">obtainStyledAttributes</span>(int arg0, int[] arg1)
         
   </td></tr>
 
@@ -4903,7 +4903,7 @@ From class
             TypedArray
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">obtainStyledAttributes</span>(int arg0, int[] arg1)
+        <span class="sympad">obtainStyledAttributes</span>(int[] arg0)
         
   </td></tr>
 
@@ -4951,7 +4951,7 @@ From class
             SQLiteDatabase
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2)
+        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2, DatabaseErrorHandler arg3)
         
   </td></tr>
 
@@ -4967,7 +4967,7 @@ From class
             SQLiteDatabase
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2, DatabaseErrorHandler arg3)
+        <span class="sympad">openOrCreateDatabase</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> arg0, int arg1, SQLiteDatabase.CursorFactory arg2)
         
   </td></tr>
 
@@ -5287,7 +5287,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">setWallpaper</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
+        <span class="sympad">setWallpaper</span>(Bitmap arg0)
         
   </td></tr>
 
@@ -5303,7 +5303,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">setWallpaper</span>(Bitmap arg0)
+        <span class="sympad">setWallpaper</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/InputStream.html">InputStream</a> arg0)
         
   </td></tr>
 
@@ -5399,7 +5399,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4, Bundle arg5)
+        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4)
         
   </td></tr>
 
@@ -5415,7 +5415,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4)
+        <span class="sympad">startIntentSender</span>(IntentSender arg0, Intent arg1, int arg2, int arg3, int arg4, Bundle arg5)
         
   </td></tr>
 
@@ -5665,7 +5665,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
@@ -5681,7 +5681,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -5697,7 +5697,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
@@ -5992,6 +5992,117 @@ From interface
 
 
 
+<a id="addListener(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.measurements.Measurement.Listener)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">addListener</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../com/openxc/measurements/Measurement.Listener.html">Measurement.Listener</a> listener)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Register to receive asynchronous updates for a specific Measurement type.
+
+ A Measurement is a specific, known VehicleMessage subtype.
+
+ Use this method to register an object implementing the
+ Measurement.Listener interface to receive real-time updates
+ whenever a new value is received for the specified measurementType.
+
+ Make sure you unregister your listeners with
+ VehicleManager.removeListener(...) when your activity or service closes
+ and no longer requires updates.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>measurementType</th>
+          <td>The class of the Measurement
+      (e.g. VehicleSpeed.class) the listener was listening for</td>
+        </tr>
+        <tr>
+          <th>listener</th>
+          <td>An listener instance to receive the callback.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="addListener(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">addListener</span>
+      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Register to receive asynchronous updates for a specific VehicleMessage
+ type.
+
+ Use this method to register an object implementing the
+ VehicleMessage.Listener interface to receive real-time updates
+ whenever a new value is received for the specified message type.
+
+ Make sure you unregister your listeners with
+ VehicleManager.removeListener(...) when your activity or service closes
+ and no longer requires updates.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>messageType</th>
+          <td>The class of the VehicleMessage
+      (e.g. SimpleVehicleMessage.class) the listener is listening for</td>
+        </tr>
+        <tr>
+          <th>listener</th>
+          <td>An listener instance to receive the callback.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
 <a id="addListener(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -6090,62 +6201,6 @@ From interface
 </div>
 
 
-<a id="addListener(java.lang.Class<? extends com.openxc.measurements.Measurement>, com.openxc.measurements.Measurement.Listener)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">addListener</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/measurements/Measurement.html">Measurement</a>&gt; measurementType, <a href="../../com/openxc/measurements/Measurement.Listener.html">Measurement.Listener</a> listener)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Register to receive asynchronous updates for a specific Measurement type.
-
- A Measurement is a specific, known VehicleMessage subtype.
-
- Use this method to register an object implementing the
- Measurement.Listener interface to receive real-time updates
- whenever a new value is received for the specified measurementType.
-
- Make sure you unregister your listeners with
- VehicleManager.removeListener(...) when your activity or service closes
- and no longer requires updates.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>measurementType</th>
-          <td>The class of the Measurement
-      (e.g. VehicleSpeed.class) the listener was listening for</td>
-        </tr>
-        <tr>
-          <th>listener</th>
-          <td>An listener instance to receive the callback.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
 <a id="addListener(com.openxc.messages.MessageKey, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -6179,61 +6234,6 @@ From interface
         <tr>
           <th>key</th>
           <td>The key you want to receive updates.</td>
-        </tr>
-        <tr>
-          <th>listener</th>
-          <td>An listener instance to receive the callback.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<a id="addListener(java.lang.Class<? extends com.openxc.messages.VehicleMessage>, com.openxc.messages.VehicleMessage.Listener)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">addListener</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&nbsp;extends&nbsp;<a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>&gt; messageType, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Register to receive asynchronous updates for a specific VehicleMessage
- type.
-
- Use this method to register an object implementing the
- VehicleMessage.Listener interface to receive real-time updates
- whenever a new value is received for the specified message type.
-
- Make sure you unregister your listeners with
- VehicleManager.removeListener(...) when your activity or service closes
- and no longer requires updates.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>messageType</th>
-          <td>The class of the VehicleMessage
-      (e.g. SimpleVehicleMessage.class) the listener is listening for</td>
         </tr>
         <tr>
           <th>listener</th>
@@ -6394,6 +6394,57 @@ From interface
 </div>
 
 
+<a id="get(com.openxc.messages.MessageKey)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
+      </span>
+      <span class="sympad">get</span>
+      <span class="normal">(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Retrieve the most current value of a keyed message.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>An instance of the requested Measurement which may or may
+      not have a value.</li></ul>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th><a href="../../com/openxc/NoValueException.html">NoValueException</a></td>
+            <td>if no value has yet been received for this
+      measurementType</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li><code><a href="../../com/openxc/measurements/BaseMeasurement.html">BaseMeasurement</a></code></li>
+      </ul>
+  </div>
+
+    </div>
+</div>
+
+
 <a id="get(java.lang.Class<? extends com.openxc.measurements.Measurement>)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -6443,57 +6494,6 @@ From interface
             <td>if passed a measurementType
       that does not extend Measurement</td>
         </tr>  
-        <tr>
-            <th><a href="../../com/openxc/NoValueException.html">NoValueException</a></td>
-            <td>if no value has yet been received for this
-      measurementType</td>
-        </tr>
-      </table>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li><code><a href="../../com/openxc/measurements/BaseMeasurement.html">BaseMeasurement</a></code></li>
-      </ul>
-  </div>
-
-    </div>
-</div>
-
-
-<a id="get(com.openxc.messages.MessageKey)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
-      </span>
-      <span class="sympad">get</span>
-      <span class="normal">(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Retrieve the most current value of a keyed message.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>An instance of the requested Measurement which may or may
-      not have a value.</li></ul>
-  </div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
         <tr>
             <th><a href="../../com/openxc/NoValueException.html">NoValueException</a></td>
             <td>if no value has yet been received for this
@@ -6886,47 +6886,6 @@ From interface
 </div>
 
 
-<a id="removeListener(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">removeListener</span>
-      <span class="normal">(<a href="../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Unregister a previously registered key matcher listener.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>listener</th>
-          <td>The listener to remove.
-</td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
 <a id="removeListener(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -6968,7 +6927,7 @@ From interface
 </div>
 
 
-<a id="removeListener(com.openxc.messages.MessageKey, com.openxc.messages.VehicleMessage.Listener)"></a>
+<a id="removeListener(com.openxc.messages.KeyMatcher, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -6981,7 +6940,7 @@ From interface
         void
       </span>
       <span class="sympad">removeListener</span>
-      <span class="normal">(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
+      <span class="normal">(<a href="../../com/openxc/messages/KeyMatcher.html">KeyMatcher</a> matcher, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -6993,7 +6952,7 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Unregister a previously registered key listener.</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Unregister a previously registered key matcher listener.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
@@ -7045,6 +7004,47 @@ From interface
       multiple message types, which is why this must be specified when
       removing a listener.</td>
         </tr>
+        <tr>
+          <th>listener</th>
+          <td>The listener to remove.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="removeListener(com.openxc.messages.MessageKey, com.openxc.messages.VehicleMessage.Listener)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">removeListener</span>
+      <span class="normal">(<a href="../../com/openxc/messages/MessageKey.html">MessageKey</a> key, <a href="../../com/openxc/messages/VehicleMessage.Listener.html">VehicleMessage.Listener</a> listener)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Unregister a previously registered key listener.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
         <tr>
           <th>listener</th>
           <td>The listener to remove.
@@ -7171,6 +7171,46 @@ From interface
 </div>
 
 
+<a id="request(com.openxc.messages.KeyedMessage)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
+      </span>
+      <span class="sympad">request</span>
+      <span class="normal">(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Send a message to the VehicleInterface and wait up to 2 seconds to
+ receive a response.
+
+ This is a blocking version of the other request(...) method.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>The response if one is received before the timeout, otherwise
+      null.
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
 <a id="request(com.openxc.messages.KeyedMessage, com.openxc.messages.VehicleMessage.Listener)"></a>
 
 <div class="jd-details api apilevel-"> 
@@ -7219,46 +7259,6 @@ From interface
 </td>
         </tr>
       </table>
-  </div>
-
-    </div>
-</div>
-
-
-<a id="request(com.openxc.messages.KeyedMessage)"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        <a href="../../com/openxc/messages/VehicleMessage.html">VehicleMessage</a>
-      </span>
-      <span class="sympad">request</span>
-      <span class="normal">(<a href="../../com/openxc/messages/KeyedMessage.html">KeyedMessage</a> message)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Send a message to the VehicleInterface and wait up to 2 seconds to
- receive a response.
-
- This is a blocking version of the other request(...) method.</p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>The response if one is received before the timeout, otherwise
-      null.
-</li></ul>
   </div>
 
     </div>

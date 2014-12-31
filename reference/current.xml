@@ -13449,7 +13449,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="VehicleManager.VehicleBinder"
+<constructor name="VehicleBinder"
  type="com.openxc.VehicleManager.VehicleBinder"
  static="false"
  final="false"
@@ -18212,6 +18212,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="java.lang.Comparable">
+</implements>
 <implements name="android.os.Parcelable">
 </implements>
 <constructor name="VehicleMessage"
@@ -19329,7 +19331,7 @@
 >
 <implements name="com.openxc.remote.VehicleServiceInterface">
 </implements>
-<constructor name="VehicleServiceInterface.Stub"
+<constructor name="Stub"
  type="com.openxc.remote.VehicleServiceInterface.Stub"
  static="false"
  final="false"
@@ -19418,7 +19420,7 @@
 >
 <implements name="com.openxc.remote.VehicleServiceListener">
 </implements>
-<constructor name="VehicleServiceListener.Stub"
+<constructor name="Stub"
  type="com.openxc.remote.VehicleServiceListener.Stub"
  static="false"
  final="false"
@@ -19520,7 +19522,7 @@
 >
 <implements name="com.openxc.remote.ViConnectionListener">
 </implements>
-<constructor name="ViConnectionListener.Stub"
+<constructor name="Stub"
  type="com.openxc.remote.ViConnectionListener.Stub"
  static="false"
  final="false"
@@ -21905,7 +21907,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="R.attr"
+<constructor name="attr"
  type="com.openxcplatform.R.attr"
  static="false"
  final="false"
@@ -21922,7 +21924,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="R.drawable"
+<constructor name="drawable"
  type="com.openxcplatform.R.drawable"
  static="false"
  final="false"
@@ -21949,7 +21951,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="R.string"
+<constructor name="string"
  type="com.openxcplatform.R.string"
  static="false"
  final="false"
