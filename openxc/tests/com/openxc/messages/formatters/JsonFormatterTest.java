@@ -94,7 +94,9 @@ public class JsonFormatterTest extends AbstractFormatterTest {
         String serialized = new String(JsonFormatter.serialize(
                     new SimpleVehicleMessage(
                         Long.valueOf(1332432977835L), messageName, value)));
-        assertTrue(serialized.contains("1332432977835"));
+        // The timestamp is represented intenally as milliseconds, in a long,
+        // but when serialized it is a floating point in seconds.
+        assertTrue(serialized.contains("1332432977.835"));
     }
 
     @Test

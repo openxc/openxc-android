@@ -41,7 +41,12 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     public static final String EXTRAS_KEY = "extras";
 
     @SerializedName(TIMESTAMP_KEY)
-    private Long mTimestamp;
+    // This is a bit of hack to be able to serialize timestamps to JSON as
+    // seconds with floating point precision, but represent them internally as
+    // longs (milliseconds) for performance.
+    private Double mTimestampSeconds;
+
+    private transient Long mTimestamp;
 
     @SerializedName(EXTRAS_KEY)
     private Map<String, Object> mExtras;
@@ -85,6 +90,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     public void setTimestamp(Long timestamp) {
         if(timestamp != null) {
             mTimestamp = timestamp;
+            mTimestampSeconds = timestamp / 1000.0;
         }
     }
 
@@ -92,7 +98,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
      * @return true if the message has a valid timestamp.
      */
     public boolean isTimestamped() {
-        return mTimestamp != null;
+        return getTimestamp() != null;
     }
 
     /**
@@ -100,6 +106,9 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
      * epoch.
      */
     public Long getTimestamp() {
+        if(mTimestampSeconds != null) {
+            mTimestamp = new Double(mTimestampSeconds * 1000).longValue();
+        }
         return mTimestamp;
     }
 
@@ -130,6 +139,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
      */
     public void untimestamp() {
         mTimestamp = null;
+        mTimestampSeconds = null;
     }
 
     public void timestamp() {
@@ -184,7 +194,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     }
 
     public int compareTo(VehicleMessage other) {
-        return mTimestamp.compareTo(other.mTimestamp);
+        return getTimestamp().compareTo(other.getTimestamp());
     }
 
     @Override
@@ -198,7 +208,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         }
 
         final VehicleMessage other = (VehicleMessage) obj;
-        return Objects.equal(mTimestamp, other.mTimestamp) &&
+        return Objects.equal(getTimestamp(), other.getTimestamp()) &&
                 Objects.equal(mExtras, other.mExtras);
     }
 

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.math.BigDecimal;
+import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +13,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
@@ -31,6 +36,13 @@ public class JsonFormatter {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory());
         builder.registerTypeAdapter(byte[].class, new ByteAdapter());
+        builder.registerTypeAdapter(Double.class,  new JsonSerializer<Double>() {
+            @Override
+            public JsonElement serialize(final Double src, final Type typeOfSrc, final JsonSerializationContext context) {
+                BigDecimal value = BigDecimal.valueOf(src);
+                return new JsonPrimitive(value);
+            }
+        });
         sGson = builder.create();
     }
 
