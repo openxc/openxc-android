@@ -42,7 +42,7 @@
         <android.platform>21</android.platform>
 
         <java.version>1.7</java.version>
-        <android-maven.version>4.0.0-rc.3</android-maven.version>
+        <android-maven.version>4.0.0</android-maven.version>
     </properties>
 
     <dependencyManagement>
