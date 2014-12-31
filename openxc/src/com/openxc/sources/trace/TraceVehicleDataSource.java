@@ -156,7 +156,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             }
 
             String line = null;
-            long startingTime = System.nanoTime();
+            long startingTime = System.currentTimeMillis();
             // In the future may want to support binary traces
             try {
                 while(mRunning && (line = reader.readLine()) != null) {
@@ -264,26 +264,18 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      * Using the startingTime as the relative starting point, sleep this thread
      * until the next timestamp would occur.
      *
-     * @param startingTime the relative starting time in nanoseconds
+     * @param startingTime the relative starting time in milliseconds
      * @param timestamp the timestamp to wait for in milliseconds since the
      * epoch
      */
     private void waitForNextRecord(long startingTime, long timestamp) {
-        // TODO is all of this nanosecond conversion necessary? the original
-        // motivation was to get the most accurate time from the system, but i"m
-        // not really sure it matters if the records are only timestamped at
-        // the ms level.
-        long timestampNanoseconds = TimeUnit.NANOSECONDS.convert(
-                timestamp, TimeUnit.MILLISECONDS);
         if(mFirstTimestamp == 0) {
-            mFirstTimestamp = timestampNanoseconds;
+            mFirstTimestamp = timestamp;
             Log.d(TAG, "Storing " + timestamp + " as the first " +
                     "timestamp of the trace file");
         }
-        long targetTime = startingTime + (timestampNanoseconds - mFirstTimestamp);
-        long sleepDuration = TimeUnit.MILLISECONDS.convert(
-                targetTime - System.nanoTime(), TimeUnit.NANOSECONDS);
-        sleepDuration = Math.max(sleepDuration, 0);
+        long targetTime = startingTime + (timestamp - mFirstTimestamp);
+        long sleepDuration = Math.max(targetTime - System.currentTimeMillis(), 0);
         try {
             Thread.sleep(sleepDuration);
         } catch(InterruptedException e) {}
