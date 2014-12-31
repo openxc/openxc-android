@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v6.0.5-dev
+
 ## v6.0.4
 
 * Fix: Use proper initialization of an explicit intent to start and bind to the
