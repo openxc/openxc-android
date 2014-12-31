@@ -206,8 +206,12 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 Log.d(TAG, "Not looping trace.");
                 break;
             }
+
             disconnected();
             Log.d(TAG, "Restarting playback of trace " + mFilename);
+            // Set this back to false so the VI shows as "disconnected" for
+            // a second before reconnecting.
+            mTraceValid = false;
             try {
                 Thread.sleep(1000);
             } catch(InterruptedException e) {}
