@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v6.0.6-dev
+
 ## v6.0.5
 
 * Fix: Explicitly specify signing algorithm when building release APK files to

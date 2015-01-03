@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.openxcplatform</groupId>
     <artifactId>openxc-parent</artifactId>
-    <version>6.0.5</version>
+    <version>6.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>OpenXC - Parent</name>
     <description>Android library and Enabler application for the OpenXC Platform</description>
