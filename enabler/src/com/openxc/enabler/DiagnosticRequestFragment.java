@@ -1,8 +1,5 @@
 package com.openxc.enabler;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
