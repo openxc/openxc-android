@@ -105,6 +105,10 @@ public class StatusFragment extends Fragment {
                 Log.e(TAG, "Unable to register VI connection listener", e);
             }
 
+            if(getActivity() == null) {
+                Log.w(TAG, "Status fragment detached from activity");
+            }
+
             if(mVehicleManager.isViConnected()) {
                 updateViInfo();
             }

@@ -44,6 +44,10 @@ public class PipelineStatusUpdateTask extends TimerTask {
     }
 
     private void setVisibility(final View view, boolean visible) {
+        if(mActivity == null) {
+            return;
+        }
+
         if(visible && view.getVisibility() != View.VISIBLE) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
