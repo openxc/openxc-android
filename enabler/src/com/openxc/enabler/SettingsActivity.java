@@ -140,7 +140,8 @@ public class SettingsActivity extends PreferenceActivity {
 
                 return getDataColumn(context, contentUri, null, null);
             }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme()) ||
+                "content".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
 
@@ -490,6 +491,7 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceClick(Preference preference) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             startActivityForResult(intent, FILE_SELECTOR_RESULT);
             return true;
         }
