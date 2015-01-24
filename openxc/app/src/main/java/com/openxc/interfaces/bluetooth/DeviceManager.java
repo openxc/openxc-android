@@ -148,7 +148,7 @@ public class DeviceManager {
                         Context.MODE_MULTI_PROCESS).edit();
         editor.putString(LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY,
                 device.getAddress());
-        editor.commit();
+        editor.apply();
         Log.d(TAG, "Stored last connected device: " + device.getAddress());
     }
 
