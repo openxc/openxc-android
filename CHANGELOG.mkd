@@ -1,5 +1,7 @@
 # OpenXC Android Library Changelog
 
+## v6.0.7-dev
+
 ## v6.0.6
 
 * Fix: Protect against crashes in the activity using a fragment disappears. (#215,
