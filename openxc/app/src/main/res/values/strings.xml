@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="openxc_name">OpenXC</string>
+    <string name="notification_content">Connected to vehicle</string>
+
+    <string name="native_gps_checkbox_key">use_native_gps</string>
+    <string name="gps_overwrite_checkbox_key">overwrite_native_gps</string>
+    <string name="recording_checkbox_key">recording_enabled</string>
+    <string name="recording_directory_key">recording_output</string>
+    <string name="uploading_checkbox_key">uploading_enabled</string>
+    <string name="uploading_path_key">uploading_target</string>
+    <string name="bluetooth_polling_key">bluetooth_polling</string>
+    <string name="bluetooth_mac_key">bluetooth_mac</string>
+    <string name="network_host_key">network_host</string>
+    <string name="network_port_key">network_port</string>
+    <string name="trace_source_file_key">playback_trace_file</string>
+
+    <!-- A default value for the token so we can still build the Enabler without
+      one - can be overridden in any app using this library. -->
+    <string name="bugsnag_token"></string>
+
+    <string name="steering_wheel_angle_label">Steering Wheel</string>
+    <string name="vehicle_speed_label">Vehicle Speed</string>
+    <string name="fuel_consumed_since_restart_label">Fuel Consumed</string>
+    <string name="fuel_level_label">Fuel Level</string>
+    <string name="odometer_label">Odometer</string>
+    <string name="windshield_wiper_status_label">Windshield Wiper</string>
+    <string name="brake_pedal_status_label">Brake Pedal</string>
+    <string name="headlamp_status_label">Headlamp</string>
+    <string name="high_beam_status_label">High Beams</string>
+    <string name="engine_speed_label">Engine Speed</string>
+    <string name="torque_at_transmission_label">Transmission Torque</string>
+    <string name="accelerator_pedal_position_label">
+        Accelerator Pedal
+    </string>
+    <string name="transmission_gear_position_label">
+        Transmission Gear
+    </string>
+    <string name="ignition_status_label">Ignition Status</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="parking_brake_status_label">Parking Brake</string>
+
+</resources>
