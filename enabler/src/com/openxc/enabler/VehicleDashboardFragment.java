@@ -40,6 +40,10 @@ public class VehicleDashboardFragment extends ListFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if(getActivity() == null) {
+            return;
+        }
+
         if (isVisibleToUser) {
             getActivity().bindService(
                     new Intent(getActivity(), VehicleManager.class),
