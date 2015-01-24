@@ -1,6 +1,10 @@
 # OpenXC Android Library Changelog
 
-## v6.0.6-dev
+## v6.0.6
+
+* Fix: Protect against crashes in the activity using a fragment disappears. (#215,
+  #217)
+* Update Bugsnag library to latest release.
 
 ## v6.0.5
 
