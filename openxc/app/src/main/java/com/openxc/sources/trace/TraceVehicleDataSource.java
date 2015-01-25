@@ -153,7 +153,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 break;
             }
 
-            String line = null;
+            String line;
             long startingTime = System.currentTimeMillis();
             // In the future may want to support binary traces
             try {
@@ -167,6 +167,10 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                         continue;
                     }
 
+                    if(measurement == null) {
+                        continue;
+                    }
+
                     if(measurement != null && !measurement.isTimestamped()) {
                         Log.w(TAG, "A trace line was missing a timestamp: " +
                                 line);
@@ -174,8 +178,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     }
 
                     try {
-                        waitForNextRecord(startingTime,
-                                measurement.getTimestamp());
+                        waitForNextRecord(startingTime, measurement.getTimestamp());
                     } catch(NumberFormatException e) {
                         Log.w(TAG, "A trace line was not in the expected " +
                                 "format: " + line);
@@ -189,7 +192,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     handleMessage(measurement);
                 }
             } catch(IOException e) {
-                Log.w(TAG, "An exception occured when reading the trace " +
+                Log.w(TAG, "An exception occurred when reading the trace " +
                         reader, e);
                 break;
             } finally {
@@ -229,7 +232,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
     public static boolean validatePath(String path) {
         if(path == null) {
-            Log.w(TAG, "Trace file path not set (it's " + path + ")");
+            Log.w(TAG, "Trace file path not set");
             return false;
         }
 

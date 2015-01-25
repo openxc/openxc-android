@@ -33,7 +33,7 @@ import com.openxc.util.Range;
  * Most applications will not use this class directly, but will import specific
  * child classes that correspond to specific types of measurements - i.e. the
  * parameterized instances of this class with a Unit. That may seem like a
- * "psuedo-typedef" but we're using it to enforce the binding between
+ * "pseudo-typedef" but we're using it to enforce the binding between
  * the measurement and its unit type. This unfortunately means we have to add
  * constructors to every child class because they aren't inherited from
  * Measurement. If you know of a better way, please say so.
@@ -90,7 +90,7 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 Log.w(TAG, "Incomplete BaseMeasurement subclass", e);
             }
         }
-        mValue = new AgingData<TheUnit>(value);
+        mValue = new AgingData<>(value);
     }
 
     /**
@@ -219,13 +219,13 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
             Class<? extends Measurement> measurementType,
             SimpleVehicleMessage message)
                 throws UnrecognizedMeasurementTypeException, NoValueException {
-        Constructor<? extends Measurement> constructor = null;
+        Constructor<? extends Measurement> constructor;
         if(message == null) {
             throw new NoValueException();
         }
 
         try {
-            Measurement measurement = null;
+            Measurement measurement;
             SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
             Class<?> valueClass = simpleMessage.getValue().getClass();
             if(valueClass == Double.class || valueClass == Integer.class) {

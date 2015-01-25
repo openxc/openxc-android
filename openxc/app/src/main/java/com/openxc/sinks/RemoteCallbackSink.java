@@ -20,8 +20,8 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "RemoteCallbackSink";
 
     private int mListenerCount;
-    private RemoteCallbackList<VehicleServiceListener> mListeners =
-            new RemoteCallbackList<VehicleServiceListener>();
+    private final RemoteCallbackList<VehicleServiceListener> mListeners =
+            new RemoteCallbackList<>();
 
     public synchronized void register(VehicleServiceListener listener) {
         synchronized(mListeners) {
@@ -66,4 +66,4 @@ public class RemoteCallbackSink extends AbstractQueuedCallbackSink {
             mListeners.finishBroadcast();
         }
     }
-};
+}

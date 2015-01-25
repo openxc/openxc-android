@@ -8,7 +8,7 @@ import com.openxc.util.Range;
  * GPS.
  */
 public class Longitude extends BaseMeasurement<Degree> {
-    private final static Range<Degree> RANGE = new Range<Degree>(
+    private final static Range<Degree> RANGE = new Range<>(
             new Degree(-179.0), new Degree(179.0));
     public final static String ID = "longitude";
 

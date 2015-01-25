@@ -34,7 +34,7 @@ public class FileRecorderSink implements VehicleDataSink {
     private BufferedWriter mWriter;
     private Calendar mLastMessageReceived;
 
-    public FileRecorderSink(FileOpener fileOpener) throws DataSinkException {
+    public FileRecorderSink(FileOpener fileOpener) {
         mFileOpener = fileOpener;
     }
 
@@ -95,7 +95,7 @@ public class FileRecorderSink implements VehicleDataSink {
         }
     }
 
-    private synchronized Calendar openTimestampedFile() throws IOException {
+    private synchronized void openTimestampedFile() throws IOException {
         Calendar calendar = Calendar.getInstance();
         String filename = sDateFormatter.format(
                 calendar.getTime()) + ".json";
@@ -104,6 +104,5 @@ public class FileRecorderSink implements VehicleDataSink {
         }
         mWriter = mFileOpener.openForWriting(filename);
         Log.i(TAG, "Opened trace file " + filename + " for writing");
-        return calendar;
     }
 }

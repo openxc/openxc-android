@@ -20,7 +20,7 @@ public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             NAME_KEY, VALUE_KEY, EVENT_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(EVENT_KEY)
@@ -89,8 +89,7 @@ public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
         mEvent = in.readValue(null);
     }
 
-    protected EventedSimpleVehicleMessage(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected EventedSimpleVehicleMessage(Parcel in) {
         readFromParcel(in);
     }
 

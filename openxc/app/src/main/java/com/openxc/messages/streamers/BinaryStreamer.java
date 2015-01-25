@@ -71,7 +71,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
             try {
                 IOUtils.copy(input, mBuffer);
             } catch(IOException e) {
-                Log.e(TAG, "Unexpected errror copying buffers");
+                Log.e(TAG, "Unexpected error copying buffers");
             }
         }
         return message;

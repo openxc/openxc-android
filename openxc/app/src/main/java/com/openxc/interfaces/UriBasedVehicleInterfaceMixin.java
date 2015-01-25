@@ -9,7 +9,7 @@ import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 
 /**
- * A collection of utilites for vehicle interfaces that reference a physical
+ * A collection of utilities for vehicle interfaces that reference a physical
  * device with a URI.
  */
 public class UriBasedVehicleInterfaceMixin {

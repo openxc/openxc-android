@@ -23,7 +23,7 @@ public class IgnitionStatus
     }
 
     public IgnitionStatus(IgnitionPosition value) {
-        this(new State<IgnitionPosition>(value));
+        this(new State<>(value));
     }
 
     public IgnitionStatus(String value) {

@@ -18,7 +18,7 @@ public interface Measurement {
     }
 
     /**
-     * Retreive the age of this measurement.
+     * Retrieve the age of this measurement.
      *
      * @return the age of the data in milliseconds.
      */

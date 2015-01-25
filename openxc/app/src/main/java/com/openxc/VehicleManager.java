@@ -207,7 +207,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Retrieve the most current value of a keyed message.
      *
-     * @param measurementType The class of the requested Measurement
+     * @param key The key of the requested Measurement
      *      (e.g. VehicleSpeed.class)
      * @return An instance of the requested Measurement which may or may
      *      not have a value.
@@ -439,7 +439,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Unregister a previously registered keyed message listener.
      *
-     * @param messageType The message with the key this listener was previously
+     * @param message The message with the key this listener was previously
      *      registered to receive.
      * @param listener The listener to remove.
      */
@@ -451,7 +451,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Unregister a previously registered key matcher listener.
      *
-     * @param messageType The KeyMatcher this listener was previously registered
+     * @param matcher The KeyMatcher this listener was previously registered
      *      to receive matches from.
      * @param listener The listener to remove.
      */
@@ -463,7 +463,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Unregister a previously registered key listener.
      *
-     * @param messageType The key this listener was previously registered to
+     * @param key The key this listener was previously registered to
      *      receive updates on.
      * @param listener The listener to remove.
      */
@@ -602,7 +602,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      *
      * To disable all vehicle interfaces, pass null to this function.
      *
-     * The only valid VehicleInteface types are those included with the library
+     * The only valid VehicleInterface types are those included with the library
      * - the vehicle service running in a remote process is the one to actually
      * instantiate the interfaces. Interfaces added with this method will be
      * available for all other OpenXC applications running in the system.
@@ -688,7 +688,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             try {
                 descriptor = mRemoteService.getVehicleInterfaceDescriptor();
             } catch(RemoteException e) {
-                Log.w(TAG, "Unable to retreive VI descriptor", e);
+                Log.w(TAG, "Unable to retrieve VI descriptor", e);
             }
 
         }
@@ -791,7 +791,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
             return mResponse;
         }
-    };
+    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override

@@ -24,7 +24,7 @@ import com.openxc.sources.VehicleDataSource;
 public interface VehicleInterface extends VehicleDataSource, VehicleDataSink {
     /**
      * Change the resource used by the instance to connect to the interface,
-     * restarting any neccessary services.
+     * restarting any necessary services.
      *
      * @param resource The new resource to use for the interface.
      * @return true if the resource was different and the interface was

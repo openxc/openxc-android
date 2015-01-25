@@ -27,7 +27,7 @@ public class CommandResponse extends KeyedMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             COMMAND_RESPONSE_KEY, STATUS_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_RESPONSE_KEY)
@@ -119,8 +119,7 @@ public class CommandResponse extends KeyedMessage {
         mMessage = in.readString();
     }
 
-    protected CommandResponse(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected CommandResponse(Parcel in) {
         readFromParcel(in);
     }
 

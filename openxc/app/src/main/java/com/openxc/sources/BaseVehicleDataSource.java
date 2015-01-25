@@ -9,7 +9,7 @@ import com.openxc.messages.VehicleMessage;
 /**
  * A common parent for all vehicle data sources.
  *
- * This class encapsulates funcationaliy common to most data sources. It accepts
+ * This class encapsulates functionality common to most data sources. It accepts
  * and stores a SourceCallback reference (required by the
  * {@link com.openxc.sources.VehicleDataSource} interface) and implements a
  * {@link #handleMessage(VehicleMessage)} method for subclass to call

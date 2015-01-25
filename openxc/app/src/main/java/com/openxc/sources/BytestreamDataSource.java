@@ -62,7 +62,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         mReconnectionAttempts = 0;
         if(enabled) {
             resetConnectionAttempts(0, RECONNECTION_ATTEMPT_WAIT_TIME_S);
-        } else if(mFastPolling && !enabled) {
+        } else if(mFastPolling) {
             resetConnectionAttempts(SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S,
                     SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S);
         }
@@ -161,7 +161,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 }
 
                 mStreamHandler.receive(bytes, received);
-                VehicleMessage message = null;
+                VehicleMessage message;
                 while((message = mStreamHandler.parseNextMessage()) != null) {
                     handleMessage(message);
                 }
@@ -251,4 +251,4 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     /** Initiate a connection to the vehicle interface. */
     protected abstract void connect() throws DataSourceException;
-};
+}

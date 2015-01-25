@@ -3,6 +3,7 @@
 
 package com.openxc;
 
+@SuppressWarnings("ALL")
 public final class BinaryMessages {
   private BinaryMessages() {}
   public static void registerAllExtensions(

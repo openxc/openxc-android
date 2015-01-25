@@ -32,7 +32,7 @@ public class TransmissionGearPosition
     }
 
     public TransmissionGearPosition(GearPosition value) {
-        this(new State<GearPosition>(value));
+        this(new State<>(value));
     }
 
     public TransmissionGearPosition(String value) {

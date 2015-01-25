@@ -121,7 +121,8 @@ public abstract class DiagnosticMessage extends KeyedMessage {
         return mBusId == other.mBusId
                 && mId == other.mId
                 && mMode == other.mMode
-                && mPid == other.mPid
+                && ((!hasPid() && !other.hasPid())
+                    || mPid.equals(other.mPid))
                 && Arrays.equals(mPayload, other.mPayload);
     }
 

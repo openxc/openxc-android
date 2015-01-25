@@ -2,7 +2,6 @@ package com.openxc.measurements;
 
 import java.util.Locale;
 
-import com.openxc.units.Boolean;
 import com.openxc.units.State;
 
 /**
@@ -31,30 +30,30 @@ public class VehicleDoorStatus
         BOOT
     }
 
-    public VehicleDoorStatus(State<DoorId> value, Boolean event) {
+    public VehicleDoorStatus(State<DoorId> value, com.openxc.units.Boolean event) {
         super(value, event);
     }
 
-    public VehicleDoorStatus(DoorId value, Boolean event) {
-        this(new State<DoorId>(value), event);
+    public VehicleDoorStatus(DoorId value, com.openxc.units.Boolean event) {
+        this(new State<>(value), event);
     }
 
     public VehicleDoorStatus(DoorId value, java.lang.Boolean event) {
-        this(value, new Boolean(event));
+        this(value, new com.openxc.units.Boolean(event));
     }
 
     public VehicleDoorStatus(String value, java.lang.Boolean event) {
-        this(DoorId.valueOf(value.toUpperCase(Locale.US)), new Boolean(event));
+        this(DoorId.valueOf(value.toUpperCase(Locale.US)), new com.openxc.units.Boolean(event));
     }
 
     @Override
-    public Boolean getEvent() {
-        return (Boolean) super.getEvent();
+    public com.openxc.units.Boolean getEvent() {
+        return (com.openxc.units.Boolean) super.getEvent();
     }
 
     @Override
     public java.lang.Boolean getSerializedEvent() {
-        return new java.lang.Boolean(getEvent().booleanValue());
+        return getEvent().booleanValue();
     }
 
     @Override

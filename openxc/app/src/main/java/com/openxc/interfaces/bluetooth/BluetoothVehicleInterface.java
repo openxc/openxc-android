@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -16,17 +17,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
 
-import com.openxcplatform.R;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
+import com.openxcplatform.R;
 
 /**
  * A vehicle data source reading measurements from an Bluetooth-enabled
@@ -130,6 +132,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         return reconnect;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean isConnected() {
         boolean connected = false;
@@ -198,7 +201,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 }
 
                 // If the BT vehicle interface has been disabled, the socket
-                // wlil be disconnected and we will break out of the above
+                // will be disconnected and we will break out of the above
                 // while(isConnected()) loop and land here - double check that
                 // this interface should still be running before trying to make
                 // another connection.
@@ -283,7 +286,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             Log.v(TAG, "Attempting automatic detection of Bluetooth VI");
 
             ArrayList<BluetoothDevice> candidateDevices =
-                new ArrayList<BluetoothDevice>(
+                new ArrayList<>(
                         mDeviceManager.getCandidateDevices());
 
             if(lastConnectedDevice != null) {

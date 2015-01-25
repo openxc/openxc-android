@@ -32,7 +32,7 @@ public class Boolean extends Unit {
 
     @Override
     public java.lang.Boolean getSerializedValue() {
-        return new java.lang.Boolean(booleanValue());
+        return booleanValue();
     }
 
     @Override

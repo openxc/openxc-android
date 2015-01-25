@@ -26,11 +26,7 @@ public abstract class KeyMatcher {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null) {
-            return false;
-        }
-
-        return obj == this;
+        return obj != null && obj == this;
     }
 
     private static KeyMatcher sWildcardMatcher = new KeyMatcher() {

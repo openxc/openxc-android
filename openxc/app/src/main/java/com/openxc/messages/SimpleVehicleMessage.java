@@ -18,7 +18,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             NAME_KEY, VALUE_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(VALUE_KEY)
@@ -85,8 +85,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         mValue = in.readValue(null);
     }
 
-    protected SimpleVehicleMessage(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected SimpleVehicleMessage(Parcel in) {
         readFromParcel(in);
     }
 

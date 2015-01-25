@@ -163,7 +163,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         try {
             getContext().unregisterReceiver(mBroadcastReceiver);
         } catch(IllegalArgumentException e) {
-            Log.d(TAG, "Unable to unregster receiver when stopping, probably not registered");
+            Log.d(TAG, "Unable to unregister receiver when stopping, probably not registered");
         }
     }
 
@@ -243,8 +243,8 @@ public class UsbVehicleInterface extends BytestreamDataSource
     private void connectToDevice(UsbManager manager, URI deviceUri)
             throws DataSourceResourceException {
         connectToDevice(manager,
-                UsbDeviceUtilities.vendorFromUri(mDeviceUri),
-                UsbDeviceUtilities.productFromUri(mDeviceUri));
+                UsbDeviceUtilities.vendorFromUri(deviceUri),
+                UsbDeviceUtilities.productFromUri(deviceUri));
     }
 
     private void connectToDevice(UsbManager manager, int vendorId,
@@ -378,28 +378,31 @@ public class UsbVehicleInterface extends BytestreamDataSource
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (ACTION_USB_PERMISSION.equals(action)) {
-                UsbDevice device = (UsbDevice) intent.getParcelableExtra(
-                        UsbManager.EXTRA_DEVICE);
+            switch (action) {
+                case ACTION_USB_PERMISSION:
+                    UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 
-                if(intent.getBooleanExtra(
+                    if (intent.getBooleanExtra(
                             UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                    openConnection(device);
-                } else {
-                    Log.i(TAG, "User declined permission for device " +
-                            device);
-                }
-            } else if(ACTION_USB_DEVICE_ATTACHED.equals(action)) {
-                Log.d(TAG, "Device attached");
-                try {
-                    connectToDevice(mManager, mDeviceUri);
-                } catch(DataSourceException e) {
-                    Log.i(TAG, "Unable to load USB device -- waiting for it " +
-                            "to appear", e);
-                }
-            } else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
-                Log.d(TAG, "Device detached");
-                disconnect();
+                        openConnection(device);
+                    } else {
+                        Log.i(TAG, "User declined permission for device " +
+                                device);
+                    }
+                    break;
+                case ACTION_USB_DEVICE_ATTACHED:
+                    Log.d(TAG, "Device attached");
+                    try {
+                        connectToDevice(mManager, mDeviceUri);
+                    } catch (DataSourceException e) {
+                        Log.i(TAG, "Unable to load USB device -- waiting for it " +
+                                "to appear", e);
+                    }
+                    break;
+                case UsbManager.ACTION_USB_DEVICE_DETACHED:
+                    Log.d(TAG, "Device detached");
+                    disconnect();
+                    break;
             }
         }
     };

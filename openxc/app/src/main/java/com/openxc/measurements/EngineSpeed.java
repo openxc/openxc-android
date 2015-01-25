@@ -10,7 +10,7 @@ import com.openxc.util.Range;
  */
 public class EngineSpeed extends BaseMeasurement<RotationsPerMinute> {
     private final static Range<RotationsPerMinute> RANGE =
-        new Range<RotationsPerMinute>(new RotationsPerMinute(0),
+        new Range<>(new RotationsPerMinute(0),
                 new RotationsPerMinute(16382));
     public final static String ID = "engine_speed";
 

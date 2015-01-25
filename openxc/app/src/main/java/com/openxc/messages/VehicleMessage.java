@@ -34,7 +34,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     }
 
     /**
-     * The field names for the timsetamp and extra data, defined in the OpenXC
+     * The field names for the timestamp and extra data, defined in the OpenXC
      * Message Format specification.
      */
     private static final String TIMESTAMP_KEY = "timestamp";
@@ -107,7 +107,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
      */
     public Long getTimestamp() {
         if(mTimestampSeconds != null) {
-            mTimestamp = new Double(mTimestampSeconds * 1000).longValue();
+            mTimestamp = Double.valueOf(mTimestampSeconds * 1000).longValue();
         }
         return mTimestamp;
     }
@@ -121,7 +121,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
 
     public void setExtras(Map<String, Object> extras) {
         if(extras != null && !extras.isEmpty()) {
-            mExtras = new HashMap<String, Object>(extras);
+            mExtras = new HashMap<>(extras);
         }
     }
 
@@ -223,6 +223,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         // Not reading the derived class name as it is already pulled out of the
         // Parcel by the CREATOR.
         setTimestamp((Long)in.readValue(Long.class.getClassLoader()));
+        //noinspection unchecked
         mExtras = (HashMap<String, Object>) in.readValue(
                 HashMap.class.getClassLoader());
     }
@@ -232,7 +233,7 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         @Override
         public VehicleMessage createFromParcel(Parcel in) {
             String messageClassName = in.readString();
-            Constructor<? extends VehicleMessage> constructor = null;
+            Constructor<? extends VehicleMessage> constructor;
             Class<? extends VehicleMessage> messageClass = null;
             try {
                 try {
@@ -268,10 +269,9 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         }
     };
 
-    // This must be protected so that we can call it using relfection from this
+    // This must be protected so that we can call it using reflection from this
     // class. Kind of weird, but it works.
-    protected VehicleMessage(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected VehicleMessage(Parcel in) {
         readFromParcel(in);
     }
 }

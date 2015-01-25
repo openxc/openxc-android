@@ -21,8 +21,8 @@ import android.util.Log;
  *
  * This Activity is a workaround that listens for the intent. Originally it
  * rebroadcast a custom version that the true listener can actually receive, but
- * that is actually unneccessary - when the activity's blank screen opens and
- * immediately closes (invisble to the user), it causes the active OpenXC app to
+ * that is actually unnecessary - when the activity's blank screen opens and
+ * immediately closes (invisible to the user), it causes the active OpenXC app to
  * pause. That currently means the background services all get destroyed and
  * recreated when the activity exits and the previous activity regains focus.
  *

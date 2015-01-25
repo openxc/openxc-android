@@ -262,7 +262,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
     }
 
     /**
-     * Add the prefix reuqired to parse with URI if it's not already there.
+     * Add the prefix required to parse with URI if it's not already there.
      */
     private static String massageUri(String uriString) {
         if(!uriString.startsWith(SCHEMA_SPECIFIC_PREFIX)) {

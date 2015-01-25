@@ -101,7 +101,7 @@ public class BinaryDeserializer {
 
         BinaryMessages.DiagnosticControlCommand diagnosticCommand =
                 command.getDiagnosticRequest();
-        String action = null;
+        String action;
         if(!diagnosticCommand.hasAction()) {
             throw new UnrecognizedMessageTypeException(
                     "Diagnostic command missing action");
@@ -152,7 +152,7 @@ public class BinaryDeserializer {
             throws UnrecognizedMessageTypeException {
         BinaryMessages.ControlCommand command =
                 binaryMessage.getControlCommand();
-        CommandType commandType = null;
+        CommandType commandType;
         if(command.hasType()) {
             BinaryMessages.ControlCommand.Type serializedType = command.getType();
             if(serializedType.equals(BinaryMessages.ControlCommand.Type.VERSION)) {
@@ -171,7 +171,7 @@ public class BinaryDeserializer {
                     "Command missing type");
         }
 
-        Command deserializedCommand = null;
+        Command deserializedCommand;
         if(commandType.equals(CommandType.DIAGNOSTIC_REQUEST)) {
             deserializedCommand = deserializeDiagnosticCommand(command);
         } else {
@@ -221,7 +221,7 @@ public class BinaryDeserializer {
             throws UnrecognizedMessageTypeException {
         BinaryMessages.CommandResponse response =
                 binaryMessage.getCommandResponse();
-        CommandType commandType = null;
+        CommandType commandType;
         if(response.hasType()) {
             BinaryMessages.ControlCommand.Type serializedType = response.getType();
             if(serializedType.equals(BinaryMessages.ControlCommand.Type.VERSION)) {

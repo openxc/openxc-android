@@ -118,7 +118,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
             // TODO When android 4.2 hits the maven repository we can simplify
             // this and call the makeComplete method directly, until then we use
             // reflection to load it without getting a compilation error.
-            Method makeCompleteMethod = null;
+            Method makeCompleteMethod;
             try {
                 makeCompleteMethod = Location.class.getMethod("makeComplete");
                 makeCompleteMethod.invoke(location);
@@ -145,7 +145,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
             // Only enable overwriting the built-in Android GPS provider if we
             // actually receive a GPS update from the vehicle. This is to avoid
             // killing GPS just by having the OpenXC app installed (because it's
-            // always running the serivce in the background).
+            // always running the service in the background).
             overwriteNativeProvider();
 
             Location location = new Location(LocationManager.GPS_PROVIDER);
@@ -168,7 +168,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 Log.w(TAG, "Unable to set test provider location", e);
             }
         } catch(NoValueException e) {
-                Log.w(TAG, "Can't update location, complete measurents not available yet");
+                Log.w(TAG, "Can't update location, complete measurements not available yet");
         } catch(UnrecognizedMeasurementTypeException e) {
             // This is dumb that we know these measurements are good, but
             // we still could get an exception. One of the annoying things about

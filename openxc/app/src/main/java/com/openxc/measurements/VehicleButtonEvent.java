@@ -37,7 +37,7 @@ public class VehicleButtonEvent
     }
 
     /**
-     * The ButtonAction is the specific event that ocurred.
+     * The ButtonAction is the specific event that occurred.
      */
     public enum ButtonAction {
         IDLE,
@@ -54,7 +54,7 @@ public class VehicleButtonEvent
     }
 
     public VehicleButtonEvent(ButtonId value, ButtonAction event) {
-        this(new State<ButtonId>(value), new State<ButtonAction>(event));
+        this(new State<>(value), new State<>(event));
     }
 
     public VehicleButtonEvent(String value, String event) {

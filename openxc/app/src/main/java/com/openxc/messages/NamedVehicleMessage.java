@@ -23,7 +23,7 @@ public class NamedVehicleMessage extends KeyedMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             NAME_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     public NamedVehicleMessage(String name) {
@@ -91,8 +91,7 @@ public class NamedVehicleMessage extends KeyedMessage {
         mName = in.readString();
     }
 
-    protected NamedVehicleMessage(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected NamedVehicleMessage(Parcel in) {
         readFromParcel(in);
     }
 

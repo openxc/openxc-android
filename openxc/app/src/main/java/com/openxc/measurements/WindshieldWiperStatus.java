@@ -1,16 +1,14 @@
 package com.openxc.measurements;
 
-import com.openxc.units.Boolean;
-
-public class WindshieldWiperStatus extends BaseMeasurement<Boolean> {
+public class WindshieldWiperStatus extends BaseMeasurement<com.openxc.units.Boolean> {
     public final static String ID = "windshield_wiper_status";
 
-    public WindshieldWiperStatus(Boolean value) {
+    public WindshieldWiperStatus(com.openxc.units.Boolean value) {
         super(value);
     }
 
     public WindshieldWiperStatus(java.lang.Boolean value) {
-        this(new Boolean(value));
+        this(new com.openxc.units.Boolean(value));
     }
 
     @Override

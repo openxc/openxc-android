@@ -1,7 +1,6 @@
 package com.openxc;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,11 +76,10 @@ public class DataPipeline implements SourceCallback {
         }
 
         List<VehicleDataSink> deadSinks = new ArrayList<>();
-        for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
-            VehicleDataSink sink = i.next();
+        for (VehicleDataSink sink : mSinks) {
             try {
                 sink.receive(message);
-            } catch(DataSinkException e) {
+            } catch (DataSinkException e) {
                 Log.w(TAG, this.getClass().getName() + ": The sink " +
                         sink + " exploded when we sent a new message " +
                         "-- removing it from the pipeline: " + e);
@@ -170,8 +168,8 @@ public class DataPipeline implements SourceCallback {
      * Remove and stop all sources in the pipeline.
      */
     public void clearSources() {
-        for(Iterator<VehicleDataSource> i = mSources.iterator(); i.hasNext();) {
-            (i.next()).stop();
+        for (VehicleDataSource mSource : mSources) {
+            (mSource).stop();
         }
         mSources.clear();
     }
@@ -180,8 +178,8 @@ public class DataPipeline implements SourceCallback {
      * Remove and stop all sinks in the pipeline.
      */
     public void clearSinks() {
-        for(Iterator<VehicleDataSink> i = mSinks.iterator(); i.hasNext();) {
-            (i.next()).stop();
+        for (VehicleDataSink mSink : mSinks) {
+            (mSink).stop();
         }
         mSinks.clear();
     }
@@ -189,7 +187,7 @@ public class DataPipeline implements SourceCallback {
     /**
      * Return the last received value for the keyed message if known.
      *
-     * @param key the key of the message to retreive, if any available.
+     * @param key the key of the message to retrieve, if any available.
      * @return a VehicleMessage with the last known value, or null if no value
      *          has been received.
      */

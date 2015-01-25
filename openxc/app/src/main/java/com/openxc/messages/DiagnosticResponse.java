@@ -25,7 +25,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             BUS_KEY, ID_KEY, MODE_KEY, SUCCESS_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(SUCCESS_KEY)
@@ -189,7 +189,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
             }
             return result;
         }
-    };
+    }
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
@@ -205,8 +205,7 @@ public class DiagnosticResponse extends DiagnosticMessage {
         mNegativeResponseCode = (NegativeResponseCode) in.readSerializable();
     }
 
-    protected DiagnosticResponse(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected DiagnosticResponse(Parcel in) {
         readFromParcel(in);
     }
 

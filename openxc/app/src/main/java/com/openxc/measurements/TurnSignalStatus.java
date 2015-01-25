@@ -19,7 +19,7 @@ public class TurnSignalStatus extends
     }
 
     public TurnSignalStatus(TurnSignalPosition value) {
-        this(new State<TurnSignalPosition>(value));
+        this(new State<>(value));
     }
 
     public TurnSignalStatus(String value) {

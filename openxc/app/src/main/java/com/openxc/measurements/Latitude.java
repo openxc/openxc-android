@@ -8,7 +8,7 @@ import com.openxc.util.Range;
  * GPS.
  */
 public class Latitude extends BaseMeasurement<Degree> {
-    private final static Range<Degree> RANGE = new Range<Degree>(
+    private final static Range<Degree> RANGE = new Range<>(
             new Degree(-89.0), new Degree(89.0));
     public final static String ID = "latitude";
 

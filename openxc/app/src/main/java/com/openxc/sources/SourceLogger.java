@@ -11,7 +11,6 @@ public class SourceLogger {
      * @param tag the Android log tag to use.
      * @param startTime the starting time for the stats calculation in
      * nanoseconds.
-     * @param endTime the ending time for the stats calculation in nanoseconds.
      * @param bytesReceived the number of bytes received over the given period
      * of time
      */

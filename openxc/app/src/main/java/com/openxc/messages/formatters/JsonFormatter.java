@@ -93,7 +93,7 @@ public class JsonFormatter {
             fields.add(entry.getKey());
         }
 
-        VehicleMessage message = new VehicleMessage();
+        VehicleMessage message;
         if(CanMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, CanMessage.class);
         } else if(DiagnosticResponse.containsRequiredFields(fields)) {

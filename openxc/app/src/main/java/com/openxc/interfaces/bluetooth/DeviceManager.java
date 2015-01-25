@@ -115,9 +115,9 @@ public class DeviceManager {
      * connection, but it's thread safe and we can cancel that by calling
      * close() on it at any time.
      *
-     * Importantly we don't want to close the socket any other time, becauase we
+     * Importantly we don't want to close the socket any other time, because we
      * want to leave that up to the user of the socket - if you call close()
-     * twice, or close Input/Ouput streams associated with the socket
+     * twice, or close Input/Output streams associated with the socket
      * simultaneously, it can cause a segfault due to a bug in some Android
      * Bluetooth stacks. Awesome!
      */
@@ -134,7 +134,7 @@ public class DeviceManager {
     }
 
     public Set<BluetoothDevice> getPairedDevices() {
-        Set<BluetoothDevice> devices = new HashSet<BluetoothDevice>();
+        Set<BluetoothDevice> devices = new HashSet<>();
         if(getDefaultAdapter() != null && getDefaultAdapter().isEnabled()) {
             devices = getDefaultAdapter().getBondedDevices();
         }
@@ -166,7 +166,7 @@ public class DeviceManager {
     }
 
     public Set<BluetoothDevice> getCandidateDevices() {
-        Set<BluetoothDevice> candidates = new HashSet<BluetoothDevice>();
+        Set<BluetoothDevice> candidates = new HashSet<>();
 
         for(BluetoothDevice device : getPairedDevices()) {
             if(device.getName().startsWith(
@@ -226,12 +226,12 @@ public class DeviceManager {
     private BluetoothSocket setupSocket(BluetoothDevice device)
             throws BluetoothException {
         if(device == null) {
-            Log.w(TAG, "Can't setup socket -- device is " + device);
+            Log.w(TAG, "Can't setup socket -- device is null");
             throw new BluetoothException();
         }
 
         Log.d(TAG, "Scanning services on " + device);
-        BluetoothSocket socket = null;
+        BluetoothSocket socket;
         try {
             socket = device.createRfcommSocketToServiceRecord(RFCOMM_UUID);
         } catch(IOException e) {

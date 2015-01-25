@@ -47,7 +47,7 @@ public class AndroidFileOpener implements FileOpener {
     private String getDirectory() {
         if(mDirectory == null) {
             return DEFAULT_DIRECTORY;
-        };
+        }
         return mDirectory;
     }
 }

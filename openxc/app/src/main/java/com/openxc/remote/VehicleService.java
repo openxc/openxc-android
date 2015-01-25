@@ -9,7 +9,6 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.openxcplatform.R;
 import com.openxc.DataPipeline;
 import com.openxc.interfaces.VehicleInterface;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
@@ -26,6 +25,8 @@ import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.WakeLockManager;
 
+import com.openxcplatform.R;
+
 /**
  * The VehicleService is the centralized source of all vehicle data.
  *
@@ -36,11 +37,11 @@ import com.openxc.sources.WakeLockManager;
  * Applications should not use this service directly, but should bind to the
  * in-process {@link com.openxc.VehicleManager} instead - that has an interface
  * that respects Measurement types. The interface used for the
- * VehicleService is purposefully primative as there are a small set of
+ * VehicleService is purposefully primitive as there are a small set of
  * objects that can be natively marshalled through an AIDL interface.
  *
  * Only one vehicle interface can be active at at time, and it can be set with
- * the {@link #setVehicleInterface(Class, String)} method.
+ * the {@link #setVehicleInterface(String, String)} method.
  *
  * This service uses the same {@link com.openxc.DataPipeline} as the
  * {@link com.openxc.VehicleManager} to move data from sources to sinks, but it
@@ -65,7 +66,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
     private boolean mUserPipelineActive;
-    private RemoteCallbackList<ViConnectionListener> mViConnectionListeners =
+    private final RemoteCallbackList<ViConnectionListener> mViConnectionListeners =
             new RemoteCallbackList<>();
 
     @Override

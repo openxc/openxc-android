@@ -16,7 +16,7 @@ public abstract class EventedMeasurement<TheUnit extends Unit>
 
     public EventedMeasurement(TheUnit value, Unit event) {
         super(value);
-        mEvent = new AgingData<Unit>(event);
+        mEvent = new AgingData<>(event);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.openxc.messages;
 
 /**
  * A KeyedMessage is a VehicleMessage with a unique key that identifies this
- * message, and potentailly responses to this message. For example, the CAN
+ * message, and potentially responses to this message. For example, the CAN
  * message ID and bus ID form a unique key for a CAN message.
  */
 public abstract class KeyedMessage extends VehicleMessage {

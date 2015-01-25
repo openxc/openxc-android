@@ -29,7 +29,7 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
     private Lock mNotificationsLock = new ReentrantLock();
     private Condition mNotificationsChanged = mNotificationsLock.newCondition();
     private CopyOnWriteArrayList<VehicleMessage> mNotifications =
-            new CopyOnWriteArrayList<VehicleMessage>();
+            new CopyOnWriteArrayList<>();
 
     public AbstractQueuedCallbackSink() {
         mNotificationThread.start();
@@ -97,7 +97,7 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
 
                     Iterator<VehicleMessage> it = mNotifications.iterator();
                     CopyOnWriteArrayList<VehicleMessage> deleted =
-                            new CopyOnWriteArrayList<VehicleMessage>(mNotifications);
+                            new CopyOnWriteArrayList<>(mNotifications);
                     while(it.hasNext()) {
                         VehicleMessage message = it.next();
                         propagateMessage(message);

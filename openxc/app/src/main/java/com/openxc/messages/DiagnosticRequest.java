@@ -25,7 +25,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             ID_KEY, BUS_KEY, MODE_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(MULTIPLE_RESPONSES_KEY)
@@ -48,7 +48,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
     }
 
     public void setMultipleResponses(boolean multipleResponses) {
-        mMultipleResponses = Boolean.valueOf(multipleResponses);
+        mMultipleResponses = multipleResponses;
     }
 
     public boolean hasFrequency() {
@@ -127,8 +127,7 @@ public class DiagnosticRequest extends DiagnosticMessage {
         mName = in.readString();
     }
 
-    protected DiagnosticRequest(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected DiagnosticRequest(Parcel in) {
         readFromParcel(in);
     }
 

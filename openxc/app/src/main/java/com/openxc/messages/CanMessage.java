@@ -31,7 +31,7 @@ public class CanMessage extends KeyedMessage {
 
     private static final String[] sRequiredFieldsValues = new String[] {
             BUS_KEY, ID_KEY, DATA_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     public CanMessage(int canBus, int id, byte[] data) {
@@ -130,7 +130,7 @@ public class CanMessage extends KeyedMessage {
         in.readByteArray(mData);
     }
 
-    protected CanMessage(Parcel in) throws UnrecognizedMessageTypeException {
+    protected CanMessage(Parcel in) {
         readFromParcel(in);
     }
 }

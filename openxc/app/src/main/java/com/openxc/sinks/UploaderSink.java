@@ -97,7 +97,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
      */
     public static boolean validatePath(String path) {
         if(path == null) {
-            Log.w(TAG, "Uploading path not set (it's " + path + ")");
+            Log.w(TAG, "Uploading path not set");
             return false;
         }
 
@@ -189,7 +189,7 @@ public class UploaderSink extends ContextualVehicleDataSink {
                 HttpResponse response = client.execute(request);
                 final int statusCode = response.getStatusLine().getStatusCode();
                 if(statusCode != HttpStatus.SC_CREATED) {
-                    Log.w(TAG, "Got unxpected status code: " + statusCode);
+                    Log.w(TAG, "Got unexpected status code: " + statusCode);
                 }
             } catch(IOException e) {
                 Log.w(TAG, "Problem uploading the record", e);

@@ -13,13 +13,7 @@ public abstract class Unit {
             return true;
         }
 
-        if(obj == null) {
-            return false;
-        }
+        return obj != null && getClass() == obj.getClass();
 
-        if(getClass() != obj.getClass()) {
-            return false;
-        }
-        return true;
     }
 }

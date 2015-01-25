@@ -25,11 +25,11 @@ public class Command extends KeyedMessage {
 
     public enum CommandType {
         VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST
-    };
+    }
 
     private static final String[] sRequiredFieldsValues = new String[] {
             COMMAND_KEY };
-    private static final Set<String> sRequiredFields = new HashSet<String>(
+    private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
     @SerializedName(COMMAND_KEY)
@@ -122,12 +122,10 @@ public class Command extends KeyedMessage {
         super.readFromParcel(in);
         mCommand = (CommandType) in.readSerializable();
         mAction = in.readString();
-        mDiagnosticRequest = (DiagnosticRequest) in.readParcelable(
-                DiagnosticRequest.class.getClassLoader());
+        mDiagnosticRequest = in.readParcelable(DiagnosticRequest.class.getClassLoader());
     }
 
-    protected Command(Parcel in)
-            throws UnrecognizedMessageTypeException {
+    protected Command(Parcel in) {
         readFromParcel(in);
     }
 

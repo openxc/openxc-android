@@ -31,11 +31,8 @@ public abstract class ExactKeyMatcher extends KeyMatcher {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null) {
-            return false;
-        }
+        return obj != null && getKey().equals(((ExactKeyMatcher) obj).getKey());
 
-        return getKey().equals(((ExactKeyMatcher)obj).getKey());
     }
 
     @Override
