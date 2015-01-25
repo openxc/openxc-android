@@ -8,15 +8,8 @@ android:
     - sys-img-armeabi-v7a-android-21
     - extra-android-support
     - extra-android-m2repository
-before_install:
-  - mkdir -p ~/.m2/repository
-  - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
-  - git clone https://github.com/mosabua/maven-android-sdk-deployer.git
-  - pushd maven-android-sdk-deployer; mvn install -P 5.0; popd
-install:
-  - mvn clean install -DskipTests=true -pl openxc -am
 script:
-  - mvn test -pl openxc
-  - mvn package -pl enabler
+  - ./gradlew test -i
+  - ./gradlew clean assemble -PdisablePreDex
 after_success:
   - mvn cobertura:cobertura coveralls:cobertura -pl openxc
