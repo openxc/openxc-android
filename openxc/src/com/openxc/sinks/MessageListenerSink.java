@@ -59,6 +59,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             mListeners = new ArrayList<>();
         }
         
+        boolean isEmpty() {
+            return mPersistentListeners.isEmpty() && mListeners.isEmpty();
+        }   
     }
     
     public MessageListenerSink() {
@@ -118,7 +121,12 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public synchronized void unregister(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
-        mMessageListeners.get(matcher).removePersistent(listener);
+       
+        MessageListenerGroup group = mMessageListeners.get(matcher);
+        if (group != null) {
+            group.removePersistent(listener);
+            pruneListeners(matcher);
+        }
     }
 
     @Override
@@ -140,6 +148,13 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         
         return sum;
     }
+    
+    private void pruneListeners(KeyMatcher matcher) {
+        MessageListenerGroup group = mMessageListeners.get(matcher);
+        if (group.isEmpty()) {
+            mMessageListeners.remove(matcher);
+        }
+    }
 
     @Override
     protected synchronized void propagateMessage(VehicleMessage message) {
@@ -160,8 +175,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
             for (KeyMatcher matcher : matchedKeys) {
                 mMessageListeners.get(matcher).removeAllNonPersistent();
+                pruneListeners(matcher);
             }
-
+            
             if (message instanceof SimpleVehicleMessage) {
                 propagateMeasurementFromMessage(message.asSimpleMessage());
             }
