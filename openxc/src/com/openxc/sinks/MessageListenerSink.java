@@ -151,7 +151,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     
     private void pruneListeners(KeyMatcher matcher) {
         MessageListenerGroup group = mMessageListeners.get(matcher);
-        if (group.isEmpty()) {
+        if (group != null && group.isEmpty()) {
             mMessageListeners.remove(matcher);
         }
     }
