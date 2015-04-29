@@ -31,14 +31,14 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     // The non-persistent listeners will be removed after they receive their
     // first message.
-    private Map<KeyMatcher, ListenerGroup>
+    private Map<KeyMatcher, MessageListenerGroup>
             mMessageListeners = new HashMap<>();
     private Multimap<Class<? extends Measurement>, Measurement.Listener>
             mMeasurementTypeListeners = HashMultimap.create();
     private Multimap<Class<? extends VehicleMessage>, VehicleMessage.Listener>
             mMessageTypeListeners = HashMultimap.create();
 
-    private class ListenerGroup {
+    private class MessageListenerGroup {
         
         ArrayList<VehicleMessage.Listener> mPersistentListeners = new ArrayList<>();
         ArrayList<VehicleMessage.Listener> mListeners = new ArrayList<>();
@@ -68,9 +68,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     public synchronized void register(KeyMatcher matcher,
             VehicleMessage.Listener listener, boolean persist) {
        
-        ListenerGroup group = mMessageListeners.get(matcher);
+        MessageListenerGroup group = mMessageListeners.get(matcher);
         if (group == null) {
-            group = new ListenerGroup();
+            group = new MessageListenerGroup();
             mMessageListeners.put(matcher, group);
         }
         
@@ -148,7 +148,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             Set<KeyMatcher> matchedKeys = new HashSet<>();
             for (KeyMatcher matcher : mMessageListeners.keySet()) {
                 if (matcher.matches(message.asKeyedMessage())) {
-                    ListenerGroup group = mMessageListeners.get(matcher);
+                    MessageListenerGroup group = mMessageListeners.get(matcher);
                     for (VehicleMessage.Listener listener : group.mPersistentListeners) {
                         listener.receive(message);
                     }
