@@ -1,6 +1,9 @@
 package com.openxc.sinks;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import android.util.Log;
@@ -26,28 +29,52 @@ import com.openxc.messages.VehicleMessage;
 public class MessageListenerSink extends AbstractQueuedCallbackSink {
     private final static String TAG = "MessageListenerSink";
 
-    private Multimap<KeyMatcher, VehicleMessage.Listener>
-            mPersistentMessageListeners = HashMultimap.create();
     // The non-persistent listeners will be removed after they receive their
     // first message.
-    private Multimap<KeyMatcher, VehicleMessage.Listener>
-            mMessageListeners = HashMultimap.create();
+    private Map<KeyMatcher, ListenerGroup>
+            mMessageListeners = new HashMap<>();
     private Multimap<Class<? extends Measurement>, Measurement.Listener>
             mMeasurementTypeListeners = HashMultimap.create();
     private Multimap<Class<? extends VehicleMessage>, VehicleMessage.Listener>
             mMessageTypeListeners = HashMultimap.create();
 
+    private class ListenerGroup {
+        
+        ArrayList<VehicleMessage.Listener> mPersistentListeners = new ArrayList<>();
+        ArrayList<VehicleMessage.Listener> mListeners = new ArrayList<>();
+        
+        void add(VehicleMessage.Listener listener, boolean persist) {
+            if (persist) {
+                mPersistentListeners.add(listener);
+            } else {
+                mListeners.add(listener);
+            }
+        }
+        
+        void removePersistent(VehicleMessage.Listener listener) {
+            mPersistentListeners.remove(listener);
+        }
+        
+        void removeAllSingular() {
+            mListeners = new ArrayList<>();
+        }
+        
+    }
+    
     public MessageListenerSink() {
         super();
     }
 
     public synchronized void register(KeyMatcher matcher,
             VehicleMessage.Listener listener, boolean persist) {
-        if(persist) {
-            mPersistentMessageListeners.put(matcher, listener);
-        } else {
-            mMessageListeners.put(matcher, listener);
+       
+        ListenerGroup group = mMessageListeners.get(matcher);
+        if (group == null) {
+            group = new ListenerGroup();
+            mMessageListeners.put(matcher, group);
         }
+        
+        group.add(listener, persist);
     }
 
     public synchronized void register(KeyMatcher matcher,
@@ -91,7 +118,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public synchronized void unregister(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
-        mPersistentMessageListeners.remove(matcher, listener);
+        mMessageListeners.get(matcher).removePersistent(listener);
     }
 
     @Override
@@ -99,37 +126,40 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
         return MoreObjects.toStringHelper(this)
             .add("numMessageListeners", mMessageListeners.size())
             .add("numMessageTypeListeners", mMessageTypeListeners.size())
-            .add("numPersistentMessageListeners",
-                    mPersistentMessageListeners.size())
+            .add("numPersistentMessageListeners", getNumPersistentListeners())
             .add("numMeasurementTypeListeners", mMeasurementTypeListeners.size())
             .toString();
+    }
+    
+    private int getNumPersistentListeners() {
+        
+        int sum = 0;
+        for (KeyMatcher matcher : mMessageListeners.keySet()) {
+            sum += mMessageListeners.get(matcher).mPersistentListeners.size();
+        }
+        
+        return sum;
     }
 
     @Override
     protected synchronized void propagateMessage(VehicleMessage message) {
-        if(message instanceof KeyedMessage) {
-            for (KeyMatcher matcher : mPersistentMessageListeners.keys()) {
-                if (matcher.matches(message.asKeyedMessage())) {
-                    for (VehicleMessage.Listener listener :
-                            mPersistentMessageListeners.get(matcher)) {
-                        listener.receive(message);
-                    }
-                }
-            }
+        if (message instanceof KeyedMessage) {
 
             Set<KeyMatcher> matchedKeys = new HashSet<>();
-            for (KeyMatcher matcher : mMessageListeners.keys()) {
+            for (KeyMatcher matcher : mMessageListeners.keySet()) {
                 if (matcher.matches(message.asKeyedMessage())) {
-                    for (VehicleMessage.Listener listener :
-                            mMessageListeners.get(matcher)) {
+                    ListenerGroup group = mMessageListeners.get(matcher);
+                    for (VehicleMessage.Listener listener : group.mPersistentListeners) {
                         listener.receive(message);
                     }
-                    matchedKeys.add(matcher);
+                    for (VehicleMessage.Listener listener : group.mListeners) {
+                        listener.receive(message);
+                    }
                 }
             }
 
-            for(KeyMatcher matcher : matchedKeys) {
-                mMessageListeners.removeAll(matcher);
+            for (KeyMatcher matcher : matchedKeys) {
+                mMessageListeners.get(matcher).removeAllSingular();
             }
 
             if (message instanceof SimpleVehicleMessage) {
