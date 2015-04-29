@@ -55,7 +55,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             mPersistentListeners.remove(listener);
         }
         
-        void removeAllSingular() {
+        void removeAllNonPersistent() {
             mListeners = new ArrayList<>();
         }
         
@@ -159,7 +159,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             }
 
             for (KeyMatcher matcher : matchedKeys) {
-                mMessageListeners.get(matcher).removeAllSingular();
+                mMessageListeners.get(matcher).removeAllNonPersistent();
             }
 
             if (message instanceof SimpleVehicleMessage) {
