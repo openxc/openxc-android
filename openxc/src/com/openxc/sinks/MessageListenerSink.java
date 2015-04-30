@@ -55,10 +55,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             mPersistentListeners.remove(listener);
         }
         
-        void removeAllNonPersistent() {
-            mListeners = new ArrayList<>();
-        }
-        
         void receive(VehicleMessage message) {
             for (VehicleMessage.Listener listener : mPersistentListeners) {
                 listener.receive(message);
@@ -66,6 +62,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             for (VehicleMessage.Listener listener : mListeners) {
                 listener.receive(message);
             }   
+            mListeners = new ArrayList<>(); //delete all non-persistent
         }
         
         boolean isEmpty() {
@@ -178,7 +175,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             }
 
             for (KeyMatcher matcher : matchedKeys) {
-                mMessageListeners.get(matcher).removeAllNonPersistent();
                 pruneListeners(matcher);
             }
             
