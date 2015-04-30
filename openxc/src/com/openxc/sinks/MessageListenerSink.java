@@ -59,6 +59,15 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             mListeners = new ArrayList<>();
         }
         
+        void receive(VehicleMessage message) {
+            for (VehicleMessage.Listener listener : mPersistentListeners) {
+                listener.receive(message);
+            }
+            for (VehicleMessage.Listener listener : mListeners) {
+                listener.receive(message);
+            }   
+        }
+        
         boolean isEmpty() {
             return mPersistentListeners.isEmpty() && mListeners.isEmpty();
         }   
@@ -140,7 +149,6 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     }
     
     private int getNumPersistentListeners() {
-        
         int sum = 0;
         for (KeyMatcher matcher : mMessageListeners.keySet()) {
             sum += mMessageListeners.get(matcher).mPersistentListeners.size();
@@ -164,12 +172,8 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             for (KeyMatcher matcher : mMessageListeners.keySet()) {
                 if (matcher.matches(message.asKeyedMessage())) {
                     MessageListenerGroup group = mMessageListeners.get(matcher);
-                    for (VehicleMessage.Listener listener : group.mPersistentListeners) {
-                        listener.receive(message);
-                    }
-                    for (VehicleMessage.Listener listener : group.mListeners) {
-                        listener.receive(message);
-                    }
+                    group.receive(message);
+                    matchedKeys.add(matcher);
                 }
             }
 
