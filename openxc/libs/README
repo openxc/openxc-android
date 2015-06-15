@@ -1,3 +1,0 @@
-Note: This folder is managed exclusively by the Maven build - it will make sure
-all dependencies are collected here for Eclipse users. Please don't add any
-.jar files manually, otherwise the Maven build will be broken.

@@ -3,8 +3,6 @@ OpenXC Android Library
 
 [![Build Status](https://travis-ci.org/openxc/openxc-android.svg?branch=master)](https://travis-ci.org/openxc/openxc-android)
 
-[![Coverage Status](https://coveralls.io/repos/openxc/openxc-android/badge.png?branch=master)](https://coveralls.io/r/openxc/openxc-android?branch=master)
-
 [![Stories in Ready](https://badge.waffle.io/openxc/openxc-android.png?label=ready&title=Ready)](http://waffle.io/openxc/openxc-android)
 
 This library is a part of the [OpenXC][] project.
