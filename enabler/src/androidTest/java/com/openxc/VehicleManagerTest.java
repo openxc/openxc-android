@@ -301,7 +301,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         VehicleSpeed measurement = (VehicleSpeed)
                 service.get(VehicleSpeed.class);
         assertNotNull(measurement);
-        assertEquals(measurement.getValue().doubleValue(), 42.0);
+        assertEquals(measurement.getValue().doubleValue(), 42.0, 0.1);
     }
 
     @MediumTest
