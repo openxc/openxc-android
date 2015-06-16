@@ -115,14 +115,19 @@ public class StatusFragment extends Fragment {
 
             new Thread(new Runnable() {
                 public void run() {
-                    mVehicleManager.waitUntilBound();
-                    if(getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                mServiceNotRunningWarningView.setVisibility(View.GONE);
-                            }
-                        });
+                    try {
+                        mVehicleManager.waitUntilBound();
+                        if(getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    mServiceNotRunningWarningView.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                    } catch(VehicleServiceException e) {
+                        Log.w(TAG, "Unable to connect to VehicleService");
                     }
+
                 }
             }).start();
 

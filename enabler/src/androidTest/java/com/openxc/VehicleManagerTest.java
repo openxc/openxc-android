@@ -83,7 +83,11 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         startIntent.setClass(getContext(), VehicleManager.class);
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
-        service.waitUntilBound();
+        try {
+            service.waitUntilBound();
+        } catch(VehicleServiceException e) {
+            fail("Never bound to remote VehicleService");
+        }
         service.addSource(source);
     }
 

@@ -14,6 +14,7 @@ import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.remote.VehicleService;
+import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.TestSource;
 
 public class VehicleLocationProviderTest
@@ -51,7 +52,10 @@ public class VehicleLocationProviderTest
         startIntent.setClass(getContext(), VehicleManager.class);
         manager = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
-        manager.waitUntilBound();
+        try {
+            manager.waitUntilBound();
+        } catch(VehicleServiceException e) {
+        }
         manager.addSource(source);
         locationProvider = new VehicleLocationProvider(getContext(), manager);
         locationProvider.setOverwritingStatus(true);

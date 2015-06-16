@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.openxc.VehicleManager;
+import com.openxc.remote.VehicleServiceException;
 
 public class PreferenceManagerService extends Service {
     private static String TAG = "PreferenceManagerService";
@@ -82,9 +83,13 @@ public class PreferenceManagerService extends Service {
 
             new Thread(new Runnable() {
                 public void run() {
-                    mVehicleManager.waitUntilBound();
-                    for(VehiclePreferenceManager manager : mPreferenceManagers) {
-                        manager.setVehicleManager(mVehicleManager);
+                    try {
+                        mVehicleManager.waitUntilBound();
+                        for(VehiclePreferenceManager manager : mPreferenceManagers) {
+                            manager.setVehicleManager(mVehicleManager);
+                        }
+                    } catch(VehicleServiceException e) {
+                        Log.w(TAG, "Unable to connect to VehicleService");
                     }
                 }
             }).start();

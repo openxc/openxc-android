@@ -47,8 +47,8 @@ public class VehicleInterfaceTests extends ServiceTestCase<VehicleManager> {
         startIntent.setClass(getContext(), VehicleManager.class);
         service = ((VehicleManager.VehicleBinder)
                 bindService(startIntent)).getService();
-        service.waitUntilBound();
         try {
+            service.waitUntilBound();
             service.setVehicleInterface(TestVehicleInterface.class);
         } catch(VehicleServiceException e) { }
     }

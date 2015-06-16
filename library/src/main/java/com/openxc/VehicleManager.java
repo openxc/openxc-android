@@ -168,16 +168,21 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     /**
      * Block until the VehicleManager is alive and can return measurements.
      *
+     * Blocks for at most 3 seconds.
+     *
      * Most applications don't need this and don't wait this method, but it can
      * be useful for testing when you need to make sure you will get a
      * measurement back from the system.
      */
-    public void waitUntilBound() {
+    public void waitUntilBound() throws VehicleServiceException {
         mRemoteBoundLock.lock();
         Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
         while(mRemoteService == null) {
             try {
-                mRemoteBoundCondition.await();
+                if(!mRemoteBoundCondition.await(3, TimeUnit.SECONDS)) {
+                    throw new VehicleServiceException(
+                            "Not bound to remote service after 3 seconds");
+                }
             } catch(InterruptedException e) {}
         }
         Log.i(TAG, mRemoteService + " is now bound");
