@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
@@ -43,6 +44,11 @@ public class VehicleLocationProviderTest
                     Context.LOCATION_SERVICE);
     }
 
+    public static boolean mockLocationsEnabled(Context context) {
+        return !Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ALLOW_MOCK_LOCATION).equals("0");
+    }
+
     // Due to bugs and or general crappiness in the ServiceTestCase, you will
     // run into many unexpected problems if you start the service in setUp - see
     // this blog post for more details:
@@ -71,6 +77,10 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testNotOverwrittenWhenDisabled() {
+        if(!mockLocationsEnabled(getContext())) {
+            return;
+        }
+
         prepareServices();
         locationProvider.setOverwritingStatus(false);
         source.inject(Latitude.ID, latitude + 1);
@@ -86,6 +96,10 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testLocationWhenAllPresent() throws InterruptedException {
+        if(!mockLocationsEnabled(getContext())) {
+            return;
+        }
+
         prepareServices();
         source.inject(Latitude.ID, latitude);
         source.inject(Longitude.ID, longitude);
@@ -106,6 +120,10 @@ public class VehicleLocationProviderTest
 
     @MediumTest
     public void testOverwritesNativeGps() throws InterruptedException {
+        if(!mockLocationsEnabled(getContext())) {
+            return;
+        }
+
         prepareServices();
         source.inject(Latitude.ID, latitude);
         source.inject(Longitude.ID, longitude);
