@@ -15,12 +15,6 @@
 
   <application android:allowBackup="true" android:icon="@drawable/open_xc_launcher_icon_black" android:label="@string/app_name">
       <service android:name="com.openxc.enabler.preferences.PreferenceManagerService"/>
-      <service android:name="com.openxc.VehicleManager"/>
-      <service android:name="com.openxc.remote.VehicleService" android:process=":remote">
-          <intent-filter>
-              <action android:name="com.openxc.remote.VehicleService"/>
-          </intent-filter>
-      </service>
 
       <activity android:launchMode="singleTask" android:name="com.openxc.enabler.OpenXcEnablerActivity">
           <intent-filter>
