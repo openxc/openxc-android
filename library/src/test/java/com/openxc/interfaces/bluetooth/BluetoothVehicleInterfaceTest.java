@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config;
 
 import com.openxc.sources.DataSourceException;
 
-// @Config(manifest = "src/main/AndroidManifest.xml", emulateSdk = 18)
+@Config(manifest = "src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)
 /* This test has to live in the openxc-it package because you can't access
  * Android resources like R.* from robolectric tests in a library project.
@@ -37,22 +37,22 @@ public class BluetoothVehicleInterfaceTest {
     @Test
     public void testValidaddress() throws DataSourceException {
         // TODO disabling tests for now until we convert to a gradle build
-        // source = new BluetoothVehicleInterface(RuntimeEnvironment.application, macAddress);
+        source = new BluetoothVehicleInterface(RuntimeEnvironment.application, macAddress);
     }
 
     @Test
     public void testResourceMatching() throws DataSourceException {
         // TODO disabling tests for now until we convert to a gradle build
-        // source = new BluetoothVehicleInterface(RuntimeEnvironment.application, macAddress);
-        // assertFalse(source.setResource(macAddress));
+        source = new BluetoothVehicleInterface(RuntimeEnvironment.application, macAddress);
+        assertFalse(source.setResource(macAddress));
     }
 
     @Test
     public void testResourceDifferent() throws DataSourceException {
         String anotherMac = "01:00:00:00:00:00";
-        // source = new BluetoothVehicleInterface(RuntimeEnvironment.application, macAddress);
+        source = new BluetoothVehicleInterface(RuntimeEnvironment.application, macAddress);
         // TODO it has to be connected first before this will return true, need
         // a better test
-        // assertTrue(source.setResource(anotherMac));
+        assertTrue(source.setResource(anotherMac));
     }
 }
