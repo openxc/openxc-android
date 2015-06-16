@@ -14,7 +14,7 @@ import com.openxc.messages.VehicleMessage;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
-import com.openxcplatform.enabler.test.R;
+import com.openxcplatform.enabler.R;
 
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
     URI traceUri;
