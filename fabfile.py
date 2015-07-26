@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from fabric.api import *
+from fabric.api import *  # noqa
 from fabric.colors import green, yellow
 from fabric.contrib.console import confirm
 
@@ -18,6 +18,7 @@ env.http_proxy = env.http_proxy_port = None
 if proxy is not None:
     env.http_proxy, env.http_proxy_port = proxy.rsplit(":")
 
+
 def latest_git_tag():
     description = local('git describe master', capture=True).rstrip('\n')
     if '-' in description:
@@ -27,6 +28,7 @@ def latest_git_tag():
     if not re.match(VERSION_PATTERN, latest_tag):
         latest_tag = None
     return latest_tag
+
 
 def compare_versions(x, y):
     """
@@ -47,7 +49,7 @@ def compare_versions(x, y):
             [version_list.append(0) for _ in range(3 - len(version_list))]
         try:
             return tuple((int(version) for version in version_list))
-        except ValueError: # not an integer, so it goes to the bottom
+        except ValueError:  # not an integer, so it goes to the bottom
             return (0, 0, 0)
 
     x_major, x_minor, x_bugfix = version_to_tuple(x)
@@ -62,39 +64,24 @@ def make_tag():
         tags = local('git tag | tail -n 20', capture=True)
         pp(sorted(tags.split('\n'), compare_versions, reverse=True))
         prompt("New release tag in the format vX.Y[.Z]?", 'tag',
-                validate=VERSION_PATTERN)
+               validate=VERSION_PATTERN)
         local('git tag -as %(tag)s' % env)
         local('git push origin', capture=True)
         local('git push --tags origin', capture=True)
         local('git fetch --tags origin', capture=True)
 
-@task(default=True)
-def test(args=None):
-    local("mvn clean install -pl openxc,openxc-it")
 
 @task
 def release():
     test()
     make_tag()
-    env.descriptor = release_descriptor(".")
-    print(green("Building release %(descriptor)s" % env))
-    local("mvn package -pl enabler -am")
-    # Must have keystore info configured in ~/.m2/settings
-    local("mvn install -Prelease -pl enabler")
-    local("mkdir -p %(releases_directory)s" % env)
-    local("cp enabler/target/openxc-enabler.apk %(releases_directory)s/openxc-enabler-%(descriptor)s.apk" % env)
-    local("cp enabler/target/openxc-enabler-signed-aligned.apk %(releases_directory)s/openxc-enabler-release-%(descriptor)s.apk" % env)
 
-    local("scripts/updatedocs.sh")
-
-@task
-def snapshot():
-    local("mvn clean deploy -pl openxc -am")
 
 @task
 def sequence_diagrams():
     with lcd("docs/sequences"):
         local("make")
+
 
 def release_descriptor(path):
     with lcd(path):

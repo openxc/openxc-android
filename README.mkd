@@ -45,30 +45,21 @@ emulator):
 
 The project requires Android Studio and is configured to build with Gradle.
 
-## Releaseing the Library to JCenter and the Maven Central Repostiroy
+## Releasing the App and Library
 
-Edit the `local.properties` file to specify your Bintray username and API key,
-then run:
+The release of the Enabler to the Play store and the library to JCenter and the
+Maven Central Repository is managed automatically with Travis CI. The Travis
+build environment must be configured with these encrypted environment variables:
 
-    $ ./gradew bintrayUpload
-
-## Automatic Crash Reporting
-
-The Enabler includes optional support for automatic crash reporting via Bugsnag.
-If you wish to enable this, create a resources file in `enabler/res/values` with
-your Bugsnag token, e.g.:
-
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="bugsnag_token">0123456789</string>
-</resources>
-
-If no token is found, Bugsnag will not be included in the build.
-
-The APK files upload to the GitHub releases page are built with Bugsnag
-included, reporting to an accout that the OpenXC maintainers can review to
-improve the project. If you wish to not have any crash reports collected from
-your device, please build the Enabler from the source code.
+* `BINTRAY_USER` - username at Bintray that is an owner of the openxc-android artifact.
+* `BINTRAY_API_KEY` - API key for the user at Bintray.
+* `KEYSTORE_PASS` - password to the release keystore in this repository.
+* `ALIAS_NAME` - alias of the release key in the keystore.
+* `ALIAS_PASS` - password for the release key.
+* `SERVICE_EMAIL` - Google Play service account email, for API access to the
+    Play store.
+* `BUGSNAG_TOKEN` - Bugsnag API key, used to upload the Proguard mapping
+    during the build and crash reporting in the release version of the app.
 
 ## Contributing
 

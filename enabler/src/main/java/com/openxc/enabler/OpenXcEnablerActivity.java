@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.bugsnag.android.Bugsnag;
+import com.openxcplatform.enabler.BuildConfig;
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxcplatform.enabler.R;
@@ -50,7 +51,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String bugsnagToken = getBugsnagToken(this);
+        String bugsnagToken = BuildConfig.BUGSNAG_TOKEN;
         if(bugsnagToken != null && !bugsnagToken.isEmpty()) {
             try {
                 Bugsnag.init(this, bugsnagToken);
