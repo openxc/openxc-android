@@ -50,7 +50,7 @@ android {
                 getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.txt'
             buildConfigField "String", "BUGSNAG_TOKEN",
-                System.getenv("BUGSNAG_TOKEN") ?: "null"
+                "\"" + System.getenv("BUGSNAG_TOKEN") + "\"" ?: "null"
         }
     }
 
