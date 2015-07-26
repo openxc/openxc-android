@@ -35,3 +35,4 @@ env:
   - secure: dB950vdO3N6GSagrqmAFsTZYaRd2B6IcCZuYTqiI0WS9hQFxrka53gNVblAWcfSsRpyGdsoRzK1LdKgZcFm2YBVPXriiM/CNWfolWMxii7aY/BQs03tUsafcwaprgpDlJqeCIbG2nD6/Yk2g48JEjEQz/a1QI2Ppw/FLNe26jc4=
   - secure: fSxLsuELLvaNmGtFn4ZtELt8d1gSJZwJ+5+QahpV0b9Nf/JNUehSl4RSYVFsq2uw5fuhdsgy/OujpGEYWTA6iDidaB+YOXfwR3q1vpxwUCIEAjbhVG0TwlFh0wqcYOq8FHUBlSNh9DoLJh61N+Y1pCzoXAPFBqaqQ1wjUpxUfCw=
   - secure: QaeBvXRE0EDCiVb5OnMI1d0Co5wffHb0kjncx6qXcB/kovYvV2Zj9UTqDAxSNptaaoatHhXAPXAC6Qmq0Ixj///+0cT2wbxPlaA9Fm3E6OxWb+dC9P4CoN4LwzuwJ/LHgW3RKzMSDjHMrPF893DEM7PG5MoSweoP7s1BdqoqdNA=
+  - GRADLE_OPTS="-Xmx512m -XX:MaxPermSize=512m"
