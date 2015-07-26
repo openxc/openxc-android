@@ -31,10 +31,6 @@ android {
 dependencies {
     compile project(":library")
 
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'com.google.guava:guava:18.0'
-    compile 'com.google.protobuf:protobuf-java:2.6.1'
-    compile 'commons-io:commons-io:2.4'
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.bugsnag:bugsnag-android:3.2.2'
 
