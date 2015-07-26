@@ -1,6 +1,9 @@
 # OpenXC Android Library Changelog
 
-## v6.0.7-dev
+## v6.1.0
+
+* Convert from a Maven build to Gradle, to be compatible with the officially
+    release Android Studio.
 
 ## v6.0.6
 

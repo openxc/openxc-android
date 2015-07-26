@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6000007" android:versionName="6.0.7-SNAPSHOT" package="com.openxcplatform">
-  <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-  <service android:name="com.openxc.VehicleManager"/>
-  <service android:name="com.openxc.remote.VehicleService" android:process=":remote"/>
-  <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="21"/>
-</manifest>
