@@ -73,7 +73,6 @@ def make_tag():
 
 @task
 def release():
-    test()
     make_tag()
 
 
