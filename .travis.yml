@@ -9,11 +9,7 @@ android:
   - sys-img-armeabi-v7a-android-22
   - extra-android-support
   - extra-android-m2repository
-before_script:
-- echo no | android create avd --force -n test -c 128M -t android-22 --abi armeabi-v7a
-- emulator -avd test -no-skin -no-audio -no-window &
-- android-wait-for-emulator
-- adb shell input keyevent 82 &
+script: ./gradlew build test
 deploy:
 - provider: releases
   api_key:
