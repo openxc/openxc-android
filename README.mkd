@@ -30,70 +30,20 @@ required to run OpenXC applications).
 
 To run the unit tests suite:
 
-    $ mvn test -pl openxc
+    $ ./gradlew test
 
 To generate a code coverage report for the test suite:
 
-    $ mvn cobertura:cobertura -pl openxc
+    $ TODO figure out how to calculate coverage with the new gradle build
 
 To run the instrumentation tests (must have an attached Android device or
 emulator):
 
-    $ mvn install -pl openxc -am
-    $ mvn install -pl openxc-it
+    $ ./gradlew conectedCheck
 
 ## Building from Command Line
 
-The build requires [Maven](http://maven.apache.org/download.html)
-v3.0.3+ and the [Android SDK](http://developer.android.com/sdk/index.html)
-to be installed in your development environment.
-
-Set the `ANDROID_HOME` environment variable to the location of your SDK:
-
-    export ANDROID_HOME=/opt/tools/android-sdk
-
-Clone the maven-android-sdk-deployer tool and install the SDK to your local
-Maven repository for the latest SDK:
-
-    $ git clone git@github.com:mosabua/maven-android-sdk-deployer.git
-    $ cd maven-android-sdk-deployer
-    $ mvn install -P 5.0
-
-### Support Library
-
-You also need the Android support library, but unfortunately Google doesn't
-deploy the latest versions of this to the the Central Maven repository. Instead,
-you must open the Android SDK manager and install the "Android Support
-Repository" package (under "Extras"). Next, open a terminal and navigate to your
-SDK's top-level directory (e.g. `/home/user/android-sdk`.
-
-You must manually copy the Maven artifacts from this folder to your local
-repository:
-
-    $ cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
-
-After satisfying those requirements, the build is pretty simple:
-
-To compile the OpenXC library as an APKLIB and install it to your local
-Maven repository:
-
-    $ mvn install -pl openxc -am
-
-To compile and build and APK for the Enabler app (that uses the OpenXC
-library):
-
-    $ mvn package -pl enabler
-
-Finally, to deploy the packaged APK to an attached Android device and run it:
-
-    $ mvn android:deploy android:run -pl enabler
-
-* Run `mvn clean install -pl openxc,openxc-it -am` from the root directory to build and run
-  the library and test suite. This requires that an Android device is attached or an
-  emulator is running.
-
-If you want the tests to wait for a debugger to attach, change the `testDebug`
-setting in `openxc-android/pom.xml` to `true`.
+The project requires Android Studio and is configured to build with Gradle.
 
 ## Automatic Crash Reporting
 
