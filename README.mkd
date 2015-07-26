@@ -45,6 +45,13 @@ emulator):
 
 The project requires Android Studio and is configured to build with Gradle.
 
+## Releaseing the Library to JCenter and the Maven Central Repostiroy
+
+Edit the `local.properties` file to specify your Bintray username and API key,
+then run:
+
+    $ ./gradew bintrayUpload
+
 ## Automatic Crash Reporting
 
 The Enabler includes optional support for automatic crash reporting via Bugsnag.

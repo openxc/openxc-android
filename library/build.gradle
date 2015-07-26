@@ -42,6 +42,9 @@ dependencies {
     testCompile 'org.robolectric:shadows-httpclient:3.0-rc3'
 }
 
+def siteUrl = 'http://openxcplatform.com'
+def gitUrl = 'https://github.com/openxc/openxc-android.git'
+
 install {
     repositories.mavenInstaller {
         pom {
@@ -49,12 +52,12 @@ install {
                 name 'OpenXC Android Library'
                 packaging 'aar'
                 description 'OpenXC vehicle data library for Android applications'
-                url 'https://github.com/openxc/openxc-android'
+                url siteUrl
 
                 scm {
-                    url 'scm:git@github.com:openxc/openxc-android.git'
-                    connection 'scm:git@github.com:openxc/openxc-android.git'
-                    developerConnection 'scm:git@github.com:openxc/openxc-android.git'
+                    url 'https://github.com/openxc/openxc-android'
+                    connection gitUrl
+                    developerConnection gitUrl
                 }
 
                 licenses {
@@ -94,4 +97,23 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives javadocJar
     archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "openxc-android"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        issueTrackerUrl = 'https://github.com/openxc/openxc-android/issues'
+        licenses = ["BSD"]
+        publish = true
+    }
 }
