@@ -47,6 +47,11 @@ The project requires Android Studio and is configured to build with Gradle.
 
 ## Releasing the App and Library
 
+* Bump the major, minor or patch version in `build.gradle`.
+* Update `CHANGELOG.mkd`.
+* Merge into `master`, run `fab release` to tag and push to GitHub.
+* Travis CI will take care of the rest.
+
 The release of the Enabler to the Play store and the library to JCenter and the
 Maven Central Repository is managed automatically with Travis CI. The Travis
 build environment must be configured with these encrypted environment variables:

@@ -35,7 +35,8 @@ ext {
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 
     def Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    if(file('local.properties').exists())
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
     keystorePassword = getValue(properties, "KEYSTORE_PASS")
     keyAlias = getValue(properties, "ALIAS_NAME")

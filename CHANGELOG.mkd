@@ -1,5 +1,9 @@
 # OpenXC Android Library Changelog
 
+## v6.1.2
+
+* Another attempt at an automated release.
+
 ## v6.1.1
 
 * No code changes
