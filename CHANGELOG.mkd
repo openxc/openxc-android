@@ -1,5 +1,11 @@
 # OpenXC Android Library Changelog
 
+## v6.1.1
+
+* No code changes
+* First attempt at an automatic release through Travis CI to the Play Store and
+    JCenter.
+
 ## v6.1.0
 
 * Convert from a Maven build to Gradle, to be compatible with the officially
