@@ -21,6 +21,7 @@ deploy:
 - provider: script
   script: scripts/deploy.sh
   on:
+    repo: openxc/openxc-android
     tags: true
 env:
   global:
