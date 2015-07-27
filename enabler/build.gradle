@@ -2,20 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'bugsnag'
 apply plugin: 'com.github.triplet.play'
 
-def versionMajor = 6
-def versionMinor = 1
-def versionPatch = 0
-
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.openxcplatform.enabler"
-        minSdkVersion 10
-        targetSdkVersion 22
-        versionCode 600100
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
     }
 
    signingConfigs {
@@ -28,9 +24,9 @@ android {
 
         release {
             storeFile rootProject.file('keys/release.keystore')
-            storePassword System.getenv("KEYSTORE_PASS")
-            keyAlias System.getenv("ALIAS_NAME")
-            keyPassword System.getenv("ALIAS_PASS")
+            storePassword rootProject.ext.keystorePassword
+            keyAlias rootProject.ext.keyAlias
+            keyPassword rootProject.ext.keyPassword
         }
     }
 
@@ -49,8 +45,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                 getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.txt'
-            buildConfigField "String", "BUGSNAG_TOKEN",
-                "\"" + System.getenv("BUGSNAG_TOKEN") + "\"" ?: "null"
+            buildConfigField "String", "BUGSNAG_TOKEN", "\"" + rootProject.ext.bugsnagToken + "\""
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                output.outputFile = new File(
+                        output.outputFile.parent,
+                        output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+            }
         }
     }
 
@@ -62,16 +65,14 @@ android {
       exclude 'LICENSE.txt'
     }
 
-    if (System.getenv("TRAVIS")) {
-        bugsnag {
-            apiKey System.getenv("BUGSNAG_TOKEN")
-        }
+    bugsnag {
+        apiKey rootProject.ext.bugsnagToken
+    }
 
-        play {
-            serviceAccountEmail = System.getenv("SERVICE_EMAIL")
-            pk12File = rootProject.file('keys/play-store.p12')
-            track = 'beta'
-        }
+    play {
+        serviceAccountEmail = rootProject.ext.serviceAccountEmail
+        pk12File = rootProject.file('keys/play-store.p12')
+        track = 'beta'
     }
 }
 

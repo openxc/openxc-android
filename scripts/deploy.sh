@@ -2,4 +2,3 @@
 
 ./gradlew bintrayUpload
 ./gradlew publishRelease
-./scripts/updatedocs.sh

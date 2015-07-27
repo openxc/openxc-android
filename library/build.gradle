@@ -2,25 +2,15 @@ apply plugin: 'android-library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "6.1.0"
 group = "com.openxcplatform"
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 22
-        versionCode 2
-        versionName version
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
     lintOptions {
@@ -101,8 +91,8 @@ artifacts {
 }
 
 bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_API_KEY")
+    user = bintrayUser
+    key = bintrayPassword
 
     configurations = ['archives']
     pkg {

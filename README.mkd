@@ -61,6 +61,9 @@ build environment must be configured with these encrypted environment variables:
 * `BUGSNAG_TOKEN` - Bugsnag API key, used to upload the Proguard mapping
     during the build and crash reporting in the release version of the app.
 
+If you want to deploy from a local machine, you can either define those in your
+environment or in the `local.properties` file.
+
 ## Contributing
 
 Please see our [Contribution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
