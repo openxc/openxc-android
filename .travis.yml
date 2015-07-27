@@ -13,7 +13,8 @@ deploy:
 - provider: releases
   api_key:
     secure: dy25Z+PzdZaw8HPq8/Ob0ao72yTmTmq+0wbowc/TKBQ5MN786pGckguyJx5yTLo8NAlDyY08e+TNOtp4rnftJne1xYlDxIkSfA79yv1AkUvGGFJHglQh7ExAsZGIRBtoNbS2lbcC/tUeaE0l2iEVjaq6vLATaZ73aKK5Ut9Keh8=
-  file: "./enabler/build/outputs/apk/enabler-release.apk"
+  file_glob: true
+  file: "./enabler/build/outputs/apk/enabler-release-*.*.*.apk"
   on:
     repo: openxc/openxc-android
     tags: true
