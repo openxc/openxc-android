@@ -73,6 +73,7 @@ android {
         serviceAccountEmail = rootProject.ext.serviceAccountEmail
         pk12File = rootProject.file('keys/play-store.p12')
         track = 'beta'
+        uploadImages = true
     }
 }
 

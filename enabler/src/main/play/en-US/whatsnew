@@ -1,0 +1,2 @@
+* Minor performance improvement when notifying message listeners.
+* Built against new Android Studio-compatible version of the OpenXC library.
