@@ -17,24 +17,15 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 [usage details](http://openxcplatform.com/android/api-guide.html) and the
 [source code documentation](http://android.openxcplatform.com).
 
-## Building from Eclipse
+## Building from Android Studio
 
-After cloning the `openxc-android` repository to your local disk, open Eclipse
-and go to `File -> New -> Other -> Android -> Android Project from Existing
-Source`. Browse to the `openxc-android` folder and it should detect the 4
-Android projects within the repository. At the minimum, add the `openxc` project
-(the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
-required to run OpenXC applications).
+Open the `library` or `enabler` projects in Android Studio - done!
 
 ## Tests
 
 To run the unit tests suite:
 
     $ ./gradlew test
-
-To generate a code coverage report for the test suite:
-
-    $ TODO figure out how to calculate coverage with the new gradle build
 
 To run the instrumentation tests (must have an attached Android device or
 emulator):
