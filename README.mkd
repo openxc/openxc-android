@@ -19,6 +19,10 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 
 ## Building from Android Studio
 
+Make sure you have Android SDK 22 installed (the default in newer versions of
+Android Studio might be later, e.g. 23 - you need to install SDK 22 to build
+OpenXC).
+
 Open the `library` or `enabler` projects in Android Studio - done!
 
 ## Tests
