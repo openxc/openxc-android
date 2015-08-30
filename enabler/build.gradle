@@ -34,7 +34,6 @@ android {
         debug {
             signingConfig signingConfigs.debug
             minifyEnabled false
-            testCoverageEnabled = true
             buildConfigField "String", "BUGSNAG_TOKEN", "null"
         }
 
