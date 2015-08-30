@@ -1,11 +1,12 @@
 # OpenXC Android Library Changelog
 
+## v6.1.6-dev
+
 ## v6.1.5
 
 * Fix ProGuard rules so constructors for vehicle interface classes aren't
     stripped from production builds (#246).
 * Fix a few possible crashes when activites and services are shutting down.
-
 
 ## v6.1.4
 
