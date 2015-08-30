@@ -540,9 +540,20 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         VehicleMessage message = request(new Command(type));
         String value = null;
         if(message != null) {
-            CommandResponse response = message.asCommandResponse();
-            if(response.getStatus()) {
-                value = response.getMessage();
+            // Because we use the same key and value for commands and command
+            // responses, if for some reason a Command is echoed back to the
+            // device instead of a CommandResponse, you could get a casting
+            // exception when trying to cast this message here. If we got a
+            // Command, just ignore it and assume no response - I wasn't able to
+            // reproduce it but we did have a few Bugsnag reports about it.
+            try {
+                CommandResponse response = message.asCommandResponse();
+                if(response.getStatus()) {
+                    value = response.getMessage();
+                }
+            } catch(ClassCastException e) {
+                Log.w(TAG, "Expected a command response but got " + message +
+                        " -- ignoring, assuming no response");
             }
         }
         return value;
