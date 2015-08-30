@@ -3,7 +3,6 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.openxc.interfaces.network.NetworkVehicleInterface;
 import com.openxc.remote.VehicleServiceException;
@@ -52,7 +51,6 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                 String error = "Network host URI (" + combinedAddress +
                     ") not valid -- not starting network data source";
                 Log.w(TAG, error);
-                Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editor = getPreferences().edit();
                 editor.putBoolean(getString(R.string.uploading_checkbox_key),
                         false);

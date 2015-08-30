@@ -14,7 +14,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.common.base.MoreObjects;
 import com.openxc.interfaces.VehicleInterface;
@@ -837,9 +836,6 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         } catch(SecurityException e) {
             Log.e(TAG, "Unable to bind with remote service, it's not exported "
                     + "-- is the instrumentation tests package installed?", e);
-            Toast.makeText(this, "Vehicle service is not exported and is " +
-                    "inaccessible - are the instrumentation tests still " +
-                    "installed?", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -3,7 +3,6 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.UploaderSink;
@@ -55,7 +54,6 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
                 String error = "Target URL in preferences not valid " +
                         "-- not starting uploading a trace";
                 Log.w(TAG, error);
-                Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editor = getPreferences().edit();
                 editor.putBoolean(getString(R.string.uploading_checkbox_key),
                         false);
