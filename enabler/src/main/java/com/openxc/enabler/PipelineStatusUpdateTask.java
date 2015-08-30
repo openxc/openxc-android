@@ -84,7 +84,8 @@ public class PipelineStatusUpdateTask extends TimerTask {
     }
 
     private boolean traceEnabled() {
-        return PreferenceManager.getDefaultSharedPreferences(mActivity).getString(
+        return mActivity != null &&
+            PreferenceManager.getDefaultSharedPreferences(mActivity).getString(
                 mActivity.getString(R.string.vehicle_interface_key), "").equals(
                 mActivity.getString(R.string.trace_interface_option_value));
     }
