@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.openxcplatform">
     <application>
         <service android:name="com.openxc.VehicleManager"/>
-        <service android:name="com.openxc.remote.VehicleService" android:process=":remote"/>
+        <service android:name="com.openxc.remote.VehicleService" android:process=":remote" android:exported="true"/>
         <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity"/>
     </application>
 </manifest>
