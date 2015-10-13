@@ -42,9 +42,8 @@ The project requires Android Studio and is configured to build with Gradle.
 
 ## Releasing the App and Library
 
-* Bump the major, minor or patch version in `build.gradle`.
 * Update `CHANGELOG.mkd`.
-* UPdate `enabler/src/main/play/en-US/whatsnew`
+* Update `enabler/src/main/play/en-US/whatsnew`
 * Merge into `master`, run `fab release` which will tag and push to GitHub.
 * Travis CI will take care of the rest.
 * Check out `next`, bump the version in `build.grade` to the next release.

@@ -1,6 +1,9 @@
 # OpenXC Android Library Changelog
 
-## v6.1.6-dev
+## v6.1.6
+
+* Fix: Add exported=True option to VehicleService so it is accessible from
+  external apps (thanks @arunganesan).
 
 ## v6.1.5
 
