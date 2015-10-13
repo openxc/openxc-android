@@ -8,7 +8,8 @@ android:
   - android-22
   - extra-android-support
   - extra-android-m2repository
-script: "./gradlew build test"
+script:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew build test || ./gradlew testDebug'
 deploy:
 - provider: releases
   api_key:
