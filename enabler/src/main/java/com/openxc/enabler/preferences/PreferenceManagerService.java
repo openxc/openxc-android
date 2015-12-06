@@ -1,9 +1,5 @@
 package com.openxc.enabler.preferences;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,6 +11,10 @@ import android.util.Log;
 
 import com.openxc.VehicleManager;
 import com.openxc.remote.VehicleServiceException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class PreferenceManagerService extends Service {
     private static String TAG = "PreferenceManagerService";
@@ -43,6 +43,7 @@ public class PreferenceManagerService extends Service {
         mPreferenceManagers = new ArrayList<VehiclePreferenceManager>();
         mBluetoothPreferenceManager = new BluetoothPreferenceManager(this);
         mPreferenceManagers.add(mBluetoothPreferenceManager);
+        mPreferenceManagers.add(new DweetingPreferenceManager(this));
         mPreferenceManagers.add(new FileRecordingPreferenceManager(this));
         mPreferenceManagers.add(new GpsOverwritePreferenceManager(this));
         mPreferenceManagers.add(new NativeGpsPreferenceManager(this));

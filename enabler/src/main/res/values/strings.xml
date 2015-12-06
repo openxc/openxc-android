@@ -62,5 +62,10 @@
 
     <string name="vi_version_label">VI Version</string>
     <string name="vi_device_id_label">VI Device ID</string>
+    <string name="dweeting_checkbox_title">Send Data to Dweet.io</string>
+    <string name="dweeting_checkbox_summary">Enables sending data to Dweet.io cloud messaging service</string>
+    <string name="dweeting_thingname_title">Thing-name</string>
+    <string name="dweeting_thingname_summary">Set Dweet.io thing-name</string>
+    <string name="dweeting_thingname_default" />
 
 </resources>

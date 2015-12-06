@@ -27,5 +27,19 @@
             android:defaultValue="http://"
             android:inputType="textUri" />
 
+    <CheckBoxPreference
+        android:key="@string/dweeting_checkbox_key"
+        android:title="@string/dweeting_checkbox_title"
+        android:summary="@string/dweeting_checkbox_summary"
+        android:defaultValue="false" />
+
+    <EditTextPreference
+        android:id="@+id/thingname_field"
+        android:key="@string/dweeting_thingname_key"
+        android:title="@string/dweeting_thingname_title"
+        android:summary="@string/dweeting_thingname_summary"
+        android:defaultValue="@string/dweeting_thingname_default"
+        android:inputType="textUri" />
+
     </PreferenceCategory>
 </PreferenceScreen>

@@ -1,10 +1,5 @@
 package com.openxc.enabler;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
@@ -39,6 +34,11 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
  *
@@ -62,6 +62,7 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
@@ -101,6 +102,7 @@ public class SettingsActivity extends PreferenceActivity {
             if(action.equals(RECORDING_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.recording_preferences);
                 initializeUploadingPreferences(getPreferenceManager());
+                initializeDweetingPreferences(getPreferenceManager());
             } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.data_source_preferences);
                 initializeDataSourcePreferences(getPreferenceManager());
@@ -223,6 +225,8 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.recording_preferences);
             ((SettingsActivity)getActivity()).initializeUploadingPreferences(
                 getPreferenceManager());
+            ((SettingsActivity)getActivity()).initializeDweetingPreferences(
+                    getPreferenceManager());
         }
     }
 
@@ -284,6 +288,21 @@ public class SettingsActivity extends PreferenceActivity {
         updateSummary(uploadingPathPreference,
                 preferences.getString(
                     getString(R.string.uploading_path_key), null));
+    }
+
+    protected void initializeDweetingPreferences(PreferenceManager manager) {
+        mDweetingPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.dweeting_checkbox_key));
+        Preference dweetingPathPreference = manager.findPreference(
+                getString(R.string.dweeting_thingname_key));
+        dweetingPathPreference.setOnPreferenceChangeListener(
+                mDweetingPathPreferenceListener);
+
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        updateSummary(dweetingPathPreference,
+                preferences.getString(
+                        getString(R.string.dweeting_thingname_key), null));
     }
 
     protected void initializeVehicleInterfacePreference(PreferenceManager manager) {
@@ -483,6 +502,16 @@ public class SettingsActivity extends PreferenceActivity {
             updateSummary(preference, newValue);
             return true;
         }
+    };
+
+    private OnPreferenceChangeListener mDweetingPathPreferenceListener =
+            new OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference,
+                                                  Object newValue) {
+                    String path = (String) newValue;
+                    updateSummary(preference, newValue);
+                    return true;
+                }
     };
 
 
