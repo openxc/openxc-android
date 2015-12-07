@@ -50,7 +50,7 @@ public class DweetingPreferenceManager extends VehiclePreferenceManager {
         Log.i(TAG, "Setting dweet to " + enabled);
         SharedPreferences.Editor editor = getPreferences().edit();
         String thingname = getPreferenceString(R.string.dweeting_thingname_key);
-        if (thingname.equals("")) {
+        if (thingname == null || thingname.equals("")) {
             thingname = DweetLib.getInstance(getContext()).getRandomThingName();
             editor.putString(getString(R.string.dweeting_thingname_key), thingname);
             editor.putString(getString(R.string.dweeting_thingname_default), thingname);
