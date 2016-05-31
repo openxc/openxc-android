@@ -1,10 +1,5 @@
 package com.openxc;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -39,6 +34,11 @@ import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.RemoteListenerSource;
 import com.openxc.sources.VehicleDataSource;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * The VehicleManager is an in-process Android service and the primary entry

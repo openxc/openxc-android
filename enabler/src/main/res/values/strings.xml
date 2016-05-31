@@ -39,6 +39,8 @@
     <string name="network_port_title">Network port</string>
     <string name="trace_source_settings">Trace file playback</string>
     <string name="trace_source_file_title">Select a trace file for playback</string>
+    <string name="phone_source_settings">Built-In Phone Sensors</string>
+    <string name="phone_source_polling_checkbox_title">Include Data from Phone Sensors</string>
     <string name="about_summary">About OpenXC</string>
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>

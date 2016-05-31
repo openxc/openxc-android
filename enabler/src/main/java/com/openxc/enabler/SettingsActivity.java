@@ -69,6 +69,9 @@ public class SettingsActivity extends PreferenceActivity {
     private Preference mAboutVersionPreference;
     private PreferenceManagerService mPreferenceManager;
 
+    private CheckBoxPreference mPhoneSensorPreference;
+
+
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
@@ -270,9 +273,15 @@ public class SettingsActivity extends PreferenceActivity {
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
-        updateSummary(mTraceFilePreference,
-                preferences.getString(
-                    getString(R.string.trace_source_file_key), null));
+//        updateSummary(mTraceFilePreference,
+//                preferences.getString(
+//                    getString(R.string.trace_source_file_key), null));
+    }
+
+    protected void initializePhoneSensorPreferences(PreferenceManager manager) {
+        mPhoneSensorPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.phone_source_polling_checkbox_key));
+
     }
 
     protected void initializeUploadingPreferences(PreferenceManager manager) {
@@ -372,6 +381,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializeBluetoothPreferences(manager);
         initializeNetwork(manager);
         initializeTracePreferences(manager);
+        initializePhoneSensorPreferences(manager);
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {

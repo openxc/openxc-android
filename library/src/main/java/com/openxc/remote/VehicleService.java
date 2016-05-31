@@ -24,7 +24,6 @@ import com.openxc.sources.DataSourceException;
 import com.openxc.sources.NativeLocationSource;
 import com.openxc.sources.VehicleDataSource;
 import com.openxc.sources.WakeLockManager;
-
 import com.openxcplatform.R;
 
 /**
@@ -62,6 +61,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private VehicleDataSource mNativeLocationSource;
+    private VehicleDataSource mPhoneSensorSource;
     private VehicleInterface mVehicleInterface;
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
