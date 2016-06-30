@@ -2,6 +2,8 @@
 
 ## v6.1.7-dev
 
+* Fix: Evented messages will now show on the dashboard in enabler.
+
 ## v6.1.6
 
 * Fix: Add exported=True option to VehicleService so it is accessible from
