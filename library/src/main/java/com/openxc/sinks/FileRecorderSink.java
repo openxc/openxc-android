@@ -61,26 +61,7 @@ public class FileRecorderSink implements VehicleDataSink {
 
         mLastMessageReceived = Calendar.getInstance();
         try {
-            //JsonFormatter returns the message as a string in the JSON format
-            String origMessage = JsonFormatter.serialize(message);
-            //Checking to see if the formatted message string contains the mKey. If not, no need to clean it
-            if(origMessage.contains("mKey"))
-            {
-                /*Sometimes the messages come with an mKey object attached, which is used as a unique
-                identifier in the app. While this is useful for the app, it makes it harder to interpret
-                the data when using a tracefile. This fix aims to clean up the message before it is
-                written out. (See github.com/openxc/openxc-android/issues/253)
-                */
-                //Find the position of mKey and timestamp (timestamp always occurs after the mKey)
-                int pos = origMessage.indexOf("mKey");
-                int pos2 = origMessage.indexOf("timestamp");
-                //Create a new string (still in the JSON format) that excludes all of the mKey
-                String cleanedMessage = origMessage.substring(0, pos-1) + origMessage.substring(pos2-1);
-                mWriter.write(cleanedMessage);
-            } else
-            {
-                mWriter.write(origMessage);
-            }
+            mWriter.write(JsonFormatter.serialize(message));
             mWriter.newLine();
         } catch(IOException e) {
             throw new DataSinkException("Unable to write message to file");

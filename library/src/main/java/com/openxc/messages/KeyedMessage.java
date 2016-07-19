@@ -6,7 +6,8 @@ package com.openxc.messages;
  * message ID and bus ID form a unique key for a CAN message.
  */
 public abstract class KeyedMessage extends VehicleMessage {
-    private MessageKey mKey;
+    //the transient designation prevents this from being serialized when we write to a tracefile
+    private transient MessageKey mKey;
 
     public KeyedMessage() {
         super();
