@@ -161,6 +161,12 @@ public class DiagnosticRequestFragment extends ListFragment {
                     pidView.setText("0x" + Integer.toHexString(
                                 request.getPid()));
                 }
+                else
+                {
+                    TextView pidView = (TextView)
+                            mLastRequestView.findViewById(R.id.pid);
+                    pidView.setText("None");
+                }
             }
         });
     }
