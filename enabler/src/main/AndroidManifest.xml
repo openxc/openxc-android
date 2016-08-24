@@ -10,6 +10,7 @@
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.BLUETOOTH"/>
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
 
   <application android:allowBackup="true" android:icon="@drawable/open_xc_launcher_icon_black" android:label="@string/app_name">
@@ -24,6 +25,13 @@
 
       <activity android:name="com.openxc.enabler.SettingsActivity"/>
       <activity android:name="com.openxc.enabler.CanMessageDetailActivity"/>
+      <activity android:name="com.openxc.enabler.viewTraces"
+          android:label="@string/recorded_traces">
+          <intent-filter>
+              <action android:name="com.openxc.enabler.viewTraces" />
+              <category android:name="android.intent.category.DEFAULT" />
+          </intent-filter>
+      </activity>
 
       <activity android:name="com.openxc.interfaces.usb.UsbDeviceAttachmentActivity">
             <intent-filter>
