@@ -62,5 +62,6 @@
 
     <string name="vi_version_label">VI Version</string>
     <string name="vi_device_id_label">VI Device ID</string>
+    <string name="vi_device_platform_label">VI Platform</string>
 
 </resources>
