@@ -65,6 +65,16 @@ build environment must be configured with these encrypted environment variables:
 If you want to deploy from a local machine, you can either define those in your
 environment or in the `local.properties` file.
 
+## Crash Reporting
+
+The pre-built version of the Enabler available through GitHub and the Google
+Play store uses [Android Crash Reporting](https://bugsnag.com/platforms/android)
+by Bugsnag. We're thankful to Bugsnag for offering their service to open source
+projects for free.
+
+If you wish to link your own build of the app to a different Bugsnag account,
+you can set your own `BUGSNAG_TOKEN` in the build config (see above).
+
 ## Contributing
 
 Please see our [Contribution Documents](https://github.com/openxc/openxc-android/blob/master/CONTRIBUTING.mkd).
