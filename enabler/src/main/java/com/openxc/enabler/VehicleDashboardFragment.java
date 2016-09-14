@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.openxc.VehicleManager;
+import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxcplatform.enabler.R;
@@ -52,6 +53,7 @@ public class VehicleDashboardFragment extends ListFragment {
             if(mVehicleManager != null) {
                 Log.i(TAG, "Unbinding from vehicle service");
                 mVehicleManager.removeListener(SimpleVehicleMessage.class, mListener);
+                mVehicleManager.removeListener(EventedSimpleVehicleMessage.class, mListener);
                 getActivity().unbindService(mConnection);
                 mVehicleManager = null;
             }
@@ -71,7 +73,15 @@ public class VehicleDashboardFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        mAdapter.add(message.asSimpleMessage());
+                        if(message instanceof EventedSimpleVehicleMessage) {
+                            SimpleVehicleMessage convertedMsg = new SimpleVehicleMessage(message.getTimestamp(),
+                                    ((EventedSimpleVehicleMessage) message).getName(),
+                                    ((EventedSimpleVehicleMessage) message).getValue() +
+                                            ": " + ((EventedSimpleVehicleMessage) message).getEvent());
+                            mAdapter.add(convertedMsg.asSimpleMessage());
+                        }
+                        else
+                            mAdapter.add(message.asSimpleMessage());
                     }
                 });
             }
@@ -86,6 +96,7 @@ public class VehicleDashboardFragment extends ListFragment {
                     ).getService();
 
             mVehicleManager.addListener(SimpleVehicleMessage.class, mListener);
+            mVehicleManager.addListener(EventedSimpleVehicleMessage.class, mListener);
         }
 
         public void onServiceDisconnected(ComponentName className) {

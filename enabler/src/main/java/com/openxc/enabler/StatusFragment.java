@@ -33,6 +33,7 @@ public class StatusFragment extends Fragment {
 
     private TextView mMessageCountView;
     private TextView mViVersionView;
+    private TextView mViPlatformView;
     private TextView mViDeviceIdView;
     private View mBluetoothConnIV;
     private View mUsbConnIV;
@@ -56,10 +57,12 @@ public class StatusFragment extends Fragment {
                     try {
                         final String version = mVehicleManager.getVehicleInterfaceVersion();
                         final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                        final String platform = mVehicleManager.getVehicleInterfacePlatform();
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 mViDeviceIdView.setText(deviceId);
                                 mViVersionView.setText(version);
+                                mViPlatformView.setText(platform);
                             }
                         });
                     } catch(NullPointerException e) {
@@ -85,6 +88,7 @@ public class StatusFragment extends Fragment {
                         Log.d(TAG, "VI disconnected");
                         mViVersionView.setText("");
                         mViDeviceIdView.setText("");
+                        mViPlatformView.setText("");
                     }
                 });
             }
@@ -186,6 +190,7 @@ public class StatusFragment extends Fragment {
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) v.findViewById(R.id.message_count);
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
+        mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
