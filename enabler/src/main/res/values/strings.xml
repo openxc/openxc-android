@@ -67,5 +67,6 @@
     <string name="view">View</string>
     <string name="delete">Delete</string>
     <string name="recorded_traces">Recorded Traces</string>
+    <string name="vi_device_platform_label">VI Platform</string>
 
 </resources>
