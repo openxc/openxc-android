@@ -3,6 +3,7 @@
 ## v6.1.7-dev
 
 * Fix: Evented messages will now show on the dashboard in enabler.
+* Fix: Allow 2-byte PIDs in diagnostic request screen.
 
 ## v6.1.6
 
