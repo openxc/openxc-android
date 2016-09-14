@@ -10,6 +10,11 @@ android:
   - android-22
   - extra-android-support
   - extra-android-m2repository
+before_script:
+    - wget http://services.gradle.org/distributions/gradle-2.14.1-bin.zip
+    - unzip gradle-2.14.1-bin.zip
+    - export GRADLE_HOME=$PWD/gradle-2.14.1
+    - export PATH=$GRADLE_HOME/bin:$PATH  
 script:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew build test || ./gradlew testDebug'
 deploy:
