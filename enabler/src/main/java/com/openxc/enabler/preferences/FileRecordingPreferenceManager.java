@@ -1,6 +1,7 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
+import android.preference.Preference;
 import android.util.Log;
 
 import com.openxc.sinks.DataSinkException;
@@ -29,7 +30,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     protected PreferenceListener createPreferenceListener() {
         return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.recording_checkbox_key,
+                    R.string.recording_checkbox_key,
             };
 
             protected int[] getWatchedPreferenceKeyIds() {
@@ -38,10 +39,11 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
 
             public void readStoredPreferences() {
                 setFileRecordingStatus(getPreferences().getBoolean(
-                            getString(R.string.recording_checkbox_key), false));
+                        getString(R.string.recording_checkbox_key), false));
             }
         };
     }
+
 
     private void setFileRecordingStatus(boolean enabled) {
         Log.i(TAG, "Setting recording to " + enabled);
