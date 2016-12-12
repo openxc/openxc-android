@@ -89,6 +89,18 @@
 
     </LinearLayout>
 
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/vi_device_platform_label" />
+
+        <TextView
+            android:id="@+id/vi_device_platform"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/start_bluetooth_search_btn"
         style="@style/MinimalButton"

@@ -24,7 +24,7 @@ public class Command extends KeyedMessage {
     protected static final String ACTION_KEY = "action";
 
     public enum CommandType {
-        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST
+        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM
     }
 
     private static final String[] sRequiredFieldsValues = new String[] {

@@ -578,6 +578,15 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
+     * Query for the platform of the active VI.
+     *
+     * @return the platform string or null if not known.
+     */
+    public String getVehicleInterfacePlatform() {
+        return requestCommandMessage(CommandType.PLATFORM);
+    }
+
+    /**
      * Register a listener to receive a callback when the selected VI is
      * connected.
      *

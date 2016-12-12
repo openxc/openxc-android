@@ -1,5 +1,4 @@
 apply plugin: 'android-library'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = "com.openxcplatform"
@@ -18,6 +17,8 @@ android {
         abortOnError false
     }
 }
+
+apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     compile 'com.google.code.gson:gson:2.3'

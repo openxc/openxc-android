@@ -62,5 +62,11 @@
 
     <string name="vi_version_label">VI Version</string>
     <string name="vi_device_id_label">VI Device ID</string>
+    <string name="view_traces">view_traces</string>
+    <string name="view_recorded_traces">View Recorded Traces</string>
+    <string name="view">View</string>
+    <string name="delete">Delete</string>
+    <string name="recorded_traces">Recorded Traces</string>
+    <string name="vi_device_platform_label">VI Platform</string>
 
 </resources>
