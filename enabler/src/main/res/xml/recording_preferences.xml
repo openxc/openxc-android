@@ -1,0 +1,35 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="@string/recording_preferences">
+    <CheckBoxPreference
+            android:key="@string/recording_checkbox_key"
+            android:title="@string/recording_checkbox_title"
+            android:summary="@string/recording_checkbox_summary"
+            android:defaultValue="false" />
+
+    <PreferenceScreen android:title="@string/view_recorded_traces">
+        <intent android:action="com.openxc.enabler.viewTraces"/>
+    </PreferenceScreen>
+
+    <EditTextPreference
+            android:key="@string/recording_directory_key"
+            android:title="@string/recording_directory_title"
+            android:summary="@string/recording_directory_summary"
+            android:defaultValue="openxc-traces" />
+
+    <CheckBoxPreference
+            android:key="@string/uploading_checkbox_key"
+            android:title="@string/uploading_checkbox_title"
+            android:summary="@string/uploading_checkbox_summary"
+            android:defaultValue="false" />
+
+    <EditTextPreference
+            android:key="@string/uploading_path_key"
+            android:title="@string/uploading_path_title"
+            android:summary="@string/uploading_path_summary"
+            android:defaultValue="http://"
+            android:inputType="textUri" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

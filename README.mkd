@@ -1,6 +1,10 @@
 OpenXC Android Library
 =========================
 
+[![Build Status](https://travis-ci.org/openxc/openxc-android.svg?branch=master)](https://travis-ci.org/openxc/openxc-android)
+
+[![Stories in Ready](https://badge.waffle.io/openxc/openxc-android.png?label=ready&title=Ready)](http://waffle.io/openxc/openxc-android)
+
 This library is a part of the [OpenXC][] project.
 
 This Android library contains the tools required to read vehicle data from the
@@ -13,57 +17,63 @@ instructions](http://openxcplatform.com/getting-started/library-installation.htm
 [usage details](http://openxcplatform.com/android/api-guide.html) and the
 [source code documentation](http://android.openxcplatform.com).
 
-## Building from Eclipse
+## Building from Android Studio
 
-After cloning the `openxc-android` repository to your local disk, open Eclipse
-and go to `File -> New -> Other -> Android -> Android Project from Existing
-Source`. Browse to the `openxc-android` folder and it should detect the 4
-Android projects within the repository. At the minimum, add the `openxc` project
-(the Android library itself) and `OpenXcEnablerActivity` (the Enabler app,
-required to run OpenXC applications).
+Make sure you have Android SDK 22 installed (the default in newer versions of
+Android Studio might be later, e.g. 23 - you need to install SDK 22 to build
+OpenXC).
+
+Open the `library` or `enabler` projects in Android Studio - done!
+
+## Tests
+
+To run the unit tests suite:
+
+    $ ./gradlew test
+
+To run the instrumentation tests (must have an attached Android device or
+emulator):
+
+    $ ./gradlew conectedCheck
 
 ## Building from Command Line
 
-The build requires [Maven](http://maven.apache.org/download.html)
-v3.0.3+ and the [Android SDK](http://developer.android.com/sdk/index.html)
-to be installed in your development environment. In addition you'll need to set
-the `ANDROID_HOME` environment variable to the location of your SDK:
+The project requires Android Studio and is configured to build with Gradle.
 
-    export ANDROID_HOME=/opt/tools/android-sdk
+## Releasing the App and Library
 
-You also need the Android support library, but unfortunately Google doesn't
-deploy the latest versions of this to the the Central Maven repository. Instead,
-you must open the Android SDK manager and install the "Android Support
-Repository" package (under "Extras"). Next, open a terminal and navigate to your
-SDK's top-level directory (e.g. `/home/user/android-sdk`.
+* Update `CHANGELOG.mkd`.
+* Update `enabler/src/main/play/en-US/whatsnew`
+* Merge into `master`, run `fab release` which will tag and push to GitHub.
+* Travis CI will take care of the rest.
+* Check out `next`, bump the version in `build.grade` to the next release.
 
-You must manually copy the Maven artifacts from this folder to your local
-repository:
+The release of the Enabler to the Play store and the library to JCenter and the
+Maven Central Repository is managed automatically with Travis CI. The Travis
+build environment must be configured with these encrypted environment variables:
 
-    $ cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
+* `BINTRAY_USER` - username at Bintray that is an owner of the openxc-android artifact.
+* `BINTRAY_API_KEY` - API key for the user at Bintray.
+* `KEYSTORE_PASS` - password to the release keystore in this repository.
+* `ALIAS_NAME` - alias of the release key in the keystore.
+* `ALIAS_PASS` - password for the release key.
+* `SERVICE_EMAIL` - Google Play service account email, for API access to the
+    Play store.
+* `BUGSNAG_TOKEN` - Bugsnag API key, used to upload the Proguard mapping
+    during the build and crash reporting in the release version of the app.
 
-After satisfying those requirements, the build is pretty simple:
+If you want to deploy from a local machine, you can either define those in your
+environment or in the `local.properties` file.
 
-To compile the OpenXC library as an APKLIB and install it to your local
-Maven repository:
+## Crash Reporting
 
-    $ mvn install -pl openxc -am
+The pre-built version of the Enabler available through GitHub and the Google
+Play store uses [Android Crash Reporting](https://bugsnag.com/platforms/android)
+by Bugsnag. We're thankful to Bugsnag for offering their service to open source
+projects for free.
 
-To compile and build and APK for the Enabler app (that uses the OpenXC
-library):
-
-    $ mvn package -pl enabler
-
-Finally, to deploy the packaged APK to an attached Android device and run it:
-
-    $ mvn android:deploy android:run -pl enabler
-
-* Run `mvn clean install -pl openxc,openxc-it -am` from the root directory to build and run
-  the library and test suite. This requires that an Android device is attached or an
-  emulator is running.
-
-If you want the tests to wait for a debugger to attach, change the `testDebug`
-setting in `openxc-android/pom.xml` to `true`.
+If you wish to link your own build of the app to a different Bugsnag account,
+you can set your own `BUGSNAG_TOKEN` in the build config (see above).
 
 ## Contributing
 

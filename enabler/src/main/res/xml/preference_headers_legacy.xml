@@ -1,0 +1,30 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+            android:title="@string/recording_preferences">
+        <intent
+            android:targetPackage="com.openxcplatform.enabler"
+            android:targetClass="com.openxc.enabler.SettingsActivity"
+            android:action="com.openxc.enabler.preferences.RECORDING" />
+    </Preference>
+    <Preference
+            android:title="@string/data_source_preferences">
+        <intent
+            android:targetPackage="com.openxcplatform.enabler"
+            android:targetClass="com.openxc.enabler.SettingsActivity"
+            android:action="com.openxc.enabler.preferences.DATA_SOURCE" />
+    </Preference>
+    <Preference
+            android:title="@string/output_preferences">
+        <intent
+            android:targetPackage="com.openxcplatform.enabler"
+            android:targetClass="com.openxc.enabler.SettingsActivity"
+            android:action="com.openxc.enabler.preferences.OUTPUT" />
+    </Preference>
+    <Preference
+            android:title="@string/about_preferences">
+        <intent
+            android:targetPackage="com.openxcplatform.enabler"
+            android:targetClass="com.openxc.enabler.SettingsActivity"
+            android:action="com.openxc.enabler.preferences.ABOUT" />
+    </Preference>
+</PreferenceScreen>

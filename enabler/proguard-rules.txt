@@ -1,0 +1,8 @@
+-dontwarn javax.annotation.**
+-dontwarn javax.inject.**
+-dontwarn sun.misc.Unsafe
+
+# Keep all public and protected class methods on all OpenXC classes.
+-keep public class com.openxc.** {
+    public protected *;
+}

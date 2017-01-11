@@ -1,0 +1,57 @@
+<PreferenceScreen
+        android:key="preference_screen"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+            android:key="@string/vehicle_interface_key"
+            android:title="@string/vehicle_interface_title"
+            android:entries="@array/vehicle_interface_types"
+            android:entryValues="@array/vehicle_interface_type_aliases"
+            android:defaultValue="@string/bluetooth_interface_option_value"
+            android:persistent="true"/>
+
+    <PreferenceCategory
+            android:title="@string/gps_settings">
+        <CheckBoxPreference
+                android:key="@string/native_gps_checkbox_key"
+                android:title="@string/native_gps_checkbox_title"
+                android:summary="@string/native_gps_checkbox_summary"
+                android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="@string/bluetooth_settings"
+            android:title="@string/bluetooth_settings">
+        <CheckBoxPreference
+                android:key="@string/bluetooth_polling_key"
+                android:title="@string/bluetooth_polling_title"
+                android:summary="@string/bluetooth_polling_summary"
+                android:defaultValue="true" />
+        <ListPreference
+                android:key="@string/bluetooth_mac_key"
+                android:title="@string/bluetooth_mac_title"
+                android:defaultValue="@string/bluetooth_mac_automatic_option"
+                android:persistent="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="@string/network_settings"
+            android:title="@string/network_settings">
+        <EditTextPreference
+                android:key="@string/network_host_key"
+                android:title="@string/network_host_title"
+                android:inputType="textUri" />
+        <EditTextPreference
+                android:key="@string/network_port_key"
+                android:title="@string/network_port_title"
+                android:inputType="number" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="@string/trace_source_settings"
+            android:title="@string/trace_source_settings">
+        <Preference
+                android:key="@string/trace_source_file_key"
+                android:title="@string/trace_source_file_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

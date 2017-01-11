@@ -1,0 +1,23 @@
+title JSON Data Received in VehicleService from Bluetooth
+
+BytestreamDataSource -> BluetoothVehicleInterface: read()
+BluetoothVehicleInterface -> BytestreamDataSource: bytes
+BytestreamDataSource -> JsonStreamer: receive(bytes)
+note over JsonStreamer: Stores bytes in a private buffer
+loop while there are messages left in buffer
+   BytestreamDataSource -> JsonStreamer: parseNextMessage()
+
+note over JsonStreamer: Reads line from buffer
+JsonStreamer -> JsonFormatter: deserialize(line)
+JsonFormatter -> JsonStreamer: VehicleMessage
+JsonStreamer -> BytestreamDataSource: VehicleMessage
+BytestreamDataSource -> BaseVehicleDataSource: handleMessage(message)
+BaseVehicleDataSource -> DataPipeline: receive(message)
+alt if message has a 'name' field
+note over DataPipeline: store locally for retreival by name
+end
+loop for each sink on the pipeline
+   DataPipeline -> VehicleDataSink: receive(message);
+end
+end
+

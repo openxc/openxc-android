@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/EnablerFragment">
+
+    <TextView
+        android:id="@+id/service_not_running_bar"
+        style="@style/WarningText"
+        android:drawableLeft="@drawable/ic_action_warning"
+        android:text="@string/service_not_running" >
+
+    </TextView>
+
+    <LinearLayout
+            style="@style/ItemRow">
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/active_connections" />
+
+        <LinearLayout
+            android:id="@+id/connection_status"
+            style="@style/ItemData"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/connection_file"
+                style="@style/ItemDataImage"
+                android:contentDescription="@string/connection_file"
+                android:src="@drawable/ic_action_storage" />
+
+            <ImageView
+                android:id="@+id/connection_bluetooth"
+                style="@style/ItemDataImage"
+                android:contentDescription="@string/connection_bluetooth"
+                android:src="@drawable/ic_action_bluetooth_connected" />
+
+            <ImageView
+                android:id="@+id/connection_network"
+                style="@style/ItemDataImage"
+                android:contentDescription="@string/connection_network"
+                android:src="@drawable/ic_action_network_wifi" />
+
+            <ImageView
+                android:id="@+id/connection_usb"
+                style="@style/ItemDataImage"
+                android:contentDescription="@string/connection_usb"
+                android:src="@drawable/ic_action_usb" />
+
+            <TextView
+                android:id="@+id/connection_none"
+                style="@style/ItemDataRedBold"
+                android:text="@string/connection_none" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/message_count_label" />
+
+        <TextView
+            android:id="@+id/message_count"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/vi_version_label" />
+
+        <TextView
+            android:id="@+id/vi_version"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/vi_device_id_label" />
+
+        <TextView
+            android:id="@+id/vi_device_id"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/vi_device_platform_label" />
+
+        <TextView
+            android:id="@+id/vi_device_platform"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/start_bluetooth_search_btn"
+        style="@style/MinimalButton"
+        android:text="@string/bluetooth_search_button" />
+
+</LinearLayout>

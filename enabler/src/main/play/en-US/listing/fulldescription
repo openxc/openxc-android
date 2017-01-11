@@ -1,0 +1,19 @@
+OpenXC™ is an open source, data-focused API for your car. By installing a small hardware module, the vehicle's data becomes accessible to Android or other desktop applications using the OpenXC library.
+
+The Enabler takes care of a lot of boilerplate code, so your app's code can be simpler. It also includes a basic GUI for most functionality of the Android library.
+
+The Enabler also has views that allow you to:
+
+- Display all received simple vehicle messages from the VI.
+
+- Display all received low-level CAN messages from the VI, if that functionality is enabled in the firmware.
+
+- Send an arbitrary CAN message to the vehicle through the VI (requires firmware that supports this feature).
+
+- Send a diagnostic request to the vehicle through the VI.
+
+More information on getting started with OpenXC on Android is available at http://openxcplatform.com
+
+This app sends crash reporting data to Bugsnag for the purposes of assisting the OpenXC maintainers with debugging. If you do not wish to have your crashes reported, please compile the app from the sources.
+
+The source code for the OpenXC Enabler is available at https://github.com/openxc/openxc-android and is provided under the BSD license.

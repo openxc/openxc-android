@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="DefaultFont" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="EnablerFragment">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">8sp</item>
+        <item name="android:paddingLeft">16sp</item>
+        <item name="android:paddingRight">16sp</item>
+    </style>
+
+    <style name="SectionHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8sp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ItemRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_margin">1dp</item>
+    </style>
+
+    <style name="ItemText">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ItemLabel" parent="ItemText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ItemData" parent="ItemText">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">right</item>
+        <item name="android:paddingRight">2dp</item>
+    </style>
+
+    <style name="ItemDataRedBold" parent="ItemData">
+        <item name="android:textColor">#ED1C1C</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ItemDataImage">
+        <item name="android:layout_width">26sp</item>
+        <item name="android:layout_height">26sp</item>
+        <item name="android:padding">0sp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="MinimalButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Warning Styles -->
+    <style name="WarningBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">36sp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="WarningImage">
+        <item name="android:layout_width">36sp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="WarningText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="HexTextField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:digits">0123456789ABCDEF</item>
+        <item name="android:inputType">textCapCharacters</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">right</item>
+        <item name="android:paddingRight">2dp</item>
+    </style>
+
+    <style name="FormInputLabel" parent="ItemText">
+        <item name="android:layout_width">256dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+</resources>

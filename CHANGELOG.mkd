@@ -1,5 +1,166 @@
 # OpenXC Android Library Changelog
 
+## v6.1.7-dev
+
+* Improvement: App will now pull and display the VI platform.
+* Fix: Evented messages will now show on the dashboard in enabler.
+* Fix: mKey is stripped from the message before it is written to the tracefile (#253).
+* Fix: Allow 2-byte PIDs in diagnostic request screen.
+
+## v6.1.6
+
+* Fix: Add exported=True option to VehicleService so it is accessible from
+  external apps (thanks @arunganesan).
+
+## v6.1.5
+
+* Fix ProGuard rules so constructors for vehicle interface classes aren't
+    stripped from production builds (#246).
+* Fix a few possible crashes when activites and services are shutting down.
+
+## v6.1.4
+
+* Fix version for Bintray releases.
+
+## v6.1.3
+
+* Remove invalid default language for Play store listing.
+* Fix Bugsnag token uploading Proguard mappings.
+
+## v6.1.2
+
+* Another attempt at an automated release.
+
+## v6.1.1
+
+* No code changes
+* First attempt at an automatic release through Travis CI to the Play Store and
+    JCenter.
+
+## v6.1.0
+
+* Convert from a Maven build to Gradle, to be compatible with the officially
+    release Android Studio.
+
+## v6.0.6
+
+* Fix: Protect against crashes in the activity using a fragment disappears. (#215,
+  #217)
+* Update Bugsnag library to latest release.
+
+## v6.0.5
+
+* Fix: Explicitly specify signing algorithm when building release APK files to
+  fix installation on Android 4.3 and earlier (#210).
+
+## v6.0.4
+
+* Fix: Use proper initialization of an explicit intent to start and bind to the
+  VehicleService. This fixes data received by third-party OpenXC apps (i.e.
+  everything besides the Enabler, doh!) and also allows the app to run in
+  Android 5.0 (#213).
+* Fix: Timestamps in trace files are now respected, so playback is close-ish to
+  the same cadence as the messages happened (#214).
+* Fix: Watch out for null pointers in a few places, caught with crash reporting.
+* Fix: Properly put service in background/foreground when a trace file restarts
+  playback (#212).
+
+## v6.0.3
+
+* Improvement: Use an explicit intent to start services to avoid a security
+  hole.
+* Fix: Guard against a race condition when querying for an active VI.
+* Fix: Gaurd against missing timestamp when rendering diagnostic messages.
+
+## v6.0.2
+
+* Fix: Fix classpaths in Enabler manifest so it can find the activity class.
+
+## v6.0.1
+
+* Change Android package namespace from `com.openxc` to `com.openxcplatform`
+
+## v6.0.0
+
+* BREAKING: Refactor RawMeasurement class into more useful message types in the
+    openxc.messages package, all based on a VehicleMessage. This requires
+    updates to all code that uses the VehicleManager.
+    * Renamed `addVehicleInterface` -> `setVehicleInterface`, only allow 1 VI at
+        a time.
+    * `getSourceSummaries` and `getSinkSummaries` are removed in favor of
+        `getActiveVehicleInterface`.
+* BREAKING: Classes implemeting `VehicleInterface` must now implement an
+    `isConnected()` method.
+* BREAKING: Increase minimum Android API version from 8 to 9.
+* BREAKING: Refactor VehicleManager's API for retrieving the active vehicle
+    interface.
+* BREAKING: Limit the VehicleManager (and Enabler) to only 1 active VI at at
+    time, making the API and UI much more clear. Because of this change, the USB
+    VI is no longer enabled by default - it must be explicitly selected.
+* BREAKING: `MockedLocationSink` is renamed to `VehicleLocationProvider`, and it
+    no longer implements `VehicleDataSink`. It is simply a VehicleMessage
+    receiver and is instantiate explicitly in the VehicleManager.
+* BREAKING: Message listeners will no longer receive the last known value of the
+    message when they register. The complexity of maintaining this was not worth
+    it since there is a synchronous API you can get to get the current value on
+    startup anyway.
+* Feature: Support sending diagnostic requests to a VI.
+* Feature: Support receiving diagnostic responses from a VI.
+* Feature: Add new KeyMatcher class to support matching multiple types of
+    messages from VI with a single handler.
+* Feature: Redesign Enabler UI for clarity and add new swipeable view panels
+    * Dynamically list all received simple vehicle messages in Enabler
+        instead of hard-coding a subset. Supports anything being sent by the VI with
+        a `name` and `value`.
+    * View a list of all received CAN messages, with timestamp, ID and data.
+    * Send an arbitrary CAN message.
+    * Send a diagnostic request.
+    * View diagnostic responses.
+* Improvement: Add full support for receiving and sending protobuf encoded
+    messages to a VI (although the vi-firmware does not yet have full support
+    for receiving commands encoded as protobufs, see
+    [vi-firmware#313](https://github.com/openxc/vi-firmware/issues/313).
+* Improvement: Use Gson for JSON (de)serialization to greatly decrease code
+    complexity in exchange for a small performance hit.
+* Improvement: Use message injection instead of trace file playback in test
+    suite for quicker, more reliable tests.
+* Improvement: Only attempt to send commands to a VI if it claims to be
+    connected.
+* Improvement: Don't display Android's GPS location in Enabler to avoid battery
+    drain.
+* Improvement: Use more standard icons to show vehicle interface connectivity in
+    Enabler, and include multiple resolutions for high-DPI displays.
+* Improvement: Switch from Crashlytics to Bugsnag for crash reporting as it
+    doesn't require an Eclipse plugin to get going.
+* Improvement: If native GPS overwriting is disabled, fully disable the vehicle
+    location provider instead of just leaving it on.
+* Improvement: If native GPS injection is enabled, only register for GPS updates
+    from the phone if connected to a vehicle interface. If not connected, don't
+    keep GPS alive to avoid battery drain.
+* Improvement: Greatly increase unit test coverage, from 8% to 57%.
+* Improvement: Add a callback for VehicleDataSource instances registered with
+    the VehicleManager to be notified when the pipeline is activated or
+    deactivated.
+* Fix: Warning displayed properly when remote vehicle service is not running.
+
+## v5.3.2
+
+* Be less strict about incoming JSON messages (allow whitespace).
+
+## v5.3.1
+
+* Improve reliability of automatic Bluetooth device detection and decrease the
+  impact on battery life.
+* Listen for Bluetooth VIs that initiate a new connection to avoid polling.
+  Uncheck the "use polling" option in the Enabler if you have a new Ford
+  Reference VI with a big "OpenXC" sticker on it, as this version is capable of
+  initiating the Bluetooth connection on wakeup.
+
+## v5.3
+
+* Automatically discover, initiate pairing and connect to Bluetooth-enabled
+  OpenXC vehicle interfaces.
+
 ## v5.2
 
 * Support Android API level 19.

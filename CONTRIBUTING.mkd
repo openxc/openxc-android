@@ -32,8 +32,6 @@ top of things.
 * Make sure you have added the necessary tests for your changes in the
   `openxc-it` sub-project
 * Run the full test suite to assure nothing else was accidentally broken.
-    * With an Android device attached, run `mvn clean install -pl
-      openxc,openxc-it -am`
 
 ## Submitting Changes
 

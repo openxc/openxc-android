@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/EnablerFragment"
+    android:orientation="vertical" >
+
+    <LinearLayout
+            style="@style/ItemRow">
+
+        <TextView
+                style="@style/FormInputLabel"
+                android:text="@string/bus_label" />
+
+        <Spinner
+                android:id="@+id/bus_spinner"
+                style="@style/ItemData"
+                android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/ItemRow">
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/message_id_label" />
+
+        <EditText
+            android:id="@+id/diag_request_id"
+            android:maxLength="3"
+            style="@style/HexTextField">
+
+            <requestFocus />
+        </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ItemRow">
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/diag_request_mode_label" />
+
+        <EditText
+            android:id="@+id/diag_request_mode"
+            android:maxLength="2"
+            style="@style/HexTextField">
+
+            <requestFocus />
+        </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ItemRow">
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/diag_request_pid_label" />
+
+        <EditText
+            android:id="@+id/diag_request_pid"
+            android:maxLength="4"
+            style="@style/HexTextField">
+
+            <requestFocus />
+        </EditText>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/send_request"
+        style="@style/MinimalButton"
+        android:text="@string/send_button" />
+
+    <LinearLayout
+            style="@style/ItemRow"
+            android:orientation="vertical" >
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/last_diag_request_label" />
+
+        <include android:id="@+id/last_request"
+                layout="@layout/diagnostic_request_list_item"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            style="@style/ItemRow"
+            android:orientation="vertical" >
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/diag_response_label" />
+
+        <!-- The frame layout is here since we will be showing either
+        the empty view or the list view.  -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" >
+            <!-- Here is the list. Since we are using a ListActivity, we
+                 have to call it "@android:id/list" so ListActivity will
+                 find it -->
+            <ListView android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="false"/>
+
+            <!-- Here is the view to show if the list is empty -->
+            <TextView android:id="@android:id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/no_diagnostic_responses_received"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
