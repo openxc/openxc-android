@@ -3,8 +3,11 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.openxc.VehicleManager;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Abstract base class that collects functionality common to watching shared
@@ -14,6 +17,7 @@ import com.openxc.VehicleManager;
  * contained in a subclass, instead of all cluttering up the main activity.
  */
 public abstract class VehiclePreferenceManager {
+    private final static String TAG = "VehiclePreferenceManager";
     private Context mContext;
     private PreferenceListener mPreferenceListener;
     private SharedPreferences mPreferences;
@@ -66,7 +70,7 @@ public abstract class VehiclePreferenceManager {
      */
     protected abstract PreferenceListener createPreferenceListener();
 
-    protected abstract class PreferenceListener implements
+    protected static abstract class PreferenceListener implements
             SharedPreferences.OnSharedPreferenceChangeListener {
 
         /**
@@ -84,13 +88,44 @@ public abstract class VehiclePreferenceManager {
         protected abstract int[] getWatchedPreferenceKeyIds();
 
         /**
+         * Reference to enclosing class.
+         */
+        private final WeakReference<VehiclePreferenceManager> mReference;
+
+        /**
+         * Default constructor.
+         *
+         * @param reference Reference to enclosing class.
+         */
+        protected PreferenceListener(final VehiclePreferenceManager reference) {
+            super();
+            mReference = new WeakReference<>(reference);
+        }
+
+        /**
+         * Returns a reference to the enclosing class.
+         *
+         * @return A reference to the enclosing class or {@code null} if a reference is
+         * garbage collected.
+         */
+        protected VehiclePreferenceManager getEnclosingReference() {
+            return mReference.get();
+        }
+
+        /**
          * If any of the watched preference keys changed, trigger a refresh of
          * the service.
          */
         public void onSharedPreferenceChanged(SharedPreferences preferences,
                 String key) {
+            final VehiclePreferenceManager reference = getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not handle shared preferenced changes, enclosing reference is null");
+                return;
+            }
+
             for(int watchedKeyId : getWatchedPreferenceKeyIds()) {
-                if(key.equals(getString(watchedKeyId))) {
+                if(key.equals(reference.getString(watchedKeyId))) {
                     readStoredPreferences();
                     break;
                 }

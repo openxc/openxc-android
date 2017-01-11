@@ -1,10 +1,8 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
-import android.preference.Preference;
 import android.util.Log;
 
-import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.FileRecorderSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.util.AndroidFileOpener;
@@ -28,22 +26,8 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                    R.string.recording_checkbox_key,
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setFileRecordingStatus(getPreferences().getBoolean(
-                        getString(R.string.recording_checkbox_key), false));
-            }
-        };
+        return new PreferenceListenerImpl(this);
     }
-
 
     private void setFileRecordingStatus(boolean enabled) {
         Log.i(TAG, "Setting recording to " + enabled);
@@ -71,6 +55,44 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
         if(getVehicleManager() != null){
             getVehicleManager().removeSink(mFileRecorder);
             mFileRecorder = null;
+        }
+    }
+
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private static final int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.recording_checkbox_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final FileRecordingPreferenceManager reference
+                    = (FileRecordingPreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setFileRecordingStatus(reference.getPreferences().getBoolean(
+                    reference.getString(R.string.recording_checkbox_key), false));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
         }
     }
 }

@@ -1,10 +1,5 @@
 package com.openxc.enabler.preferences;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +14,11 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.util.SupportSettingsUtils;
 import com.openxcplatform.enabler.R;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth vehicle interface.
@@ -86,26 +86,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.vehicle_interface_key,
-                R.string.bluetooth_polling_key,
-                R.string.bluetooth_mac_key,
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setBluetoothStatus(getPreferences().getString(
-                            getString(R.string.vehicle_interface_key), "").equals(
-                            getString(R.string.bluetooth_interface_option_value)));
-                getVehicleManager().setBluetoothPollingStatus(
-                        getPreferences().getBoolean(
-                            getString(R.string.bluetooth_polling_key), true));
-            }
-        };
+        return new PreferenceListenerImpl(this);
     }
 
     private synchronized void setBluetoothStatus(boolean enabled) {
@@ -172,5 +153,48 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
         SupportSettingsUtils.putStringSet(editor,
                 DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREF_KEY, candidates);
         editor.commit();
+    }
+
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private final static int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.vehicle_interface_key,
+                R.string.bluetooth_polling_key,
+                R.string.bluetooth_mac_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final BluetoothPreferenceManager reference = (BluetoothPreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setBluetoothStatus(reference.getPreferences().getString(
+                    reference.getString(R.string.vehicle_interface_key), "").equals(
+                    reference.getString(R.string.bluetooth_interface_option_value)));
+            reference.getVehicleManager().setBluetoothPollingStatus(
+                    reference.getPreferences().getBoolean(
+                            reference.getString(R.string.bluetooth_polling_key), true));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
+        }
     }
 }
