@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
+import com.openxc.interfaces.bluetooth.BluetoothModemVehicleInterface;
+import com.openxc.interfaces.bluetooth.BluetoothV2XVehicleInterface;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
@@ -35,8 +37,15 @@ public class StatusFragment extends Fragment {
     private TextView mViVersionView;
     private TextView mViPlatformView;
     private TextView mViDeviceIdView;
+    private TextView mModemViVersionView;
+    private TextView mModemViDeviceIdView;
+    private TextView mModemViV2XVersionView;
+    private TextView mModemViV2XDeviceIdView;
     private View mBluetoothConnIV;
+    private View mBluetoothConnModem;
+    private View mBluetoothConnV2X;
     private View mUsbConnIV;
+    private View mUsbConnModem;
     private View mNetworkConnIV;
     private View mFileConnIV;
     private View mNoneConnView;
@@ -46,6 +55,12 @@ public class StatusFragment extends Fragment {
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
+    private String version = null;
+    private String deviceId = null;
+    private String modemVersion = null;
+    private String modemDeviceId =null;
+    private String v2xVersion = null;
+    private String v2xDeviceId = null;
 
     private synchronized void updateViInfo() {
         if(mVehicleManager != null) {
@@ -55,17 +70,42 @@ public class StatusFragment extends Fragment {
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        final String version = mVehicleManager.getVehicleInterfaceVersion();
-                        final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
-                        final String platform = mVehicleManager.getVehicleInterfacePlatform();
+                    	/*Request for Device ID and version  gets sent only once!
+                    	 * Rationale behind is that - Once a device is paired/connected and 
+                    	 * received device ID and version, there would be lesser need to repeatedly send requests.
+                    	 * */
+                    	if(version == null) version = mVehicleManager.getVehicleInterfaceVersion();
+                        if(deviceId == null) deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                        
+                        if(modemVersion==null) 
+                        	modemVersion = mVehicleManager.getModemInterfaceVersion();
+                        
+                        if(modemDeviceId==null) 
+                        	modemDeviceId = mVehicleManager.getModemInterfaceDeviceId();
+                        else if(modemDeviceId != null && modemDeviceId.startsWith(BluetoothModemVehicleInterface.DEVICE_NAME_PREFIX))
+                        	RegisterDevice.setDevice(modemDeviceId);
+                        
+                        if(v2xVersion==null)  
+                        	v2xVersion = mVehicleManager.getV2XInterfaceVersion();
+                        
+                        if(v2xDeviceId == null)   
+                        	v2xDeviceId = mVehicleManager.getV2XInterfaceDeviceId();
+                        else if(v2xDeviceId != null && v2xDeviceId.startsWith(BluetoothV2XVehicleInterface.DEVICE_NAME_PREFIX)) 
+                        	RegisterDevice.setDevice(v2xDeviceId);
+                        
+                        
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
-                                mViDeviceIdView.setText(deviceId);
+                            	mViDeviceIdView.setText(deviceId);
                                 mViVersionView.setText(version);
-                                mViPlatformView.setText(platform);
+                                mModemViVersionView.setText(modemVersion);
+                            	mModemViDeviceIdView.setText(modemDeviceId);
+                            	mModemViV2XVersionView.setText(v2xVersion);
+                            	mModemViV2XDeviceIdView.setText(v2xDeviceId);
                             }
                         });
-                    } catch(NullPointerException e) {
+                    } catch(Exception e) {
+                    	
                         // A bit of a hack, should probably use a lock - but
                         // this can happen if this view is being paused and it's
                         // not really a problem.
@@ -73,8 +113,16 @@ public class StatusFragment extends Fragment {
                 }
             }).start();
         }
+		else
+        {
+        	Log.e(TAG, "updateViInfo called with mVehicleManager == null"); //NEW:
+        }
     }
-
+	
+    public synchronized long getCurrentSystemTime(){
+    	return System.currentTimeMillis();
+    }
+	
     private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
         public void onConnected(final VehicleInterfaceDescriptor descriptor) {
             Log.d(TAG, descriptor + " is now connected");
@@ -82,14 +130,21 @@ public class StatusFragment extends Fragment {
         }
 
         public void onDisconnected() {
-            if(getActivity() != null) {
+		   Log.d(TAG, "Now disconnected");
+           if(getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Log.d(TAG, "VI disconnected");
                         mViVersionView.setText("");
                         mViDeviceIdView.setText("");
                         mViPlatformView.setText("");
-                    }
+                        // Show an indication on the screen that there is no connection to the modem.
+                        mModemViVersionView.setText("-");
+                        mModemViDeviceIdView.setText("-");
+                        mModemViV2XVersionView.setText("-");
+                        mModemViV2XDeviceIdView.setText("-");
+
+						}
                 });
             }
         }
@@ -143,8 +198,11 @@ public class StatusFragment extends Fragment {
                     getActivity(), mMessageCountView);
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, getActivity(),
-                    mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
-                    mNoneConnView);
+                    mFileConnIV, mNetworkConnIV, 
+                    mBluetoothConnIV, mBluetoothConnModem, 
+                    mUsbConnIV, mUsbConnModem,
+                    mNoneConnView, mModemViDeviceIdView,
+                    mBluetoothConnV2X,mModemViV2XDeviceIdView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
@@ -192,8 +250,15 @@ public class StatusFragment extends Fragment {
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);
+        mModemViVersionView = (TextView) v.findViewById(R.id.modem_version);
+        mModemViDeviceIdView = (TextView) v.findViewById(R.id.modem_device_id);
+        mModemViV2XVersionView = (TextView) v.findViewById(R.id.v2x_version);
+        mModemViV2XDeviceIdView = (TextView) v.findViewById(R.id.v2x_device_id);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
+        mBluetoothConnModem = v.findViewById(R.id.connection_bluetooth_modem);
+        mBluetoothConnV2X = v.findViewById(R.id.connection_bluetooth_v2x);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
+        mUsbConnModem = v.findViewById(R.id.connection_usb_modem);
         mFileConnIV = v.findViewById(R.id.connection_file);
         mNetworkConnIV = v.findViewById(R.id.connection_network);
         mNoneConnView = v.findViewById(R.id.connection_none);
