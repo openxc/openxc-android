@@ -34,17 +34,35 @@
                 android:contentDescription="@string/connection_bluetooth"
                 android:src="@drawable/ic_action_bluetooth_connected" />
 
-            <ImageView
-                android:id="@+id/connection_network"
-                style="@style/ItemDataImage"
-                android:contentDescription="@string/connection_network"
-                android:src="@drawable/ic_action_network_wifi" />
+	    <ImageView
+	        android:id="@+id/connection_bluetooth_modem"
+	        style="@style/ItemDataImage"
+	        android:contentDescription="@string/connection_bluetooth_modem"
+	        android:src="@drawable/ic_action_bluetooth_connected_modem" />
 
-            <ImageView
+	    <ImageView
+	        android:id="@+id/connection_bluetooth_v2x"
+	        style="@style/ItemDataImage"
+	        android:contentDescription="@string/connection_bluetooth_v2x"
+	        android:src="@drawable/ic_action_bluetooth_connected_v2x" />
+
+	    <ImageView
+	        android:id="@+id/connection_network"
+	        style="@style/ItemDataImage"
+	        android:contentDescription="@string/connection_network"
+	        android:src="@drawable/ic_action_network_wifi" />
+
+	    <ImageView
                 android:id="@+id/connection_usb"
                 style="@style/ItemDataImage"
                 android:contentDescription="@string/connection_usb"
                 android:src="@drawable/ic_action_usb" />
+    
+	    <ImageView
+	        android:id="@+id/connection_usb_modem"
+	        style="@style/ItemDataImage"
+	        android:contentDescription="@string/connection_usb_modem"
+	        android:src="@drawable/ic_action_usb_modem" />
 
             <TextView
                 android:id="@+id/connection_none"
@@ -97,6 +115,53 @@
 
         <TextView
             android:id="@+id/vi_device_platform"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/modem_version_label" />
+
+        <TextView
+	    android:id="@+id/modem_version"
+	    style="@style/ItemData" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+	<TextView
+	    style="@style/ItemLabel"
+	    android:text="@string/modem_device_id_label" ></TextView>
+
+        <TextView
+	    android:id="@+id/modem_device_id"
+	    style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/v2x_version_label" />
+
+        <TextView
+            android:id="@+id/v2x_version"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/v2x_device_id_label" ></TextView>
+
+        <TextView
+            android:id="@+id/v2x_device_id"
             style="@style/ItemData" />
 
     </LinearLayout>

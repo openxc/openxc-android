@@ -5,7 +5,10 @@
     <string name="message_count_label">Messages Received</string>
     <string name="connection_file">File</string>
     <string name="connection_bluetooth">Bluetooth</string>
+    <string name="connection_bluetooth_modem">Bluetooth (modem)</string>
+    <string name="connection_bluetooth_v2x">Bluetooth (v2x)</string>
     <string name="connection_usb">USB</string>
+    <string name="connection_usb_modem">USB (modem)</string>
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
@@ -68,5 +71,10 @@
     <string name="delete">Delete</string>
     <string name="recorded_traces">Recorded Traces</string>
     <string name="vi_device_platform_label">VI Platform</string>
-
+    <string name="modem_device_id_label">Modem Device ID</string>
+    <string name="modem_version_label">Modem Version</string>
+    <string name="v2x_device_id_label">V2X Device ID</string>
+    <string name="v2x_version_label">V2X Version</string>
+    <string name="no_modem_messages_received">No modem messages received.</string>
+    <string name="no_v2x_messages_received">No v2x messages received.</string>
 </resources>
