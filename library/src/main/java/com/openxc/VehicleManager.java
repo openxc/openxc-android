@@ -29,6 +29,10 @@ import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
+import com.openxc.messages.ModemCommand;
+import com.openxc.messages.ModemCommandResponse;
+import com.openxc.messages.V2XCommand;
+import com.openxc.messages.V2XCommandResponse;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
@@ -559,6 +563,34 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         return value;
     }
 
+	    public String requestModemCommandMessage(ModemCommand.CommandType type) {
+    	Log.i(TAG, "requestModemCommandMessage " + type);
+        VehicleMessage message = request(new ModemCommand(type));
+        String value = null;
+        if(message != null) {
+        	Log.i(TAG, "requestModemCommandMessage " + "response");
+            ModemCommandResponse response = message.asModemCommandResponse();
+            if(response.getStatus()) {
+                value = response.getMessage();
+            }
+        }
+        return value;
+    }
+    
+    public String requestV2XCommandMessage(V2XCommand.CommandType type) {
+    	Log.i(TAG, "requestV2XCommandMessage " + type);
+        VehicleMessage message = request(new V2XCommand(type));
+        String value = null;
+        if(message != null) {
+        	Log.i(TAG, "requestV2XCommandMessage " + "response");
+            V2XCommandResponse response = message.asV2XCommandResponse();
+            if(response.getStatus()) {
+                value = response.getMessage();
+            }
+        }
+        return value;
+    }
+	
     /**
      * Query for the unique device ID of the active VI.
      *
@@ -577,6 +609,95 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         return requestCommandMessage(CommandType.VERSION);
     }
 
+	    /**
+     * Query for the unique device ID of the active Modem.
+     *
+     * @return the device ID string or null if not known.
+     */
+    public String getModemInterfaceDeviceId() {
+        String value = requestModemCommandMessage(ModemCommand.CommandType.DEVICE_ID);
+        if (value == null)
+        {
+        	value = "_";
+        }
+        return value;
+    }
+    /**
+     * Query for the firmware version of the active Modem.
+     *
+     * @return the firmware version string or null if not known.
+     */
+    public String getModemInterfaceVersion() {
+    	String value = requestModemCommandMessage(ModemCommand.CommandType.VERSION);
+        if (value == null)
+        {
+        	value = "_";
+        }
+        return value;
+    }
+
+    
+    /**
+     * Query for the unique device ID of the active V2X.
+     *
+     * @return the device ID string or null if not known.
+     */
+    public String getV2XInterfaceDeviceId() {
+        String value = requestV2XCommandMessage(V2XCommand.CommandType.DEVICE_ID);
+        if (value == null)
+        {
+        	value = "_";
+        }
+        return value;
+    }
+    /**
+     * Query for the firmware version of the active V2X.
+     *
+     * @return the firmware version string or null if not known.
+     */
+    public String getV2XInterfaceVersion() {
+    	String value = requestV2XCommandMessage(V2XCommand.CommandType.VERSION);
+        if (value == null)
+        {
+        	value = "_";
+        }
+        return value;
+    }
+    public String enableV2XInterfaceDiagnostics() {
+    	String value = requestV2XCommandMessage(V2XCommand.CommandType.DIAGNOSTICS_ENABLE);
+        if (value == null)
+        {
+        	value = "<>";
+        }
+        return value;
+    }
+
+    public String disableV2XInterfaceDiagnostics() {
+    	String value = requestV2XCommandMessage(V2XCommand.CommandType.DIAGNOSTICS_DISABLE);
+        if (value == null)
+        {
+        	value = "<>";
+        }
+        return value;
+    }
+    public String enableModemInterfaceDiagnostics() {
+    	String value = requestModemCommandMessage(ModemCommand.CommandType.DIAGNOSTICS_ENABLE);
+        if (value == null)
+        {
+        	value = "<>";
+        }
+        return value;
+    }
+
+    public String disableModemInterfaceDiagnostics() {
+    	String value = requestModemCommandMessage(ModemCommand.CommandType.DIAGNOSTICS_DISABLE);
+        if (value == null)
+        {
+        	value = "<>";
+        }
+        return value;
+    }
+	
     /**
      * Query for the platform of the active VI.
      *

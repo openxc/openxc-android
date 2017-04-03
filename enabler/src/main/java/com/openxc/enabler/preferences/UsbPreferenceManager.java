@@ -40,7 +40,7 @@ public class UsbPreferenceManager extends VehiclePreferenceManager {
             Log.i(TAG, "Enabling the USB vehicle interface");
             try {
                 getVehicleManager().setVehicleInterface(
-                        UsbVehicleInterface.class);
+                        UsbVehicleInterface.class); // TODO: switch to UsbModemVehicleInterface later (when it's determined to be a modem) - start with default as is?
             } catch(VehicleServiceException e) {
                 Log.e(TAG, "Unable to add USB interface");
             }
