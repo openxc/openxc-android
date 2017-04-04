@@ -36,6 +36,7 @@ public class DeviceManager {
     private BluetoothSocket mSocket;
     private AtomicBoolean mSocketConnecting = new AtomicBoolean(false);
     private Context mContext;
+    public String deviceID =null;
 
     /**
      * The DeviceManager requires an Android Context in order to send the intent
@@ -105,6 +106,15 @@ public class DeviceManager {
         connectToSocket(mSocket);
 
         storeLastConnectedDevice(device);
+ 
+		// TODO: switch to BluetoothModemVehicleInterface later (when it's determined to be a modem)?
+        if(device.getName().startsWith(BluetoothModemVehicleInterface.DEVICE_NAME_PREFIX)) { 
+        	// It's a modem.
+        }
+        if(device.getName().startsWith(BluetoothV2XVehicleInterface.DEVICE_NAME_PREFIX)) { 
+        	// It's a V2X.
+        }
+
         return mSocket;
     }
 
@@ -150,6 +160,7 @@ public class DeviceManager {
                 device.getAddress());
         editor.apply();
         Log.d(TAG, "Stored last connected device: " + device.getAddress());
+        deviceID = device.getName();
     }
 
     public BluetoothDevice getLastConnectedDevice() {

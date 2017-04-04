@@ -21,9 +21,17 @@ import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.ModemCommand;
+import com.openxc.messages.ModemCommandResponse;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.LabeledModemMessage;
+import com.openxc.messages.LabeledV2XMessage;
+import com.openxc.messages.SimpleModemMessage;
+import com.openxc.messages.SimpleV2XMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
+import com.openxc.messages.V2XCommand;
+import com.openxc.messages.V2XCommandResponse;
 import com.openxc.messages.VehicleMessage;
 
 /**
@@ -102,12 +110,28 @@ public class JsonFormatter {
             message = sGson.fromJson(root, Command.class);
         } else if(CommandResponse.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, CommandResponse.class);
+        } else if(ModemCommand.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, ModemCommand.class);
+        } else if(ModemCommandResponse.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, ModemCommandResponse.class);
+        } else if(V2XCommand.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, V2XCommand.class);
+        } else if(V2XCommandResponse.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, V2XCommandResponse.class);
         } else if(EventedSimpleVehicleMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, EventedSimpleVehicleMessage.class);
         } else if(SimpleVehicleMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, SimpleVehicleMessage.class);
+        } else if(SimpleModemMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, SimpleModemMessage.class);
+        } else if(SimpleV2XMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, SimpleV2XMessage.class);
         } else if(NamedVehicleMessage.containsRequiredFields(fields)) {
             message = sGson.fromJson(root, NamedVehicleMessage.class);
+        } else if(LabeledModemMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, LabeledModemMessage.class);
+        } else if(LabeledV2XMessage.containsRequiredFields(fields)) {
+            message = sGson.fromJson(root, LabeledV2XMessage.class);
         } else if(fields.contains(VehicleMessage.EXTRAS_KEY)) {
             message = sGson.fromJson(root, VehicleMessage.class);
         } else {

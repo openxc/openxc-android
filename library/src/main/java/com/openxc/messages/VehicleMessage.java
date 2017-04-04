@@ -156,6 +156,14 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
         return (SimpleVehicleMessage) this;
     }
 
+	public SimpleModemMessage asSimpleModemMessage() {
+        return (SimpleModemMessage) this;
+    }
+
+	public SimpleV2XMessage asSimpleV2XMessage() {
+        return (SimpleV2XMessage) this;
+    }
+
     public EventedSimpleVehicleMessage asEventedMessage() {
         return (EventedSimpleVehicleMessage) this;
     }
@@ -167,7 +175,14 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     public CommandResponse asCommandResponse() {
         return (CommandResponse) this;
     }
-
+	
+    public ModemCommandResponse asModemCommandResponse() {
+        return (ModemCommandResponse) this;
+    }
+    public V2XCommandResponse asV2XCommandResponse() {
+        return (V2XCommandResponse) this;
+    }
+	
     public DiagnosticRequest asDiagnosticRequest() {
         return (DiagnosticRequest) this;
     }
