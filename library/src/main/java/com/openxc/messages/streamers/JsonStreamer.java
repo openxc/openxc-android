@@ -43,15 +43,50 @@ public class JsonStreamer extends VehicleMessageStreamer {
     public VehicleMessage parseNextMessage() {
         String line = readToDelimiter();
         if(line != null) {
+        	//Additional implementation put in the app for processing double messages //discards the second message, and holds onto the first one.
+        	/*Rationale behind discarding second message - Would prevent altering existing Vehicle Message return type.
+        	 *Ideal fix - Ensure hardware sends only single message.
+        	 * */
+        	String temp = processDoubleMessages(line);
+        	
+        	//if(temp!=null)
+        	
+        	//else
             try {
-                return JsonFormatter.deserialize(line);
+            	if(temp!=null)
+                {
+            		 Log.i(TAG, "The raw data now is "+temp);
+            		return JsonFormatter.deserialize(temp);
+                }
+            	else{
+            		Log.i(TAG, "The raw data now is "+line);
+            	return JsonFormatter.deserialize(line);
+            	}
             } catch(UnrecognizedMessageTypeException e) {
                 Log.w(TAG, "Unable to deserialize JSON", e);
+               Log.e(TAG, "The raw data "+line);
             }
         }
         return null;
     }
 
+	    private String processDoubleMessages(String line) {
+    	String DELIMITER = "}{";
+    	if(line!=null && line.contains(DELIMITER)){
+    		
+    		Log.i(TAG,"A double message detected!");
+    		
+    		String[] doubleMsgs = line.split("\\}");
+    		doubleMsgs[0] = doubleMsgs[0]+"}";
+    		doubleMsgs[1] = doubleMsgs[1] +"}";
+    		Log.i(TAG,"Message 1 - "+doubleMsgs[0]);
+    		Log.i(TAG,"Message 2 -"+doubleMsgs[1]);
+    		return doubleMsgs[0]; 
+    	}
+		return null;
+		
+	}
+	
     @Override
     public void receive(byte[] bytes, int length) {
         super.receive(bytes, length);
