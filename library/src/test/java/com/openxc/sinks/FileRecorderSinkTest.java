@@ -14,8 +14,10 @@ import java.io.StringWriter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.formatters.JsonFormatter;
 import com.openxc.util.FileOpener;
 
 @RunWith(RobolectricTestRunner.class)
@@ -53,6 +55,14 @@ public class FileRecorderSinkTest {
         message = new JSONObject(outputString.toString());
         assertTrue(message.getString("name").equals(measurementId));
         assertTrue(message.getString("value").equals(value));
+    }
+
+    @Test
+    public void testSerialize() throws DataSinkException {
+        KeyedMessage measurement = new SimpleVehicleMessage(measurementId, value);
+        measurement.asKeyedMessage().getKey();
+        String serializedMessage = JsonFormatter.serialize(measurement);
+        assertTrue(!serializedMessage.contains("mKey"));
     }
 
     @Test

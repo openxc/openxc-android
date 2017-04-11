@@ -1,5 +1,12 @@
 # OpenXC Android Library Changelog
 
+## v6.1.7-dev
+
+* Improvement: App will now pull and display the VI platform.
+* Fix: Evented messages will now show on the dashboard in enabler.
+* Fix: mKey is stripped from the message before it is written to the tracefile (#253).
+* Fix: Allow 2-byte PIDs in diagnostic request screen.
+
 ## v6.1.6
 
 * Fix: Add exported=True option to VehicleService so it is accessible from

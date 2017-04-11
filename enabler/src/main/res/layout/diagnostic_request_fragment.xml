@@ -61,7 +61,7 @@
 
         <EditText
             android:id="@+id/diag_request_pid"
-            android:maxLength="2"
+            android:maxLength="4"
             style="@style/HexTextField">
 
             <requestFocus />
