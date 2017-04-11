@@ -27,13 +27,10 @@ import java.util.Random;
 //
 //  Pre-Release version
 //
-//  + edits to replace System.out.println() with Android Logging output
-//  + adds random thingname generator
-//  edits by Vishal Kumar on 2015-12-05
-//
-//  Created by Tim Buick on 2015-06-10.
-//  Copyright (c) 2015 Bug Labs. All rights reserved.
-//
+//  MIT License
+//  
+//  Based off of https://github.com/buglabs/dweet-apps
+//  with modifications by BugLabs for OpenXC
 
 
 public class DweetLib {
