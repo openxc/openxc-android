@@ -79,7 +79,7 @@ dependencies {
     compile project(":library")
 
     compile 'com.android.support:support-v4:19.1.0'
-    compile 'com.bugsnag:bugsnag-android:3.2.2'
+    compile 'com.bugsnag:bugsnag-android:2.0.2'
 
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'org.hamcrest:hamcrest-library:1.3'

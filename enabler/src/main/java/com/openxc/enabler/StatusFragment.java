@@ -74,25 +74,38 @@ public class StatusFragment extends Fragment {
                     	 * Rationale behind is that - Once a device is paired/connected and 
                     	 * received device ID and version, there would be lesser need to repeatedly send requests.
                     	 * */
-                    	if(version == null) version = mVehicleManager.getVehicleInterfaceVersion();
-                        if(deviceId == null) deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                        final String version = mVehicleManager.getVehicleInterfaceVersion();
+                        final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+                        final String modemVersion = mVehicleManager.getModemInterfaceVersion();
+                        final String modemDeviceId = mVehicleManager.getModemInterfaceVersion();
+                        if (modemDeviceId.startsWith(BluetoothModemVehicleInterface.DEVICE_NAME_PREFIX))
+                            RegisterDevice.setDevice(modemDeviceId);
+
+                        final String v2xVersion = mVehicleManager.getV2XInterfaceVersion();
+                        final String v2xDeviceId = mVehicleManager.getV2XInterfaceDeviceId();
+                        if (v2xDeviceId.startsWith(BluetoothV2XVehicleInterface.DEVICE_NAME_PREFIX))
+                            RegisterDevice.setDevice(v2xDeviceId);
+/*
+                         if(version == null) version = mVehicleManager.getVehicleInterfaceVersion();
+                         if(deviceId == null) deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
                         
-                        if(modemVersion==null) 
+                        if(modemVersion==null)
                         	modemVersion = mVehicleManager.getModemInterfaceVersion();
-                        
-                        if(modemDeviceId==null) 
+
+                        if(modemDeviceId==null)
                         	modemDeviceId = mVehicleManager.getModemInterfaceDeviceId();
                         else if(modemDeviceId != null && modemDeviceId.startsWith(BluetoothModemVehicleInterface.DEVICE_NAME_PREFIX))
                         	RegisterDevice.setDevice(modemDeviceId);
-                        
+
+
                         if(v2xVersion==null)  
                         	v2xVersion = mVehicleManager.getV2XInterfaceVersion();
-                        
+
                         if(v2xDeviceId == null)   
                         	v2xDeviceId = mVehicleManager.getV2XInterfaceDeviceId();
                         else if(v2xDeviceId != null && v2xDeviceId.startsWith(BluetoothV2XVehicleInterface.DEVICE_NAME_PREFIX)) 
                         	RegisterDevice.setDevice(v2xDeviceId);
-                        
+  */
                         
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
@@ -244,6 +257,7 @@ public class StatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.status_fragment, container, false);
+        System.out.print("v is..." + v);
 
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) v.findViewById(R.id.message_count);
@@ -262,6 +276,10 @@ public class StatusFragment extends Fragment {
         mFileConnIV = v.findViewById(R.id.connection_file);
         mNetworkConnIV = v.findViewById(R.id.connection_network);
         mNoneConnView = v.findViewById(R.id.connection_none);
+
+        View blBtn = v.findViewById(R.id.start_bluetooth_search_btn);
+        System.out.print("btn is..." + blBtn);
+
 
         v.findViewById(R.id.start_bluetooth_search_btn).setOnClickListener(
                 new View.OnClickListener() {

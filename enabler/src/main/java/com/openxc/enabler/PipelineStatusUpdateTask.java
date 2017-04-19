@@ -42,13 +42,13 @@ public class PipelineStatusUpdateTask extends TimerTask {
         mFileConnView = fileConnView;
         mNetworkConnView = networkConnView;
         mBluetoothConnView = bluetoothConnView;
-	mBluetoothModemConnView = bluetoothModemConnView;
-	mBluetoothV2XConnView = bluetoothV2XConnView;
+	    mBluetoothModemConnView = bluetoothModemConnView;
+	    mBluetoothV2XConnView = bluetoothV2XConnView;
         mUsbConnView = usbConnView;
         mUsbModemConnView = usbModemConnView;
-	mNoneConnView = noneConnView;
-	mModemViDeviceIdView = modemViDeviceIdView;
-	mModemViV2XDeviceIdView = modemViV2XDeviceIdView;
+	    mNoneConnView = noneConnView;
+	    mModemViDeviceIdView = modemViDeviceIdView;
+	    mModemViV2XDeviceIdView = modemViV2XDeviceIdView;
     }
 
     private void setVisibility(

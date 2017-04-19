@@ -210,9 +210,9 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
 
     public static Measurement getMeasurementFromMessage(
             SimpleVehicleMessage message)
-                throws UnrecognizedMeasurementTypeException, NoValueException {
+            throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
-            BaseMeasurement.getClassForId(message.getName());
+                BaseMeasurement.getClassForId(message.getName());
         return BaseMeasurement.getMeasurementFromMessage(measurementClass,
                 message);
     }
@@ -220,14 +220,14 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
     public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
             SimpleVehicleMessage message)
-                throws UnrecognizedMeasurementTypeException, NoValueException {
-        Constructor<? extends Measurement> constructor;
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Constructor<? extends Measurement> constructor = null;
         if(message == null) {
             throw new NoValueException();
         }
 
         try {
-            Measurement measurement;
+            Measurement measurement = null;
             SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
             Class<?> valueClass = simpleMessage.getValue().getClass();
             if(valueClass == Double.class || valueClass == Integer.class) {
@@ -249,9 +249,9 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 } catch(NoSuchMethodException e) {
                     throw new UnrecognizedMeasurementTypeException(
                             measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ", " + eventClass + ")");
+                                    " doesn't have the expected constructor, " +
+                                    measurementType + "(" +
+                                    valueClass + ", " + eventClass + ")");
                 }
 
                 measurement = constructor.newInstance(
@@ -263,16 +263,15 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 } catch(NoSuchMethodException e) {
                     throw new UnrecognizedMeasurementTypeException(
                             measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ")");
+                                    " doesn't have the expected constructor, " +
+                                    measurementType + "(" +
+                                    valueClass + ")");
                 }
 
                 measurement = constructor.newInstance(
                         simpleMessage.getValue());
             }
 
-			
             if (simpleMessage.getTimestamp() != null) {
                 measurement.setTimestamp(simpleMessage.getTimestamp());
             }

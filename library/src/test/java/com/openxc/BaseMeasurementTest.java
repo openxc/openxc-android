@@ -17,6 +17,7 @@ import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.messages.SimpleModemMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
@@ -114,7 +115,9 @@ public class BaseMeasurementTest {
     @Test(expected=NoValueException.class)
     public void buildFromNull() throws NoValueException,
            UnrecognizedMeasurementTypeException {
-        BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
+      //  BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
+        SimpleModemMessage sm = null;
+        BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, sm);
     }
 
     @Test
