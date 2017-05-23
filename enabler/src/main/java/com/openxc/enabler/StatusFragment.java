@@ -1,8 +1,5 @@
 package com.openxc.enabler;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +21,17 @@ import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
+import com.openxc.messages.Command;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StatusFragment extends Fragment {
     private static String TAG = "StatusFragment";
@@ -227,6 +232,66 @@ public class StatusFragment extends Fragment {
                     }
                 });
 
+        v.findViewById(R.id.update_btn).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getActivity(), "Update clicked", Toast.LENGTH_LONG).show();
+
+                        //mVehicleManager.request(new Command(Command.CommandType.UPDATE_REQUEST));
+
+                        File file = new File("/storage/emulated/0/Download/vi-firmware-FORDBOARD.bin");
+                        double file_size = file.length();
+
+                        mVehicleManager.request(new Command(Command.CommandType.UPDATE_REQUEST, "start", file_size));
+
+                        FileInputStream in = null;
+                        try {
+
+                            in = new FileInputStream("/storage/emulated/0/Download/vi-firmware-FORDBOARD.bin");
+                        } catch (FileNotFoundException e) {
+                            Log.e(TAG, "vi-firmware not found");
+                        }
+                        if (in != null)
+                        {
+                            //TODO: create a data type for the 128 size. Concern is if that'll become a field in json in command.java
+                            byte[] d = new byte[128];
+                            int count = 0;
+                            try {
+                                //while (in.read(d) != -1) {
+                                int local_cnt = 0;
+                                while(local_cnt < 3) {
+                                    in.read(d);
+                                    local_cnt++;
+                                    count++;
+                                    //mVehicleManager.request(new FileMessage("update", d));
+                                    mVehicleManager.request(new Command(Command.CommandType.UPDATE_REQUEST, "file", d, count));
+                                }
+                                Log.i(TAG,"Count: "+count);
+                                //count came to 1279. 1279*128 = 163,712 bytes which is the size of the bin file
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        if (in != null) {
+                            try {
+                                in.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+
+                        mVehicleManager.request(new Command(Command.CommandType.UPDATE_REQUEST, "stop"));
+                        //TODO: do a checksum check over here. Expect a response just for the Stop request
+                        Toast.makeText(getActivity(), "Update done", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+
+
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
@@ -234,5 +299,11 @@ public class StatusFragment extends Fragment {
         });
 
         return v;
+    }
+
+    //why didn't this work???!!
+    public void onUpdateClick(View view) {
+        Toast.makeText(getActivity(), "Update clicked", Toast.LENGTH_LONG).show();
+
     }
 }
