@@ -50,6 +50,8 @@
     <string name="message_payload_label">Payload (hex)</string>
     <string name="diag_request_mode_label">Mode (hex)</string>
     <string name="diag_request_pid_label">PID (hex, optional)</string>
+    <string name="command_label">Command</string>
+    <string name="enabled_label">Enabled</string>
 
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>
