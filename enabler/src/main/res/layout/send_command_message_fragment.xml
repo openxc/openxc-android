@@ -53,6 +53,21 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/bypass_layout"
+        style="@style/ItemRow"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/bypass_label" />
+
+        <Spinner
+            android:id="@+id/bypass_spinner"
+            style="@style/ItemData"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/send_request"
         style="@style/MinimalButton"

@@ -52,6 +52,8 @@
     <string name="diag_request_pid_label">PID (hex, optional)</string>
     <string name="command_label">Command</string>
     <string name="enabled_label">Enabled</string>
+    <string name="bypass_label">Bypass</string>
+
 
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>

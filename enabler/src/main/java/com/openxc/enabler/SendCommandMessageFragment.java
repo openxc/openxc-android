@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.messages.Command;
+import com.openxc.messages.CommandResponse;
+import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
@@ -46,9 +48,11 @@ public class SendCommandMessageFragment extends Fragment {
 
     private LinearLayout mBusLayout;
     private LinearLayout mEnabledLayout;
+    private LinearLayout mBypassLayout;
 
     private Spinner mBusSpinner;
     private Spinner mEnabledSpinner;
+    private Spinner mBypassSpinner;
 
     private Button mSendButton;
 
@@ -155,7 +159,7 @@ public class SendCommandMessageFragment extends Fragment {
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mBusLayout = (LinearLayout) v.findViewById(R.id.bus_layout);
         mEnabledLayout = (LinearLayout) v.findViewById(R.id.enabled_layout);
-
+        mBypassLayout = (LinearLayout) v.findViewById(R.id.bypass_layout);
 
         mBusSpinner = (Spinner) v.findViewById(R.id.bus_spinner);
         ArrayAdapter<CharSequence> busAdapter = ArrayAdapter.createFromResource(
@@ -168,12 +172,21 @@ public class SendCommandMessageFragment extends Fragment {
 
         mEnabledSpinner = (Spinner) v.findViewById(R.id.enabled_spinner);
         ArrayAdapter<CharSequence> enabledAdapter = ArrayAdapter.createFromResource(
-                getActivity(), R.array.enabled_array
+                getActivity(), R.array.boolean_array
                 , android.R.layout.simple_spinner_item);
 
         enabledAdapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item);
         mEnabledSpinner.setAdapter(enabledAdapter);
+
+        mBypassSpinner = (Spinner) v.findViewById(R.id.bypass_spinner);
+        ArrayAdapter<CharSequence> bypassAdapter = ArrayAdapter.createFromResource(
+                getActivity(), R.array.boolean_array
+                , android.R.layout.simple_spinner_item);
+
+        bypassAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+        mBypassSpinner.setAdapter(bypassAdapter);
 
         final Spinner commandSpinner = (Spinner) v.findViewById(R.id.command_spinner);
         //set default selection as Select Command
@@ -235,6 +248,7 @@ public class SendCommandMessageFragment extends Fragment {
                     sendPassthroughRequest();
                     break;
                 case ACCEPTANCE_BYPASS_POS:
+                    sendAcceptanceRequest();
                     break;
                 case PAYLOAD_FORMAT_POS:
                     break;
@@ -268,17 +282,48 @@ public class SendCommandMessageFragment extends Fragment {
     }
 
     private void sendPassthroughRequest() {
-        final String passThroughResponse = mVehicleManager.requestCommandMessage(Command.CommandType.PASSTHROUGH);
-        Log.d(TAG, "HEY :" + passThroughResponse);
+        Command.CommandType passthrough = Command.CommandType.PASSTHROUGH;
+        int bus = 1;
+        boolean enabled = true;
+        String passThroughResponse = getCommandResponse(passthrough, bus, enabled);
+
         commandResponseTextView.setVisibility(View.VISIBLE);
         commandResponseTextView.setText(passThroughResponse);
+    }
+
+    private void sendAcceptanceRequest() {
+        Command.CommandType afBypass = Command.CommandType.AF_BYPASS;
+        int bus = 1;
+        boolean enabled = true;
+        String acceptanceResponse = getCommandResponse(afBypass, bus, enabled);
+
+        commandResponseTextView.setVisibility(View.VISIBLE);
+        commandResponseTextView.setText(acceptanceResponse);
+    }
+
+    private String getCommandResponse(Command.CommandType commandType, int bus, boolean enabled) {
+        String acceptanceResponse = null;
+        VehicleMessage vehicleMessage = mVehicleManager.request(new Command(commandType, bus, enabled));
+
+        if (vehicleMessage != null) {
+            try {
+                CommandResponse response = vehicleMessage.asCommandResponse();
+                if (response.getStatus()) {
+                    acceptanceResponse = response.toString();
+                }
+            } catch (ClassCastException e) {
+                Log.w(TAG, "Expected a command response but got " + vehicleMessage +
+                        " -- ignoring, assuming no response");
+            }
+        }
+        return acceptanceResponse;
     }
 
     private void runSelectedCommand(int pos) {
         commandResponseTextView.setVisibility(View.GONE);
         mBusLayout.setVisibility(View.GONE);
         mEnabledLayout.setVisibility(View.GONE);
-
+        mBypassLayout.setVisibility(View.GONE);
         switch (pos) {
             case SELECT_COMMAND:
                 // do nothing as "Select Command" is default selected
@@ -293,9 +338,12 @@ public class SendCommandMessageFragment extends Fragment {
                 mSendButton.setVisibility(View.VISIBLE);
                 break;
             case PASSTHROUGH_CAN_POS:
+                mSendButton.setVisibility(View.VISIBLE);
                 showPassthroughView();
                 break;
             case ACCEPTANCE_BYPASS_POS:
+                mSendButton.setVisibility(View.VISIBLE);
+                showAcceptanceView();
                 break;
             case PAYLOAD_FORMAT_POS:
                 break;
@@ -313,4 +361,8 @@ public class SendCommandMessageFragment extends Fragment {
         mEnabledLayout.setVisibility(View.VISIBLE);
     }
 
+    private void showAcceptanceView() {
+        mBusLayout.setVisibility(View.VISIBLE);
+        mBypassLayout.setVisibility(View.VISIBLE);
+    }
 }

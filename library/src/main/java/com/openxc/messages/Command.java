@@ -1,34 +1,36 @@
 package com.openxc.messages;
 
+import android.os.Parcel;
+
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.os.Parcel;
-
 import static com.google.common.base.MoreObjects.toStringHelper;
-
-import com.google.gson.annotations.SerializedName;
 
 /**
  * A Command message defined by the OpenXC message format.
- *
+ * <p>
  * Commands are keyed on the command name.
  */
 public class Command extends KeyedMessage {
     protected static final String COMMAND_KEY = "command";
     protected static final String DIAGNOSTIC_REQUEST_KEY = "request";
     protected static final String ACTION_KEY = "action";
+    protected static final String BUS_KEY = "bus";
+    protected static final String ENABLED_KEY = "enabled";
+    protected static final String BYPASS_KEY = "bypass";
 
     public enum CommandType {
-        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM
+        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS
     }
 
-    private static final String[] sRequiredFieldsValues = new String[] {
-            COMMAND_KEY };
+    private static final String[] sRequiredFieldsValues = new String[]{
+            COMMAND_KEY};
     private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
@@ -40,6 +42,27 @@ public class Command extends KeyedMessage {
 
     @SerializedName(DIAGNOSTIC_REQUEST_KEY)
     private DiagnosticRequest mDiagnosticRequest;
+
+    @SerializedName(BUS_KEY)
+    private int mBus;
+
+    @SerializedName(ENABLED_KEY)
+    private boolean mEnabled;
+
+    @SerializedName(BYPASS_KEY)
+    private boolean mBypass;
+
+    public Command(CommandType command, int bus, boolean enabled) {
+        mCommand = command;
+        mBus = bus;
+        mEnabled = enabled;
+    }
+
+    public Command(CommandType command, boolean bypass, int bus) {
+        mCommand = command;
+        mBus = bus;
+        mBypass = bypass;
+    }
 
     public Command(CommandType command, String action) {
         mCommand = command;
@@ -71,9 +94,33 @@ public class Command extends KeyedMessage {
         return mDiagnosticRequest;
     }
 
+    public int getBus() {
+        return mBus;
+    }
+
+    public void setBus(int mBus) {
+        this.mBus = mBus;
+    }
+
+    public boolean isEnabled() {
+        return mEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.mEnabled = enabled;
+    }
+
+    public boolean isBypass() {
+        return mBypass;
+    }
+
+    public void setBypass(boolean bypass) {
+        this.mBypass = bypass;
+    }
+
     @Override
     public MessageKey getKey() {
-        if(super.getKey() == null) {
+        if (super.getKey() == null) {
             HashMap<String, Object> key = new HashMap<>();
             key.put(COMMAND_KEY, getCommand());
             setKey(new MessageKey(key));
@@ -87,7 +134,7 @@ public class Command extends KeyedMessage {
 
     @Override
     public boolean equals(Object obj) {
-        if(!super.equals(obj) || !(obj instanceof Command)) {
+        if (!super.equals(obj) || !(obj instanceof Command)) {
             return false;
         }
 
@@ -95,18 +142,24 @@ public class Command extends KeyedMessage {
         return Objects.equal(getCommand(), other.getCommand()) &&
                 Objects.equal(getDiagnosticRequest(),
                         other.getDiagnosticRequest()) &&
-                Objects.equal(getAction(), other.getAction());
+                Objects.equal(getAction(), other.getAction()) &&
+                Objects.equal(getBus(), other.getBus()) &&
+                Objects.equal(isEnabled(), other.isEnabled()) &&
+                Objects.equal(isBypass(), other.isBypass());
     }
 
     @Override
     public String toString() {
         return toStringHelper(this)
-            .add("timestamp", getTimestamp())
-            .add("command", getCommand())
-            .add("action", getAction())
-            .add("diagnostic_request", getDiagnosticRequest())
-            .add("extras", getExtras())
-            .toString();
+                .add("timestamp", getTimestamp())
+                .add("command", getCommand())
+                .add("bus", getBus())
+                .add("enabled", isEnabled())
+                .add("bypass", isBypass())
+                .add("action", getAction())
+                .add("diagnostic_request", getDiagnosticRequest())
+                .add("extras", getExtras())
+                .toString();
     }
 
     @Override
@@ -115,6 +168,9 @@ public class Command extends KeyedMessage {
         out.writeSerializable(getCommand());
         out.writeString(getAction());
         out.writeParcelable(getDiagnosticRequest(), flags);
+        out.writeInt(getBus());
+        out.writeValue(isEnabled());
+        out.writeValue(isBypass());
     }
 
     @Override
@@ -123,11 +179,16 @@ public class Command extends KeyedMessage {
         mCommand = (CommandType) in.readSerializable();
         mAction = in.readString();
         mDiagnosticRequest = in.readParcelable(DiagnosticRequest.class.getClassLoader());
+        mBus = in.readInt();
+        mBypass = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        mEnabled = (Boolean) in.readValue(Boolean.class.getClassLoader());
+
     }
 
     protected Command(Parcel in) {
         readFromParcel(in);
     }
 
-    protected Command() { }
+    protected Command() {
+    }
 }
