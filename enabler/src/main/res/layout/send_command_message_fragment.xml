@@ -68,6 +68,21 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/format_layout"
+        style="@style/ItemRow"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/format_label" />
+
+        <Spinner
+            android:id="@+id/format_spinner"
+            style="@style/ItemData"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/send_request"
         style="@style/MinimalButton"
@@ -84,7 +99,7 @@
 
         <include
             android:id="@+id/last_request"
-            layout="@layout/diagnostic_request_list_item" />
+            layout="@layout/command_request_list_item" />
     </LinearLayout>
 
     <LinearLayout

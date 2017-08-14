@@ -24,9 +24,10 @@ public class Command extends KeyedMessage {
     protected static final String BUS_KEY = "bus";
     protected static final String ENABLED_KEY = "enabled";
     protected static final String BYPASS_KEY = "bypass";
+    protected static final String FORMAT_KEY = "format";
 
     public enum CommandType {
-        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS
+        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT
     }
 
     private static final String[] sRequiredFieldsValues = new String[]{
@@ -52,6 +53,9 @@ public class Command extends KeyedMessage {
     @SerializedName(BYPASS_KEY)
     private boolean mBypass;
 
+    @SerializedName(FORMAT_KEY)
+    private String mFormat;
+
     public Command(CommandType command, int bus, boolean enabled) {
         mCommand = command;
         mBus = bus;
@@ -62,6 +66,11 @@ public class Command extends KeyedMessage {
         mCommand = command;
         mBus = bus;
         mBypass = bypass;
+    }
+
+    public Command(String format,CommandType command) {
+        mFormat = format;
+        mCommand = command;
     }
 
     public Command(CommandType command, String action) {
@@ -118,6 +127,14 @@ public class Command extends KeyedMessage {
         this.mBypass = bypass;
     }
 
+    public String getFormat() {
+        return mFormat;
+    }
+
+    public void setFormat(String Format) {
+        this.mFormat = Format;
+    }
+
     @Override
     public MessageKey getKey() {
         if (super.getKey() == null) {
@@ -145,7 +162,8 @@ public class Command extends KeyedMessage {
                 Objects.equal(getAction(), other.getAction()) &&
                 Objects.equal(getBus(), other.getBus()) &&
                 Objects.equal(isEnabled(), other.isEnabled()) &&
-                Objects.equal(isBypass(), other.isBypass());
+                Objects.equal(isBypass(), other.isBypass()) &&
+                Objects.equal(getFormat(), other.getFormat());
     }
 
     @Override
@@ -156,6 +174,7 @@ public class Command extends KeyedMessage {
                 .add("bus", getBus())
                 .add("enabled", isEnabled())
                 .add("bypass", isBypass())
+                .add("format", getFormat())
                 .add("action", getAction())
                 .add("diagnostic_request", getDiagnosticRequest())
                 .add("extras", getExtras())
@@ -171,6 +190,7 @@ public class Command extends KeyedMessage {
         out.writeInt(getBus());
         out.writeValue(isEnabled());
         out.writeValue(isBypass());
+        out.writeString(getFormat());
     }
 
     @Override
@@ -182,6 +202,7 @@ public class Command extends KeyedMessage {
         mBus = in.readInt();
         mBypass = (Boolean) in.readValue(Boolean.class.getClassLoader());
         mEnabled = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        mFormat = in.readString();
 
     }
 
