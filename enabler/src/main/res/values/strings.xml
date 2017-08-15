@@ -54,6 +54,7 @@
     <string name="enabled_label">Enabled</string>
     <string name="bypass_label">Bypass</string>
     <string name="format_label">Format</string>
+    <string name="custom_input_label">Custom Command Input</string>
 
 
     <string name="last_diag_request_label">Last Request</string>

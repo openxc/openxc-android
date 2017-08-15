@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,8 +29,9 @@ import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
 
 public class SendCommandMessageFragment extends Fragment {
-    public static final int SELECT_COMMAND = 0;
+    private static String TAG = "SendCommandMsgFragment";
 
+    public static final int SELECT_COMMAND = 0;
     public static final int VERSION_POS = 1;
     public static final int DEVICE_ID_POS = 2;
     public static final int PLATFORM_POS = 3;
@@ -38,7 +40,7 @@ public class SendCommandMessageFragment extends Fragment {
     public static final int PAYLOAD_FORMAT_POS = 6;
     public static final int C5_RTC_CONFIG_POS = 7;
     public static final int C5_SD_CARD_POS = 8;
-    private static String TAG = "SendCommandMsgFragment";
+    public static final int CUSTOM_COMMAND_POS = 9;
 
     private TextView commandResponseTextView;
 
@@ -51,12 +53,14 @@ public class SendCommandMessageFragment extends Fragment {
     private LinearLayout mEnabledLayout;
     private LinearLayout mBypassLayout;
     private LinearLayout mFormatLayout;
+    private LinearLayout mCustomInputLayout;
 
     private Spinner mBusSpinner;
     private Spinner mEnabledSpinner;
     private Spinner mBypassSpinner;
     private Spinner mFormatSpinner;
     private Button mSendButton;
+    private EditText mCustomInput;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -164,6 +168,7 @@ public class SendCommandMessageFragment extends Fragment {
         mBypassLayout = (LinearLayout) v.findViewById(R.id.bypass_layout);
         mFormatLayout = (LinearLayout) v.findViewById(R.id.format_layout);
         mLastRequestView = v.findViewById(R.id.last_request);
+        mCustomInputLayout = (LinearLayout) v.findViewById(R.id.custom_input_layout);
 
         mBusSpinner = (Spinner) v.findViewById(R.id.bus_spinner);
         ArrayAdapter<CharSequence> busAdapter = ArrayAdapter.createFromResource(
@@ -201,6 +206,8 @@ public class SendCommandMessageFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item);
         mFormatSpinner.setAdapter(formatAdapter);
 
+        mCustomInput = (EditText) v.findViewById(R.id.custom_input_id);
+
         final Spinner commandSpinner = (Spinner) v.findViewById(R.id.command_spinner);
         //set default selection as Select Command
         commandSpinner.setSelection(0);
@@ -217,7 +224,7 @@ public class SendCommandMessageFragment extends Fragment {
         commandSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                runSelectedCommand(i);
+                showSelectedCommmandView(i);
             }
 
             @Override
@@ -247,9 +254,11 @@ public class SendCommandMessageFragment extends Fragment {
 
     private void sendRequest(int selectedItem) {
         if (mVehicleManager != null) {
-            Command request = null ;
+            Command request = null;
             VehicleMessage response = null;
             int selectedBus;
+            Boolean enabled, bypass;
+            String format;
             switch (selectedItem) {
                 case VERSION_POS:
                     request = new Command(Command.CommandType.VERSION);
@@ -268,23 +277,26 @@ public class SendCommandMessageFragment extends Fragment {
 
                 case PASSTHROUGH_CAN_POS:
                     selectedBus = Integer.valueOf(mBusSpinner.getSelectedItem().toString());
-                    boolean enabled = Boolean.valueOf(
+                    enabled = Boolean.valueOf(
                             mEnabledSpinner.getSelectedItem().toString());
-                    request = new Command(Command.CommandType.PASSTHROUGH, selectedBus, enabled);
+                    request = new Command(
+                            Command.CommandType.PASSTHROUGH, selectedBus, enabled, null, null, null);
                     response = mVehicleManager.request(request);
                     break;
 
                 case ACCEPTANCE_BYPASS_POS:
                     selectedBus = Integer.valueOf(mBusSpinner.getSelectedItem().toString());
-                    boolean bypass = Boolean.valueOf(
+                    bypass = Boolean.valueOf(
                             mBypassSpinner.getSelectedItem().toString());
-                    request = new Command(Command.CommandType.AF_BYPASS, bypass, selectedBus);
+                    request = new Command(Command.CommandType.AF_BYPASS, selectedBus, null, bypass
+                            , null, null);
                     response = mVehicleManager.request(request);
                     break;
 
                 case PAYLOAD_FORMAT_POS:
-                    String format = mFormatSpinner.getSelectedItem().toString();
-                    request = new Command(format, Command.CommandType.PAYLOAD_FORMAT);
+                    format = mFormatSpinner.getSelectedItem().toString();
+                    request = new Command(Command.CommandType.PAYLOAD_FORMAT, 0, null, null
+                            , format, null);
                     response = mVehicleManager.request(request);
                     break;
 
@@ -294,6 +306,17 @@ public class SendCommandMessageFragment extends Fragment {
                 case C5_SD_CARD_POS:
                     break;
 
+                case CUSTOM_COMMAND_POS:
+                    selectedBus = Integer.valueOf(mBusSpinner.getSelectedItem().toString());
+                    enabled = Boolean.valueOf(
+                            mEnabledSpinner.getSelectedItem().toString());
+                    bypass = Boolean.valueOf(
+                            mBypassSpinner.getSelectedItem().toString());
+                    format = mFormatSpinner.getSelectedItem().toString();
+                    String customCommand = mCustomInput.getText().toString();
+                    request = new Command(Command.CommandType.CUSTOM,selectedBus,enabled,bypass,format,customCommand);
+                    response = mVehicleManager.request(request);
+                    break;
                 default:
                     break;
             }
@@ -333,6 +356,9 @@ public class SendCommandMessageFragment extends Fragment {
                         mLastRequestView.findViewById(R.id.format);
                 formatView.setText("" + requestMessage.getFormat());
 
+                TextView customView = (TextView)
+                        mLastRequestView.findViewById(R.id.custom);
+                customView.setText("" + requestMessage.getCustom());
 
             }
         });
@@ -355,58 +381,49 @@ public class SendCommandMessageFragment extends Fragment {
         return acceptanceResponse;
     }
 
-    private void runSelectedCommand(int pos) {
+    private void showSelectedCommmandView(int pos) {
         commandResponseTextView.setVisibility(View.GONE);
         mBusLayout.setVisibility(View.GONE);
         mEnabledLayout.setVisibility(View.GONE);
         mBypassLayout.setVisibility(View.GONE);
         mFormatLayout.setVisibility(View.GONE);
-        mSendButton.setVisibility(View.GONE);
+        mCustomInputLayout.setVisibility(View.GONE);
+        /*Send button is visible in all views*/
+        mSendButton.setVisibility(View.VISIBLE);
         switch (pos) {
             case SELECT_COMMAND:
-                // do nothing as "Select Command" is default selected
+                mSendButton.setVisibility(View.GONE);
                 break;
             case VERSION_POS:
-                mSendButton.setVisibility(View.VISIBLE);
                 break;
             case DEVICE_ID_POS:
-                mSendButton.setVisibility(View.VISIBLE);
                 break;
             case PLATFORM_POS:
-                mSendButton.setVisibility(View.VISIBLE);
                 break;
             case PASSTHROUGH_CAN_POS:
-                mSendButton.setVisibility(View.VISIBLE);
-                showPassthroughView();
+                mBusLayout.setVisibility(View.VISIBLE);
+                mEnabledLayout.setVisibility(View.VISIBLE);
                 break;
             case ACCEPTANCE_BYPASS_POS:
-                mSendButton.setVisibility(View.VISIBLE);
-                showAcceptanceView();
+                mBusLayout.setVisibility(View.VISIBLE);
+                mBypassLayout.setVisibility(View.VISIBLE);
                 break;
             case PAYLOAD_FORMAT_POS:
-                mSendButton.setVisibility(View.VISIBLE);
-                showPayloadFormatView();
+                mFormatLayout.setVisibility(View.VISIBLE);
                 break;
             case C5_RTC_CONFIG_POS:
                 break;
             case C5_SD_CARD_POS:
                 break;
+            case CUSTOM_COMMAND_POS:
+                mBusLayout.setVisibility(View.VISIBLE);
+                mEnabledLayout.setVisibility(View.VISIBLE);
+                mBypassLayout.setVisibility(View.VISIBLE);
+                mFormatLayout.setVisibility(View.VISIBLE);
+                mCustomInputLayout.setVisibility(View.VISIBLE);
+                break;
             default: // do nothing
                 break;
         }
-    }
-
-    private void showPayloadFormatView() {
-        mFormatLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void showPassthroughView() {
-        mBusLayout.setVisibility(View.VISIBLE);
-        mEnabledLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void showAcceptanceView() {
-        mBusLayout.setVisibility(View.VISIBLE);
-        mBypassLayout.setVisibility(View.VISIBLE);
     }
 }

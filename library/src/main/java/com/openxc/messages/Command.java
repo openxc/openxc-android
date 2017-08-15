@@ -25,9 +25,10 @@ public class Command extends KeyedMessage {
     protected static final String ENABLED_KEY = "enabled";
     protected static final String BYPASS_KEY = "bypass";
     protected static final String FORMAT_KEY = "format";
+    protected static final String CUSTOM_KEY = "custom";
 
     public enum CommandType {
-        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT
+        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT, CUSTOM
     }
 
     private static final String[] sRequiredFieldsValues = new String[]{
@@ -48,15 +49,18 @@ public class Command extends KeyedMessage {
     private int mBus;
 
     @SerializedName(ENABLED_KEY)
-    private boolean mEnabled;
+    private Boolean mEnabled;
 
     @SerializedName(BYPASS_KEY)
-    private boolean mBypass;
+    private Boolean mBypass;
 
     @SerializedName(FORMAT_KEY)
     private String mFormat;
 
-    public Command(CommandType command, int bus, boolean enabled) {
+    @SerializedName(CUSTOM_KEY)
+    private String mCustom;
+
+    /*public Command(CommandType command, int bus, boolean enabled) {
         mCommand = command;
         mBus = bus;
         mEnabled = enabled;
@@ -71,6 +75,16 @@ public class Command extends KeyedMessage {
     public Command(String format,CommandType command) {
         mFormat = format;
         mCommand = command;
+    }*/
+
+    public Command(CommandType mCommand, int mBus, Boolean mEnabled, Boolean mBypass
+            , String mFormat, String mCustom) {
+        this.mCommand = mCommand;
+        this.mBus = mBus;
+        this.mEnabled = mEnabled;
+        this.mBypass = mBypass;
+        this.mFormat = mFormat;
+        this.mCustom = mCustom;
     }
 
     public Command(CommandType command, String action) {
@@ -111,19 +125,19 @@ public class Command extends KeyedMessage {
         this.mBus = mBus;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return mEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.mEnabled = enabled;
     }
 
-    public boolean isBypass() {
+    public Boolean isBypass() {
         return mBypass;
     }
 
-    public void setBypass(boolean bypass) {
+    public void setBypass(Boolean bypass) {
         this.mBypass = bypass;
     }
 
@@ -133,6 +147,14 @@ public class Command extends KeyedMessage {
 
     public void setFormat(String Format) {
         this.mFormat = Format;
+    }
+
+    public String getCustom() {
+        return mCustom;
+    }
+
+    public void setCustom(String mCustom) {
+        this.mCustom = mCustom;
     }
 
     @Override

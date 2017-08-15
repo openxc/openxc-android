@@ -10,5 +10,6 @@
         <item>Payload Format Control</item>
         <item>C5 RTC Configuration</item>
         <item>C5 SD Card Status</item>
+        <item>Custom Command</item>
     </string-array>
 </resources>

@@ -83,6 +83,30 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/custom_input_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            style="@style/ItemRow">
+
+            <TextView
+                style="@style/FormInputLabel"
+                android:text="@string/custom_input_label" />
+
+            <EditText
+                android:id="@+id/custom_input_id"
+                style="@style/CustomTextField">
+                <requestFocus />
+            </EditText>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/send_request"
         style="@style/MinimalButton"
