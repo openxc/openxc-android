@@ -13,7 +13,7 @@
     <LinearLayout style="@style/ItemRow">
 
         <TextView
-            style="@style/FormInputLabel"
+            style="@style/FormInputLabelConstrained"
             android:text="@string/command_label" />
 
         <Spinner
@@ -29,7 +29,7 @@
         android:visibility="gone">
 
         <TextView
-            style="@style/FormInputLabel"
+            style="@style/FormInputLabelConstrained"
             android:text="@string/bus_label" />
 
         <Spinner
@@ -44,7 +44,7 @@
         android:visibility="gone">
 
         <TextView
-            style="@style/FormInputLabel"
+            style="@style/FormInputLabelConstrained"
             android:text="@string/enabled_label" />
 
         <Spinner
@@ -59,7 +59,7 @@
         android:visibility="gone">
 
         <TextView
-            style="@style/FormInputLabel"
+            style="@style/FormInputLabelConstrained"
             android:text="@string/bypass_label" />
 
         <Spinner
@@ -74,7 +74,7 @@
         android:visibility="gone">
 
         <TextView
-            style="@style/FormInputLabel"
+            style="@style/FormInputLabelConstrained"
             android:text="@string/format_label" />
 
         <Spinner
@@ -85,13 +85,15 @@
 
     <LinearLayout
         android:id="@+id/custom_input_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
-            style="@style/ItemRow">
+            style="@style/ItemRow"
+            android:orientation="vertical"
+            >
 
             <TextView
                 style="@style/FormInputLabel"
@@ -99,12 +101,13 @@
 
             <EditText
                 android:id="@+id/custom_input_id"
-                style="@style/CustomTextField">
+                style="@style/CustomTextField"
+                android:minLines="3"
+                android:maxLines="3">
                 <requestFocus />
             </EditText>
 
         </LinearLayout>
-
     </LinearLayout>
 
     <Button

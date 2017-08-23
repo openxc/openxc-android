@@ -26,9 +26,10 @@ public class Command extends KeyedMessage {
     protected static final String BYPASS_KEY = "bypass";
     protected static final String FORMAT_KEY = "format";
     protected static final String CUSTOM_KEY = "custom";
-
+    protected static final String UNIX_TIME_KEY = "unix_time";
     public enum CommandType {
-        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT, CUSTOM
+        VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT
+        , SD_MOUNT_STATUS, RTC_CONFIGURATION
     }
 
     private static final String[] sRequiredFieldsValues = new String[]{
@@ -49,10 +50,10 @@ public class Command extends KeyedMessage {
     private int mBus;
 
     @SerializedName(ENABLED_KEY)
-    private Boolean mEnabled;
+    private boolean mEnabled;
 
     @SerializedName(BYPASS_KEY)
-    private Boolean mBypass;
+    private boolean mBypass;
 
     @SerializedName(FORMAT_KEY)
     private String mFormat;
@@ -60,7 +61,10 @@ public class Command extends KeyedMessage {
     @SerializedName(CUSTOM_KEY)
     private String mCustom;
 
-    /*public Command(CommandType command, int bus, boolean enabled) {
+    @SerializedName(UNIX_TIME_KEY)
+    private long mUnixTime;
+
+    public Command(CommandType command, int bus, boolean enabled) {
         mCommand = command;
         mBus = bus;
         mEnabled = enabled;
@@ -75,9 +79,12 @@ public class Command extends KeyedMessage {
     public Command(String format,CommandType command) {
         mFormat = format;
         mCommand = command;
-    }*/
+    }
+    public Command(String custom) {
+        mCustom = custom;
+    }
 
-    public Command(CommandType mCommand, int mBus, Boolean mEnabled, Boolean mBypass
+    public Command(CommandType mCommand, int mBus, boolean mEnabled, boolean mBypass
             , String mFormat, String mCustom) {
         this.mCommand = mCommand;
         this.mBus = mBus;
@@ -85,6 +92,11 @@ public class Command extends KeyedMessage {
         this.mBypass = mBypass;
         this.mFormat = mFormat;
         this.mCustom = mCustom;
+    }
+
+    public Command(CommandType command, long unixTime) {
+        this.mCommand = command;
+        this.mUnixTime = unixTime;
     }
 
     public Command(CommandType command, String action) {
@@ -125,19 +137,19 @@ public class Command extends KeyedMessage {
         this.mBus = mBus;
     }
 
-    public Boolean isEnabled() {
+    public boolean isEnabled() {
         return mEnabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.mEnabled = enabled;
     }
 
-    public Boolean isBypass() {
+    public boolean isBypass() {
         return mBypass;
     }
 
-    public void setBypass(Boolean bypass) {
+    public void setBypass(boolean bypass) {
         this.mBypass = bypass;
     }
 
@@ -153,8 +165,16 @@ public class Command extends KeyedMessage {
         return mCustom;
     }
 
-    public void setCustom(String mCustom) {
-        this.mCustom = mCustom;
+    public void setCustom(String custom) {
+        this.mCustom = custom;
+    }
+
+    public long getUnixTime() {
+        return mUnixTime;
+    }
+
+    public void setUnixTime(long unixTime) {
+        this.mUnixTime = unixTime;
     }
 
     @Override
@@ -185,7 +205,9 @@ public class Command extends KeyedMessage {
                 Objects.equal(getBus(), other.getBus()) &&
                 Objects.equal(isEnabled(), other.isEnabled()) &&
                 Objects.equal(isBypass(), other.isBypass()) &&
-                Objects.equal(getFormat(), other.getFormat());
+                Objects.equal(getFormat(), other.getFormat()) &&
+                Objects.equal(getCustom(), other.getCustom()) &&
+                Objects.equal(getUnixTime(), other.getUnixTime());
     }
 
     @Override
@@ -197,6 +219,8 @@ public class Command extends KeyedMessage {
                 .add("enabled", isEnabled())
                 .add("bypass", isBypass())
                 .add("format", getFormat())
+                .add("custom", getCustom())
+                .add("unix_time",getUnixTime())
                 .add("action", getAction())
                 .add("diagnostic_request", getDiagnosticRequest())
                 .add("extras", getExtras())
@@ -213,6 +237,8 @@ public class Command extends KeyedMessage {
         out.writeValue(isEnabled());
         out.writeValue(isBypass());
         out.writeString(getFormat());
+        out.writeString(getCustom());
+        out.writeLong(getUnixTime());
     }
 
     @Override
@@ -225,7 +251,8 @@ public class Command extends KeyedMessage {
         mBypass = (Boolean) in.readValue(Boolean.class.getClassLoader());
         mEnabled = (Boolean) in.readValue(Boolean.class.getClassLoader());
         mFormat = in.readString();
-
+        mCustom = in.readString();
+        mUnixTime = in.readLong();
     }
 
     protected Command(Parcel in) {

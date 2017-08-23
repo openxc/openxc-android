@@ -28,6 +28,8 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
 
+import java.util.Date;
+
 public class SendCommandMessageFragment extends Fragment {
     private static String TAG = "SendCommandMsgFragment";
 
@@ -78,10 +80,6 @@ public class SendCommandMessageFragment extends Fragment {
 
             if (getActivity() == null) {
                 Log.w(TAG, "Status fragment detached from activity");
-            }
-
-            if (mVehicleManager.isViConnected()) {
-                //TODO: add tasks that you want to do once the VI is connected
             }
 
             new Thread(new Runnable() {
@@ -224,7 +222,7 @@ public class SendCommandMessageFragment extends Fragment {
         commandSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                showSelectedCommmandView(i);
+                showSelectedCommandView(i);
             }
 
             @Override
@@ -255,24 +253,21 @@ public class SendCommandMessageFragment extends Fragment {
     private void sendRequest(int selectedItem) {
         if (mVehicleManager != null) {
             Command request = null;
-            VehicleMessage response = null;
+            VehicleMessage response ;
             int selectedBus;
             Boolean enabled, bypass;
             String format;
             switch (selectedItem) {
                 case VERSION_POS:
                     request = new Command(Command.CommandType.VERSION);
-                    response = mVehicleManager.request(request);
                     break;
 
                 case DEVICE_ID_POS:
                     request = new Command(Command.CommandType.DEVICE_ID);
-                    response = mVehicleManager.request(request);
                     break;
 
                 case PLATFORM_POS:
                     request = new Command(Command.CommandType.PLATFORM);
-                    response = mVehicleManager.request(request);
                     break;
 
                 case PASSTHROUGH_CAN_POS:
@@ -280,47 +275,38 @@ public class SendCommandMessageFragment extends Fragment {
                     enabled = Boolean.valueOf(
                             mEnabledSpinner.getSelectedItem().toString());
                     request = new Command(
-                            Command.CommandType.PASSTHROUGH, selectedBus, enabled, null, null, null);
-                    response = mVehicleManager.request(request);
+                            Command.CommandType.PASSTHROUGH, selectedBus, enabled);
                     break;
 
                 case ACCEPTANCE_BYPASS_POS:
                     selectedBus = Integer.valueOf(mBusSpinner.getSelectedItem().toString());
                     bypass = Boolean.valueOf(
                             mBypassSpinner.getSelectedItem().toString());
-                    request = new Command(Command.CommandType.AF_BYPASS, selectedBus, null, bypass
-                            , null, null);
-                    response = mVehicleManager.request(request);
+                    request = new Command(Command.CommandType.AF_BYPASS,bypass, selectedBus);
                     break;
 
                 case PAYLOAD_FORMAT_POS:
                     format = mFormatSpinner.getSelectedItem().toString();
-                    request = new Command(Command.CommandType.PAYLOAD_FORMAT, 0, null, null
-                            , format, null);
-                    response = mVehicleManager.request(request);
+                    request = new Command(format, Command.CommandType.PAYLOAD_FORMAT);
                     break;
 
                 case C5_RTC_CONFIG_POS:
+                    request = new Command(Command.CommandType.RTC_CONFIGURATION, new Date().getTime());
                     break;
 
                 case C5_SD_CARD_POS:
+                    request = new Command(Command.CommandType.SD_MOUNT_STATUS);
                     break;
 
                 case CUSTOM_COMMAND_POS:
-                    selectedBus = Integer.valueOf(mBusSpinner.getSelectedItem().toString());
-                    enabled = Boolean.valueOf(
-                            mEnabledSpinner.getSelectedItem().toString());
-                    bypass = Boolean.valueOf(
-                            mBypassSpinner.getSelectedItem().toString());
-                    format = mFormatSpinner.getSelectedItem().toString();
-                    String customCommand = mCustomInput.getText().toString();
-                    request = new Command(Command.CommandType.CUSTOM,selectedBus,enabled,bypass,format,customCommand);
-                    response = mVehicleManager.request(request);
+                    String customCommand =  mCustomInput.getText().toString();
+                    //TODO: Custom Command needs to be implemented
                     break;
                 default:
                     break;
             }
             updateLastRequestView(request);
+            response = mVehicleManager.request(request);
             commandResponseTextView.setVisibility(View.VISIBLE);
             commandResponseTextView.setText(getCommandResponse(response));
 
@@ -330,7 +316,6 @@ public class SendCommandMessageFragment extends Fragment {
     private void updateLastRequestView(final Command requestMessage) {
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-
                 TextView timestampView = (TextView)
                         mLastRequestView.findViewById(R.id.timestamp);
                 timestampView.setText(VehicleMessageAdapter.formatTimestamp(
@@ -359,7 +344,6 @@ public class SendCommandMessageFragment extends Fragment {
                 TextView customView = (TextView)
                         mLastRequestView.findViewById(R.id.custom);
                 customView.setText("" + requestMessage.getCustom());
-
             }
         });
     }
@@ -370,9 +354,7 @@ public class SendCommandMessageFragment extends Fragment {
         if (vehicleMessage != null) {
             try {
                 CommandResponse response = vehicleMessage.asCommandResponse();
-                if (response.getStatus()) {
-                    acceptanceResponse = response.toString();
-                }
+                acceptanceResponse = response.toString();
             } catch (ClassCastException e) {
                 Log.w(TAG, "Expected a command response but got " + vehicleMessage +
                         " -- ignoring, assuming no response");
@@ -381,7 +363,7 @@ public class SendCommandMessageFragment extends Fragment {
         return acceptanceResponse;
     }
 
-    private void showSelectedCommmandView(int pos) {
+    private void showSelectedCommandView(int pos) {
         commandResponseTextView.setVisibility(View.GONE);
         mBusLayout.setVisibility(View.GONE);
         mEnabledLayout.setVisibility(View.GONE);
@@ -416,10 +398,6 @@ public class SendCommandMessageFragment extends Fragment {
             case C5_SD_CARD_POS:
                 break;
             case CUSTOM_COMMAND_POS:
-                mBusLayout.setVisibility(View.VISIBLE);
-                mEnabledLayout.setVisibility(View.VISIBLE);
-                mBypassLayout.setVisibility(View.VISIBLE);
-                mFormatLayout.setVisibility(View.VISIBLE);
                 mCustomInputLayout.setVisibility(View.VISIBLE);
                 break;
             default: // do nothing
