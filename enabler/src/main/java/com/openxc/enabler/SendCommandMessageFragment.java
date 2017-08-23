@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +30,7 @@ import com.openxcplatform.enabler.R;
 
 import java.util.Date;
 
-public class SendCommandMessageFragment extends Fragment {
+public class SendCommandMessageFragment extends ListFragment {
     private static String TAG = "SendCommandMsgFragment";
 
     public static final int SELECT_COMMAND = 0;
@@ -300,13 +300,15 @@ public class SendCommandMessageFragment extends Fragment {
 
                 case CUSTOM_COMMAND_POS:
                     String customCommand =  mCustomInput.getText().toString();
-                    //TODO: Custom Command needs to be implemented
+                    //TODO: Custom Command needs to be implemented. Temp calling Version Code
+                    request = new Command(Command.CommandType.VERSION);
                     break;
                 default:
                     break;
             }
-            updateLastRequestView(request);
             response = mVehicleManager.request(request);
+            updateLastRequestView(request);
+
             commandResponseTextView.setVisibility(View.VISIBLE);
             commandResponseTextView.setText(getCommandResponse(response));
 
