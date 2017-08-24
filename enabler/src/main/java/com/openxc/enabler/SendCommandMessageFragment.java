@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +30,7 @@ import com.openxcplatform.enabler.R;
 
 import java.util.Date;
 
-public class SendCommandMessageFragment extends ListFragment {
+public class SendCommandMessageFragment extends Fragment {
     private static String TAG = "SendCommandMsgFragment";
 
     public static final int SELECT_COMMAND = 0;
@@ -343,9 +343,6 @@ public class SendCommandMessageFragment extends ListFragment {
                         mLastRequestView.findViewById(R.id.format);
                 formatView.setText("" + requestMessage.getFormat());
 
-                TextView customView = (TextView)
-                        mLastRequestView.findViewById(R.id.custom);
-                customView.setText("" + requestMessage.getCustom());
             }
         });
     }
@@ -378,12 +375,6 @@ public class SendCommandMessageFragment extends ListFragment {
             case SELECT_COMMAND:
                 mSendButton.setVisibility(View.GONE);
                 break;
-            case VERSION_POS:
-                break;
-            case DEVICE_ID_POS:
-                break;
-            case PLATFORM_POS:
-                break;
             case PASSTHROUGH_CAN_POS:
                 mBusLayout.setVisibility(View.VISIBLE);
                 mEnabledLayout.setVisibility(View.VISIBLE);
@@ -394,10 +385,6 @@ public class SendCommandMessageFragment extends ListFragment {
                 break;
             case PAYLOAD_FORMAT_POS:
                 mFormatLayout.setVisibility(View.VISIBLE);
-                break;
-            case C5_RTC_CONFIG_POS:
-                break;
-            case C5_SD_CARD_POS:
                 break;
             case CUSTOM_COMMAND_POS:
                 mCustomInputLayout.setVisibility(View.VISIBLE);

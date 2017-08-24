@@ -25,7 +25,6 @@ public class Command extends KeyedMessage {
     protected static final String ENABLED_KEY = "enabled";
     protected static final String BYPASS_KEY = "bypass";
     protected static final String FORMAT_KEY = "format";
-    protected static final String CUSTOM_KEY = "custom";
     protected static final String UNIX_TIME_KEY = "unix_time";
     public enum CommandType {
         VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT
@@ -58,9 +57,6 @@ public class Command extends KeyedMessage {
     @SerializedName(FORMAT_KEY)
     private String mFormat;
 
-    @SerializedName(CUSTOM_KEY)
-    private String mCustom;
-
     @SerializedName(UNIX_TIME_KEY)
     private long mUnixTime;
 
@@ -79,19 +75,6 @@ public class Command extends KeyedMessage {
     public Command(String format,CommandType command) {
         mFormat = format;
         mCommand = command;
-    }
-    public Command(String custom) {
-        mCustom = custom;
-    }
-
-    public Command(CommandType mCommand, int mBus, boolean mEnabled, boolean mBypass
-            , String mFormat, String mCustom) {
-        this.mCommand = mCommand;
-        this.mBus = mBus;
-        this.mEnabled = mEnabled;
-        this.mBypass = mBypass;
-        this.mFormat = mFormat;
-        this.mCustom = mCustom;
     }
 
     public Command(CommandType command, long unixTime) {
@@ -161,14 +144,6 @@ public class Command extends KeyedMessage {
         this.mFormat = Format;
     }
 
-    public String getCustom() {
-        return mCustom;
-    }
-
-    public void setCustom(String custom) {
-        this.mCustom = custom;
-    }
-
     public long getUnixTime() {
         return mUnixTime;
     }
@@ -206,7 +181,6 @@ public class Command extends KeyedMessage {
                 Objects.equal(isEnabled(), other.isEnabled()) &&
                 Objects.equal(isBypass(), other.isBypass()) &&
                 Objects.equal(getFormat(), other.getFormat()) &&
-                Objects.equal(getCustom(), other.getCustom()) &&
                 Objects.equal(getUnixTime(), other.getUnixTime());
     }
 
@@ -219,7 +193,6 @@ public class Command extends KeyedMessage {
                 .add("enabled", isEnabled())
                 .add("bypass", isBypass())
                 .add("format", getFormat())
-                .add("custom", getCustom())
                 .add("unix_time",getUnixTime())
                 .add("action", getAction())
                 .add("diagnostic_request", getDiagnosticRequest())
@@ -237,7 +210,6 @@ public class Command extends KeyedMessage {
         out.writeValue(isEnabled());
         out.writeValue(isBypass());
         out.writeString(getFormat());
-        out.writeString(getCustom());
         out.writeLong(getUnixTime());
     }
 
@@ -251,7 +223,6 @@ public class Command extends KeyedMessage {
         mBypass = (Boolean) in.readValue(Boolean.class.getClassLoader());
         mEnabled = (Boolean) in.readValue(Boolean.class.getClassLoader());
         mFormat = in.readString();
-        mCustom = in.readString();
         mUnixTime = in.readLong();
     }
 
