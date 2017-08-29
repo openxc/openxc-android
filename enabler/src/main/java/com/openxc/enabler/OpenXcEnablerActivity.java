@@ -17,9 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.bugsnag.android.Bugsnag;
+import com.openxcplatform.enabler.BuildConfig;
 import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
-import com.openxcplatform.enabler.BuildConfig;
 import com.openxcplatform.enabler.R;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
@@ -102,7 +102,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
 
     public static class EnablerFragmentAdapter extends FragmentPagerAdapter {
         private static final String[] mTitles = { "Status", "Dashboard",
-                "CAN", "Diagnostic", "Send CAN", "Send Command"};
+            "CAN", "Diagnostic", "Send CAN" };
 
         public EnablerFragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -128,8 +128,6 @@ public class OpenXcEnablerActivity extends FragmentActivity {
                 return new DiagnosticRequestFragment();
             } else if(position == 4) {
                 return new SendCanMessageFragment();
-            } else if (position == 5) {
-                return new SendCommandMessageFragment();
             }
 
             // For position 0 or anything unrecognized, go to Status
