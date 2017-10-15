@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,13 +23,22 @@ import android.widget.TextView;
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.messages.Command;
-import com.openxc.messages.CommandResponse;
+import com.openxc.messages.CustomCommand;
+import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.formatters.JsonFormatter;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import static android.view.View.GONE;
 
 public class SendCommandMessageFragment extends Fragment {
     private static String TAG = "SendCommandMsgFragment";
@@ -45,12 +55,11 @@ public class SendCommandMessageFragment extends Fragment {
     public static final int CUSTOM_COMMAND_POS = 9;
 
     private TextView commandResponseTextView;
-
+    private TextView commandRequestTextView;
     private View mServiceNotRunningWarningView;
 
     private VehicleManager mVehicleManager;
 
-    private View mLastRequestView;
     private LinearLayout mBusLayout;
     private LinearLayout mEnabledLayout;
     private LinearLayout mBypassLayout;
@@ -92,7 +101,7 @@ public class SendCommandMessageFragment extends Fragment {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     public void run() {
-                                        mServiceNotRunningWarningView.setVisibility(View.GONE);
+                                        mServiceNotRunningWarningView.setVisibility(GONE);
                                     }
                                 });
                             }
@@ -160,14 +169,14 @@ public class SendCommandMessageFragment extends Fragment {
         View v = inflater.inflate(R.layout.send_command_message_fragment, container, false);
 
         commandResponseTextView = (TextView) v.findViewById(R.id.command_response);
+        commandRequestTextView = (TextView) v.findViewById(R.id.last_request);
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mBusLayout = (LinearLayout) v.findViewById(R.id.bus_layout);
         mEnabledLayout = (LinearLayout) v.findViewById(R.id.enabled_layout);
         mBypassLayout = (LinearLayout) v.findViewById(R.id.bypass_layout);
         mFormatLayout = (LinearLayout) v.findViewById(R.id.format_layout);
-        mLastRequestView = v.findViewById(R.id.last_request);
         mCustomInputLayout = (LinearLayout) v.findViewById(R.id.custom_input_layout);
-
+        mCustomInput = (EditText) v.findViewById(R.id.customInput);
         mBusSpinner = (Spinner) v.findViewById(R.id.bus_spinner);
         ArrayAdapter<CharSequence> busAdapter = ArrayAdapter.createFromResource(
                 getActivity(), R.array.buses_array
@@ -204,8 +213,6 @@ public class SendCommandMessageFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item);
         mFormatSpinner.setAdapter(formatAdapter);
 
-        mCustomInput = (EditText) v.findViewById(R.id.custom_input_id);
-
         final Spinner commandSpinner = (Spinner) v.findViewById(R.id.command_spinner);
         //set default selection as Select Command
         commandSpinner.setSelection(0);
@@ -241,6 +248,18 @@ public class SendCommandMessageFragment extends Fragment {
             }
         });
 
+        mCustomInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (hasFocus) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                } else {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        });
+
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
@@ -252,8 +271,8 @@ public class SendCommandMessageFragment extends Fragment {
 
     private void sendRequest(int selectedItem) {
         if (mVehicleManager != null) {
-            Command request = null;
-            VehicleMessage response ;
+            KeyedMessage request = null;
+            VehicleMessage response;
             int selectedBus;
             Boolean enabled, bypass;
             String format;
@@ -282,7 +301,7 @@ public class SendCommandMessageFragment extends Fragment {
                     selectedBus = Integer.valueOf(mBusSpinner.getSelectedItem().toString());
                     bypass = Boolean.valueOf(
                             mBypassSpinner.getSelectedItem().toString());
-                    request = new Command(Command.CommandType.AF_BYPASS,bypass, selectedBus);
+                    request = new Command(Command.CommandType.AF_BYPASS, bypass, selectedBus);
                     break;
 
                 case PAYLOAD_FORMAT_POS:
@@ -299,81 +318,67 @@ public class SendCommandMessageFragment extends Fragment {
                     break;
 
                 case CUSTOM_COMMAND_POS:
-                    String customCommand =  mCustomInput.getText().toString();
-                    //TODO: Custom Command needs to be implemented. Temp calling Version Code
-                    request = new Command(Command.CommandType.VERSION);
+                    String inputString = mCustomInput.getText().toString();
+                    HashMap<String, String> inputCommand = getMapFromJson(inputString);
+                    if (inputCommand == null)
+                        mCustomInput.setError(getResources().getString(R.string.input_json_error));
+                    else
+                        request = new CustomCommand(inputCommand);
                     break;
                 default:
                     break;
             }
-            response = mVehicleManager.request(request);
-            updateLastRequestView(request);
+            if (request != null) {
+                response = mVehicleManager.request(request);
+                //Update the request TextView
+                commandRequestTextView.setVisibility(View.VISIBLE);
+                commandRequestTextView.setText(JsonFormatter.serialize(request));
 
-            commandResponseTextView.setVisibility(View.VISIBLE);
-            commandResponseTextView.setText(getCommandResponse(response));
-
+                //Update the response TextView
+                commandResponseTextView.setVisibility(View.VISIBLE);
+                commandResponseTextView.setText(JsonFormatter.serialize(response));
+            }
         }
     }
 
-    private void updateLastRequestView(final Command requestMessage) {
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                TextView timestampView = (TextView)
-                        mLastRequestView.findViewById(R.id.timestamp);
-                timestampView.setText(VehicleMessageAdapter.formatTimestamp(
-                        requestMessage));
-
-                TextView commandView = (TextView)
-                        mLastRequestView.findViewById(R.id.command);
-                commandView.setText("" + requestMessage.getCommand());
-
-                TextView busView = (TextView)
-                        mLastRequestView.findViewById(R.id.bus);
-                busView.setText("" + requestMessage.getBus());
-
-                TextView enabledView = (TextView)
-                        mLastRequestView.findViewById(R.id.enabled);
-                enabledView.setText("" + requestMessage.isEnabled());
-
-                TextView bypassView = (TextView)
-                        mLastRequestView.findViewById(R.id.bypass);
-                bypassView.setText("" + requestMessage.isBypass());
-
-                TextView formatView = (TextView)
-                        mLastRequestView.findViewById(R.id.format);
-                formatView.setText("" + requestMessage.getFormat());
-
-            }
-        });
-    }
-
-    private String getCommandResponse(VehicleMessage vehicleMessage) {
-        String acceptanceResponse = null;
-
-        if (vehicleMessage != null) {
+    /****
+     * This method will return a map of the key value pairs received from JSON.
+     * If JSON is invalid it will return null.
+     * @param customJson
+     * @return HashMap
+     */
+    private HashMap<String, String> getMapFromJson(String customJson) {
+        HashMap<String, String> command = new HashMap<>();
+        if (customJson != null) {
             try {
-                CommandResponse response = vehicleMessage.asCommandResponse();
-                acceptanceResponse = response.toString();
-            } catch (ClassCastException e) {
-                Log.w(TAG, "Expected a command response but got " + vehicleMessage +
-                        " -- ignoring, assuming no response");
+                JSONObject jsonObject = new JSONObject(customJson);
+                Iterator iterator = jsonObject.keys();
+                while (iterator.hasNext()) {
+                    String key = (String) iterator.next();
+                    String value = jsonObject.getString(key);
+                    command.put(key, value);
+                }
+                return command;
+            } catch (JSONException exception) {
+                return null;
             }
-        }
-        return acceptanceResponse;
+        } else
+            return null;
     }
 
     private void showSelectedCommandView(int pos) {
-        commandResponseTextView.setVisibility(View.GONE);
-        mBusLayout.setVisibility(View.GONE);
-        mEnabledLayout.setVisibility(View.GONE);
-        mBypassLayout.setVisibility(View.GONE);
-        mFormatLayout.setVisibility(View.GONE);
-        mCustomInputLayout.setVisibility(View.GONE);
+        commandRequestTextView.setVisibility(GONE);
+        commandResponseTextView.setVisibility(GONE);
+        mBusLayout.setVisibility(GONE);
+        mEnabledLayout.setVisibility(GONE);
+        mBypassLayout.setVisibility(GONE);
+        mFormatLayout.setVisibility(GONE);
+        mCustomInputLayout.setVisibility(GONE);
         /*Send button is visible in all views*/
         mSendButton.setVisibility(View.VISIBLE);
         switch (pos) {
             case SELECT_COMMAND:
-                mSendButton.setVisibility(View.GONE);
+                mSendButton.setVisibility(GONE);
                 break;
             case PASSTHROUGH_CAN_POS:
                 mBusLayout.setVisibility(View.VISIBLE);
