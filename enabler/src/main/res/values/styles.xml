@@ -92,8 +92,21 @@
         <item name="android:paddingRight">2dp</item>
     </style>
 
+    <style name="CustomTextField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:gravity">left</item>
+        <item name="android:paddingRight">2dp</item>
+    </style>
+
     <style name="FormInputLabel" parent="ItemText">
         <item name="android:layout_width">256dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="FormInputLabelConstrained" parent="ItemText">
+        <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
