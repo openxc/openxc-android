@@ -52,6 +52,12 @@
     <string name="message_payload_label">Payload (hex)</string>
     <string name="diag_request_mode_label">Mode (hex)</string>
     <string name="diag_request_pid_label">PID (hex, optional)</string>
+    <string name="command_label">Command</string>
+    <string name="enabled_label">Enabled</string>
+    <string name="bypass_label">Bypass</string>
+    <string name="format_label">Format</string>
+    <string name="custom_input_label">Custom Command Input</string>
+
 
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>
@@ -71,6 +77,7 @@
     <string name="delete">Delete</string>
     <string name="recorded_traces">Recorded Traces</string>
     <string name="vi_device_platform_label">VI Platform</string>
+    <string name="input_json_error">Please enter a valid json</string>
 
     <string name="dweeting_checkbox_title">Send Data to Dweet.io</string>
     <string name="dweeting_checkbox_summary">Enables sending data to Dweet.io cloud messaging service</string>

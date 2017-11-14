@@ -1,11 +1,5 @@
 package com.openxc.sinks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
@@ -15,10 +9,18 @@ import com.openxc.NoValueException;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.messages.CommandResponse;
+import com.openxc.messages.CustomCommandResponse;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A data sink that sends new measurements of specific types to listeners.
@@ -39,10 +41,10 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             mMessageTypeListeners = HashMultimap.create();
 
     private class MessageListenerGroup {
-        
+
         ArrayList<VehicleMessage.Listener> mPersistentListeners = new ArrayList<>();
         ArrayList<VehicleMessage.Listener> mListeners = new ArrayList<>();
-        
+
         void add(VehicleMessage.Listener listener, boolean persist) {
             if (persist) {
                 mPersistentListeners.add(listener);
@@ -50,39 +52,39 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                 mListeners.add(listener);
             }
         }
-        
+
         void removePersistent(VehicleMessage.Listener listener) {
             mPersistentListeners.remove(listener);
         }
-        
+
         void receive(VehicleMessage message) {
             for (VehicleMessage.Listener listener : mPersistentListeners) {
                 listener.receive(message);
             }
             for (VehicleMessage.Listener listener : mListeners) {
                 listener.receive(message);
-            }   
+            }
             mListeners = new ArrayList<>(); //delete all non-persistent
         }
-        
+
         boolean isEmpty() {
             return mPersistentListeners.isEmpty() && mListeners.isEmpty();
-        }   
+        }
     }
-    
+
     public MessageListenerSink() {
         super();
     }
 
     public synchronized void register(KeyMatcher matcher,
             VehicleMessage.Listener listener, boolean persist) {
-       
+
         MessageListenerGroup group = mMessageListeners.get(matcher);
         if (group == null) {
             group = new MessageListenerGroup();
             mMessageListeners.put(matcher, group);
         }
-        
+
         group.add(listener, persist);
     }
 
@@ -127,7 +129,7 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     public synchronized void unregister(KeyMatcher matcher,
             VehicleMessage.Listener listener) {
-       
+
         MessageListenerGroup group = mMessageListeners.get(matcher);
         if (group != null) {
             group.removePersistent(listener);
@@ -144,16 +146,16 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             .add("numMeasurementTypeListeners", mMeasurementTypeListeners.size())
             .toString();
     }
-    
+
     private int getNumPersistentListeners() {
         int sum = 0;
         for (KeyMatcher matcher : mMessageListeners.keySet()) {
             sum += mMessageListeners.get(matcher).mPersistentListeners.size();
         }
-        
+
         return sum;
     }
-    
+
     private void pruneListeners(KeyMatcher matcher) {
         MessageListenerGroup group = mMessageListeners.get(matcher);
         if (group != null && group.isEmpty()) {
@@ -171,13 +173,22 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
                     MessageListenerGroup group = mMessageListeners.get(matcher);
                     group.receive(message);
                     matchedKeys.add(matcher);
+                } else if( message instanceof CustomCommandResponse || message instanceof CommandResponse){
+                    /*
+                     * This is bit of a hack to read response of custom messages for which keys won't match
+                     * as they are not pre-defined.
+                     */
+                    Map.Entry<KeyMatcher, MessageListenerGroup> entry = mMessageListeners.entrySet().iterator().next();
+                    MessageListenerGroup group = mMessageListeners.get(entry.getKey());
+                    group.receive(message);
+                    matchedKeys.add(entry.getKey());
                 }
             }
 
             for (KeyMatcher matcher : matchedKeys) {
                 pruneListeners(matcher);
             }
-            
+
             if (message instanceof SimpleVehicleMessage) {
                 propagateMeasurementFromMessage(message.asSimpleMessage());
             }
