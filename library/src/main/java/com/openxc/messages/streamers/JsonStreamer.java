@@ -40,6 +40,11 @@ public class JsonStreamer extends VehicleMessageStreamer {
     }
 
     @Override
+    public String getFailedMessageCause() {
+        return "None";
+    }
+
+    @Override
     public VehicleMessage parseNextMessage() {
         String line = readToDelimiter();
         if(line != null) {

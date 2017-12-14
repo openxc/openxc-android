@@ -740,6 +740,11 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
         }
     }
 
+
+    public boolean checkSources() {
+        return mRemoteOriginPipeline.sourcesOK();
+    }
+
     /**
      * Return the connection status of the selected VI.
      *

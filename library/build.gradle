@@ -16,6 +16,12 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    buildTypes {
+        customDebugType {
+            debuggable = true
+        }
+    }
 }
 
 apply plugin: 'com.github.dcendents.android-maven'

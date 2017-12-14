@@ -79,7 +79,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 PreferenceManager.getDefaultSharedPreferences(context);
         mUsePolling = preferences.getBoolean(
                 context.getString(R.string.bluetooth_polling_key), true);
-        Log.d(TAG, "Bluetooth device polling is " + (mUsePolling ? "enabled" : "disabled"));
+        Log.i(TAG, "Bluetooth device polling is " + (mUsePolling ? "enabled" : "disabled"));
 
         setAddress(address);
         start();
@@ -186,7 +186,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
         @Override
         public void run() {
-            Log.d(TAG, "Socket accepter starting up");
+            Log.i(TAG, "Socket accepter starting up");
             BluetoothSocket socket = null;
             while(isRunning() && shouldAttemptConnection()) {
                 while(isConnected()) {
@@ -209,7 +209,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     break;
                 }
 
-                Log.d(TAG, "Initializing listening socket");
+                Log.i(TAG, "Initializing listening socket");
                 mmServerSocket = mDeviceManager.listen();
 
                 if(mmServerSocket == null) {
@@ -229,12 +229,12 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     Log.i(TAG, "New inbound socket connection accepted");
                     manageConnectedSocket(socket);
                     try {
-                        Log.d(TAG, "Closing listening server socket");
+                        Log.i(TAG, "Closing listening server socket");
                         mmServerSocket.close();
                     } catch (IOException e) { }
                 }
             }
-            Log.d(TAG, "SocketAccepter is stopping");
+            Log.i(TAG, "SocketAccepter is stopping");
             closeSocket();
             stop();
         }

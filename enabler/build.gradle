@@ -3,9 +3,7 @@ apply plugin: 'bugsnag'
 apply plugin: 'com.github.triplet.play'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
-
+    buildToolsVersion '22.0.1'
     defaultConfig {
         applicationId "com.openxcplatform.enabler"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -13,8 +11,7 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
     }
-
-   signingConfigs {
+    signingConfigs {
         debug {
             storeFile rootProject.file('keys/debug.keystore')
             storePassword 'android'
@@ -29,18 +26,23 @@ android {
             keyPassword rootProject.ext.keyPassword
         }
     }
-
     buildTypes {
+        customDebugType {
+            debuggable = true
+        }
+
         debug {
             signingConfig signingConfigs.debug
+            debuggable = true
             minifyEnabled false
             buildConfigField "String", "BUGSNAG_TOKEN", "null"
         }
 
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
+            debuggable = true
+            minifyEnabled false
+            shrinkResources false
             proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFile 'proguard-rules.txt'
             buildConfigField "String", "BUGSNAG_TOKEN", "\"" + rootProject.ext.bugsnagToken + "\""
@@ -54,33 +56,28 @@ android {
             }
         }
     }
-
     lintOptions {
         abortOnError false
     }
-
     packagingOptions {
-      exclude 'LICENSE.txt'
+        exclude 'LICENSE.txt'
     }
-
     bugsnag {
         apiKey rootProject.ext.bugsnagToken
     }
-
     play {
         serviceAccountEmail = rootProject.ext.serviceAccountEmail
         pk12File = rootProject.file('keys/play-store.p12')
         track = 'beta'
         uploadImages = true
     }
+    compileSdkVersion 22
 }
 
 dependencies {
-    compile project(":library")
-
+    compile project(':library')
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.bugsnag:bugsnag-android:3.2.2'
-
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
     androidTestCompile 'org.mockito:mockito-core:1.10.19'

@@ -35,6 +35,11 @@ public class TestSource extends BaseVehicleDataSource {
     }
 
     @Override
+    public boolean isOK() {
+        return true;
+    }
+
+    @Override
     public void stop() {
         callback = null;
     }

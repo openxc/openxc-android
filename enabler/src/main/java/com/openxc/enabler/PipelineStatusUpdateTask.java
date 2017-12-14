@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
@@ -22,11 +23,13 @@ public class PipelineStatusUpdateTask extends TimerTask {
     private View mUsbConnView;
     private View mFileConnView;
     private View mNoneConnView;
+    private TextView mBytestreamStatusView;
+    private boolean status = false;
 
     public PipelineStatusUpdateTask(VehicleManager vehicleService,
             Activity activity, View fileConnView,
             View networkConnView, View bluetoothConnView, View usbConnView,
-            View noneConnView) {
+            View noneConnView, TextView text) {
         mVehicleManager = vehicleService;
         mActivity = activity;
         mFileConnView = fileConnView;
@@ -34,6 +37,7 @@ public class PipelineStatusUpdateTask extends TimerTask {
         mBluetoothConnView = bluetoothConnView;
         mUsbConnView = usbConnView;
         mNoneConnView = noneConnView;
+        mBytestreamStatusView = text;
     }
 
     private void setVisibility(
@@ -80,6 +84,16 @@ public class PipelineStatusUpdateTask extends TimerTask {
             setVisibility(mNoneConnView,
                     !traceEnabled() && viDescriptor == null);
             setVisibility(mFileConnView, traceEnabled());
+
+            status = viDescriptor.checkSources();
+            final String messageText = String.valueOf(status);
+            if(mActivity != null) {
+                mActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        mBytestreamStatusView.setText(messageText);
+                    }
+                });
+            }
         }
     }
 

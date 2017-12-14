@@ -32,6 +32,7 @@ public class StatusFragment extends Fragment {
     private static String TAG = "StatusFragment";
 
     private TextView mMessageCountView;
+    private TextView mBytestreamStatusView;
     private TextView mViVersionView;
     private TextView mViPlatformView;
     private TextView mViDeviceIdView;
@@ -144,7 +145,7 @@ public class StatusFragment extends Fragment {
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, getActivity(),
                     mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
-                    mNoneConnView);
+                    mNoneConnView, mBytestreamStatusView);
             mTimer = new Timer();
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
@@ -189,6 +190,7 @@ public class StatusFragment extends Fragment {
 
         mServiceNotRunningWarningView = v.findViewById(R.id.service_not_running_bar);
         mMessageCountView = (TextView) v.findViewById(R.id.message_count);
+        mBytestreamStatusView = (TextView) v.findViewById(R.id.bytestream_status);
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);

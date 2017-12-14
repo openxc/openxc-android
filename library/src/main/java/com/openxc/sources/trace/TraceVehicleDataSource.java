@@ -251,6 +251,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             .toString();
     }
 
+    @Override
+    public boolean isOK() {
+        return true;
+    }
+
     public boolean sameFilename(String filename) {
         try {
             return mFilename.equals(uriFromString(filename));

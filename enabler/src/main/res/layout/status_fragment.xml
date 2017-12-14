@@ -69,6 +69,18 @@
 
         <TextView
             style="@style/ItemLabel"
+            android:text="@string/bytestream_state_of_health" />
+
+        <TextView
+            android:id="@+id/bytestream_status"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
             android:text="@string/vi_version_label" />
 
         <TextView

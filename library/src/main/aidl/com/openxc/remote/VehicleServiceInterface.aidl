@@ -91,4 +91,6 @@ interface VehicleServiceInterface {
     void addViConnectionListener(in ViConnectionListener listener);
 
     boolean isViConnected();
+
+    boolean checkSources();
 }

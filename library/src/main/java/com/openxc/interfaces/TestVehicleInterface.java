@@ -33,4 +33,9 @@ public class TestVehicleInterface implements VehicleInterface {
 
     @Override
     public void onPipelineDeactivated() { }
+
+    @Override
+    public boolean isOK() {
+        return true;
+    }
 }

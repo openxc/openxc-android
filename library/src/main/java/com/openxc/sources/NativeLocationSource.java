@@ -42,6 +42,11 @@ public class NativeLocationSource extends ContextualVehicleDataSource
     }
 
     @Override
+    public boolean isOK() {
+        return true;
+    }
+
+    @Override
     public void run() {
         Looper.prepare();
 

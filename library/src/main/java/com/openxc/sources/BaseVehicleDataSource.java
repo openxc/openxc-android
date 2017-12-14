@@ -65,6 +65,8 @@ public abstract class BaseVehicleDataSource implements VehicleDataSource {
 
     public abstract boolean isConnected();
 
+    public abstract boolean isOK();
+
     /**
      * Clear the callback so no further updates are sent.
      *

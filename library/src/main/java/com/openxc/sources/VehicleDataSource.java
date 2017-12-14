@@ -28,6 +28,8 @@ public interface VehicleDataSource extends DataPipeline.Operator {
      */
     public boolean isConnected();
 
+    public boolean isOK();
+
     /**
      * Release any acquired resources and either stop sending measurements (if a
      * source) or stop expecting to receive them (if a sink).

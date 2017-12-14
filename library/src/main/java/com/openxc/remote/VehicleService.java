@@ -253,6 +253,11 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             public boolean isViConnected() {
                 return VehicleService.this.mPipeline.isActive();
             }
+
+            @Override
+            public boolean checkSources() {
+                return VehicleService.this.mPipeline.sourcesOK();
+            }
     };
 
     private void addViConnectionListener(ViConnectionListener listener) {

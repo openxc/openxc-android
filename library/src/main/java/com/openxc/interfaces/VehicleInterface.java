@@ -36,4 +36,9 @@ public interface VehicleInterface extends VehicleDataSource, VehicleDataSink {
      * Return true if the interface is actively connected to the vehicle.
      */
     public boolean isConnected();
+
+    /**
+     * Return true if the data source has no error states.
+     */
+    public boolean isOK();
 }

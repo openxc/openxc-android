@@ -31,6 +31,7 @@ import com.openxc.messages.formatters.BinaryFormatter;
  */
 public class BinaryStreamer extends VehicleMessageStreamer {
     private static String TAG = "BinaryStreamer";
+    private static String failedMessageCause = "None";
 
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
@@ -44,6 +45,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         InputStream input = new ByteArrayInputStream(mBuffer.toByteArray());
         VehicleMessage message = null;
         int bytesRemaining = mBuffer.size();
+        failedMessageCause = "None";
         while(message == null) {
             try {
                 int firstByte = input.read();
@@ -56,6 +58,10 @@ public class BinaryStreamer extends VehicleMessageStreamer {
                 if(size > 0 && bytesRemaining >= size) {
                     message = BinaryFormatter.deserialize(
                             ByteStreams.limit(input, size));
+                    // If message is 'null' at this point it is because the BinaryDeserializer failed
+                    if (message == null) {
+                        failedMessageCause = "BinaryDeserializer";
+                    }
                 } else {
                     break;
                 }
@@ -76,6 +82,12 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         }
         return message;
     }
+
+    @Override
+    public String getFailedMessageCause() {
+        return failedMessageCause;
+    }
+
 
     @Override
     public byte[] serializeForStream(VehicleMessage message)

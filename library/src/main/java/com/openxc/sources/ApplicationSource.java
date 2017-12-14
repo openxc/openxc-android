@@ -28,6 +28,11 @@ public class ApplicationSource extends BaseVehicleDataSource {
     }
 
     @Override
+    public boolean isOK() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).toString();
     }

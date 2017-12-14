@@ -12,21 +12,27 @@ public class VehicleInterfaceDescriptor implements Parcelable {
     private final static String TAG =
             VehicleInterfaceDescriptor.class.getName();
     private boolean mConnected;
+    private boolean mStatus;
     private Class<? extends VehicleInterface> mInterfaceClass;
 
     public VehicleInterfaceDescriptor(
             Class<? extends VehicleInterface> interfaceClass,
-            boolean connected) {
+            boolean connected, boolean status) {
         mInterfaceClass = interfaceClass;
         mConnected = connected;
+        mStatus = status;
     }
 
     public VehicleInterfaceDescriptor(VehicleInterface vi) {
-        this(vi.getClass(), vi.isConnected());
+        this(vi.getClass(), vi.isConnected(), vi.isOK());
     }
 
     public boolean isConnected() {
         return mConnected;
+    }
+
+    public boolean checkSources() {
+        return mStatus;
     }
 
     public Class<? extends VehicleInterface> getInterfaceClass() {
@@ -42,12 +48,13 @@ public class VehicleInterfaceDescriptor implements Parcelable {
         final VehicleInterfaceDescriptor other =
                 (VehicleInterfaceDescriptor) obj;
         return Objects.equal(mConnected, other.mConnected) &&
+                Objects.equal(mStatus, other.mStatus) &&
                 Objects.equal(mInterfaceClass, other.mInterfaceClass);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mConnected, mInterfaceClass);
+        return Objects.hashCode(mConnected, mStatus, mInterfaceClass);
     }
 
     @Override
@@ -55,6 +62,7 @@ public class VehicleInterfaceDescriptor implements Parcelable {
         return toStringHelper(this)
             .add("class", mInterfaceClass)
             .add("connected", mConnected)
+            .add("status", mStatus)
             .toString();
     }
 
@@ -66,11 +74,13 @@ public class VehicleInterfaceDescriptor implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mConnected ? 1 : 0);
+        out.writeInt(mStatus ? 1 : 0);
         out.writeString(mInterfaceClass.getName());
     }
 
     protected void readFromParcel(Parcel in) {
         mConnected = in.readInt() == 1;
+        mStatus = in.readInt() == 1;
         try {
             mInterfaceClass = VehicleInterfaceFactory.findClass(
                     in.readString());

@@ -223,6 +223,17 @@ public class DataPipeline implements SourceCallback {
     }
 
     /**
+     * Return true if all sources report back that they are OK.
+     */
+    public boolean sourcesOK() {
+        boolean sources = true;
+        for(VehicleDataSource s : mSources) {
+            sources = sources && s.isOK();
+        }
+        return sources;
+    }
+
+    /**
      * At least one source is not active - if all sources are inactive, notify
      * the operator.
      */

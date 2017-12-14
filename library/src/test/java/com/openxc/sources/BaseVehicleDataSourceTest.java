@@ -128,5 +128,10 @@ public class BaseVehicleDataSourceTest {
         public boolean isConnected() {
             return false;
         }
+
+        @Override
+        public boolean isOK() {
+            return true;
+        }
     }
 }

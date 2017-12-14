@@ -25,8 +25,10 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
+    private static final int DESERIALIZER_FAIL_LIMIT = 200;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
     protected static final int SLOW_RECONNECTION_ATTEMPT_WAIT_TIME_S = 60;
+    private static int failedMessageCount = 0;
 
     private AtomicBoolean mRunning = new AtomicBoolean(false);
     private int mReconnectionAttempts;
@@ -37,6 +39,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private BytestreamConnectingTask mConnectionCheckTask;
     private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
+    private boolean mBytestreamDataSourceOK = true;
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
@@ -91,7 +94,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 mDeviceChanged.await();
 
                 if(mReconnectionAttempts == MAX_FAST_RECONNECTION_ATTEMPTS) {
-                    Log.d(this.getClass().getSimpleName(),
+                    Log.i(this.getClass().getSimpleName(),
                             "Unable to connect after " +
                             MAX_FAST_RECONNECTION_ATTEMPTS +
                             " attempts, slowing down attempts to every " +
@@ -165,10 +168,24 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 while((message = mStreamHandler.parseNextMessage()) != null) {
                     handleMessage(message);
                 }
+
+                String temp = "BinaryDeserializer";
+                // Check why message is 'null'
+                if (temp.equals(mStreamHandler.getFailedMessageCause())) {
+                    failedMessageCount += 1;
+                    // Log.i(getTag(), "Failed messages count: " + failedMessageCount);
+                    if (failedMessageCount > DESERIALIZER_FAIL_LIMIT) {
+                        failedMessageCount = 0;
+                        Log.i(getTag(), "BinaryDeserializer failure: Setting status OK flag to False.");
+                        mBytestreamDataSourceOK = false;
+                    }
+
+                }
+
             }
         }
         disconnect();
-        Log.d(getTag(), "Stopped " + getTag());
+        Log.i(getTag(), "Stopped " + getTag());
     }
 
     public void receive(VehicleMessage command) throws DataSinkException {
@@ -178,8 +195,9 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 streamer = mStreamHandler;
                 if(streamer == null) {
                     // See https://github.com/openxc/openxc-android/issues/181
-                    streamer = new JsonStreamer();
-                    Log.i(getTag(), "Payload format unknown, guessing JSON");
+                    // Changed to assuming PROTOBUF message format
+                    streamer = new BinaryStreamer();
+                    Log.i(getTag(), "Payload format unknown, guessing PROTOBUF");
                 }
             }
 
@@ -199,6 +217,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     @Override
     public boolean isConnected() {
         return isRunning();
+    }
+
+    @Override
+    public boolean isOK() {
+        return mBytestreamDataSourceOK;
     }
 
     /**

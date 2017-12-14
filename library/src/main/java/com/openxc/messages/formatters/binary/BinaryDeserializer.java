@@ -32,7 +32,7 @@ public class BinaryDeserializer {
                 result = deserialize(message);
             }
         } catch(IOException e) {
-            Log.w(TAG, "Unable to deserialize from binary stream", e);
+            // Log.w(TAG, "Unable to deserialize from binary stream", e);
         }
         return result;
     }
