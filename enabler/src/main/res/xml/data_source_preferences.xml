@@ -54,4 +54,13 @@
                 android:key="@string/trace_source_file_key"
                 android:title="@string/trace_source_file_title" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/phone_source_settings"
+        android:title="@string/phone_source_settings">
+        <CheckBoxPreference
+            android:key="@string/phone_source_polling_checkbox_key"
+            android:title="@string/phone_source_polling_checkbox_title"
+            android:defaultValue="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

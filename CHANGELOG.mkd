@@ -6,6 +6,8 @@
 * Fix: Evented messages will now show on the dashboard in enabler.
 * Fix: mKey is stripped from the message before it is written to the tracefile (#253).
 * Fix: Allow 2-byte PIDs in diagnostic request screen.
+* New Feature: Now supports BugLabs Dweet.io formats
+* New Feature: Now can include phone sensor data into OpenXC stream.
 
 ## v6.1.6
 

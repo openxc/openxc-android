@@ -39,6 +39,8 @@
     <string name="network_port_title">Network port</string>
     <string name="trace_source_settings">Trace file playback</string>
     <string name="trace_source_file_title">Select a trace file for playback</string>
+    <string name="phone_source_settings">Built-In Phone Sensors</string>
+    <string name="phone_source_polling_checkbox_title">Include Data from Phone Sensors</string>
     <string name="about_summary">About OpenXC</string>
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>
@@ -68,6 +70,7 @@
 
     <string name="vi_version_label">VI Version</string>
     <string name="vi_device_id_label">VI Device ID</string>
+
     <string name="view_traces">view_traces</string>
     <string name="view_recorded_traces">View Recorded Traces</string>
     <string name="view">View</string>
@@ -75,5 +78,11 @@
     <string name="recorded_traces">Recorded Traces</string>
     <string name="vi_device_platform_label">VI Platform</string>
     <string name="input_json_error">Please enter a valid json</string>
+
+    <string name="dweeting_checkbox_title">Send Data to Dweet.io</string>
+    <string name="dweeting_checkbox_summary">Enables sending data to Dweet.io cloud messaging service</string>
+    <string name="dweeting_thingname_title">Thing-name</string>
+    <string name="dweeting_thingname_summary">Set Dweet.io thing-name</string>
+    <string name="dweeting_thingname_default">openxc-dweet</string>
 
 </resources>
