@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="commands_array">
+        <item>Select Command</item>
+        <item>Version</item>
+        <item>Device ID</item>
+        <item>Platform</item>
+        <item>Passthrough CAN Mode</item>
+        <item>Acceptance Bypass</item>
+        <item>Payload Format Control</item>
+        <item>C5 RTC Configuration</item>
+        <item>C5 SD Card Status</item>
+        <item>Custom Command</item>
+    </string-array>
+</resources>

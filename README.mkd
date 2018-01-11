@@ -14,7 +14,7 @@ application.
 Visit the [OpenXC][] project page for
 [installation
 instructions](http://openxcplatform.com/getting-started/library-installation.html),
-[usage details](http://openxcplatform.com/android/api-guide.html) and the
+[usage details](http://openxcplatform.com/android/api-guide.html), and the
 [source code documentation](http://android.openxcplatform.com).
 
 ## Building from Android Studio
@@ -81,10 +81,10 @@ Please see our [Contribution Documents](https://github.com/openxc/openxc-android
 
 ## License
 
-Copyright (c) 2011-2013 Ford Motor Company
+Copyright (c) 2011-2017 Ford Motor Company
 Licensed under the BSD license.
 
-[binding]: http://developer.android.com/guide/topics/fundamentals/bound-services.html#Binding)
+[binding]: http://developer.android.com/guide/topics/fundamentals/bound-services.html#Binding
 [services]: http://developer.android.com/guide/topics/fundamentals/services.html
 [AIDL]: http://developer.android.com/guide/developing/tools/aidl.html
 [OpenXC]: http://openxcplatform.com
