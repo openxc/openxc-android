@@ -95,34 +95,38 @@ public class JsonFormatter {
         for(Map.Entry<String, JsonElement> entry : root.entrySet()) {
             fields.add(entry.getKey());
         }
-
         VehicleMessage message;
-        if(CanMessage.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, CanMessage.class);
-        } else if(DiagnosticResponse.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, DiagnosticResponse.class);
-        } else if(Command.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, Command.class);
-        } else if(CommandResponse.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, CommandResponse.class);
-            if(((CommandResponse)message).getCommand()== null){
+        try {
+            if (CanMessage.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, CanMessage.class);
+            } else if (DiagnosticResponse.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, DiagnosticResponse.class);
+            } else if (Command.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, Command.class);
+            } else if (CommandResponse.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, CommandResponse.class);
+                if (((CommandResponse) message).getCommand() == null) {
                 /* Both CommandResponse and CustomCommandResponse have exact fields but different
                     keys. If Command(key) for CommandResponse can not be de-serialized then it
                     must be a CustomCommandResponse.
                  */
-                message = sGson.fromJson(root, CustomCommandResponse.class);
+                    message = sGson.fromJson(root, CustomCommandResponse.class);
+                }
+            } else if (EventedSimpleVehicleMessage.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, EventedSimpleVehicleMessage.class);
+            } else if (SimpleVehicleMessage.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, SimpleVehicleMessage.class);
+            } else if (NamedVehicleMessage.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, NamedVehicleMessage.class);
+            } else if (fields.contains(VehicleMessage.EXTRAS_KEY)) {
+                message = sGson.fromJson(root, VehicleMessage.class);
+            } else {
+                throw new UnrecognizedMessageTypeException(
+                        "Unrecognized combination of fields: " + fields);
             }
-        } else if(EventedSimpleVehicleMessage.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, EventedSimpleVehicleMessage.class);
-        } else if(SimpleVehicleMessage.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, SimpleVehicleMessage.class);
-        } else if(NamedVehicleMessage.containsRequiredFields(fields)) {
-            message = sGson.fromJson(root, NamedVehicleMessage.class);
-        } else if(fields.contains(VehicleMessage.EXTRAS_KEY)) {
-            message = sGson.fromJson(root, VehicleMessage.class);
-        } else {
-            throw new UnrecognizedMessageTypeException(
-                    "Unrecognized combination of fields: " + fields);
+        }catch (NumberFormatException e){
+           throw new UnrecognizedMessageTypeException(
+                    "Unable to parse JSON from \"" + data + "\": " + e);
         }
         return message;
     }
