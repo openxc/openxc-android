@@ -322,7 +322,6 @@ public class DeviceManager {
                 writeArray[queueEnd++] = bytes[i];
             }
         } catch (BufferOverflowException e) {
-            //TODO : How to handle???
             Log.d(TAG, "Buffer overflowing!!!!");
             return false;
         }
@@ -350,7 +349,6 @@ public class DeviceManager {
                             queueEnd = queueEnd - 20;
 
                         } else {
-                            //TODO : Remove this crude code!!!
                             sendingPacket = new byte[queueEnd];
                             System.arraycopy(writeArray, 0, sendingPacket, 0, queueEnd);
                             queueEnd = 0;

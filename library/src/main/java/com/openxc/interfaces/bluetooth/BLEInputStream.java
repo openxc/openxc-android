@@ -40,7 +40,6 @@ public class BLEInputStream extends InputStream {
         try {
             buf.get(bytes, off, bufferLength);
         } catch (BufferUnderflowException e) {
-            //TODO : Better handling
             Log.d(TAG, "BufferUnderflow bufferLength : " + bufferLength);
         }
         buf.clear();
@@ -51,7 +50,6 @@ public class BLEInputStream extends InputStream {
         try {
             buf.put(data);
         } catch (BufferOverflowException e) {
-            //TODO : Better handling
             Log.e(TAG, "Buffer overflowing Resetting!!!!");
             buf.clear();
         }

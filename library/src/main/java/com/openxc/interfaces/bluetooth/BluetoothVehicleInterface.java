@@ -241,7 +241,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                         mBluetoothGatt = mDeviceManager.connectBLE(mConnectedAddress);
                         manageConnectedGatt(mBluetoothGatt);
                     }catch (BluetoothException e){
-                        Log.d(TAG,"XXX : failed in connecting to BLE via socket listener");
+                        Log.d(TAG,"failed in connecting to BLE via socket listener");
 
                     }
                 }
