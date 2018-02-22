@@ -43,8 +43,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class BluetoothVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
-    private static final String TAG = "BluetoothVehInterface";
-    public static final String DEVICE_NAME_PREFIX = "OpenXC-VI-";
+    private static final String TAG = BluetoothVehicleInterface.class.getSimpleName();
+    public static final String DEVICE_NAME_PREFIX = "OPENXC-VI-";
 
     private DeviceManager mDeviceManager;
     private Thread mAcceptThread;

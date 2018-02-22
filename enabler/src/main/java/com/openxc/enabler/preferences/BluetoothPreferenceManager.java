@@ -1,10 +1,5 @@
 package com.openxc.enabler.preferences;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +14,11 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.util.SupportSettingsUtils;
 import com.openxcplatform.enabler.R;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Enable or disable receiving vehicle data from a Bluetooth vehicle interface.
@@ -52,7 +52,7 @@ import com.openxcplatform.enabler.R;
  * enabled or the OpenXC service first starts, to avoid draining the battery.
  */
 public class BluetoothPreferenceManager extends VehiclePreferenceManager {
-    private final static String TAG = "BluetoothPreferenceManager";
+    private final static String TAG = BluetoothPreferenceManager.class.getSimpleName();
 
     private DeviceManager mBluetoothDeviceManager;
     private HashMap<String, String> mDiscoveredDevices =
@@ -164,7 +164,7 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
                         Context.MODE_MULTI_PROCESS).edit();
         Set<String> candidates = new HashSet<String>();
         for(Map.Entry<String, String> device : mDiscoveredDevices.entrySet()) {
-            if(device.getValue().startsWith(
+            if(device.getValue().toUpperCase().startsWith(
                         BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
                 candidates.add(device.getKey());
             }
