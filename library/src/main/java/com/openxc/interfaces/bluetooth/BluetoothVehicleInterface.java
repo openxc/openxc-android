@@ -170,8 +170,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     if (mBluetoothGatt == null) {
                         connected = false;
                     } else {
-                        if(mConnectedAddress!=null)
-                        connected = true;
+                        if (mConnectedAddress != null)
+                            connected = true;
                         else connected = false;
                     }
                 }
@@ -235,16 +235,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 if (!isRunning()) {
                     break;
                 }
-                if(mBluetoothGatt!=null && !mDeviceManager.isBLEConnected()){
-                    try{
-                        connectingToBLE = true;
-                        mBluetoothGatt = mDeviceManager.connectBLE(mConnectedAddress);
-                        manageConnectedGatt(mBluetoothGatt);
-                    }catch (BluetoothException e){
-                        Log.d(TAG,"failed in connecting to BLE via socket listener");
-
-                    }
-                }
 
                 if (mmServerSocket == null) {
                     Log.i(TAG, "Unable to listen for Bluetooth connections " +
@@ -286,7 +276,6 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     @Override
     protected void connect() {
-        Log.d(TAG, "Connect called!!");
         if (!mUsePolling || !isRunning()) {
             return;
         }
@@ -311,7 +300,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                         if (!mDeviceManager.isBLEDevice(address)) {
                             connectingToBLE = false;
                             newSocket = mDeviceManager.connect(address);
-                        } else {
+                        } else if (!mDeviceManager.isBLEConnected()) {
                             connectingToBLE = true;
                             bluetoothGatt = mDeviceManager.connectBLE(address);
                         }
@@ -373,14 +362,14 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                         candidateDevices.get(0));
             }
         }
-        if (connectingToBLE) {
+        if (connectingToBLE && bluetoothGatt != null) {
             manageConnectedGatt(bluetoothGatt);
-        } else {
+        } else if(!connectingToBLE){
             manageConnectedSocket(newSocket);
         }
     }
 
-    private synchronized void manageConnectedGatt(BluetoothGatt bluetoothGatt) {
+    private void manageConnectedGatt(BluetoothGatt bluetoothGatt) {
         mConnectionLock.writeLock().lock();
         try {
             mBluetoothGatt = bluetoothGatt;
@@ -435,6 +424,10 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             } else if (isConnected()) {
                 if (mBLEInputStream != null && mBLEInputStream.doesBufferHasRemaining()) {
                     bytesRead = mInStream.read(bytes, 0, bytes.length);
+                } else if (mDeviceManager.isBLEDisconnected()) {
+                    //Disconnect BLE if GattCallBack state changed to disconnected
+                    mConnectedAddress = null;
+                    bytesRead = -1;
                 }
             }
         } finally {
@@ -453,7 +446,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 // sustained writes.
                 mOutStream.flush();
                 success = true;
-            } else if (isConnected()) {
+            } else if (isConnected() && connectingToBLE && !mDeviceManager.isBLEDisconnected()) {
                 mDeviceManager.writeCharacteristicToBLE(bytes);
                 success = true;
             } else {
@@ -486,7 +479,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private synchronized void closeGatt() {
         if (mBluetoothGatt != null) {
             mBluetoothGatt.close();
-            Log.d(TAG, "Disconnected from the socket");
+            Log.d(TAG, "Disconnected from the gatt");
         }
     }
 

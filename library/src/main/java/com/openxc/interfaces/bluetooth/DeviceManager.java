@@ -47,7 +47,6 @@ public class DeviceManager {
     public static final int MAX_WRITE_BUFFER_CAPACITY = 1024;
     private byte[] writeArray = new byte[MAX_WRITE_BUFFER_CAPACITY];
     private int queueEnd = 0;
-    private static int writeCounter = 0;
     public static final int PACKET_SENDING_WAIT_TIME_MS = 50;
 
 
@@ -278,15 +277,14 @@ public class DeviceManager {
     }
 
     public BluetoothGatt connectBLE(BluetoothDevice device) throws BluetoothException {
-        Log.d(TAG, "Connecting to device " + device.getAddress());
         if (device == null) {
             throw new BluetoothException("Not connecting to null Bluetooth device");
         }
         mSocketConnecting.set(true);
         try {
             mGattCallback = new GattCallback();
-
             mBluetoothGatt = device.connectGatt(mContext, true, mGattCallback);
+            mBluetoothGatt.connect();
             mGattCallback.setBluetoothGatt(mBluetoothGatt);
             Log.d(TAG, "Connected to gatt " + mBluetoothGatt);
             if (getDefaultAdapter().isDiscovering()) {
@@ -300,7 +298,7 @@ public class DeviceManager {
         } finally {
             mSocketConnecting.set(false);
         }
-        storeLastConnectedDevice(device);
+        //storeLastConnectedDevice(device);
         return mBluetoothGatt;
     }
 
@@ -311,6 +309,14 @@ public class DeviceManager {
     public boolean isBLEConnected() {
         if (mGattCallback != null) {
             return mGattCallback.isConnected();
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isBLEDisconnected() {
+        if (mGattCallback != null) {
+            return mGattCallback.isDisconnected();
         } else {
             return false;
         }

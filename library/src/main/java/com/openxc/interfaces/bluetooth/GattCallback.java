@@ -23,7 +23,7 @@ public class GattCallback extends BluetoothGattCallback{
     public static final String C5_OPENXC_BLE_CHARACTERISTIC_WRITE_UUID = "6800D38B-5262-11E5-885D-FEFF819CDCE2";
 
     private boolean isConnected = false;
-
+    private boolean isDisconnected = false;
     private BluetoothGatt mBluetoothGatt;
 
     public void setBluetoothGatt(BluetoothGatt mBluetoothGatt) {
@@ -46,6 +46,7 @@ public class GattCallback extends BluetoothGattCallback{
 
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             Log.d(TAG, "Status BLE Disconnected");
+            setDisconnected(true);
             setConnected(false);
         }
     }
@@ -63,6 +64,14 @@ public class GattCallback extends BluetoothGattCallback{
 
     public void setConnected(boolean connected) {
         isConnected = connected;
+    }
+
+    public boolean isDisconnected() {
+        return isDisconnected;
+    }
+
+    public void setDisconnected(boolean disconnected) {
+        isDisconnected = disconnected;
     }
 
     @Override
