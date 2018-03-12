@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
  */
 
 public class BLEInputStream extends InputStream {
-    public static final int MAX_READ_BUFFER_CAPACITY = 1024;
+    public static final int MAX_READ_BUFFER_CAPACITY = 4096;
     private static final String TAG = BLEInputStream.class.getSimpleName();
     private static BLEInputStream bleInputStream = null;
 

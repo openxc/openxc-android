@@ -14,9 +14,9 @@ import java.util.UUID;
  * Created by AKUMA128 on 2/9/2018.
  */
 
-public class GattCallback extends BluetoothGattCallback{
+public class GattCallback extends BluetoothGattCallback {
 
-    private final static String TAG =  GattCallback.class.getSimpleName();
+    private final static String TAG = GattCallback.class.getSimpleName();
     public static final String C5_OPENXC_BLE_SERVICE_UUID = "6800D38B-423D-4BDB-BA05-C9276D8453E1";
     public static final String C5_OPENXC_BLE_CHARACTERISTIC_NOTIFY_UUID = "6800D38B-5262-11E5-885D-FEFF819CDCE3";
     public static final String C5_OPENXC_BLE_DESCRIPTOR_NOTIFY_UUID = "00002902-0000-1000-8000-00805f9b34fb";
@@ -25,6 +25,8 @@ public class GattCallback extends BluetoothGattCallback{
     private boolean isConnected = false;
     private boolean isDisconnected = false;
     private BluetoothGatt mBluetoothGatt;
+    private StringBuffer messageBuffer = new StringBuffer();
+    private final static String DELIMITER = "\u0000";
 
     public void setBluetoothGatt(BluetoothGatt mBluetoothGatt) {
         this.mBluetoothGatt = mBluetoothGatt;
@@ -37,11 +39,11 @@ public class GattCallback extends BluetoothGattCallback{
             setConnected(true);
             Log.d(TAG, "Status BLE Connected");
             // Attempts to discover services after successful connection.
-            if(mBluetoothGatt!=null) {
+            if (mBluetoothGatt != null) {
                 boolean discoverServices = mBluetoothGatt.discoverServices();
                 Log.i(TAG, "Attempting to start service discovery:" + discoverServices);
             } else {
-                Log.d(TAG,"BluetoothGatt is null");
+                Log.d(TAG, "BluetoothGatt is null");
             }
 
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -84,10 +86,14 @@ public class GattCallback extends BluetoothGattCallback{
         byte[] data;
         data = characteristic.getValue(); // *** this is going to get overwritten by next call, so make a queue
         if (data != null && data.length > 0 && (isConnected())) {
-            final StringBuilder stringBuilder = new StringBuilder(data.length);
-            for (byte byteChar : data)
-                stringBuilder.append(String.format("%02X ", byteChar));
-            BLEInputStream.getInstance().putDataInBuffer(data);
+            messageBuffer.append(new String(data, 0, data.length));
+
+            int delimiterIndex = messageBuffer.indexOf(DELIMITER);
+            if (delimiterIndex != -1) {
+                byte message[] = messageBuffer.substring(0,delimiterIndex+1).getBytes();
+                BLEInputStream.getInstance().putDataInBuffer(message);
+                messageBuffer.delete(0, delimiterIndex + 1);
+            }
         }
     }
 
