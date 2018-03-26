@@ -1,8 +1,19 @@
 package com.openxc.sinks;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.openxc.TestUtils;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
+
+import org.apache.http.client.methods.HttpPost;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.shadows.httpclient.FakeHttp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,22 +21,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.methods.HttpPost;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
-import org.robolectric.shadows.FakeHttp;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.openxc.TestUtils;
-import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.VehicleMessage;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class UploaderSinkTest {
