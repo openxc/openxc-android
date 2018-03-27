@@ -16,6 +16,7 @@ android {
     lintOptions {
         abortOnError false
     }
+    useLibrary  'org.apache.http.legacy'
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
