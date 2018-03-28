@@ -1,5 +1,12 @@
 # OpenXC Android Library Changelog
 
+## v7.0.0
+
+* New Feature: Now supports sending control commands on-demand
+* New Feature: Added new command types to CommandType enum
+* New Feature: Enabler app to include Dweet.io integration
+* New Feature: Now can connect to BLE VIs
+
 ## v6.1.7-dev
 
 * Improvement: App will now pull and display the VI platform.
