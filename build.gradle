@@ -2,21 +2,24 @@
 
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.3'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
         classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
-        classpath 'com.bugsnag:bugsnag-android-gradle-plugin:2.0.2'
+        classpath 'com.bugsnag:bugsnag-android-gradle-plugin:3.2.5'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 }
 
@@ -27,9 +30,9 @@ ext {
     minSdkVersion = 18
     targetSdkVersion = 27
 
-    versionMajor = 6
-    versionMinor = 1
-    versionPatch = 7
+    versionMajor = 7
+    versionMinor = 0
+    versionPatch = 0
 
     versionCode = versionMajor * 1000000 + versionMinor * 1000 + versionPatch
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"

@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'bugsnag'
 apply plugin: 'com.github.triplet.play'
-
+apply plugin: 'com.bugsnag.android.gradle'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -12,6 +11,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+        multiDexEnabled true
     }
 
    signingConfigs {
@@ -47,10 +47,10 @@ android {
         }
 
         applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                output.outputFile = new File(
-                        output.outputFile.parent,
-                        output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+            variant.outputs.all { output ->
+                def newName = outputFileName
+                newName.replace(".apk", "-${variant.versionName}.apk")
+                outputFileName = new File(newName)
             }
         }
     }
@@ -76,14 +76,13 @@ android {
 }
 
 dependencies {
-    compile project(":library")
+    implementation project(":library")
+    implementation 'com.android.support:support-v4:27.1.0'
+    implementation 'com.bugsnag:bugsnag-android:4.3.2'
 
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.bugsnag:bugsnag-android:3.2.2'
-
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
-    androidTestCompile 'org.mockito:mockito-core:1.10.19'
-    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
-    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+    androidTestImplementation 'org.mockito:mockito-core:2.17.0'
+    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
+    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 }
