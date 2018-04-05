@@ -14,6 +14,7 @@ public class VehicleManagerJvmTest {
     @Before
     public void setup()  {
         manager = new VehicleManager();
+        manager.onCreate();
     }
 
     @Test
