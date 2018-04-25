@@ -27,6 +27,7 @@
                 <Spinner
                     android:id="@+id/command_spinner"
                     style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
                     android:layout_weight="1" />
 
             </LinearLayout>
@@ -43,6 +44,7 @@
                 <Spinner
                     android:id="@+id/bus_spinner"
                     style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -58,6 +60,7 @@
                 <Spinner
                     android:id="@+id/enabled_spinner"
                     style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -73,6 +76,7 @@
                 <Spinner
                     android:id="@+id/bypass_spinner"
                     style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -88,6 +92,7 @@
                 <Spinner
                     android:id="@+id/format_spinner"
                     style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -112,8 +117,7 @@
                     android:id="@+id/customInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Custom JSON"
-                    android:text="{&quot;command&quot;: &quot;payload_format&quot; , &quot;format&quot;: &quot;json&quot;}" />
+                    android:hint="Enter Custom JSON" />
             </LinearLayout>
 
             <Button

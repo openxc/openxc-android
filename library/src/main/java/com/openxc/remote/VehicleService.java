@@ -1,8 +1,11 @@
 package com.openxc.remote;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -52,6 +55,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private final static String TAG = "VehicleService";
 
     private final static int SERVICE_NOTIFICATION_ID = 1000;
+    private static final String CHANNEL_ID = "OpenXC Notification Channel";
 
     // Work around an issue with instrumentation tests and foreground services
     // https://code.google.com/p/android/issues/detail?id=12122
@@ -103,6 +107,19 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private void moveToForeground() {
         if(!mForeground) {
             Log.i(TAG, "Moving service to foreground.");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Create the NotificationChannel
+                CharSequence name = getString(R.string.channel_name);
+                String description = getString(R.string.channel_description);
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                mChannel.setDescription(description);
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = (NotificationManager) getSystemService(
+                        NOTIFICATION_SERVICE);
+                notificationManager.createNotificationChannel(mChannel);
+            }
 
             try {
                 // I'd like to not have to depend on the EnablerActivity, but
@@ -116,7 +133,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                         this, 0, intent, 0);
 
                 NotificationCompat.Builder notificationBuilder =
-                        new NotificationCompat.Builder(this);
+                        new NotificationCompat.Builder(this, CHANNEL_ID);
                 notificationBuilder.setContentTitle(getString(R.string.openxc_name))
                         .setContentInfo(getString(R.string.notification_content))
                         .setSmallIcon(R.drawable.openxc_notification_icon_small_white)

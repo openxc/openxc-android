@@ -3,15 +3,19 @@ package com.openxc.enabler;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +31,10 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class StatusFragment extends Fragment {
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static String TAG = "StatusFragment";
 
     private TextView mMessageCountView;
@@ -46,6 +52,7 @@ public class StatusFragment extends Fragment {
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
+    private Context mContext;
 
     private synchronized void updateViInfo() {
         if(mVehicleManager != null) {
@@ -202,27 +209,33 @@ public class StatusFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        try {
-                            DeviceManager deviceManager = new DeviceManager(getActivity());
-                            deviceManager.startDiscovery();
-                            // Re-adding the interface with a null address triggers
-                            // automatic mode 1 time
-                            mVehicleManager.setVehicleInterface(
-                                    BluetoothVehicleInterface.class, null);
 
-                            // clears the existing explicitly set Bluetooth device.
-                            SharedPreferences.Editor editor =
-                                PreferenceManager.getDefaultSharedPreferences(
-                                        getActivity()).edit();
-                            editor.putString(getString(R.string.bluetooth_mac_key),
-                                    getString(R.string.bluetooth_mac_automatic_option));
-                            editor.commit();
-                        } catch(BluetoothException e) {
-                            Toast.makeText(getActivity(),
-                                    "Bluetooth is disabled, can't search for devices",
-                                    Toast.LENGTH_LONG).show();
-                        } catch(VehicleServiceException e) {
-                            Log.e(TAG, "Unable to enable Bluetooth vehicle interface", e);
+                        if (ContextCompat.checkSelfPermission(mContext.getApplicationContext(),ACCESS_FINE_LOCATION )
+                                == PackageManager.PERMISSION_GRANTED) {
+                            try {
+                                DeviceManager deviceManager = new DeviceManager(getActivity());
+                                deviceManager.startDiscovery();
+                                // Re-adding the interface with a null address triggers
+                                // automatic mode 1 time
+                                mVehicleManager.setVehicleInterface(
+                                        BluetoothVehicleInterface.class, null);
+
+                                // clears the existing explicitly set Bluetooth device.
+                                SharedPreferences.Editor editor =
+                                        PreferenceManager.getDefaultSharedPreferences(
+                                                getActivity()).edit();
+                                editor.putString(getString(R.string.bluetooth_mac_key),
+                                        getString(R.string.bluetooth_mac_automatic_option));
+                                editor.commit();
+                            } catch (BluetoothException e) {
+                                Toast.makeText(getActivity(),
+                                        "Bluetooth is disabled, can't search for devices",
+                                        Toast.LENGTH_LONG).show();
+                            } catch (VehicleServiceException e) {
+                                Log.e(TAG, "Unable to enable Bluetooth vehicle interface", e);
+                            }
+                        } else {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
                         }
                     }
                 });
@@ -234,5 +247,11 @@ public class StatusFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mContext = context;
     }
 }
