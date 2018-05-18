@@ -276,8 +276,6 @@ public class StatusFragment extends Fragment {
         if (resultCode == RESULT_CANCELED) {
             Toast.makeText(getActivity(), "Bluetooth needs to be enabled for search.",
                     Toast.LENGTH_LONG).show();
-        } else if (resultCode == RESULT_OK) {
-            startBluetoothSearch();
         }
     }
 
