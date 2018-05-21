@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.util.Log;
 
+import com.openxc.messages.streamers.JsonStreamer;
+
 import java.util.UUID;
 
 /**
@@ -85,14 +87,19 @@ public class GattCallback extends BluetoothGattCallback {
     public void readChangedCharacteristic(BluetoothGattCharacteristic characteristic) {
         byte[] data;
         data = characteristic.getValue(); // *** this is going to get overwritten by next call, so make a queue
+
         if (data != null && data.length > 0 && (isConnected())) {
             messageBuffer.append(new String(data, 0, data.length));
 
-            int delimiterIndex = messageBuffer.indexOf(DELIMITER);
-            if (delimiterIndex != -1) {
-                byte message[] = messageBuffer.substring(0,delimiterIndex+1).getBytes();
-                BLEInputStream.getInstance().putDataInBuffer(message);
-                messageBuffer.delete(0, delimiterIndex + 1);
+            if(JsonStreamer.containsJson(messageBuffer.toString())) {
+                int delimiterIndex = messageBuffer.indexOf(DELIMITER);
+                if (delimiterIndex != -1) {
+                    byte message[] = messageBuffer.substring(0, delimiterIndex + 1).getBytes();
+                    BLEInputStream.getInstance().putDataInBuffer(message);
+                    messageBuffer.delete(0, delimiterIndex + 1);
+                }
+            } else {
+                BLEInputStream.getInstance().putDataInBuffer(data);
             }
         }
     }
