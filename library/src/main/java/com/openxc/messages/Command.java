@@ -207,8 +207,8 @@ public class Command extends KeyedMessage {
         out.writeString(getAction());
         out.writeParcelable(getDiagnosticRequest(), flags);
         out.writeInt(getBus());
-        out.writeValue(isEnabled());
-        out.writeValue(isBypass());
+        out.writeByte((byte) (isEnabled() ? 1 : 0));
+        out.writeByte((byte) (isBypass() ? 1 : 0));
         out.writeString(getFormat());
         out.writeLong(getUnixTime());
     }
