@@ -220,8 +220,8 @@ public class Command extends KeyedMessage {
         mAction = in.readString();
         mDiagnosticRequest = in.readParcelable(DiagnosticRequest.class.getClassLoader());
         mBus = in.readInt();
-        mBypass = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        mEnabled = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        mBypass = in.readByte() != 0;
+        mEnabled = in.readByte() != 0;
         mFormat = in.readString();
         mUnixTime = in.readLong();
     }
