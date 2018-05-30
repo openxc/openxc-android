@@ -359,16 +359,7 @@ public class DeviceManager {
                             System.arraycopy(writeArray, 0, sendingPacket, 0, queueEnd);
                             queueEnd = 0;
                         }
-                        String sendingPacketString = new String(sendingPacket);
-                        byte[] sendingPacketUtf8 = new byte[0];
-                        try {
-                            sendingPacketUtf8 = sendingPacketString.getBytes("UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                            Log.d(TAG, "UnsupportedEncoding");
-
-                        }
-                        characteristic.setValue(sendingPacketUtf8);
+                        characteristic.setValue(sendingPacket);
                         try {
                             Thread.sleep(PACKET_SENDING_WAIT_TIME_MS);
 
