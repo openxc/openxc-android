@@ -847,6 +847,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
 
     private void bindRemote() {
         Log.i(TAG, "Binding to VehicleService");
+        //Adding explicit intent without using setComponent as it was depending on enabler
+        //Now other apps can bind to library without enabler app
         Intent intent = new Intent(this,VehicleService.class);
 
         try {
