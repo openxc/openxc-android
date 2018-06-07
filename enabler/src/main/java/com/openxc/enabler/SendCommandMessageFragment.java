@@ -310,7 +310,7 @@ public class SendCommandMessageFragment extends Fragment {
                     break;
 
                 case C5_RTC_CONFIG_POS:
-                    request = new Command(Command.CommandType.RTC_CONFIGURATION, new Date().getTime());
+                    request = new Command(Command.CommandType.RTC_CONFIGURATION, new Date().getTime()/1000L);
                     break;
 
                 case C5_SD_CARD_POS:
