@@ -1,3 +1,5 @@
 * Can send custom commands from commands screen.
+* Now supports BugLabs Dweet.io formats
+* Now can include phone sensor data into OpenXC stream.
 * Can now connect to BLE Vehicle interfaces.
 * Properly export VehicleService for use by external apps.

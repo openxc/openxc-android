@@ -9,9 +9,6 @@
 * New Feature: Bluetooth Prompt in case bluetooth is switched off and runtime location permission.
 * Building with Android API level 27 (8.1)
 * Updated dependencies for library and enabler.
-
-## v6.1.7-dev
-
 * Improvement: App will now pull and display the VI platform.
 * Fix: Evented messages will now show on the dashboard in enabler.
 * Fix: mKey is stripped from the message before it is written to the tracefile (#253).
