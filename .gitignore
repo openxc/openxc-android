@@ -11,7 +11,6 @@ reference
 *.releaseBackup
 release.properties
 release
-assets
 tokens.xml
 local.properties
 
@@ -29,7 +28,17 @@ local.properties
 bin/
 gen/
 
-# Gradle files
+# Android Studio / Gradle files
+.idea/
+.gradle
+/*/local.properties
+/*/out
+/*/*/production
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
 .gradle/
 build/
 /*/build/

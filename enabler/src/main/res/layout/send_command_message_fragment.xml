@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout style="@style/EnablerFragment">
+
+            <TextView
+                android:id="@+id/service_not_running_bar"
+                style="@style/WarningText"
+                android:drawableLeft="@drawable/ic_action_warning"
+                android:text="@string/service_not_running">
+
+            </TextView>
+
+            <LinearLayout style="@style/ItemRow">
+
+                <TextView
+                    style="@style/FormInputLabelConstrained"
+                    android:text="@string/command_label" />
+
+                <Spinner
+                    android:id="@+id/command_spinner"
+                    style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bus_layout"
+                style="@style/ItemRow"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/FormInputLabelConstrained"
+                    android:text="@string/bus_label" />
+
+                <Spinner
+                    android:id="@+id/bus_spinner"
+                    style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/enabled_layout"
+                style="@style/ItemRow"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/FormInputLabelConstrained"
+                    android:text="@string/enabled_label" />
+
+                <Spinner
+                    android:id="@+id/enabled_spinner"
+                    style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bypass_layout"
+                style="@style/ItemRow"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/FormInputLabelConstrained"
+                    android:text="@string/bypass_label" />
+
+                <Spinner
+                    android:id="@+id/bypass_spinner"
+                    style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/format_layout"
+                style="@style/ItemRow"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/FormInputLabelConstrained"
+                    android:text="@string/format_label" />
+
+                <Spinner
+                    android:id="@+id/format_spinner"
+                    style="@style/ItemData"
+                    android:popupBackground="@android:color/white"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/custom_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    style="@style/ItemRow"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/FormInputLabel"
+                        android:text="@string/custom_input_label" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/customInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Custom JSON" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/send_request"
+                style="@style/MinimalButton"
+                android:text="@string/send_button"
+                android:visibility="gone" />
+
+            <LinearLayout
+                style="@style/ItemRow"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/ItemLabel"
+                    android:text="@string/last_diag_request_label" />
+
+                <TextView
+                    android:id="@+id/last_request"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ItemRow"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/ItemLabel"
+                    android:text="@string/diag_response_label" />
+
+                <TextView
+                    android:id="@+id/command_response"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

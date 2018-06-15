@@ -9,11 +9,15 @@
     <string name="recording_directory_key">recording_output</string>
     <string name="uploading_checkbox_key">uploading_enabled</string>
     <string name="uploading_path_key">uploading_target</string>
+    <string name="dweeting_checkbox_key">dweeting_enabled</string>
+    <string name="dweeting_thingname_key">dweeting_target</string>
     <string name="bluetooth_polling_key">bluetooth_polling</string>
     <string name="bluetooth_mac_key">bluetooth_mac</string>
     <string name="network_host_key">network_host</string>
     <string name="network_port_key">network_port</string>
     <string name="trace_source_file_key">playback_trace_file</string>
+    <string name="phone_source_polling_checkbox_key">phone_source_enabled</string>
+
 
     <!-- A default value for the token so we can still build the Enabler without
       one - can be overridden in any app using this library. -->
@@ -41,4 +45,6 @@
     <string name="longitude_label">Longitude</string>
     <string name="parking_brake_status_label">Parking Brake</string>
 
+    <string name="channel_name">OpenXC Channel</string>
+    <string name="channel_description">OpenXC Vehicle Service Notification Channel</string>
 </resources>

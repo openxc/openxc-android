@@ -159,6 +159,18 @@ public class BinaryDeserializer {
                 commandType = CommandType.VERSION;
             } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DEVICE_ID)) {
                 commandType = CommandType.DEVICE_ID;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.PLATFORM)) {
+                commandType = CommandType.PLATFORM;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.PASSTHROUGH)) {
+                commandType = CommandType.PASSTHROUGH;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.ACCEPTANCE_FILTER_BYPASS)) {
+                commandType = CommandType.AF_BYPASS;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.PAYLOAD_FORMAT)) {
+                commandType = CommandType.PAYLOAD_FORMAT;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.SD_MOUNT_STATUS)) {
+                commandType = CommandType.SD_MOUNT_STATUS;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.RTC_CONFIGURATION)) {
+                commandType = CommandType.RTC_CONFIGURATION;
             } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DIAGNOSTIC)) {
                 commandType = CommandType.DIAGNOSTIC_REQUEST;
             } else {
@@ -228,6 +240,18 @@ public class BinaryDeserializer {
                 commandType = CommandType.VERSION;
             } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DEVICE_ID)) {
                 commandType = CommandType.DEVICE_ID;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.PLATFORM)){
+                commandType = CommandType.PLATFORM;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.PASSTHROUGH)){
+                commandType = CommandType.PASSTHROUGH;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.ACCEPTANCE_FILTER_BYPASS)){
+                commandType = CommandType.AF_BYPASS;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.PAYLOAD_FORMAT)){
+                commandType = CommandType.PAYLOAD_FORMAT;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.SD_MOUNT_STATUS)){
+                commandType = CommandType.SD_MOUNT_STATUS;
+            } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.RTC_CONFIGURATION)){
+                commandType = CommandType.RTC_CONFIGURATION;
             } else if(serializedType.equals(BinaryMessages.ControlCommand.Type.DIAGNOSTIC)) {
                 commandType = CommandType.DIAGNOSTIC_REQUEST;
             } else {

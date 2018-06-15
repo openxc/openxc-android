@@ -14,7 +14,9 @@ public class NativeGpsPreferenceManager extends VehiclePreferenceManager {
 
     public void close() {
         super.close();
-        getVehicleManager().setNativeGpsStatus(false);
+        if(getVehicleManager()!=null) {
+            getVehicleManager().setNativeGpsStatus(false);
+        }
     }
 
     protected PreferenceListener createPreferenceListener() {

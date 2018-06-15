@@ -104,6 +104,7 @@
     <Button
         android:id="@+id/start_bluetooth_search_btn"
         style="@style/MinimalButton"
+        android:textAllCaps="true"
         android:text="@string/bluetooth_search_button" />
 
 </LinearLayout>
