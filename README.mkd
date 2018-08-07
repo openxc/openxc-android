@@ -5,13 +5,13 @@ OpenXC Android Library
 
 [![Stories in Ready](https://badge.waffle.io/openxc/openxc-android.png?label=ready&title=Ready)](http://waffle.io/openxc/openxc-android)
 
-This library is a part of the [OpenXC][] project.
+This library is a part of the [OpenXC](http://openxcplatform.com) project.
 
 This Android library contains the tools required to read vehicle data from the
 vehicle's CAN bus through the OpenXC vehicle interface in any Android
 application.
 
-Visit the [OpenXC][] project page for
+Visit the [OpenXC](http://openxcplatform.com) project page for
 [installation
 instructions](http://openxcplatform.com/getting-started/library-installation.html),
 [usage details](http://openxcplatform.com/android/api-guide.html), and the
