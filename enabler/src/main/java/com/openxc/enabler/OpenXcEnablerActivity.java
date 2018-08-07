@@ -21,6 +21,7 @@ import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxcplatform.enabler.BuildConfig;
 import com.openxcplatform.enabler.R;
+import net.hockeyapp.android.CrashManager;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
  * the reliability of OpenXC by handling background tasks on behalf of client
@@ -151,5 +152,15 @@ public class OpenXcEnablerActivity extends FragmentActivity {
             Log.e(TAG, "Unexpected NameNotFound.", e);
         }
         return key;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForCrashes();
+    }
+
+    private void checkForCrashes() {
+        CrashManager.register(this);
     }
 }

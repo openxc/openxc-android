@@ -27,6 +27,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.DocumentsContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -75,7 +76,6 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,10 +140,17 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             } else if(isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
+                if (!TextUtils.isEmpty(id)) {
+                    return id.replace("raw:", "");
+                }
+                try {
+                    final Uri contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                    return getDataColumn(context, contentUri, null, null);
+                } catch (NumberFormatException e) {
+                    Log.i(TAG,e.getMessage());
+                    return null;
+                }
             }
         } else if ("file".equalsIgnoreCase(uri.getScheme()) ||
                 "content".equalsIgnoreCase(uri.getScheme())) {
