@@ -9,6 +9,7 @@
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
+    <string name="disconnect_button">Disconnect</string>
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>

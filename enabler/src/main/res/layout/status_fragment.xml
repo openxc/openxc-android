@@ -107,4 +107,10 @@
         android:textAllCaps="true"
         android:text="@string/bluetooth_search_button" />
 
+    <Button
+        android:id="@+id/disconnect_btn"
+        style="@style/MinimalButton"
+        android:textAllCaps="true"
+        android:text="@string/disconnect_button" />
+
 </LinearLayout>
