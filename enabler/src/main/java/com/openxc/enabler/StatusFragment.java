@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class StatusFragment extends Fragment {
+public class StatusFragment extends Fragment implements Button.OnClickListener{
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static String TAG = "StatusFragment";
@@ -52,6 +53,8 @@ public class StatusFragment extends Fragment {
     private VehicleManager mVehicleManager;
     private View mServiceNotRunningWarningView;
 
+    private Button mDisconnect;
+    private Button mBluetoothSearch;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
@@ -207,14 +210,10 @@ public class StatusFragment extends Fragment {
         mFileConnIV = v.findViewById(R.id.connection_file);
         mNetworkConnIV = v.findViewById(R.id.connection_network);
         mNoneConnView = v.findViewById(R.id.connection_none);
-
-        v.findViewById(R.id.start_bluetooth_search_btn).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startBluetoothSearch();
-                    }
-                });
+        mBluetoothSearch = v.findViewById(R.id.start_bluetooth_search_btn);
+        mBluetoothSearch.setOnClickListener(this);
+        mDisconnect = v.findViewById(R.id.disconnect_btn);
+        mDisconnect.setOnClickListener(this);
 
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -279,4 +278,19 @@ public class StatusFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.start_bluetooth_search_btn :
+                startBluetoothSearch();
+                break;
+            case R.id.disconnect_btn :
+                try {
+                    mVehicleManager.setVehicleInterface(null);
+                } catch (VehicleServiceException e) {
+                    Log.e(TAG, "Unable to disconnect vehicle interface", e);
+                }
+                break;
+        }
+    }
 }
