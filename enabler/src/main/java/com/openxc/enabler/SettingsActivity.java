@@ -1,5 +1,6 @@
 package com.openxc.enabler;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,6 +29,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.DocumentsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -59,6 +63,8 @@ public class SettingsActivity extends PreferenceActivity {
     private final static String ABOUT_PREFERENCE =
             "com.openxc.enabler.preferences.ABOUT";
     private final static int FILE_SELECTOR_RESULT = 100;
+
+    private static final int APP_PERMISSION_REQUEST_WRITE_STORAGE = 200;
 
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
@@ -535,6 +541,7 @@ public class SettingsActivity extends PreferenceActivity {
     private Preference.OnPreferenceClickListener mTraceFileClickListener =
             new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(Preference preference) {
+            checkExternalStoragePermission();
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -543,6 +550,34 @@ public class SettingsActivity extends PreferenceActivity {
         }
     };
 
+    private void checkExternalStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    APP_PERMISSION_REQUEST_WRITE_STORAGE);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case APP_PERMISSION_REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //do nothing
+                } else {
+                    Toast.makeText(this, "External write permission missing", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+        }
+    }
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
