@@ -1,5 +1,6 @@
 package com.openxc.sources;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -13,6 +14,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
@@ -134,6 +136,11 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
                         SensorManager.SENSOR_DELAY_NORMAL);
             }
 
+            if (ActivityCompat.checkSelfPermission
+                    (thecontext, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, 10, this);
 

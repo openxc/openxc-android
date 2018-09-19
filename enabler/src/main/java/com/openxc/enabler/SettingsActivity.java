@@ -65,6 +65,7 @@ public class SettingsActivity extends PreferenceActivity {
     private final static int FILE_SELECTOR_RESULT = 100;
 
     private static final int APP_PERMISSION_REQUEST_WRITE_STORAGE = 200;
+    private static final int APP_PERMISSION_ACCESS_FINE_LOCATION = 300;
 
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
@@ -294,6 +295,8 @@ public class SettingsActivity extends PreferenceActivity {
     protected void initializePhoneSensorPreferences(PreferenceManager manager) {
         mPhoneSensorPreference = (CheckBoxPreference) manager.findPreference(
                 getString(R.string.phone_source_polling_checkbox_key));
+        mPhoneSensorPreference.setOnPreferenceClickListener(
+                mPhoneSensorClickListener);
 
     }
 
@@ -550,6 +553,26 @@ public class SettingsActivity extends PreferenceActivity {
         }
     };
 
+    private Preference.OnPreferenceClickListener mPhoneSensorClickListener =
+            new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    checkPhoneSensorPermission();
+                    return true;
+                }
+            };
+
+    private void checkPhoneSensorPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    APP_PERMISSION_ACCESS_FINE_LOCATION);
+
+        }
+    }
+
     private void checkExternalStoragePermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -575,7 +598,16 @@ public class SettingsActivity extends PreferenceActivity {
                 }
                 return;
             }
-
+            case APP_PERMISSION_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //do nothing
+                } else {
+                    Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+                    mPhoneSensorPreference.setChecked(false);
+                }
+                return;
+            }
         }
     }
     private ServiceConnection mConnection = new ServiceConnection() {
