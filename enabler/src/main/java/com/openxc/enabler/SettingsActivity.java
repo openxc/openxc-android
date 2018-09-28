@@ -557,7 +557,7 @@ public class SettingsActivity extends PreferenceActivity {
             new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     checkPhoneSensorPermission();
-                    return true;
+                    return false;
                 }
             };
 
@@ -602,6 +602,7 @@ public class SettingsActivity extends PreferenceActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //do nothing
+                    mPhoneSensorPreference.setChecked(true);
                 } else {
                     Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
                     mPhoneSensorPreference.setChecked(false);
