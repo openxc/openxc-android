@@ -1,16 +1,10 @@
 package com.openxc.sources.trace;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
@@ -20,6 +14,16 @@ import com.openxc.messages.formatters.JsonFormatter;
 import com.openxc.sources.ContextualVehicleDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.SourceCallback;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 
 /**
  * A vehicle data source that reads measurements from a pre-recorded trace file.
@@ -145,81 +149,98 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         while(mRunning) {
             waitForCallback();
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
-            BufferedReader reader;
-            try {
-                reader = openFile(mFilename);
-            } catch(DataSourceException e) {
-                Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
-                break;
-            }
-
-            String line;
-            long startingTime = System.currentTimeMillis();
-            // In the future may want to support binary traces
-            try {
-                while(mRunning && (line = reader.readLine()) != null) {
-                    VehicleMessage measurement;
-                    try {
-                        measurement = JsonFormatter.deserialize(line);
-                    } catch(UnrecognizedMessageTypeException e) {
-                        Log.w(TAG, "A trace line was not in the expected " +
-                                "format: " + line);
-                        continue;
-                    }
-
-                    if(measurement == null) {
-                        continue;
-                    }
-
-                    if(measurement != null && !measurement.isTimestamped()) {
-                        Log.w(TAG, "A trace line was missing a timestamp: " +
-                                line);
-                        continue;
-                    }
-
-                    try {
-                        waitForNextRecord(startingTime, measurement.getTimestamp());
-                    } catch(NumberFormatException e) {
-                        Log.w(TAG, "A trace line was not in the expected " +
-                                "format: " + line);
-                        continue;
-                    }
-                    measurement.untimestamp();
-                    if(!mTraceValid) {
-                        connected();
-                        mTraceValid = true;
-                    }
-                    handleMessage(measurement);
-                }
-            } catch(IOException e) {
-                Log.w(TAG, "An exception occurred when reading the trace " +
-                        reader, e);
-                break;
-            } finally {
+            BufferedReader reader = null;
+            if (checkPermission()) {
                 try {
-                    reader.close();
-                } catch(IOException e) {
-                    Log.w(TAG, "Couldn't even close the trace file", e);
+
+                    reader = openFile(mFilename);
+                } catch (DataSourceException e) {
+                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                    break;
+                }
+
+                String line;
+                long startingTime = System.currentTimeMillis();
+                // In the future may want to support binary traces
+                try {
+                    while (mRunning && (line = reader.readLine()) != null) {
+                        VehicleMessage measurement;
+                        try {
+                            measurement = JsonFormatter.deserialize(line);
+                        } catch (UnrecognizedMessageTypeException e) {
+                            Log.w(TAG, "A trace line was not in the expected " +
+                                    "format: " + line);
+                            continue;
+                        }
+
+                        if (measurement == null) {
+                            continue;
+                        }
+
+                        if (measurement != null && !measurement.isTimestamped()) {
+                            Log.w(TAG, "A trace line was missing a timestamp: " +
+                                    line);
+                            continue;
+                        }
+
+                        try {
+                            waitForNextRecord(startingTime, measurement.getTimestamp());
+                        } catch (NumberFormatException e) {
+                            Log.w(TAG, "A trace line was not in the expected " +
+                                    "format: " + line);
+                            continue;
+                        }
+                        measurement.untimestamp();
+                        if (!mTraceValid) {
+                            connected();
+                            mTraceValid = true;
+                        }
+                        handleMessage(measurement);
+                    }
+                } catch (IOException e) {
+                    Log.w(TAG, "An exception occurred when reading the trace " +
+                            reader, e);
+                    break;
+                } finally {
+                    try {
+                        if (reader != null) {
+                            reader.close();
+                        }
+                    } catch (IOException e) {
+                        Log.w(TAG, "Couldn't even close the trace file", e);
+                    }
+                }
+
+                if (!mLoop) {
+                    Log.d(TAG, "Not looping trace.");
+                    break;
+                }
+
+                disconnected();
+                Log.d(TAG, "Restarting playback of trace " + mFilename);
+                // Set this back to false so the VI shows as "disconnected" for
+                // a second before reconnecting.
+                mTraceValid = false;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
                 }
             }
-
-            if(!mLoop) {
-                Log.d(TAG, "Not looping trace.");
-                break;
-            }
-
             disconnected();
-            Log.d(TAG, "Restarting playback of trace " + mFilename);
-            // Set this back to false so the VI shows as "disconnected" for
-            // a second before reconnecting.
-            mTraceValid = false;
-            try {
-                Thread.sleep(1000);
-            } catch(InterruptedException e) {}
+            mRunning = false;
+            Log.d(TAG, "Playback of trace " + mFilename + " is finished");
         }
-        disconnected();
-        mRunning = false;
-        Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+    }
+
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG,"Write external storage permission missing.");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private static URI uriFromString(String path) throws DataSourceException {
