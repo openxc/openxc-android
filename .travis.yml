@@ -1,7 +1,7 @@
 language: android
 sudo: false
 jdk:
-  - oraclejdk8
+- oraclejdk8
 android:
   components:
   - platform-tools
@@ -11,11 +11,11 @@ android:
   - extra-android-support
   - extra-android-m2repository
 script:
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew build test || ./gradlew testDebug'
+- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew build test || ./gradlew testDebug'
 deploy:
 - provider: releases
   api_key:
-    secure: msLFj++tHTib7s//IKjSeFsAE6SWTSkuvaJG6TDwBvB35vo538TmwOwk/eQ+QoaCL2843Es6/Tg2K8pl9xTKdl+aqy7GLGH7rt8Vuzi7EM1RhvFRsaZQQh6KQuQsA8aiSjcab31tJEWDoQJUPbSMVNX/FcUHf4lCYOoxW9hLhfU=
+    secure: Syj7l60jj+05PMmPfT2N2T+kvsYRGvKfXxKa+FUzIVFRUMF+y3kzjkUXC9xnL+jCaH+x01yC+DlGj9+YPd3nOenV9V0LhusRdeQy3E8udEwGodxFO7x5aCaIpAQ3VKWv5Uez71y7MdGjUEpaoiGWGcJN9Xa3fITq00FqVQNo9w8=
   file_glob: true
   file: "./enabler/build/outputs/apk/enabler-release-*.*.*.apk"
   on:
