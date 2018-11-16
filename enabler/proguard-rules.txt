@@ -1,7 +1,14 @@
 -dontwarn javax.annotation.**
+-dontwarn org.checkerframework.**
+-dontwarn afu.org.checkerframework.**
 -dontwarn javax.inject.**
 -dontwarn sun.misc.Unsafe
-
+-dontwarn com.google.common.util.**
+-dontwarn com.google.errorprone.**
+-dontwarn org.apache.http.**
+-dontnote com.google.**
+-dontnote com.bugsnag.**
+-dontnote net.hockeyapp.**
 # Keep all public and protected class methods on all OpenXC classes.
 -keep public class com.openxc.** {
     public protected *;
