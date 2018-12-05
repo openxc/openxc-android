@@ -16,6 +16,8 @@ import com.openxc.NoValueException;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleModemMessage;
+import com.openxc.messages.SimpleV2XMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
@@ -216,6 +218,65 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
     }
 
     public static Measurement getMeasurementFromMessage(
+            SimpleModemMessage message)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Class<? extends Measurement> measurementClass =
+                BaseMeasurement.getClassForId(message.getLabel());
+        return BaseMeasurement.getMeasurementFromMessage(measurementClass,
+                message);
+    }
+
+    public static Measurement getMeasurementFromMessage(
+            Class<? extends Measurement> measurementType,
+            SimpleModemMessage message)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Constructor<? extends Measurement> constructor = null;
+        if(message == null) {
+            throw new NoValueException();
+        }
+
+        try {
+            Measurement measurement = null;
+            SimpleModemMessage simpleMessage = message.asSimpleModemMessage();
+            Class<?> valueClass = simpleMessage.getValue().getClass();
+            if(valueClass == Double.class || valueClass == Integer.class) {
+                valueClass = Number.class;
+            }
+
+            try {
+                constructor = measurementType.getConstructor(valueClass);
+            } catch(NoSuchMethodException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType +
+                                " doesn't have the expected constructor, " +
+                                measurementType + "(" +
+                                valueClass + ")");
+            }
+
+            measurement = constructor.newInstance(simpleMessage.getValue());
+
+            if (simpleMessage.getTimestamp() != null) {
+                measurement.setTimestamp(simpleMessage.getTimestamp());
+            }
+            // https://github.com/openxc/openxc-android/issues/185
+            return measurement;
+        } catch(InstantiationException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " is abstract", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has a private constructor", e);
+        } catch(IllegalArgumentException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has unexpected arguments", e);
+        } catch(InvocationTargetException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + "'s constructor threw an exception",
+                    e);
+        }
+    }
+
+    public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
             SimpleVehicleMessage message)
                 throws UnrecognizedMeasurementTypeException, NoValueException {
@@ -269,6 +330,65 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 measurement = constructor.newInstance(
                         simpleMessage.getValue());
             }
+
+            if (simpleMessage.getTimestamp() != null) {
+                measurement.setTimestamp(simpleMessage.getTimestamp());
+            }
+            // https://github.com/openxc/openxc-android/issues/185
+            return measurement;
+        } catch(InstantiationException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " is abstract", e);
+        } catch(IllegalAccessException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has a private constructor", e);
+        } catch(IllegalArgumentException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + " has unexpected arguments", e);
+        } catch(InvocationTargetException e) {
+            throw new UnrecognizedMeasurementTypeException(
+                    measurementType + "'s constructor threw an exception",
+                    e);
+        }
+    }
+
+    public static Measurement getMeasurementFromMessage(
+            SimpleV2XMessage message)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Class<? extends Measurement> measurementClass =
+                BaseMeasurement.getClassForId(message.getLabel());
+        return BaseMeasurement.getMeasurementFromMessage(measurementClass,
+                message);
+    }
+
+    public static Measurement getMeasurementFromMessage(
+            Class<? extends Measurement> measurementType,
+            SimpleV2XMessage message)
+            throws UnrecognizedMeasurementTypeException, NoValueException {
+        Constructor<? extends Measurement> constructor = null;
+        if(message == null) {
+            throw new NoValueException();
+        }
+
+        try {
+            Measurement measurement = null;
+            SimpleV2XMessage simpleMessage = message.asSimpleV2XMessage();
+            Class<?> valueClass = simpleMessage.getValue().getClass();
+            if(valueClass == Double.class || valueClass == Integer.class) {
+                valueClass = Number.class;
+            }
+
+            try {
+                constructor = measurementType.getConstructor(valueClass);
+            } catch(NoSuchMethodException e) {
+                throw new UnrecognizedMeasurementTypeException(
+                        measurementType +
+                                " doesn't have the expected constructor, " +
+                                measurementType + "(" +
+                                valueClass + ")");
+            }
+
+            measurement = constructor.newInstance(simpleMessage.getValue());
 
             if (simpleMessage.getTimestamp() != null) {
                 measurement.setTimestamp(simpleMessage.getTimestamp());

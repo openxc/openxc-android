@@ -81,6 +81,17 @@
 
         <TextView
             style="@style/ItemLabel"
+            android:text="@string/vi_device_platform_label" />
+
+        <TextView
+            android:id="@+id/vi_device_platform"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
             android:text="@string/vi_device_id_label" />
 
         <TextView
@@ -93,13 +104,50 @@
 
         <TextView
             style="@style/ItemLabel"
-            android:text="@string/vi_device_platform_label" />
+            android:text="@string/modem_version_label" />
 
         <TextView
-            android:id="@+id/vi_device_platform"
+            android:id="@+id/modem_version"
             style="@style/ItemData" />
 
     </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/modem_device_id_label" ></TextView>
+
+        <TextView
+            android:id="@+id/modem_device_id"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/v2x_version_label" />
+
+        <TextView
+            android:id="@+id/v2x_version"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/v2x_device_id_label" ></TextView>
+
+        <TextView
+            android:id="@+id/v2x_device_id"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/start_bluetooth_search_btn"

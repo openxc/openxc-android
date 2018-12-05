@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
+import com.openxc.interfaces.bluetooth.BluetoothModemVehicleInterface;
+import com.openxc.interfaces.bluetooth.BluetoothV2XVehicleInterface;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
@@ -36,7 +38,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class StatusFragment extends Fragment implements Button.OnClickListener{
+public class StatusFragment extends Fragment implements Button.OnClickListener {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static String TAG = "StatusFragment";
@@ -45,6 +47,11 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private TextView mViVersionView;
     private TextView mViPlatformView;
     private TextView mViDeviceIdView;
+    private TextView mModemViVersionView;
+    private TextView mModemViDeviceIdView;
+    private TextView mModemViV2XVersionView;
+    private TextView mModemViV2XDeviceIdView;
+
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -60,6 +67,13 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Timer mTimer;
     private Context mContext;
 
+    private String version = null;
+    private String deviceId = null;
+    private String modemVersion = null;
+    private String modemDeviceId =null;
+    private String v2xVersion = null;
+    private String v2xDeviceId = null;
+
     private synchronized void updateViInfo() {
         if (mVehicleManager != null) {
             // Must run in another thread or we get circular references to
@@ -68,14 +82,40 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        final String version = mVehicleManager.getVehicleInterfaceVersion();
-                        final String deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
-                        final String platform = mVehicleManager.getVehicleInterfacePlatform();
+                        /*Request for Device ID and version  gets sent only once!
+                         * Rationale behind is that - Once a device is paired/connected and
+                         * received device ID and version, there would be lesser need to repeatedly send requests.
+                         * */
+                        if (version == null)
+                            version = mVehicleManager.getVehicleInterfaceVersion();
+                        if (deviceId == null)
+                            deviceId = mVehicleManager.getVehicleInterfaceDeviceId();
+
+                        if (modemVersion == null)
+                            modemVersion = mVehicleManager.getModemInterfaceVersion();
+
+                        if (modemDeviceId == null)
+                            modemDeviceId = mVehicleManager.getModemInterfaceDeviceId();
+                        else if (modemDeviceId != null && modemDeviceId.startsWith(BluetoothModemVehicleInterface.DEVICE_NAME_PREFIX))
+                            RegisterDevice.setDevice(modemDeviceId);
+
+                        if (v2xVersion == null)
+                            v2xVersion = mVehicleManager.getV2XInterfaceVersion();
+
+                        if (v2xDeviceId == null)
+                            v2xDeviceId = mVehicleManager.getV2XInterfaceDeviceId();
+                        else if (v2xDeviceId != null && v2xDeviceId.startsWith(BluetoothV2XVehicleInterface.DEVICE_NAME_PREFIX))
+                            RegisterDevice.setDevice(v2xDeviceId);
+
+
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 mViDeviceIdView.setText(deviceId);
                                 mViVersionView.setText(version);
-                                mViPlatformView.setText(platform);
+                                mModemViVersionView.setText(modemVersion);
+                                mModemViDeviceIdView.setText(modemDeviceId);
+                                mModemViV2XVersionView.setText(v2xVersion);
+                                mModemViV2XDeviceIdView.setText(v2xDeviceId);
                             }
                         });
                     } catch (NullPointerException e) {
@@ -205,6 +245,10 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);
+        mModemViVersionView = (TextView) v.findViewById(R.id.modem_version);
+        mModemViDeviceIdView = (TextView) v.findViewById(R.id.modem_device_id);
+        mModemViV2XVersionView = (TextView) v.findViewById(R.id.v2x_version);
+        mModemViV2XDeviceIdView = (TextView) v.findViewById(R.id.v2x_device_id);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
         mFileConnIV = v.findViewById(R.id.connection_file);
@@ -280,11 +324,11 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.start_bluetooth_search_btn :
+        switch (v.getId()) {
+            case R.id.start_bluetooth_search_btn:
                 startBluetoothSearch();
                 break;
-            case R.id.disconnect_btn :
+            case R.id.disconnect_btn:
                 try {
                     mVehicleManager.setVehicleInterface(null);
                 } catch (VehicleServiceException e) {

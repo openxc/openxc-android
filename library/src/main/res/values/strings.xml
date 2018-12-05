@@ -47,4 +47,11 @@
 
     <string name="channel_name">OpenXC Channel</string>
     <string name="channel_description">OpenXC Vehicle Service Notification Channel</string>
+
+    <string name="modem_device_id_label">Modem Device ID</string>
+    <string name="modem_version_label">Modem Version</string>
+    <string name="v2x_device_id_label">V2X Device ID</string>
+    <string name="v2x_version_label">V2X Version</string>
+    <string name="no_modem_messages_received">No modem messages received.</string>
+    <string name="no_v2x_messages_received">No v2x messages received.</string>
 </resources>
