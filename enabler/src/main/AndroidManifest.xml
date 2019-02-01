@@ -59,6 +59,8 @@
           </intent-filter>
       </receiver>
       <meta-data android:name="com.bugsnag.token" android:value="@string/bugsnag_token"/>
+      <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
   </application>
 
 </manifest>
