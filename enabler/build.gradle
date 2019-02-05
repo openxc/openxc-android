@@ -42,8 +42,8 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
+            proguardFile file('proguard-rules.txt')
             proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
-            proguardFile 'proguard-rules.txt'
             buildConfigField "String", "BUGSNAG_TOKEN", "\"" + rootProject.ext.bugsnagToken + "\""
         }
 
