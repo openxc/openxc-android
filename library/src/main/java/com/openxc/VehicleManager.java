@@ -741,6 +741,27 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     }
 
     /**
+     * Read the bitrate of messages from the bluetooth service.
+     *
+     * @throws VehicleServiceException if the listener is unable to be
+     *      unregistered with the library internals - an exceptional situation
+     *      that shouldn't occur.
+     */
+    public int getBitRate() throws VehicleServiceException {
+        if(mRemoteService != null) {
+            try {
+                return mRemoteService.getBitRate();
+            } catch(RemoteException e) {
+                throw new VehicleServiceException(
+                        "Unable to retrieve bitrate", e);
+            }
+        } else {
+            throw new VehicleServiceException(
+                    "Unable to retrieve bitrate");
+        }
+    }
+
+    /**
      * Return the connection status of the selected VI.
      *
      * @return true if the selected VI reports that it is connected to the

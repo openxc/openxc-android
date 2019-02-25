@@ -45,6 +45,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private TextView mViVersionView;
     private TextView mViPlatformView;
     private TextView mViDeviceIdView;
+    private TextView mViDeviceThroughputBytesView;
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -56,6 +57,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Button mDisconnect;
     private Button mBluetoothSearch;
     private TimerTask mUpdateMessageCountTask;
+    private TimerTask mUpdateBitRateCalcTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
     private Context mContext;
@@ -154,11 +156,15 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
 
             mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
                     getActivity(), mMessageCountView);
+            mUpdateBitRateCalcTask = new BitRateCalcTask(mVehicleManager,
+                    getActivity(), mViDeviceThroughputBytesView);
+
             mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
                     mVehicleManager, getActivity(),
                     mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
                     mNoneConnView);
             mTimer = new Timer();
+            mTimer.schedule(mUpdateBitRateCalcTask, 100, 1000);
             mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
             mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
         }
@@ -205,6 +211,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);
+        mViDeviceThroughputBytesView = (TextView) v.findViewById(R.id.throughput_bytes);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
         mFileConnIV = v.findViewById(R.id.connection_file);

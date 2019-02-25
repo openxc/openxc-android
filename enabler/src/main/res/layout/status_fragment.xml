@@ -69,6 +69,18 @@
 
         <TextView
             style="@style/ItemLabel"
+            android:text="Bytes Per Second" />
+
+        <TextView
+            android:id="@+id/throughput_bytes"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
             android:text="@string/vi_version_label" />
 
         <TextView
