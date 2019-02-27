@@ -1,6 +1,5 @@
 language: android
 sudo: false
-dist: xenial
 jdk:
 - oraclejdk8
 android:
