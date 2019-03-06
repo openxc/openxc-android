@@ -101,6 +101,7 @@ bintray {
     pkg {
         repo = "maven"
         name = "openxc-android"
+        userOrg = "openxc"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         issueTrackerUrl = 'https://github.com/openxc/openxc-android/issues'
