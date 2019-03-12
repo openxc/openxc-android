@@ -228,8 +228,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
                 else return 0;
             }
 
-
-            // Override and implement method for bit rate
+            // Override and implement methods for message rate and average message size
 
             @Override
             public void setVehicleInterface(String interfaceName,

@@ -149,14 +149,15 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     public int getBitRate() {
         System.arraycopy(mByteRateBuffer, 0, mByteRateBuffer, 1, 19);
-        mByteRateBuffer[0]= mByteRateCounter;
+        mByteRateBuffer[0] = mByteRateCounter;
         mByteRateCounter = 0;
         int sum = 0;
-        for(int a = 0; a < mByteRateBuffer.length; a++)
-        {
-            sum = sum + mByteRateBuffer[a];
+
+        for (int a = 0; a < mByteRateBuffer.length; a++) {
+            sum += mByteRateBuffer[a];
         }
-        return (sum / mByteRateBuffer.length)/1;
+
+        return sum / mByteRateBuffer.length;
     }
 
 
@@ -449,7 +450,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         } finally {
             mConnectionLock.readLock().unlock();
         }
-        mByteRateCounter = mByteRateCounter + bytesRead;
+        mByteRateCounter += bytesRead;
         return bytesRead;
     }
 
