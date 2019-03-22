@@ -1,7 +1,7 @@
 language: android
 sudo: false
 jdk:
-- openjdk9
+- openjdk8
 android:
   components:
   - platform-tools
