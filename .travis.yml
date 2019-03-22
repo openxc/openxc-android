@@ -1,7 +1,7 @@
 language: android
 sudo: false
 jdk:
-- openjdk8
+- openjdk9
 android:
   components:
   - platform-tools
@@ -38,3 +38,4 @@ env:
   - secure: fSxLsuELLvaNmGtFn4ZtELt8d1gSJZwJ+5+QahpV0b9Nf/JNUehSl4RSYVFsq2uw5fuhdsgy/OujpGEYWTA6iDidaB+YOXfwR3q1vpxwUCIEAjbhVG0TwlFh0wqcYOq8FHUBlSNh9DoLJh61N+Y1pCzoXAPFBqaqQ1wjUpxUfCw=
   - secure: VHn45y17v68I/VNhIBCNue9eRMdaRurHBSu8cGO3NLcjZFpJqYehqKnwhjIS2eP1SDHEM++LFz6XpANpU4KwdjnYaP5qEU4b2zEVqvc+9GZK37kFIaeSaOrvoRGYVrzp+oeU8ehG6MjsgXWjIwE4QNLVc8dinILjuqWXY5zxqGs=
   - GRADLE_OPTS="-Xmx1024m -XX:MaxPermSize=1024m"
+  - JAVA_OPTS="--add-modules java.xml.bind"
