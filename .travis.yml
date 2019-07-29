@@ -1,7 +1,8 @@
 language: android
+dist: trusty
 sudo: false
 jdk:
-- oraclejdk8
+- openjdk8
 android:
   components:
   - platform-tools
