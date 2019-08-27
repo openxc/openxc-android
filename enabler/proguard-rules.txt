@@ -8,7 +8,7 @@
 -dontwarn org.apache.http.**
 -dontnote com.google.**
 -dontnote com.bugsnag.**
--dontnote net.hockeyapp.**
+#-dontnote net.hockeyapp.**
 # Keep all public and protected class methods on all OpenXC classes.
 -keep public class com.openxc.** {
     public protected *;
