@@ -24,7 +24,7 @@ import com.openxcplatform.enabler.R;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
-//import net.hockeyapp.android.CrashManager;
+
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
  * the reliability of OpenXC by handling background tasks on behalf of client
