@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="data_format_key">Data_Format</string>
+    <string name="data_format_key_title">Data Format</string>
+
+    <string name="default_mode_option">Auto Detect Mode</string>
+    <string name="default_mode_option_value">auto detect mode</string>
+    <string name="json_mode_option">JSON Mode</string>
+    <string name="json_mode_option_value">json mode</string>
+    <string name="protobuf_mode_option">Protobuf Mode</string>
+    <string name="protobuf_mode_option_value">protobuf mode</string>
+
+    <string-array name="data_format_types">
+        <item>@string/default_mode_option</item>
+        <item>@string/json_mode_option</item>
+        <item>@string/protobuf_mode_option</item>
+    </string-array>
+
+    <string-array name="data_format_type_aliases">
+        <item>@string/default_mode_option_value</item>
+        <item>@string/json_mode_option_value</item>
+        <item>@string/protobuf_mode_option_value</item>
+    </string-array>
+</resources>

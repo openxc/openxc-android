@@ -8,6 +8,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.ListPreference;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.openxc.messages.SerializationException;
@@ -122,6 +126,13 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     @Override
     public void run() {
+
+
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("data-Format",
+                Context.MODE_PRIVATE);
+       // Log.d("BytestreamDataSource", "initializDataformatPreference111: "+ sharedpreferences.getString("dataFormat" , null));
+
+
         while(isRunning()) {
             try {
                 waitForConnection();
@@ -130,7 +141,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 stop();
                 break;
             }
-
+            Log.e(getTag(), "gggggggggggggggggggggg");
             int received;
             byte[] bytes = new byte[READ_BATCH_SIZE];
             try {
@@ -148,17 +159,54 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
+//
+//                if (sharedpreferences.contains("dataFormat")) {
+//                    Log.d("BytestreamDataSource", "initializDataformatPreference111: "+ sharedpreferences.getString("dataFormat" , null));
+//                }
+                String dataFormatValue =  sharedpreferences.getString("dataFormat" , null);
+                Log.d("BytestreamDataSource", "initializDataformatvalue: "+ dataFormatValue);
+                // Ranjan data format logic
+                if ( dataFormatValue.equals("JSON Mode")){
+                    synchronized(this) {
+                        mStreamHandler = new JsonStreamer();
+                       // Log.i(getTag(), "Source is selected JSON ");
+                    }
+                }
+                else if (dataFormatValue.equals("Protobuf Mode") ){
+                    synchronized(this) {
+                        mStreamHandler = new BinaryStreamer();
+                        //Log.i(getTag(), "Source is selected protocol buffers");
+                    }
+                }else{
                 synchronized(this) {
+                    Log.i(getTag(), "Source is slected Auto detect");
                     if(mStreamHandler == null) {
                         if(JsonStreamer.containsJson(new String(bytes))) {
                             mStreamHandler = new JsonStreamer();
                             Log.i(getTag(), "Source is sending JSON");
+
+
                         } else {
                             mStreamHandler = new BinaryStreamer();
                             Log.i(getTag(), "Source is sending protocol buffers");
                         }
                     }
                 }
+
+                }
+//                synchronized(this) {
+//                    if(mStreamHandler == null) {
+//                        if(JsonStreamer.containsJson(new String(bytes))) {
+//                            mStreamHandler = new JsonStreamer();
+//                            Log.i(getTag(), "Source is sending JSON");
+//
+//
+//                        } else {
+//                            mStreamHandler = new BinaryStreamer();
+//                            Log.i(getTag(), "Source is sending protocol buffers");
+//                        }
+//                    }
+//                }
 
                 mStreamHandler.receive(bytes, received);
                 VehicleMessage message;
@@ -170,6 +218,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         disconnect();
         Log.d(getTag(), "Stopped " + getTag());
     }
+
 
     public void receive(VehicleMessage command) throws DataSinkException {
         if(isConnected()) {

@@ -10,6 +10,14 @@
             android:defaultValue="@string/bluetooth_interface_option_value"
             android:persistent="true"/>
 
+    <ListPreference
+        android:key="@string/data_format_key"
+        android:title="@string/data_format_key_title"
+        android:entries="@array/data_format_types"
+        android:entryValues="@array/data_format_type_aliases"
+        android:defaultValue="@string/default_mode_option_value"
+        android:persistent="true"/>
+
     <PreferenceCategory
             android:title="@string/gps_settings">
         <CheckBoxPreference
@@ -63,4 +71,5 @@
             android:title="@string/phone_source_polling_checkbox_title"
             android:defaultValue="false" />
     </PreferenceCategory>
+
 </PreferenceScreen>

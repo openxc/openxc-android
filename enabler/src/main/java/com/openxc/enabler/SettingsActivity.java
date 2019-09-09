@@ -68,6 +68,7 @@ public class SettingsActivity extends PreferenceActivity {
     private static final int APP_PERMISSION_ACCESS_FINE_LOCATION = 300;
 
     private ListPreference mVehicleInterfaceListPreference;
+    private ListPreference mDataFormatListPreference;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
     private CheckBoxPreference mDweetingPreference;
@@ -391,6 +392,36 @@ public class SettingsActivity extends PreferenceActivity {
                 getValue().equals(
                     getString(R.string.trace_interface_option_value)));
     }
+//Ranjan Added code for Data format
+    protected void initializDataformatPreference(PreferenceManager manager) {
+        mDataFormatListPreference = (ListPreference)
+                manager.findPreference(getString(
+                        R.string.data_format_key));
+        PreferenceManager.setDefaultValues(this, R.xml.data_source_preferences, false);
+        mDataFormatListPreference.setOnPreferenceChangeListener(
+                mDataFormatUpdatedListener);
+
+        PreferenceScreen screen = (PreferenceScreen)
+                manager.findPreference("preference_screen");
+
+        List<String> entries = new ArrayList<>(Arrays.asList(getResources().
+                getStringArray(R.array.data_format_types)));
+        List<String> values = new ArrayList<>(Arrays.asList(getResources().
+                getStringArray(R.array.data_format_type_aliases)));
+        if(android.os.Build.VERSION.SDK_INT <
+                android.os.Build.VERSION_CODES.HONEYCOMB) {
+            // USB not supported, so re-load entries without that option
+            entries.remove(getString(R.string.usb_interface_option));
+            values.remove(getString(R.string.usb_interface_option_value));
+        }
+
+        CharSequence[] prototype = {};
+        mDataFormatListPreference.setEntries(entries.toArray(prototype));
+        mDataFormatListPreference.setEntryValues(values.toArray(prototype));
+        mDataFormatListPreference.setSummary(mDataFormatListPreference.getEntry());
+        Log.d(TAG, "initializDataformatPreference: "+ mDataFormatListPreference.getEntry());
+
+    }
 
     protected void initializeDataSourcePreferences(PreferenceManager manager) {
         initializeVehicleInterfacePreference(manager);
@@ -398,6 +429,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializeNetwork(manager);
         initializeTracePreferences(manager);
         initializePhoneSensorPreferences(manager);
+        initializDataformatPreference(manager);
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {
@@ -501,6 +533,29 @@ public class SettingsActivity extends PreferenceActivity {
             return true;
         }
     };
+    //Ranjan Added code for Data format
+    private OnPreferenceChangeListener mDataFormatUpdatedListener =
+            new OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference,
+                                                  Object newValue) {
+                    // Can't just call preference.getSummary() because this callback
+                    // happens bofore newValue is actually set.
+                    ListPreference listPreference = (ListPreference) preference;
+                    String newSummary = listPreference.getEntries()[
+                            listPreference.findIndexOfValue(
+                                    newValue.toString())].toString();
+                    preference.setSummary(newSummary);
+                   // mDataFormatListPreference.setEnabled(newValue.equals(getString(R.string.)));
+                    Log.d(TAG, "initializDataformatPreference: "+ preference.getSummary());
+
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("data-Format", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("dataFormat", newSummary); // Storing string
+                    editor.commit();
+
+                    return true;
+                }
+            };
 
     private OnPreferenceChangeListener mUpdateSummaryListener =
             new OnPreferenceChangeListener() {

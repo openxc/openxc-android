@@ -141,5 +141,7 @@
     <orderEntry type="library" name="Gradle: com.microsoft.appcenter:appcenter-crashes:2.3.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.microsoft.appcenter:appcenter:2.3.0@aar" level="project" />
     <orderEntry type="module" module-name="library" />
+    <orderEntry type="module" module-name="library" />
+    <orderEntry type="module" module-name="library" />
   </component>
 </module>
