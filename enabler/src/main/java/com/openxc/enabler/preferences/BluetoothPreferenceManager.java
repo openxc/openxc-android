@@ -130,10 +130,12 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void fillBluetoothDeviceList() {
-        for(BluetoothDevice device :
+        for (BluetoothDevice device :
                 mBluetoothDeviceManager.getPairedDevices()) {
-            mDiscoveredDevices.put(device.getAddress(),
-                    device.getName() + " (" + device.getAddress() + ")");
+            if (device.getName().toUpperCase().startsWith(BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                mDiscoveredDevices.put(device.getAddress(),
+                        device.getName() + " (" + device.getAddress() + ")");
+            }
         }
 
         persistCandidateDiscoveredDevices();
@@ -142,12 +144,13 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
 
     private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
+            if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                 BluetoothDevice device = intent.getParcelableExtra(
                         BluetoothDevice.EXTRA_DEVICE);
-                if(device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    String summary = device.getName() + " (" +
-                            device.getAddress() + ")";
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED && device.getName() != null
+                        && device.getName()
+                        .toUpperCase().startsWith(BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                    String summary = device.getName() + " (" + device.getAddress() + ")";
                     Log.d(TAG, "Found unpaired device: " + summary);
                     mDiscoveredDevices.put(device.getAddress(), summary);
                     persistCandidateDiscoveredDevices();
