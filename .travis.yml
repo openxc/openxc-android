@@ -1,4 +1,5 @@
 language: android
+dist: trusty
 sudo: false
 jdk:
 - openjdk8
@@ -10,8 +11,6 @@ android:
   - android-28
   - extra-android-support
   - extra-android-m2repository
-before_install:
-  - yes | sdkmanager "platforms;android-28"
 script:
 - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew build test || ./gradlew testDebug'
 deploy:
