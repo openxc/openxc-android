@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.openxc.messages.SerializationException;
@@ -146,21 +147,39 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 disconnect();
                 continue;
             }
-
+            SharedPreferences sharedpreferences = getContext().getSharedPreferences("data-Format", Context.MODE_PRIVATE);
+            String dataFormatValue =  sharedpreferences.getString("dataFormat" , null);
+            Log.d("BytestreamDataSource", "initializDataformatvalue: "+ dataFormatValue);
             if(received > 0) {
-                synchronized(this) {
-                    if(mStreamHandler == null) {
-                        if(JsonStreamer.containsJson(new String(bytes))) {
-                            mStreamHandler = new JsonStreamer();
-                            Log.i(getTag(), "Source is sending JSON");
-                        } else {
-                            mStreamHandler = new BinaryStreamer();
-                            Log.i(getTag(), "Source is sending protocol buffers");
+                if ( dataFormatValue.equals("JSON Mode")){
+                    synchronized(this) {
+                        mStreamHandler = new JsonStreamer();
+                        // Log.i(getTag(), "Source is selected JSON ");
+                    }
+                }
+                else if (dataFormatValue.equals("Protobuf Mode") ){
+                    synchronized(this) {
+                        mStreamHandler = new BinaryStreamer();
+                        //Log.i(getTag(), "Source is selected protocol buffers");
+                    }
+                } else {
+                    synchronized (this) {
+                        Log.i(getTag(), "Source is slected Auto detect");
+                        if (mStreamHandler == null) {
+                            if (JsonStreamer.containsJson(new String(bytes))) {
+                                mStreamHandler = new JsonStreamer();
+                                Log.i(getTag(), "Source is sending JSON");
+
+
+                            } else {
+                                mStreamHandler = new BinaryStreamer();
+                                Log.i(getTag(), "Source is sending protocol buffers");
+                            }
                         }
                     }
                 }
 
-                mStreamHandler.receive(bytes, received);
+                    mStreamHandler.receive(bytes, received);
                 VehicleMessage message;
                 while((message = mStreamHandler.parseNextMessage()) != null) {
                     handleMessage(message);
