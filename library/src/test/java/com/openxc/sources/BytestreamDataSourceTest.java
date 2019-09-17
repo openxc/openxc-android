@@ -104,7 +104,7 @@ public class BytestreamDataSourceTest {
         TestUtils.pause(20);
         verify(callback, never()).receive(Matchers.any(VehicleMessage.class));
     }
-/*
+
     @Test
     public void receiveValidBinaryTriggersCallback() throws SerializationException {
         source.start();
@@ -159,7 +159,7 @@ public class BytestreamDataSourceTest {
             assertEquals(received, messages.get(i));
         }
     }
-*/
+
     private class TestBytestreamSource extends BytestreamDataSource {
         public boolean connected = false;
         public ArrayList<byte[]> packets = new ArrayList<>();
@@ -201,7 +201,9 @@ public class BytestreamDataSourceTest {
                 mPacketLock.unlock();
             }
         }
-
+        public void inject(String dataformat) {
+            inject("JSON Mode");
+        }
         @Override
         protected int read(byte[] bytes) throws IOException {
             try {
