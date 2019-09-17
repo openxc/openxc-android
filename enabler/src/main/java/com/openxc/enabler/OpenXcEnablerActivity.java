@@ -21,7 +21,9 @@ import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxcplatform.enabler.BuildConfig;
 import com.openxcplatform.enabler.R;
-import net.hockeyapp.android.CrashManager;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
 
 /** The OpenXC Enabler app is primarily for convenience, but it also increases
  * the reliability of OpenXC by handling background tasks on behalf of client
@@ -161,6 +163,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     }
 
     private void checkForCrashes() {
-        CrashManager.register(this);
+        AppCenter.start(getApplication(), "f9cdd141-2cb9-4cb5-a756-8bdea1b20b4a",
+                Analytics.class, Crashes.class);
     }
 }

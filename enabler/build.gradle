@@ -13,7 +13,7 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         multiDexEnabled true
-        manifestPlaceholders = [HOCKEYAPP_APP_ID: "f9cdd1412cb94cb5a7568bdea1b20b4a"]
+
     }
 
    signingConfigs {
@@ -81,7 +81,8 @@ dependencies {
     implementation project(":library")
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.bugsnag:bugsnag-android:4.3.2'
-    implementation 'net.hockeyapp.android:HockeySDK:5.1.0'
+    implementation 'com.microsoft.appcenter:appcenter-analytics:2.3.0'
+    implementation 'com.microsoft.appcenter:appcenter-crashes:2.3.0'
 
 
     androidTestImplementation 'junit:junit:4.12'
