@@ -153,13 +153,13 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                if ( dataFormatValue.equals("JSON Mode")){
+                if ( dataFormatValue == "JSON Mode"){
                     synchronized(this) {
                         mStreamHandler = new JsonStreamer();
                          Log.i(getTag(), "Source is selected JSON ");
                     }
                 }
-                else if (dataFormatValue.equals("Protobuf Mode") ){
+                else if (dataFormatValue == "Protobuf Mode"){
                     synchronized(this) {
                         mStreamHandler = new BinaryStreamer();
                         Log.i(getTag(), "Source is selected protocol buffers");
