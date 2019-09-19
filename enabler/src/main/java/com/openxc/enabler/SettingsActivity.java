@@ -35,7 +35,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
+import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
@@ -78,7 +80,6 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceManagerService mPreferenceManager;
     private ListPreference mDataFormatListPreference;
     private CheckBoxPreference mPhoneSensorPreference;
-
 
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
@@ -516,7 +517,13 @@ public class SettingsActivity extends PreferenceActivity {
 
                     SharedPreferences pref = getApplicationContext().getSharedPreferences("data-Format", 0);
                     SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("dataFormat", newSummary); // Storing string
+                    if ( newSummary.equals("JSON Mode")){
+                        editor.putInt("dataFormat", 1); // Storing int
+                        }else if ( newSummary.equals("Protobuf Mode")){
+                        editor.putInt("dataFormat", 2); // Storing int
+                    }else{
+                        editor.putInt("dataFormat", 0); // Storing int
+                    }
                     editor.commit();
 
                     return true;
