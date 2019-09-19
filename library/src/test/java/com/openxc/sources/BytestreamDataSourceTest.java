@@ -136,6 +136,22 @@ public class BytestreamDataSourceTest {
     }
 
     @Test
+    public void receiveValidJsonTriggersInjectProtobufModeCallback() {
+        source.start();
+        source.connect();
+        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        source.inject("Protobuf Mode");      // valid Values "JSON Mode" and "Protobuf Mode"
+        source.inject(new JsonStreamer().serializeForStream(message));
+        TestUtils.pause(100);
+        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                VehicleMessage.class);
+        verify(callback).receive(argument.capture());
+        VehicleMessage received = argument.getValue();
+        received.untimestamp();
+        assertEquals(received, message);
+    }
+
+    @Test
     public void readMultipleMessageAtOnceReceivesAll() {
         source.start();
         source.connect();
@@ -202,7 +218,7 @@ public class BytestreamDataSourceTest {
             }
         }
         public void inject(String dataformat) {
-            inject("JSON Mode");
+            mDataFormatValue = dataformat;
         }
         @Override
         protected int read(byte[] bytes) throws IOException {
