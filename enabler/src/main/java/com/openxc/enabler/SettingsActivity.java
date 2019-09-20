@@ -226,7 +226,7 @@ public class SettingsActivity extends PreferenceActivity {
                     PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putString(getString(R.string.trace_source_file_key), newValue);
             editor.commit();
-
+            Log.d(TAG, "initializtraceFilePreference: "+ newValue);
             updateSummary(mTraceFilePreference, newValue);
         }
     }
@@ -517,13 +517,7 @@ public class SettingsActivity extends PreferenceActivity {
 
                     SharedPreferences pref = getApplicationContext().getSharedPreferences("data-Format", 0);
                     SharedPreferences.Editor editor = pref.edit();
-                    if ( newSummary.equals("JSON Mode")){
-                        editor.putInt("dataFormat", 1); // Storing int
-                        }else if ( newSummary.equals("Protobuf Mode")){
-                        editor.putInt("dataFormat", 2); // Storing int
-                    }else{
-                        editor.putInt("dataFormat", 0); // Storing int
-                    }
+                    editor.putString("dataFormat", newSummary); // Storing string
                     editor.commit();
 
                     return true;
@@ -558,7 +552,13 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.bluetooth_interface_option_value)));
             mTracePreferences.setEnabled(newValue.equals(
                     getString(R.string.trace_interface_option_value)));
-
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("TraceIsEnabled", 0);
+            SharedPreferences.Editor editor = pref.edit();
+            if(newSummary.equals(getString(R.string.trace_interface_option_value)) ) {
+                editor.putBoolean("TraceIsEnabled", true);
+            }// Storing boolean
+            editor.commit();
+           // Log.d(TAG, "initializDataformatPreference: "+ getString(R.string.trace_interface_option_value));
             return true;
         }
     };

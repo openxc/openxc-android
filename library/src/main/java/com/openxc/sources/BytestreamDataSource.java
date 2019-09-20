@@ -38,6 +38,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private BytestreamConnectingTask mConnectionCheckTask;
     private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
+    protected String mDataFormatValue = null;
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
@@ -124,9 +125,10 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     @Override
     public void run() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("data-Format", Context.MODE_PRIVATE);
-        int dataFormatValue =  sharedpreferences.getInt("dataFormat" , 0);
-        Log.d("BytestreamDataSource", "initializDataformatvalue1: "+ dataFormatValue);
-        Log.d(getTag(), "yyyyyyyyyyyyyyyN");
+        if (sharedpreferences != null) {
+            mDataFormatValue = sharedpreferences.getString("dataFormat", null);
+            Log.d("BytestreamDataSource", "initializDataformatvalue: " + mDataFormatValue);
+        }
         while(isRunning()) {
             try {
                 waitForConnection();
@@ -153,13 +155,13 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                if ( dataFormatValue == 1){
+                if ((mDataFormatValue != null) && mDataFormatValue.equals("JSON Mode")){
                     synchronized(this) {
                         mStreamHandler = new JsonStreamer();
                          Log.i(getTag(), "Source is selected JSON ");
                     }
                 }
-                else if (dataFormatValue == 2 ){
+                else if ((mDataFormatValue != null) && mDataFormatValue.equals("Protobuf Mode") ){
                     synchronized(this) {
                         mStreamHandler = new BinaryStreamer();
                         Log.i(getTag(), "Source is selected protocol buffers");
