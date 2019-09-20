@@ -552,13 +552,7 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.bluetooth_interface_option_value)));
             mTracePreferences.setEnabled(newValue.equals(
                     getString(R.string.trace_interface_option_value)));
-            SharedPreferences pref = getApplicationContext().getSharedPreferences("TraceIsEnabled", 0);
-            SharedPreferences.Editor editor = pref.edit();
-            if(newSummary.equals(getString(R.string.trace_interface_option_value)) ) {
-                editor.putBoolean("TraceIsEnabled", true);
-            }// Storing boolean
-            editor.commit();
-           // Log.d(TAG, "initializDataformatPreference: "+ getString(R.string.trace_interface_option_value));
+ 
             return true;
         }
     };
