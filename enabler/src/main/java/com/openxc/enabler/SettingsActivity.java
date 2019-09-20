@@ -35,7 +35,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
+import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
@@ -76,9 +78,8 @@ public class SettingsActivity extends PreferenceActivity {
     private EditTextPreference mNetworkPortPreference;
     private Preference mAboutVersionPreference;
     private PreferenceManagerService mPreferenceManager;
-
+    private ListPreference mDataFormatListPreference;
     private CheckBoxPreference mPhoneSensorPreference;
-
 
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
@@ -225,7 +226,7 @@ public class SettingsActivity extends PreferenceActivity {
                     PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putString(getString(R.string.trace_source_file_key), newValue);
             editor.commit();
-
+            Log.d(TAG, "initializtraceFilePreference: "+ newValue);
             updateSummary(mTraceFilePreference, newValue);
         }
     }
@@ -391,6 +392,36 @@ public class SettingsActivity extends PreferenceActivity {
                 getValue().equals(
                     getString(R.string.trace_interface_option_value)));
     }
+    //Ranjan Added code for Data format
+    protected void initializDataformatPreference(PreferenceManager manager) {
+        mDataFormatListPreference = (ListPreference)
+                manager.findPreference(getString(
+                        R.string.data_format_key));
+        PreferenceManager.setDefaultValues(this, R.xml.data_source_preferences, false);
+        mDataFormatListPreference.setOnPreferenceChangeListener(
+                mDataFormatUpdatedListener);
+
+        PreferenceScreen screen = (PreferenceScreen)
+                manager.findPreference("preference_screen");
+
+        List<String> entries = new ArrayList<>(Arrays.asList(getResources().
+                getStringArray(R.array.data_format_types)));
+        List<String> values = new ArrayList<>(Arrays.asList(getResources().
+                getStringArray(R.array.data_format_type_aliases)));
+        if(android.os.Build.VERSION.SDK_INT <
+                android.os.Build.VERSION_CODES.HONEYCOMB) {
+            // USB not supported, so re-load entries without that option
+            entries.remove(getString(R.string.usb_interface_option));
+            values.remove(getString(R.string.usb_interface_option_value));
+        }
+
+        CharSequence[] prototype = {};
+        mDataFormatListPreference.setEntries(entries.toArray(prototype));
+        mDataFormatListPreference.setEntryValues(values.toArray(prototype));
+        mDataFormatListPreference.setSummary(mDataFormatListPreference.getEntry());
+        Log.d(TAG, "initializDataformatPreference: "+ mDataFormatListPreference.getEntry());
+
+    }
 
     protected void initializeDataSourcePreferences(PreferenceManager manager) {
         initializeVehicleInterfacePreference(manager);
@@ -398,6 +429,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializeNetwork(manager);
         initializeTracePreferences(manager);
         initializePhoneSensorPreferences(manager);
+        initializDataformatPreference(manager);
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {
@@ -468,6 +500,29 @@ public class SettingsActivity extends PreferenceActivity {
             Log.e(TAG, "Could not get application version.", e);
         }
     }
+    //Ranjan Added code for Data format
+    private OnPreferenceChangeListener mDataFormatUpdatedListener =
+            new OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference,
+                                                  Object newValue) {
+                    // Can't just call preference.getSummary() because this callback
+                    // happens bofore newValue is actually set.
+                    ListPreference listPreference = (ListPreference) preference;
+                    String newSummary = listPreference.getEntries()[
+                            listPreference.findIndexOfValue(
+                                    newValue.toString())].toString();
+                    preference.setSummary(newSummary);
+                    // mDataFormatListPreference.setEnabled(newValue.equals(getString(R.string.)));
+                    Log.d(TAG, "initializDataformatPreference: "+ preference.getSummary());
+
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("data-Format", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("dataFormat", newSummary); // Storing string
+                    editor.commit();
+
+                    return true;
+                }
+            };
 
     protected void updateSummary(Preference preference, Object currentValue) {
         String summary = null;
@@ -497,7 +552,7 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.bluetooth_interface_option_value)));
             mTracePreferences.setEnabled(newValue.equals(
                     getString(R.string.trace_interface_option_value)));
-
+ 
             return true;
         }
     };
