@@ -563,6 +563,7 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.bluetooth_interface_option_value)));
             mTracePreferences.setEnabled(newValue.equals(
                     getString(R.string.trace_interface_option_value)));
+
             SharedPreferences pref = getApplicationContext().getSharedPreferences("isTracePlayingEnabled", 0);
             SharedPreferences.Editor editor = pref.edit();
             if(newSummary.equals("Pre-recorded Trace")) {
