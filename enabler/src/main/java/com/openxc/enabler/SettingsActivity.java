@@ -72,6 +72,7 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private CheckBoxPreference mTraceRecordingPreference;
     private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
     private EditTextPreference mNetworkHostPreference;
@@ -84,6 +85,7 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
+    private boolean isTraceRecording;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +116,7 @@ public class SettingsActivity extends PreferenceActivity {
                 addPreferencesFromResource(R.xml.recording_preferences);
                 initializeUploadingPreferences(getPreferenceManager());
                 initializeDweetingPreferences(getPreferenceManager());
+                initializeTraceRecordingPreferences(getPreferenceManager());
             } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.data_source_preferences);
                 initializeDataSourcePreferences(getPreferenceManager());
@@ -245,6 +248,8 @@ public class SettingsActivity extends PreferenceActivity {
                 getPreferenceManager());
             ((SettingsActivity)getActivity()).initializeDweetingPreferences(
                     getPreferenceManager());
+            ((SettingsActivity)getActivity()).initializeTraceRecordingPreferences(
+                    getPreferenceManager());
         }
     }
 
@@ -316,6 +321,11 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.uploading_path_key), null));
     }
 
+    protected void initializeTraceRecordingPreferences(PreferenceManager manager) {
+        mTraceRecordingPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.recording_checkbox_key));
+        mTraceRecordingPreference.setOnPreferenceClickListener(mTraceFileRecordingClickListener);
+    }
     protected void initializeDweetingPreferences(PreferenceManager manager) {
         mDweetingPreference = (CheckBoxPreference) manager.findPreference(
                 getString(R.string.dweeting_checkbox_key));
@@ -430,6 +440,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializeTracePreferences(manager);
         initializePhoneSensorPreferences(manager);
         initializDataformatPreference(manager);
+        //initializeTraceRecordingPreferences(manager);
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {
@@ -552,7 +563,16 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.bluetooth_interface_option_value)));
             mTracePreferences.setEnabled(newValue.equals(
                     getString(R.string.trace_interface_option_value)));
- 
+
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("isTracePlayingEnabled", 0);
+            SharedPreferences.Editor editor = pref.edit();
+            if(newSummary.equals("Pre-recorded Trace")) {
+                editor.putBoolean("isTracePlayingEnabled", true);
+            }else{
+                editor.putBoolean("isTracePlayingEnabled", false);// Storing boolean
+            }
+            editor.commit();
+           // Log.d(TAG, "initializDataformatPreference: "+ getString(R.string.trace_interface_option_value));
             return true;
         }
     };
@@ -599,15 +619,46 @@ public class SettingsActivity extends PreferenceActivity {
     private Preference.OnPreferenceClickListener mTraceFileClickListener =
             new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(Preference preference) {
-            checkExternalStoragePermission();
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(intent, FILE_SELECTOR_RESULT);
+            SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences("IsTraceRecording",0);
+            if (sharedpreferences != null) {
+              isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
+                Log.d("BytestreamDataSource", "TraceRecording: " + isTraceRecording);
+            }
+            if(!isTraceRecording){
+                Log.d(TAG, "Tracefile checklist:");
+                checkExternalStoragePermission();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, FILE_SELECTOR_RESULT);
+
+            }else{
+                Toast.makeText(getApplicationContext(),"Please stop Tracefile Recording",Toast.LENGTH_SHORT).show();
+               // Log.d(TAG, "Tracefile checklist else:" );
+            }
             return true;
         }
     };
 
+    private Preference.OnPreferenceClickListener mTraceFileRecordingClickListener =
+            new Preference.OnPreferenceClickListener() {
+
+                public boolean onPreferenceClick(Preference preference) {
+                    SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences("isTracePlayingEnabled", 0);
+                    boolean isTracePlaying = sharedpreferences.getBoolean("isTracePlayingEnabled", false);
+                    Log.d(TAG, "Tracefile checklist recordvalue:" + isTracePlaying);
+                    if (sharedpreferences != null && !isTracePlaying) {
+                        //mTraceRecordingPreference.setChecked(true);
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Please stop Tracefile Playing",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Tracefile checklist record:");
+                        mTraceRecordingPreference.setChecked(false);
+                    }
+
+                    return false;
+                }
+            };
     private Preference.OnPreferenceClickListener mPhoneSensorClickListener =
             new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
@@ -629,6 +680,7 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     private void checkExternalStoragePermission() {
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

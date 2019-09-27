@@ -1,8 +1,10 @@
 package com.openxc.enabler.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.openxc.sinks.DataSinkException;
 import com.openxc.sinks.FileRecorderSink;
@@ -28,26 +30,39 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                    R.string.recording_checkbox_key,
+
+            return new PreferenceListener() {
+                private int[] WATCHED_PREFERENCE_KEY_IDS = {
+                        R.string.recording_checkbox_key,
+                };
+
+                protected int[] getWatchedPreferenceKeyIds() {
+                    return WATCHED_PREFERENCE_KEY_IDS;
+                }
+
+                public void readStoredPreferences() {
+                    setFileRecordingStatus(getPreferences().getBoolean(
+                            getString(R.string.recording_checkbox_key), false));
+
+                }
             };
 
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setFileRecordingStatus(getPreferences().getBoolean(
-                        getString(R.string.recording_checkbox_key), false));
-            }
-        };
     }
 
 
     private void setFileRecordingStatus(boolean enabled) {
-        Log.i(TAG, "Setting recording to " + enabled);
-        if(enabled) {
+
+        //Log.i(TAG, "Setting recording to " + enabled);
+        SharedPreferences pref = getContext().getSharedPreferences("IsTraceRecording", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("IsTraceRecording", enabled);
+        editor.commit();
+
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("isTracePlayingEnabled", 0);
+        boolean isTracePlaying = sharedpreferences.getBoolean("isTracePlayingEnabled", false);
+        //Log.d(TAG, "Tracefile checklist recordvalue1:" + isTracePlaying);
+        if(enabled && !isTracePlaying) {
+            Log.i(TAG, "Setting recording to " + enabled);
             String directory = getPreferenceString(R.string.recording_directory_key);
             if(directory != null) {
                 if(mFileRecorder == null || !mCurrentDirectory.equals(directory)) {
