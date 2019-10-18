@@ -85,7 +85,7 @@ public class DweetLib {
 
         final String JSONString = data.toString();
 
-        final String urlstr = "http://dweet.io/dweet/for/" + thing;
+        final String urlstr = "https://dweet.io/dweet/for/" + thing;
         DweetTask dt = (DweetTask) thingProcess.get(urlstr);
 
         if (!isNetworkingAvailable(currentCtx)) {
