@@ -41,10 +41,17 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import android.telephony.TelephonyManager;
+import java.util.Base64;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
@@ -86,6 +93,9 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
     private boolean isTraceRecording;
+
+    TelephonyManager mTelephonyManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +180,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         return null;
     }
+
+
 
 
     /**
@@ -307,17 +319,13 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeUploadingPreferences(PreferenceManager manager) {
-        mUploadingPreference = (CheckBoxPreference) manager.findPreference(
-                getString(R.string.uploading_checkbox_key));
-        Preference uploadingPathPreference = manager.findPreference(
-                getString(R.string.uploading_path_key));
-        uploadingPathPreference.setOnPreferenceChangeListener(
-                mUploadingPathPreferenceListener);
+        mUploadingPreference = (CheckBoxPreference) manager.findPreference(getString(R.string.uploading_checkbox_key));
+        Preference uploadingPathPreference = manager.findPreference(getString(R.string.uploading_path_key));
 
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        updateSummary(uploadingPathPreference,
-                preferences.getString(
+        uploadingPathPreference.setOnPreferenceChangeListener(mUploadingPathPreferenceListener);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        updateSummary(uploadingPathPreference, preferences.getString(
                     getString(R.string.uploading_path_key), null));
     }
 
@@ -591,6 +599,7 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceChange(Preference preference,
                 Object newValue) {
             String path = (String) newValue;
+
             if(!UploaderSink.validatePath(path)) {
                 String error = "Invalid target URL \"" + path +
                     "\" -- must be an absolute URL " +
@@ -599,11 +608,29 @@ public class SettingsActivity extends PreferenceActivity {
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
                 mUploadingPreference.setChecked(false);
+            } else {
+                String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+                // no device ID encoding for now due to Android backward compatibility issues
+                path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
+                System.out.println(path);
+                newValue = path;
             }
+
             updateSummary(preference, newValue);
             return true;
         }
     };
+
+    private String getDeviceID() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // We do not have this permission. Let's ask the user
+            return "device_id_not_available";
+        } else {
+            mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String deviceId = mTelephonyManager.getDeviceId();
+            return deviceId;
+        }
+    }
 
     private OnPreferenceChangeListener mDweetingPathPreferenceListener =
             new OnPreferenceChangeListener() {
