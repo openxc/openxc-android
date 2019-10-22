@@ -105,9 +105,33 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onPause() {
         super.onPause();
+
+        updateTargetURL();
+
         if(mPreferenceManager != null) {
             unbindService(mConnection);
             mPreferenceManager = null;
+        }
+    }
+
+    private void updateTargetURL() {
+        try {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            //SharedPreferences pref = getApplicationContext().getSharedPreferences("uploading_target", 0);
+            String path = (settings.getString("uploading_target", ""));
+            String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+            // no device ID encoding for now due to Android backward compatibility issues
+            path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("uploading_target", path);
+
+            Log.d(TAG, "updateTargetURL(): " + path);
+
+            editor.commit();
+        } catch (Exception e) {
+            Log.i(TAG,e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -325,6 +349,10 @@ public class SettingsActivity extends PreferenceActivity {
         uploadingPathPreference.setOnPreferenceChangeListener(mUploadingPathPreferenceListener);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Log.d(TAG, "initializeUploadingPreferences - start: "+ preferences.getString(
+                getString(R.string.uploading_path_key), null));
+
         updateSummary(uploadingPathPreference, preferences.getString(
                     getString(R.string.uploading_path_key), null));
     }
@@ -525,7 +553,7 @@ public class SettingsActivity extends PreferenceActivity {
                 public boolean onPreferenceChange(Preference preference,
                                                   Object newValue) {
                     // Can't just call preference.getSummary() because this callback
-                    // happens bofore newValue is actually set.
+                    // happens before newValue is actually set.
                     ListPreference listPreference = (ListPreference) preference;
                     String newSummary = listPreference.getEntries()[
                             listPreference.findIndexOfValue(
@@ -595,31 +623,31 @@ public class SettingsActivity extends PreferenceActivity {
     };
 
     private OnPreferenceChangeListener mUploadingPathPreferenceListener =
-            new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference,
-                Object newValue) {
-            String path = (String) newValue;
+        new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String path = (String) newValue;
 
-            if(!UploaderSink.validatePath(path)) {
-                String error = "Invalid target URL \"" + path +
-                    "\" -- must be an absolute URL " +
-                    "with http:// prefix";
-                Toast.makeText(getApplicationContext(), error,
-                        Toast.LENGTH_SHORT).show();
-                Log.w(TAG, error);
-                mUploadingPreference.setChecked(false);
-            } else {
-                String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
-                // no device ID encoding for now due to Android backward compatibility issues
-                path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
-                System.out.println(path);
-                newValue = path;
+                if(!UploaderSink.validatePath(path)) {
+                    String error = "Invalid target URL \"" + path +
+                            "\" -- must be an absolute URL " +
+                            "with http:// prefix";
+                    Toast.makeText(getApplicationContext(), error,
+                            Toast.LENGTH_SHORT).show();
+                    Log.w(TAG, error);
+                    mUploadingPreference.setChecked(false);
+                } else {
+                    String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+                    // no device ID encoding for now due to Android backward compatibility issues
+                    path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
+                    Log.d(TAG, "path: " + path);
+                    newValue = path;
+                }
+
+                updateSummary(preference, newValue);
+                return true;
             }
-
-            updateSummary(preference, newValue);
-            return true;
-        }
     };
+
 
     private String getDeviceID() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
