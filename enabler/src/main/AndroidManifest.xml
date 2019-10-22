@@ -10,6 +10,7 @@
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.BLUETOOTH"/>
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace"/>
   <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
