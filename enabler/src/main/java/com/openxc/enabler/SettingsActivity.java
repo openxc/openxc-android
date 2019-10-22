@@ -41,17 +41,12 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import android.telephony.TelephonyManager;
-import java.util.Base64;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
@@ -95,7 +90,7 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceCategory mTracePreferences;
     private boolean isTraceRecording;
 
-    TelephonyManager mTelephonyManager;
+    private TelephonyManager mTelephonyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -630,29 +625,29 @@ public class SettingsActivity extends PreferenceActivity {
     };
 
     private OnPreferenceChangeListener mUploadingPathPreferenceListener =
-        new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String path = (String) newValue;
+            new OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String path = (String) newValue;
 
-                if(!UploaderSink.validatePath(path)) {
-                    String error = "Invalid target URL \"" + path +
-                            "\" -- must be an absolute URL " +
-                            "with http:// prefix";
-                    Toast.makeText(getApplicationContext(), error,
-                            Toast.LENGTH_SHORT).show();
-                    Log.w(TAG, error);
-                    mUploadingPreference.setChecked(false);
-                } else {
-                    String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
-                    // no device ID encoding for now due to Android backward compatibility issues
-                    path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
-                    newValue = path;
-                    mSourceNamePreference.setSummary(getDeviceID());
-                }
-
-                updateSummary(preference, newValue);
-                return true;
+            if(!UploaderSink.validatePath(path)) {
+                String error = "Invalid target URL \"" + path +
+                        "\" -- must be an absolute URL " +
+                        "with http:// prefix";
+                Toast.makeText(getApplicationContext(), error,
+                        Toast.LENGTH_SHORT).show();
+                Log.w(TAG, error);
+                mUploadingPreference.setChecked(false);
+            } else {
+                String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+                // no device ID encoding for now due to Android backward compatibility issues
+                path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
+                newValue = path;
+                mSourceNamePreference.setSummary(getDeviceID());
             }
+
+            updateSummary(preference, newValue);
+            return true;
+        }
     };
 
 
