@@ -79,6 +79,7 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private Preference mSourceNamePreference;
     private CheckBoxPreference mTraceRecordingPreference;
     private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
@@ -107,6 +108,7 @@ public class SettingsActivity extends PreferenceActivity {
         super.onPause();
 
         updateTargetURL();
+        displaySourceName();
 
         if(mPreferenceManager != null) {
             unbindService(mConnection);
@@ -117,17 +119,25 @@ public class SettingsActivity extends PreferenceActivity {
     private void updateTargetURL() {
         try {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            //SharedPreferences pref = getApplicationContext().getSharedPreferences("uploading_target", 0);
             String path = (settings.getString("uploading_target", ""));
-            String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
             // no device ID encoding for now due to Android backward compatibility issues
+            String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
             path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
-
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("uploading_target", path);
+            editor.commit();
+        } catch (Exception e) {
+            Log.i(TAG,e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-            Log.d(TAG, "updateTargetURL(): " + path);
-
+    private void displaySourceName() {
+        try {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String path = getDeviceID();
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("uploading_source_name", path);
             editor.commit();
         } catch (Exception e) {
             Log.i(TAG,e.getMessage());
@@ -344,17 +354,14 @@ public class SettingsActivity extends PreferenceActivity {
 
     protected void initializeUploadingPreferences(PreferenceManager manager) {
         mUploadingPreference = (CheckBoxPreference) manager.findPreference(getString(R.string.uploading_checkbox_key));
+        mSourceNamePreference = manager.findPreference(getString(R.string.uploading_source_name_key));
         Preference uploadingPathPreference = manager.findPreference(getString(R.string.uploading_path_key));
-
         uploadingPathPreference.setOnPreferenceChangeListener(mUploadingPathPreferenceListener);
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Log.d(TAG, "initializeUploadingPreferences - start: "+ preferences.getString(
-                getString(R.string.uploading_path_key), null));
-
         updateSummary(uploadingPathPreference, preferences.getString(
                     getString(R.string.uploading_path_key), null));
+        updateSummary(mSourceNamePreference, preferences.getString(
+                getString(R.string.uploading_source_name_key), null));
     }
 
     protected void initializeTraceRecordingPreferences(PreferenceManager manager) {
@@ -639,8 +646,8 @@ public class SettingsActivity extends PreferenceActivity {
                     String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
                     // no device ID encoding for now due to Android backward compatibility issues
                     path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
-                    Log.d(TAG, "path: " + path);
                     newValue = path;
+                    mSourceNamePreference.setSummary(getDeviceID());
                 }
 
                 updateSummary(preference, newValue);
@@ -651,7 +658,6 @@ public class SettingsActivity extends PreferenceActivity {
 
     private String getDeviceID() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // We do not have this permission. Let's ask the user
             return "device_id_not_available";
         } else {
             mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
