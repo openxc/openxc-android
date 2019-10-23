@@ -37,7 +37,10 @@ public class BinaryFormatterTest extends AbstractFormatterTestBase {
 
             VehicleMessage deserialized = BinaryFormatter.deserialize(
                     new ByteArrayInputStream(serialized));
-            assertEquals(originalMessage, deserialized);
+                    System.out.print("output =  " + originalMessage + "=" + deserialized);
+                    System.out.println();
+                    System.out.flush();
+                    assertEquals(originalMessage, deserialized);
         } catch(UnrecognizedMessageTypeException | SerializationException e) {
             throw new RuntimeException(e);
         }
