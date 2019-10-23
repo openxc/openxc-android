@@ -117,27 +117,12 @@ public class BinaryDeserializer {
                 serializedRequest.getMessageId(),
                 serializedRequest.getMode());
 
-        if(serializedRequest.getDecodedTypeValue() != 0) {
-            request.setPayload(
-                    serializedRequest.getPayload().toByteArray());
-        }
+        request.setPayload(serializedRequest.getPayload().toByteArray());
+        request.setPid(serializedRequest.getPid());
+        request.setMultipleResponses(serializedRequest.getMultipleResponses());
+        request.setFrequency(serializedRequest.getFrequency());
+        request.setName(serializedRequest.getName());
 
-        if(serializedRequest.getDecodedTypeValue() != 0) {
-            request.setPid(serializedRequest.getPid());
-        }
-
-        if(serializedRequest.getDecodedTypeValue() != 0) {
-            request.setMultipleResponses(
-                    serializedRequest.getMultipleResponses());
-        }
-
-        if(serializedRequest.getDecodedTypeValue() != 0) {
-            request.setFrequency(serializedRequest.getFrequency());
-        }
-
-        if(serializedRequest.getDecodedTypeValue() != 0) {
-            request.setName(serializedRequest.getName());
-        }
         return new Command(request, action);
     }
 
@@ -244,7 +229,7 @@ public class BinaryDeserializer {
                     "Command response missing type");
         }
 
-        String message = null;
+        String message = response.getMessage();
         return new CommandResponse(commandType, response.getStatus(), message);
     }
 
