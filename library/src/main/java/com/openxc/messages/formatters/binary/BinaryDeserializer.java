@@ -42,32 +42,26 @@ public class BinaryDeserializer {
         BinaryMessages.SimpleMessage simpleMessage =
             binaryMessage.getSimpleMessage();
         String name;
-        if(simpleMessage.hasName()) {
-            name = simpleMessage.getName();
-        } else {
-            throw new UnrecognizedMessageTypeException(
-                    "Binary message is missing name");
-        }
-
+        name = simpleMessage.getName();
         Object value = null;
         BinaryMessages.DynamicField field =
             simpleMessage.getValue();
-        if(field.hasNumericValue()) {
+        if(field.getTypeValue() == 2)  {
             value = field.getNumericValue();
-        } else if(field.hasBooleanValue()) {
+        } else if(field.getTypeValue() == 3) {
             value = field.getBooleanValue();
-        } else if(field.hasStringValue()) {
+        } else if(field.getTypeValue() == 1) {
             value = field.getStringValue();
         }
 
         Object event = null;
         if(simpleMessage.hasEvent()) {
             field = simpleMessage.getEvent();
-            if(field.hasNumericValue()) {
+            if(field.getTypeValue() == 2) {
                 event = field.getNumericValue();
-            } else if(field.hasBooleanValue()) {
+            } else if(field.getTypeValue() == 3) {
                 event = field.getBooleanValue();
-            } else if(field.hasStringValue()) {
+            } else if(field.getTypeValue() == 1) {
                 event = field.getStringValue();
             }
         }
@@ -102,7 +96,7 @@ public class BinaryDeserializer {
         BinaryMessages.DiagnosticControlCommand diagnosticCommand =
                 command.getDiagnosticRequest();
         String action;
-        if(!diagnosticCommand.hasAction()) {
+        if(diagnosticCommand.getActionValue() == 0) {
             throw new UnrecognizedMessageTypeException(
                     "Diagnostic command missing action");
         } else if(diagnosticCommand.getAction() ==
@@ -123,25 +117,25 @@ public class BinaryDeserializer {
                 serializedRequest.getMessageId(),
                 serializedRequest.getMode());
 
-        if(serializedRequest.hasPayload()) {
+        if(serializedRequest.getDecodedTypeValue() != 0) {
             request.setPayload(
                     serializedRequest.getPayload().toByteArray());
         }
 
-        if(serializedRequest.hasPid()) {
+        if(serializedRequest.getDecodedTypeValue() != 0) {
             request.setPid(serializedRequest.getPid());
         }
 
-        if(serializedRequest.hasMultipleResponses()) {
+        if(serializedRequest.getDecodedTypeValue() != 0) {
             request.setMultipleResponses(
                     serializedRequest.getMultipleResponses());
         }
 
-        if(serializedRequest.hasFrequency()) {
+        if(serializedRequest.getDecodedTypeValue() != 0) {
             request.setFrequency(serializedRequest.getFrequency());
         }
 
-        if(serializedRequest.hasName()) {
+        if(serializedRequest.getDecodedTypeValue() != 0) {
             request.setName(serializedRequest.getName());
         }
         return new Command(request, action);
@@ -153,7 +147,7 @@ public class BinaryDeserializer {
         BinaryMessages.ControlCommand command =
                 binaryMessage.getControlCommand();
         CommandType commandType;
-        if(command.hasType()) {
+        if(command.getTypeValue() != 0) {
             BinaryMessages.ControlCommand.Type serializedType = command.getType();
             if(serializedType.equals(BinaryMessages.ControlCommand.Type.VERSION)) {
                 commandType = CommandType.VERSION;
@@ -193,37 +187,23 @@ public class BinaryDeserializer {
     }
 
     private static DiagnosticResponse deserializeDiagnosticResponse(
-            BinaryMessages.VehicleMessage binaryMessage)
-            throws UnrecognizedMessageTypeException {
+            BinaryMessages.VehicleMessage binaryMessage) {
         BinaryMessages.DiagnosticResponse serializedResponse =
                 binaryMessage.getDiagnosticResponse();
-        if(!serializedResponse.hasBus() || !serializedResponse.hasMessageId() ||
-                !serializedResponse.hasMode()) {
-            throw new UnrecognizedMessageTypeException(
-                    "Diagnostic response missing one or more required fields");
-        }
 
         DiagnosticResponse response = new DiagnosticResponse(
                 serializedResponse.getBus(),
                 serializedResponse.getMessageId(),
                 serializedResponse.getMode());
 
-        if(serializedResponse.hasPid()) {
-            response.setPid(serializedResponse.getPid());
-        }
+        response.setPid(serializedResponse.getPid());
+        response.setPayload(serializedResponse.getPayload().toByteArray());
+        response.setNegativeResponseCode(
+                DiagnosticResponse.NegativeResponseCode.get(
+                serializedResponse.getNegativeResponseCode()));
 
-        if(serializedResponse.hasPayload()) {
-            response.setPayload(serializedResponse.getPayload().toByteArray());
-        }
-
-        if(serializedResponse.hasNegativeResponseCode()) {
-            response.setNegativeResponseCode(
-                    DiagnosticResponse.NegativeResponseCode.get(
-                        serializedResponse.getNegativeResponseCode()));
-        }
-
-        if(serializedResponse.hasValue()) {
-            response.setValue(serializedResponse.getValue());
+        if(serializedResponse.getValue().getTypeValue() == 2) {
+            response.setValue(serializedResponse.getValue().getNumericValue());
         }
         return response;
     }
@@ -234,7 +214,7 @@ public class BinaryDeserializer {
         BinaryMessages.CommandResponse response =
                 binaryMessage.getCommandResponse();
         CommandType commandType;
-        if(response.hasType()) {
+        if(response.getTypeValue() != 0) {
             BinaryMessages.ControlCommand.Type serializedType = response.getType();
             if(serializedType.equals(BinaryMessages.ControlCommand.Type.VERSION)) {
                 commandType = CommandType.VERSION;
@@ -264,30 +244,22 @@ public class BinaryDeserializer {
                     "Command response missing type");
         }
 
-        if(!response.hasStatus()) {
-            throw new UnrecognizedMessageTypeException(
-                    "Command response missing status");
-        }
-
         String message = null;
-        if(response.hasMessage()) {
-            message = response.getMessage();
-        }
         return new CommandResponse(commandType, response.getStatus(), message);
     }
 
     private static VehicleMessage deserialize(
             BinaryMessages.VehicleMessage binaryMessage)
                 throws UnrecognizedMessageTypeException {
-        if(binaryMessage.hasSimpleMessage()) {
+        if(binaryMessage.getTypeValue() == 2) {
             return deserializeNamedMessage(binaryMessage);
-        } else if(binaryMessage.hasCanMessage()) {
+        } else if(binaryMessage.getTypeValue() == 1) {
             return deserializeCanMessage(binaryMessage);
-        } else if(binaryMessage.hasCommandResponse()) {
+        } else if(binaryMessage.getTypeValue() == 5) {
             return deserializeCommandResponse(binaryMessage);
-        } else if(binaryMessage.hasControlCommand()) {
+        } else if(binaryMessage.getTypeValue() == 4) {
             return deserializeCommand(binaryMessage);
-        } else if(binaryMessage.hasDiagnosticResponse()) {
+        } else if(binaryMessage.getTypeValue() == 3) {
             return deserializeDiagnosticResponse(binaryMessage);
         } else {
             throw new UnrecognizedMessageTypeException(

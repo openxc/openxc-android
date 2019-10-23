@@ -71,9 +71,11 @@ public class BinarySerializer {
         messageBuilder.setNegativeResponseCode(message.getNegativeResponseCode().code());
         messageBuilder.setSuccess(message.isSuccessful());
 
-        if(message.hasValue()) {
-            messageBuilder.setValue(message.getValue());
-        }
+        BinaryMessages.DynamicField.Builder dynamicBuilder = BinaryMessages.DynamicField.newBuilder();
+                dynamicBuilder.setNumericValue(message.getValue());
+                dynamicBuilder.setTypeValue(2);
+
+        messageBuilder.setValue(dynamicBuilder);
 
         if(message.hasPayload()) {
             messageBuilder.setPayload(ByteString.copyFrom(message.getPayload()));
