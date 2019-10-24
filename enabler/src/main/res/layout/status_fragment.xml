@@ -101,12 +101,14 @@
 
     </LinearLayout>
 
-    <LinearLayout style="@style/ItemRow">
+    <LinearLayout
+        style="@style/ItemRow"
+        android:layout_width="362dp">
 
         <Button
             android:id="@+id/start_bluetooth_search_btn"
             style="@style/MinimalButtonstatus"
-            android:layout_width="212dp"
+            android:layout_width="180dp"
             android:text="@string/bluetooth_search_button"
             android:textAllCaps="true" />
 
@@ -119,17 +121,21 @@
             android:textAllCaps="true" />
     </LinearLayout>
 
-    <LinearLayout style="@style/ItemRow">
+    <LinearLayout
+        style="@style/ItemRow"
+        android:layout_width="362dp">
+
         <Button
             android:id="@+id/splittrace_btn"
-            android:layout_width="212dp"
             style="@style/MinimalButtonstatus"
+            android:layout_width="180dp"
             android:text="@string/splittrace_button"
             android:textAllCaps="true" />
+
         <Button
             android:id="@+id/starstop_btn"
-            android:layout_width="165dp"
             style="@style/MinimalButtonstatus"
+            android:layout_width="165dp"
             android:text="@string/startstop_button"
             android:textAllCaps="true" />
     </LinearLayout>
