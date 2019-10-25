@@ -53,7 +53,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
 
         // setFileRecordingStatus(enable);
 
-        mFileRecorder = null;
+        stopRecording();
         String directory = getPreferenceString(R.string.recording_directory_key);
         if (directory != null) {
             if (mFileRecorder == null) {
@@ -107,15 +107,15 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     public void stopTraceRecording() {
         stopRecording();
     }
-//    public void startTraceRecording() {
-//        String directory = getPreferenceString(R.string.recording_directory_key);
-//        if (directory != null) {
-//            if (mFileRecorder != null) {
-//            getVehicleManager().addSink(mFileRecorder);
-//            //mFileRecorder = new FileRecorderSink(new AndroidFileOpener(directory));
-//            //getVehicleManager().addSink(mFileRecorder);
-//        }
-//    }
-//    }
+    public void startTraceRecording() {
+        String directory = getPreferenceString(R.string.recording_directory_key);
+        if (directory != null) {
+            if (mFileRecorder != null) {
+            getVehicleManager().addSink(mFileRecorder);
+            //mFileRecorder = new FileRecorderSink(new AndroidFileOpener(directory));
+            //getVehicleManager().addSink(mFileRecorder);
+        }
+    }
+    }
 
 }

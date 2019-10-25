@@ -21,10 +21,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
 
 import com.openxc.VehicleManager;
-import com.openxc.enabler.preferences.VehiclePreferenceManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
@@ -67,10 +65,9 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Timer mTimer;
     private Context mContext;
     private   FileRecordingPreferenceManager mTracePref;
-    private CheckBoxPreference mTraceRecordingPreference;
-    private Preference mTraceFilePreference;
     private  boolean isTraceRecording;
     private boolean isStart = false;
+
 
     private synchronized void updateViInfo() {
         if (mVehicleManager != null) {
@@ -205,6 +202,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             mSplitTraceFile.setVisibility(View.GONE);
             mStartStop.setVisibility(View.GONE);
         }
+
     }
 
     @Override
@@ -307,13 +305,16 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     }
 
     private void splitTraceFile(){
-       mTracePref.splitTraceFile(true);
+
+        mTracePref.setVehicleManager(mVehicleManager);
+        mTracePref.splitTraceFile(true);
+
     }
     private void startStopClick(){
 
         if (isStart){
             Log.e(TAG,"clicked Start stop");
-            //mTracePref.startTraceRecording();
+            mTracePref.startTraceRecording();
             mStartStop.setText("STOP TRACE");
             isStart=false;
         }else{
