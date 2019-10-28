@@ -41,8 +41,10 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -115,9 +117,9 @@ public class SettingsActivity extends PreferenceActivity {
         try {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String path = (settings.getString("uploading_target", ""));
-            // no device ID encoding for now due to Android backward compatibility issues
             String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
-            path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
+            String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
+            path = baseEndpoint + "/api/v1/message/" + data + "/save";
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("uploading_target", path);
             editor.commit();
@@ -639,8 +641,8 @@ public class SettingsActivity extends PreferenceActivity {
                 mUploadingPreference.setChecked(false);
             } else {
                 String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
-                // no device ID encoding for now due to Android backward compatibility issues
-                path = baseEndpoint + "/api/v1/message/" + getDeviceID() + "/save";
+                String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
+                path = baseEndpoint + "/api/v1/message/" + data + "/save";
                 newValue = path;
                 mSourceNamePreference.setSummary(getDeviceID());
             }
