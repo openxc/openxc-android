@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLog;
 
 import com.openxc.BinaryMessages;
 import com.openxc.messages.NamedVehicleMessage;
@@ -37,7 +38,12 @@ public class BinaryFormatterTest extends AbstractFormatterTestBase {
 
             VehicleMessage deserialized = BinaryFormatter.deserialize(
                     new ByteArrayInputStream(serialized));
-            assertEquals(originalMessage, deserialized);
+                    ShadowLog.setupLogging();
+                    ShadowLog.stream = System.out;
+                    System.out.println("output =  " + originalMessage + "=" + deserialized);
+                    System.out.println("A");
+                    System.out.flush();
+                    assertEquals(originalMessage, deserialized);
         } catch(UnrecognizedMessageTypeException | SerializationException e) {
             throw new RuntimeException(e);
         }
@@ -87,7 +93,7 @@ public class BinaryFormatterTest extends AbstractFormatterTestBase {
         // Build a simple message that's missing a name
         BinaryMessages.VehicleMessage.Builder builder =
             BinaryMessages.VehicleMessage.newBuilder();
-        builder.setType(BinaryMessages.VehicleMessage.Type.SIMPLE);
+        builder.setTypeValue(42);
 
         BinaryMessages.SimpleMessage.Builder messageBuilder =
                 BinaryMessages.SimpleMessage.newBuilder();
