@@ -12,7 +12,7 @@ android:
   - extra-android-support
   - extra-android-m2repository
 script:
-- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew build test || ./gradlew testDebug'
+- ' ./gradlew build test && ./gradlew testDebug'
 deploy:
 - provider: releases
   api_key:
