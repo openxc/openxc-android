@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +30,7 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
+import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,10 +58,16 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
 
     private Button mDisconnect;
     private Button mBluetoothSearch;
+    private Button mSplitTraceFile;
+    private Button mStartStop;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
     private Context mContext;
+    private   FileRecordingPreferenceManager mTracePref;
+    private  boolean isTraceRecording;
+    private boolean isStart = false;
+
 
     private synchronized void updateViInfo() {
         if (mVehicleManager != null) {
@@ -184,6 +193,16 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                     new Intent(getActivity(), VehicleManager.class),
                     mConnection, Context.BIND_AUTO_CREATE);
         }
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("IsTraceRecording", 0);
+        isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
+        if(isTraceRecording) {
+            mSplitTraceFile.setVisibility(View.VISIBLE);
+            mStartStop.setVisibility(View.VISIBLE);
+        }else{
+            mSplitTraceFile.setVisibility(View.GONE);
+            mStartStop.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -193,6 +212,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             getActivity().unbindService(mConnection);
             mVehicleManager = null;
         }
+
     }
 
     @Override
@@ -214,6 +234,12 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         mBluetoothSearch.setOnClickListener(this);
         mDisconnect = v.findViewById(R.id.disconnect_btn);
         mDisconnect.setOnClickListener(this);
+        mSplitTraceFile = v.findViewById(R.id.splittrace_btn);
+        mSplitTraceFile.setOnClickListener(this);
+        mStartStop = v.findViewById(R.id.starstop_btn);
+        mStartStop.setOnClickListener(this);
+        mTracePref = new FileRecordingPreferenceManager(requireContext());
+
 
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -278,6 +304,26 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
     }
 
+    private void splitTraceFile(){
+
+        mTracePref.setVehicleManager(mVehicleManager);
+        mTracePref.splitTraceFile(true);
+
+    }
+    private void startStopClick(){
+
+        if (isStart){
+            Log.e(TAG,"clicked Start stop");
+            mTracePref.startTraceRecording();
+            mStartStop.setText("STOP TRACE");
+            isStart=false;
+        }else{
+            mTracePref.stopTraceRecording();
+            mStartStop.setText("START TRACE");
+            isStart=true;
+        }
+
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -290,6 +336,12 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                 } catch (VehicleServiceException e) {
                     Log.e(TAG, "Unable to disconnect vehicle interface", e);
                 }
+                break;
+            case R.id.splittrace_btn:
+                splitTraceFile();
+                break;
+            case R.id.starstop_btn:
+                startStopClick();
                 break;
         }
     }

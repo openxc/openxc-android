@@ -101,16 +101,43 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/start_bluetooth_search_btn"
-        style="@style/MinimalButton"
-        android:textAllCaps="true"
-        android:text="@string/bluetooth_search_button" />
+    <LinearLayout
+        style="@style/ItemRow"
+        android:layout_width="362dp">
 
-    <Button
-        android:id="@+id/disconnect_btn"
-        style="@style/MinimalButton"
-        android:textAllCaps="true"
-        android:text="@string/disconnect_button" />
+        <Button
+            android:id="@+id/start_bluetooth_search_btn"
+            style="@style/MinimalButtonstatus"
+            android:layout_width="180dp"
+            android:text="@string/bluetooth_search_button"
+            android:textAllCaps="true" />
+
+        <Button
+            android:id="@+id/disconnect_btn"
+            style="@style/MinimalButtonstatus"
+            android:layout_width="165dp"
+            android:layout_height="match_parent"
+            android:text="@string/disconnect_button"
+            android:textAllCaps="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ItemRow"
+        android:layout_width="362dp">
+
+        <Button
+            android:id="@+id/splittrace_btn"
+            style="@style/MinimalButtonstatus"
+            android:layout_width="180dp"
+            android:text="@string/splittrace_button"
+            android:textAllCaps="true" />
+
+        <Button
+            android:id="@+id/starstop_btn"
+            style="@style/MinimalButtonstatus"
+            android:layout_width="165dp"
+            android:text="@string/startstop_button"
+            android:textAllCaps="true" />
+    </LinearLayout>
 
 </LinearLayout>

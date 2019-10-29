@@ -49,9 +49,26 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
 
     }
 
+    public  void splitTraceFile(boolean enable) {
 
+        // setFileRecordingStatus(enable);
+
+        stopRecording();
+        String directory = getPreferenceString(R.string.recording_directory_key);
+        if (directory != null) {
+            if (mFileRecorder == null) {
+                mCurrentDirectory = directory;
+                //stopRecording();
+
+                mFileRecorder = new FileRecorderSink(
+                        new AndroidFileOpener(directory));
+                getVehicleManager().addSink(mFileRecorder);
+            }
+        }
+    }
     private void setFileRecordingStatus(boolean enabled) {
 
+        Log.e(TAG, "splitTraceFile: this called");
         //Log.i(TAG, "Setting recording to " + enabled);
         SharedPreferences pref = getContext().getSharedPreferences("IsTraceRecording", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -62,7 +79,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
         boolean isTracePlaying = sharedpreferences.getBoolean("isTracePlayingEnabled", false);
         //Log.d(TAG, "Tracefile checklist recordvalue1:" + isTracePlaying);
         if(enabled && !isTracePlaying) {
-            Log.i(TAG, "Setting recording to " + enabled);
+            //Log.i(TAG, "Setting recording to " + enabled);
             String directory = getPreferenceString(R.string.recording_directory_key);
             if(directory != null) {
                 if(mFileRecorder == null || !mCurrentDirectory.equals(directory)) {
@@ -74,8 +91,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
                     getVehicleManager().addSink(mFileRecorder);
                 }
             } else {
-                Log.d(TAG, "No recording base directory set (" + directory +
-                        "), not starting recorder");
+               // Log.d(TAG, "No recording base directory set (" + directory +"), not starting recorder");
             }
         } else {
             stopRecording();
@@ -83,9 +99,23 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void stopRecording() {
-        if(getVehicleManager() != null){
+            if(getVehicleManager() != null){
             getVehicleManager().removeSink(mFileRecorder);
             mFileRecorder = null;
         }
     }
+    public void stopTraceRecording() {
+        stopRecording();
+    }
+    public void startTraceRecording() {
+        String directory = getPreferenceString(R.string.recording_directory_key);
+        if (directory != null) {
+            if (mFileRecorder != null) {
+            getVehicleManager().addSink(mFileRecorder);
+            //mFileRecorder = new FileRecorderSink(new AndroidFileOpener(directory));
+            //getVehicleManager().addSink(mFileRecorder);
+        }
+    }
+    }
+
 }
