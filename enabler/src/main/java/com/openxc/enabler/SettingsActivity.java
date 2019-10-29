@@ -41,10 +41,14 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+
+import android.telephony.TelephonyManager;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
@@ -72,6 +76,7 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private Preference mSourceNamePreference;
     private CheckBoxPreference mTraceRecordingPreference;
     private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
@@ -86,6 +91,9 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
     private boolean isTraceRecording;
+
+    private TelephonyManager mTelephonyManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +103,42 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onPause() {
         super.onPause();
+
+        updateTargetURL();
+        displaySourceName();
+
         if(mPreferenceManager != null) {
             unbindService(mConnection);
             mPreferenceManager = null;
+        }
+    }
+
+    private void updateTargetURL() {
+        try {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String path = (settings.getString("uploading_target", ""));
+            String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+            String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
+            path = baseEndpoint + "/api/v1/message/" + data + "/save";
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("uploading_target", path);
+            editor.commit();
+        } catch (Exception e) {
+            Log.i(TAG,e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void displaySourceName() {
+        try {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String path = getDeviceID();
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("uploading_source_name", path);
+            editor.commit();
+        } catch (Exception e) {
+            Log.i(TAG,e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -170,6 +211,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         return null;
     }
+
+
 
 
     /**
@@ -307,18 +350,15 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeUploadingPreferences(PreferenceManager manager) {
-        mUploadingPreference = (CheckBoxPreference) manager.findPreference(
-                getString(R.string.uploading_checkbox_key));
-        Preference uploadingPathPreference = manager.findPreference(
-                getString(R.string.uploading_path_key));
-        uploadingPathPreference.setOnPreferenceChangeListener(
-                mUploadingPathPreferenceListener);
-
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        updateSummary(uploadingPathPreference,
-                preferences.getString(
+        mUploadingPreference = (CheckBoxPreference) manager.findPreference(getString(R.string.uploading_checkbox_key));
+        mSourceNamePreference = manager.findPreference(getString(R.string.uploading_source_name_key));
+        Preference uploadingPathPreference = manager.findPreference(getString(R.string.uploading_path_key));
+        uploadingPathPreference.setOnPreferenceChangeListener(mUploadingPathPreferenceListener);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        updateSummary(uploadingPathPreference, preferences.getString(
                     getString(R.string.uploading_path_key), null));
+        updateSummary(mSourceNamePreference, preferences.getString(
+                getString(R.string.uploading_source_name_key), null));
     }
 
     protected void initializeTraceRecordingPreferences(PreferenceManager manager) {
@@ -517,7 +557,7 @@ public class SettingsActivity extends PreferenceActivity {
                 public boolean onPreferenceChange(Preference preference,
                                                   Object newValue) {
                     // Can't just call preference.getSummary() because this callback
-                    // happens bofore newValue is actually set.
+                    // happens before newValue is actually set.
                     ListPreference listPreference = (ListPreference) preference;
                     String newSummary = listPreference.getEntries()[
                             listPreference.findIndexOfValue(
@@ -588,22 +628,40 @@ public class SettingsActivity extends PreferenceActivity {
 
     private OnPreferenceChangeListener mUploadingPathPreferenceListener =
             new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference,
-                Object newValue) {
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
             String path = (String) newValue;
+
             if(!UploaderSink.validatePath(path)) {
                 String error = "Invalid target URL \"" + path +
-                    "\" -- must be an absolute URL " +
-                    "with http:// prefix";
+                        "\" -- must be an absolute URL " +
+                        "with http:// prefix";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
                 mUploadingPreference.setChecked(false);
+            } else {
+                String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+                String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
+                path = baseEndpoint + "/api/v1/message/" + data + "/save";
+                newValue = path;
+                mSourceNamePreference.setSummary(getDeviceID());
             }
+
             updateSummary(preference, newValue);
             return true;
         }
     };
+
+
+    private String getDeviceID() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return "device_id_not_available";
+        } else {
+            mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String deviceId = mTelephonyManager.getDeviceId();
+            return deviceId;
+        }
+    }
 
     private OnPreferenceChangeListener mDweetingPathPreferenceListener =
             new OnPreferenceChangeListener() {

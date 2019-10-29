@@ -31,6 +31,13 @@
             android:defaultValue="http://"
             android:inputType="textUri" />
 
+    <Preference
+            android:key="@string/uploading_source_name_key"
+            android:title="@string/uploading_source_name_title"
+            android:summary="@string/uploading_source_name_summary"
+            android:editable="false"
+            android:defaultValue="unknown" />
+
     <CheckBoxPreference
         android:key="@string/dweeting_checkbox_key"
         android:title="@string/dweeting_checkbox_title"

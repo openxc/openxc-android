@@ -9,6 +9,7 @@
     <string name="recording_directory_key">recording_output</string>
     <string name="uploading_checkbox_key">uploading_enabled</string>
     <string name="uploading_path_key">uploading_target</string>
+    <string name="uploading_source_name_key">uploading_source_name</string>
     <string name="dweeting_checkbox_key">dweeting_enabled</string>
     <string name="dweeting_thingname_key">dweeting_target</string>
     <string name="bluetooth_polling_key">bluetooth_polling</string>
