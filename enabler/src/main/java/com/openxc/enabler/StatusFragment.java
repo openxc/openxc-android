@@ -59,6 +59,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Button mDisconnect;
     private Button mBluetoothSearch;
     private Button mSplitTraceFile;
+    private Button mRestartTraceFile;
     private Button mStartStop;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
@@ -66,6 +67,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Context mContext;
     private   FileRecordingPreferenceManager mTracePref;
     private  boolean isTraceRecording;
+    private  boolean isDisableTraceLooping;
     private boolean isStart = false;
 
 
@@ -195,12 +197,24 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("IsTraceRecording", 0);
         isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
+
+        SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
+        isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
+
         if(isTraceRecording) {
             mSplitTraceFile.setVisibility(View.VISIBLE);
             mStartStop.setVisibility(View.VISIBLE);
         }else{
             mSplitTraceFile.setVisibility(View.GONE);
             mStartStop.setVisibility(View.GONE);
+
+        }
+        if (isDisableTraceLooping){
+            mDisconnect.setVisibility(View.GONE);
+            mRestartTraceFile.setVisibility(View.VISIBLE);
+        }else{
+            mDisconnect.setVisibility(View.VISIBLE);
+            mRestartTraceFile.setVisibility(View.GONE);
         }
 
     }
@@ -239,6 +253,8 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         mStartStop = v.findViewById(R.id.starstop_btn);
         mStartStop.setOnClickListener(this);
         mTracePref = new FileRecordingPreferenceManager(requireContext());
+        mRestartTraceFile = v.findViewById(R.id.restarttrace_btn);
+        mRestartTraceFile.setOnClickListener(this);
 
 
         getActivity().runOnUiThread(new Runnable() {
@@ -324,6 +340,9 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
 
     }
+    private void restartTraceFile(){
+
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -342,6 +361,9 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                 break;
             case R.id.starstop_btn:
                 startStopClick();
+                break;
+            case R.id.restarttrace_btn:
+                restartTraceFile();
                 break;
         }
     }

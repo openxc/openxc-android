@@ -10,6 +10,7 @@
     <string name="connection_none">None</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
     <string name="disconnect_button">Disconnect</string>
+    <string name="restart_button">Restart Trace</string>
     <string name="splittrace_button">Split Trace</string>
     <string name="startstop_button">Stop Trace</string>
 
@@ -45,7 +46,9 @@
     <string name="trace_source_settings">Trace file playback</string>
     <string name="trace_source_file_title">Select a trace file for playback</string>
     <string name="phone_source_settings">Built-In Phone Sensors</string>
+    <string name="trace_disable_playing">Trace Disable Playing Loop</string>
     <string name="phone_source_polling_checkbox_title">Include Data from Phone Sensors</string>
+    <string name="trace_disable_playing_checkbox_title">Disable Trace Playing In Loop</string>
     <string name="about_summary">About OpenXC</string>
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>

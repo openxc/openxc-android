@@ -119,6 +119,13 @@
             android:layout_height="match_parent"
             android:text="@string/disconnect_button"
             android:textAllCaps="true" />
+        <Button
+            android:id="@+id/restarttrace_btn"
+            style="@style/MinimalButtonstatus"
+            android:layout_width="165dp"
+            android:layout_height="match_parent"
+            android:text="@string/restart_button"
+            android:textAllCaps="true" />
     </LinearLayout>
 
     <LinearLayout

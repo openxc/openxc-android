@@ -78,6 +78,7 @@ public class SettingsActivity extends PreferenceActivity {
     private CheckBoxPreference mUploadingPreference;
     private Preference mSourceNamePreference;
     private CheckBoxPreference mTraceRecordingPreference;
+    private CheckBoxPreference mDisableTracePlayingLoop;
     private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
     private EditTextPreference mNetworkHostPreference;
@@ -366,6 +367,11 @@ public class SettingsActivity extends PreferenceActivity {
                 getString(R.string.recording_checkbox_key));
         mTraceRecordingPreference.setOnPreferenceClickListener(mTraceFileRecordingClickListener);
     }
+    protected void initializeDisableTraceplayingLoopPreferences(PreferenceManager manager) {
+        mDisableTracePlayingLoop = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.trace_source_playing_checkbox_key));
+        mDisableTracePlayingLoop.setOnPreferenceClickListener(mDisableTracePlayingLoopClickListener);
+    }
     protected void initializeDweetingPreferences(PreferenceManager manager) {
         mDweetingPreference = (CheckBoxPreference) manager.findPreference(
                 getString(R.string.dweeting_checkbox_key));
@@ -480,6 +486,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializeTracePreferences(manager);
         initializePhoneSensorPreferences(manager);
         initializDataformatPreference(manager);
+        initializeDisableTraceplayingLoopPreferences(manager);
         //initializeTraceRecordingPreferences(manager);
     }
 
@@ -717,6 +724,28 @@ public class SettingsActivity extends PreferenceActivity {
                     return false;
                 }
             };
+    private Preference.OnPreferenceClickListener mDisableTracePlayingLoopClickListener =
+            new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                  //  editor.putBoolean("isDisabledTracePlayingLoop", true ); // Storing string
+
+
+                    if(mDisableTracePlayingLoop.isChecked()){
+                        mDisableTracePlayingLoop.setChecked(true);
+                        editor.putBoolean("isDisabledTracePlayingLoop", true );
+                        Log.d(TAG, "Tracefile disabled loop:" + "checked");
+                    }else{
+                        mDisableTracePlayingLoop.setChecked(false);
+                        editor.putBoolean("isDisabledTracePlayingLoop", false );
+                        Log.d(TAG, "Tracefile disabled loop:" + "Unchecked");
+                    }
+                    editor.commit();
+                    return false;
+                }
+            };
+
     private Preference.OnPreferenceClickListener mPhoneSensorClickListener =
             new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
