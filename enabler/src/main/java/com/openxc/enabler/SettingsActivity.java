@@ -729,18 +729,7 @@ public class SettingsActivity extends PreferenceActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     SharedPreferences pref = getApplicationContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
                     SharedPreferences.Editor editor = pref.edit();
-                  //  editor.putBoolean("isDisabledTracePlayingLoop", true ); // Storing string
-
-
-                    if(mDisableTracePlayingLoop.isChecked()){
-                        mDisableTracePlayingLoop.setChecked(true);
-                        editor.putBoolean("isDisabledTracePlayingLoop", true );
-                        Log.d(TAG, "Tracefile disabled loop:" + "checked");
-                    }else{
-                        mDisableTracePlayingLoop.setChecked(false);
-                        editor.putBoolean("isDisabledTracePlayingLoop", false );
-                        Log.d(TAG, "Tracefile disabled loop:" + "Unchecked");
-                    }
+                    editor.putBoolean("isDisabledTracePlayingLoop", mDisableTracePlayingLoop.isChecked());
                     editor.commit();
                     return false;
                 }

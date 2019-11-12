@@ -130,6 +130,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     /**
      * Stop trace file playback and the playback thread.
      */
+
+
     @Override
     public void stop() {
         super.stop();
@@ -137,6 +139,17 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         mRunning = false;
     }
 
+
+    public void start() {
+        run();
+        Log.d(TAG, "Start trace playback");
+        mRunning = true;
+    }
+
+    public void disableTraceLoopP(boolean disable){
+        mLoop = disable;
+
+    }
     /**
      * While running, continuously read from the trace file and send messages
      * to the callback.
@@ -146,6 +159,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      */
     @Override
     public void run() {
+        Log.w(TAG, "value of mloop: " + mLoop);
         while(mRunning) {
             waitForCallback();
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
@@ -213,6 +227,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
                 if (!mLoop) {
                     Log.d(TAG, "Not looping trace.");
+                    stop();
                     break;
                 }
 
