@@ -244,6 +244,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             disconnected();
             mRunning = false;
             Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+            mTraceValid = false;
+            start();
         }
     }
 
