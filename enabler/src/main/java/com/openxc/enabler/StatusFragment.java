@@ -31,6 +31,7 @@ import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
 import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -198,8 +199,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("IsTraceRecording", 0);
         isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
 
-        SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
-        isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
+
 
         if(isTraceRecording) {
             mSplitTraceFile.setVisibility(View.VISIBLE);
@@ -341,7 +341,8 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
 
     }
     private void restartTraceFile(){
-
+        //TraceVehicleDataSource traceDatasourceObj = new TraceVehicleDataSource();
+        //traceDatasourceObj.start();
     }
     @Override
     public void onClick(View v) {

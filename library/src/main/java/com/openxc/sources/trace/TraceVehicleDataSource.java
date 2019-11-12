@@ -2,6 +2,7 @@ package com.openxc.sources.trace;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
@@ -141,6 +142,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
 
 
     public void start() {
+        mTraceValid = false;
         run();
         Log.d(TAG, "Start trace playback");
         mRunning = true;
@@ -242,10 +244,15 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 }
             }
             disconnected();
-            mRunning = false;
-            Log.d(TAG, "Playback of trace " + mFilename + " is finished");
-            mTraceValid = false;
-            start();
+            SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
+            boolean isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
+            if(isDisableTraceLooping){
+                start();
+            }else {
+                mRunning = false;
+                Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+            }
+
         }
     }
 
