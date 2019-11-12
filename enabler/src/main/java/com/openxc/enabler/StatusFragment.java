@@ -199,7 +199,8 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("IsTraceRecording", 0);
         isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
 
-
+        SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
+        isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
 
         if(isTraceRecording) {
             mSplitTraceFile.setVisibility(View.VISIBLE);
