@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.openxc.interfaces.bluetooth.BluetoothException;
@@ -160,11 +161,8 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     };
 
     private void persistCandidateDiscoveredDevices() {
-        // TODO I don't think the MULTI_PROCESS flag is necessary
-        SharedPreferences.Editor editor =
-                getContext().getSharedPreferences(
-                        DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
-                        Context.MODE_MULTI_PROCESS).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
+                        getContext().getApplicationContext()).edit();
         Set<String> candidates = new HashSet<String>();
         for(Map.Entry<String, String> device : mDiscoveredDevices.entrySet()) {
             if(device.getValue().toUpperCase().startsWith(

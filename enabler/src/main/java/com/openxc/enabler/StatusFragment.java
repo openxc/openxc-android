@@ -193,8 +193,9 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                     new Intent(getActivity(), VehicleManager.class),
                     mConnection, Context.BIND_AUTO_CREATE);
         }
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("IsTraceRecording", 0);
-        isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
+
+        isTraceRecording = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("IsTraceRecording", false);
+
         if(isTraceRecording) {
             mSplitTraceFile.setVisibility(View.VISIBLE);
             mStartStop.setVisibility(View.VISIBLE);
@@ -265,7 +266,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                 // clears the existing explicitly set Bluetooth device.
                 SharedPreferences.Editor editor =
                         PreferenceManager.getDefaultSharedPreferences(
-                                getActivity()).edit();
+                                getActivity().getApplicationContext()).edit();
                 editor.putString(getString(R.string.bluetooth_mac_key),
                         getString(R.string.bluetooth_mac_automatic_option));
                 editor.commit();

@@ -31,7 +31,7 @@ public class viewTraces extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_saved_data);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext().getApplicationContext());
         String dir = prefs.getString(getApplicationContext().getString(R.string.recording_directory_key), null);
         final String dirPath = Environment.getExternalStorageDirectory().getPath() + "/" + dir;
 

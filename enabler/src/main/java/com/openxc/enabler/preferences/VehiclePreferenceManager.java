@@ -21,7 +21,7 @@ public abstract class VehiclePreferenceManager {
 
     public VehiclePreferenceManager(Context context) {
         mContext = context;
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
     }
 
     /**

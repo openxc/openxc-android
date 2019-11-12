@@ -3,6 +3,7 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -70,12 +71,12 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
 
         Log.e(TAG, "splitTraceFile: this called");
         //Log.i(TAG, "Setting recording to " + enabled);
-        SharedPreferences pref = getContext().getSharedPreferences("IsTraceRecording", Context.MODE_PRIVATE);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("IsTraceRecording", enabled);
         editor.commit();
 
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("isTracePlayingEnabled", 0);
+        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
         boolean isTracePlaying = sharedpreferences.getBoolean("isTracePlayingEnabled", false);
         //Log.d(TAG, "Tracefile checklist recordvalue1:" + isTracePlaying);
         if(enabled && !isTracePlaying) {
