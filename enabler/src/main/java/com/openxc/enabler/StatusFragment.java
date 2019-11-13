@@ -344,6 +344,17 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private void restartTraceFile(){
         //TraceVehicleDataSource traceDatasourceObj = new TraceVehicleDataSource();
         //traceDatasourceObj.start();
+        //SourceCallback callback = null;
+        String keyName = getString(R.string.trace_source_file_key);
+        String traceFile = PreferenceManager.getDefaultSharedPreferences(mContext).getString(keyName, keyName);
+        if(traceFile != null ) {
+            try {
+                TraceVehicleDataSource traceDatasourceObj = new TraceVehicleDataSource(mContext, traceFile);
+                traceDatasourceObj.start();
+            } catch (Exception exception) {
+            }
+        }
+
     }
     @Override
     public void onClick(View v) {

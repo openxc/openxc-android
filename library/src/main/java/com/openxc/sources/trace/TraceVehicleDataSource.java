@@ -147,11 +147,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         Log.d(TAG, "Start trace playback");
         mRunning = true;
     }
-
-    public void disableTraceLoopP(boolean disable){
-        mLoop = disable;
-
-    }
     /**
      * While running, continuously read from the trace file and send messages
      * to the callback.
@@ -161,6 +156,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      */
     @Override
     public void run() {
+
         Log.w(TAG, "value of mloop: " + mLoop);
         while(mRunning) {
             waitForCallback();
@@ -247,10 +243,12 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
             boolean isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
             if(isDisableTraceLooping){
-                start();
-            }else {
                 mRunning = false;
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+
+            }else {
+                start();
+                Log.d(TAG, "Playback of trace " + mFilename + " is ");
             }
 
         }
