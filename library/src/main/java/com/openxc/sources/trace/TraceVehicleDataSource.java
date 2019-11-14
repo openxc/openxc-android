@@ -180,6 +180,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 // In the future may want to support binary traces
                 try {
                     while (mRunning && (line = reader.readLine()) != null) {
+                        Log.e(TAG, "Line:" + line);
                         VehicleMessage measurement;
                         try {
                             measurement = JsonFormatter.deserialize(line);
@@ -246,11 +247,12 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             disconnected();
             SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
             boolean isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
-            if(isDisableTraceLooping){
-                start();
-            }else {
+//            if(isDisableTraceLooping){
+            if(isDisableTraceLooping){      // gja changed - swapped parts 11/13/2019
                 mRunning = false;
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+            }else {
+                start();
             }
 
         }

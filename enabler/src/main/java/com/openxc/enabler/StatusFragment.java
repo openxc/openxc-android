@@ -341,10 +341,15 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
 
     }
+
+    // Restart Tracefile button pressed
+
     private void restartTraceFile(){
-        //TraceVehicleDataSource traceDatasourceObj = new TraceVehicleDataSource();
-        //traceDatasourceObj.start();
+        TraceVehicleDataSource traceVehicleDataSource  = OpenXCApplication.getTraceSource();
+        //traceVehicleDataSource.getCallback();
+        traceVehicleDataSource.start();
     }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()){
