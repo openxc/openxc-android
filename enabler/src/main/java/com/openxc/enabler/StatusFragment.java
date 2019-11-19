@@ -29,8 +29,10 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
+import com.openxc.sources.SourceCallback;
 import com.openxcplatform.enabler.R;
 import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
+import com.openxc.sources.trace.TraceVehicleDataSource;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,6 +61,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Button mDisconnect;
     private Button mBluetoothSearch;
     private Button mSplitTraceFile;
+    private Button mRestartTraceFile;
     private Button mStartStop;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
@@ -66,6 +69,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private Context mContext;
     private   FileRecordingPreferenceManager mTracePref;
     private  boolean isTraceRecording;
+    private  boolean isDisableTraceLooping;
     private boolean isStart = false;
 
 
@@ -194,6 +198,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                     mConnection, Context.BIND_AUTO_CREATE);
         }
 
+        isDisableTraceLooping = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isDisabledTracePlayingLoop", false);
         isTraceRecording = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("IsTraceRecording", false);
 
         if(isTraceRecording) {
@@ -202,6 +207,13 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }else{
             mSplitTraceFile.setVisibility(View.GONE);
             mStartStop.setVisibility(View.GONE);
+        }
+        if (isDisableTraceLooping){
+            mDisconnect.setVisibility(View.GONE);
+            mRestartTraceFile.setVisibility(View.VISIBLE);
+        }else{
+            mDisconnect.setVisibility(View.VISIBLE);
+            mRestartTraceFile.setVisibility(View.GONE);
         }
 
     }
@@ -240,6 +252,8 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         mStartStop = v.findViewById(R.id.starstop_btn);
         mStartStop.setOnClickListener(this);
         mTracePref = new FileRecordingPreferenceManager(requireContext());
+        mRestartTraceFile = v.findViewById(R.id.restarttrace_btn);
+        mRestartTraceFile.setOnClickListener(this);
 
 
         getActivity().runOnUiThread(new Runnable() {
@@ -325,6 +339,19 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
 
     }
+
+    // Restart Tracefile button pressed
+    private void restartTraceFile(){
+        SourceCallback remoteCallback = mVehicleManager.getRemoteCallback();
+        SourceCallback userCallback = mVehicleManager.getUserCallback();
+        TraceVehicleDataSource traceVehicleDataSource  = OpenXCApplication.getTraceSource();
+        if (traceVehicleDataSource != null) {
+            traceVehicleDataSource.startThread(userCallback, mContext);
+        } else {
+            Toast.makeText(mContext, "No Trace File", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -343,6 +370,9 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                 break;
             case R.id.starstop_btn:
                 startStopClick();
+                break;
+            case R.id.restarttrace_btn:
+                restartTraceFile();
                 break;
         }
     }

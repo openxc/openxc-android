@@ -2,6 +2,7 @@ package com.openxc.sources.trace;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
@@ -66,7 +67,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     private boolean mTraceValid = false;
     private long mFirstTimestamp = 0;
     private boolean mRunning = true;
-    private boolean mLoop = true;
     private URI mFilename;
 
     /** Construct a trace data source with the given context, callback and
@@ -96,7 +96,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         }
 
         mFilename = filename;
-        mLoop = loop;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
         new Thread(this).start();
@@ -131,11 +130,29 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     /**
      * Stop trace file playback and the playback thread.
      */
+
+
     @Override
     public void stop() {
         super.stop();
         Log.d(TAG, "Stopping trace playback");
         mRunning = false;
+    }
+
+    public void start() {
+        mTraceValid = false;
+        mRunning = true;
+        run();
+        Log.d(TAG, "Start trace playback");
+    }
+
+    public void startThread(SourceCallback userCallback, Context context) {
+        try {
+            Thread thread = new Thread(new TraceVehicleDataSource(userCallback, context, mFilename));
+            thread.start();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
@@ -153,7 +170,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             BufferedReader reader = null;
             if (checkPermission()) {
                 try {
-
                     reader = openFile(mFilename);
                 } catch (DataSourceException e) {
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
@@ -165,6 +181,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 // In the future may want to support binary traces
                 try {
                     while (mRunning && (line = reader.readLine()) != null) {
+                        //Log.e(TAG, "Line:" + line);
                         VehicleMessage measurement;
                         try {
                             measurement = JsonFormatter.deserialize(line);
@@ -212,11 +229,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     }
                 }
 
-                if (!mLoop) {
-                    Log.d(TAG, "Not looping trace.");
-                    break;
-                }
-
                 disconnected();
                 Log.d(TAG, "Restarting playback of trace " + mFilename);
                 // Set this back to false so the VI shows as "disconnected" for
@@ -225,12 +237,16 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
+                    mRunning = false;
                 }
             }
             disconnected();
-            mRunning = false;
-            Log.d(TAG, "Playback of trace " + mFilename + " is finished");
-        }
+            boolean isDisableTraceLooping = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isDisabledTracePlayingLoop", false);
+            if (isDisableTraceLooping) {
+                mRunning = false;
+                Log.d(TAG, "Playback of trace " + mFilename + " is finished");
+            }
+        } // while(mRunning)
     }
 
     private boolean checkPermission() {

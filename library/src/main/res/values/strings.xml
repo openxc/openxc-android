@@ -18,6 +18,7 @@
     <string name="network_port_key">network_port</string>
     <string name="trace_source_file_key">playback_trace_file</string>
     <string name="phone_source_polling_checkbox_key">phone_source_enabled</string>
+    <string name="trace_source_playing_checkbox_key">trace_disable_playing_loop</string>
 
 
     <!-- A default value for the token so we can still build the Enabler without

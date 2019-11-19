@@ -3,6 +3,7 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.util.Log;
 
+import com.openxc.enabler.OpenXCApplication;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.trace.TraceVehicleDataSource;
@@ -67,6 +68,8 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
                         Log.w(TAG, "Unable to add Trace source", e);
                         return;
                     }
+
+                    OpenXCApplication.setTraceSource(mTraceSource);
                     getVehicleManager().addSource(mTraceSource);
                 } else {
                     Log.d(TAG, "Trace file + " + traceFile + " already playing");
