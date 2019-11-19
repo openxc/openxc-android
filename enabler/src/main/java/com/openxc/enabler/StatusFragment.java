@@ -29,6 +29,7 @@ import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
+import com.openxc.sources.SourceCallback;
 import com.openxcplatform.enabler.R;
 import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.sources.trace.TraceVehicleDataSource;
@@ -208,7 +209,6 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }else{
             mSplitTraceFile.setVisibility(View.GONE);
             mStartStop.setVisibility(View.GONE);
-
         }
         if (isDisableTraceLooping){
             mDisconnect.setVisibility(View.GONE);
@@ -343,11 +343,15 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     }
 
     // Restart Tracefile button pressed
-
     private void restartTraceFile(){
+        SourceCallback remoteCallback = mVehicleManager.getRemoteCallback();
+        SourceCallback userCallback = mVehicleManager.getUserCallback();
         TraceVehicleDataSource traceVehicleDataSource  = OpenXCApplication.getTraceSource();
-        //traceVehicleDataSource.getCallback();
-        traceVehicleDataSource.start();
+        if (traceVehicleDataSource != null) {
+            traceVehicleDataSource.startThread(userCallback, mContext);
+        } else {
+            Toast.makeText(mContext, "No Trace File", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

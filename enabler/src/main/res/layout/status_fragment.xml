@@ -101,31 +101,32 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        style="@style/ItemRow"
-        android:layout_width="362dp">
+    <LinearLayout style="@style/ItemRow">
 
         <Button
             android:id="@+id/start_bluetooth_search_btn"
-            style="@style/MinimalButtonstatus"
-            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:text="@string/bluetooth_search_button"
+            android:layout_weight="1"
             android:textAllCaps="true" />
 
         <Button
             android:id="@+id/disconnect_btn"
-            style="@style/MinimalButtonstatus"
-            android:layout_width="165dp"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:text="@string/disconnect_button"
+            android:layout_weight="1"
             android:textAllCaps="true" />
+
         <Button
             android:id="@+id/restarttrace_btn"
-            style="@style/MinimalButtonstatus"
-            android:layout_width="165dp"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:text="@string/restart_button"
+            android:layout_weight="1"
             android:textAllCaps="true" />
+
     </LinearLayout>
 
     <LinearLayout

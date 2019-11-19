@@ -66,7 +66,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     private boolean mTraceValid = false;
     private long mFirstTimestamp = 0;
     private boolean mRunning = true;
-    private boolean mLoop = true;
     private URI mFilename;
 
     /** Construct a trace data source with the given context, callback and
@@ -96,7 +95,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         }
 
         mFilename = filename;
-        mLoop = loop;
         Log.d(TAG, "Starting new trace data source with trace file " +
                 mFilename);
         new Thread(this).start();
@@ -140,18 +138,22 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         mRunning = false;
     }
 
-
     public void start() {
         mTraceValid = false;
+        mRunning = true;
         run();
         Log.d(TAG, "Start trace playback");
-        mRunning = true;
     }
 
-    public void disableTraceLoopP(boolean disable){
-        mLoop = disable;
-
+    public void startThread(SourceCallback userCallback, Context context) {
+        try {
+            Thread thread = new Thread(new TraceVehicleDataSource(userCallback, context, mFilename));
+            thread.start();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
+
     /**
      * While running, continuously read from the trace file and send messages
      * to the callback.
@@ -161,14 +163,12 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
      */
     @Override
     public void run() {
-        Log.w(TAG, "value of mloop: " + mLoop);
         while(mRunning) {
             waitForCallback();
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader = null;
             if (checkPermission()) {
                 try {
-
                     reader = openFile(mFilename);
                 } catch (DataSourceException e) {
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
@@ -180,7 +180,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 // In the future may want to support binary traces
                 try {
                     while (mRunning && (line = reader.readLine()) != null) {
-                        Log.e(TAG, "Line:" + line);
+                        //Log.e(TAG, "Line:" + line);
                         VehicleMessage measurement;
                         try {
                             measurement = JsonFormatter.deserialize(line);
@@ -228,12 +228,6 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     }
                 }
 
-                if (!mLoop) {
-                    Log.d(TAG, "Not looping trace.");
-                    stop();
-                    break;
-                }
-
                 disconnected();
                 Log.d(TAG, "Restarting playback of trace " + mFilename);
                 // Set this back to false so the VI shows as "disconnected" for
@@ -242,20 +236,18 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
+                    mRunning = false;
                 }
             }
             disconnected();
             SharedPreferences sharedpreferences1 = getContext().getSharedPreferences("isDisabledTracePlayingLoop", 0);
             boolean isDisableTraceLooping = sharedpreferences1.getBoolean("isDisabledTracePlayingLoop", false);
-//            if(isDisableTraceLooping){
-            if(isDisableTraceLooping){      // gja changed - swapped parts 11/13/2019
+            //Log.e(TAG, "isDisableTraceLooping:" + Boolean.toString(isDisableTraceLooping));
+            if (isDisableTraceLooping) {
                 mRunning = false;
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
-            }else {
-                start();
             }
-
-        }
+        } // while(mRunning)
     }
 
     private boolean checkPermission() {
