@@ -29,23 +29,18 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.DocumentsContract;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openxc.VehicleManager;
 import com.openxc.enabler.preferences.PreferenceManagerService;
-import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.UploaderSink;
 import com.openxcplatform.enabler.R;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -368,7 +363,7 @@ public class SettingsActivity extends PreferenceActivity {
                 getString(R.string.recording_checkbox_key));
         mTraceRecordingPreference.setOnPreferenceClickListener(mTraceFileRecordingClickListener);
     }
-    protected void initializeDisableTraceplayingLoopPreferences(PreferenceManager manager) {
+    protected void initializeDisableTracePlayingLoopPreferences(PreferenceManager manager) {
         mDisableTracePlayingLoop = (CheckBoxPreference) manager.findPreference(
                 getString(R.string.trace_source_playing_checkbox_key));
         mDisableTracePlayingLoop.setOnPreferenceClickListener(mDisableTracePlayingLoopClickListener);
@@ -487,8 +482,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializeTracePreferences(manager);
         initializePhoneSensorPreferences(manager);
         initializDataformatPreference(manager);
-        initializeDisableTraceplayingLoopPreferences(manager);
-        //initializeTraceRecordingPreferences(manager);
+        initializeDisableTracePlayingLoopPreferences(manager);
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {
