@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.openxc.messages.SerializationException;
@@ -124,7 +125,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     @Override
     public void run() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("data-Format", Context.MODE_PRIVATE);
+        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
         if (sharedpreferences != null) {
             mDataFormatValue = sharedpreferences.getString("dataFormat", null);
             Log.d("BytestreamDataSource", "initializDataformatvalue: " + mDataFormatValue);
