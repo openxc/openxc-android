@@ -14,6 +14,14 @@ public class TransmissionGearPosition
         extends BaseMeasurement<State<TransmissionGearPosition.GearPosition>> {
     public final static String ID = "transmission_gear_position";
 
+    // Superset composed of the sub signals within HS1: 0x230 for both
+    // GearPos_D_Trg : Neutral, First, Second, Third, Fourth, Fifth, Sixth, Seventh,
+    //                      Eighth, Ninth, Tenth, Reverse
+    //    and
+    // GearLvrPos_D_Actl : Park, Reverse, Neutral, Drive, Sport_DriveSport, Low, first
+    //                      second, third, fourth, fifth, sizth
+    //
+
     public enum GearPosition {
         FIRST,
         SECOND,
@@ -23,8 +31,14 @@ public class TransmissionGearPosition
         SIXTH,
         SEVENTH,
         EIGHTH,
+        NINTH,
+        TENTH,
         NEUTRAL,
-        REVERSE
+        REVERSE,
+        PARK,
+        DRIVE,
+        SPORT_DRIVESPORT,
+        LOW
     }
 
     public TransmissionGearPosition(State<GearPosition> value) {
