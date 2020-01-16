@@ -11,9 +11,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.openxc.messages.MultiFrameResponse;
 import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.formatters.MultiFrameStitcher;
 import com.openxc.messages.streamers.BinaryStreamer;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
@@ -25,6 +28,7 @@ import com.openxc.sinks.DataSinkException;
  */
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
+    private final static String TAG = BytestreamDataSource.class.getSimpleName();
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
@@ -184,10 +188,16 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                     }
                 }
 
-                    mStreamHandler.receive(bytes, received);
+                mStreamHandler.receive(bytes, received);
                 VehicleMessage message;
                 while((message = mStreamHandler.parseNextMessage()) != null) {
-                    handleMessage(message);
+                    if (message instanceof MultiFrameResponse) {
+                        if (((MultiFrameResponse)message).addSequentialData()) {
+                            handleMessage(mStreamHandler.parseMessage(((MultiFrameResponse)message).getAssembledMessage()));
+                        }
+                    } else {
+                        handleMessage(message);
+                    }
                 }
             }
         }
