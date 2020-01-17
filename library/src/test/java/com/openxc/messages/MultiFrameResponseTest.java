@@ -15,11 +15,10 @@ public class MultiFrameResponseTest {
     String payload = "{\"timestamp\":88,\"frame\":1,\"message_id\":345,\"bus\":1,\"total_size\":200,\"pid\":34,\"value\":93,\"payload\":\"{\\\"timestamp\\\":0,\\\"name\\\":\\\"torque_at_transmission\\\",\\\"value\\\":32.5}\"}";
     int totalSize = payload.length();
 
-//    public MultiFrameResponse(int frame, int totalSize, int messageId, int size, String payload) {
-
     @Before
     public void setup() {
         message = new MultiFrameResponse(frame, totalSize, messageId, totalSize, payload);
+        message.clear();
     }
 
     @Test
@@ -74,12 +73,12 @@ public class MultiFrameResponseTest {
         MultiFrameResponse message1 = new MultiFrameResponse(frame, tSize, messageId, payload1.length(), payload1);
         boolean addResult1 = message1.addSequentialData();
         String result1 = message1.getAssembledMessage();
+        assertEquals(payload1, result1);
 
         MultiFrameResponse message2  = new MultiFrameResponse(frame, tSize, messageId+1, payload2.length(), payload2);
         boolean addResult2 = message2.addSequentialData();
         String result2 = message2.getAssembledMessage();
 
-        assertEquals(payload1, result1);
         assertEquals(payload2, result2);
         assertEquals(false, addResult1);
         assertEquals(false, addResult2);
@@ -103,6 +102,28 @@ public class MultiFrameResponseTest {
         assertEquals(payload2, result2);
         assertEquals(false, addResult1);
         assertEquals(false, addResult2);
+    }
+
+    @Test
+    public void combineThreeFramesReturnsCombinedMessage() {
+        String payload1 = "{\"timestamp\":88,\"frame\":1,\"message_id\":345,\"bus\":1,\"total";
+        String payload2 = "_size\":200,\"pid\":34,\"value\":93,\"payload\":\"{\\\"timestamp\\\":";
+        String payload3 = "0,\\\"name\\\":\\\"torque_at_transmission\\\",\\\"value\\\":32.5}\"}";
+
+        int tSize = payload1.length() + payload2.length() + payload3.length();
+        MultiFrameResponse message1 = new MultiFrameResponse(frame, tSize, messageId, payload1.length(), payload1);
+        boolean addResult1 = message1.addSequentialData();
+        MultiFrameResponse message2  = new MultiFrameResponse(frame, tSize, messageId, payload2.length(), payload2);
+        boolean addResult2 = message2.addSequentialData();
+        MultiFrameResponse message3  = new MultiFrameResponse(frame, tSize, messageId, payload3.length(), payload3);
+        boolean addResult3 = message3.addSequentialData();
+
+        String result = message3.getAssembledMessage();
+        String expected = payload1 + payload2 + payload3;
+        assertEquals(expected, result);
+        assertEquals(false, addResult1);
+        assertEquals(false, addResult2);
+        assertEquals(true, addResult3);
     }
 
 }

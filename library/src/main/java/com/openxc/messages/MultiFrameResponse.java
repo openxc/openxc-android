@@ -76,6 +76,10 @@ public class MultiFrameResponse extends KeyedMessage {
         return MultiFrameStitcher.addFrame(mMessageId, mPayload, mTotalSize);
     }
 
+    public void clear() {
+        MultiFrameStitcher.clear();
+    }
+
     public String getAssembledMessage() {
         Log.e(TAG, "message_id:" + mMessageId);
         Log.e(TAG, "total_size:" + mTotalSize);

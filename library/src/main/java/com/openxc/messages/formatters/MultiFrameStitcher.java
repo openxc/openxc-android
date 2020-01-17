@@ -65,6 +65,10 @@ public class MultiFrameStitcher {
         message_id = -1;
     }
 
+    public static void clear() {
+        initializeFrame();
+    }
+
     public static String getMessage() {
         if (!isMultiFrameMessageComplete()) {
             Log.e(TAG, "Incomplete message returned");
