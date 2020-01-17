@@ -50,6 +50,22 @@ public class MultiFrameResponse extends KeyedMessage {
     @SerializedName(PAYLOAD_KEY)
     private String mPayload;
 
+    public int getFrame() {
+        return mFrame;
+    }
+
+    public int getTotalSize() {
+        return mTotalSize;
+    }
+
+    public int getMessageId() {
+        return mMessageId;
+    }
+
+    public int getSize() {
+        return mSize;
+    }
+
     public String getPayload() {
         return mPayload;
     }
@@ -101,4 +117,12 @@ public class MultiFrameResponse extends KeyedMessage {
     }
 
     protected MultiFrameResponse() {}
+
+    public MultiFrameResponse(int frame, int totalSize, int messageId, int size, String payload) {
+        mFrame = frame;
+        mTotalSize = totalSize;
+        mMessageId = messageId;
+        mSize = size;
+        mPayload = payload;
+    }
 }
