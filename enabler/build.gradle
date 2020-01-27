@@ -29,6 +29,12 @@ android {
             storePassword rootProject.ext.keystorePassword
             keyAlias rootProject.ext.keyAlias
             keyPassword rootProject.ext.keyPassword
+
+            //use below for local testing
+            //storeFile rootProject.file('keys/debug.keystore')
+            //storePassword 'android'
+            //keyAlias 'androiddebugkey'
+            //keyPassword 'android'
         }
     }
 
@@ -83,6 +89,9 @@ dependencies {
     implementation 'com.bugsnag:bugsnag-android:4.3.2'
     implementation 'com.microsoft.appcenter:appcenter-analytics:2.3.0'
     implementation 'com.microsoft.appcenter:appcenter-crashes:2.3.0'
+
+    //protobuf test
+    //implementation 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
 
 
     androidTestImplementation 'junit:junit:4.12'
