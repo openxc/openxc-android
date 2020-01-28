@@ -64,6 +64,9 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.OUTPUT";
     private final static String ABOUT_PREFERENCE =
             "com.openxc.enabler.preferences.ABOUT";
+    private final static String NOTIFICATION_PREFERENCE =
+            "com.openxc.enabler.preferences.NOTIFICATION";
+
     private final static int FILE_SELECTOR_RESULT = 100;
 
     private static final int APP_PERMISSION_REQUEST_WRITE_STORAGE = 200;
@@ -83,6 +86,10 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceManagerService mPreferenceManager;
     private ListPreference mDataFormatListPreference;
     private CheckBoxPreference mPhoneSensorPreference;
+
+    private CheckBoxPreference mpowerDropPreference;
+    private CheckBoxPreference mnetworkDropPreference;
+    private CheckBoxPreference musbDropPreference;
 
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
@@ -143,6 +150,7 @@ public class SettingsActivity extends PreferenceActivity {
         return RecordingPreferences.class.getName().equals(fragmentName) ||
                 OutputPreferences.class.getName().equals(fragmentName) ||
                 DataSourcePreferences.class.getName().equals(fragmentName) ||
+                NotificationPreferences.class.getName().equals(fragmentName)||
                 AboutPreferences.class.getName().equals(fragmentName);
     }
 
@@ -163,6 +171,9 @@ public class SettingsActivity extends PreferenceActivity {
             } else if(action.equals(ABOUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.about_preferences);
                 initializeAboutPreferences(getPreferenceManager());
+            } else if(action.equals(NOTIFICATION_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.notification_preferences);
+                //initializeAboutPreferences(getPreferenceManager());
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
@@ -309,6 +320,15 @@ public class SettingsActivity extends PreferenceActivity {
 
             ((SettingsActivity)getActivity()).initializeDataSourcePreferences(
                 getPreferenceManager());
+        }
+    }
+    public static class NotificationPreferences extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState){
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.notification_preferences);
+
+            ((SettingsActivity)getActivity()).initializeNotificationPreferences(getPreferenceManager());
         }
     }
 
@@ -537,6 +557,15 @@ public class SettingsActivity extends PreferenceActivity {
         updateSummary(mNetworkPortPreference,
                 preferences.getString(getString(
                         R.string.network_port_key), null));
+    }
+    protected void initializeNotificationPreferences(PreferenceManager manager) {
+        mpowerDropPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.power_drop_checkbox_key));
+        mnetworkDropPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.network_drop_checkbox_key));
+        musbDropPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.usb_drop_checkbox_key));
+
     }
 
     protected void initializeAboutPreferences(PreferenceManager manager) {
