@@ -1,5 +1,18 @@
 # OpenXC Android Library Changelog
 
+
+##v7.0.1
+
+* Fix: Fixed many system prefs to now read from default application system
+* Improvement: dweet endpoint switched from http to https
+* New Feature: Populating devices with name openxc-vi only to the bluetooth device list
+* Improvement: Updated  test Travis build on Xenial
+* Fix:  Fixed the variantOutputgetAssemble issue
+* Improvement: Updated defaultLanguage to Language code
+* Improvement: Tracefile playing disable while recording is on and vice versa
+* Improvement: Updated the protobuf version
+
+
 ## v7.0.0
 
 * New Feature: Now supports sending control commands on-demand
