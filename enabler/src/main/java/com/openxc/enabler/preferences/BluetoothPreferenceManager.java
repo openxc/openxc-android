@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.openxc.interfaces.bluetooth.BluetoothException;
@@ -130,10 +131,12 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     }
 
     private void fillBluetoothDeviceList() {
-        for(BluetoothDevice device :
+        for (BluetoothDevice device :
                 mBluetoothDeviceManager.getPairedDevices()) {
-            mDiscoveredDevices.put(device.getAddress(),
-                    device.getName() + " (" + device.getAddress() + ")");
+            if (device.getName().toUpperCase().startsWith(BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                mDiscoveredDevices.put(device.getAddress(),
+                        device.getName() + " (" + device.getAddress() + ")");
+            }
         }
 
         persistCandidateDiscoveredDevices();
@@ -142,12 +145,13 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
 
     private BroadcastReceiver mDiscoveryReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
+            if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                 BluetoothDevice device = intent.getParcelableExtra(
                         BluetoothDevice.EXTRA_DEVICE);
-                if(device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    String summary = device.getName() + " (" +
-                            device.getAddress() + ")";
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED && device.getName() != null
+                        && device.getName()
+                        .toUpperCase().startsWith(BluetoothVehicleInterface.DEVICE_NAME_PREFIX)) {
+                    String summary = device.getName() + " (" + device.getAddress() + ")";
                     Log.d(TAG, "Found unpaired device: " + summary);
                     mDiscoveredDevices.put(device.getAddress(), summary);
                     persistCandidateDiscoveredDevices();
@@ -157,11 +161,8 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     };
 
     private void persistCandidateDiscoveredDevices() {
-        // TODO I don't think the MULTI_PROCESS flag is necessary
-        SharedPreferences.Editor editor =
-                getContext().getSharedPreferences(
-                        DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
-                        Context.MODE_MULTI_PROCESS).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
+                        getContext().getApplicationContext()).edit();
         Set<String> candidates = new HashSet<String>();
         for(Map.Entry<String, String> device : mDiscoveredDevices.entrySet()) {
             if(device.getValue().toUpperCase().startsWith(

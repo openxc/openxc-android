@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.openxc.util.SupportSettingsUtils;
@@ -159,10 +160,8 @@ public class DeviceManager {
     }
 
     public void storeLastConnectedDevice(BluetoothDevice device) {
-        SharedPreferences.Editor editor =
-                mContext.getSharedPreferences(
-                        DeviceManager.KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
-                        Context.MODE_MULTI_PROCESS).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
+                mContext.getApplicationContext()).edit();
         editor.putString(LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY,
                 device.getAddress());
         editor.apply();
@@ -171,8 +170,7 @@ public class DeviceManager {
 
     public BluetoothDevice getLastConnectedDevice() {
         SharedPreferences preferences =
-                mContext.getSharedPreferences(KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
-                        Context.MODE_MULTI_PROCESS);
+                PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
         String lastConnectedDeviceAddress = preferences.getString(
                 LAST_CONNECTED_BLUETOOTH_DEVICE_PREF_KEY, null);
         BluetoothDevice lastConnectedDevice = null;
@@ -193,8 +191,7 @@ public class DeviceManager {
         }
 
         SharedPreferences preferences =
-                mContext.getSharedPreferences(KNOWN_BLUETOOTH_DEVICE_PREFERENCES,
-                        Context.MODE_MULTI_PROCESS);
+                PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());;
         Set<String> detectedDevices = SupportSettingsUtils.getStringSet(
                 preferences, KNOWN_BLUETOOTH_DEVICE_PREF_KEY,
                 new HashSet<String>());

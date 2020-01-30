@@ -81,7 +81,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         getContext().registerReceiver(mBroadcastReceiver, filter);
 
         SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
+                PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         mUsePolling = preferences.getBoolean(
                 context.getString(R.string.bluetooth_polling_key), true);
         Log.d(TAG, "Bluetooth device polling is " + (mUsePolling ? "enabled" : "disabled"));

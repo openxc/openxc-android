@@ -17,6 +17,8 @@ public abstract class VehicleMessageStreamer {
      */
     public abstract VehicleMessage parseNextMessage();
 
+    public abstract VehicleMessage parseMessage(String line);
+
     /**
      * Serialize the message and insert any required delimiters for insertion
      * into a message stream.

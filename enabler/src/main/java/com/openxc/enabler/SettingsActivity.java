@@ -44,6 +44,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import android.telephony.TelephonyManager;
+
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
  *
@@ -70,19 +72,25 @@ public class SettingsActivity extends PreferenceActivity {
     private ListPreference mVehicleInterfaceListPreference;
     private ListPreference mBluetoothDeviceListPreference;
     private CheckBoxPreference mUploadingPreference;
+    private Preference mSourceNamePreference;
+    private CheckBoxPreference mTraceRecordingPreference;
+    private CheckBoxPreference mDisableTracePlayingLoop;
     private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
     private Preference mAboutVersionPreference;
     private PreferenceManagerService mPreferenceManager;
-
+    private ListPreference mDataFormatListPreference;
     private CheckBoxPreference mPhoneSensorPreference;
-
 
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
+    private boolean isTraceRecording;
+
+    private TelephonyManager mTelephonyManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,9 +100,42 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onPause() {
         super.onPause();
+
+        updateTargetURL();
+        displaySourceName();
+
         if(mPreferenceManager != null) {
             unbindService(mConnection);
             mPreferenceManager = null;
+        }
+    }
+
+    private void updateTargetURL() {
+        try {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String path = (settings.getString("uploading_target", ""));
+            String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+            String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
+            path = baseEndpoint + "/api/v1/message/" + data + "/save";
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("uploading_target", path);
+            editor.commit();
+        } catch (Exception e) {
+            Log.i(TAG,e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void displaySourceName() {
+        try {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String path = getDeviceID();
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("uploading_source_name", path);
+            editor.commit();
+        } catch (Exception e) {
+            Log.i(TAG,e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -113,6 +154,7 @@ public class SettingsActivity extends PreferenceActivity {
                 addPreferencesFromResource(R.xml.recording_preferences);
                 initializeUploadingPreferences(getPreferenceManager());
                 initializeDweetingPreferences(getPreferenceManager());
+                initializeTraceRecordingPreferences(getPreferenceManager());
             } else if(action.equals(DATA_SOURCE_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.data_source_preferences);
                 initializeDataSourcePreferences(getPreferenceManager());
@@ -166,6 +208,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         return null;
     }
+
+
 
 
     /**
@@ -222,10 +266,10 @@ public class SettingsActivity extends PreferenceActivity {
         if(requestCode == FILE_SELECTOR_RESULT && resultCode == RESULT_OK) {
             String newValue = getPath(this, data.getData());
             SharedPreferences.Editor editor =
-                    PreferenceManager.getDefaultSharedPreferences(this).edit();
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
             editor.putString(getString(R.string.trace_source_file_key), newValue);
             editor.commit();
-
+            Log.d(TAG, "initializtraceFilePreference: "+ newValue);
             updateSummary(mTraceFilePreference, newValue);
         }
     }
@@ -243,6 +287,8 @@ public class SettingsActivity extends PreferenceActivity {
             ((SettingsActivity)getActivity()).initializeUploadingPreferences(
                 getPreferenceManager());
             ((SettingsActivity)getActivity()).initializeDweetingPreferences(
+                    getPreferenceManager());
+            ((SettingsActivity)getActivity()).initializeTraceRecordingPreferences(
                     getPreferenceManager());
         }
     }
@@ -285,8 +331,8 @@ public class SettingsActivity extends PreferenceActivity {
         mTraceFilePreference.setOnPreferenceChangeListener(
                 mUpdateSummaryListener);
 
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences preferences =
+//            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        updateSummary(mTraceFilePreference,
 //                preferences.getString(
 //                    getString(R.string.trace_source_file_key), null));
@@ -301,20 +347,27 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeUploadingPreferences(PreferenceManager manager) {
-        mUploadingPreference = (CheckBoxPreference) manager.findPreference(
-                getString(R.string.uploading_checkbox_key));
-        Preference uploadingPathPreference = manager.findPreference(
-                getString(R.string.uploading_path_key));
-        uploadingPathPreference.setOnPreferenceChangeListener(
-                mUploadingPathPreferenceListener);
-
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
-        updateSummary(uploadingPathPreference,
-                preferences.getString(
+        mUploadingPreference = (CheckBoxPreference) manager.findPreference(getString(R.string.uploading_checkbox_key));
+        mSourceNamePreference = manager.findPreference(getString(R.string.uploading_source_name_key));
+        Preference uploadingPathPreference = manager.findPreference(getString(R.string.uploading_path_key));
+        uploadingPathPreference.setOnPreferenceChangeListener(mUploadingPathPreferenceListener);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        updateSummary(uploadingPathPreference, preferences.getString(
                     getString(R.string.uploading_path_key), null));
+        updateSummary(mSourceNamePreference, preferences.getString(
+                getString(R.string.uploading_source_name_key), null));
     }
 
+    protected void initializeTraceRecordingPreferences(PreferenceManager manager) {
+        mTraceRecordingPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.recording_checkbox_key));
+        mTraceRecordingPreference.setOnPreferenceClickListener(mTraceFileRecordingClickListener);
+    }
+    protected void initializeDisableTracePlayingLoopPreferences(PreferenceManager manager) {
+        mDisableTracePlayingLoop = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.trace_source_playing_checkbox_key));
+        mDisableTracePlayingLoop.setOnPreferenceClickListener(mDisableTracePlayingLoopClickListener);
+    }
     protected void initializeDweetingPreferences(PreferenceManager manager) {
         mDweetingPreference = (CheckBoxPreference) manager.findPreference(
                 getString(R.string.dweeting_checkbox_key));
@@ -324,7 +377,7 @@ public class SettingsActivity extends PreferenceActivity {
                 mDweetingPathPreferenceListener);
 
         SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         updateSummary(dweetingPathPreference,
                 preferences.getString(
                         getString(R.string.dweeting_thingname_key), null));
@@ -391,6 +444,36 @@ public class SettingsActivity extends PreferenceActivity {
                 getValue().equals(
                     getString(R.string.trace_interface_option_value)));
     }
+    //Ranjan Added code for Data format
+    protected void initializDataformatPreference(PreferenceManager manager) {
+        mDataFormatListPreference = (ListPreference)
+                manager.findPreference(getString(
+                        R.string.data_format_key));
+        PreferenceManager.setDefaultValues(this, R.xml.data_source_preferences, false);
+        mDataFormatListPreference.setOnPreferenceChangeListener(
+                mDataFormatUpdatedListener);
+
+        PreferenceScreen screen = (PreferenceScreen)
+                manager.findPreference("preference_screen");
+
+        List<String> entries = new ArrayList<>(Arrays.asList(getResources().
+                getStringArray(R.array.data_format_types)));
+        List<String> values = new ArrayList<>(Arrays.asList(getResources().
+                getStringArray(R.array.data_format_type_aliases)));
+        if(android.os.Build.VERSION.SDK_INT <
+                android.os.Build.VERSION_CODES.HONEYCOMB) {
+            // USB not supported, so re-load entries without that option
+            entries.remove(getString(R.string.usb_interface_option));
+            values.remove(getString(R.string.usb_interface_option_value));
+        }
+
+        CharSequence[] prototype = {};
+        mDataFormatListPreference.setEntries(entries.toArray(prototype));
+        mDataFormatListPreference.setEntryValues(values.toArray(prototype));
+        mDataFormatListPreference.setSummary(mDataFormatListPreference.getEntry());
+        Log.d(TAG, "initializDataformatPreference: "+ mDataFormatListPreference.getEntry());
+
+    }
 
     protected void initializeDataSourcePreferences(PreferenceManager manager) {
         initializeVehicleInterfacePreference(manager);
@@ -398,6 +481,8 @@ public class SettingsActivity extends PreferenceActivity {
         initializeNetwork(manager);
         initializeTracePreferences(manager);
         initializePhoneSensorPreferences(manager);
+        initializDataformatPreference(manager);
+        initializeDisableTracePlayingLoopPreferences(manager);
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {
@@ -423,7 +508,7 @@ public class SettingsActivity extends PreferenceActivity {
             mBluetoothDeviceListPreference.setEntryValues(values.toArray(prototype));
 
             SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
             updateSummary(mBluetoothDeviceListPreference,
                     preferences.getString(getString(
@@ -443,7 +528,7 @@ public class SettingsActivity extends PreferenceActivity {
                 mUpdateSummaryListener);
 
         SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(this);
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         updateSummary(mNetworkHostPreference,
                 preferences.getString(getString(
@@ -468,6 +553,29 @@ public class SettingsActivity extends PreferenceActivity {
             Log.e(TAG, "Could not get application version.", e);
         }
     }
+    //Ranjan Added code for Data format
+    private OnPreferenceChangeListener mDataFormatUpdatedListener =
+            new OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference,
+                                                  Object newValue) {
+                    // Can't just call preference.getSummary() because this callback
+                    // happens before newValue is actually set.
+                    ListPreference listPreference = (ListPreference) preference;
+                    String newSummary = listPreference.getEntries()[
+                            listPreference.findIndexOfValue(
+                                    newValue.toString())].toString();
+                    preference.setSummary(newSummary);
+                    // mDataFormatListPreference.setEnabled(newValue.equals(getString(R.string.)));
+                    Log.d(TAG, "initializDataformatPreference: "+ preference.getSummary());
+
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("dataFormat", newSummary); // Storing string
+                    editor.commit();
+
+                    return true;
+                }
+            };
 
     protected void updateSummary(Preference preference, Object currentValue) {
         String summary = null;
@@ -498,6 +606,15 @@ public class SettingsActivity extends PreferenceActivity {
             mTracePreferences.setEnabled(newValue.equals(
                     getString(R.string.trace_interface_option_value)));
 
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = pref.edit();
+            if(newSummary.equals("Pre-recorded Trace")) {
+                editor.putBoolean("isTracePlayingEnabled", true);
+            }else{
+                editor.putBoolean("isTracePlayingEnabled", false);// Storing boolean
+            }
+            editor.commit();
+           // Log.d(TAG, "initializDataformatPreference: "+ getString(R.string.trace_interface_option_value));
             return true;
         }
     };
@@ -513,22 +630,40 @@ public class SettingsActivity extends PreferenceActivity {
 
     private OnPreferenceChangeListener mUploadingPathPreferenceListener =
             new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference,
-                Object newValue) {
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
             String path = (String) newValue;
+
             if(!UploaderSink.validatePath(path)) {
                 String error = "Invalid target URL \"" + path +
-                    "\" -- must be an absolute URL " +
-                    "with http:// prefix";
+                        "\" -- must be an absolute URL " +
+                        "with http:// prefix";
                 Toast.makeText(getApplicationContext(), error,
                         Toast.LENGTH_SHORT).show();
                 Log.w(TAG, error);
                 mUploadingPreference.setChecked(false);
+            } else {
+                String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+                String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
+                path = baseEndpoint + "/api/v1/message/" + data + "/save";
+                newValue = path;
+                mSourceNamePreference.setSummary(getDeviceID());
             }
+
             updateSummary(preference, newValue);
             return true;
         }
     };
+
+
+    private String getDeviceID() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return "device_id_not_available";
+        } else {
+            mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String deviceId = mTelephonyManager.getDeviceId();
+            return deviceId;
+        }
+    }
 
     private OnPreferenceChangeListener mDweetingPathPreferenceListener =
             new OnPreferenceChangeListener() {
@@ -544,14 +679,57 @@ public class SettingsActivity extends PreferenceActivity {
     private Preference.OnPreferenceClickListener mTraceFileClickListener =
             new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(Preference preference) {
-            checkExternalStoragePermission();
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(intent, FILE_SELECTOR_RESULT);
+            SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if (sharedpreferences != null) {
+              isTraceRecording = sharedpreferences.getBoolean("IsTraceRecording", false);
+                Log.d("BytestreamDataSource", "TraceRecording: " + isTraceRecording);
+            }
+            if(!isTraceRecording){
+                Log.d(TAG, "Tracefile checklist:");
+                checkExternalStoragePermission();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, FILE_SELECTOR_RESULT);
+
+            }else{
+                Toast.makeText(getApplicationContext(),"Please stop Tracefile Recording",Toast.LENGTH_SHORT).show();
+               // Log.d(TAG, "Tracefile checklist else:" );
+            }
             return true;
         }
     };
+
+    private Preference.OnPreferenceClickListener mTraceFileRecordingClickListener =
+            new Preference.OnPreferenceClickListener() {
+
+                public boolean onPreferenceClick(Preference preference) {
+                    SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    boolean isTracePlaying = sharedpreferences.getBoolean("isTracePlayingEnabled", false);
+                    Log.d(TAG, "Tracefile checklist recordvalue:" + isTracePlaying);
+                    if (sharedpreferences != null && !isTracePlaying) {
+                        //mTraceRecordingPreference.setChecked(true);
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Please stop Tracefile Playing",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Tracefile checklist record:");
+                        mTraceRecordingPreference.setChecked(false);
+                    }
+
+                    return false;
+                }
+            };
+
+    private Preference.OnPreferenceClickListener mDisableTracePlayingLoopClickListener =
+            new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isDisabledTracePlayingLoop", mDisableTracePlayingLoop.isChecked());
+                    editor.commit();
+                    return false;
+                }
+            };
 
     private Preference.OnPreferenceClickListener mPhoneSensorClickListener =
             new Preference.OnPreferenceClickListener() {
@@ -574,6 +752,7 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     private void checkExternalStoragePermission() {
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

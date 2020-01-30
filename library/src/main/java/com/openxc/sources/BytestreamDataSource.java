@@ -8,10 +8,15 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.openxc.messages.MultiFrameResponse;
 import com.openxc.messages.SerializationException;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.formatters.MultiFrameStitcher;
 import com.openxc.messages.streamers.BinaryStreamer;
 import com.openxc.messages.streamers.JsonStreamer;
 import com.openxc.messages.streamers.VehicleMessageStreamer;
@@ -23,6 +28,7 @@ import com.openxc.sinks.DataSinkException;
  */
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
+    private final static String TAG = BytestreamDataSource.class.getSimpleName();
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
@@ -37,6 +43,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private BytestreamConnectingTask mConnectionCheckTask;
     private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
+    protected String mDataFormatValue = null;
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
@@ -122,6 +129,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     @Override
     public void run() {
+        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        if (sharedpreferences != null) {
+            mDataFormatValue = sharedpreferences.getString("dataFormat", null);
+            Log.d("BytestreamDataSource", "initializDataformatvalue: " + mDataFormatValue);
+        }
         while(isRunning()) {
             try {
                 waitForConnection();
@@ -148,14 +160,30 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                synchronized(this) {
-                    if(mStreamHandler == null) {
-                        if(JsonStreamer.containsJson(new String(bytes))) {
-                            mStreamHandler = new JsonStreamer();
-                            Log.i(getTag(), "Source is sending JSON");
-                        } else {
-                            mStreamHandler = new BinaryStreamer();
-                            Log.i(getTag(), "Source is sending protocol buffers");
+                if ((mDataFormatValue != null) && mDataFormatValue.equals("JSON Mode")){
+                    synchronized(this) {
+                        mStreamHandler = new JsonStreamer();
+                         Log.i(getTag(), "Source is selected JSON ");
+                    }
+                }
+                else if ((mDataFormatValue != null) && mDataFormatValue.equals("Protobuf Mode") ){
+                    synchronized(this) {
+                        mStreamHandler = new BinaryStreamer();
+                        Log.i(getTag(), "Source is selected protocol buffers");
+                    }
+                } else {
+                    synchronized (this) {
+                        Log.i(getTag(), "Source is slected Auto detect");
+                        if (mStreamHandler == null) {
+                            if (JsonStreamer.containsJson(new String(bytes))) {
+                                mStreamHandler = new JsonStreamer();
+                                Log.i(getTag(), "Source is sending JSON");
+
+
+                            } else {
+                                mStreamHandler = new BinaryStreamer();
+                                Log.i(getTag(), "Source is sending protocol buffers");
+                            }
                         }
                     }
                 }
@@ -163,7 +191,13 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 mStreamHandler.receive(bytes, received);
                 VehicleMessage message;
                 while((message = mStreamHandler.parseNextMessage()) != null) {
-                    handleMessage(message);
+                    if (message instanceof MultiFrameResponse) {
+                        if (((MultiFrameResponse)message).addSequentialData()) {
+                            handleMessage(mStreamHandler.parseMessage(((MultiFrameResponse)message).getAssembledMessage()));
+                        }
+                    } else {
+                        handleMessage(message);
+                    }
                 }
             }
         }
