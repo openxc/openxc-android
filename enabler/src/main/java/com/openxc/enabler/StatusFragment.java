@@ -1,9 +1,11 @@
 package com.openxc.enabler;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -189,6 +191,25 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
     };
 
+    private NetworkDisconnectBroadcastReceiver networkDisconnectBroadcastReceiver;
+
+    private void registerDisconnectBroadcastReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(com.openxc.interfaces.network.NetworkVehicleInterface.BROADCAST_NETWORK_DISCONNECTED);
+        networkDisconnectBroadcastReceiver = new NetworkDisconnectBroadcastReceiver();
+        getContext().registerReceiver(networkDisconnectBroadcastReceiver, filter);
+    }
+
+    private void unregisterDisconnectBroadcastReceiver() {
+        getContext().unregisterReceiver(networkDisconnectBroadcastReceiver);
+    }
+
+    public class NetworkDisconnectBroadcastReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+            // Perform the Action that you need here on a Disconnect
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -215,7 +236,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             mDisconnect.setVisibility(View.VISIBLE);
             mRestartTraceFile.setVisibility(View.GONE);
         }
-
+        registerDisconnectBroadcastReceiver();
     }
 
     @Override
@@ -225,7 +246,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             getActivity().unbindService(mConnection);
             mVehicleManager = null;
         }
-
+        unregisterDisconnectBroadcastReceiver();
     }
 
     @Override
