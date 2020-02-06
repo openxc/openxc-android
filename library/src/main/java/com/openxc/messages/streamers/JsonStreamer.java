@@ -42,6 +42,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
     @Override
     public VehicleMessage parseNextMessage() {
         String line = readToDelimiter();
+//        Log.e(TAG, line);
         if(line != null) {
             try {
                 Log.e(TAG, line);
@@ -57,7 +58,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
     public VehicleMessage parseMessage(String line) {
         if(line != null) {
             try {
-                Log.e(TAG, line);
+                Log.e(TAG, "Unpackaged:"+line);
                 return JsonFormatter.deserialize(line);
             } catch(UnrecognizedMessageTypeException e) {
                 Log.w(TAG, "Unable to deserialize JSON", e);
