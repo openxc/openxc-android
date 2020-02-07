@@ -71,6 +71,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private  boolean isTraceRecording;
     private  boolean isDisableTraceLooping;
     private boolean isStart = false;
+    private boolean  ispowerDrop;
 
 
     private synchronized void updateViInfo() {
@@ -115,12 +116,19 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
                         mViVersionView.setText("");
                         mViDeviceIdView.setText("");
                         mViPlatformView.setText("");
+                        disconnectAlert();
                     }
                 });
             }
         }
     };
-
+    public  void disconnectAlert(){
+        ispowerDrop = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isPowerDrop", false);
+        Log.d(TAG,ispowerDrop + "here value");
+        if(ispowerDrop){
+            Toast.makeText(getActivity(), "VI Power Dropped", Toast.LENGTH_LONG).show();
+        }
+    }
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
@@ -215,7 +223,6 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             mDisconnect.setVisibility(View.VISIBLE);
             mRestartTraceFile.setVisibility(View.GONE);
         }
-
     }
 
     @Override
