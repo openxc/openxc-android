@@ -21,10 +21,25 @@
             android:action="com.openxc.enabler.preferences.OUTPUT" />
     </Preference>
     <Preference
+        android:title="@string/notification_preferences">
+        <intent
+            android:targetPackage="com.openxcplatform.enabler"
+            android:targetClass="com.openxc.enabler.SettingsActivity"
+            android:action="com.openxc.enabler.preferences.ABOUT" />
+    </Preference>
+    <Preference
             android:title="@string/about_preferences">
         <intent
             android:targetPackage="com.openxcplatform.enabler"
             android:targetClass="com.openxc.enabler.SettingsActivity"
             android:action="com.openxc.enabler.preferences.ABOUT" />
     </Preference>
+    <Preference
+        android:title="@string/notification_preferences">
+        <intent
+            android:targetPackage="com.openxcplatform.enabler"
+            android:targetClass="com.openxc.enabler.SettingsActivity"
+            android:action="com.openxc.enabler.preferences.DATA_SOURCE" />
+    </Preference>
+
 </PreferenceScreen>
