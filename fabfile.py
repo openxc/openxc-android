@@ -5,7 +5,7 @@ from fabric.api import *  # noqa
 from fabric.colors import green, yellow
 from fabric.contrib.console import confirm
 
-from prettyprint import pp
+import pprint
 import re
 
 VERSION_PATTERN = r'^v\d+(\.\d+)+?$'
@@ -16,7 +16,12 @@ env.release = "HEAD"
 proxy = os.environ.get('http_proxy', None)
 env.http_proxy = env.http_proxy_port = None
 if proxy is not None:
-    env.http_proxy, env.http_proxy_port = proxy.rsplit(":")
+    proxys = proxy.rsplit(":")
+    if len(proxys) > 2:
+        env.http_proxy = proxys[0] + ':' + proxys[1]
+        env.http_proxy_port = proxys[2]
+    else:
+        env.http_proxy, env.http_proxy_port = proxys
 
 
 def latest_git_tag():
@@ -62,6 +67,7 @@ def make_tag():
     if confirm(yellow("Tag this release?"), default=True):
         print(green("The last 5 tags were: "))
         tags = local('git tag | tail -n 20', capture=True)
+        pp = pprint.PrettyPrinter()
         pp(sorted(tags.split('\n'), compare_versions, reverse=True))
         prompt("New release tag in the format vX.Y[.Z]?", 'tag',
                validate=VERSION_PATTERN)
