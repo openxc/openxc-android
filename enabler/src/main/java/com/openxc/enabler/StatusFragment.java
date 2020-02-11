@@ -210,14 +210,21 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private USBDisconnectBroadcastReceiver usbDisconnectBroadcastReceiver;
 
     private void registerDisconnectBroadcastReceiver() {
+
+        // Network Disconnect
         IntentFilter filter = new IntentFilter();
         filter.addAction(com.openxc.interfaces.network.NetworkVehicleInterface.BROADCAST_NETWORK_DISCONNECTED);
 
         networkDisconnectBroadcastReceiver = new NetworkDisconnectBroadcastReceiver();
         getContext().registerReceiver(networkDisconnectBroadcastReceiver, filter);
 
+
+        // USB Disconnect
+        IntentFilter usbFilter = new IntentFilter();
+        usbFilter.addAction(com.openxc.interfaces.usb.UsbVehicleInterface.BROADCAST_USB_DISCONNECTED);
+
         usbDisconnectBroadcastReceiver = new USBDisconnectBroadcastReceiver();
-        getContext().registerReceiver(usbDisconnectBroadcastReceiver, filter);
+        getContext().registerReceiver(usbDisconnectBroadcastReceiver, usbFilter);
     }
 
     private void unregisterDisconnectBroadcastReceiver() {
