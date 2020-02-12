@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
@@ -27,6 +28,7 @@ import com.openxc.sources.SourceCallback;
  */
 public class NetworkVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
+    public static final String BROADCAST_NETWORK_DISCONNECTED = "com.openxc.interfaces.network.NetworkVehicleInterface.disconnected";
     private static final String TAG = "NetworkVehicleInterface";
     private static final int SOCKET_TIMEOUT = 10000;
     private static final String SCHEMA_SPECIFIC_PREFIX = "//";
@@ -210,6 +212,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             mConnectionLock.writeLock().unlock();
         }
         Log.d(TAG, "Disconnected from the socket");
+        sendNetworkDisconnectBroadcast();
     }
 
     /**
@@ -281,5 +284,13 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         }
 
         mUri = uri;
+    }
+
+    // For an example on BroadcastReceivers and Broadcast Intents see
+    // https://www.techotopia.com/index.php/Android_Broadcast_Intents_and_Broadcast_Receivers
+    protected void sendNetworkDisconnectBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(BROADCAST_NETWORK_DISCONNECTED);
+        getContext().sendBroadcast(intent);
     }
 }
