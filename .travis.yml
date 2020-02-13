@@ -23,6 +23,7 @@ deploy:
     repo: openxc/openxc-android
     tags: true
 - provider: script
+  script: openssl enc -d -aes256 -in secret.json.enc -out secret.json -pass pass:$secret
   script: scripts/deploy.sh
   on:
     repo: openxc/openxc-android
