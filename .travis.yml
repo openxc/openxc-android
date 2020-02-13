@@ -16,7 +16,7 @@ script:
 deploy:
 - provider: releases
   api_key:
-    secure: Syj7l60jj+05PMmPfT2N2T+kvsYRGvKfXxKa+FUzIVFRUMF+y3kzjkUXC9xnL+jCaH+x01yC+DlGj9+YPd3nOenV9V0LhusRdeQy3E8udEwGodxFO7x5aCaIpAQ3VKWv5Uez71y7MdGjUEpaoiGWGcJN9Xa3fITq00FqVQNo9w8=
+    secure: d36mzrxmwOMbf86Va5dW/uUKgCK+ZRMOnKx96NOfDxHfw06SRkrdIQHrl+1MaeO04g/117yjZtEkCTPKpERWErB4nCu6oo1ERdMaAvSMyuyXaPRtGPR8yw3iPmNWWDMGrL5G8bU2UgoIlEATkK8byFOF+pFDbFOEbS7Lq19pIm8=
   file_glob: true
   file: "./enabler/build/outputs/apk/enabler-release-*.*.*.apk"
   on:
