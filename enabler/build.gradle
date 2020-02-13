@@ -72,7 +72,6 @@ android {
     play {
         serviceAccountCredentials = file("secret.json")
         track = 'beta'
-        uploadImages = true
     }
 }
 
