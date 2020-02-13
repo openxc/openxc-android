@@ -119,9 +119,11 @@ public class SendCanMessageFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().bindService(
-                new Intent(getActivity(), VehicleManager.class),
-                mConnection, Context.BIND_AUTO_CREATE);
+        if (getActivity() != null) {
+            getActivity().bindService(
+                    new Intent(getActivity(), VehicleManager.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Override
