@@ -82,7 +82,11 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("tab", mPager.getCurrentItem());
+        try {
+            outState.putInt("tab", mPager.getCurrentItem());
+        }catch (NoClassDefFoundError e){
+            Log.w(TAG, "Busgnag is unsupported when building from Eclipse", e);
+        }
     }
 
     @Override
@@ -159,7 +163,11 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkForCrashes();
+        try {
+            checkForCrashes();
+        }catch (NoClassDefFoundError e){
+            Log.w(TAG, "Busgnag is unsupported when building from Eclipse", e);
+        }
     }
 
     private void checkForCrashes() {
