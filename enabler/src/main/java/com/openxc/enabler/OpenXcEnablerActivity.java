@@ -85,7 +85,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         try {
             outState.putInt("tab", mPager.getCurrentItem());
         }catch (NoClassDefFoundError e){
-            Log.w(TAG, "Busgnag is unsupported when building from Eclipse", e);
+            Log.w(TAG, "Failling to get current page ", e);
         }
     }
 
@@ -166,7 +166,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         try {
             checkForCrashes();
         }catch (NoClassDefFoundError e){
-            Log.w(TAG, "Busgnag is unsupported when building from Eclipse", e);
+            Log.w(TAG, "Failed checkForChrashes call",e.printStackTrace());
         }
     }
 
