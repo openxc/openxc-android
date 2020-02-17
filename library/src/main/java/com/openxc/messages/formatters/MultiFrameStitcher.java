@@ -36,10 +36,11 @@ public class MultiFrameStitcher {
     static int filledBytes;                // Total Number of bytes that have received valid data
     static int totalBytes;                 // Total size of final message when all payloads have been
                                            // received and constructed
+    static int frame;
     static int message_id = -1;             // Message Id of current in construction message
     static String message = "";            // Location where the message will be constructed
 
-    public static boolean addFrame(int messageId, String payload, int totalSize) {
+    public static boolean addFrame(int messageId, int frameValue, String payload, int totalSize) {
         if (message_id != messageId) {
             initializeFrame();
             totalBytes = totalSize;
@@ -48,6 +49,7 @@ public class MultiFrameStitcher {
 
         message += payload;
         filledBytes += payload.length();
+        frame = frameValue;
 
         if (filledBytes > totalBytes) {
             Log.e(TAG, "Received more data than expected");

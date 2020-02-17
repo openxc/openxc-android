@@ -15,7 +15,7 @@ import java.util.TimerTask;
 public class LocalLogcat {
 
     private final static String TAG                 = LocalLogcat.class.getSimpleName();
-    private final static String LOGFILE_DIRECTORY   = "/ZebraLogFile";
+    private final static String LOGFILE_DIRECTORY   = "/StitchLogFiles";
 
     private static Process mProcess = null;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);

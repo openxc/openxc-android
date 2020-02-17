@@ -29,7 +29,7 @@ public class MultiFrameResponse extends KeyedMessage {
     private static final String PAYLOAD_KEY = "payload";
 
     private static final String[] sRequiredFieldsValues = new String[] {
-            FRAME_KEY, TOTAL_SIZE_KEY, MESSAGE_ID_KEY };
+            FRAME_KEY, MESSAGE_ID_KEY, PAYLOAD_KEY };
     private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
@@ -73,7 +73,7 @@ public class MultiFrameResponse extends KeyedMessage {
     // addSequentialData
     //      returns True if our assembled message is complete
     public boolean addSequentialData() {
-        return MultiFrameStitcher.addFrame(mMessageId, mPayload, mTotalSize);
+        return MultiFrameStitcher.addFrame(mMessageId, mFrame, mPayload, mTotalSize);
     }
 
     public void clear() {
