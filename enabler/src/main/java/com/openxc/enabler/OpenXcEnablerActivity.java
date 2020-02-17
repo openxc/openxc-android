@@ -85,7 +85,8 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         try {
             outState.putInt("tab", mPager.getCurrentItem());
         }catch (NoClassDefFoundError e){
-            Log.w(TAG, "Failling to get current page ", e);
+            Log.w(TAG, "Failing to get current page ");
+            e.printStackTrace();
         }
     }
 
@@ -166,7 +167,8 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         try {
             checkForCrashes();
         }catch (NoClassDefFoundError e){
-            Log.w(TAG, "Failed checkForChrashes call",e.printStackTrace());
+            Log.w(TAG, "Failed checkForChrashes call");
+            e.printStackTrace();
         }
     }
 
