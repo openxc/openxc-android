@@ -10,10 +10,10 @@ if [ "$TRAVIS_REPO_SLUG" == "openxc/openxc-android" ] && [ "$TRAVIS_JDK_VERSION"
   git clone --quiet --branch=automate-gh-pages https://${GH_TOKEN}@github.com/openxc/openxc-android automate-gh-pages > /dev/null
 
   cd automate-gh-pages
+  LATEST_TAG=$(git describe master --abbrev=0 --tags)
   git rm -rf ./
   cp -Rf $HOME/javadoc-latest/. ./
   git add -f .
-  LATEST_TAG=$(git describe master --abbrev=0 --tags)
   git commit -m "JavaDoc $LATEST_TAG - Travis Build $TRAVIS_BUILD_NUMBER"
   git push -fq origin automate-gh-pages > /dev/null
   
