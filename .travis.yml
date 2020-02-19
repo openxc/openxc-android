@@ -11,8 +11,8 @@ android:
   - android-28
   - extra-android-support
   - extra-android-m2repository
-script:
-- ' ./gradlew build test && ./gradlew testDebug'
+# script:
+# - ' ./gradlew build test && ./gradlew testDebug'
 deploy:
 - provider: releases
   api_key:
@@ -39,4 +39,4 @@ env:
   - secure: VHn45y17v68I/VNhIBCNue9eRMdaRurHBSu8cGO3NLcjZFpJqYehqKnwhjIS2eP1SDHEM++LFz6XpANpU4KwdjnYaP5qEU4b2zEVqvc+9GZK37kFIaeSaOrvoRGYVrzp+oeU8ehG6MjsgXWjIwE4QNLVc8dinILjuqWXY5zxqGs=
   - GRADLE_OPTS="-Xmx1024m -XX:MaxPermSize=1024m"
 after_sucess:
-  - scripts/push-javadoc.sh
+- scripts/push-javadoc.sh
