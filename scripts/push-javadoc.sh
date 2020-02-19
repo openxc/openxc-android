@@ -7,10 +7,15 @@ if [ "$TRAVIS_REPO_SLUG" == "openxc/openxc-android" ] && [ "$TRAVIS_JDK_VERSION"
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "Travis-CI"
-  git clone --quiet --branch=automate-gh-pages https://${GH_TOKEN}@github.com/openxc/openxc-android automate-gh-pages > /dev/null
+  
+  git clone --quiet --branch=master https://${GH_TOKEN}@github.com/openxc/openxc-android master > /dev/null
+  cd master
+  LATEST_TAG=$(git describe --abbrev=0 --tags)
+  cd ../
 
+  git clone --quiet --branch=automate-gh-pages https://${GH_TOKEN}@github.com/openxc/openxc-android automate-gh-pages > /dev/null
   cd automate-gh-pages
-  LATEST_TAG=$(git describe master --abbrev=0 --tags)
+
   git rm -rf ./
   cp -Rf $HOME/javadoc-latest/. ./
   git add -f .
