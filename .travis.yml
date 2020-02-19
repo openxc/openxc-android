@@ -27,12 +27,6 @@ deploy:
   on:
     repo: openxc/openxc-android
     tags: true
-- provider: javadoc
-  script: scripts/push-javadoc.sh
-  on:
-    repo: openxc/openxc-android
-    branch: automate-javadoc
-    tags: false
 env:
   global:
   - secure: Vt32deOYoaVrGv/LsrPQ5+O5v0sHz07G4HaEEW2fGwGb5El5K6BddqV8mtBuK681EcohoWv/ySOpuE95lmNu8xldffPY4o0JZE9RQiZAvXhOYec0nv7mg8bscYEffLP2sXpSb9bag5Cf/G76A4QxzvQAbFH3lK6Uy1Phghwwmak=
@@ -44,3 +38,5 @@ env:
   - secure: fSxLsuELLvaNmGtFn4ZtELt8d1gSJZwJ+5+QahpV0b9Nf/JNUehSl4RSYVFsq2uw5fuhdsgy/OujpGEYWTA6iDidaB+YOXfwR3q1vpxwUCIEAjbhVG0TwlFh0wqcYOq8FHUBlSNh9DoLJh61N+Y1pCzoXAPFBqaqQ1wjUpxUfCw=
   - secure: VHn45y17v68I/VNhIBCNue9eRMdaRurHBSu8cGO3NLcjZFpJqYehqKnwhjIS2eP1SDHEM++LFz6XpANpU4KwdjnYaP5qEU4b2zEVqvc+9GZK37kFIaeSaOrvoRGYVrzp+oeU8ehG6MjsgXWjIwE4QNLVc8dinILjuqWXY5zxqGs=
   - GRADLE_OPTS="-Xmx1024m -XX:MaxPermSize=1024m"
+after_sucess:
+  - scripts/push-javadoc.sh
