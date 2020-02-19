@@ -31,6 +31,7 @@ deploy:
   script: scripts/push-javadoc.sh
   on:
     repo: openxc/openxc-android
+    branch: automate-javadoc
     tags: false
 env:
   global:
