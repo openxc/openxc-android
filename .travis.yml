@@ -1,16 +1,16 @@
-language: android
-dist: trusty
-sudo: false
-jdk:
-- openjdk8
-android:
-  components:
-  - platform-tools
-  - tools
-  - build-tools-28.0.3
-  - android-28
-  - extra-android-support
-  - extra-android-m2repository
+# language: android
+# dist: trusty
+# sudo: false
+# jdk:
+# - openjdk8
+# android:
+#   components:
+#   - platform-tools
+#   - tools
+#   - build-tools-28.0.3
+#   - android-28
+#   - extra-android-support
+#   - extra-android-m2repository
 # script:
 # - ' ./gradlew build test && ./gradlew testDebug'
 deploy:
