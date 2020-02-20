@@ -82,7 +82,12 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("tab", mPager.getCurrentItem());
+        try {
+            outState.putInt("tab", mPager.getCurrentItem());
+        }catch (NoClassDefFoundError e){
+            Log.w(TAG, "Failing to get current page ");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -159,7 +164,12 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkForCrashes();
+        try {
+            checkForCrashes();
+        }catch (NoClassDefFoundError e){
+            Log.w(TAG, "Failed checkForChrashes call");
+            e.printStackTrace();
+        }
     }
 
     private void checkForCrashes() {
