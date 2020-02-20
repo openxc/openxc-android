@@ -41,20 +41,26 @@ public class MultiFrameStitcher {
     static String message = "";            // Location where the message will be constructed
 
     public static boolean addFrame(int messageId, int frameValue, String payload, int totalSize) {
-        if (message_id != messageId) {
+
+        // If message is different than last then initialize
+        // Also if previous frame was -1 then initialize as well
+        if ((message_id != messageId) || (frame == -1)) {
             initializeFrame();
             totalBytes = totalSize;
             message_id = messageId;
         }
 
-        message += payload;
-        filledBytes += payload.length();
+        if  ((message.length() > 0) && (payload.substring(0,2).compareToIgnoreCase("0x") == 0)) {
+            message += payload.substring(2);
+            filledBytes += payload.length()-2;
+        } else {
+            message += payload;
+            filledBytes += payload.length();
+        }
         frame = frameValue;
 
-        if (filledBytes > totalBytes) {
-            Log.e(TAG, "Received more data than expected");
-            return true;
-        } else if (filledBytes == totalBytes) {
+        if (frame == -1) {  // Last frame is marked with a "-1"
+            Log.d(TAG, "Received Last frame of a multi-frame");
             return true;
         }
         return false;
@@ -65,6 +71,7 @@ public class MultiFrameStitcher {
         filledBytes = 0;
         totalBytes = 0;
         message_id = -1;
+        frame = 0;
     }
 
     public static void clear() {
@@ -75,11 +82,15 @@ public class MultiFrameStitcher {
         if (!isMultiFrameMessageComplete()) {
             Log.e(TAG, "Incomplete message returned");
         }
+        Log.e(TAG, "Getting message for message_id:" + message_id);
+        Log.e(TAG, message);
         return message;
     }
 
     public static boolean isMultiFrameMessageComplete() {
-        if (filledBytes >= totalBytes) {
+        if ((totalBytes > 0) && (filledBytes >= totalBytes)) {
+            return true;
+        } else if (frame == -1) {  // Last frame is marked with a "-1"
             return true;
         }
         return false;

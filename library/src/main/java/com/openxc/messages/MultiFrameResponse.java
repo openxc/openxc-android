@@ -29,7 +29,7 @@ public class MultiFrameResponse extends KeyedMessage {
     private static final String PAYLOAD_KEY = "payload";
 
     private static final String[] sRequiredFieldsValues = new String[] {
-            FRAME_KEY, MESSAGE_ID_KEY, PAYLOAD_KEY };
+            FRAME_KEY, PAYLOAD_KEY };
     private static final Set<String> sRequiredFields = new HashSet<>(
             Arrays.asList(sRequiredFieldsValues));
 
@@ -73,22 +73,43 @@ public class MultiFrameResponse extends KeyedMessage {
     // addSequentialData
     //      returns True if our assembled message is complete
     public boolean addSequentialData() {
-        return MultiFrameStitcher.addFrame(mMessageId, mFrame, mPayload, mTotalSize);
+        boolean result = MultiFrameStitcher.addFrame(mMessageId, mFrame, mPayload, mTotalSize);
+        return result;
     }
 
     public void clear() {
         MultiFrameStitcher.clear();
     }
 
-    public String getAssembledMessage() {
-        Log.e(TAG, "message_id:" + mMessageId);
-        Log.e(TAG, "total_size:" + mTotalSize);
-        Log.e(TAG, "frame:" + mFrame);
-        Log.e(TAG, "payload length:" + mPayload.length());
-        Log.e(TAG, "Payload:" + mPayload);
+    public String getAssembledMessage(String rawMessage) {
+//        Log.e(TAG, "message_id:" + mMessageId);
+//        Log.e(TAG, "total_size:" + mTotalSize);
+//        Log.e(TAG, "frame:" + mFrame);
+//        Log.e(TAG, "payload length:" + mPayload.length());
+//        Log.e(TAG, "Payload:" + mPayload);
 
-        // Get the Message from the stitcher
-        return MultiFrameStitcher.getMessage();
+        // Get the stitched Message from the stitcher
+        String fullPayload = MultiFrameStitcher.getMessage();
+
+        // Replace the payload of the last multi-frame message with
+        // the contents of the combined multi-frame
+
+        int index = rawMessage.indexOf("payload\":\""); // substring length 10
+        if (index == -1) {
+            return null;
+        }
+        int indexEnd = rawMessage.indexOf("\"", index + 10);
+        if (indexEnd == -1) {
+            return null;
+        }
+
+        String updated = rawMessage.substring(0, index+10) + fullPayload +
+                        rawMessage.substring(indexEnd);
+
+        // replace "message_id" with "id"
+
+        updated = updated.replace("message_id", "id");  //rename message_id as id
+        return updated;
     }
 
     public static boolean containsRequiredFields(Set<String> fields) {

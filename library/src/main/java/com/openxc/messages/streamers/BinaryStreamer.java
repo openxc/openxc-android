@@ -83,6 +83,11 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     }
 
     @Override
+    public String getRawMessage() {
+        return null;
+    }
+
+    @Override
     public byte[] serializeForStream(VehicleMessage message)
             throws SerializationException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

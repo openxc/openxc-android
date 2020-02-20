@@ -31,7 +31,11 @@ public class LocalLogcat {
 
             // create app folder
             if ( !appDirectory.exists() ) {
-                appDirectory.mkdir();
+                Log.e(TAG, "Creating Directory:" + appDirectory.toString());
+                boolean dirCreated = appDirectory.mkdir();
+                if (!dirCreated) {
+                    Log.e(TAG, "Could not create logfile directory" + appDirectory.toString());
+                }
             }
 
             // clear the previous logcat and then write the new one to the file
@@ -41,6 +45,8 @@ public class LocalLogcat {
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
+
+            Log.e(TAG, "Starting Local Logfile:" + logFile);
 
             deleteOldLogFiles();
 
