@@ -70,7 +70,7 @@ android {
     }
 
     play {
-        serviceAccountCredentials = file("secret.json")
+        serviceAccountCredentials = file("../secret.json")
         track = 'beta'
     }
 }
