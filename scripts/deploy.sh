@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 ./gradlew bintrayUpload
-./gradlew publishRelease
+./gradlew publishRelease --stacktrace --info
