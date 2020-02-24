@@ -14,8 +14,8 @@ android:
 script:
 - ' ./gradlew build test && ./gradlew testDebug'
 deploy:
-  skip_cleanup: true
 - provider: releases
+  skip_cleanup: true
   api_key:
     secure: d36mzrxmwOMbf86Va5dW/uUKgCK+ZRMOnKx96NOfDxHfw06SRkrdIQHrl+1MaeO04g/117yjZtEkCTPKpERWErB4nCu6oo1ERdMaAvSMyuyXaPRtGPR8yw3iPmNWWDMGrL5G8bU2UgoIlEATkK8byFOF+pFDbFOEbS7Lq19pIm8=
   file_glob: true
@@ -24,6 +24,7 @@ deploy:
     repo: openxc/openxc-android
     tags: true
 - provider: script
+  skip_cleanup: true
   script: openssl enc -d -aes256 -in secret.json.enc -out secret.json -pass pass:$secret
   script: scripts/deploy.sh
   on:
