@@ -1,7 +1,5 @@
 com.buglabs.dweetlib
 com.openxc
-com.openxc.enabler
-com.openxc.enabler.preferences
 com.openxc.interfaces
 com.openxc.interfaces.bluetooth
 com.openxc.interfaces.network
