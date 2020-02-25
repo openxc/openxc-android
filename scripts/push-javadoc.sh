@@ -17,7 +17,8 @@ if [ "$TRAVIS_REPO_SLUG" == "openxc/openxc-android" ] && [ "$TRAVIS_JDK_VERSION"
   cd gh-pages
 
   git rm -rf ./
-  cp -Rf $HOME/javadoc-latest/. ./docs/
+  echo "android.openxcplatform.com" > CNAME
+  cp -Rf $HOME/javadoc-latest/. ./
   git add -f .
   git commit -m "JavaDoc $LATEST_TAG - Travis Build $TRAVIS_BUILD_NUMBER"
   git push -fq origin gh-pages > /dev/null
