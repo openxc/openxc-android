@@ -25,10 +25,7 @@ deploy:
     tags: true
 - provider: script
   skip_cleanup: true
-  script: openssl enc -d -aes256 -in secret.json.enc -out secret.json -pass pass:$secret
-  script: pwd
-  script: ls
-  script: scripts/deploy.sh
+  script: scripts/deploy.sh $secret
   on:
     repo: openxc/openxc-android
     tags: true
