@@ -134,7 +134,7 @@ public class FileRecordingPreferenceManager extends VehiclePreferenceManager {
          * @param reference Reference to the enclosing class.
          */
         private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
-           // super(reference);
+            super(reference);
         }
 
         @Override

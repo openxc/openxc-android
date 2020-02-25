@@ -84,7 +84,7 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
          * @param reference Reference to the enclosing class.
          */
         private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
-            //super(reference);
+            super(reference);
         }
 
         @Override
