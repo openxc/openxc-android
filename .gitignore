@@ -13,6 +13,7 @@ release.properties
 release
 tokens.xml
 local.properties
+.scannerwork/
 
 # Built application files
 *.apk
