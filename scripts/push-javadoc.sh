@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "openxc/openxc-android" ] && [ "$TRAVIS_JDK_VERSION" == "openjdk8" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "openxc/openxc-android" ] && [ "$TRAVIS_JDK_VERSION" == "openjdk8" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "automate-javadoc" ]; then
 
   cp -R library/build/docs/javadoc $HOME/javadoc-latest
 
@@ -17,7 +17,7 @@ if [ "$TRAVIS_REPO_SLUG" == "openxc/openxc-android" ] && [ "$TRAVIS_JDK_VERSION"
   cd gh-pages
 
   git rm -rf ./
-  cp -Rf $HOME/javadoc-latest/. ./
+  cp -Rf $HOME/javadoc-latest/. ./docs/
   git add -f .
   git commit -m "JavaDoc $LATEST_TAG - Travis Build $TRAVIS_BUILD_NUMBER"
   git push -fq origin gh-pages > /dev/null
