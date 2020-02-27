@@ -81,34 +81,34 @@ public class MultiFrameResponse extends KeyedMessage {
         MultiFrameStitcher.clear();
     }
 
-    public String getAssembledMessage(String rawMessage) {
-//        Log.e(TAG, "message_id:" + mMessageId);
-//        Log.e(TAG, "total_size:" + mTotalSize);
-//        Log.e(TAG, "frame:" + mFrame);
-//        Log.e(TAG, "payload length:" + mPayload.length());
-//        Log.e(TAG, "Payload:" + mPayload);
+    // The MultiFrameStitcher accumlates the partials for each of the
 
+    public String getAssembledMessage(String rawMessage) {
         // Get the stitched Message from the stitcher
         String fullPayload = MultiFrameStitcher.getMessage();
+
+        if ((rawMessage == null) || (rawMessage.length() <= 0)) {
+            return fullPayload;
+        }
 
         // Replace the payload of the last multi-frame message with
         // the contents of the combined multi-frame
 
-        int index = rawMessage.indexOf("payload\":\""); // substring length 10
+        String SUBSTRING = "payload\":\"";
+
+        int index = rawMessage.indexOf(SUBSTRING); // substring length 10
         if (index == -1) {
             return null;
         }
-        int indexEnd = rawMessage.indexOf("\"", index + 10);
+        int indexEnd = rawMessage.indexOf("\"", index + SUBSTRING.length());
         if (indexEnd == -1) {
             return null;
         }
 
-        String updated = rawMessage.substring(0, index+10) + fullPayload +
+        String updated = rawMessage.substring(0, index + SUBSTRING.length()) + fullPayload +
                         rawMessage.substring(indexEnd);
 
-        // replace "message_id" with "id"
-
-        updated = updated.replace("message_id", "id");  //rename message_id as id
+        updated = updated.replace("message_id", "id");
         return updated;
     }
 
