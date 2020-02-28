@@ -27,7 +27,7 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
+       /* return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
                 R.string.vehicle_interface_key,
                 R.string.trace_source_file_key,
@@ -42,7 +42,8 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
                             getString(R.string.vehicle_interface_key), "").equals(
                             getString(R.string.trace_interface_option_value)));
             }
-        };
+        };*/
+        return new PreferenceListenerImpl(this);
     }
 
     private synchronized void setTraceSourceStatus(boolean enabled) {
@@ -87,6 +88,45 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
         if(getVehicleManager() != null && mTraceSource != null){
             getVehicleManager().removeSource(mTraceSource);
             mTraceSource = null;
+        }
+    }
+
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private final static int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.vehicle_interface_key,
+                R.string.trace_source_file_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final TraceSourcePreferenceManager reference = (TraceSourcePreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setTraceSourceStatus(reference.getPreferences().getString(
+                    reference.getString(R.string.vehicle_interface_key), "").equals(
+                    reference.getString(R.string.trace_interface_option_value)));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
         }
     }
 }
