@@ -19,7 +19,7 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
+       /* return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
                 R.string.vehicle_interface_key,
                 R.string.network_host_key,
@@ -35,7 +35,8 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                             getString(R.string.vehicle_interface_key), "").equals(
                             getString(R.string.network_interface_option_value)));
             }
-        };
+        };*/
+        return new PreferenceListenerImpl(this);
     }
 
     private void setNetworkStatus(boolean enabled) {
@@ -63,6 +64,45 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
                     Log.e(TAG, "Unable to add network interface", e);
                 }
             }
+        }
+    }
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private final static int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.vehicle_interface_key,
+                R.string.network_host_key,
+                R.string.network_port_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final NetworkPreferenceManager reference = (NetworkPreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setNetworkStatus(reference.getPreferences().getString(
+                    reference.getString(R.string.vehicle_interface_key), "").equals(
+                    reference.getString(R.string.network_interface_option_value)));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
         }
     }
 }
