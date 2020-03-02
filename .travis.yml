@@ -15,6 +15,7 @@ script:
 - ' ./gradlew build test && ./gradlew testDebug'
 deploy:
 - provider: releases
+  overwrite: true
   skip_cleanup: true
   api_key:
     secure: d36mzrxmwOMbf86Va5dW/uUKgCK+ZRMOnKx96NOfDxHfw06SRkrdIQHrl+1MaeO04g/117yjZtEkCTPKpERWErB4nCu6oo1ERdMaAvSMyuyXaPRtGPR8yw3iPmNWWDMGrL5G8bU2UgoIlEATkK8byFOF+pFDbFOEbS7Lq19pIm8=
