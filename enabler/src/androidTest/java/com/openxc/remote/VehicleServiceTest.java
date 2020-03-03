@@ -5,8 +5,7 @@ import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
-public class VehicleServiceTest
-        extends ServiceTestCase<VehicleService> {
+public class VehicleServiceTest extends ServiceTestCase<VehicleService> {
     Intent startIntent;
 
     public VehicleServiceTest() {

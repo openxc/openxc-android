@@ -18,7 +18,9 @@
     <string name="recording_preferences">Recording</string>
     <string name="data_source_preferences">Data Sources</string>
     <string name="about_preferences">About</string>
+    <string name="notification_preferences">Notification</string>
     <string name="gps_settings">GPS</string>
+    <string name="notification_settings">NOTIFICATION</string>
     <string name="output_preferences">Output</string>
     <string name="bluetooth_settings">Bluetooth</string>
     <string name="recording_checkbox_title">Record Trace</string>
@@ -32,6 +34,9 @@
     <string name="uploading_source_name_title">API Source Name</string>
     <string name="uploading_source_name_summary">Retrieve your uploaded data using this source name in the API</string>
     <string name="native_gps_checkbox_title">Use built-in GPS</string>
+    <string name="power_drop_checkbox_title">Power Drop</string>
+    <string name="network_drop_checkbox_title">Network Drop</string>
+    <string name="usb_drop_checkbox_title">USB Drop</string>
     <string name="native_gps_checkbox_summary">For vehicles without a GPS receiver, send the host\'s built-in GPS location instead</string>
     <string name="gps_overwrite_checkbox_title">Overwrite Native GPS</string>
     <string name="gps_overwrite_checkbox_summary">Overwrite Android native GPS values with those from the vehicle (if available)</string>
@@ -50,6 +55,7 @@
     <string name="phone_source_polling_checkbox_title">Include Data from Phone Sensors</string>
     <string name="trace_disable_playing_checkbox_title">Disable Trace Playing In Loop</string>
     <string name="about_summary">About OpenXC</string>
+    <string name="notification_summary">NOTIFICATION OpenXC</string>
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>
     <string name="application_version_key">application_version</string>

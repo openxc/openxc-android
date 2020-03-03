@@ -29,7 +29,7 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
+       /* return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
                 R.string.uploading_checkbox_key,
                 R.string.uploading_path_key,
@@ -43,7 +43,8 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
                 setUploadingStatus(getPreferences().getBoolean(getString(
                                 R.string.uploading_checkbox_key), false));
             }
-        };
+        };*/
+        return new PreferenceListenerImpl(this);
     }
 
     private void setUploadingStatus(boolean enabled) {
@@ -80,6 +81,43 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
         if(getVehicleManager() != null){
             getVehicleManager().removeSink(mUploader);
             mUploader = null;
+        }
+    }
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private final static int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.uploading_checkbox_key,
+                R.string.uploading_path_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final UploadingPreferenceManager reference = (UploadingPreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setUploadingStatus(reference.getPreferences().getBoolean(reference.getString(
+                    R.string.uploading_checkbox_key), false));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
         }
     }
 }

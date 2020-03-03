@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ListFragment;
+import android.preference.PreferenceManager;
+import androidx.fragment.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.openxc.remote.ViConnectionListener;
 import com.openxc.VehicleManager;
+import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -59,7 +63,27 @@ public class VehicleDashboardFragment extends ListFragment {
             }
         }
     }
+    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
+        public void onConnected(final VehicleInterfaceDescriptor descriptor) {
+            Log.d(TAG, descriptor + " is now connected");
+        }
 
+        public void onDisconnected() {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d(TAG, "VI disconnected");
+                        disconnectAlert();
+                    }
+                });
+            }
+        }
+    };
+    public  void disconnectAlert() {
+        if (PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isPowerDrop", false)) {
+            Toast.makeText(getActivity(), "VI Power Droped", Toast.LENGTH_LONG).show();
+        }
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

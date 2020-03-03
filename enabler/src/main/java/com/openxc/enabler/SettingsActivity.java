@@ -29,8 +29,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.DocumentsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -64,6 +64,9 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.OUTPUT";
     private final static String ABOUT_PREFERENCE =
             "com.openxc.enabler.preferences.ABOUT";
+    private final static String NOTIFICATION_PREFERENCE =
+            "com.openxc.enabler.preferences.NOTIFICATION";
+
     private final static int FILE_SELECTOR_RESULT = 100;
 
     private static final int APP_PERMISSION_REQUEST_WRITE_STORAGE = 200;
@@ -83,6 +86,10 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceManagerService mPreferenceManager;
     private ListPreference mDataFormatListPreference;
     private CheckBoxPreference mPhoneSensorPreference;
+
+    private CheckBoxPreference mpowerDropPreference;
+    private CheckBoxPreference mnetworkDropPreference;
+    private CheckBoxPreference musbDropPreference;
 
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
@@ -143,6 +150,7 @@ public class SettingsActivity extends PreferenceActivity {
         return RecordingPreferences.class.getName().equals(fragmentName) ||
                 OutputPreferences.class.getName().equals(fragmentName) ||
                 DataSourcePreferences.class.getName().equals(fragmentName) ||
+                NotificationPreferences.class.getName().equals(fragmentName)||
                 AboutPreferences.class.getName().equals(fragmentName);
     }
 
@@ -163,6 +171,9 @@ public class SettingsActivity extends PreferenceActivity {
             } else if(action.equals(ABOUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.about_preferences);
                 initializeAboutPreferences(getPreferenceManager());
+            } else if(action.equals(NOTIFICATION_PREFERENCE)) {
+                addPreferencesFromResource(R.xml.notification_preferences);
+                //initializeAboutPreferences(getPreferenceManager());
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
@@ -311,6 +322,15 @@ public class SettingsActivity extends PreferenceActivity {
                 getPreferenceManager());
         }
     }
+    public static class NotificationPreferences extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState){
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.notification_preferences);
+
+            ((SettingsActivity)getActivity()).initializeNotificationPreferences(getPreferenceManager());
+        }
+    }
 
     public static class AboutPreferences extends PreferenceFragment {
         @Override
@@ -345,7 +365,27 @@ public class SettingsActivity extends PreferenceActivity {
                 mPhoneSensorClickListener);
 
     }
+    protected void initializeNetworkDropPreferences(PreferenceManager manager) {
+        mnetworkDropPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.network_drop_checkbox_key));
+        mnetworkDropPreference.setOnPreferenceClickListener(
+                mNetworkDropClickListener);
 
+    }
+    protected void initializePowerDropPreferences(PreferenceManager manager) {
+        mpowerDropPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.power_drop_checkbox_key));
+        mpowerDropPreference.setOnPreferenceClickListener(
+                mPowerDropClickListener);
+
+    }
+    protected void initializeUSBDropPreferences(PreferenceManager manager) {
+        musbDropPreference = (CheckBoxPreference) manager.findPreference(
+                getString(R.string.usb_drop_checkbox_key));
+        musbDropPreference.setOnPreferenceClickListener(
+                mUSBDropClickListener);
+
+    }
     protected void initializeUploadingPreferences(PreferenceManager manager) {
         mUploadingPreference = (CheckBoxPreference) manager.findPreference(getString(R.string.uploading_checkbox_key));
         mSourceNamePreference = manager.findPreference(getString(R.string.uploading_source_name_key));
@@ -483,6 +523,7 @@ public class SettingsActivity extends PreferenceActivity {
         initializePhoneSensorPreferences(manager);
         initializDataformatPreference(manager);
         initializeDisableTracePlayingLoopPreferences(manager);
+
     }
 
     protected void initializeBluetoothPreferences(PreferenceManager manager) {
@@ -537,6 +578,12 @@ public class SettingsActivity extends PreferenceActivity {
         updateSummary(mNetworkPortPreference,
                 preferences.getString(getString(
                         R.string.network_port_key), null));
+    }
+    protected void initializeNotificationPreferences(PreferenceManager manager) {
+        initializeNetworkDropPreferences(manager);
+        initializePowerDropPreferences(manager);
+        initializeUSBDropPreferences(manager);
+
     }
 
     protected void initializeAboutPreferences(PreferenceManager manager) {
@@ -735,6 +782,39 @@ public class SettingsActivity extends PreferenceActivity {
             new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     checkPhoneSensorPermission();
+                    return false;
+                }
+            };
+
+    private Preference.OnPreferenceClickListener mNetworkDropClickListener =
+            new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isNetworkDrop", mnetworkDropPreference.isChecked());
+                    editor.commit();
+                    return false;
+                }
+            };
+    private Preference.OnPreferenceClickListener mPowerDropClickListener =
+            new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isPowerDrop", mpowerDropPreference.isChecked());
+                    editor.commit();
+                    return false;
+                }
+            };
+
+    private Preference.OnPreferenceClickListener mUSBDropClickListener =
+            new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isUSBDrop", musbDropPreference.isChecked());
+                    editor.commit();
                     return false;
                 }
             };

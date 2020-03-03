@@ -6,11 +6,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,7 +82,12 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("tab", mPager.getCurrentItem());
+        try {
+            outState.putInt("tab", mPager.getCurrentItem());
+        }catch (NoClassDefFoundError e){
+            Log.w(TAG, "Failing to get current page ");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -159,7 +164,12 @@ public class OpenXcEnablerActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkForCrashes();
+        try {
+            checkForCrashes();
+        }catch (NoClassDefFoundError e){
+            Log.w(TAG, "Failed checkForChrashes call");
+            e.printStackTrace();
+        }
     }
 
     private void checkForCrashes() {

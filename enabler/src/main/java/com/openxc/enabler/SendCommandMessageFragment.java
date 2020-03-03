@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
+import android.preference.PreferenceManager;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
@@ -138,12 +140,17 @@ public class SendCommandMessageFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Log.d(TAG, "VI disconnected");
+                        disconnectAlert();
                     }
                 });
             }
         }
     };
-
+    public  void disconnectAlert() {
+        if (PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isPowerDrop", false)) {
+            Toast.makeText(getActivity(), "VI Power Dropped", Toast.LENGTH_LONG).show();
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();

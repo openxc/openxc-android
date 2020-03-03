@@ -29,7 +29,7 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener(){
-        return new PreferenceListener() {
+        /*return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
                 R.string.gps_overwrite_checkbox_key,
             };
@@ -42,7 +42,8 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
                 setNativeGpsOverwriteStatus(getPreferences().getBoolean(
                             getString(R.string.gps_overwrite_checkbox_key), false));
             }
-        };
+        };*/
+        return new PreferenceListenerImpl(this);
     }
 
     private void setNativeGpsOverwriteStatus(boolean enabled) {
@@ -52,5 +53,42 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
                     getVehicleManager());
         }
         mVehicleLocationProvider.setOverwritingStatus(enabled);
+    }
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private final static int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.gps_overwrite_checkbox_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final GpsOverwritePreferenceManager reference
+                    = (GpsOverwritePreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setNativeGpsOverwriteStatus(reference.getPreferences().getBoolean(
+                    reference.getString(R.string.gps_overwrite_checkbox_key), false));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
+        }
     }
 }

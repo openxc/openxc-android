@@ -29,7 +29,7 @@ public class DweetingPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
+       /* return new PreferenceListener() {
             private int[] WATCHED_PREFERENCE_KEY_IDS = {
                 R.string.dweeting_checkbox_key,
                 R.string.dweeting_thingname_key
@@ -43,7 +43,8 @@ public class DweetingPreferenceManager extends VehiclePreferenceManager {
                 setDweetingStatus(getPreferences().getBoolean(getString(
                                 R.string.dweeting_checkbox_key), false));
             }
-        };
+        };*/
+        return new PreferenceListenerImpl(this);
     }
 
     private void setDweetingStatus(boolean enabled) {
@@ -79,6 +80,45 @@ public class DweetingPreferenceManager extends VehiclePreferenceManager {
             Log.d(TAG,"removing Dweet sink");
             getVehicleManager().removeSink(mDweeter);
             mDweeter = null;
+        }
+    }
+
+    /**
+     * Internal implementation of the {@link VehiclePreferenceManager.PreferenceListener}
+     * interface.
+     */
+    private static final class PreferenceListenerImpl extends PreferenceListener {
+
+        private final static int[] WATCHED_PREFERENCE_KEY_IDS = {
+                R.string.dweeting_checkbox_key,
+                R.string.dweeting_thingname_key
+        };
+
+        /**
+         * Main constructor.
+         *
+         * @param reference Reference to the enclosing class.
+         */
+        private PreferenceListenerImpl(final VehiclePreferenceManager reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void readStoredPreferences() {
+            final DweetingPreferenceManager reference
+                    = (DweetingPreferenceManager) getEnclosingReference();
+            if (reference == null) {
+                Log.w(TAG, "Can not read stored preferences, enclosing instance is null");
+                return;
+            }
+
+            reference.setDweetingStatus(reference.getPreferences().getBoolean(
+                    reference.getString(R.string.dweeting_checkbox_key), false));
+        }
+
+        @Override
+        protected int[] getWatchedPreferenceKeyIds() {
+            return WATCHED_PREFERENCE_KEY_IDS;
         }
     }
 }
