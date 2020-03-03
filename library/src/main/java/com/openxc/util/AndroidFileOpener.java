@@ -34,18 +34,13 @@ public class AndroidFileOpener implements FileOpener {
         File directory = new File(externalStoragePath.getAbsolutePath() +
                 "/" + getDirectory());
         File file = new File(directory, filename);
-        OutputStream outputStream = null;
         try {
             directory.mkdirs();
-            outputStream = new FileOutputStream(file);
+            OutputStream outputStream = new FileOutputStream(file);
             return new BufferedWriter(new OutputStreamWriter(outputStream));
         } catch(IOException e) {
             Log.w(TAG, "Unable to open " + file + " for writing", e);
             throw e;
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
-            }
         }
     }
 
