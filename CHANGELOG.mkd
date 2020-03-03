@@ -1,7 +1,7 @@
 # OpenXC Android Library Changelog
 
 
-## v7.0.1
+## v7.0.8
 
 * Fix: Fixed many system prefs to now read from default application system
 * Improvement: dweet endpoint switched from http to https
