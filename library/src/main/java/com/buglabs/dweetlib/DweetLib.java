@@ -175,10 +175,6 @@ public class DweetLib {
         InputStreamReader inputStreamReader = null;
         try {
             is = am.open("adjectives.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (is!=null) {
             String line = null;
             try {
                 inputStreamReader = new InputStreamReader(is);
@@ -191,16 +187,33 @@ public class DweetLib {
                 newThingName = newThingName.concat(stringArray.get(rand1));
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (inputStreamReader != null) {
+                        inputStreamReader.close();
+                    }
+                    if (br != null) {
+                        br.close();
+                    }
+                }  catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            }  catch (IOException e) {
+                e.printStackTrace();
             }
         }
         newThingName = newThingName.concat("-");
         stringArray.clear();
         try {
             is = am.open("nouns.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (is!=null) {
             String line = null;
             try {
                 inputStreamReader = new InputStreamReader(is);
@@ -212,6 +225,27 @@ public class DweetLib {
                 int rand1 = r.nextInt(stringArray.size());
                 newThingName = newThingName.concat(stringArray.get(rand1));
             } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (inputStreamReader != null) {
+                        inputStreamReader.close();
+                    }
+                    if (br != null) {
+                        br.close();
+                    }
+                }  catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            }  catch (IOException e) {
                 e.printStackTrace();
             }
         }
