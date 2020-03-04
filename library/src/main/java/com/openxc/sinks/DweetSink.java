@@ -96,6 +96,8 @@ public class DweetSink extends ContextualVehicleDataSink {
                     records = getRecords();
                 } catch(InterruptedException e) {
                     Log.w(TAG, "Dweeter was interrupted", e);
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                     break;
                 }
             }

@@ -16,6 +16,7 @@ android {
 
     lintOptions {
         abortOnError false
+        disable 'LongLogTag'
     }
     useLibrary  'org.apache.http.legacy'
 }
