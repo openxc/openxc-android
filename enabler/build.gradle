@@ -70,10 +70,8 @@ android {
     }
 
     play {
-        serviceAccountEmail = rootProject.ext.serviceAccountEmail
-        pk12File = rootProject.file('keys/play-store.p12')
+        serviceAccountCredentials = file("../secret.json")
         track = 'beta'
-        uploadImages = true
     }
 }
 
