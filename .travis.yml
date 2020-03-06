@@ -12,7 +12,8 @@ android:
   - extra-android-support
   - extra-android-m2repository
 script:
-- ' ./gradlew build test && ./gradlew testDebug'
+- './gradlew build test && ./gradlew testDebug'
+- './gradlew connectedAndroidTest'
 deploy:
 - provider: releases
   overwrite: true
