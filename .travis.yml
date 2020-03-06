@@ -5,18 +5,14 @@ jdk:
 - openjdk8
 android:
   components:
-  - platform-tools
   - tools
+  - platform-tools
   - build-tools-28.0.3
   - android-28
   - extra-android-support
   - extra-android-m2repository
-  - sys-img-x86-android-28
 before_script:
-  - echo no | android create avd --force -n test -t android-28 --abi x86 -c 100M
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+  - yes | sdkmanager "platforms;android-28"
 script:
 - './gradlew build test && ./gradlew testDebug'
 - './gradlew connectedAndroidTest'
