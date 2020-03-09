@@ -13,8 +13,6 @@ import com.openxc.messages.VehicleMessage;
 
 public abstract class VehicleMessageAdapter extends BaseAdapter {
     protected List<VehicleMessage> mValues = new ArrayList<>();
-    private static SimpleDateFormat sDateFormatter =
-            new SimpleDateFormat( "HH:mm:ss.S", Locale.US);
 
     public void add(VehicleMessage message) {
         ThreadPreconditions.checkOnMainThread();
@@ -26,6 +24,8 @@ public abstract class VehicleMessageAdapter extends BaseAdapter {
 
     protected static String formatTimestamp(VehicleMessage message) {
         if(message.isTimestamped()) {
+            SimpleDateFormat sDateFormatter =
+                    new SimpleDateFormat( "HH:mm:ss.S", Locale.US);
             return sDateFormatter.format(message.getDate());
         }
         return "";

@@ -32,7 +32,11 @@ public abstract class VehiclePreferenceManager {
     public void setVehicleManager(VehicleManager vehicle) {
         mVehicle = vehicle;
         mPreferenceListener = watchPreferences(getPreferences());
-        mPreferenceListener.readStoredPreferences();
+        if (mPreferenceListener != null) {
+            mPreferenceListener.readStoredPreferences();
+        } else {
+            Log.w(TAG, "mPreferenceListener was null");
+        }
     }
 
     /**
