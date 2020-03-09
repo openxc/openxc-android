@@ -1,73 +1,25 @@
-# sudo: false --> run dist image in docker container on shared host for faster startup (runs slower)
-# sudo: required --> run dist image in VM on Google Compute Engine for slower startup (runs faster)
-sudo: required
-dist: trusty
-os:
-  - linux
-  
+language: android
+jdk: oraclejdk8
 env:
-  - SYS=25 ABI="google_apis;arm64-v8a"
-  - SYS=25 ABI="google_apis;armeabi-v7a"
-  - SYS=24 ABI="google_apis;arm64-v8a"
-  - SYS=24 ABI="google_apis;armeabi-v7a"
-  - SYS=23 ABI="google_apis;armeabi-v7a"
+  global:
+    - ANDROID_TARGET=android-23
+    - ANDROID_ABI=x86
 
-  - SYS=22 ABI="default;x86" # demo failure due to no accelerator on travis
-  - SYS=22 ABI="default;x86_64" # demo failure due to no accelerator on travis
-  - SYS=22 ABI="google_apis;armeabi-v7a"
-  - SYS=22 ABI="google_apis;x86" # demo failure due to no accelerator on travis
-  - SYS=22 ABI="google_apis;x86_64" # demo failure due to no accelerator on travis
-  - SYS=22 ABI="default;armeabi-v7a"
-
-  - SYS=21 ABI="default;armeabi-v7a"
-  - SYS=20 ABI="default;armeabi-v7a"
-  - SYS=19 ABI="default;armeabi-v7a"
-  - SYS=18 ABI="default;armeabi-v7a"
-  - SYS=17 ABI="default;armeabi-v7a"
-  - SYS=16 ABI="default;armeabi-v7a"
-  - SYS=15 ABI="default;armeabi-v7a"
-  - SYS=14 ABI="default;armeabi-v7a"
-  - SYS=10 ABI="default;armeabi-v7a"
-
-matrix:
-  allow_failures:
-    - env: SYS=22 ABI="default;x86"
-    - env: SYS=22 ABI="default;x86_64"
-    - env: SYS=22 ABI="google_apis;x86"
-    - env: SYS=22 ABI="google_apis;x86_64"
-    - env: SYS=20 ABI="default;armeabi-v7a"
-    - env: SYS=14 ABI="default;armeabi-v7a"
-
-language: generic
-before_install:
-  # Install the Android SDK Dependency.
-  - export ANDROID_HOME=~/android-sdk-linux
-  - wget -q "https://dl.google.com/android/repository/sdk-tools-${OS}-4333796.zip" -O android-sdk-tools.zip
-  - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
-  - rm android-sdk-tools.zip
-  - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
-  # Silence warning.
-  - mkdir -p ~/.android
-  - touch ~/.android/repositories.cfg
-  - HOMEBREW_NO_AUTO_UPDATE=1
-  # Accept licenses before installing components, no need to echo y for each component
-  - yes | sdkmanager --licenses
-  # Platform tools
-  - sdkmanager "emulator" "tools" "platform-tools" > /dev/null
-  - sdkmanager --list | head -15
-  # install older packages (for emulator)
-  - sdkmanager "build-tools;25.0.2" "platforms;android-25" > /dev/null
-  # Create and start emulator.
-  - sdkmanager "system-images;android-$SYS;$ABI" > /dev/null
-  - sdkmanager --list | head -15
-  - echo no | avdmanager create avd --force -n test -k "system-images;android-$SYS;$ABI"
-  # fix timezone warning
-  # use the absolute emulator path in case older version installed (on default path)
-  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
-  
-before_script:
-  # Wait for emulator to startup.
-  - android-wait-for-emulator
-  - adb shell input keyevent 82
-
+android:
+  components:
+  - tools
+  - platform-tools
+  - build-tools-25.0.1
+  - android-23
+  - extra-android-m2repository
+  - extra-google-m2repository
+  - sys-img-x86-android-23
 script:
+  - android list targets
+  - echo no | android create avd --force -n test -t android-23 --abi x86 -no-accel
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
+  - ./gradlew installDebug
+after_success:
+  - bash echo "Yata!"
