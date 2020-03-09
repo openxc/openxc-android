@@ -13,7 +13,7 @@ android:
   - extra-android-m2repository
 before_install:
   - touch /home/travis/.android/repositories.cfg
-  - android update sdk --no-ui --all --filter "system-images;android-28;google_apis;x86"
+  - yes | sdkmanager "system-images;android-28;google_apis;x86"
   - sdkmanager --list | head -15
   - echo no | android create avd --force -n test -t android-28 --abi x86
   - emulator -avd test -no-audio -no-window &
