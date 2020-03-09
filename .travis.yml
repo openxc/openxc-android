@@ -11,12 +11,14 @@ android:
   - android-28
   - extra-android-support
   - extra-android-m2repository
-  - sys-img-armeabi-v7a-android-28
+before_install:
+  - sdkmanager "system-images;android-$SYS;$ABI" > /dev/null
+  - sdkmanager --list | head -15
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-$SYS;$ABI"
+  - emulator -avd test -no-audio -no-window -gpu swiftshader &
 before_script:
-  - echo no | android create avd --force -n Test -t android-28 --abi armeabi-v7a
-  - emulator -avd Test -no-audio -no-window &
   - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+  - adb shell input keyevent 82
 script:
 - './gradlew build test && ./gradlew testDebug'
 - './gradlew connectedAndroidTest'
@@ -38,6 +40,7 @@ deploy:
     repo: openxc/openxc-android
     tags: true
 env:
+  - SYS=28 ABI="google_apis;arm64-v8a"
   global:
   - secure: Vt32deOYoaVrGv/LsrPQ5+O5v0sHz07G4HaEEW2fGwGb5El5K6BddqV8mtBuK681EcohoWv/ySOpuE95lmNu8xldffPY4o0JZE9RQiZAvXhOYec0nv7mg8bscYEffLP2sXpSb9bag5Cf/G76A4QxzvQAbFH3lK6Uy1Phghwwmak=
   - secure: dmvaay5GzUO1qkaRk46+o96rRmP4cKAvbgD6njgCegfaGbXwDAMQGKjPeJc5uORWpmxnqpqSg8+0ZvYwkUsflvG3tTtsPV+llzjkDGnstvLxFBEU/JibLoUscOdrdkrc6DsxZtfZ9jJWkb271ARjgTxjMHnNcN3jwTLfU67htXc=
