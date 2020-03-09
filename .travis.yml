@@ -42,7 +42,7 @@ language: generic
 before_install:
   # Install the Android SDK Dependency.
   - export ANDROID_HOME=~/android-sdk-linux
-#  - wget -q "https://dl.google.com/android/repository/sdk-tools-${OS}-4333796.zip" -O android-sdk-tools.zip
+  - wget -q "https://dl.google.com/android/repository/sdk-tools-${OS}-4333796.zip" -O android-sdk-tools.zip
   - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
   - rm android-sdk-tools.zip
   - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
