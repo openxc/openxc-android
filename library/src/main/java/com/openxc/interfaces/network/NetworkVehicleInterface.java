@@ -123,7 +123,11 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                 connected = mSocket != null && mSocket.isConnected() && super.isConnected();
                 mConnectionLock.readLock().unlock();
             }
-        } catch(InterruptedException e) {}
+        } catch(InterruptedException e) {
+            Log.d(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
         return connected;
     }
 
