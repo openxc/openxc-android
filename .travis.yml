@@ -16,7 +16,7 @@ android:
   - sys-img-x86-android-23
 script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-23 --abi x86 -no-accel
+  - echo no | android create avd --force -n test -t android-23 --abi x86
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
