@@ -14,6 +14,7 @@ android:
   - sys-img-x86-android-28
 before_install:
   - ls /usr/local/android-sdk/tools/bin
+  - ls /opt/android
   - sdkmanager --list | head -15
   - echo no | avdmanager create avd --force -n test -t android-28 --abi x86
   - emulator -avd test -no-audio -no-window &
