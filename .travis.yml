@@ -13,9 +13,9 @@ android:
   - extra-android-m2repository
 before_install:
   - touch /home/travis/.android/repositories.cfg
-  - echo y | sdkmanager "system-images;android-28;google_apis;x86"
+  - sdkmanager "system-images;android-28;google_apis;x86"
   - sdkmanager --list | head -15
-  - echo no | android create avd --force -n test -k "system-images;android-28;google_apis;x86"
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-28;google_apis;x86"
   - emulator -avd test -no-audio -no-window &
 before_script:
   - android-wait-for-emulator
