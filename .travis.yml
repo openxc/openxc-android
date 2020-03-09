@@ -1,56 +1,76 @@
-language: android
+# sudo: false --> run dist image in docker container on shared host for faster startup (runs slower)
+# sudo: required --> run dist image in VM on Google Compute Engine for slower startup (runs faster)
+sudo: required
 dist: trusty
-sudo: false
-jdk:
-- openjdk8
-android:
-  components:
-  - tools
-  - platform-tools
-  - build-tools-28.0.3
-  - android-28
-  - extra-android-support
-  - extra-android-m2repository
-  - sys-img-x86-android-28
-before_install:
-  - ls /usr/local/android-sdk/tools/bin
-  - ls /opt/android
-  - sdkmanager --list | head -15
-  - echo no | avdmanager create avd --force -n test -t android-28 --abi x86
-  - emulator -avd test -no-audio -no-window &
-before_script:
-  - android-wait-for-emulator
-  - adb shell input keyevent 82
-script:
-- './gradlew build test && ./gradlew testDebug'
-- './gradlew connectedAndroidTest'
-deploy:
-- provider: releases
-  overwrite: true
-  skip_cleanup: true
-  api_key:
-    secure: d36mzrxmwOMbf86Va5dW/uUKgCK+ZRMOnKx96NOfDxHfw06SRkrdIQHrl+1MaeO04g/117yjZtEkCTPKpERWErB4nCu6oo1ERdMaAvSMyuyXaPRtGPR8yw3iPmNWWDMGrL5G8bU2UgoIlEATkK8byFOF+pFDbFOEbS7Lq19pIm8=
-  file_glob: true
-  file: "./enabler/build/outputs/apk/enabler-release-*.*.*.apk"
-  on:
-    repo: openxc/openxc-android
-    tags: true
-- provider: script
-  skip_cleanup: true
-  script: scripts/deploy.sh $secret
-  on:
-    repo: openxc/openxc-android
-    tags: true
+os:
+  - linux
+  - osx
+
 env:
-  global:
-  - secure: Vt32deOYoaVrGv/LsrPQ5+O5v0sHz07G4HaEEW2fGwGb5El5K6BddqV8mtBuK681EcohoWv/ySOpuE95lmNu8xldffPY4o0JZE9RQiZAvXhOYec0nv7mg8bscYEffLP2sXpSb9bag5Cf/G76A4QxzvQAbFH3lK6Uy1Phghwwmak=
-  - secure: dmvaay5GzUO1qkaRk46+o96rRmP4cKAvbgD6njgCegfaGbXwDAMQGKjPeJc5uORWpmxnqpqSg8+0ZvYwkUsflvG3tTtsPV+llzjkDGnstvLxFBEU/JibLoUscOdrdkrc6DsxZtfZ9jJWkb271ARjgTxjMHnNcN3jwTLfU67htXc=
-  - secure: Kr9rh1Y7MM1iJ6hS0YO/1ymLfHt+ncsMk4nY2DEO74V2ROTaqWsA1GdtczWb8AD3ZjeF8Qw+wBlaJvZ5Sx51ydGnmT5X/e/pHkKMIe96UHjugvogEigLcw6pI9ZRo/p8A+tZ3WOeY2VVoQhOx6sCObNBIEQE5NVrRpldrTB+D+M=
-  - secure: eBbtEJOTUJ3PaM1xfgW9ccXdiG28TeMGYWfxCW1nBQvtdLzIHyfDZb8FNEFkChaq41sk44+IVMQNLj8tybAPlg3E6SOwLd5SWjhv+0f+tJWYBY1j04MKS8WE3osE3iifs+CafjOk8lws4YH0tKaUXsqqLO/53OuT3px2mlSxjwc=
-  - secure: Ck+GprGc70jIh90pUiaFKRZGdb1UB4DIdWOrTPT4awbPRt/ddUDbnjXaRbVCDs83Xf++NuKCJEtoxC77XM1LLqRTCvdmUe6pgc1ghQQms6h0HT1XX6mOb9XIG9wNV6OW2HKJMbw4gQ9j8QuRT/9mfYU80o1j4Nzq1mqNtfbWNZI=
-  - secure: c/VC44g6n4u9Hewci/8X+Zq7nR04OxaRbQauGkfKHXGHUA9GJbo8pBDFD3qPvD8MU2n5Lq+UNX897flcTCJ0WVx+BtFU8XRUeOwAwLgvpzgyrNraJvcBVUvrZpL7qFt2lwf6l7xbOXJQWepe4V7YvssCRgWVsBpSqfRkulUC4Tk=
-  - secure: fSxLsuELLvaNmGtFn4ZtELt8d1gSJZwJ+5+QahpV0b9Nf/JNUehSl4RSYVFsq2uw5fuhdsgy/OujpGEYWTA6iDidaB+YOXfwR3q1vpxwUCIEAjbhVG0TwlFh0wqcYOq8FHUBlSNh9DoLJh61N+Y1pCzoXAPFBqaqQ1wjUpxUfCw=
-  - secure: VHn45y17v68I/VNhIBCNue9eRMdaRurHBSu8cGO3NLcjZFpJqYehqKnwhjIS2eP1SDHEM++LFz6XpANpU4KwdjnYaP5qEU4b2zEVqvc+9GZK37kFIaeSaOrvoRGYVrzp+oeU8ehG6MjsgXWjIwE4QNLVc8dinILjuqWXY5zxqGs=
-  - GRADLE_OPTS="-Xmx1024m -XX:MaxPermSize=1024m"
-after_success:
-  - scripts/push-javadoc.sh
+  - SYS=25 ABI="google_apis;arm64-v8a"
+  - SYS=25 ABI="google_apis;armeabi-v7a"
+  - SYS=24 ABI="google_apis;arm64-v8a"
+  - SYS=24 ABI="google_apis;armeabi-v7a"
+  - SYS=23 ABI="google_apis;armeabi-v7a"
+
+  - SYS=22 ABI="default;x86" # demo failure due to no accelerator on travis
+  - SYS=22 ABI="default;x86_64" # demo failure due to no accelerator on travis
+  - SYS=22 ABI="google_apis;armeabi-v7a"
+  - SYS=22 ABI="google_apis;x86" # demo failure due to no accelerator on travis
+  - SYS=22 ABI="google_apis;x86_64" # demo failure due to no accelerator on travis
+  - SYS=22 ABI="default;armeabi-v7a"
+
+  - SYS=21 ABI="default;armeabi-v7a"
+  - SYS=20 ABI="default;armeabi-v7a"
+  - SYS=19 ABI="default;armeabi-v7a"
+  - SYS=18 ABI="default;armeabi-v7a"
+  - SYS=17 ABI="default;armeabi-v7a"
+  - SYS=16 ABI="default;armeabi-v7a"
+  - SYS=15 ABI="default;armeabi-v7a"
+  - SYS=14 ABI="default;armeabi-v7a"
+  - SYS=10 ABI="default;armeabi-v7a"
+
+matrix:
+  allow_failures:
+    - env: SYS=22 ABI="default;x86"
+    - env: SYS=22 ABI="default;x86_64"
+    - env: SYS=22 ABI="google_apis;x86"
+    - env: SYS=22 ABI="google_apis;x86_64"
+    - env: SYS=20 ABI="default;armeabi-v7a"
+    - env: SYS=14 ABI="default;armeabi-v7a"
+
+language: generic
+before_install:
+  # Install the Android SDK Dependency.
+  - export ANDROID_HOME=~/android-sdk-linux
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then wget -q "https://dl.google.com/android/repository/sdk-tools-darwin-4333796.zip" -O android-sdk-tools.zip; else wget -q "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" -O android-sdk-tools.zip; fi
+#  - wget -q "https://dl.google.com/android/repository/sdk-tools-${OS}-4333796.zip" -O android-sdk-tools.zip
+  - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
+  - rm android-sdk-tools.zip
+  - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+  # Silence warning.
+  - mkdir -p ~/.android
+  - touch ~/.android/repositories.cfg
+  - HOMEBREW_NO_AUTO_UPDATE=1
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then brew cask uninstall java; brew tap caskroom/versions; brew cask install java8; fi
+  # Accept licenses before installing components, no need to echo y for each component
+  - yes | sdkmanager --licenses
+  # Platform tools
+  - sdkmanager "emulator" "tools" "platform-tools" > /dev/null
+  - sdkmanager --list | head -15
+  # install older packages (for emulator)
+  - sdkmanager "build-tools;25.0.2" "platforms;android-25" > /dev/null
+  # Create and start emulator.
+  - sdkmanager "system-images;android-$SYS;$ABI" > /dev/null
+  - sdkmanager --list | head -15
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-$SYS;$ABI"
+  # fix timezone warning
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then sudo ln -sf /usr/share/zoneinfo/US/Pacific /etc/localtime; fi
+  # use the absolute emulator path in case older version installed (on default path)
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
+before_script:
+  # Wait for emulator to startup.
+  - ./scripts/android-wait-for-emulator.sh
+  - adb shell input keyevent 82
+
+script:
