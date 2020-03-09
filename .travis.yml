@@ -11,6 +11,7 @@ android:
   - android-28
   - extra-android-support
   - extra-android-m2repository
+  - sys-img-x86-android-28
 before_install:
   - touch /home/travis/.android/repositories.cfg
   - yes | sdkmanager "system-images;android-28;google_apis;x86"
