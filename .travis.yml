@@ -4,8 +4,7 @@ sudo: required
 dist: trusty
 os:
   - linux
-  - osx
-
+  
 env:
   - SYS=25 ABI="google_apis;arm64-v8a"
   - SYS=25 ABI="google_apis;armeabi-v7a"
@@ -43,7 +42,6 @@ language: generic
 before_install:
   # Install the Android SDK Dependency.
   - export ANDROID_HOME=~/android-sdk-linux
-  - if [ $TRAVIS_OS_NAME == "osx" ]; then wget -q "https://dl.google.com/android/repository/sdk-tools-darwin-4333796.zip" -O android-sdk-tools.zip; else wget -q "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" -O android-sdk-tools.zip; fi
 #  - wget -q "https://dl.google.com/android/repository/sdk-tools-${OS}-4333796.zip" -O android-sdk-tools.zip
   - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
   - rm android-sdk-tools.zip
@@ -52,7 +50,6 @@ before_install:
   - mkdir -p ~/.android
   - touch ~/.android/repositories.cfg
   - HOMEBREW_NO_AUTO_UPDATE=1
-  - if [ $TRAVIS_OS_NAME == "osx" ]; then brew cask uninstall java; brew tap caskroom/versions; brew cask install java8; fi
   # Accept licenses before installing components, no need to echo y for each component
   - yes | sdkmanager --licenses
   # Platform tools
@@ -65,9 +62,9 @@ before_install:
   - sdkmanager --list | head -15
   - echo no | avdmanager create avd --force -n test -k "system-images;android-$SYS;$ABI"
   # fix timezone warning
-  - if [ $TRAVIS_OS_NAME == "osx" ]; then sudo ln -sf /usr/share/zoneinfo/US/Pacific /etc/localtime; fi
   # use the absolute emulator path in case older version installed (on default path)
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
+  
 before_script:
   # Wait for emulator to startup.
   - android-wait-for-emulator
