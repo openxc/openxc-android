@@ -1,11 +1,13 @@
 
 package com.buglabs.dweetlib;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -17,6 +19,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -49,7 +53,7 @@ public class DweetLib {
     private final static String TAG = "DweetLib";
 
     private static DweetLib instance;
-
+    private Random rand ;
     HashMap<Object,Object> thingProcess;
     HashMap<Object,Object> thingProcessUrl;
     HashMap<Object,Object> thingProcessConnection;
@@ -62,13 +66,23 @@ public class DweetLib {
         instance = new DweetLib();
     }
 
+
     private DweetLib() {
         thingProcess = new HashMap<>();
         thingProcessUrl = new HashMap<>();
         thingProcessConnection = new HashMap<>();
         thingProcessCallback = new HashMap<>();
         thingProcessCaller = new HashMap<>();
+        try
+ {
+            rand = SecureRandom.getInstance("SHA1PRNG");
 
+        }
+ catch(NoSuchAlgorithmException ex)
+        {
+            ex.printStackTrace();
+            rand = new SecureRandom();
+        }
 
     }
 
@@ -182,8 +196,7 @@ public class DweetLib {
                 while ((line = br.readLine()) != null) {
                     stringArray.add(line);
                 }
-                Random r = new Random();
-                int rand1 = r.nextInt(stringArray.size());
+                int rand1 = this.rand.nextInt();
                 newThingName = newThingName.concat(stringArray.get(rand1));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -221,8 +234,8 @@ public class DweetLib {
                 while ((line = br.readLine()) != null) {
                     stringArray.add(line);
                 }
-                Random r = new Random();
-                int rand1 = r.nextInt(stringArray.size());
+
+                int rand1 = this.rand.nextInt();
                 newThingName = newThingName.concat(stringArray.get(rand1));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -326,13 +339,13 @@ public class DweetLib {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                return "err";
+                sb.replace(0,sb.length(), "err");
             } finally {
                 try {
                     is.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return "err";
+                    sb.replace(0,sb.length(), "err");
                 }
             }
             return sb.toString();
