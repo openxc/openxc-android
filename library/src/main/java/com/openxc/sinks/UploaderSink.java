@@ -155,6 +155,8 @@ public class UploaderSink extends ContextualVehicleDataSink {
                     Log.w(TAG, "Problem uploading the record", e);
                 } catch(InterruptedException e) {
                     Log.w(TAG, "Uploader was interrupted", e);
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                     break;
                 }
             }

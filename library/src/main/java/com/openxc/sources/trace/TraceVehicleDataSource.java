@@ -237,6 +237,9 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     mRunning = false;
+                    Log.w(TAG, "Interrupted...");
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
             disconnected();
@@ -320,7 +323,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         long sleepDuration = Math.max(targetTime - System.currentTimeMillis(), 0);
         try {
             Thread.sleep(sleepDuration);
-        } catch(InterruptedException e) {}
+        } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private BufferedReader openResourceFile(URI filename) {
