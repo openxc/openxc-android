@@ -9,13 +9,11 @@ android:
   - extra-android-m2repository
   - extra-google-m2repository
   - sys-img-armeabi-v7a-android-24
-install:
-  - travis_wait mvn install
 script:
   - android list targets
   - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
+  - travis_wait android-wait-for-emulator
   - ./gradlew connectedCheck
 after_success:
   - bash echo "Yata!"
