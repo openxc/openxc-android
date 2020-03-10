@@ -1,5 +1,8 @@
 language: android
-jdk: openjdk8
+dist: trusty
+sudo: false
+jdk:
+- openjdk8
 android:
   components:
   - tools
@@ -7,15 +10,44 @@ android:
   - build-tools-28.0.3
   - android-28
   - android-24
+  - extra-android-support
   - extra-android-m2repository
-  - extra-google-m2repository
   - sys-img-armeabi-v7a-android-24
-script:
-  - android list targets
+before_script:
   - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
   - emulator -avd test -no-boot-anim -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  - ./gradlew connectedCheck
+script:
+- './gradlew build test && ./gradlew testDebug'
+- './gradlew connectedCheck'
+deploy:
+- provider: releases
+  overwrite: true
+  skip_cleanup: true
+  api_key:
+    secure: d36mzrxmwOMbf86Va5dW/uUKgCK+ZRMOnKx96NOfDxHfw06SRkrdIQHrl+1MaeO04g/117yjZtEkCTPKpERWErB4nCu6oo1ERdMaAvSMyuyXaPRtGPR8yw3iPmNWWDMGrL5G8bU2UgoIlEATkK8byFOF+pFDbFOEbS7Lq19pIm8=
+  file_glob: true
+  file: "./enabler/build/outputs/apk/enabler-release-*.*.*.apk"
+  on:
+    repo: openxc/openxc-android
+    tags: true
+- provider: script
+  skip_cleanup: true
+  script: scripts/deploy.sh $secret
+  on:
+    repo: openxc/openxc-android
+    tags: true
+env:
+  global:
+  - secure: Vt32deOYoaVrGv/LsrPQ5+O5v0sHz07G4HaEEW2fGwGb5El5K6BddqV8mtBuK681EcohoWv/ySOpuE95lmNu8xldffPY4o0JZE9RQiZAvXhOYec0nv7mg8bscYEffLP2sXpSb9bag5Cf/G76A4QxzvQAbFH3lK6Uy1Phghwwmak=
+  - secure: dmvaay5GzUO1qkaRk46+o96rRmP4cKAvbgD6njgCegfaGbXwDAMQGKjPeJc5uORWpmxnqpqSg8+0ZvYwkUsflvG3tTtsPV+llzjkDGnstvLxFBEU/JibLoUscOdrdkrc6DsxZtfZ9jJWkb271ARjgTxjMHnNcN3jwTLfU67htXc=
+  - secure: Kr9rh1Y7MM1iJ6hS0YO/1ymLfHt+ncsMk4nY2DEO74V2ROTaqWsA1GdtczWb8AD3ZjeF8Qw+wBlaJvZ5Sx51ydGnmT5X/e/pHkKMIe96UHjugvogEigLcw6pI9ZRo/p8A+tZ3WOeY2VVoQhOx6sCObNBIEQE5NVrRpldrTB+D+M=
+  - secure: eBbtEJOTUJ3PaM1xfgW9ccXdiG28TeMGYWfxCW1nBQvtdLzIHyfDZb8FNEFkChaq41sk44+IVMQNLj8tybAPlg3E6SOwLd5SWjhv+0f+tJWYBY1j04MKS8WE3osE3iifs+CafjOk8lws4YH0tKaUXsqqLO/53OuT3px2mlSxjwc=
+  - secure: Ck+GprGc70jIh90pUiaFKRZGdb1UB4DIdWOrTPT4awbPRt/ddUDbnjXaRbVCDs83Xf++NuKCJEtoxC77XM1LLqRTCvdmUe6pgc1ghQQms6h0HT1XX6mOb9XIG9wNV6OW2HKJMbw4gQ9j8QuRT/9mfYU80o1j4Nzq1mqNtfbWNZI=
+  - secure: c/VC44g6n4u9Hewci/8X+Zq7nR04OxaRbQauGkfKHXGHUA9GJbo8pBDFD3qPvD8MU2n5Lq+UNX897flcTCJ0WVx+BtFU8XRUeOwAwLgvpzgyrNraJvcBVUvrZpL7qFt2lwf6l7xbOXJQWepe4V7YvssCRgWVsBpSqfRkulUC4Tk=
+  - secure: fSxLsuELLvaNmGtFn4ZtELt8d1gSJZwJ+5+QahpV0b9Nf/JNUehSl4RSYVFsq2uw5fuhdsgy/OujpGEYWTA6iDidaB+YOXfwR3q1vpxwUCIEAjbhVG0TwlFh0wqcYOq8FHUBlSNh9DoLJh61N+Y1pCzoXAPFBqaqQ1wjUpxUfCw=
+  - secure: VHn45y17v68I/VNhIBCNue9eRMdaRurHBSu8cGO3NLcjZFpJqYehqKnwhjIS2eP1SDHEM++LFz6XpANpU4KwdjnYaP5qEU4b2zEVqvc+9GZK37kFIaeSaOrvoRGYVrzp+oeU8ehG6MjsgXWjIwE4QNLVc8dinILjuqWXY5zxqGs=
+  - GRADLE_OPTS="-Xmx1024m -XX:MaxPermSize=1024m"
 after_success:
-  - bash echo "Yata!"
+  - scripts/push-javadoc.sh
