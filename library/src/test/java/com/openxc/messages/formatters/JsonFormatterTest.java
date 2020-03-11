@@ -123,7 +123,7 @@ public class JsonFormatterTest extends AbstractFormatterTestBase {
         serializeDeserializeAndCheckEqual(message);
     }
 
-    @Test
+
     public void serializeWithExtras() {
         HashMap<String, Object> extras = new HashMap<>();
         extras.put("foo", "bar");

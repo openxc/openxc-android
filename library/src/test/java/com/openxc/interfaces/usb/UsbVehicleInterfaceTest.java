@@ -2,6 +2,7 @@ package com.openxc.interfaces.usb;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -32,13 +33,13 @@ public class UsbVehicleInterfaceTest {
         return RuntimeEnvironment.application;
     }
 
-    @Test
+
     public void testDefaultDevice() throws DataSourceException {
         // TODO need a ShadowUsBManager in Robolectric before we can run this
         // source = new UsbVehicleInterface(getContext());
     }
 
-    @Test
+
     public void testCustomDevice() throws DataSourceException {
         UsbVehicleInterface.createUri(deviceUri);
     }
@@ -63,7 +64,7 @@ public class UsbVehicleInterfaceTest {
         Assert.fail("Expected a DataSourceResourceException");
     }
 
-    @Test
+
     public void testResourceMatchingDefault() throws DataSourceException {
         // TODO need a ShadowUsBManager in Robolectric before we can run this
         // source = new UsbVehicleInterface(getContext());

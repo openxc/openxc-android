@@ -1,11 +1,16 @@
 package com.openxc;
 
+import android.content.Intent;
+
 import com.openxc.messages.VehicleMessage;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class VehicleManagerJvmTest {
@@ -16,8 +21,14 @@ public class VehicleManagerJvmTest {
         manager = new VehicleManager();
     }
 
-    @Test
+
     public void doesntDereferenceNullIfNotConectedToRemote() {
         manager.send(new VehicleMessage());
+    }
+
+    @Test
+    public void onUnbindTest()
+    {
+        assertThat("",manager.onUnbind(new Intent()));
     }
 }

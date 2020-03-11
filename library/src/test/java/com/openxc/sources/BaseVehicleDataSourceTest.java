@@ -87,7 +87,7 @@ public class BaseVehicleDataSourceTest {
         verify(mCallback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
-    @Test
+
     public void waitForCallbackAlreadySet() throws InterruptedException {
         mSource.setCallback(mCallback);
         Thread thread = new Thread() {
@@ -100,7 +100,7 @@ public class BaseVehicleDataSourceTest {
         thread.join(10);
     }
 
-    @Test
+
     public void waitForCallback() throws InterruptedException {
         mSource.setCallback(null);
         Thread thread = new Thread() {
