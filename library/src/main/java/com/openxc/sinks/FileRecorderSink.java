@@ -27,8 +27,6 @@ import com.openxc.util.FileOpener;
 public class FileRecorderSink implements VehicleDataSink {
     private final static String TAG = "FileRecorderSink";
     private final static int INTER_TRIP_THRESHOLD_MINUTES = 5;
-    private static SimpleDateFormat sDateFormatter =
-            new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
 
     private FileOpener mFileOpener;
     private BufferedWriter mWriter;
@@ -97,6 +95,8 @@ public class FileRecorderSink implements VehicleDataSink {
 
     private synchronized void openTimestampedFile() throws IOException {
         Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sDateFormatter =
+                new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
         String filename = sDateFormatter.format(
                 calendar.getTime()) + ".json";
         if(mWriter != null) {

@@ -161,7 +161,9 @@ public class DweetLib {
                 if (caller!=null) {
                     ArrayList ar = new ArrayList<>();
                     ar.add(CONNECTION_ERROR);
-                    cb.callback(ar);
+                    if (cb != null) {
+                        cb.callback(ar);
+                    }
                 }
                 DweetTask x = (DweetTask)thingProcessUrl.get(urlstr);
                 thingProcessUrl.remove(urlstr);

@@ -361,8 +361,9 @@ public class DeviceManager {
                             Thread.sleep(PACKET_SENDING_WAIT_TIME_MS);
 
                         } catch (InterruptedException e) {
-                            Log.d(TAG, "Interrupted");
+                            Log.d(TAG, "Interrupted...");
                             e.printStackTrace();
+                            Thread.currentThread().interrupt();
                         }
                         mBluetoothGatt.writeCharacteristic(characteristic);
                     }

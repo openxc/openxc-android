@@ -178,6 +178,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 mConnectionLock.readLock().unlock();
             }
         } catch (InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         return connected;
@@ -221,7 +224,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     try {
                         mDeviceChanged.await();
                     } catch (InterruptedException e) {
-
+                        Log.w(TAG, "Interrupted...");
+                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     } finally {
                         mConnectionLock.writeLock().unlock();
                     }
