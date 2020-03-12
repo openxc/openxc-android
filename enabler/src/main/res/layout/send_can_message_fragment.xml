@@ -40,6 +40,7 @@
             <EditText
                 android:id="@+id/message_id"
                 android:maxLength="3"
+                android:gravity="center"
                 style="@style/HexTextField">
 
                 <requestFocus />
@@ -50,22 +51,99 @@
     </LinearLayout>
 
     <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        style="@style/ItemRow"
+        android:orientation="vertical" >
+
+        <TextView
+            style="@style/FormInputLabel"
+            android:text="@string/message_payload_label" />
+
+    </LinearLayout>
+
+</LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <LinearLayout
             style="@style/ItemRow"
-            android:orientation="vertical" >
-
-            <TextView
-                style="@style/FormInputLabel"
-                android:text="@string/message_payload_label" />
+            android:orientation="horizontal" >
 
             <EditText
                 android:id="@+id/message_payload"
-                android:maxLength="16"
+                android:maxLength="2"
                 android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload2"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload3"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload4"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload5"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload6"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload7"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                style="@style/HexTextField">
+
+                <requestFocus />
+            </EditText>
+            <EditText
+                android:id="@+id/message_payload8"
+                android:maxLength="2"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 style="@style/HexTextField">
 
                 <requestFocus />
