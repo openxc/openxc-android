@@ -36,9 +36,10 @@ public class NetworkVehicleInterfaceTest {
         return RuntimeEnvironment.application;
     }
 
-
+    @Test
     public void testValidUri() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), goodUri);
+        assertTrue(null != source);
     }
 
     @Test
@@ -103,8 +104,9 @@ public class NetworkVehicleInterfaceTest {
         Assert.fail("Expected a DataSourceResourceException");
     }
 
-
+    @Test(expected = DataSourceException.class)
     public void testMissingPrefix() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
+
     }
 }

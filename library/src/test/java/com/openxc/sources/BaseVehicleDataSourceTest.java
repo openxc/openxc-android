@@ -87,7 +87,7 @@ public class BaseVehicleDataSourceTest {
         verify(mCallback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
-
+    @Test
     public void waitForCallbackAlreadySet() throws InterruptedException {
         mSource.setCallback(mCallback);
         Thread thread = new Thread() {
@@ -98,9 +98,11 @@ public class BaseVehicleDataSourceTest {
         };
         thread.start();
         thread.join(10);
+
+        assertEquals(mCallback,mSource.getCallback());
     }
 
-
+    @Test
     public void waitForCallback() throws InterruptedException {
         mSource.setCallback(null);
         Thread thread = new Thread() {
@@ -112,7 +114,7 @@ public class BaseVehicleDataSourceTest {
         thread.start();
         mSource.setCallback(mCallback);
         thread.join(100);
-        // TODO need to assert something
+        assertEquals(mCallback,mSource.getCallback());
     }
 
     private class BaseSourceSpy extends BaseVehicleDataSource {

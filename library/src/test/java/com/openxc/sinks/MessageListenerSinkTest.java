@@ -41,7 +41,7 @@ public class MessageListenerSinkTest {
         sink.stop();
     }
 
-
+    @Test
     public void nonKeyedIgnored() throws DataSinkException {
         KeyedMessage message = new NamedVehicleMessage("foo");
         sink.register(ExactKeyMatcher.buildExactMatcher(message),
@@ -59,11 +59,14 @@ public class MessageListenerSinkTest {
         assertThat(listener.received, nullValue());
     }
 
-
+    @Test
     public void receiveUnrecognizedSimpleMessage() throws
             DataSinkException, UnrecognizedMeasurementTypeException {
         SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        sink.register(ExactKeyMatcher.buildExactMatcher(message), listener);
         sink.receive(message);
+        sink.clearQueue();
+        assertEquals(listener.received.asSimpleMessage(), message);
     }
 
     @Test

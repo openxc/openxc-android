@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.openxc.messages.VehicleMessage;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class VehicleManagerJvmTest {
         manager = new VehicleManager();
     }
 
-
+    @Test
     public void doesntDereferenceNullIfNotConectedToRemote() {
         manager.send(new VehicleMessage());
     }
@@ -29,6 +30,6 @@ public class VehicleManagerJvmTest {
     @Test
     public void onUnbindTest()
     {
-        assertThat("",manager.onUnbind(new Intent()));
+        Assert.assertTrue(manager.onUnbind(new Intent()));
     }
 }

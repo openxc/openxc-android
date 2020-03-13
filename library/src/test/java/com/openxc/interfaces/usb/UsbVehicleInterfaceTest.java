@@ -15,6 +15,8 @@ import com.openxc.sources.DataSourceResourceException;
 
 import android.content.Context;
 
+import java.net.URI;
+
 @RunWith(RobolectricTestRunner.class)
 public class UsbVehicleInterfaceTest {
     String deviceUri = "usb://04d8/0053";
@@ -33,15 +35,18 @@ public class UsbVehicleInterfaceTest {
         return RuntimeEnvironment.application;
     }
 
-
+    @Test
     public void testDefaultDevice() throws DataSourceException {
         // TODO need a ShadowUsBManager in Robolectric before we can run this
         // source = new UsbVehicleInterface(getContext());
     }
 
+    @Test
+    public void testCustomDevice() throws DataSourceException,java.net.MalformedURLException {
+        URI uri = UsbVehicleInterface.createUri(deviceUri);
+//        URI expectedURI=new URI(deviceUri);
 
-    public void testCustomDevice() throws DataSourceException {
-        UsbVehicleInterface.createUri(deviceUri);
+        Assert.assertEquals(uri.toURL(),deviceUri);
     }
 
     @Test
@@ -64,7 +69,7 @@ public class UsbVehicleInterfaceTest {
         Assert.fail("Expected a DataSourceResourceException");
     }
 
-
+    @Test
     public void testResourceMatchingDefault() throws DataSourceException {
         // TODO need a ShadowUsBManager in Robolectric before we can run this
         // source = new UsbVehicleInterface(getContext());

@@ -24,7 +24,7 @@ public abstract class AbstractFormatterTestBase {
     protected abstract void serializeDeserializeAndCheckEqual(
             VehicleMessage message);
 
-
+    @Test
     public void serializeFailedDiagnosticResponse() {
         int id = 42;
         int bus = 1;
@@ -36,26 +36,27 @@ public abstract class AbstractFormatterTestBase {
                 pid, payload, null, value));
     }
 
-
+    @Test
     public void serializeDiagnosticResponse() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                     1, 2, 3, 4,
                     new byte[]{1,2,3,4}, null, 0.0));
     }
 
+    @Test
     public void serializeDiagnosticResponseWithValue() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                     1, 2, 3, 4,
                     new byte[]{1,2,3,4}, null, 42.0));
     }
 
-
+    @Test
     public void serializeCommandResponse() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
                     Command.CommandType.DEVICE_ID, true, ""));
     }
 
-
+    @Test
     public void serializeCommandResponseWithMessage() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
                     Command.CommandType.DEVICE_ID, true, "bar"));
@@ -63,12 +64,13 @@ public abstract class AbstractFormatterTestBase {
                     Command.CommandType.VERSION, true, "bar"));
     }
 
-
+    @Test
     public void serializeCommand() {
         serializeDeserializeAndCheckEqual(new Command(
                     Command.CommandType.VERSION));
     }
 
+    @Test
     public void serializeCommandWithDiagnosticRequest() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
         request.setFrequency(0.0);
@@ -77,7 +79,7 @@ public abstract class AbstractFormatterTestBase {
         serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 
-
+    @Test
     public void serializeCommandWithDiagnosticRequestNoPid() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 0);
         request.setFrequency(0.0);
@@ -86,18 +88,19 @@ public abstract class AbstractFormatterTestBase {
         serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 
-
+    @Test
     public void serializeCanMessage() {
         serializeDeserializeAndCheckEqual(new CanMessage(1, 2, new byte[]{1,2,3,4}));
     }
 
+    @Test
     public void serializeSimpleMessage() {
         serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", "bar"));
         serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", false));
         serializeDeserializeAndCheckEqual(new SimpleVehicleMessage("foo", 42.0));
     }
 
-
+    @Test
     public void serializeEventedSimpleMessage() {
         serializeDeserializeAndCheckEqual(new EventedSimpleVehicleMessage(
                     "foo", "bar", "baz"));
@@ -107,11 +110,12 @@ public abstract class AbstractFormatterTestBase {
                     "foo", "bar", 42.0));
     }
 
+    @Test
     public void serializeNamedMessage() {
         serializeDeserializeAndCheckEqual(new NamedVehicleMessage("foo"));
     }
 
-
+    @Test
     public void serializeDiagnosticRequestWithOptional() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
         request.setPayload(new byte[]{1,2,3,4});
