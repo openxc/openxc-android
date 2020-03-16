@@ -47,6 +47,7 @@ public class MessageListenerSinkTest {
         sink.register(ExactKeyMatcher.buildExactMatcher(message),
                 listener);
         sink.receive(new VehicleMessage());
+        assertThat(listener.received, nullValue());
     }
 
     @Test

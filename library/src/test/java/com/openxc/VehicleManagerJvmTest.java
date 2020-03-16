@@ -24,7 +24,8 @@ public class VehicleManagerJvmTest {
 
     @Test
     public void doesntDereferenceNullIfNotConectedToRemote() {
-        manager.send(new VehicleMessage());
+        boolean send = manager.send(new VehicleMessage());
+        Assert.assertFalse(send);
     }
 
     @Test
