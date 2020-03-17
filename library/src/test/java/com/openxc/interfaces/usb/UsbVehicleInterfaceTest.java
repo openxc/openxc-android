@@ -1,19 +1,16 @@
 package com.openxc.interfaces.usb;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
+import android.content.Context;
 
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 
-import android.content.Context;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.net.URI;
 
@@ -42,11 +39,9 @@ public class UsbVehicleInterfaceTest {
     }
 
     @Test
-    public void testCustomDevice() throws DataSourceException,java.net.MalformedURLException {
+    public void testCustomDevice() throws DataSourceException {
         URI uri = UsbVehicleInterface.createUri(deviceUri);
-//        URI expectedURI=new URI(deviceUri);
-
-        Assert.assertEquals(uri.toURL(),deviceUri);
+        Assert.assertEquals(uri.toString(), deviceUri);
     }
 
     @Test
