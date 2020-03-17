@@ -56,7 +56,7 @@ public class UriBasedVehicleInterfaceMixin {
      * @return true if the address and port are valid.
      */
     public static boolean validateResource(URI uri) {
-        return uri != null && uri.getPort() != -1 && uri.getHost() != null && uri.getScheme() != null;
+        return uri != null && uri.getPort() != -1 && uri.getHost() != null;
     }
 
     /**

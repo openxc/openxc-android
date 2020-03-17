@@ -106,12 +106,8 @@ public class NetworkVehicleInterfaceTest {
 
     @Test
     public void testMissingPrefix() throws DataSourceException{
-        try {
-            source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
-        } catch(DataSourceResourceException e) {
-            return;
-        }
-        Assert.fail("Expected a DataSourceResourceException");
 
+            source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
+        assertFalse(source.setResource("//"+missingPrefixUri));
     }
 }
