@@ -121,12 +121,14 @@
 
                 <requestFocus />
             </EditText>
+
             <EditText
                 android:id="@+id/message_payload6"
-                android:maxLength="2"
+                style="@style/HexTextField"
                 android:layout_width="match_parent"
+                android:digits="0123456789abcdefABCDEF"
                 android:gravity="center"
-                style="@style/HexTextField">
+                android:maxLength="2">
 
                 <requestFocus />
             </EditText>
@@ -177,14 +179,17 @@
             <ListView android:id="@android:id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawSelectorOnTop="false"/>
+                android:drawSelectorOnTop="false">
+
+                <TextView
+                    android:id="@android:id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/no_can_messages_sent"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </ListView>
 
             <!-- Here is the view to show if the list is empty -->
-            <TextView android:id="@android:id/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/no_can_messages_sent"/>
 
         </FrameLayout>
 
