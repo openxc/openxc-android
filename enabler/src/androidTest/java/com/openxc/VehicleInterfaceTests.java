@@ -17,6 +17,9 @@ import com.openxc.remote.VehicleService;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.sinks.DataSinkException;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class VehicleInterfaceTests extends ServiceTestCase<VehicleManager> {
     VehicleManager service;
     VehicleInterface mTestInterface;
