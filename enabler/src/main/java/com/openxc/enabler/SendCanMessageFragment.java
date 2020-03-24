@@ -204,45 +204,52 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (payLoad1.getText().toString().length() == 2) {
-            payLoad1.clearFocus();
-            payLoad2.requestFocus();
-            payLoad2.setCursorVisible(true);
-        }
-        if (payLoad2.getText().toString().length() == 2) {
-            payLoad2.clearFocus();
-            payLoad3.requestFocus();
-            payLoad3.setCursorVisible(true);
-        }
-        if (payLoad3.getText().toString().length() == 2) {
-            payLoad3.clearFocus();
-            payLoad4.requestFocus();
-            payLoad4.setCursorVisible(true);
-        }
-        if (payLoad4.getText().toString().length() == 2) {
-            payLoad4.clearFocus();
-            payLoad5.requestFocus();
-            payLoad5.setCursorVisible(true);
-        }
-        if (payLoad5.getText().toString().length() == 2) {
-            payLoad5.clearFocus();
-            payLoad6.requestFocus();
-            payLoad6.setCursorVisible(true);
-        }
-        if (payLoad6.getText().toString().length() == 2) {
-            payLoad6.clearFocus();
-            payLoad7.requestFocus();
-            payLoad7.setCursorVisible(true);
-        }
-        if (payLoad7.getText().toString().length() == 2) {
-            payLoad7.clearFocus();
-            payLoad8.requestFocus();
-            payLoad8.setCursorVisible(true);
-        }
+
+
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
+        if (s.length() == 2) {
+            if (payLoad1.getText().toString().trim().length() == 2) {
+                payLoad1.clearFocus();
+                payLoad2.requestFocus();
+                payLoad2.setCursorVisible(true);
+            }
+            if (payLoad2.getText().toString().trim().length() == 2) {
+                payLoad2.clearFocus();
+                payLoad3.requestFocus();
+                payLoad3.setCursorVisible(true);
+            }
+            if (payLoad3.getText().toString().trim().length() == 2) {
+                payLoad3.clearFocus();
+                payLoad4.requestFocus();
+                payLoad4.setCursorVisible(true);
+            }
+            if (payLoad4.getText().toString().trim().length() == 2) {
+                payLoad4.clearFocus();
+                payLoad5.requestFocus();
+                payLoad5.setCursorVisible(true);
+            }
+            if (payLoad5.getText().toString().trim().length() == 2) {
+                payLoad5.clearFocus();
+                payLoad6.requestFocus();
+                payLoad6.setCursorVisible(true);
+            }
+            if (payLoad6.getText().toString().trim().length() == 2) {
+                payLoad6.clearFocus();
+                payLoad7.requestFocus();
+                payLoad7.setCursorVisible(true);
+            }
+            if (payLoad7.getText().toString().trim().length() == 2) {
+                payLoad7.clearFocus();
+                payLoad8.requestFocus();
+                payLoad8.setCursorVisible(true);
+            }
+            if (payLoad8.getText().toString().trim().length() == 2) {
+                payLoad8.setCursorVisible(true);
+                payLoad8.requestFocus();
+            }
+        }
     }
 }
