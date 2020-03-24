@@ -128,7 +128,8 @@ public class JsonFormatterTest extends AbstractFormatterTestBase {
         HashMap<String, Object> extras = new HashMap<>();
         extras.put("foo", "bar");
         extras.put("baz", 42.0);
-        JsonFormatter.serialize(new VehicleMessage(extras));
+        String actualJson = JsonFormatter.serialize(new VehicleMessage(extras));
+        assertTrue(actualJson.contains("foo") && actualJson.contains("bar")&&actualJson.contains("baz") && actualJson.contains("42.0"));
     }
 
     @Test
