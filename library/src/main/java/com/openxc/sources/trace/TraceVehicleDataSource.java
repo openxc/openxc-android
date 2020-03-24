@@ -2,11 +2,10 @@ package com.openxc.sources.trace;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
@@ -238,6 +237,9 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     mRunning = false;
+                    Log.w(TAG, "Interrupted...");
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
             disconnected();
@@ -321,7 +323,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         long sleepDuration = Math.max(targetTime - System.currentTimeMillis(), 0);
         try {
             Thread.sleep(sleepDuration);
-        } catch(InterruptedException e) {}
+        } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private BufferedReader openResourceFile(URI filename) {

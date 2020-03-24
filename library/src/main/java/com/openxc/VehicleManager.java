@@ -175,18 +175,23 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * measurement back from the system.
      */
     public void waitUntilBound() throws VehicleServiceException {
-        mRemoteBoundLock.lock();
-        Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
-        while(mRemoteService == null) {
-            try {
-                if(!mRemoteBoundCondition.await(3, TimeUnit.SECONDS)) {
+        try {
+            mRemoteBoundLock.lock();
+            Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
+            while(mRemoteService == null) {
+                if (!mRemoteBoundCondition.await(3, TimeUnit.SECONDS)) {
                     throw new VehicleServiceException(
                             "Not bound to remote service after 3 seconds");
                 }
-            } catch(InterruptedException e) {}
+            }
+        } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } finally {
+            Log.i(TAG, mRemoteService + " is now bound");
+            mRemoteBoundLock.unlock();
         }
-        Log.i(TAG, mRemoteService + " is now bound");
-        mRemoteBoundLock.unlock();
     }
 
     /**
@@ -818,6 +823,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                     mResponseReceived.await(RESPONSE_TIMEOUT_S, TimeUnit.SECONDS);
                 }
             } catch(InterruptedException e) {
+                Log.w(TAG, "Interrupted...");
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             } finally {
                 mLock.unlock();
             }

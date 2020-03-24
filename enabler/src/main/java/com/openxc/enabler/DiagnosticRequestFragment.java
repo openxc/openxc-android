@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ListFragment;
+import androidx.fragment.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,7 @@ public class DiagnosticRequestFragment extends ListFragment {
     private static String TAG = "DiagnosticRequestFragment";
 
     private VehicleManager mVehicleManager;
-    private DiagnosticResponseAdapter mAdapter;
+    private DiagnosticResponseAdapter diagnosticResponseAdapter;
     private View mLastRequestView;
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
@@ -38,7 +38,7 @@ public class DiagnosticRequestFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        mAdapter.add(message.asDiagnosticResponse());
+                        diagnosticResponseAdapter.add(message.asDiagnosticResponse());
                     }
                 });
             }
@@ -64,7 +64,7 @@ public class DiagnosticRequestFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new DiagnosticResponseAdapter(getActivity());
+        diagnosticResponseAdapter = new DiagnosticResponseAdapter(getActivity());
     }
 
     @Override
@@ -168,7 +168,7 @@ public class DiagnosticRequestFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setListAdapter(mAdapter);
+        setListAdapter(diagnosticResponseAdapter);
     }
 
     @Override

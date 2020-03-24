@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ListFragment;
+import androidx.fragment.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +25,7 @@ public class SendCanMessageFragment extends ListFragment {
     private static String TAG = "SendCanMessageFragment";
 
     private VehicleManager mVehicleManager;
-    private VehicleMessageAdapter mAdapter;
+    private VehicleMessageAdapter vehicleMessageAdapter;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -44,7 +44,7 @@ public class SendCanMessageFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new CanMessageAdapter(getActivity());
+        vehicleMessageAdapter = new CanMessageAdapter(getActivity());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SendCanMessageFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setListAdapter(mAdapter);
+        setListAdapter(vehicleMessageAdapter);
     }
 
     private void onSendCanMessage(Spinner busSpinner,
@@ -110,7 +110,7 @@ public class SendCanMessageFragment extends ListFragment {
             mVehicleManager.send(message);
             // Make sure to update after sending so the timestamp is set by the
             // VehicleManager
-            mAdapter.add(message.asCanMessage());
+            vehicleMessageAdapter.add(message.asCanMessage());
         } else {
             Log.i(TAG, "Form is invalid, not sending message");
         }

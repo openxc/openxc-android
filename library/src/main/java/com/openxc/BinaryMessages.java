@@ -922,11 +922,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -2307,11 +2302,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -3671,11 +3661,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -5240,11 +5225,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -5906,11 +5886,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -6460,11 +6435,6 @@ public final class BinaryMessages {
         result.bypass_ = bypass_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -7117,11 +7087,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -7625,11 +7590,6 @@ public final class BinaryMessages {
         result.enabled_ = enabled_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -8536,10 +8496,10 @@ public final class BinaryMessages {
           return result;
         }
 
-        @java.lang.Override
-        public Builder clone() {
-          return super.clone();
-        }
+//        @java.lang.Override
+//        public Builder clone() {
+//          return super.clone();
+//        }
         @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -9066,11 +9026,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -9763,11 +9718,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -10363,11 +10313,6 @@ public final class BinaryMessages {
         result.port_ = port_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -11128,11 +11073,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -11948,11 +11888,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -12552,11 +12487,6 @@ public final class BinaryMessages {
         result.status_ = status_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -13618,11 +13548,6 @@ public final class BinaryMessages {
         result.decodedType_ = decodedType_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -14731,11 +14656,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -15818,11 +15738,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -16660,11 +16575,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
