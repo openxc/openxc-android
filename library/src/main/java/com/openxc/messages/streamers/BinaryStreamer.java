@@ -32,7 +32,7 @@ import com.openxc.messages.formatters.BinaryFormatter;
 public class BinaryStreamer extends VehicleMessageStreamer {
     private static String TAG = "BinaryStreamer";
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
