@@ -17,12 +17,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.fragment.app.ListFragment;
+
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.formatters.ByteAdapter;
 import com.openxcplatform.enabler.R;
-
-import androidx.fragment.app.ListFragment;
 
 public class SendCanMessageFragment extends ListFragment implements TextWatcher  {
     private static String TAG = "SendCanMessageFragment";
@@ -33,7 +33,6 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
     private EditText payLoad1, payLoad2, payLoad3, payLoad4, payLoad5, payLoad6, payLoad7, payLoad8;
     private EditText idView;
     private Spinner spinner;
-    private CanMessageAdapter vehicleMessageAdapter;
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
