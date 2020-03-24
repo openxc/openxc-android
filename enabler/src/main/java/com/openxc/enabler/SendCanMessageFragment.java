@@ -31,6 +31,7 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
     private EditText payLoad1, payLoad2, payLoad3, payLoad4, payLoad5, payLoad6, payLoad7, payLoad8;
     private EditText idView;
     private Spinner spinner;
+    private CanMessageAdapter vehicleMessageAdapter;
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -46,6 +47,7 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
             mVehicleManager = null;
         }
     };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
