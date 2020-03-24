@@ -83,6 +83,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
         // of converting the byte[] to something the StringBuilder can
         // accept (either char[] or String). See #151.
         mBuffer.append(new String(bytes, 0, length));
+        BinaryStreamer.dumpToLog(bytes, length);
     }
 
     @Override
