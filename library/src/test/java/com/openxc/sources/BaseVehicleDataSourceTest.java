@@ -98,6 +98,8 @@ public class BaseVehicleDataSourceTest {
         };
         thread.start();
         thread.join(10);
+
+        assertEquals(mCallback,mSource.getCallback());
     }
 
     @Test
@@ -112,7 +114,7 @@ public class BaseVehicleDataSourceTest {
         thread.start();
         mSource.setCallback(mCallback);
         thread.join(100);
-        // TODO need to assert something
+        assertEquals(mCallback,mSource.getCallback());
     }
 
     private class BaseSourceSpy extends BaseVehicleDataSource {

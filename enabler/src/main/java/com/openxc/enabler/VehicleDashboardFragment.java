@@ -27,12 +27,12 @@ public class VehicleDashboardFragment extends ListFragment {
     private static String TAG = "VehicleDashboard";
 
     private VehicleManager mVehicleManager;
-    private SimpleVehicleMessageAdapter mAdapter;
+    private SimpleVehicleMessageAdapter simpleVehicleMessageAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new SimpleVehicleMessageAdapter(getActivity());
+        simpleVehicleMessageAdapter = new SimpleVehicleMessageAdapter(getActivity());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class VehicleDashboardFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setListAdapter(mAdapter);
+        setListAdapter(simpleVehicleMessageAdapter);
     }
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
@@ -102,10 +102,10 @@ public class VehicleDashboardFragment extends ListFragment {
                                     ((EventedSimpleVehicleMessage) message).getName(),
                                     ((EventedSimpleVehicleMessage) message).getValue() +
                                             ": " + ((EventedSimpleVehicleMessage) message).getEvent());
-                            mAdapter.add(convertedMsg.asSimpleMessage());
+                            simpleVehicleMessageAdapter.add(convertedMsg.asSimpleMessage());
                         }
                         else
-                            mAdapter.add(message.asSimpleMessage());
+                            simpleVehicleMessageAdapter.add(message.asSimpleMessage());
                     }
                 });
             }
