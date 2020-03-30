@@ -118,23 +118,12 @@ public class DweetLib {
             return "";
         }
 
-        if (dt != null) {
-            Log.w(TAG,"still working");
-            if (overwrite) {
-                Log.w(TAG,"overwriting data");
-                String u = (String) thingProcessUrl.get(dt);
-                thingProcess.remove(u);
-                HttpURLConnection c = (HttpURLConnection) thingProcessConnection.get(dt);
-                thingProcessConnection.remove(dt);
-                thingProcessCallback.remove(dt);
-                thingProcessCaller.remove(dt);
-                c.disconnect();
-                c = null;
-                dt.cancel(true);
-                thingProcessUrl.remove(dt);
-                dt = null;
-            }
-        }
+        dt = overwriteDweetTask(overwrite, dt);
+        createNewDweetTask(caller, cb, JSONString, urlstr, dt);
+        return "";
+    }
+
+    private void createNewDweetTask(Object caller, DweetCallback cb, String JSONString, String urlstr, DweetTask dt) {
         if (dt==null) {
             Log.d(TAG,"starting new dt");
 
@@ -172,21 +161,44 @@ public class DweetLib {
                 thingProcessCaller.remove(x);
                 thingProcessCallback.remove(x);
             }
-
-
         }
+    }
 
-
-        return "";
-
+    private DweetTask overwriteDweetTask(boolean overwrite, DweetTask dt) {
+        if (dt != null) {
+            Log.w(TAG,"still working");
+            if (overwrite) {
+                Log.w(TAG,"overwriting data");
+                String u = (String) thingProcessUrl.get(dt);
+                thingProcess.remove(u);
+                HttpURLConnection c = (HttpURLConnection) thingProcessConnection.get(dt);
+                thingProcessConnection.remove(dt);
+                thingProcessCallback.remove(dt);
+                thingProcessCaller.remove(dt);
+                c.disconnect();
+                c = null;
+                dt.cancel(true);
+                thingProcessUrl.remove(dt);
+                dt = null;
+            }
+        }
+        return dt;
     }
 
     public String getRandomThingName() {
         String newThingName = "";
 
         AssetManager am = currentCtx.getAssets();
-        InputStream is = null;
         ArrayList<String> stringArray = new ArrayList<String>();
+        newThingName = getAdjectives(newThingName, am, stringArray);
+        newThingName = newThingName.concat("-");
+        stringArray.clear();
+        newThingName = getNouns(newThingName, am,  stringArray);
+        return newThingName;
+    }
+
+    private String getAdjectives(String newThingName, AssetManager am, ArrayList<String> stringArray) {
+        InputStream is = null;
         BufferedReader br = null;
         InputStreamReader inputStreamReader = null;
         try {
@@ -225,8 +237,13 @@ public class DweetLib {
                 e.printStackTrace();
             }
         }
-        newThingName = newThingName.concat("-");
-        stringArray.clear();
+        return newThingName;
+    }
+
+    private String getNouns(String newThingName, AssetManager am,  ArrayList<String> stringArray) {
+        InputStream is = null;
+        BufferedReader br = null;
+        InputStreamReader inputStreamReader = null;
         try {
             is = am.open("nouns.txt");
             String line = null;
@@ -265,9 +282,7 @@ public class DweetLib {
             }
         }
         return newThingName;
-
     }
-
 
 
     private class DweetTask extends AsyncTask<Object,String,Integer> {
