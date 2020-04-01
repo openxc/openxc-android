@@ -89,8 +89,8 @@ public class DiagnosticResponse extends DiagnosticMessage {
             .add("mode", getMode())
             .add("pid", getPid())
             .add("payload", Arrays.toString(getPayload()))
-            .add("value", getValue())
-            .add("negative_response_code", getNegativeResponseCode())
+            .add(VALUE_KEY, getValue())
+            .add(NEGATIVE_RESPONSE_CODE_KEY, getNegativeResponseCode())
             .add("extras", getExtras())
             .toString();
     }
