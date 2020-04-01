@@ -83,8 +83,8 @@ public class CommandResponse extends KeyedMessage {
         return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("command", getCommand())
-            .add("status", getStatus())
-            .add("message", getMessage())
+            .add(STATUS_KEY, getStatus())
+            .add(MESSAGE_KEY, getMessage())
             .add("extras", getExtras())
             .toString();
     }

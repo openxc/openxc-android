@@ -342,30 +342,7 @@ public class DeviceManager {
             if (openXCService != null) {
                 BluetoothGattCharacteristic characteristic = openXCService.getCharacteristic(UUID.fromString(GattCallback.C5_OPENXC_BLE_CHARACTERISTIC_WRITE_UUID));
                 if (characteristic != null) {
-
-                    while (queueEnd != 0) {
-                        byte[] sendingPacket;
-                        if (queueEnd >= 20) {
-                            sendingPacket = new byte[20];
-                            System.arraycopy(writeArray, 0, sendingPacket, 0, 20);
-                            System.arraycopy(writeArray, 20, writeArray, 0, queueEnd - 20);
-                            queueEnd = queueEnd - 20;
-
-                        } else {
-                            sendingPacket = new byte[queueEnd];
-                            System.arraycopy(writeArray, 0, sendingPacket, 0, queueEnd);
-                            queueEnd = 0;
-                        }
-                        characteristic.setValue(sendingPacket);
-                        try {
-                            Thread.sleep(PACKET_SENDING_WAIT_TIME_MS);
-
-                        } catch (InterruptedException e) {
-                            Log.d(TAG, "Interrupted");
-                            e.printStackTrace();
-                        }
-                        mBluetoothGatt.writeCharacteristic(characteristic);
-                    }
+                    manageCharacteristic(characteristic);
                 } else {
                     Log.d(TAG, "characteristic is null");
                 }
@@ -375,5 +352,37 @@ public class DeviceManager {
         } else {
             Log.d(TAG, "Gatt not found!");
         }
+    }
+
+    private void manageCharacteristic(BluetoothGattCharacteristic characteristic) {
+        while (queueEnd != 0) {
+            byte[] sendingPacket = getSendingPacket();
+            characteristic.setValue(sendingPacket);
+            try {
+                Thread.sleep(PACKET_SENDING_WAIT_TIME_MS);
+
+            } catch (InterruptedException e) {
+                Log.d(TAG, "Interrupted...");
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+            mBluetoothGatt.writeCharacteristic(characteristic);
+        }
+    }
+
+    private byte[] getSendingPacket() {
+        byte[] sendingPacket;
+        if (queueEnd >= 20) {
+            sendingPacket = new byte[20];
+            System.arraycopy(writeArray, 0, sendingPacket, 0, 20);
+            System.arraycopy(writeArray, 20, writeArray, 0, queueEnd - 20);
+            queueEnd = queueEnd - 20;
+
+        } else {
+            sendingPacket = new byte[queueEnd];
+            System.arraycopy(writeArray, 0, sendingPacket, 0, queueEnd);
+            queueEnd = 0;
+        }
+        return sendingPacket;
     }
 }

@@ -3,7 +3,16 @@
 
 package com.openxc;
 
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.ExtensionRegistryLite;
+import com.google.protobuf.UnknownFieldSet;
+
+import java.io.IOException;
+
 public final class BinaryMessages {
+
+  public static final String UNKNOWN_ENUM_VALUE = "Can't get the number of an unknown enum value.";
+
   private BinaryMessages() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
@@ -152,94 +161,7 @@ public final class BinaryMessages {
         boolean done = false;
         while (!done) {
           int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-
-              type_ = rawValue;
-              break;
-            }
-            case 18: {
-              com.openxc.BinaryMessages.CanMessage.Builder subBuilder = null;
-              if (canMessage_ != null) {
-                subBuilder = canMessage_.toBuilder();
-              }
-              canMessage_ = input.readMessage(com.openxc.BinaryMessages.CanMessage.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(canMessage_);
-                canMessage_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 26: {
-              com.openxc.BinaryMessages.SimpleMessage.Builder subBuilder = null;
-              if (simpleMessage_ != null) {
-                subBuilder = simpleMessage_.toBuilder();
-              }
-              simpleMessage_ = input.readMessage(com.openxc.BinaryMessages.SimpleMessage.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(simpleMessage_);
-                simpleMessage_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 34: {
-              com.openxc.BinaryMessages.DiagnosticResponse.Builder subBuilder = null;
-              if (diagnosticResponse_ != null) {
-                subBuilder = diagnosticResponse_.toBuilder();
-              }
-              diagnosticResponse_ = input.readMessage(com.openxc.BinaryMessages.DiagnosticResponse.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(diagnosticResponse_);
-                diagnosticResponse_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 42: {
-              com.openxc.BinaryMessages.ControlCommand.Builder subBuilder = null;
-              if (controlCommand_ != null) {
-                subBuilder = controlCommand_.toBuilder();
-              }
-              controlCommand_ = input.readMessage(com.openxc.BinaryMessages.ControlCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(controlCommand_);
-                controlCommand_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 50: {
-              com.openxc.BinaryMessages.CommandResponse.Builder subBuilder = null;
-              if (commandResponse_ != null) {
-                subBuilder = commandResponse_.toBuilder();
-              }
-              commandResponse_ = input.readMessage(com.openxc.BinaryMessages.CommandResponse.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(commandResponse_);
-                commandResponse_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 56: {
-
-              timestamp_ = input.readUInt64();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
+          done = processTag(input, extensionRegistry, unknownFields, done, tag);
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
@@ -251,6 +173,109 @@ public final class BinaryMessages {
         makeExtensionsImmutable();
       }
     }
+
+    private boolean processTag(CodedInputStream input, ExtensionRegistryLite extensionRegistry, UnknownFieldSet.Builder unknownFields, boolean done, int tag) throws IOException {
+      switch (tag) {
+        case 0:
+          done = true;
+          break;
+        case 8:
+          type_ = input.readEnum();
+          break;
+        case 18:
+          getMessageForTag18(input, extensionRegistry);
+          break;
+        case 26:
+          getMessageForTag26(input, extensionRegistry);
+          break;
+        case 34:
+          getMessageForTag34(input, extensionRegistry);
+          break;
+        case 42:
+          getMessageForTag42(input, extensionRegistry);
+          break;
+        case 50:
+          getMessageForTag50(input, extensionRegistry);
+          break;
+        case 56:
+          timestamp_ = input.readUInt64();
+          break;
+        default:
+            done = !parseUnknownField(input, unknownFields, extensionRegistry, tag);
+          break;
+      }
+      return done;
+    }
+
+    private void getMessageForTag50(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      CommandResponse.Builder subBuilder = null;
+      if (commandResponse_ != null) {
+        subBuilder = commandResponse_.toBuilder();
+      }
+      commandResponse_ = input.readMessage(CommandResponse.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(commandResponse_);
+        commandResponse_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void getMessageForTag42(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      ControlCommand.Builder subBuilder = null;
+      if (controlCommand_ != null) {
+        subBuilder = controlCommand_.toBuilder();
+      }
+      controlCommand_ = input.readMessage(ControlCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(controlCommand_);
+        controlCommand_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void getMessageForTag34(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      DiagnosticResponse.Builder subBuilder = null;
+      if (diagnosticResponse_ != null) {
+        subBuilder = diagnosticResponse_.toBuilder();
+      }
+      diagnosticResponse_ = input.readMessage(DiagnosticResponse.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(diagnosticResponse_);
+        diagnosticResponse_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void getMessageForTag26(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      SimpleMessage.Builder subBuilder = null;
+      if (simpleMessage_ != null) {
+        subBuilder = simpleMessage_.toBuilder();
+      }
+      simpleMessage_ = input.readMessage(SimpleMessage.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(simpleMessage_);
+        simpleMessage_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void getMessageForTag18(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      CanMessage.Builder subBuilder = null;
+      if (canMessage_ != null) {
+        subBuilder = canMessage_.toBuilder();
+      }
+      canMessage_ = input.readMessage(CanMessage.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(canMessage_);
+        canMessage_ = subBuilder.buildPartial();
+      }
+      return;
+    }
+
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.openxc.BinaryMessages.internal_static_openxc_VehicleMessage_descriptor;
@@ -320,12 +345,13 @@ public final class BinaryMessages {
        * <code>COMMAND_RESPONSE = 5;</code>
        */
       public static final int COMMAND_RESPONSE_VALUE = 5;
+      public static final String ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE = "EnumValueDescriptor is not for this type.";
 
 
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -387,7 +413,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -636,35 +662,59 @@ public final class BinaryMessages {
       com.openxc.BinaryMessages.VehicleMessage other = (com.openxc.BinaryMessages.VehicleMessage) obj;
 
       if (type_ != other.type_) return false;
-      if (hasCanMessage() != other.hasCanMessage()) return false;
-      if (hasCanMessage()) {
-        if (!getCanMessage()
-            .equals(other.getCanMessage())) return false;
-      }
-      if (hasSimpleMessage() != other.hasSimpleMessage()) return false;
-      if (hasSimpleMessage()) {
-        if (!getSimpleMessage()
-            .equals(other.getSimpleMessage())) return false;
-      }
-      if (hasDiagnosticResponse() != other.hasDiagnosticResponse()) return false;
-      if (hasDiagnosticResponse()) {
-        if (!getDiagnosticResponse()
-            .equals(other.getDiagnosticResponse())) return false;
-      }
-      if (hasControlCommand() != other.hasControlCommand()) return false;
-      if (hasControlCommand()) {
-        if (!getControlCommand()
-            .equals(other.getControlCommand())) return false;
-      }
-      if (hasCommandResponse() != other.hasCommandResponse()) return false;
-      if (hasCommandResponse()) {
-        if (!getCommandResponse()
-            .equals(other.getCommandResponse())) return false;
-      }
-      if (getTimestamp()
-          != other.getTimestamp()) return false;
+      if (hasCanMessage(other)) return false;
+      if (hasSimpleMessage(other)) return false;
+      if (hasDiagnosticResponse(other)) return false;
+      if (hasControlCommand(other)) return false;
+      if (hasCommandResponse(other)) return false;
+      if (getTimestamp() != other.getTimestamp()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
+    }
+
+    private boolean hasCanMessage(VehicleMessage other) {
+      if (hasCanMessage() != other.hasCanMessage()) return true;
+      if (hasCanMessage()) {
+        if (!getCanMessage()
+            .equals(other.getCanMessage())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasSimpleMessage(VehicleMessage other) {
+      if (hasSimpleMessage() != other.hasSimpleMessage()) return true;
+      if (hasSimpleMessage()) {
+        if (!getSimpleMessage()
+            .equals(other.getSimpleMessage())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasCommandResponse(VehicleMessage other) {
+      if (hasCommandResponse() != other.hasCommandResponse()) return true;
+      if (hasCommandResponse()) {
+        if (!getCommandResponse()
+            .equals(other.getCommandResponse())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasControlCommand(VehicleMessage other) {
+      if (hasControlCommand() != other.hasControlCommand()) return true;
+      if (hasControlCommand()) {
+        if (!getControlCommand()
+            .equals(other.getControlCommand())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasDiagnosticResponse(VehicleMessage other) {
+      if (hasDiagnosticResponse() != other.hasDiagnosticResponse()) return true;
+      if (hasDiagnosticResponse()) {
+        if (!getDiagnosticResponse()
+            .equals(other.getDiagnosticResponse())) return true;
+      }
+      return false;
     }
 
     @java.lang.Override
@@ -921,11 +971,6 @@ public final class BinaryMessages {
         result.timestamp_ = timestamp_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -1916,7 +1961,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -1975,7 +2020,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -2306,11 +2351,6 @@ public final class BinaryMessages {
         result.frameFormat_ = frameFormat_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -2752,115 +2792,7 @@ public final class BinaryMessages {
         boolean done = false;
         while (!done) {
           int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-
-              type_ = rawValue;
-              break;
-            }
-            case 18: {
-              com.openxc.BinaryMessages.DiagnosticControlCommand.Builder subBuilder = null;
-              if (diagnosticRequest_ != null) {
-                subBuilder = diagnosticRequest_.toBuilder();
-              }
-              diagnosticRequest_ = input.readMessage(com.openxc.BinaryMessages.DiagnosticControlCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(diagnosticRequest_);
-                diagnosticRequest_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 26: {
-              com.openxc.BinaryMessages.PassthroughModeControlCommand.Builder subBuilder = null;
-              if (passthroughModeRequest_ != null) {
-                subBuilder = passthroughModeRequest_.toBuilder();
-              }
-              passthroughModeRequest_ = input.readMessage(com.openxc.BinaryMessages.PassthroughModeControlCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(passthroughModeRequest_);
-                passthroughModeRequest_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 34: {
-              com.openxc.BinaryMessages.AcceptanceFilterBypassCommand.Builder subBuilder = null;
-              if (acceptanceFilterBypassCommand_ != null) {
-                subBuilder = acceptanceFilterBypassCommand_.toBuilder();
-              }
-              acceptanceFilterBypassCommand_ = input.readMessage(com.openxc.BinaryMessages.AcceptanceFilterBypassCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(acceptanceFilterBypassCommand_);
-                acceptanceFilterBypassCommand_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 42: {
-              com.openxc.BinaryMessages.PayloadFormatCommand.Builder subBuilder = null;
-              if (payloadFormatCommand_ != null) {
-                subBuilder = payloadFormatCommand_.toBuilder();
-              }
-              payloadFormatCommand_ = input.readMessage(com.openxc.BinaryMessages.PayloadFormatCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(payloadFormatCommand_);
-                payloadFormatCommand_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 50: {
-              com.openxc.BinaryMessages.PredefinedObd2RequestsCommand.Builder subBuilder = null;
-              if (predefinedObd2RequestsCommand_ != null) {
-                subBuilder = predefinedObd2RequestsCommand_.toBuilder();
-              }
-              predefinedObd2RequestsCommand_ = input.readMessage(com.openxc.BinaryMessages.PredefinedObd2RequestsCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(predefinedObd2RequestsCommand_);
-                predefinedObd2RequestsCommand_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 58: {
-              com.openxc.BinaryMessages.ModemConfigurationCommand.Builder subBuilder = null;
-              if (modemConfigurationCommand_ != null) {
-                subBuilder = modemConfigurationCommand_.toBuilder();
-              }
-              modemConfigurationCommand_ = input.readMessage(com.openxc.BinaryMessages.ModemConfigurationCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(modemConfigurationCommand_);
-                modemConfigurationCommand_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 66: {
-              com.openxc.BinaryMessages.RTCConfigurationCommand.Builder subBuilder = null;
-              if (rtcConfigurationCommand_ != null) {
-                subBuilder = rtcConfigurationCommand_.toBuilder();
-              }
-              rtcConfigurationCommand_ = input.readMessage(com.openxc.BinaryMessages.RTCConfigurationCommand.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(rtcConfigurationCommand_);
-                rtcConfigurationCommand_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
+          done = processTag(input, extensionRegistry, unknownFields, done, tag);
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
@@ -2872,6 +2804,141 @@ public final class BinaryMessages {
         makeExtensionsImmutable();
       }
     }
+
+    private boolean processTag(CodedInputStream input, ExtensionRegistryLite extensionRegistry, UnknownFieldSet.Builder unknownFields, boolean done, int tag) throws IOException {
+      switch (tag) {
+        case 0:
+          done = true;
+          break;
+        case 8:
+          type_ = input.readEnum();
+          break;
+        case 18:
+          processTag18(input, extensionRegistry);
+          break;
+        case 26:
+          processTag26(input, extensionRegistry);
+          break;
+        case 34:
+          processTag34(input, extensionRegistry);
+          break;
+        case 42:
+          processTag42(input, extensionRegistry);
+          break;
+        case 50:
+          processTag50(input, extensionRegistry);
+          break;
+        case 58:
+          processTag58(input, extensionRegistry);
+          break;
+        case 66:
+          processTag66(input, extensionRegistry);
+          break;
+        default:
+            done = !parseUnknownField(input, unknownFields, extensionRegistry, tag);
+            break;
+      }
+      return done;
+    }
+
+    private void processTag66(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      RTCConfigurationCommand.Builder subBuilder = null;
+      if (rtcConfigurationCommand_ != null) {
+        subBuilder = rtcConfigurationCommand_.toBuilder();
+      }
+      rtcConfigurationCommand_ = input.readMessage(RTCConfigurationCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(rtcConfigurationCommand_);
+        rtcConfigurationCommand_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag58(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      ModemConfigurationCommand.Builder subBuilder = null;
+      if (modemConfigurationCommand_ != null) {
+        subBuilder = modemConfigurationCommand_.toBuilder();
+      }
+      modemConfigurationCommand_ = input.readMessage(ModemConfigurationCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(modemConfigurationCommand_);
+        modemConfigurationCommand_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag50(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      PredefinedObd2RequestsCommand.Builder subBuilder = null;
+      if (predefinedObd2RequestsCommand_ != null) {
+        subBuilder = predefinedObd2RequestsCommand_.toBuilder();
+      }
+      predefinedObd2RequestsCommand_ = input.readMessage(PredefinedObd2RequestsCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(predefinedObd2RequestsCommand_);
+        predefinedObd2RequestsCommand_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag42(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      PayloadFormatCommand.Builder subBuilder = null;
+      if (payloadFormatCommand_ != null) {
+        subBuilder = payloadFormatCommand_.toBuilder();
+      }
+      payloadFormatCommand_ = input.readMessage(PayloadFormatCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(payloadFormatCommand_);
+        payloadFormatCommand_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag34(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      AcceptanceFilterBypassCommand.Builder subBuilder = null;
+      if (acceptanceFilterBypassCommand_ != null) {
+        subBuilder = acceptanceFilterBypassCommand_.toBuilder();
+      }
+      acceptanceFilterBypassCommand_ = input.readMessage(AcceptanceFilterBypassCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(acceptanceFilterBypassCommand_);
+        acceptanceFilterBypassCommand_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag26(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      PassthroughModeControlCommand.Builder subBuilder = null;
+      if (passthroughModeRequest_ != null) {
+        subBuilder = passthroughModeRequest_.toBuilder();
+      }
+      passthroughModeRequest_ = input.readMessage(PassthroughModeControlCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(passthroughModeRequest_);
+        passthroughModeRequest_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag18(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      DiagnosticControlCommand.Builder subBuilder = null;
+      if (diagnosticRequest_ != null) {
+        subBuilder = diagnosticRequest_.toBuilder();
+      }
+      diagnosticRequest_ = input.readMessage(DiagnosticControlCommand.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(diagnosticRequest_);
+        diagnosticRequest_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.openxc.BinaryMessages.internal_static_openxc_ControlCommand_descriptor;
@@ -2994,7 +3061,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -3062,7 +3129,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -3354,43 +3421,80 @@ public final class BinaryMessages {
       com.openxc.BinaryMessages.ControlCommand other = (com.openxc.BinaryMessages.ControlCommand) obj;
 
       if (type_ != other.type_) return false;
-      if (hasDiagnosticRequest() != other.hasDiagnosticRequest()) return false;
-      if (hasDiagnosticRequest()) {
-        if (!getDiagnosticRequest()
-            .equals(other.getDiagnosticRequest())) return false;
-      }
-      if (hasPassthroughModeRequest() != other.hasPassthroughModeRequest()) return false;
-      if (hasPassthroughModeRequest()) {
-        if (!getPassthroughModeRequest()
-            .equals(other.getPassthroughModeRequest())) return false;
-      }
-      if (hasAcceptanceFilterBypassCommand() != other.hasAcceptanceFilterBypassCommand()) return false;
-      if (hasAcceptanceFilterBypassCommand()) {
-        if (!getAcceptanceFilterBypassCommand()
-            .equals(other.getAcceptanceFilterBypassCommand())) return false;
-      }
-      if (hasPayloadFormatCommand() != other.hasPayloadFormatCommand()) return false;
-      if (hasPayloadFormatCommand()) {
-        if (!getPayloadFormatCommand()
-            .equals(other.getPayloadFormatCommand())) return false;
-      }
-      if (hasPredefinedObd2RequestsCommand() != other.hasPredefinedObd2RequestsCommand()) return false;
-      if (hasPredefinedObd2RequestsCommand()) {
-        if (!getPredefinedObd2RequestsCommand()
-            .equals(other.getPredefinedObd2RequestsCommand())) return false;
-      }
-      if (hasModemConfigurationCommand() != other.hasModemConfigurationCommand()) return false;
-      if (hasModemConfigurationCommand()) {
-        if (!getModemConfigurationCommand()
-            .equals(other.getModemConfigurationCommand())) return false;
-      }
-      if (hasRtcConfigurationCommand() != other.hasRtcConfigurationCommand()) return false;
-      if (hasRtcConfigurationCommand()) {
-        if (!getRtcConfigurationCommand()
-            .equals(other.getRtcConfigurationCommand())) return false;
-      }
+      if (hasDiagnosticRequest(other)) return false;
+      if (hasPassthroughModeRequest(other)) return false;
+      if (hasAcceptanceFilterBypassCommand(other)) return false;
+      if (hasPayloadFormatCommand(other)) return false;
+      if (hasPredefinedObd2RequestsCommand(other)) return false;
+      if (hasModemConfigurationCommand(other)) return false;
+      if (hasRtcConfigurationCommand(other)) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
+    }
+
+    private boolean hasRtcConfigurationCommand(ControlCommand other) {
+      if (hasRtcConfigurationCommand() != other.hasRtcConfigurationCommand()) return true;
+      if (hasRtcConfigurationCommand()) {
+        if (!getRtcConfigurationCommand()
+            .equals(other.getRtcConfigurationCommand())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasModemConfigurationCommand(ControlCommand other) {
+      if (hasModemConfigurationCommand() != other.hasModemConfigurationCommand()) return true;
+      if (hasModemConfigurationCommand()) {
+        if (!getModemConfigurationCommand()
+            .equals(other.getModemConfigurationCommand())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasPredefinedObd2RequestsCommand(ControlCommand other) {
+      if (hasPredefinedObd2RequestsCommand() != other.hasPredefinedObd2RequestsCommand())
+        return true;
+      if (hasPredefinedObd2RequestsCommand()) {
+        if (!getPredefinedObd2RequestsCommand()
+            .equals(other.getPredefinedObd2RequestsCommand())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasPayloadFormatCommand(ControlCommand other) {
+      if (hasPayloadFormatCommand() != other.hasPayloadFormatCommand()) return true;
+      if (hasPayloadFormatCommand()) {
+        if (!getPayloadFormatCommand()
+            .equals(other.getPayloadFormatCommand())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasAcceptanceFilterBypassCommand(ControlCommand other) {
+      if (hasAcceptanceFilterBypassCommand() != other.hasAcceptanceFilterBypassCommand())
+        return true;
+      if (hasAcceptanceFilterBypassCommand()) {
+        if (!getAcceptanceFilterBypassCommand()
+            .equals(other.getAcceptanceFilterBypassCommand())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasPassthroughModeRequest(ControlCommand other) {
+      if (hasPassthroughModeRequest() != other.hasPassthroughModeRequest()) return true;
+      if (hasPassthroughModeRequest()) {
+        if (!getPassthroughModeRequest()
+            .equals(other.getPassthroughModeRequest())) return true;
+      }
+      return false;
+    }
+
+    private boolean hasDiagnosticRequest(ControlCommand other) {
+      if (hasDiagnosticRequest() != other.hasDiagnosticRequest()) return true;
+      if (hasDiagnosticRequest()) {
+        if (!getDiagnosticRequest()
+            .equals(other.getDiagnosticRequest())) return true;
+      }
+      return false;
     }
 
     @java.lang.Override
@@ -3671,11 +3775,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -4871,7 +4970,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -4930,7 +5029,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -5239,11 +5338,6 @@ public final class BinaryMessages {
         result.action_ = action_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -5906,11 +6000,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -6461,11 +6550,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -6797,7 +6881,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -6857,7 +6941,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -7116,11 +7200,6 @@ public final class BinaryMessages {
         result.format_ = format_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -7626,11 +7705,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -7976,7 +8050,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -8037,7 +8111,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -8193,7 +8267,7 @@ public final class BinaryMessages {
         public final int getNumber() {
           if (this == UNRECOGNIZED) {
             throw new java.lang.IllegalArgumentException(
-                "Can't get the number of an unknown enum value.");
+                    UNKNOWN_ENUM_VALUE);
           }
           return value;
         }
@@ -8251,7 +8325,7 @@ public final class BinaryMessages {
             com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
           if (desc.getType() != getDescriptor()) {
             throw new java.lang.IllegalArgumentException(
-              "EnumValueDescriptor is not for this type.");
+                    VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
           }
           if (desc.getIndex() == -1) {
             return UNRECOGNIZED;
@@ -8536,10 +8610,10 @@ public final class BinaryMessages {
           return result;
         }
 
-        @java.lang.Override
-        public Builder clone() {
-          return super.clone();
-        }
+//        @java.lang.Override
+//        public Builder clone() {
+//          return super.clone();
+//        }
         @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -9067,11 +9141,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -9504,7 +9573,7 @@ public final class BinaryMessages {
     }
 
     public static final int APN_FIELD_NUMBER = 1;
-    private volatile java.lang.Object apn_;
+    private transient volatile java.lang.Object apn_;
     /**
      * <code>string apn = 1;</code>
      * @return The apn.
@@ -9762,11 +9831,6 @@ public final class BinaryMessages {
         result.apn_ = apn_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -10081,7 +10145,7 @@ public final class BinaryMessages {
     }
 
     public static final int HOST_FIELD_NUMBER = 1;
-    private volatile java.lang.Object host_;
+    private transient  volatile java.lang.Object host_;
     /**
      * <code>string host = 1;</code>
      * @return The host.
@@ -10363,11 +10427,6 @@ public final class BinaryMessages {
         result.port_ = port_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -10693,57 +10752,7 @@ public final class BinaryMessages {
         boolean done = false;
         while (!done) {
           int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.openxc.BinaryMessages.NetworkOperatorSettings.Builder subBuilder = null;
-              if (networkOperatorSettings_ != null) {
-                subBuilder = networkOperatorSettings_.toBuilder();
-              }
-              networkOperatorSettings_ = input.readMessage(com.openxc.BinaryMessages.NetworkOperatorSettings.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(networkOperatorSettings_);
-                networkOperatorSettings_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 18: {
-              com.openxc.BinaryMessages.NetworkDataSettings.Builder subBuilder = null;
-              if (networkDataSettings_ != null) {
-                subBuilder = networkDataSettings_.toBuilder();
-              }
-              networkDataSettings_ = input.readMessage(com.openxc.BinaryMessages.NetworkDataSettings.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(networkDataSettings_);
-                networkDataSettings_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 26: {
-              com.openxc.BinaryMessages.ServerConnectSettings.Builder subBuilder = null;
-              if (serverConnectSettings_ != null) {
-                subBuilder = serverConnectSettings_.toBuilder();
-              }
-              serverConnectSettings_ = input.readMessage(com.openxc.BinaryMessages.ServerConnectSettings.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(serverConnectSettings_);
-                serverConnectSettings_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
+          done = processTag(input, extensionRegistry, unknownFields, done, tag);
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
@@ -10755,6 +10764,70 @@ public final class BinaryMessages {
         makeExtensionsImmutable();
       }
     }
+
+    private boolean processTag(CodedInputStream input, ExtensionRegistryLite extensionRegistry, UnknownFieldSet.Builder unknownFields, boolean done, int tag) throws IOException {
+      switch (tag) {
+        case 0:
+          done = true;
+          break;
+        case 10:
+          processTag10(input, extensionRegistry);
+          break;
+        case 18:
+          processTag18(input, extensionRegistry);
+          break;
+        case 26:
+          processTag26(input, extensionRegistry);
+          break;
+        default:
+            done = !parseUnknownField(input, unknownFields, extensionRegistry, tag);
+          break;
+      }
+      return done;
+    }
+
+    private void processTag26(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      ServerConnectSettings.Builder subBuilder = null;
+      if (serverConnectSettings_ != null) {
+        subBuilder = serverConnectSettings_.toBuilder();
+      }
+      serverConnectSettings_ = input.readMessage(ServerConnectSettings.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(serverConnectSettings_);
+        serverConnectSettings_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag18(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      NetworkDataSettings.Builder subBuilder = null;
+      if (networkDataSettings_ != null) {
+        subBuilder = networkDataSettings_.toBuilder();
+      }
+      networkDataSettings_ = input.readMessage(NetworkDataSettings.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(networkDataSettings_);
+        networkDataSettings_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag10(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      NetworkOperatorSettings.Builder subBuilder = null;
+      if (networkOperatorSettings_ != null) {
+        subBuilder = networkOperatorSettings_.toBuilder();
+      }
+      networkOperatorSettings_ = input.readMessage(NetworkOperatorSettings.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(networkOperatorSettings_);
+        networkOperatorSettings_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.openxc.BinaryMessages.internal_static_openxc_ModemConfigurationCommand_descriptor;
@@ -11128,11 +11201,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -11948,11 +12016,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -12256,7 +12319,7 @@ public final class BinaryMessages {
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 2;
-    private volatile java.lang.Object message_;
+    private transient  volatile java.lang.Object message_;
     /**
      * <code>string message = 2;</code>
      * @return The message.
@@ -12552,11 +12615,6 @@ public final class BinaryMessages {
         result.status_ = status_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -13080,7 +13138,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -13139,7 +13197,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -13227,7 +13285,7 @@ public final class BinaryMessages {
     }
 
     public static final int NAME_FIELD_NUMBER = 8;
-    private volatile java.lang.Object name_;
+    private transient volatile java.lang.Object name_;
     /**
      * <code>string name = 8;</code>
      * @return The name.
@@ -13618,11 +13676,6 @@ public final class BinaryMessages {
         result.decodedType_ = decodedType_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -14731,11 +14784,6 @@ public final class BinaryMessages {
         onBuilt();
         return result;
       }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -15398,7 +15446,7 @@ public final class BinaryMessages {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
+                  UNKNOWN_ENUM_VALUE);
         }
         return value;
       }
@@ -15458,7 +15506,7 @@ public final class BinaryMessages {
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+                  VehicleMessage.Type.ENUM_VALUE_DESCRIPTOR_IS_NOT_FOR_THIS_TYPE);
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -15495,7 +15543,7 @@ public final class BinaryMessages {
     }
 
     public static final int STRING_VALUE_FIELD_NUMBER = 2;
-    private volatile java.lang.Object stringValue_;
+    private transient volatile java.lang.Object stringValue_;
     /**
      * <code>string string_value = 2;</code>
      * @return The stringValue.
@@ -15817,11 +15865,6 @@ public final class BinaryMessages {
         result.booleanValue_ = booleanValue_;
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
@@ -16231,53 +16274,7 @@ public final class BinaryMessages {
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              name_ = s;
-              break;
-            }
-            case 18: {
-              com.openxc.BinaryMessages.DynamicField.Builder subBuilder = null;
-              if (value_ != null) {
-                subBuilder = value_.toBuilder();
-              }
-              value_ = input.readMessage(com.openxc.BinaryMessages.DynamicField.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(value_);
-                value_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 26: {
-              com.openxc.BinaryMessages.DynamicField.Builder subBuilder = null;
-              if (event_ != null) {
-                subBuilder = event_.toBuilder();
-              }
-              event_ = input.readMessage(com.openxc.BinaryMessages.DynamicField.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(event_);
-                event_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
+        processTag(input, extensionRegistry, unknownFields, done);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
@@ -16288,6 +16285,58 @@ public final class BinaryMessages {
         makeExtensionsImmutable();
       }
     }
+
+    private void processTag(CodedInputStream input, ExtensionRegistryLite extensionRegistry, UnknownFieldSet.Builder unknownFields, boolean done) throws IOException {
+      while (!done) {
+        int tag = input.readTag();
+        switch (tag) {
+          case 0:
+            done = true;
+            break;
+          case 10:
+            name_ = input.readStringRequireUtf8();
+            break;
+          case 18:
+            processTag18(input, extensionRegistry);
+            break;
+          case 26:
+            processTag26(input, extensionRegistry);
+            break;
+          default:
+              done = !parseUnknownField(input, unknownFields, extensionRegistry, tag);
+            break;
+        }
+      }
+    }
+
+    private void processTag18(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      DynamicField.Builder subBuilder = null;
+      if (value_ != null) {
+        subBuilder = value_.toBuilder();
+      }
+      value_ = input.readMessage(DynamicField.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(value_);
+        value_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
+    private void processTag26(CodedInputStream input, ExtensionRegistryLite extensionRegistry) throws IOException {
+      DynamicField.Builder subBuilder = null;
+      if (event_ != null) {
+        subBuilder = event_.toBuilder();
+      }
+      event_ = input.readMessage(DynamicField.parser(), extensionRegistry);
+      if (subBuilder != null) {
+        subBuilder.mergeFrom(event_);
+        event_ = subBuilder.buildPartial();
+      }
+
+      return;
+    }
+
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.openxc.BinaryMessages.internal_static_openxc_SimpleMessage_descriptor;
@@ -16302,7 +16351,7 @@ public final class BinaryMessages {
     }
 
     public static final int NAME_FIELD_NUMBER = 1;
-    private volatile java.lang.Object name_;
+    private transient volatile java.lang.Object name_;
     /**
      * <code>string name = 1;</code>
      * @return The name.
@@ -16660,11 +16709,6 @@ public final class BinaryMessages {
         }
         onBuilt();
         return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
