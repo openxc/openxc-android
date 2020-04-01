@@ -186,8 +186,8 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-            .add("timestamp", getTimestamp())
-            .add("extras", getExtras())
+            .add(TIMESTAMP_KEY, getTimestamp())
+            .add(EXTRAS_KEY, getExtras())
             .toString();
     }
 

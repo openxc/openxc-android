@@ -14,6 +14,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import com.google.common.base.MoreObjects;
@@ -117,7 +118,7 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
                         SensorManager.SENSOR_DELAY_NORMAL);
             }
 
-            if (ActivityCompat.checkSelfPermission
+            if (ContextCompat.checkSelfPermission
                     (thecontext, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 return;

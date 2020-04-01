@@ -41,7 +41,7 @@ import java.util.TimerTask;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
 
-public class StatusFragment extends Fragment implements Button.OnClickListener{
+public class StatusFragment extends Fragment implements android.view.View.OnClickListener{
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static String TAG = "StatusFragment";
@@ -435,6 +435,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             case R.id.restarttrace_btn:
                 restartTraceFile();
                 break;
+            default: return;
         }
     }
 }

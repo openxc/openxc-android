@@ -29,6 +29,8 @@ import java.lang.reflect.Method;
 public class VehicleLocationProvider implements Measurement.Listener {
     public final static String TAG = "VehicleLocationProvider";
     public final static String VEHICLE_LOCATION_PROVIDER = "vehicle";
+    public static final String UNABLE_TO_USE_MOCKED_LOCATIONS = "Unable to use mocked locations, ";
+    public static final String INSUFFICIENT_PRIVILEGES_MAKE_SURE_MOCK_LOCATIONS = "insufficient privileges - make sure mock locations are allowed in device settings";
 
     private VehicleManager mVehicleManager;
     private LocationManager mLocationManager;
@@ -163,9 +165,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 mLocationManager.setTestProviderLocation(
                         VEHICLE_LOCATION_PROVIDER, location);
             } catch(SecurityException e) {
-                Log.w(TAG, "Unable to use mocked locations, " +
-                        "insufficient privileges - make sure mock locations " +
-                        "are allowed in device settings", e);
+                Log.w(TAG, UNABLE_TO_USE_MOCKED_LOCATIONS +
+                        INSUFFICIENT_PRIVILEGES_MAKE_SURE_MOCK_LOCATIONS, e);
             } catch(IllegalArgumentException e) {
                 Log.w(TAG, "Unable to set test provider location", e);
             }
@@ -190,9 +191,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 mLocationManager.setTestProviderEnabled(
                         LocationManager.GPS_PROVIDER, true);
             } catch(SecurityException e) {
-                Log.w(TAG, "Unable to use mocked locations, " +
-                        "insufficient privileges - make sure mock locations " +
-                        "are allowed in device settings", e);
+                Log.w(TAG, UNABLE_TO_USE_MOCKED_LOCATIONS +
+                        INSUFFICIENT_PRIVILEGES_MAKE_SURE_MOCK_LOCATIONS, e);
             }
         }
     }
@@ -207,9 +207,8 @@ public class VehicleLocationProvider implements Measurement.Listener {
             mLocationManager.setTestProviderEnabled(
                     VEHICLE_LOCATION_PROVIDER, true);
         } catch(SecurityException e) {
-                Log.w(TAG, "Unable to use mocked locations, " +
-                        "insufficient privileges - make sure mock locations " +
-                        "are allowed in device settings", e);
+                Log.w(TAG, UNABLE_TO_USE_MOCKED_LOCATIONS +
+                        INSUFFICIENT_PRIVILEGES_MAKE_SURE_MOCK_LOCATIONS, e);
             mLocationManager = null;
         }
     }

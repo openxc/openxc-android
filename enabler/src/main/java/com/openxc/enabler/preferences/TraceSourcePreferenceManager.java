@@ -44,18 +44,7 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
             if(traceFile != null ) {
                 if(mTraceSource == null ||
                         !mTraceSource.sameFilename(traceFile)) {
-                    stopTrace();
-
-                    try {
-                        mTraceSource = new TraceVehicleDataSource(
-                                getContext(), traceFile);
-                    } catch(DataSourceException e) {
-                        Log.w(TAG, "Unable to add Trace source", e);
-                        return;
-                    }
-
-                    OpenXCApplication.setTraceSource(mTraceSource);
-                    getVehicleManager().addSource(mTraceSource);
+                    addTraceDetails(traceFile);
                 } else {
                     Log.d(TAG, "Trace file + " + traceFile + " already playing");
                 }
@@ -66,6 +55,21 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
         } else {
             stopTrace();
         }
+    }
+
+    private void addTraceDetails(String traceFile) {
+        stopTrace();
+
+        try {
+            mTraceSource = new TraceVehicleDataSource(
+                    getContext(), traceFile);
+        } catch(DataSourceException e) {
+            Log.w(TAG, "Unable to add Trace source", e);
+            return;
+        }
+
+        OpenXCApplication.setTraceSource(mTraceSource);
+        getVehicleManager().addSource(mTraceSource);
     }
 
     private synchronized void stopTrace() {

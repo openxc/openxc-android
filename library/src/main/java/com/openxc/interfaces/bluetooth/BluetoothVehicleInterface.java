@@ -127,23 +127,27 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         setAddress(otherAddress);
         Log.d(TAG, "Setting address " + otherAddress);
         if (reconnect) {
-            if (!connectingToBLE) {
-                try {
-                    if (mSocket != null) {
-                        mSocket.close();
-                    }
-                } catch (IOException e) {
-                    Log.d(TAG, "Exception occurred while closing the socket");
-                }
-            } else {
-                if (mBluetoothGatt != null) {
-                    mBluetoothGatt.close();
-                }
-            }
-            setFastPolling(true);
+            reconnect();
         }
 
         return reconnect;
+    }
+
+    private void reconnect() {
+        if (!connectingToBLE) {
+            try {
+                if (mSocket != null) {
+                    mSocket.close();
+                }
+            } catch (IOException e) {
+                Log.d(TAG, "Exception occurred while closing the socket");
+            }
+        } else {
+            if (mBluetoothGatt != null) {
+                mBluetoothGatt.close();
+            }
+        }
+        setFastPolling(true);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -154,29 +158,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         // connection so we consider it disconnected.
         try {
             if (mConnectionLock.readLock().tryLock(100, TimeUnit.MILLISECONDS)) {
-                connected = super.isConnected();
-                if (!connectingToBLE) {
-                    if (mSocket == null) {
-                        connected = false;
-                    } else {
-                        try {
-                            connected &= mSocket.isConnected();
-
-                        } catch (NoSuchMethodError e) {
-                            // Cannot get isConnected() result before API 14
-                            // Assume previous result is correct.
-                        }
-                    }
-                } else {
-                    if (mBluetoothGatt == null) {
-                        connected = false;
-                    } else {
-                        if (mConnectedAddress != null)
-                            connected = true;
-                        else connected = false;
-                    }
-                }
-                mConnectionLock.readLock().unlock();
+                connected = retryConnectOp();
             }
         } catch (InterruptedException e) {
             Log.w(TAG, "Interrupted...");
@@ -184,6 +166,34 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             Thread.currentThread().interrupt();
         }
 
+        return connected;
+    }
+
+    private boolean retryConnectOp() {
+        boolean connected;
+        connected = super.isConnected();
+        if (!connectingToBLE) {
+            if (mSocket == null) {
+                connected = false;
+            } else {
+                try {
+                    connected &= mSocket.isConnected();
+
+                } catch (NoSuchMethodError e) {
+                    // Cannot get isConnected() result before API 14
+                    // Assume previous result is correct.
+                }
+            }
+        } else {
+            if (mBluetoothGatt == null) {
+                connected = false;
+            } else {
+                if (mConnectedAddress != null)
+                    connected = true;
+                else connected = false;
+            }
+        }
+        mConnectionLock.readLock().unlock();
         return connected;
     }
 
@@ -220,18 +230,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             BluetoothSocket socket = null;
             while (isRunning() && shouldAttemptConnection()) {
 
-                while (isConnected()) {
-                    mConnectionLock.writeLock().lock();
-                    try {
-                        mDeviceChanged.await();
-                    } catch (InterruptedException e) {
-                        Log.w(TAG, "Interrupted...");
-                        e.printStackTrace();
-                        Thread.currentThread().interrupt();
-                    } finally {
-                        mConnectionLock.writeLock().unlock();
-                    }
-                }
+                checkConnection();
 
                 // If the BT vehicle interface has been disabled, the socket
                 // will be disconnected and we will break out of the above
@@ -283,6 +282,21 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
     }
 
+    private void checkConnection() {
+        while (isConnected()) {
+            mConnectionLock.writeLock().lock();
+            try {
+                mDeviceChanged.await();
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Interrupted...");
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            } finally {
+                mConnectionLock.writeLock().unlock();
+            }
+        }
+    }
+
     @Override
     protected void connect() {
         if (!mUsePolling || !isRunning()) {
@@ -297,10 +311,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         BluetoothSocket newSocket = null;
         BluetoothGatt bluetoothGatt = null;
         if (mExplicitAddress != null || !mPerformAutomaticScan) {
-            String address = mExplicitAddress;
-            if (address == null && lastConnectedDevice != null) {
-                address = lastConnectedDevice.getAddress();
-            }
+            String address = getAddress(lastConnectedDevice);
 
             if (address != null) {
                 Log.i(TAG, "Connecting to Bluetooth device " + address + " device is BLE : " + mDeviceManager.isBLEDevice(address));
@@ -333,11 +344,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     new ArrayList<>(
                             mDeviceManager.getCandidateDevices());
 
-            if (lastConnectedDevice != null) {
-                Log.v(TAG, "First trying last connected BT VI: " +
-                        lastConnectedDevice);
-                candidateDevices.add(0, lastConnectedDevice);
-            }
+            addLastConnectedDevice(lastConnectedDevice, candidateDevices);
 
             for (BluetoothDevice device : candidateDevices) {
                 try {
@@ -361,20 +368,39 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                 }
             }
 
-            if (lastConnectedDevice == null && newSocket == null
-                    && candidateDevices.size() > 0) {
-                Log.i(TAG, "No BT VI ever connected, and none of " +
-                        "discovered devices could connect - storing " +
-                        candidateDevices.get(0).getAddress() +
-                        " as the next one to try");
-                mDeviceManager.storeLastConnectedDevice(
-                        candidateDevices.get(0));
-            }
+            storeLastConnectedDevice(lastConnectedDevice, newSocket, candidateDevices);
         }
         if (connectingToBLE && bluetoothGatt != null) {
             manageConnectedGatt(bluetoothGatt);
         } else if(!connectingToBLE){
             manageConnectedSocket(newSocket);
+        }
+    }
+
+    private void addLastConnectedDevice(BluetoothDevice lastConnectedDevice, ArrayList<BluetoothDevice> candidateDevices) {
+        if (lastConnectedDevice != null) {
+            Log.v(TAG, "First trying last connected BT VI: " + lastConnectedDevice);
+            candidateDevices.add(0, lastConnectedDevice);
+        }
+    }
+
+    private String getAddress(BluetoothDevice lastConnectedDevice) {
+        String address = mExplicitAddress;
+        if (address == null && lastConnectedDevice != null) {
+            address = lastConnectedDevice.getAddress();
+        }
+        return address;
+    }
+
+    private void storeLastConnectedDevice(BluetoothDevice lastConnectedDevice, BluetoothSocket newSocket, ArrayList<BluetoothDevice> candidateDevices) {
+        if (lastConnectedDevice == null && newSocket == null
+                && candidateDevices.size() > 0) {
+            Log.i(TAG, "No BT VI ever connected, and none of " +
+                    "discovered devices could connect - storing " +
+                    candidateDevices.get(0).getAddress() +
+                    " as the next one to try");
+            mDeviceManager.storeLastConnectedDevice(
+                    candidateDevices.get(0));
         }
     }
 
@@ -615,6 +641,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                         mAcceptThread = new Thread(new SocketAccepter());
                         mAcceptThread.start();
                         break;
+                    default: return;
                 }
             }
         }
