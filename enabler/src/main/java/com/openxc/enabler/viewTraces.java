@@ -89,7 +89,7 @@ public class viewTraces extends Activity {
             f.mkdirs();
             File[] files = f.listFiles();
             if (files.length == 0)
-                return null;
+                return MyFiles;
             else {
                 for (File file : files) MyFiles.add(file.getName());
             }

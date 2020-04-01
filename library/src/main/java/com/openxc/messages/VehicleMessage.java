@@ -1,6 +1,12 @@
 package com.openxc.messages;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,12 +14,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
 
-import com.google.common.base.MoreObjects;
-import com.google.gson.annotations.SerializedName;
+
+
 
 /**
  * The VehicleMessage is the most basic, root form of data going back and forth

@@ -110,7 +110,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             // measurement in this function, but we don't really have that when
             // adding a listener.
             BaseMeasurement.getKeyForMeasurement(measurementType);
-        } catch(UnrecognizedMeasurementTypeException e) { }
+        } catch(UnrecognizedMeasurementTypeException e) {
+            Log.e(TAG, "register: ", e);
+        }
 
         mMeasurementTypeListeners.put(measurementType, listener);
     }

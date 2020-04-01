@@ -1,10 +1,5 @@
 package com.openxc.sources.trace;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -16,6 +11,11 @@ import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 import com.openxcplatform.enabler.R;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 public class TraceVehicleDataSourceTest extends AndroidTestCase {
     URI traceUri;
     URI malformedTraceUri;
@@ -26,7 +26,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     boolean receivedBooleanCallback;;
 
     @Override
-    protected void setUp() {
+    protected void setUp() throws Exception {
+        super.setUp();
         traceUri = TestUtils.copyToStorage(getContext(), R.raw.tracejson,
                 "trace.json");
         malformedTraceUri = TestUtils.copyToStorage(getContext(),
@@ -106,6 +107,8 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     @SmallTest
     public void testConstructWithCallbackAndFile()
             throws DataSourceException {
+        receivedNumericalCallback = false;
         source = new TraceVehicleDataSource(callback, getContext(), traceUri);
+        assertFalse(receivedNumericalCallback);
     }
 }

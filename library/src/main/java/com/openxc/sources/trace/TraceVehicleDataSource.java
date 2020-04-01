@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.common.base.MoreObjects;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -89,7 +90,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     public TraceVehicleDataSource(SourceCallback callback, Context context,
             URI filename, boolean loop) throws DataSourceException {
         super(callback, context);
-        if(filename == null) {
+        if(filename == null && loop) {
+
             throw new DataSourceException(
                     "No filename specified for the trace source");
         }
@@ -180,7 +182,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 // In the future may want to support binary traces
                 try {
                     while (mRunning && (line = reader.readLine()) != null) {
-                        //Log.e(TAG, "Line:" + line);
+
                         VehicleMessage measurement;
                         try {
                             measurement = JsonFormatter.deserialize(line);
@@ -248,7 +250,7 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 mRunning = false;
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
             }
-        } // while(mRunning)
+        }
     }
 
     private boolean checkPermission() {

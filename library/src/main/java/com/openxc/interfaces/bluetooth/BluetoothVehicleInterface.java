@@ -116,7 +116,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         if (isConnected()) {
             if (otherAddress == null) {
                 // switch to automatic but don't break the existing connection
-                reconnect = false;
+
+
             } else if (!sameResource(mConnectedAddress, otherAddress) &&
                     !sameResource(mExplicitAddress, otherAddress)) {
                 reconnect = true;
@@ -234,7 +235,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
                 // If the BT vehicle interface has been disabled, the socket
                 // will be disconnected and we will break out of the above
-                // while(isConnected()) loop and land here - double check that
+                // loop and land here - double check that
                 // this interface should still be running before trying to make
                 // another connection.
                 if (!isRunning()) {
@@ -252,6 +253,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     Log.i(TAG, "Listening for inbound socket connections");
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
+                    Log.e(TAG, "Listening for inbound socket connections",e);
                 }
 
                 if (socket != null) {
@@ -261,6 +263,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                         Log.d(TAG, "Closing listening server socket");
                         mmServerSocket.close();
                     } catch (IOException e) {
+                        Log.e(TAG, "Listening for inbound socket connections",e);
                     }
                 }
             }
@@ -275,6 +278,7 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
                     mmServerSocket.close();
                 }
             } catch (IOException e) {
+                Log.e(TAG, "stop socket connections",e);
             }
         }
     }

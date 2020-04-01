@@ -1,12 +1,10 @@
 package com.openxc.enabler;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import androidx.fragment.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
+import androidx.fragment.app.ListFragment;
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.formatters.ByteAdapter;
@@ -102,7 +100,6 @@ public class SendCanMessageFragment extends ListFragment {
         }
 
         if(validInput) {
-            System.out.println(payloadView.getText().toString());
             CanMessage message = new CanMessage(
                     Integer.valueOf(busSpinner.getSelectedItem().toString()),
                     Integer.valueOf(idView.getText().toString(), 16),

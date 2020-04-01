@@ -1,9 +1,11 @@
 package com.openxc.interfaces.usb;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import android.util.Log;
 
 import com.openxc.sources.DataSourceResourceException;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Stateless utilities for finding and opening USB devices.
@@ -20,7 +22,9 @@ public class UsbDeviceUtilities {
     static {
         try {
             DEFAULT_USB_DEVICE_URI = new URI("usb://1bc4/0001");
-        } catch(URISyntaxException e) { }
+        } catch(URISyntaxException e) {
+            Log.e("USB", "exception: " + e.toString());
+        }
     }
 
     /**

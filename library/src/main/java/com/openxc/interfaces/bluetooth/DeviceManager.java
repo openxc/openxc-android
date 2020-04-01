@@ -92,10 +92,11 @@ public class DeviceManager {
     public BluetoothServerSocket listen() {
         BluetoothServerSocket tmp = null;
         try {
-            // TODO use an OpenXC-specific UUID
+            //  use an OpenXC-specific UUID
             tmp = getDefaultAdapter().listenUsingRfcommWithServiceRecord(
                     "TODO", DeviceManager.RFCOMM_UUID);
         } catch (IOException e) {
+            Log.i(TAG, "Starting Bluetooth discovery",e);
         }
         return tmp;
     }
@@ -141,6 +142,7 @@ public class DeviceManager {
             try {
                 mSocket.close();
             } catch (IOException e) {
+                Log.e(TAG, "Scanning services on ",e);
             }
         }
         if (mSocketConnecting.get() && mBluetoothGatt != null) {
@@ -225,6 +227,7 @@ public class DeviceManager {
             try {
                 socket.close();
             } catch (IOException e2) {
+                Log.e(TAG, "Scanning services on ",e2);
             }
             throw new BluetoothException(error, e);
         } finally {
@@ -295,7 +298,6 @@ public class DeviceManager {
         } finally {
             mSocketConnecting.set(false);
         }
-        //storeLastConnectedDevice(device);
         return mBluetoothGatt;
     }
 

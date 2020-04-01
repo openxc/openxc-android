@@ -335,7 +335,8 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+
+      @Deprecated
       public static Type valueOf(int value) {
         return forNumber(value);
       }
@@ -637,29 +638,28 @@ public final class BinaryMessages {
 
       if (type_ != other.type_) return false;
       if (hasCanMessage() != other.hasCanMessage()) return false;
-      if (hasCanMessage()) {
-        if (!getCanMessage()
-            .equals(other.getCanMessage())) return false;
+      if (hasCanMessage() && !getCanMessage().equals(other.getCanMessage())) {
+         return false;
       }
       if (hasSimpleMessage() != other.hasSimpleMessage()) return false;
-      if (hasSimpleMessage()) {
-        if (!getSimpleMessage()
-            .equals(other.getSimpleMessage())) return false;
+      if (hasSimpleMessage() && !getSimpleMessage()
+              .equals(other.getSimpleMessage())) {
+         return false;
       }
       if (hasDiagnosticResponse() != other.hasDiagnosticResponse()) return false;
-      if (hasDiagnosticResponse()) {
-        if (!getDiagnosticResponse()
-            .equals(other.getDiagnosticResponse())) return false;
+      if (hasDiagnosticResponse() && !getDiagnosticResponse()
+              .equals(other.getDiagnosticResponse())) {
+         return false;
       }
       if (hasControlCommand() != other.hasControlCommand()) return false;
-      if (hasControlCommand()) {
-        if (!getControlCommand()
-            .equals(other.getControlCommand())) return false;
+      if (hasControlCommand() && !getControlCommand()
+              .equals(other.getControlCommand())) {
+         return false;
       }
       if (hasCommandResponse() != other.hasCommandResponse()) return false;
-      if (hasCommandResponse()) {
-        if (!getCommandResponse()
-            .equals(other.getCommandResponse())) return false;
+      if (hasCommandResponse() && !getCommandResponse()
+              .equals(other.getCommandResponse())) {
+         return false;
       }
       if (getTimestamp()
           != other.getTimestamp()) return false;
@@ -825,9 +825,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -1921,7 +1919,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static FrameFormat valueOf(int value) {
         return forNumber(value);
       }
@@ -2254,9 +2252,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -2994,7 +2990,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static Type valueOf(int value) {
         return forNumber(value);
       }
@@ -3345,39 +3341,39 @@ public final class BinaryMessages {
 
       if (type_ != other.type_) return false;
       if (hasDiagnosticRequest() != other.hasDiagnosticRequest()) return false;
-      if (hasDiagnosticRequest()) {
-        if (!getDiagnosticRequest()
-            .equals(other.getDiagnosticRequest())) return false;
+      if (hasDiagnosticRequest() && !getDiagnosticRequest()
+              .equals(other.getDiagnosticRequest())) {
+         return false;
       }
       if (hasPassthroughModeRequest() != other.hasPassthroughModeRequest()) return false;
-      if (hasPassthroughModeRequest()) {
-        if (!getPassthroughModeRequest()
-            .equals(other.getPassthroughModeRequest())) return false;
+      if (hasPassthroughModeRequest() && !getPassthroughModeRequest()
+              .equals(other.getPassthroughModeRequest())) {
+         return false;
       }
       if (hasAcceptanceFilterBypassCommand() != other.hasAcceptanceFilterBypassCommand()) return false;
-      if (hasAcceptanceFilterBypassCommand()) {
-        if (!getAcceptanceFilterBypassCommand()
-            .equals(other.getAcceptanceFilterBypassCommand())) return false;
+      if (hasAcceptanceFilterBypassCommand() && !getAcceptanceFilterBypassCommand()
+              .equals(other.getAcceptanceFilterBypassCommand())) {
+         return false;
       }
       if (hasPayloadFormatCommand() != other.hasPayloadFormatCommand()) return false;
-      if (hasPayloadFormatCommand()) {
-        if (!getPayloadFormatCommand()
-            .equals(other.getPayloadFormatCommand())) return false;
+      if (hasPayloadFormatCommand() && !getPayloadFormatCommand()
+              .equals(other.getPayloadFormatCommand())) {
+         return false;
       }
       if (hasPredefinedObd2RequestsCommand() != other.hasPredefinedObd2RequestsCommand()) return false;
-      if (hasPredefinedObd2RequestsCommand()) {
-        if (!getPredefinedObd2RequestsCommand()
-            .equals(other.getPredefinedObd2RequestsCommand())) return false;
+      if (hasPredefinedObd2RequestsCommand() && !getPredefinedObd2RequestsCommand()
+              .equals(other.getPredefinedObd2RequestsCommand())) {
+         return false;
       }
       if (hasModemConfigurationCommand() != other.hasModemConfigurationCommand()) return false;
-      if (hasModemConfigurationCommand()) {
-        if (!getModemConfigurationCommand()
-            .equals(other.getModemConfigurationCommand())) return false;
+      if (hasModemConfigurationCommand() && !getModemConfigurationCommand()
+              .equals(other.getModemConfigurationCommand())) {
+         return false;
       }
       if (hasRtcConfigurationCommand() != other.hasRtcConfigurationCommand()) return false;
-      if (hasRtcConfigurationCommand()) {
-        if (!getRtcConfigurationCommand()
-            .equals(other.getRtcConfigurationCommand())) return false;
+      if (hasRtcConfigurationCommand() && !getRtcConfigurationCommand()
+              .equals(other.getRtcConfigurationCommand())) {
+        return false;
       }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -3546,9 +3542,6 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
       }
       @java.lang.Override
       public Builder clear() {
@@ -4866,7 +4859,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static Action valueOf(int value) {
         return forNumber(value);
       }
@@ -5027,9 +5020,9 @@ public final class BinaryMessages {
       com.openxc.BinaryMessages.DiagnosticControlCommand other = (com.openxc.BinaryMessages.DiagnosticControlCommand) obj;
 
       if (hasRequest() != other.hasRequest()) return false;
-      if (hasRequest()) {
-        if (!getRequest()
-            .equals(other.getRequest())) return false;
+      if (hasRequest() && !getRequest()
+              .equals(other.getRequest())) {
+        return false;
       }
       if (action_ != other.action_) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -5175,9 +5168,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -5844,9 +5835,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -6394,9 +6383,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -6777,7 +6764,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static PayloadFormat valueOf(int value) {
         return forNumber(value);
       }
@@ -7048,9 +7035,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -7552,9 +7537,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -7946,7 +7929,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static OperatorSelectMode valueOf(int value) {
         return forNumber(value);
       }
@@ -8163,7 +8146,7 @@ public final class BinaryMessages {
          * @return The enum associated with the given numeric wire value.
          * @deprecated Use {@link #forNumber(int)} instead.
          */
-        @java.lang.Deprecated
+        @Deprecated
         public static NetworkType valueOf(int value) {
           return forNumber(value);
         }
@@ -8453,9 +8436,7 @@ public final class BinaryMessages {
           maybeForceBuilderInitialization();
         }
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
+
         }
         @java.lang.Override
         public Builder clear() {
@@ -8496,10 +8477,6 @@ public final class BinaryMessages {
           return result;
         }
 
-//        @java.lang.Override
-//        public Builder clone() {
-//          return super.clone();
-//        }
         @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -8824,9 +8801,9 @@ public final class BinaryMessages {
           != other.getAllowDataRoaming()) return false;
       if (operatorSelectMode_ != other.operatorSelectMode_) return false;
       if (hasNetworkDescriptor() != other.hasNetworkDescriptor()) return false;
-      if (hasNetworkDescriptor()) {
-        if (!getNetworkDescriptor()
-            .equals(other.getNetworkDescriptor())) return false;
+      if (hasNetworkDescriptor() && !getNetworkDescriptor()
+              .equals(other.getNetworkDescriptor())) {
+         return false;
       }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -8974,9 +8951,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -9679,9 +9654,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -10272,9 +10245,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -10842,19 +10813,19 @@ public final class BinaryMessages {
       com.openxc.BinaryMessages.ModemConfigurationCommand other = (com.openxc.BinaryMessages.ModemConfigurationCommand) obj;
 
       if (hasNetworkOperatorSettings() != other.hasNetworkOperatorSettings()) return false;
-      if (hasNetworkOperatorSettings()) {
-        if (!getNetworkOperatorSettings()
-            .equals(other.getNetworkOperatorSettings())) return false;
+      if (hasNetworkOperatorSettings() && !getNetworkOperatorSettings()
+              .equals(other.getNetworkOperatorSettings())) {
+        return false;
       }
       if (hasNetworkDataSettings() != other.hasNetworkDataSettings()) return false;
-      if (hasNetworkDataSettings()) {
-        if (!getNetworkDataSettings()
-            .equals(other.getNetworkDataSettings())) return false;
+      if (hasNetworkDataSettings() && !getNetworkDataSettings()
+              .equals(other.getNetworkDataSettings())) {
+         return false;
       }
       if (hasServerConnectSettings() != other.hasServerConnectSettings()) return false;
-      if (hasServerConnectSettings()) {
-        if (!getServerConnectSettings()
-            .equals(other.getServerConnectSettings())) return false;
+      if (hasServerConnectSettings() && !getServerConnectSettings()
+              .equals(other.getServerConnectSettings())) {
+         return false;
       }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -11005,9 +10976,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -11849,9 +11818,8 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -12443,9 +12411,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -13020,7 +12986,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static DecodedType valueOf(int value) {
         return forNumber(value);
       }
@@ -13486,9 +13452,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -14428,9 +14392,9 @@ public final class BinaryMessages {
       if (!getPayload()
           .equals(other.getPayload())) return false;
       if (hasValue() != other.hasValue()) return false;
-      if (hasValue()) {
-        if (!getValue()
-            .equals(other.getValue())) return false;
+      if (hasValue() && !getValue()
+              .equals(other.getValue())) {
+         return false;
       }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -14588,9 +14552,7 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -15328,7 +15290,7 @@ public final class BinaryMessages {
        * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
-      @java.lang.Deprecated
+      @Deprecated
       public static Type valueOf(int value) {
         return forNumber(value);
       }
@@ -15690,9 +15652,8 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -16359,14 +16320,14 @@ public final class BinaryMessages {
       if (!getName()
           .equals(other.getName())) return false;
       if (hasValue() != other.hasValue()) return false;
-      if (hasValue()) {
-        if (!getValue()
-            .equals(other.getValue())) return false;
+      if (hasValue() && !getValue()
+              .equals(other.getValue())) {
+         return false;
       }
       if (hasEvent() != other.hasEvent()) return false;
-      if (hasEvent()) {
-        if (!getEvent()
-            .equals(other.getEvent())) return false;
+      if (hasEvent() && !getEvent()
+              .equals(other.getEvent())) {
+        return false;
       }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -16515,9 +16476,8 @@ public final class BinaryMessages {
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
+
       }
       @java.lang.Override
       public Builder clear() {

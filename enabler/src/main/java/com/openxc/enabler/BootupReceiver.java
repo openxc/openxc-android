@@ -14,11 +14,11 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
  * management.
  */
 public class BootupReceiver extends BroadcastReceiver {
-    private final static String TAG = BootupReceiver.class.getSimpleName();
+    private  static String Bootup_Receiver = BootupReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "Loading configured vehicle services on bootup");
+        Log.i(Bootup_Receiver, "Loading configured vehicle services on bootup");
         context.startService(new Intent(context, PreferenceManagerService.class));
     }
 }

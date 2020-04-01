@@ -1,10 +1,10 @@
 package com.openxc.interfaces;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import android.content.Context;
 import android.util.Log;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * A factory that uses reflection to create instance of VehicleInterface
@@ -51,6 +51,9 @@ public class VehicleInterfaceFactory {
         return build(findClass(interfaceName), context, resource);
     }
 
+    private  VehicleInterfaceFactory(){
+
+    }
     /**
      * Retrieve the Class for a given name and construct an instance of it.
      *

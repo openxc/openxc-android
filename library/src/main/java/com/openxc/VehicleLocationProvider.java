@@ -1,7 +1,5 @@
 package com.openxc;
 
-import java.lang.reflect.Method;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -13,6 +11,8 @@ import com.openxc.measurements.Longitude;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.UnrecognizedMeasurementTypeException;
 import com.openxc.measurements.VehicleSpeed;
+
+import java.lang.reflect.Method;
 
 /**
  * Propagate GPS and vehicle speed updates from OpenXC to the normal Android
@@ -123,7 +123,9 @@ public class VehicleLocationProvider implements Measurement.Listener {
                 makeCompleteMethod = Location.class.getMethod("makeComplete");
                 makeCompleteMethod.invoke(location);
             } catch(NoSuchMethodException e) {
+                Log.e(TAG, "makeLocationComplete: ",e );
             } catch(Exception e) {
+                Log.e(TAG, "makeLocationComplete: ",e );
             }
         } else {
             location.setTime(System.currentTimeMillis());

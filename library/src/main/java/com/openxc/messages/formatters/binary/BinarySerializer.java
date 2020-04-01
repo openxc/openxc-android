@@ -112,9 +112,9 @@ public class BinarySerializer {
         if(diagnosticRequest.hasPayload()) {
             requestBuilder.setPayload(ByteString.copyFrom(diagnosticRequest.getPayload()));
         }
-        // TODO add decoded_type when it hits the spec:
+        // TO DO add decoded_type when it hits the spec:
         // https://github.com/openxc/openxc-message-format/issues/17
-        // messageBuilder.setDecodedType(diagnosticRequest.getDecodedType());
+
 
         messageBuilder.setRequest(requestBuilder);
 
@@ -262,6 +262,6 @@ public class BinarySerializer {
         // could support with protobuf extensions but that is not something I
         // want to do right now
         throw new SerializationException(
-                "Can't serialize generic VehicleMessage to binary: " + message);
+                "Can't serialize generic VehicleMessage to binary: " + message + builder);
     }
 }

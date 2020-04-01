@@ -134,16 +134,6 @@ public abstract class VehiclePreferenceManager {
             }
         }
     }
-       /* public void onSharedPreferenceChanged(SharedPreferences preferences,
-                String key) {
-            for(int watchedKeyId : getWatchedPreferenceKeyIds()) {
-                if(key.equals(getString(watchedKeyId))) {
-                    readStoredPreferences();
-                    break;
-                }
-            }
-        }
-    }*/
 
     private void unwatchPreferences(SharedPreferences preferences,
             PreferenceListener listener) {
