@@ -66,6 +66,7 @@ public class SettingsActivity extends PreferenceActivity {
             "com.openxc.enabler.preferences.ABOUT";
     private final static String NOTIFICATION_PREFERENCE =
             "com.openxc.enabler.preferences.NOTIFICATION";
+    private final static String IS_TRACE_PLAYING_ENABLED = "isTracePlayingEnabled";
 
     private final static int FILE_SELECTOR_RESULT = 100;
 
@@ -199,18 +200,7 @@ public class SettingsActivity extends PreferenceActivity {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
             } else if(isDownloadsDocument(uri)) {
-                final String id = DocumentsContract.getDocumentId(uri);
-                if (!TextUtils.isEmpty(id)) {
-                    return id.replace("raw:", "");
-                }
-                try {
-                    final Uri contentUri = ContentUris.withAppendedId(
-                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-                    return getDataColumn(context, contentUri, null, null);
-                } catch (NumberFormatException e) {
-                    Log.i(TAG,e.getMessage());
-                    return null;
-                }
+                return getDownloadDocumentDetails(context, uri);
             }
         } else if ("file".equalsIgnoreCase(uri.getScheme()) ||
                 "content".equalsIgnoreCase(uri.getScheme())) {
@@ -220,7 +210,20 @@ public class SettingsActivity extends PreferenceActivity {
         return null;
     }
 
-
+    private static String getDownloadDocumentDetails(Context context, Uri uri) {
+        final String id = DocumentsContract.getDocumentId(uri);
+        if (!TextUtils.isEmpty(id)) {
+            return id.replace("raw:", "");
+        }
+        try {
+            final Uri contentUri = ContentUris.withAppendedId(
+                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+            return getDataColumn(context, contentUri, null, null);
+        } catch (NumberFormatException e) {
+            Log.i(TAG,e.getMessage());
+            return null;
+        }
+    }
 
 
     /**
@@ -655,10 +658,11 @@ public class SettingsActivity extends PreferenceActivity {
 
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = pref.edit();
+
             if(newSummary.equals("Pre-recorded Trace")) {
-                editor.putBoolean("isTracePlayingEnabled", true);
+                editor.putBoolean(IS_TRACE_PLAYING_ENABLED, true);
             }else{
-                editor.putBoolean("isTracePlayingEnabled", false);// Storing boolean
+                editor.putBoolean(IS_TRACE_PLAYING_ENABLED, false);// Storing boolean
             }
             editor.commit();
            // Log.d(TAG, "initializDataformatPreference: "+ getString(R.string.trace_interface_option_value));
@@ -752,7 +756,7 @@ public class SettingsActivity extends PreferenceActivity {
 
                 public boolean onPreferenceClick(Preference preference) {
                     SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    boolean isTracePlaying = sharedpreferences.getBoolean("isTracePlayingEnabled", false);
+                    boolean isTracePlaying = sharedpreferences.getBoolean(IS_TRACE_PLAYING_ENABLED, false);
                     Log.d(TAG, "Tracefile checklist recordvalue:" + isTracePlaying);
                     if (sharedpreferences != null && !isTracePlaying) {
                         //mTraceRecordingPreference.setChecked(true);
@@ -868,6 +872,7 @@ public class SettingsActivity extends PreferenceActivity {
                 }
                 return;
             }
+            default: return;
         }
     }
     private ServiceConnection mConnection = new ServiceConnection() {

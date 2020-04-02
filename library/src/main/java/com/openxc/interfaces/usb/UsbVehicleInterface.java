@@ -405,6 +405,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
                     Log.d(TAG, "Device detached");
                     disconnect();
                     break;
+                default: return;
             }
         }
     };

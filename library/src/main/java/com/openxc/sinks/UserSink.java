@@ -18,6 +18,7 @@ import com.openxc.remote.VehicleServiceInterface;
  */
 public class UserSink implements VehicleDataSink {
     private final static String TAG = UserSink.class.getSimpleName();
+    public static final String UNABLE_TO_SEND_MESSAGE_TO_REMOTE_SERVICE = "Unable to send message to remote service";
     private VehicleServiceInterface mService;
 
     /**
@@ -33,7 +34,7 @@ public class UserSink implements VehicleDataSink {
             try {
                 mService.receive(measurement);
             } catch(RemoteException e) {
-                Log.d(TAG, "Unable to send message to remote service", e);
+                Log.d(TAG, UNABLE_TO_SEND_MESSAGE_TO_REMOTE_SERVICE, e);
             }
         }
     }
