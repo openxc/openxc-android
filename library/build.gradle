@@ -5,13 +5,13 @@ group = "com.openxcplatform"
 version = rootProject.ext.versionName
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion 29
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
     lintOptions {
