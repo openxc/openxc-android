@@ -176,46 +176,12 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
                     break;
                 }
-
                 String line;
+
                 long startingTime = System.currentTimeMillis();
                 // In the future may want to support binary traces
                 try {
-                    while (mRunning && (line = reader.readLine()) != null) {
-
-                        VehicleMessage measurement;
-                        try {
-                            measurement = JsonFormatter.deserialize(line);
-                        } catch (UnrecognizedMessageTypeException e) {
-                            Log.w(TAG, "A trace line was not in the expected " +
-                                    "format: " + line);
-                            continue;
-                        }
-
-                        if (measurement == null) {
-                            continue;
-                        }
-
-                        if (measurement != null && !measurement.isTimestamped()) {
-                            Log.w(TAG, "A trace line was missing a timestamp: " +
-                                    line);
-                            continue;
-                        }
-
-                        try {
-                            waitForNextRecord(startingTime, measurement.getTimestamp());
-                        } catch (NumberFormatException e) {
-                            Log.w(TAG, "A trace line was not in the expected " +
-                                    "format: " + line);
-                            continue;
-                        }
-                        measurement.untimestamp();
-                        if (!mTraceValid) {
-                            connected();
-                            mTraceValid = true;
-                        }
-                        handleMessage(measurement);
-                    }
+                   readerTest(reader);
                 } catch (IOException e) {
                     Log.w(TAG, "An exception occurred when reading the trace " +
                             reader, e);
@@ -252,7 +218,46 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             }
         }
     }
+private  void readerTest(BufferedReader reader) throws  IOException {
+    String line;
+    long startingTime = System.currentTimeMillis();
+    while (mRunning && (line = reader.readLine()) != null) {
 
+            VehicleMessage measurement;
+            try {
+                measurement = JsonFormatter.deserialize(line);
+            } catch (UnrecognizedMessageTypeException e) {
+                Log.w(TAG, "A trace line was not in the expected " +
+                        "format: " + line);
+                continue;
+            }
+
+            if (measurement == null) {
+                continue;
+            }
+
+            if (!measurement.isTimestamped()) {
+                Log.w(TAG, "A trace line was missing a timestamp: " + line);
+                continue;
+            }
+
+            try {
+                waitForNextRecord(startingTime, measurement.getTimestamp());
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "A trace line was not in the expected " +
+                        "format: " + line);
+                continue;
+            }
+            measurement.untimestamp();
+            if (!mTraceValid) {
+                connected();
+                mTraceValid = true;
+            }
+            handleMessage(measurement);
+        }
+
+
+}
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)

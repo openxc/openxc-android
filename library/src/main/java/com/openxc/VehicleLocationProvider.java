@@ -117,7 +117,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
     private void makeLocationComplete(Location location) {
         if(android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            // TODO When android 4.2 hits the maven repository we can simplify
+            // TO DO When android 4.2 hits the maven repository we can simplify
             // this and call the makeComplete method directly, until then we use
             // reflection to load it without getting a compilation error.
             Method makeCompleteMethod;
@@ -158,19 +158,18 @@ public class VehicleLocationProvider implements Measurement.Listener {
             location.setSpeed((float) speed.getValue().doubleValue());
 
             makeLocationComplete(location);
-            try {
+
                 mLocationManager.setTestProviderLocation(
                         LocationManager.GPS_PROVIDER, location);
                 location.setProvider(VEHICLE_LOCATION_PROVIDER);
                 mLocationManager.setTestProviderLocation(
                         VEHICLE_LOCATION_PROVIDER, location);
-            } catch(SecurityException e) {
-                Log.w(TAG, UNABLE_TO_USE_MOCKED_LOCATIONS +
-                        INSUFFICIENT_PRIVILEGES_MAKE_SURE_MOCK_LOCATIONS, e);
-            } catch(IllegalArgumentException e) {
-                Log.w(TAG, "Unable to set test provider location", e);
-            }
+
+
+
         } catch(NoValueException e) {
+            Log.w(TAG, UNABLE_TO_USE_MOCKED_LOCATIONS +
+                    INSUFFICIENT_PRIVILEGES_MAKE_SURE_MOCK_LOCATIONS, e);
                 Log.w(TAG, "Can't update location, complete measurements not available yet");
         } catch(UnrecognizedMeasurementTypeException e) {
             // This is dumb that we know these measurements are good, but

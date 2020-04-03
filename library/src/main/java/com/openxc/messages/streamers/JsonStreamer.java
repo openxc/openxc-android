@@ -22,7 +22,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";
     private final static String DELIMITER = "\u0000";
 
-    private StringBuffer mBuffer = new StringBuffer();
+    private StringBuilder mBuffer = new StringBuilder();
 
     /**
      * Return true if the buffer *most likely* contains JSON (as opposed to a

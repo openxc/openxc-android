@@ -242,30 +242,15 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                     eventClass = Number.class;
                 }
 
-                try {
                     constructor = measurementType.getConstructor(
                             valueClass, eventClass);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(
-                            measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ", " + eventClass + ")");
-                }
+
 
                 measurement = constructor.newInstance(
                         eventedMessage.getValue(),
                         eventedMessage.getEvent());
             } else {
-                try {
                     constructor = measurementType.getConstructor(valueClass);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(
-                            measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ")");
-                }
 
                 measurement = constructor.newInstance(
                         simpleMessage.getValue());
@@ -289,7 +274,10 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + "'s constructor threw an exception",
                     e);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override

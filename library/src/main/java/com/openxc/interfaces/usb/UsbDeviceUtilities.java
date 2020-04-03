@@ -20,6 +20,10 @@ import java.net.URISyntaxException;
 public class UsbDeviceUtilities {
     public static final String USB_DEVICE_ERROR = "USB device must be of the format %s -- the given %s has a bad vendor ID";
     public static URI DEFAULT_USB_DEVICE_URI = null;
+    private  UsbDeviceUtilities() {
+
+    }
+
     static {
         try {
             DEFAULT_USB_DEVICE_URI = new URI("usb://1bc4/0001");

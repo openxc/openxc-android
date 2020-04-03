@@ -1,16 +1,20 @@
 package com.openxc.sinks;
 
-import org.junit.Test;
-import org.junit.Before;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
+import android.os.SystemClock;
 
-import org.robolectric.annotation.Config;
-import org.robolectric.RobolectricTestRunner;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceListener;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(RobolectricTestRunner.class)
 public class RemoteCallbackSinkTest {
@@ -60,9 +64,7 @@ public class RemoteCallbackSinkTest {
         assertNull(receivedId);
         SimpleVehicleMessage message = new SimpleVehicleMessage(messageId, 1);
         notifier.receive(message);
-        try {
-            Thread.sleep(50);
-        } catch(InterruptedException e) {}
+        SystemClock.sleep(50);
         assertNotNull(receivedId);
         assertEquals(receivedId, messageId);
     }

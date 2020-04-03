@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,9 +18,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
 import com.openxcplatform.enabler.R;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -68,9 +74,14 @@ public class viewTraces extends Activity {
                 });
 
                 btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onClick(View v) {
                         File file = new File(dirPath + "/" +  filename);
-                        file.delete();
+                        try {
+                            Files.delete(Paths.get(file.getPath()));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         alertD.dismiss();
                         finish();
                         startActivity(getIntent());

@@ -1,13 +1,9 @@
-
 package com.buglabs.dweetlib;
-
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -24,7 +20,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
 
 //
 //  DweetLib Android
@@ -101,7 +96,7 @@ public class DweetLib {
 
         final String urlstr = "https://dweet.io/dweet/for/" + thing;
         DweetTask dt = (DweetTask) thingProcess.get(urlstr);
-
+        Log.e("Dweet", "exception: " + key);
         if (!isNetworkingAvailable(currentCtx)) {
             Log.w(TAG, "no network error");
             if (caller!=null) {
@@ -176,7 +171,6 @@ public class DweetLib {
                 thingProcessCallback.remove(dt);
                 thingProcessCaller.remove(dt);
                 c.disconnect();
-                c = null;
                 dt.cancel(true);
                 thingProcessUrl.remove(dt);
                 dt = null;
@@ -186,46 +180,24 @@ public class DweetLib {
     }
 
     public String getRandomThingName() {
-        String newThingName = "";
+        String newThingName;
 
         AssetManager am = currentCtx.getAssets();
         ArrayList<String> stringArray = new ArrayList<String>();
-        newThingName = getAdjectives(newThingName, am, stringArray);
-        newThingName = newThingName.concat("-");
+        newThingName = getAdjectives( am, stringArray);
+        String newThingName1 = newThingName.concat("-");
         stringArray.clear();
-        newThingName = getNouns(newThingName, am,  stringArray);
+        newThingName = getNouns(newThingName1, am,  stringArray);
         return newThingName;
     }
 
-    private String getAdjectives(String newThingName, AssetManager am, ArrayList<String> stringArray) {
+    private String getAdjectives( AssetManager am, ArrayList<String> stringArray) {
         InputStream is = null;
-        BufferedReader br = null;
-        InputStreamReader inputStreamReader = null;
+        String newThingName = "";
         try {
             is = am.open("adjectives.txt");
-            String line = null;
-            try {
-                inputStreamReader = new InputStreamReader(is);
-                br = new BufferedReader(inputStreamReader);
-                while ((line = br.readLine()) != null) {
-                    stringArray.add(line);
-                }
-                int rand1 = this.rand.nextInt();
-                newThingName = newThingName.concat(stringArray.get(rand1));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (inputStreamReader != null) {
-                        inputStreamReader.close();
-                    }
-                    if (br != null) {
-                        br.close();
-                    }
-                }  catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            adjectivesException(newThingName,stringArray);
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -239,37 +211,31 @@ public class DweetLib {
         }
         return newThingName;
     }
+    public void adjectivesException(String newThingName,ArrayList<String> stringArray) throws IOException{
+        String line = null;
+        InputStream is = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedReader br = null;
+            inputStreamReader = new InputStreamReader(is);
+            br = new BufferedReader(inputStreamReader);
+            while ((line = br.readLine()) != null) {
+                stringArray.add(line);
+                int rand1 = this.rand.nextInt();
+                newThingName = newThingName.concat(stringArray.get(rand1));
+            }
 
+        inputStreamReader.close();
+        br.close();
+
+
+    }
     private String getNouns(String newThingName, AssetManager am,  ArrayList<String> stringArray) {
         InputStream is = null;
-        BufferedReader br = null;
-        InputStreamReader inputStreamReader = null;
+
         try {
             is = am.open("nouns.txt");
-            String line = null;
-            try {
-                inputStreamReader = new InputStreamReader(is);
-                br = new BufferedReader(inputStreamReader);
-                while ((line = br.readLine()) != null) {
-                    stringArray.add(line);
-                }
+            nounException(newThingName,stringArray);
 
-                int rand1 = this.rand.nextInt();
-                newThingName = newThingName.concat(stringArray.get(rand1));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (inputStreamReader != null) {
-                        inputStreamReader.close();
-                    }
-                    if (br != null) {
-                        br.close();
-                    }
-                }  catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -283,7 +249,23 @@ public class DweetLib {
         }
         return newThingName;
     }
+    private void nounException(String newThingName, ArrayList<String> stringArray) throws IOException{
+        BufferedReader br = null;
+        InputStream is = null;
+        InputStreamReader inputStreamReader = null;
+        String line = null;
 
+        inputStreamReader = new InputStreamReader(is);
+        br = new BufferedReader(inputStreamReader);
+        while ((line = br.readLine()) != null) {
+            stringArray.add(line);
+            int rand1 = this.rand.nextInt();
+            newThingName = newThingName.concat(stringArray.get(rand1));
+        }
+
+        inputStreamReader.close();
+        br.close();
+    }
 
     private class DweetTask extends AsyncTask<Object,String,Integer> {
 

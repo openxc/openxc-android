@@ -15,7 +15,10 @@ import com.openxc.messages.SerializationException;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
-public class BinarySerializer {
+public class  BinarySerializer {
+    private BinarySerializer() {
+        throw new IllegalStateException("BinarySerializer class");
+    }
     public static MessageLite preSerialize(VehicleMessage message)
             throws SerializationException {
         if(message.hasExtras()) {

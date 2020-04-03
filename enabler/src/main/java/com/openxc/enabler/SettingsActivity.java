@@ -737,7 +737,7 @@ public class SettingsActivity extends PreferenceActivity {
                     SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean isTracePlaying = sharedpreferences.getBoolean(IS_TRACE_PLAYING_ENABLED, false);
                     Log.d(TAG, "Tracefile checklist recordvalue:" + isTracePlaying);
-                    if (sharedpreferences == null && isTracePlaying) {
+                    if (isTracePlaying ) {
                         Toast.makeText(getApplicationContext(),"Please stop Tracefile Playing",Toast.LENGTH_SHORT).show();
                         mTraceRecordingPreference.setChecked(false);
                     }
