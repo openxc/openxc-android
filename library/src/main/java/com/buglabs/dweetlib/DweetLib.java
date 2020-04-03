@@ -197,7 +197,6 @@ public class DweetLib {
         try {
             is = am.open("adjectives.txt");
             adjectivesException(newThingName,stringArray);
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -235,7 +234,6 @@ public class DweetLib {
         try {
             is = am.open("nouns.txt");
             nounException(newThingName,stringArray);
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
