@@ -1,8 +1,9 @@
 package com.openxc;
 
 import android.content.Context;
-import android.os.SystemClock;
+
 import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -12,7 +13,12 @@ import static org.junit.Assert.fail;
 
 public class TestUtils {
     public static void pause(int millis) {
-        SystemClock.sleep(millis);
+        try {
+            Thread.sleep(millis);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+       // SystemClock.sleep(millis);
 
     }
 

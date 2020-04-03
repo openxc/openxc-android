@@ -1,6 +1,5 @@
 package com.openxc.sources.trace;
 
-import android.os.SystemClock;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -65,7 +64,10 @@ public class TraceVehicleDataSourceTest extends AndroidTestCase {
     private void startTrace(TraceVehicleDataSource source) {
         thread = new Thread(source);
         thread.start();
-        SystemClock.sleep(500);
+        try {
+            Thread.sleep(500);
+        } catch(InterruptedException e) {}
+       // SystemClock.sleep(500);
     }
 
     @SmallTest

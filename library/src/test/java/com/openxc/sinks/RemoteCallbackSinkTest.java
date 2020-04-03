@@ -1,7 +1,5 @@
 package com.openxc.sinks;
 
-import android.os.SystemClock;
-
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
@@ -64,7 +62,9 @@ public class RemoteCallbackSinkTest {
         assertNull(receivedId);
         SimpleVehicleMessage message = new SimpleVehicleMessage(messageId, 1);
         notifier.receive(message);
-        SystemClock.sleep(50);
+        try {
+            Thread.sleep(50);
+        } catch(InterruptedException e) {}
         assertNotNull(receivedId);
         assertEquals(receivedId, messageId);
     }
