@@ -30,13 +30,13 @@ public class JsonStreamer extends VehicleMessageStreamer {
      * protobuf).
      */
     public static boolean containsJson(String buffer) {
-        return CharMatcher.ASCII
+        return CharMatcher.ascii()
             // We need to allow the \u0000 delimiter for JSON messages, so we
             // can't use the JAVA_ISO_CONTROL character set and must build the
             // range manually (minus \u0000)
             .and(CharMatcher.inRange('\u0001', '\u001f').negate())
             .and(CharMatcher.inRange('\u007f', '\u009f').negate())
-            .and(CharMatcher.ASCII)
+            .and(CharMatcher.ascii())
             .matchesAllOf(buffer);
     }
 

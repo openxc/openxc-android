@@ -13,7 +13,7 @@
         <Spinner
                 android:id="@+id/bus_spinner"
                 style="@style/ItemData"
-                android:popupBackground="@android:color/white"
+                android:popupBackground="@android:color/black"
                 android:layout_weight="1" />
 
     </LinearLayout>
