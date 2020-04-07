@@ -316,7 +316,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             if(mVehicleInterface == null ||
                     !mVehicleInterface.getClass().isAssignableFrom(
                         interfaceType)) {
-                status = addtVehicleInterfaceToPipeline(resource, interfaceType, status);
+                status = addVehicleInterfaceToPipeline(resource, interfaceType, status);
             } else {
                 setResource(resource);
             }
@@ -324,7 +324,7 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         return status;
     }
 
-    private boolean addtVehicleInterfaceToPipeline(String resource, Class<? extends VehicleInterface> interfaceType, boolean status) {
+    private boolean addVehicleInterfaceToPipeline(String resource, Class<? extends VehicleInterface> interfaceType, boolean status) {
         try {
             mVehicleInterface = VehicleInterfaceFactory.build(
                     interfaceType, VehicleService.this, resource);

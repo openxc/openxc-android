@@ -210,7 +210,7 @@ public class DweetLib {
                 while ((line = br.readLine()) != null) {
                     stringArray.add(line);
                 }
-                int rand1 = this.rand.nextInt();
+                int rand1 = this.rand.nextInt(stringArray.size() - 1);
                 newThingName = newThingName.concat(stringArray.get(rand1));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -254,7 +254,7 @@ public class DweetLib {
                     stringArray.add(line);
                 }
 
-                int rand1 = this.rand.nextInt();
+                int rand1 = this.rand.nextInt(stringArray.size() - 1);
                 newThingName = newThingName.concat(stringArray.get(rand1));
             } catch (IOException e) {
                 e.printStackTrace();
