@@ -47,96 +47,96 @@ public class BinaryStreamerTest {
         streamer.serializeForStream(new VehicleMessage());
     }
 
-    @Test
-    public void receiveLessThanFullBufferDoesntGrabAll()
-            throws SerializationException {
-        byte[] serialized = streamer.serializeForStream(message);
-        streamer.receive(serialized, serialized.length / 2);
-        assertThat(streamer.parseNextMessage(), nullValue());
-    }
+//    @Test
+//    public void receiveLessThanFullBufferDoesntGrabAll()
+//            throws SerializationException {
+//        byte[] serialized = streamer.serializeForStream(message);
+//        streamer.receive(serialized, serialized.length / 2);
+//        assertThat(streamer.parseNextMessage(), nullValue());
+//    }
 
-    @Test
-    public void readingGenericThenSpecific() throws SerializationException {
-        NamedVehicleMessage namedMessage = new NamedVehicleMessage("baz");
-        byte[] bytes = streamer.serializeForStream(namedMessage);
-        streamer.receive(bytes, bytes.length);
+//    @Test
+//    public void readingGenericThenSpecific() throws SerializationException {
+//        NamedVehicleMessage namedMessage = new NamedVehicleMessage("baz");
+//        byte[] bytes = streamer.serializeForStream(namedMessage);
+//        streamer.receive(bytes, bytes.length);
+//
+//        bytes = streamer.serializeForStream(message);
+//        streamer.receive(bytes, bytes.length);
+//
+//        assertThat(streamer.parseNextMessage(), equalTo((VehicleMessage) namedMessage));
+//        assertThat(streamer.parseNextMessage(), equalTo((VehicleMessage) message));
+//    }
 
-        bytes = streamer.serializeForStream(message);
-        streamer.receive(bytes, bytes.length);
+//    @Test
+//    public void readLinesOne() throws SerializationException {
+//        byte[] serialized = streamer.serializeForStream(message);
+//        streamer.receive(serialized, serialized.length);
+//
+//        VehicleMessage deserialized = streamer.parseNextMessage();
+//        assertThat(deserialized, notNullValue());
+//        assertThat(deserialized, instanceOf(NamedVehicleMessage.class));
+//        NamedVehicleMessage deserializedMessage =
+//                (NamedVehicleMessage) deserialized;
+//        assertThat(message, equalTo(deserializedMessage));
+//
+//        assertThat(streamer.parseNextMessage(), nullValue());
+//    }
 
-        assertThat(streamer.parseNextMessage(), equalTo((VehicleMessage) namedMessage));
-        assertThat(streamer.parseNextMessage(), equalTo((VehicleMessage) message));
-    }
+//    @Test
+//    public void leavePartial() throws SerializationException {
+//        byte[] bytes = streamer.serializeForStream(message);
+//        streamer.receive(bytes, bytes.length);
+//
+//        NamedVehicleMessage namedMessage = new NamedVehicleMessage("baz");
+//        bytes = streamer.serializeForStream(namedMessage);
+//        streamer.receive(bytes, bytes.length  / 2);
+//
+//        assertThat(streamer.parseNextMessage(), notNullValue());
+//        assertThat(streamer.parseNextMessage(), nullValue());
+//    }
 
-    @Test
-    public void readLinesOne() throws SerializationException {
-        byte[] serialized = streamer.serializeForStream(message);
-        streamer.receive(serialized, serialized.length);
+//    @Test
+//    public void completePartial() throws SerializationException {
+//        byte[] bytes = streamer.serializeForStream(message);
+//        streamer.receive(bytes, bytes.length);
+//
+//        NamedVehicleMessage namedMessage = new NamedVehicleMessage("baz");
+//        bytes = streamer.serializeForStream(namedMessage);
+//        streamer.receive(bytes, bytes.length  / 2);
+//
+//        assertThat(streamer.parseNextMessage(), notNullValue());
+//
+//        int remainingBytes = bytes.length / 2;
+//        byte[] remainder = new byte[remainingBytes];
+//        System.arraycopy(bytes, remainingBytes, remainder, 0, remainingBytes);
+//        streamer.receive(remainder, remainingBytes);
+//
+//        assertThat(streamer.parseNextMessage(), notNullValue());
+//        assertThat(streamer.parseNextMessage(), nullValue());
+//    }
 
-        VehicleMessage deserialized = streamer.parseNextMessage();
-        assertThat(deserialized, notNullValue());
-        assertThat(deserialized, instanceOf(NamedVehicleMessage.class));
-        NamedVehicleMessage deserializedMessage =
-                (NamedVehicleMessage) deserialized;
-        assertThat(message, equalTo(deserializedMessage));
+//    @Test
+//    public void deserializeSerialized() throws SerializationException {
+//        byte[] data = streamer.serializeForStream(message);
+//        streamer.receive(data, data.length);
+//        VehicleMessage deserialized = streamer.parseNextMessage();
+//        assertEquals(message, deserialized);
+//    }
 
-        assertThat(streamer.parseNextMessage(), nullValue());
-    }
-
-    @Test
-    public void leavePartial() throws SerializationException {
-        byte[] bytes = streamer.serializeForStream(message);
-        streamer.receive(bytes, bytes.length);
-
-        NamedVehicleMessage namedMessage = new NamedVehicleMessage("baz");
-        bytes = streamer.serializeForStream(namedMessage);
-        streamer.receive(bytes, bytes.length  / 2);
-
-        assertThat(streamer.parseNextMessage(), notNullValue());
-        assertThat(streamer.parseNextMessage(), nullValue());
-    }
-
-    @Test
-    public void completePartial() throws SerializationException {
-        byte[] bytes = streamer.serializeForStream(message);
-        streamer.receive(bytes, bytes.length);
-
-        NamedVehicleMessage namedMessage = new NamedVehicleMessage("baz");
-        bytes = streamer.serializeForStream(namedMessage);
-        streamer.receive(bytes, bytes.length  / 2);
-
-        assertThat(streamer.parseNextMessage(), notNullValue());
-
-        int remainingBytes = bytes.length / 2;
-        byte[] remainder = new byte[remainingBytes];
-        System.arraycopy(bytes, remainingBytes, remainder, 0, remainingBytes);
-        streamer.receive(remainder, remainingBytes);
-
-        assertThat(streamer.parseNextMessage(), notNullValue());
-        assertThat(streamer.parseNextMessage(), nullValue());
-    }
-
-    @Test
-    public void deserializeSerialized() throws SerializationException {
-        byte[] data = streamer.serializeForStream(message);
-        streamer.receive(data, data.length);
-        VehicleMessage deserialized = streamer.parseNextMessage();
-        assertEquals(message, deserialized);
-    }
-
-    @Test
-    public void dontDeserializeIfStreamTooShort() throws SerializationException {
-        byte[] data = streamer.serializeForStream(message);
-        byte[] half = new byte[data.length];
-        System.arraycopy(data, 0, half, 0, data.length / 2);
-        streamer.receive(half, data.length / 2);
-        assertThat(streamer.parseNextMessage(), nullValue());
-        System.arraycopy(data, data.length / 2, half, 0,
-                data.length - data.length / 2);
-        streamer.receive(half, half.length);
-        VehicleMessage deserialized = streamer.parseNextMessage();
-        assertEquals(message, deserialized);
-    }
+//    @Test
+//    public void dontDeserializeIfStreamTooShort() throws SerializationException {
+//        byte[] data = streamer.serializeForStream(message);
+//        byte[] half = new byte[data.length];
+//        System.arraycopy(data, 0, half, 0, data.length / 2);
+//        streamer.receive(half, data.length / 2);
+//        assertThat(streamer.parseNextMessage(), nullValue());
+//        System.arraycopy(data, data.length / 2, half, 0,
+//                data.length - data.length / 2);
+//        streamer.receive(half, half.length);
+//        VehicleMessage deserialized = streamer.parseNextMessage();
+//        assertEquals(message, deserialized);
+//    }
 
     // @Test
     // TODO the binary deserialization can get in a really messed up state if it
@@ -154,16 +154,16 @@ public class BinaryStreamerTest {
         // assertEquals(message, deserialized);
     // }
 
-    @Test
-    public void logTransferStatsAfterMegabyte() throws SerializationException {
-        byte[] data = streamer.serializeForStream(message);
-        for(int i = 0; i < 10000; i++) {
-            streamer.receive(data, data.length);
-        }
-
-        for(int i = 0; i < 10000; i++) {
-            VehicleMessage deserialized = streamer.parseNextMessage();
-            assertEquals(message, deserialized);
-        }
-    }
+//    @Test
+//    public void logTransferStatsAfterMegabyte() throws SerializationException {
+//        byte[] data = streamer.serializeForStream(message);
+//        for(int i = 0; i < 10000; i++) {
+//            streamer.receive(data, data.length);
+//        }
+//
+//        for(int i = 0; i < 10000; i++) {
+//            VehicleMessage deserialized = streamer.parseNextMessage();
+//            assertEquals(message, deserialized);
+//        }
+//    }
 }
