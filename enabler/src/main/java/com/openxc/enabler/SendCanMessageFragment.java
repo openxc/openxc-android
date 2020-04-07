@@ -25,6 +25,7 @@ import com.openxc.messages.formatters.ByteAdapter;
 import com.openxcplatform.enabler.R;
 
 public class SendCanMessageFragment extends ListFragment implements TextWatcher  {
+    public static final String PAYLOAD_IS_REQUIRED = "Payload is required";
     private static String TAG = "SendCanMessageFragment";
 
     private VehicleManager mVehicleManager;
@@ -105,35 +106,35 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
             validInput = false;
         }
         if (payLoadValue1.isEmpty()) {
-            payLoad1.setError("Payload is required");
+            payLoad1.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue2.isEmpty()) {
-            payLoad2.setError("Payload is required");
+            payLoad2.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue3.isEmpty()) {
-            payLoad3.setError("Payload is required");
+            payLoad3.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue4.isEmpty()) {
-            payLoad4.setError("Payload is required");
+            payLoad4.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue5.isEmpty()) {
-            payLoad5.setError("Payload is required");
+            payLoad5.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue6.isEmpty()) {
-            payLoad6.setError("Payload is required");
+            payLoad6.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue7.isEmpty()) {
-            payLoad7.setError("Payload is required");
+            payLoad7.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
         if (payLoadValue8.isEmpty()) {
-            payLoad8.setError("Payload is required");
+            payLoad8.setError(PAYLOAD_IS_REQUIRED);
             validInput = false;
         }
 
@@ -216,45 +217,35 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
     @Override
     public void afterTextChanged(Editable s) {
         if (s.length() == 2) {
-            if (payLoad1.getText().toString().trim().length() == 2) {
-                payLoad1.clearFocus();
-                payLoad2.requestFocus();
-                payLoad2.setCursorVisible(true);
-            }
-            if (payLoad2.getText().toString().trim().length() == 2) {
-                payLoad2.clearFocus();
-                payLoad3.requestFocus();
-                payLoad3.setCursorVisible(true);
-            }
-            if (payLoad3.getText().toString().trim().length() == 2) {
-                payLoad3.clearFocus();
-                payLoad4.requestFocus();
-                payLoad4.setCursorVisible(true);
-            }
-            if (payLoad4.getText().toString().trim().length() == 2) {
-                payLoad4.clearFocus();
-                payLoad5.requestFocus();
-                payLoad5.setCursorVisible(true);
-            }
-            if (payLoad5.getText().toString().trim().length() == 2) {
-                payLoad5.clearFocus();
-                payLoad6.requestFocus();
-                payLoad6.setCursorVisible(true);
-            }
-            if (payLoad6.getText().toString().trim().length() == 2) {
-                payLoad6.clearFocus();
-                payLoad7.requestFocus();
-                payLoad7.setCursorVisible(true);
-            }
-            if (payLoad7.getText().toString().trim().length() == 2) {
-                payLoad7.clearFocus();
-                payLoad8.requestFocus();
-                payLoad8.setCursorVisible(true);
-            }
-            if (payLoad8.getText().toString().trim().length() == 2) {
-                payLoad8.setCursorVisible(true);
-                payLoad8.requestFocus();
+            payLoadChanged(payLoad1, payLoad2);
+            payLoadChanged(payLoad2, payLoad3);
+            payLoadChanged(payLoad3, payLoad4);
+            payLoadChanged(payLoad4, payLoad5);
+            payLoadChanged(payLoad5, payLoad6);
+            payLoadChanged(payLoad6, payLoad7);
+            payLoadChanged(payLoad7, payLoad8);
+            if (getLength(payLoad8) == 2) {
+                requestFocusAndCursorVisible(payLoad8);
             }
         }
+    }
+
+    private void payLoadChanged(EditText payLoad1, EditText payLoad2) {
+        if (getLength(payLoad1) == 2) {
+            requestFocusAndCursorVisible(payLoad1, payLoad2);
+        }
+    }
+
+    private int getLength(EditText payLoad) {
+        return payLoad.getText().toString().trim().length();
+    }
+
+    private void requestFocusAndCursorVisible(EditText payLoad1, EditText payLoad2) {
+        payLoad1.clearFocus();
+        requestFocusAndCursorVisible(payLoad2);
+    }
+        private void requestFocusAndCursorVisible(EditText payLoad) {
+        payLoad.requestFocus();
+        payLoad.setCursorVisible(true);
     }
 }

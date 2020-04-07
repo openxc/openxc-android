@@ -295,9 +295,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
     @Override
     protected void connect() {
-        if (!mUsePolling || !isRunning()) {
+        if (establishConnect())
             return;
-        }
 
         Log.i(TAG, "Beginning polling for Bluetooth devices");
 
@@ -311,21 +310,9 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
 
             if (address != null) {
                 Log.i(TAG, "Connecting to Bluetooth device " + address + " device is BLE : " + mDeviceManager.isBLEDevice(address));
-                try {
-                    if (!isConnected()) {
-                        if (!mDeviceManager.isBLEDevice(address)) {
-                            connectingToBLE = false;
-                            newSocket = mDeviceManager.connect(address);
-                        } else if (!mDeviceManager.isBLEConnected()) {
-                            connectingToBLE = true;
-                            bluetoothGatt = mDeviceManager.connectBLE(address);
-                        }
-                    }
-                } catch (BluetoothException e) {
-                    Log.w(TAG, "Unable to connect to device " + address, e);
-                    newSocket = null;
-                    bluetoothGatt = null;
-                }
+                newSocket=getSocket(address);
+                bluetoothGatt=getBluetoothGatt(address);
+
             } else {
                 Log.d(TAG, "No detected or stored Bluetooth device MAC, not attempting connection");
             }
@@ -343,34 +330,92 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
             addLastConnectedDevice(lastConnectedDevice, candidateDevices);
 
             for (BluetoothDevice device : candidateDevices) {
-                try {
                     if (!isConnected()) {
                         Log.i(TAG, "Attempting connection to auto-detected " +
                                 "VI " + device);
-                        if (!mDeviceManager.isBLEDevice(device)) {
-                            connectingToBLE = false;
-                            newSocket = mDeviceManager.connect(device);
-                        } else {
-                            connectingToBLE = true;
-                            bluetoothGatt = mDeviceManager.connectBLE(device);
-                        }
+                            newSocket = getSocket(device);
+                            bluetoothGatt = getBluetoothGatt(device);
                         break;
                     }
-                } catch (BluetoothException e) {
-                    Log.w(TAG, "Unable to connect to auto-detected device " +
-                            device, e);
-                    newSocket = null;
-                    bluetoothGatt = null;
-                }
+
             }
 
             storeLastConnectedDevice(lastConnectedDevice, newSocket, candidateDevices);
         }
+        manageBluetoothSocketAndGatt(newSocket, bluetoothGatt);
+    }
+
+    private BluetoothGatt getBluetoothGatt(BluetoothDevice device) {
+        BluetoothGatt bluetoothGatt=null;
+try{
+        if (mDeviceManager.isBLEDevice(device)) {
+            connectingToBLE = true;
+            bluetoothGatt = mDeviceManager.connectBLE(device);
+        }
+    } catch (BluetoothException e) {
+        Log.w(TAG, "Unable to connect to auto-detected device " +
+                device, e);
+    }
+        return bluetoothGatt;
+    }
+
+    private BluetoothSocket getSocket(BluetoothDevice device) {
+        BluetoothSocket newSocket=null;
+       try{ if (!mDeviceManager.isBLEDevice(device)) {
+            connectingToBLE = false;
+            newSocket = mDeviceManager.connect(device);
+        }
+    } catch (BluetoothException e) {
+        Log.w(TAG, "Unable to connect to auto-detected device " +
+                device, e);
+    }
+        return newSocket;
+    }
+
+    private void manageBluetoothSocketAndGatt(BluetoothSocket newSocket, BluetoothGatt bluetoothGatt) {
         if (connectingToBLE && bluetoothGatt != null) {
             manageConnectedGatt(bluetoothGatt);
         } else if(!connectingToBLE){
             manageConnectedSocket(newSocket);
         }
+    }
+
+    private BluetoothGatt getBluetoothGatt(String address ) {
+        BluetoothGatt bluetoothGatt = null;
+        if (!isConnected()) {
+            if (mDeviceManager.isBLEDevice(address) && !mDeviceManager.isBLEConnected()) {
+                try {
+                    connectingToBLE = true;
+                    bluetoothGatt = mDeviceManager.connectBLE(address);
+                } catch (BluetoothException e) {
+                    Log.w(TAG, "Unable to connect to device " + address, e);
+                }
+            }
+        }
+        return  bluetoothGatt;
+    }
+
+    private BluetoothSocket getSocket(String address ) {
+        BluetoothSocket newSocket = null;
+
+        try {
+            if (!isConnected()) {
+                if (!mDeviceManager.isBLEDevice(address)) {
+                    connectingToBLE = false;
+                    newSocket = mDeviceManager.connect(address);
+                }
+            }
+        } catch (BluetoothException e) {
+            Log.w(TAG, "Unable to connect to device " + address, e);
+        }
+        return  newSocket;
+    }
+
+    private boolean establishConnect() {
+        if (!mUsePolling || !isRunning()) {
+            return true;
+        }
+        return false;
     }
 
     private void addLastConnectedDevice(BluetoothDevice lastConnectedDevice, ArrayList<BluetoothDevice> candidateDevices) {

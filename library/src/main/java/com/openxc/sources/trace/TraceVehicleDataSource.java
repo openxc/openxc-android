@@ -168,79 +168,19 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
             Log.d(TAG, "Starting trace playback from beginning of " + mFilename);
             BufferedReader reader = null;
             if (checkPermission()) {
-                try {
-                    reader = openFile(mFilename);
-                } catch (DataSourceException e) {
-                    Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+                reader = getBufferedReader();
+                if(null == reader)
                     break;
-                }
 
-                String line;
-                long startingTime = System.currentTimeMillis();
-                // In the future may want to support binary traces
-                try {
-                    while (mRunning && (line = reader.readLine()) != null) {
-                        //Log.e(TAG, "Line:" + line);
-                        VehicleMessage measurement;
-                        try {
-                            measurement = JsonFormatter.deserialize(line);
-                        } catch (UnrecognizedMessageTypeException e) {
-                            Log.w(TAG, "A trace line was not in the expected " +
-                                    "format: " + line);
-                            continue;
-                        }
-
-                        if (measurement == null) {
-                            continue;
-                        }
-
-                        if (measurement != null && !measurement.isTimestamped()) {
-                            Log.w(TAG, "A trace line was missing a timestamp: " +
-                                    line);
-                            continue;
-                        }
-
-                        try {
-                            waitForNextRecord(startingTime, measurement.getTimestamp());
-                        } catch (NumberFormatException e) {
-                            Log.w(TAG, "A trace line was not in the expected " +
-                                    "format: " + line);
-                            continue;
-                        }
-                        measurement.untimestamp();
-                        if (!mTraceValid) {
-                            connected();
-                            mTraceValid = true;
-                        }
-                        handleMessage(measurement);
-                    }
-                } catch (IOException e) {
-                    Log.w(TAG, "An exception occurred when reading the trace " +
-                            reader, e);
+                if (processMessage(reader))
                     break;
-                } finally {
-                    try {
-                        if (reader != null) {
-                            reader.close();
-                        }
-                    } catch (IOException e) {
-                        Log.w(TAG, "Couldn't even close the trace file", e);
-                    }
-                }
 
                 disconnected();
                 Log.d(TAG, "Restarting playback of trace " + mFilename);
                 // Set this back to false so the VI shows as "disconnected" for
                 // a second before reconnecting.
                 mTraceValid = false;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    mRunning = false;
-                    Log.w(TAG, "Interrupted...");
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                }
+                sleep();
             }
             disconnected();
             boolean isDisableTraceLooping = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isDisabledTracePlayingLoop", false);
@@ -249,6 +189,102 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
             }
         } // while(mRunning)
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            mRunning = false;
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private BufferedReader getBufferedReader() {
+        BufferedReader reader=null;
+        try {
+            reader = openFile(mFilename);
+        } catch (DataSourceException e) {
+            Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
+        }
+        return reader;
+    }
+
+    private boolean processMessage(BufferedReader reader) {
+        String line;
+        long startingTime = System.currentTimeMillis();
+        // In the future may want to support binary traces
+        try {
+            while (mRunning && (line = reader.readLine()) != null) {
+                VehicleMessage measurement = getVehicleMessage(line);
+
+                if (checkMesasurement(line, measurement))
+                    continue;
+
+                if (waitForNextRecord(line, startingTime, measurement))
+                    continue;
+                unTimestampAndHandleMessage(measurement);
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "An exception occurred when reading the trace " +
+                    reader, e);
+            return true;
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Couldn't even close the trace file", e);
+            }
+        }
+        return false;
+    }
+
+    private VehicleMessage getVehicleMessage(String line) {
+        VehicleMessage measurement=null;
+        try {
+            measurement = JsonFormatter.deserialize(line);
+        } catch (UnrecognizedMessageTypeException e) {
+            Log.w(TAG, "A trace line was not in the expected " +
+                    "format: " + line);
+        }
+        return measurement;
+    }
+
+    private void unTimestampAndHandleMessage(VehicleMessage measurement) {
+        measurement.untimestamp();
+        if (!mTraceValid) {
+            connected();
+            mTraceValid = true;
+        }
+        handleMessage(measurement);
+    }
+
+    private boolean waitForNextRecord(String line, long startingTime, VehicleMessage measurement) {
+        try {
+            waitForNextRecord(startingTime, measurement.getTimestamp());
+        } catch (NumberFormatException e) {
+            Log.w(TAG, "A trace line was not in the expected " +
+                    "format: " + line);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkMesasurement(String line, VehicleMessage measurement) {
+        if (measurement == null) {
+            return true;
+        }
+
+        if (measurement != null && !measurement.isTimestamped()) {
+            Log.w(TAG, "A trace line was missing a timestamp: " +
+                    line);
+            return true;
+        }
+        return false;
     }
 
     private boolean checkPermission() {

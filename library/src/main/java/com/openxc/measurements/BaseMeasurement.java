@@ -227,19 +227,13 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
         try {
             Measurement measurement;
             SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
-            Class<?> valueClass = simpleMessage.getValue().getClass();
-            if(valueClass == Double.class || valueClass == Integer.class) {
-                valueClass = Number.class;
-            }
+            Class<?> valueClass = getaClass(simpleMessage.getValue());
 
             if(message instanceof EventedSimpleVehicleMessage) {
                 EventedSimpleVehicleMessage eventedMessage =
                         message.asEventedMessage();
 
-                Class<?> eventClass = eventedMessage.getEvent().getClass();
-                if(eventClass == Double.class || eventClass == Integer.class) {
-                    eventClass = Number.class;
-                }
+                Class<?> eventClass = getaClass(eventedMessage.getEvent());
 
                 try {
                     constructor = measurementType.getConstructor(
@@ -289,6 +283,14 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                     measurementType + "'s constructor threw an exception",
                     e);
         }
+    }
+
+    private static Class<?> getaClass(Object value) {
+        Class<?> valueClass = value.getClass();
+        if (valueClass == Double.class || valueClass == Integer.class) {
+            valueClass = Number.class;
+        }
+        return valueClass;
     }
 
     @Override
