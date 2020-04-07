@@ -131,7 +131,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         while(isRunning()) {
             if (getConnection()) break;
 
-            int received ;
+            int received;
             byte[] bytes = new byte[READ_BATCH_SIZE];
             try {
                 received = read(bytes);
