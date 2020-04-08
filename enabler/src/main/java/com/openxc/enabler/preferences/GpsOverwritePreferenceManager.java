@@ -19,7 +19,7 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     public GpsOverwritePreferenceManager(Context context) {
         super(context);
     }
-
+    @Override
     public void close() {
         super.close();
         if(getVehicleManager() != null){
@@ -29,20 +29,6 @@ public class GpsOverwritePreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener(){
-        /*return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.gps_overwrite_checkbox_key,
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setNativeGpsOverwriteStatus(getPreferences().getBoolean(
-                            getString(R.string.gps_overwrite_checkbox_key), false));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 

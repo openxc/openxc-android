@@ -7,20 +7,20 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import androidx.fragment.app.ListFragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
+import androidx.fragment.app.ListFragment;
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxcplatform.enabler.R;
 
 public class CanMessageViewFragment extends ListFragment {
-    private static String TAG = "CanMessageView";
+    private final static String CanMessage = "CanMessageView";
 
     private VehicleManager mVehicleManager;
     private CanMessageAdapter canMessageAdapter;
@@ -42,7 +42,7 @@ public class CanMessageViewFragment extends ListFragment {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
-            Log.i(TAG, "Bound to VehicleManager");
+            Log.i(CanMessage, "Bound to VehicleManager");
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
@@ -50,7 +50,7 @@ public class CanMessageViewFragment extends ListFragment {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.w(TAG, "VehicleService disconnected unexpectedly");
+            Log.w(CanMessage, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
         }
     };
@@ -64,9 +64,8 @@ public class CanMessageViewFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.can_message_list_fragment,
+        return inflater.inflate(R.layout.can_message_list_fragment,
                 container, false);
-        return v;
     }
 
     @Override
@@ -84,14 +83,14 @@ public class CanMessageViewFragment extends ListFragment {
                     mConnection, Context.BIND_AUTO_CREATE);
         } else {
             if(mVehicleManager != null) {
-                Log.i(TAG, "Unbinding from vehicle service");
+                Log.i(CanMessage, "Unbinding from vehicle service");
                 mVehicleManager.removeListener(CanMessage.class, mListener);
                 getActivity().unbindService(mConnection);
                 mVehicleManager = null;
             }
         }
     }
-
+    @Override
     public void onListItemClick(ListView listView, View view,
             int position, long id) {
         Intent intent = new Intent(getActivity(),
@@ -100,6 +99,5 @@ public class CanMessageViewFragment extends ListFragment {
                 canMessageAdapter.getItem(position));
         // This activity is not very useful or performant right now so it isn't
         // enabled - see https://github.com/openxc/openxc-android/issues/159
-        // startActivity(intent);
     }
 }

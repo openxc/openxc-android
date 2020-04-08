@@ -1,16 +1,20 @@
 package com.openxc.util;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
 
 import com.google.common.base.Joiner;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class SupportSettingsUtils {
+
+    private  SupportSettingsUtils(){
+
+    }
 
     private static boolean supportsStringSet() {
         return android.os.Build.VERSION.SDK_INT >=

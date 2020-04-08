@@ -17,16 +17,6 @@ package com.openxc.messages.formatters;
 //          partial Frame
 //     3) Size refers to the number of characters of payload in the Partial
 //
-// The Message structure from Ja'mez email 1/6/2020
-//    {"bus": 1,
-//            "frame": 0,               // Required Multiframe field
-//            "total_size" : 0,         // Required Multiframe field
-//            "message_id": 1234,       // Required Multiframe field
-//            "mode": 1,
-//            "pid": 5,
-//            "success": true/false,
-//            "payload": "0x1234",
-//            "value": 4660}
 
 import android.util.Log;
 
@@ -39,12 +29,19 @@ public class MultiFrameStitcher {
     static int frame;
     static int message_id = -1;             // Message Id of current in construction message
     static String message = "";            // Location where the message will be constructed
-
+    
     public static boolean addFrame(int messageId, int frameValue, String payload, int totalSize) {
 
         // If message is different than last then initialize
         // Also if previous frame was -1 then initialize as well
         if ((message_id != messageId) || (frame == -1)) {
+
+    private MultiFrameStitcher (){
+
+    }
+
+    public static boolean addFrame(int messageId, String payload, int totalSize) {
+        if (message_id != messageId) {
             initializeFrame();
             totalBytes = totalSize;
             message_id = messageId;

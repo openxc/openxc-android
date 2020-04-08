@@ -15,6 +15,9 @@ import com.openxc.sources.DataSourceResourceException;
 public class UriBasedVehicleInterfaceMixin {
     private final static String TAG = "UriBasedVehicleInterfaceMixin";
 
+    private  UriBasedVehicleInterfaceMixin(){
+
+    }
     /**
      * Determine if two URIs refer to the same resource.
      *

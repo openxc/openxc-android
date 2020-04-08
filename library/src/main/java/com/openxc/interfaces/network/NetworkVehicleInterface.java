@@ -1,13 +1,5 @@
 package com.openxc.interfaces.network;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.URI;
-import java.util.concurrent.TimeUnit;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -19,6 +11,14 @@ import com.openxc.sources.BytestreamDataSource;
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A vehicle data source reading measurements from an OpenXC network device.
@@ -85,6 +85,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                     mSocket.close();
                 }
             } catch(IOException e) {
+                Log.e(TAG, "setResource: ",e );
             }
             return true;
         }

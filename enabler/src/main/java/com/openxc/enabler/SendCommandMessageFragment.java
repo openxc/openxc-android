@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
@@ -43,7 +44,7 @@ import java.util.Iterator;
 import static android.view.View.GONE;
 
 public class SendCommandMessageFragment extends Fragment {
-    private static String TAG = "SendCommandMsgFragment";
+    private static String SendCommandMessage = "SendCommandMsgFragment";
 
     public static final int SELECT_COMMAND = 0;
     public static final int VERSION_POS = 1;
@@ -78,7 +79,7 @@ public class SendCommandMessageFragment extends Fragment {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            Log.i(TAG, "Bound to VehicleManager");
+            Log.i(SendCommandMessage, "Bound to VehicleManager");
             mVehicleManager = ((VehicleManager.VehicleBinder) service
             ).getService();
 
@@ -86,11 +87,11 @@ public class SendCommandMessageFragment extends Fragment {
                 mVehicleManager.addOnVehicleInterfaceConnectedListener(
                         mConnectionListener);
             } catch (VehicleServiceException e) {
-                Log.e(TAG, "Unable to register VI connection listener", e);
+                Log.e(SendCommandMessage, "Unable to register VI connection listener", e);
             }
 
             if (getActivity() == null) {
-                Log.w(TAG, "Status fragment detached from activity");
+                Log.w(SendCommandMessage, "Status fragment detached from activity");
             }
 
             new Thread(new Runnable() {
@@ -109,7 +110,7 @@ public class SendCommandMessageFragment extends Fragment {
                             }
                         }
                     } catch (VehicleServiceException e) {
-                        Log.w(TAG, "Unable to connect to VehicleService");
+                        Log.w(SendCommandMessage, "Unable to connect to VehicleService");
                     }
 
                 }
@@ -118,7 +119,7 @@ public class SendCommandMessageFragment extends Fragment {
         }
 
         public synchronized void onServiceDisconnected(ComponentName className) {
-            Log.w(TAG, "VehicleService disconnected unexpectedly");
+            Log.w(SendCommandMessage, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -132,14 +133,14 @@ public class SendCommandMessageFragment extends Fragment {
 
     private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
         public void onConnected(final VehicleInterfaceDescriptor descriptor) {
-            Log.d(TAG, descriptor + " is now connected");
+            Log.d(SendCommandMessage, descriptor + " is now connected");
         }
 
         public void onDisconnected() {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        Log.d(TAG, "VI disconnected");
+                        Log.d(SendCommandMessage, "VI disconnected");
                         disconnectAlert();
                     }
                 });
@@ -241,7 +242,7 @@ public class SendCommandMessageFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                adapterView.getAdapter();
             }
 
         });
@@ -281,7 +282,8 @@ public class SendCommandMessageFragment extends Fragment {
             KeyedMessage request = null;
             VehicleMessage response;
             int selectedBus;
-            Boolean enabled, bypass;
+            Boolean enabled,
+                    bypass;
             String format;
             switch (selectedItem) {
                 case VERSION_POS:

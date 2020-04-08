@@ -1,6 +1,7 @@
 package com.openxc.enabler;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.openxc.messages.SimpleVehicleMessage;
 import com.openxcplatform.enabler.R;
 
 public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
+    private final static String TAG = "SimpleVehicleMessageAdapter";
     private Context mContext;
 
     public SimpleVehicleMessageAdapter(Context context) {
@@ -47,6 +49,7 @@ public class SimpleVehicleMessageAdapter extends KeyedMessageAdapter {
             nameView.setText("" + message.getName());
             valueView.setText("" + message.getValue());
         } catch(NoValueException e) {
+            Log.e(TAG, "Unable to register VI connection listener", e);
         }
 
         return convertView;

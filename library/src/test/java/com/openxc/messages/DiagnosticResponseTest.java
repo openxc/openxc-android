@@ -1,18 +1,22 @@
 package com.openxc.messages;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import android.os.Parcel;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
-import com.openxc.messages.DiagnosticResponse;
-
-import android.os.Parcel;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class DiagnosticResponseTest {
@@ -74,8 +78,7 @@ public class DiagnosticResponseTest {
         response = new DiagnosticResponse(bus, id, mode, pid, payload, null,
                 value);
         assertTrue(response.isSuccessful());
-        assertEquals(response.getNegativeResponseCode(),
-                DiagnosticResponse.NegativeResponseCode.NONE);
+        assertEquals( DiagnosticResponse.NegativeResponseCode.NONE,response.getNegativeResponseCode());
     }
 
     @Test
