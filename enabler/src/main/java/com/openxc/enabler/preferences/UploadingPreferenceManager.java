@@ -22,28 +22,14 @@ public class UploadingPreferenceManager extends VehiclePreferenceManager {
     public UploadingPreferenceManager(Context context) {
         super(context);
     }
-
+    @Override
     public void close() {
         super.close();
         stopUploading();
     }
 
     protected PreferenceListener createPreferenceListener() {
-       /* return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.uploading_checkbox_key,
-                R.string.uploading_path_key,
-            };
 
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setUploadingStatus(getPreferences().getBoolean(getString(
-                                R.string.uploading_checkbox_key), false));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 

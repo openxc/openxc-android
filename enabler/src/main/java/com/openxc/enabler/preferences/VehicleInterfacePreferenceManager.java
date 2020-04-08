@@ -49,6 +49,7 @@ public class VehicleInterfacePreferenceManager extends VehiclePreferenceManager 
                 try {
                     reference.getVehicleManager().setVehicleInterface(null);
                 } catch(VehicleServiceException e) {
+                    Log.e(TAG, "readStoredPreferences: ",e );
                 }
             }
         }
@@ -59,27 +60,4 @@ public class VehicleInterfacePreferenceManager extends VehiclePreferenceManager 
         }
     }
 
-    /*protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.vehicle_interface_key
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                String selectedVi = getPreferences().getString(
-                        getString(R.string.vehicle_interface_key), "");
-                if(selectedVi.equals(getString(
-                        R.string.disabled_interface_option_value))) {
-                    try {
-                        getVehicleManager().setVehicleInterface(null);
-                    } catch(VehicleServiceException e) {
-                    }
-                }
-            }
-        };
-    }*/
 }

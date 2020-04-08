@@ -9,8 +9,9 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.openxc.DataPipeline;
 import com.openxc.interfaces.VehicleInterface;
@@ -65,7 +66,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private VehicleDataSource mNativeLocationSource;
-    private VehicleDataSource mPhoneSensorSource;
     private VehicleInterface mVehicleInterface;
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;

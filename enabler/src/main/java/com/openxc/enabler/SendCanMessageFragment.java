@@ -1,5 +1,4 @@
 package com.openxc.enabler;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import androidx.fragment.app.ListFragment;
-
 import com.openxc.VehicleManager;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.formatters.ByteAdapter;
@@ -148,7 +145,7 @@ public class SendCanMessageFragment extends ListFragment implements TextWatcher 
                 payLoad1.setError("Payload must be specified as full bytes");
                 validInput = false;
             }
-            System.out.println(payloadValue);
+
             CanMessage message = new CanMessage(
                     Integer.valueOf(spinner.getSelectedItem().toString()),
                     Integer.valueOf(idView.getText().toString(), 16),

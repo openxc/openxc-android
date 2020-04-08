@@ -1,5 +1,4 @@
 package com.openxc.enabler;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -29,11 +28,13 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.DocumentsContract;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.sinks.UploaderSink;
@@ -43,8 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import android.telephony.TelephonyManager;
 
 /**
  * Initialize and display all preferences for the OpenXC Enabler application.
@@ -79,7 +78,6 @@ public class SettingsActivity extends PreferenceActivity {
     private Preference mSourceNamePreference;
     private CheckBoxPreference mTraceRecordingPreference;
     private CheckBoxPreference mDisableTracePlayingLoop;
-    private CheckBoxPreference mDweetingPreference;
     private Preference mTraceFilePreference;
     private EditTextPreference mNetworkHostPreference;
     private EditTextPreference mNetworkPortPreference;
@@ -87,11 +85,9 @@ public class SettingsActivity extends PreferenceActivity {
     private PreferenceManagerService mPreferenceManager;
     private ListPreference mDataFormatListPreference;
     private CheckBoxPreference mPhoneSensorPreference;
-
     private CheckBoxPreference mpowerDropPreference;
     private CheckBoxPreference mnetworkDropPreference;
     private CheckBoxPreference musbDropPreference;
-
     private PreferenceCategory mBluetoothPreferences;
     private PreferenceCategory mNetworkPreferences;
     private PreferenceCategory mTracePreferences;
@@ -146,7 +142,7 @@ public class SettingsActivity extends PreferenceActivity {
             e.printStackTrace();
         }
     }
-
+    @Override
     protected boolean isValidFragment(String fragmentName){
         return RecordingPreferences.class.getName().equals(fragmentName) ||
                 OutputPreferences.class.getName().equals(fragmentName) ||
@@ -174,7 +170,6 @@ public class SettingsActivity extends PreferenceActivity {
                 initializeAboutPreferences(getPreferenceManager());
             } else if(action.equals(NOTIFICATION_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.notification_preferences);
-                //initializeAboutPreferences(getPreferenceManager());
             }
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.preference_headers_legacy);
@@ -353,12 +348,6 @@ public class SettingsActivity extends PreferenceActivity {
                 mTraceFileClickListener);
         mTraceFilePreference.setOnPreferenceChangeListener(
                 mUpdateSummaryListener);
-
-//        SharedPreferences preferences =
-//            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        updateSummary(mTraceFilePreference,
-//                preferences.getString(
-//                    getString(R.string.trace_source_file_key), null));
     }
 
     protected void initializePhoneSensorPreferences(PreferenceManager manager) {
@@ -412,8 +401,6 @@ public class SettingsActivity extends PreferenceActivity {
         mDisableTracePlayingLoop.setOnPreferenceClickListener(mDisableTracePlayingLoopClickListener);
     }
     protected void initializeDweetingPreferences(PreferenceManager manager) {
-        mDweetingPreference = (CheckBoxPreference) manager.findPreference(
-                getString(R.string.dweeting_checkbox_key));
         Preference dweetingPathPreference = manager.findPreference(
                 getString(R.string.dweeting_thingname_key));
         dweetingPathPreference.setOnPreferenceChangeListener(
@@ -495,9 +482,6 @@ public class SettingsActivity extends PreferenceActivity {
         PreferenceManager.setDefaultValues(this, R.xml.data_source_preferences, false);
         mDataFormatListPreference.setOnPreferenceChangeListener(
                 mDataFormatUpdatedListener);
-
-        PreferenceScreen screen = (PreferenceScreen)
-                manager.findPreference("preference_screen");
 
         List<String> entries = new ArrayList<>(Arrays.asList(getResources().
                 getStringArray(R.array.data_format_types)));
@@ -615,9 +599,7 @@ public class SettingsActivity extends PreferenceActivity {
                             listPreference.findIndexOfValue(
                                     newValue.toString())].toString();
                     preference.setSummary(newSummary);
-                    // mDataFormatListPreference.setEnabled(newValue.equals(getString(R.string.)));
                     Log.d(TAG, "initializDataformatPreference: "+ preference.getSummary());
-
                     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("dataFormat", newSummary); // Storing string
@@ -665,7 +647,6 @@ public class SettingsActivity extends PreferenceActivity {
                 editor.putBoolean(IS_TRACE_PLAYING_ENABLED, false);// Storing boolean
             }
             editor.commit();
-           // Log.d(TAG, "initializDataformatPreference: "+ getString(R.string.trace_interface_option_value));
             return true;
         }
     };
@@ -711,8 +692,7 @@ public class SettingsActivity extends PreferenceActivity {
             return "device_id_not_available";
         } else {
             mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            String deviceId = mTelephonyManager.getDeviceId();
-            return deviceId;
+            return mTelephonyManager.getDeviceId();
         }
     }
 
@@ -720,7 +700,6 @@ public class SettingsActivity extends PreferenceActivity {
             new OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference,
                                                   Object newValue) {
-                    String path = (String) newValue;
                     updateSummary(preference, newValue);
                     return true;
                 }
@@ -745,7 +724,7 @@ public class SettingsActivity extends PreferenceActivity {
 
             }else{
                 Toast.makeText(getApplicationContext(),"Please stop Tracefile Recording",Toast.LENGTH_SHORT).show();
-               // Log.d(TAG, "Tracefile checklist else:" );
+
             }
             return true;
         }
@@ -758,16 +737,12 @@ public class SettingsActivity extends PreferenceActivity {
                     SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean isTracePlaying = sharedpreferences.getBoolean(IS_TRACE_PLAYING_ENABLED, false);
                     Log.d(TAG, "Tracefile checklist recordvalue:" + isTracePlaying);
-                    if (sharedpreferences != null && !isTracePlaying) {
-                        //mTraceRecordingPreference.setChecked(true);
-
-                    }else{
+                    if (isTracePlaying ) {
                         Toast.makeText(getApplicationContext(),"Please stop Tracefile Playing",Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Tracefile checklist record:");
                         mTraceRecordingPreference.setChecked(false);
                     }
 
-                    return false;
+                    return true;
                 }
             };
 

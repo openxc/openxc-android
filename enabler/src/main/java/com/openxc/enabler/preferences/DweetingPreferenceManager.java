@@ -22,28 +22,13 @@ public class DweetingPreferenceManager extends VehiclePreferenceManager {
     public DweetingPreferenceManager(Context context) {
         super(context);
     }
-
+    @Override
     public void close() {
         super.close();
         stopDweeting();
     }
 
     protected PreferenceListener createPreferenceListener() {
-       /* return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.dweeting_checkbox_key,
-                R.string.dweeting_thingname_key
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setDweetingStatus(getPreferences().getBoolean(getString(
-                                R.string.dweeting_checkbox_key), false));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 

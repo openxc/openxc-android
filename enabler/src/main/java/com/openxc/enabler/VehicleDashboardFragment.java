@@ -8,19 +8,20 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.openxc.remote.ViConnectionListener;
+import androidx.fragment.app.ListFragment;
+
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
 
 public class VehicleDashboardFragment extends ListFragment {
@@ -63,9 +64,10 @@ public class VehicleDashboardFragment extends ListFragment {
             }
         }
     }
-    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
+    public ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
         public void onConnected(final VehicleInterfaceDescriptor descriptor) {
             Log.d(TAG, descriptor + " is now connected");
+
         }
 
         public void onDisconnected() {

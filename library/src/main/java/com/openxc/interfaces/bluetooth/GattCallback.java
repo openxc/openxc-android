@@ -27,7 +27,7 @@ public class GattCallback extends BluetoothGattCallback {
     private boolean isConnected = false;
     private boolean isDisconnected = false;
     private BluetoothGatt mBluetoothGatt;
-    private StringBuffer messageBuffer = new StringBuffer();
+    private StringBuilder messageBuffer = new StringBuilder();
     private final static String DELIMITER = "\u0000";
 
     public void setBluetoothGatt(BluetoothGatt mBluetoothGatt) {

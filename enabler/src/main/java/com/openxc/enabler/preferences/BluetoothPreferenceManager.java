@@ -87,26 +87,6 @@ public class BluetoothPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-       /* return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.vehicle_interface_key,
-                R.string.bluetooth_polling_key,
-                R.string.bluetooth_mac_key,
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setBluetoothStatus(getPreferences().getString(
-                            getString(R.string.vehicle_interface_key), "").equals(
-                            getString(R.string.bluetooth_interface_option_value)));
-                getVehicleManager().setBluetoothPollingStatus(
-                        getPreferences().getBoolean(
-                            getString(R.string.bluetooth_polling_key), true));
-            }
-        };*/
 
         return new PreferenceListenerImpl(this);
     }

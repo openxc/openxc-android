@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.common.base.MoreObjects;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -89,7 +90,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     public TraceVehicleDataSource(SourceCallback callback, Context context,
             URI filename, boolean loop) throws DataSourceException {
         super(callback, context);
-        if(filename == null) {
+        if(filename == null && loop) {
+
             throw new DataSourceException(
                     "No filename specified for the trace source");
         }
@@ -172,7 +174,20 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 if(null == reader)
                     break;
 
+
                 if (processMessage(reader))
+
+                }
+                String line;
+
+                long startingTime = System.currentTimeMillis();
+                // In the future may want to support binary traces
+                try {
+                   readerTest(reader);
+                } catch (IOException e) {
+                    Log.w(TAG, "An exception occurred when reading the trace " +
+                            reader, e);
+
                     break;
 
                 disconnected();
@@ -188,8 +203,30 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 mRunning = false;
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
             }
-        } // while(mRunning)
+        }
     }
+private  void readerTest(BufferedReader reader) throws  IOException {
+    String line;
+    long startingTime = System.currentTimeMillis();
+    while (mRunning && (line = reader.readLine()) != null) {
+
+            VehicleMessage measurement;
+            try {
+                measurement = JsonFormatter.deserialize(line);
+            } catch (UnrecognizedMessageTypeException e) {
+                Log.w(TAG, "A trace line was not in the expected " +
+                        "format: " + line);
+                continue;
+            }
+
+            if (measurement == null) {
+                continue;
+            }
+
+            if (!measurement.isTimestamped()) {
+                Log.w(TAG, "A trace line was missing a timestamp: " + line);
+                continue;
+            }
 
     private void sleep() {
         try {
@@ -287,6 +324,24 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         return false;
     }
 
+
+            try {
+                waitForNextRecord(startingTime, measurement.getTimestamp());
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "A trace line was not in the expected " +
+                        "format: " + line);
+                continue;
+            }
+            measurement.untimestamp();
+            if (!mTraceValid) {
+                connected();
+                mTraceValid = true;
+            }
+            handleMessage(measurement);
+        }
+
+
+}
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
