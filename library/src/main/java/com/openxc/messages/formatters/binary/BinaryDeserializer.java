@@ -1,10 +1,5 @@
 package com.openxc.messages.formatters.binary;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.util.Log;
-
 import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
@@ -18,9 +13,15 @@ import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
 
-public class BinaryDeserializer {
+import java.io.IOException;
+import java.io.InputStream;
+
+public   class BinaryDeserializer {
     private final static String TAG = "BinaryDeserializer";
 
+    private BinaryDeserializer() {
+        throw new IllegalStateException("BinaryDeserializer class");
+    }
     public static VehicleMessage deserialize(InputStream data)
             throws UnrecognizedMessageTypeException {
         VehicleMessage result = null;

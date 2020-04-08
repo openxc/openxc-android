@@ -1,12 +1,13 @@
 package com.openxc.messages;
 
-import java.util.Arrays;
-import java.util.HashMap;
+
 
 import android.os.Parcel;
 
 import com.google.gson.annotations.SerializedName;
 import com.openxc.util.Range;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * An abstract base class to hold common fields and logic for diagnostic
@@ -26,8 +27,7 @@ public abstract class DiagnosticMessage extends KeyedMessage {
     protected static final Range<Integer> MODE_RANGE = new Range<>(1, 0xff);
     // Note that this is a limit of the OpenXC Vi firmware at the moment - a
     // diagnostic request can technically have a much larger payload.
-    // TODO this is not checked anywhere!
-    private static final int MAX_PAYLOAD_LENGTH_IN_BYTES = 7;
+    // to do this is not checked anywhere!
 
     @SerializedName(BUS_KEY)
     private int mBusId;

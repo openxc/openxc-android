@@ -1,11 +1,5 @@
 package com.openxc;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
 import com.openxc.measurements.BaseMeasurement;
 import com.openxc.measurements.VehicleDoorStatus;
 import com.openxc.messages.EventedSimpleVehicleMessage;
@@ -13,6 +7,16 @@ import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.units.Meter;
 import com.openxc.util.Range;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MeasurementTest {
     TestMeasurement measurement;
@@ -61,7 +65,7 @@ public class MeasurementTest {
         VehicleMessage message = measurement.toVehicleMessage();
         assertTrue(message instanceof SimpleVehicleMessage);
         SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
-        assertEquals(simpleMessage.getName(), TestMeasurement.ID);
+        assertEquals(TestMeasurement.ID, simpleMessage.getName());
         assertEquals(simpleMessage.getValue(), measurement.getValue().doubleValue());
     }
 
@@ -72,7 +76,7 @@ public class MeasurementTest {
         VehicleMessage message = doorMeasurement.toVehicleMessage();
         assertTrue(message instanceof EventedSimpleVehicleMessage);
         EventedSimpleVehicleMessage eventedMessage = message.asEventedMessage();
-        assertEquals(eventedMessage.getName(), VehicleDoorStatus.ID);
+        assertEquals(VehicleDoorStatus.ID,eventedMessage.getName());
         assertEquals(eventedMessage.getValue(), doorMeasurement.getValue().toString());
         assertEquals(eventedMessage.getEvent(), doorMeasurement.getEvent().booleanValue());
     }

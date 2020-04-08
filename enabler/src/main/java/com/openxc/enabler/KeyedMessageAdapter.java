@@ -1,15 +1,17 @@
 package com.openxc.enabler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import android.util.Log;
 
 import com.openxc.messages.ExactKeyMatcher;
 import com.openxc.messages.KeyMatcher;
 import com.openxc.messages.KeyedMessage;
 import com.openxc.messages.MessageKey;
 import com.openxc.messages.VehicleMessage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class KeyedMessageAdapter extends VehicleMessageAdapter {
     private Map<MessageKey, KeyedMessage> mMessages;
@@ -53,6 +55,7 @@ public abstract class KeyedMessageAdapter extends VehicleMessageAdapter {
     public boolean shouldRefreshView(KeyedMessage message, KeyedMessage existingMessage) {
         // By default, we always refresh. Subclasses can do deeper inspection if
         // they want.
+        Log.e("USB", "exception: " + message + existingMessage );
         return true;
     }
 }

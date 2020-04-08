@@ -1,10 +1,14 @@
 package com.openxc.sources;
 
-import java.util.concurrent.TimeUnit;
-
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
 public class SourceLogger {
+    private  SourceLogger(){
+
+    }
+
     /**
      * Log data transfer statistics to the Android log.
      *
@@ -14,6 +18,8 @@ public class SourceLogger {
      * @param bytesReceived the number of bytes received over the given period
      * of time
      */
+
+
     public static void logTransferStats(final String tag,
             final long startTime, final double bytesReceived) {
         double kilobytesTransferred = bytesReceived / 1024.0;

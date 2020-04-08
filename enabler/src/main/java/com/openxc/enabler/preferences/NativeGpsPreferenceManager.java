@@ -12,7 +12,7 @@ public class NativeGpsPreferenceManager extends VehiclePreferenceManager {
     public NativeGpsPreferenceManager(Context context) {
         super(context);
     }
-
+    @Override
     public void close() {
         super.close();
         if(getVehicleManager()!=null) {
@@ -60,20 +60,4 @@ public class NativeGpsPreferenceManager extends VehiclePreferenceManager {
         }
     }
 
-   /* protected PreferenceListener createPreferenceListener() {
-        return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.native_gps_checkbox_key,
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                getVehicleManager().setNativeGpsStatus(getPreferences().getBoolean(
-                            getString(R.string.native_gps_checkbox_key), false));
-            }
-        };
-    }*/
 }

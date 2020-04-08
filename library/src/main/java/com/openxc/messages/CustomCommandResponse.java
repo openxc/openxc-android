@@ -110,5 +110,5 @@ public class CustomCommandResponse extends KeyedMessage {
         readFromParcel(in);
     }
 
-    protected CustomCommandResponse() { }
+
 }

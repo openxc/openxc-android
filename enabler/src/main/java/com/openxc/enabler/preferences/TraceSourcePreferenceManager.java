@@ -20,29 +20,13 @@ public class TraceSourcePreferenceManager extends VehiclePreferenceManager {
     public TraceSourcePreferenceManager(Context context) {
         super(context);
     }
-
+    @Override
     public void close() {
         super.close();
         stopTrace();
     }
 
     protected PreferenceListener createPreferenceListener() {
-       /* return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.vehicle_interface_key,
-                R.string.trace_source_file_key,
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setTraceSourceStatus(getPreferences().getString(
-                            getString(R.string.vehicle_interface_key), "").equals(
-                            getString(R.string.trace_interface_option_value)));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 

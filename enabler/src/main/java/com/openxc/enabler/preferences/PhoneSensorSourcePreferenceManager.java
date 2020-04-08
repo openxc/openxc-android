@@ -3,7 +3,6 @@ package com.openxc.enabler.preferences;
 import android.content.Context;
 import android.util.Log;
 
-import com.openxc.remote.VehicleServiceException;
 import com.openxc.sources.PhoneSensorSource;
 import com.openxcplatform.enabler.R;
 
@@ -19,7 +18,7 @@ public class PhoneSensorSourcePreferenceManager extends VehiclePreferenceManager
     public PhoneSensorSourcePreferenceManager(Context context) {
         super(context);
     }
-
+    @Override
     public void close() {
         super.close();
         stopSensorCapture();
@@ -27,19 +26,7 @@ public class PhoneSensorSourcePreferenceManager extends VehiclePreferenceManager
 
     @Override
     protected PreferenceListener createPreferenceListener() {
-       /* return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                    R.string.phone_source_polling_checkbox_key
-            };
 
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setPhoneSensorSourceStatus(getPreferences().getBoolean(getString(R.string.phone_source_polling_checkbox_key),false));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 
