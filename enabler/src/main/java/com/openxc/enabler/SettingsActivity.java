@@ -123,7 +123,7 @@ public class SettingsActivity extends PreferenceActivity {
             path = baseEndpoint + "/api/v1/message/" + data + "/save";
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("uploading_target", path);
-            editor.commit();
+            editor.apply();
         } catch (Exception e) {
             Log.i(TAG,e.getMessage());
             e.printStackTrace();
@@ -136,7 +136,7 @@ public class SettingsActivity extends PreferenceActivity {
             String path = getDeviceID();
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("uploading_source_name", path);
-            editor.commit();
+            editor.apply();
         } catch (Exception e) {
             Log.i(TAG,e.getMessage());
             e.printStackTrace();
@@ -610,13 +610,17 @@ public class SettingsActivity extends PreferenceActivity {
             };
 
     protected void updateSummary(Preference preference, Object currentValue) {
-        String summary = null;
-        if(currentValue != null) {
-            summary = currentValue.toString();
-        } else {
-            summary = "No value set";
+        try {
+            String summary = null;
+            if (currentValue != null) {
+                summary = currentValue.toString();
+            } else {
+                summary = "No value set";
+            }
+            preference.setSummary(summary);
+        }catch(Exception e) {
+            e.printStackTrace();
         }
-        preference.setSummary(summary);
     }
 
     private OnPreferenceChangeListener mVehicleInterfaceUpdatedListener =
@@ -663,7 +667,12 @@ public class SettingsActivity extends PreferenceActivity {
     private OnPreferenceChangeListener mUploadingPathPreferenceListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String path = (String) newValue;
+            String path;
+            if (newValue.toString().length() != 0) {
+                 path = (String) newValue;
+            }else{
+                path = "http://";
+            }
 
             if(!UploaderSink.validatePath(path)) {
                 String error = "Invalid target URL \"" + path +
