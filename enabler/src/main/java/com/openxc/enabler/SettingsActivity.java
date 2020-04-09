@@ -32,7 +32,7 @@ import android.provider.DocumentsContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.URLUtil;
+
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -670,7 +670,8 @@ public class SettingsActivity extends PreferenceActivity {
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String path;
-            if (newValue.toString().length() != 0 && URLUtil.isValidUrl(newValue.toString())) {
+            boolean isFound = newValue.toString().indexOf("http://") !=-1? true: false;
+            if (newValue.toString().length() != 0 && isFound) {
                  path = (String) newValue;
             }else{
                 path = "http://";
