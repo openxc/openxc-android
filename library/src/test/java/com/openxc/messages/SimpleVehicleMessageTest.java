@@ -1,17 +1,17 @@
 package com.openxc.messages;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import android.os.Parcel;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
-import android.os.Parcel;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(RobolectricTestRunner.class)
 public class SimpleVehicleMessageTest {
@@ -42,13 +42,13 @@ public class SimpleVehicleMessageTest {
     @Test
     public void valueAsString() {
         message = new SimpleVehicleMessage(name, "foo");
-        assertEquals(message.getValueAsString(), "foo");
+        assertEquals("foo" ,message.getValueAsString());
     }
 
     @Test
     public void valueAsBoolean() {
         message = new SimpleVehicleMessage(name, Boolean.valueOf(true));
-        assertEquals(message.getValueAsBoolean(), true);
+        assertEquals(true, message.getValueAsBoolean());
     }
 
     @Test

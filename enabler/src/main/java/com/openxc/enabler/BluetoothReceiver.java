@@ -11,7 +11,7 @@ import com.openxc.enabler.preferences.PreferenceManagerService;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
 
 public class BluetoothReceiver extends BroadcastReceiver {
-    private final static String TAG = BluetoothReceiver.class.getSimpleName();
+    private static String Bluetooth_Receiver = BluetoothReceiver.class.getSimpleName();
 
     private final boolean isVehicleInterface(BluetoothDevice device) {
         return device != null && device.getName() != null &&
@@ -26,12 +26,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if(isVehicleInterface(bluetoothDevice)) {
             if(intent.getAction().compareTo(
                         BluetoothDevice.ACTION_ACL_CONNECTED) == 0){
-                Log.d(TAG, "A Bluetooth OpenXC VI connected: " + bluetoothDevice.getName());
+                Log.d(Bluetooth_Receiver, "A Bluetooth OpenXC VI connected: " + bluetoothDevice.getName());
                 context.startService(new Intent(context, VehicleManager.class));
                 context.startService(new Intent(context,
                             PreferenceManagerService.class));
             } else {
-                Log.d(TAG, "A Bluetooth OpenXC VI disconnected: " + bluetoothDevice.getName());
+                Log.d(Bluetooth_Receiver, "A Bluetooth OpenXC VI disconnected: " + bluetoothDevice.getName());
             }
         }
     }

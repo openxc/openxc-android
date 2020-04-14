@@ -19,23 +19,7 @@ public class NetworkPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-       /* return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.vehicle_interface_key,
-                R.string.network_host_key,
-                R.string.network_port_key,
-            };
 
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-
-            }
-            public void readStoredPreferences() {
-                setNetworkStatus(getPreferences().getString(
-                            getString(R.string.vehicle_interface_key), "").equals(
-                            getString(R.string.network_interface_option_value)));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 

@@ -1,15 +1,9 @@
 package com.openxc.measurements;
 
-import com.google.common.base.Objects;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 import android.util.Log;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.openxc.NoValueException;
@@ -20,6 +14,11 @@ import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.units.Unit;
 import com.openxc.util.AgingData;
 import com.openxc.util.Range;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The BaseMeasurement is the base implementation of the Measurement, and
@@ -72,7 +71,9 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
             cacheMeasurementId(VehicleDoorStatus.class);
             cacheMeasurementId(VehicleSpeed.class);
             cacheMeasurementId(WindshieldWiperStatus.class);
-        } catch(UnrecognizedMeasurementTypeException e) { }
+        } catch(UnrecognizedMeasurementTypeException e) {
+            Log.e("BaseMeasurement", "exception: " + e.toString());
+        }
     }
 
     public abstract String getGenericName();
@@ -241,30 +242,15 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                     eventClass = Number.class;
                 }
 
-                try {
                     constructor = measurementType.getConstructor(
                             valueClass, eventClass);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(
-                            measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ", " + eventClass + ")");
-                }
+
 
                 measurement = constructor.newInstance(
                         eventedMessage.getValue(),
                         eventedMessage.getEvent());
             } else {
-                try {
                     constructor = measurementType.getConstructor(valueClass);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMeasurementTypeException(
-                            measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ")");
-                }
 
                 measurement = constructor.newInstance(
                         simpleMessage.getValue());
@@ -288,7 +274,10 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + "'s constructor threw an exception",
                     e);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override
