@@ -1,4 +1,5 @@
 package com.openxc.enabler;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -31,6 +32,7 @@ import android.provider.DocumentsContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -118,7 +120,7 @@ public class SettingsActivity extends PreferenceActivity {
         try {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String path = (settings.getString("uploading_target", ""));
-            String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+            String baseEndpoint = path.substring(0, path.indexOf(".com")+7);
             String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
             path = baseEndpoint + "/api/v1/message/" + data + "/save";
             SharedPreferences.Editor editor = settings.edit();
@@ -610,13 +612,17 @@ public class SettingsActivity extends PreferenceActivity {
             };
 
     protected void updateSummary(Preference preference, Object currentValue) {
-        String summary = null;
-        if(currentValue != null) {
-            summary = currentValue.toString();
-        } else {
-            summary = "No value set";
+        try {
+            String summary = "";
+            if (currentValue.toString().length() != 0) {
+                summary = currentValue.toString();
+            } else {
+                summary = "http://";
+            }
+            preference.setSummary(summary);
+        }catch(Exception e) {
+            e.printStackTrace();
         }
-        preference.setSummary(summary);
     }
 
     private OnPreferenceChangeListener mVehicleInterfaceUpdatedListener =
@@ -663,7 +669,13 @@ public class SettingsActivity extends PreferenceActivity {
     private OnPreferenceChangeListener mUploadingPathPreferenceListener =
             new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String path = (String) newValue;
+            String path;
+            boolean isFound = newValue.toString().indexOf("http://") !=-1? true: false;
+            if (newValue.toString().length() != 0 && isFound) {
+                 path = (String) newValue;
+            }else{
+                path = "http://";
+            }
 
             if(!UploaderSink.validatePath(path)) {
                 String error = "Invalid target URL \"" + path +
@@ -674,9 +686,9 @@ public class SettingsActivity extends PreferenceActivity {
                 Log.w(TAG, error);
                 mUploadingPreference.setChecked(false);
             } else {
-                String baseEndpoint = path.substring(0, path.indexOf(".com")+4);
+                String baseEndpoint = path.substring(0, path.indexOf(".com")+7);
                 String data = android.util.Base64.encodeToString(getDeviceID().getBytes(), android.util.Base64.NO_WRAP);
-                path = baseEndpoint + "/api/v1/message/" + data + "/save";
+                path = baseEndpoint + "api/v1/message/" + data + "/save";
                 newValue = path;
                 mSourceNamePreference.setSummary(getDeviceID());
             }
