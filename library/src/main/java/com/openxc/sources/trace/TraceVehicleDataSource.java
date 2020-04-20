@@ -173,23 +173,17 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 reader = getBufferedReader();
                 if(null == reader)
                     break;
-
-
-                if (processMessage(reader))
-
-                }
-                String line;
-
                 long startingTime = System.currentTimeMillis();
                 // In the future may want to support binary traces
                 try {
                    readerTest(reader);
+
                 } catch (IOException e) {
                     Log.w(TAG, "An exception occurred when reading the trace " +
                             reader, e);
 
                     break;
-
+                }
                 disconnected();
                 Log.d(TAG, "Restarting playback of trace " + mFilename);
                 // Set this back to false so the VI shows as "disconnected" for
@@ -210,24 +204,31 @@ private  void readerTest(BufferedReader reader) throws  IOException {
     long startingTime = System.currentTimeMillis();
     while (mRunning && (line = reader.readLine()) != null) {
 
-            VehicleMessage measurement;
-            try {
-                measurement = JsonFormatter.deserialize(line);
-            } catch (UnrecognizedMessageTypeException e) {
-                Log.w(TAG, "A trace line was not in the expected " +
-                        "format: " + line);
-                continue;
-            }
+        VehicleMessage measurement;
+        try {
+            measurement = JsonFormatter.deserialize(line);
+        } catch (UnrecognizedMessageTypeException e) {
+            Log.w(TAG, "A trace line was not in the expected " +
+                    "format: " + line);
+            continue;
+        }
 
-            if (measurement == null) {
-                continue;
-            }
+        if (measurement == null) {
+            continue;
+        }
 
-            if (!measurement.isTimestamped()) {
-                Log.w(TAG, "A trace line was missing a timestamp: " + line);
-                continue;
-            }
-
+        if (!measurement.isTimestamped()) {
+            Log.w(TAG, "A trace line was missing a timestamp: " + line);
+            continue;
+        }
+        measurement.untimestamp();
+        if (!mTraceValid) {
+            connected();
+            mTraceValid = true;
+        }
+        handleMessage(measurement);
+    }
+}
     private void sleep() {
         try {
             Thread.sleep(1000);
@@ -324,24 +325,6 @@ private  void readerTest(BufferedReader reader) throws  IOException {
         return false;
     }
 
-
-            try {
-                waitForNextRecord(startingTime, measurement.getTimestamp());
-            } catch (NumberFormatException e) {
-                Log.w(TAG, "A trace line was not in the expected " +
-                        "format: " + line);
-                continue;
-            }
-            measurement.untimestamp();
-            if (!mTraceValid) {
-                connected();
-                mTraceValid = true;
-            }
-            handleMessage(measurement);
-        }
-
-
-}
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
