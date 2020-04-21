@@ -616,7 +616,7 @@ public final class BinaryMessages {
 
     @java.lang.Override
     public int getSerializedSize() {
-      int size = memoizedSize;
+      int size = memoizedSize;  // super.getSerializedSize(); //memoizedSize;
       if (size != -1) return size;
 
       size = 0;

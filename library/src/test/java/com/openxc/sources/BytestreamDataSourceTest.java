@@ -107,20 +107,20 @@ public class BytestreamDataSourceTest {
 
     // Currently this test fails to run since the protobuf API has changes some of the members
     // from public to private or protected so this test fails.
-//    @Test
-//    public void receiveValidBinaryTriggersCallback() throws SerializationException {
-//        source.start();
-//        source.connect();
-//        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
-//        source.inject(new BinaryStreamer().serializeForStream(message));
-//        TestUtils.pause(100);
-//        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
-//                VehicleMessage.class);
-//        verify(callback).receive(argument.capture());
-//        VehicleMessage received = argument.getValue();
-//        received.untimestamp();
-//        assertEquals(received, message);
-//    }
+    @Test
+    public void receiveValidBinaryTriggersCallback() throws SerializationException {
+        source.start();
+        source.connect();
+        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        source.inject(new BinaryStreamer().serializeForStream(message));
+        TestUtils.pause(100);
+        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                VehicleMessage.class);
+        verify(callback).receive(argument.capture());
+        VehicleMessage received = argument.getValue();
+        received.untimestamp();
+        assertEquals(received, message);
+    }
 
 //    @Test
 //    public void receiveValidJsonTriggersCallback() {
