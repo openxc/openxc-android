@@ -49,69 +49,69 @@ public class BinaryFormatterTest extends AbstractFormatterTestBase {
         }
     }
 
-//    @Test
-//    public void deserializeNoErrors() throws IOException,
-//            UnrecognizedMessageTypeException {
-//        BinaryMessages.VehicleMessage.Builder builder =
-//            BinaryMessages.VehicleMessage.newBuilder();
-//        builder.setType(BinaryMessages.VehicleMessage.Type.SIMPLE);
-//
-//        BinaryMessages.SimpleMessage.Builder messageBuilder =
-//                BinaryMessages.SimpleMessage.newBuilder();
-//        messageBuilder.setName(messageName);
-//        BinaryMessages.DynamicField.Builder fieldBuilder =
-//                BinaryMessages.DynamicField.newBuilder();
-//        fieldBuilder.setType(BinaryMessages.DynamicField.Type.NUM);
-//        fieldBuilder.setNumericValue(42);
-//
-//        messageBuilder.setValue(fieldBuilder);
-//        builder.setSimpleMessage(messageBuilder);
-//
-//        BinaryMessages.VehicleMessage serialized = builder.build();
-//        ByteArrayOutputStream output = new ByteArrayOutputStream();
-//        serialized.writeTo(output);
-//        InputStream input = new ByteArrayInputStream(output.toByteArray());
-//
-//        try {
-//            message = (SimpleVehicleMessage) BinaryFormatter.deserialize(input);
-//        } catch(UnrecognizedMessageTypeException e) {}
-//
-//        assertEquals(message.getName(), messageName);
-//        assertEquals(message.getValue(), value);
-//    }
+    @Test
+    public void deserializeNoErrors() throws IOException,
+            UnrecognizedMessageTypeException {
+        BinaryMessages.VehicleMessage.Builder builder =
+            BinaryMessages.VehicleMessage.newBuilder();
+        builder.setType(BinaryMessages.VehicleMessage.Type.SIMPLE);
 
-//    @Test
-//    public void deserializeInvalidReturnsNull() throws IOException,
-//           UnrecognizedMessageTypeException {
-//        InputStream input = new ByteArrayInputStream(new byte[]{0,1,2,3,4});
-//        assertThat(BinaryFormatter.deserialize(input), nullValue());
-//    }
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                BinaryMessages.SimpleMessage.newBuilder();
+        messageBuilder.setName(messageName);
+        BinaryMessages.DynamicField.Builder fieldBuilder =
+                BinaryMessages.DynamicField.newBuilder();
+        fieldBuilder.setType(BinaryMessages.DynamicField.Type.NUM);
+        fieldBuilder.setNumericValue(42);
 
-//    @Test(expected=UnrecognizedMessageTypeException.class)
-//    public void deserializeWellFormedButConfusedMessage() throws IOException,
-//           UnrecognizedMessageTypeException {
-//        // Build a simple message that's missing a name
-//        BinaryMessages.VehicleMessage.Builder builder =
-//            BinaryMessages.VehicleMessage.newBuilder();
-//        builder.setTypeValue(42);
-//
-//        BinaryMessages.SimpleMessage.Builder messageBuilder =
-//                BinaryMessages.SimpleMessage.newBuilder();
-//        BinaryMessages.DynamicField.Builder fieldBuilder =
-//                BinaryMessages.DynamicField.newBuilder();
-//        fieldBuilder.setType(BinaryMessages.DynamicField.Type.NUM);
-//        fieldBuilder.setNumericValue(42);
-//
-//        messageBuilder.setValue(fieldBuilder);
-//        builder.setSimpleMessage(messageBuilder);
-//
-//        BinaryMessages.VehicleMessage serialized = builder.build();
-//        ByteArrayOutputStream output = new ByteArrayOutputStream();
-//        serialized.writeTo(output);
-//        InputStream input = new ByteArrayInputStream(output.toByteArray());
-//
-//        BinaryFormatter.deserialize(input);
-//    }
+        messageBuilder.setValue(fieldBuilder);
+        builder.setSimpleMessage(messageBuilder);
+
+        BinaryMessages.VehicleMessage serialized = builder.build();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        serialized.writeTo(output);
+        InputStream input = new ByteArrayInputStream(output.toByteArray());
+
+        try {
+            message = (SimpleVehicleMessage) BinaryFormatter.deserialize(input);
+        } catch(UnrecognizedMessageTypeException e) {}
+
+        assertEquals(message.getName(), messageName);
+        assertEquals(message.getValue(), value);
+    }
+
+    @Test
+    public void deserializeInvalidReturnsNull() throws IOException,
+           UnrecognizedMessageTypeException {
+        InputStream input = new ByteArrayInputStream(new byte[]{0,1,2,3,4});
+        assertThat(BinaryFormatter.deserialize(input), nullValue());
+    }
+
+    @Test(expected=UnrecognizedMessageTypeException.class)
+    public void deserializeWellFormedButConfusedMessage() throws IOException,
+           UnrecognizedMessageTypeException {
+        // Build a simple message that's missing a name
+        BinaryMessages.VehicleMessage.Builder builder =
+            BinaryMessages.VehicleMessage.newBuilder();
+        builder.setTypeValue(42);
+
+        BinaryMessages.SimpleMessage.Builder messageBuilder =
+                BinaryMessages.SimpleMessage.newBuilder();
+        BinaryMessages.DynamicField.Builder fieldBuilder =
+                BinaryMessages.DynamicField.newBuilder();
+        fieldBuilder.setType(BinaryMessages.DynamicField.Type.NUM);
+        fieldBuilder.setNumericValue(42);
+
+        messageBuilder.setValue(fieldBuilder);
+        builder.setSimpleMessage(messageBuilder);
+
+        BinaryMessages.VehicleMessage serialized = builder.build();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        serialized.writeTo(output);
+        InputStream input = new ByteArrayInputStream(output.toByteArray());
+
+        BinaryFormatter.deserialize(input);
+    }
 
     @Test(expected=SerializationException.class)
     public void serializeNamedMessageWithExtras() throws SerializationException {
