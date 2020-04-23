@@ -196,7 +196,7 @@ public class DweetLib {
         String newThingName = "";
         try {
             is = am.open("adjectives.txt");
-            adjectivesException(newThingName,stringArray);
+            newThingName = adjectivesException(is, newThingName,stringArray);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -210,30 +210,31 @@ public class DweetLib {
         }
         return newThingName;
     }
-    public void adjectivesException(String newThingName,ArrayList<String> stringArray) throws IOException{
-        String line = null;
-        InputStream is = null;
-        InputStreamReader inputStreamReader = null;
+    public String adjectivesException(InputStream is, String newThingName,ArrayList<String> stringArray) throws IOException{
         BufferedReader br = null;
-            inputStreamReader = new InputStreamReader(is);
-            br = new BufferedReader(inputStreamReader);
-            while ((line = br.readLine()) != null) {
-                stringArray.add(line);
-                int rand1 = this.rand.nextInt();
-                newThingName = newThingName.concat(stringArray.get(rand1));
-            }
+        String line = null;
+        InputStreamReader inputStreamReader = null;
+
+        inputStreamReader = new InputStreamReader(is);
+        br = new BufferedReader(inputStreamReader);
+        while ((line = br.readLine()) != null) {
+            stringArray.add(line);
+
+        }
+        int rand1 = this.rand.nextInt(stringArray.size() - 1);
+        newThingName = newThingName.concat(stringArray.get(rand1));
 
         inputStreamReader.close();
         br.close();
 
-
+        return newThingName;
     }
     private String getNouns(String newThingName, AssetManager am,  ArrayList<String> stringArray) {
         InputStream is = null;
 
         try {
             is = am.open("nouns.txt");
-            nounException(newThingName,stringArray);
+            newThingName = nounException(is, newThingName,stringArray);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -247,9 +248,8 @@ public class DweetLib {
         }
         return newThingName;
     }
-    private void nounException(String newThingName, ArrayList<String> stringArray) throws IOException{
+    private String nounException(InputStream is, String newThingName, ArrayList<String> stringArray) throws IOException{
         BufferedReader br = null;
-        InputStream is = null;
         InputStreamReader inputStreamReader = null;
         String line = null;
 
@@ -257,12 +257,14 @@ public class DweetLib {
         br = new BufferedReader(inputStreamReader);
         while ((line = br.readLine()) != null) {
             stringArray.add(line);
-            int rand1 = this.rand.nextInt();
-            newThingName = newThingName.concat(stringArray.get(rand1));
         }
+        int rand1 = this.rand.nextInt(stringArray.size() - 1);
+        newThingName = newThingName.concat(stringArray.get(rand1));
 
         inputStreamReader.close();
         br.close();
+
+        return newThingName;
     }
 
     private class DweetTask extends AsyncTask<Object,String,Integer> {
