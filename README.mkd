@@ -2,6 +2,7 @@ OpenXC Android Library
 =========================
 
 [![Build Status](https://travis-ci.org/openxc/openxc-android.svg?branch=master)](https://travis-ci.org/openxc/openxc-android)
+[![SourceSpy Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/openxcopenxcandroid/)
 
 This library is a part of the [OpenXC](http://openxcplatform.com) project.
 
