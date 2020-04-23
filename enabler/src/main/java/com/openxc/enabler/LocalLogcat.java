@@ -26,7 +26,7 @@ public class LocalLogcat {
     public static void initLogcat() {
         if ( isExternalStorageWritable() ) {
 
-            File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
+            final File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
             File logFile = new File( appDirectory, "logcat" + dateFormat.format(new Date()) + ".txt" );
 
             // create app folder
@@ -51,26 +51,26 @@ public class LocalLogcat {
             deleteOldLogFiles();
 
             // After 8 hours of running, start another logfile and
-//            // remove out of date files
-//            Timer timer = new Timer();
-//            TimerTask countdown = new TimerTask() {
-//                @Override
-//                public void run() {
-//                    if (mProcess != null) {
-//                        mProcess.destroy();
-//
-//                        File logFile = new File( appDirectory, "logcat_" + dateFormat.format(new Date()) + ".txt" );
-//                        try {
-//                            mProcess = Runtime.getRuntime().exec("logcat -f " + logFile);
-//                            deleteOldLogFiles();
-//                        } catch (IOException exception) {
-//                            exception.printStackTrace();
-//                        }
-//
-//                    }
-//                }
-//            };
-//            timer.schedule(countdown, 0, SINGLE_LOG_FILE_DURATION);
+            // remove out of date files
+            Timer timer = new Timer();
+            TimerTask countdown = new TimerTask() {
+                @Override
+                public void run() {
+                    if (mProcess != null) {
+                        mProcess.destroy();
+
+                        File logFile = new File( appDirectory, "logcat_" + dateFormat.format(new Date()) + ".txt" );
+                        try {
+                            mProcess = Runtime.getRuntime().exec("logcat -f " + logFile);
+                            deleteOldLogFiles();
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
+
+                    }
+                }
+            };
+            timer.schedule(countdown, 0, SINGLE_LOG_FILE_DURATION);
 
         } else if ( isExternalStorageReadable() ) {
             Log.e(TAG, "External Storage is Readable, but not Writable");
