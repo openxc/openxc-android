@@ -12,6 +12,8 @@ public class OpenXCApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        LocalLogcat.initLogcat();
     }
 
 
