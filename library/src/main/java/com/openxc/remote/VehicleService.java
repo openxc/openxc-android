@@ -9,8 +9,9 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.openxc.DataPipeline;
 import com.openxc.interfaces.VehicleInterface;
@@ -65,7 +66,6 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     private DataPipeline mPipeline = new DataPipeline(this);
     private ApplicationSource mApplicationSource = new ApplicationSource();
     private VehicleDataSource mNativeLocationSource;
-    private VehicleDataSource mPhoneSensorSource;
     private VehicleInterface mVehicleInterface;
     private RemoteCallbackSink mNotifier = new RemoteCallbackSink();
     private WakeLockManager mWakeLocker;
@@ -291,46 +291,55 @@ public class VehicleService extends Service implements DataPipeline.Operator {
         }
 
         synchronized(this) {
-            if(mVehicleInterface != null && (interfaceName == null ||
-                    (interfaceType != null &&
-                     !mVehicleInterface.getClass().isAssignableFrom(
-                         interfaceType)))) {
-                Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
-                mVehicleInterface.stop();
-                mPipeline.removeSource(mVehicleInterface);
-                mVehicleInterface = null;
-            }
+            manageVehicleInterfaceAndPipeline(interfaceName, resource, interfaceType);
+        }
+    }
 
-            if(interfaceName != null && interfaceType != null) {
-                if(mVehicleInterface == null ||
-                        !mVehicleInterface.getClass().isAssignableFrom(
-                            interfaceType)) {
-                    try {
-                        mVehicleInterface = VehicleInterfaceFactory.build(
-                                interfaceType, VehicleService.this, resource);
-                    } catch(VehicleInterfaceException e) {
-                        Log.w(TAG, "Unable to set vehicle interface", e);
-                        return;
-                    }
+    private void manageVehicleInterfaceAndPipeline(String interfaceName, String resource, Class<? extends VehicleInterface> interfaceType) {
+        if(mVehicleInterface != null && (interfaceName == null ||
+                (interfaceType != null &&
+                 !mVehicleInterface.getClass().isAssignableFrom(
+                     interfaceType)))) {
+            Log.i(TAG, "Disabling currently active VI " + mVehicleInterface);
+            mVehicleInterface.stop();
+            mPipeline.removeSource(mVehicleInterface);
+            mVehicleInterface = null;
+        }
 
-                    mPipeline.addSource(mVehicleInterface);
-                } else {
-                    try {
-                        if(mVehicleInterface.setResource(resource)) {
-                            Log.d(TAG, "Changed resource of already " +
-                                    "active interface " + mVehicleInterface);
-                        } else {
-                            Log.d(TAG, "Interface " + mVehicleInterface +
-                                    " already had same active resource " + resource +
-                                    " -- not restarting");
-                        }
-                    } catch(DataSourceException e) {
-                        Log.w(TAG, "Unable to change resource", e);
+        if (manageVehicleInterface(interfaceName, resource, interfaceType)) return;
+        Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
+    }
+
+    private boolean manageVehicleInterface(String interfaceName, String resource, Class<? extends VehicleInterface> interfaceType) {
+        if(interfaceName != null && interfaceType != null) {
+            if(mVehicleInterface == null ||
+                    !mVehicleInterface.getClass().isAssignableFrom(
+                        interfaceType)) {
+                try {
+                    mVehicleInterface = VehicleInterfaceFactory.build(
+                            interfaceType, VehicleService.this, resource);
+                } catch(VehicleInterfaceException e) {
+                    Log.w(TAG, "Unable to set vehicle interface", e);
+                    return true;
+                }
+
+                mPipeline.addSource(mVehicleInterface);
+            } else {
+                try {
+                    if(mVehicleInterface.setResource(resource)) {
+                        Log.d(TAG, "Changed resource of already " +
+                                "active interface " + mVehicleInterface);
+                    } else {
+                        Log.d(TAG, "Interface " + mVehicleInterface +
+                                " already had same active resource " + resource +
+                                " -- not restarting");
                     }
+                } catch(DataSourceException e) {
+                    Log.w(TAG, "Unable to change resource", e);
                 }
             }
-            Log.i(TAG, "Set vehicle interface to " + mVehicleInterface);
         }
+        return false;
     }
 
     private void setNativeGpsStatus(boolean enabled) {

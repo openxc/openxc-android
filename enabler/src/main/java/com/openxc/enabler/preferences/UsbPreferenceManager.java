@@ -18,21 +18,6 @@ public class UsbPreferenceManager extends VehiclePreferenceManager {
     }
 
     protected PreferenceListener createPreferenceListener() {
-        /*return new PreferenceListener() {
-            private int[] WATCHED_PREFERENCE_KEY_IDS = {
-                R.string.vehicle_interface_key
-            };
-
-            protected int[] getWatchedPreferenceKeyIds() {
-                return WATCHED_PREFERENCE_KEY_IDS;
-            }
-
-            public void readStoredPreferences() {
-                setUsbStatus(getPreferences().getString(
-                            getString(R.string.vehicle_interface_key), "").equals(
-                            getString(R.string.usb_interface_option_value)));
-            }
-        };*/
         return new PreferenceListenerImpl(this);
     }
 

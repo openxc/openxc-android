@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.common.base.MoreObjects;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -89,7 +90,8 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
     public TraceVehicleDataSource(SourceCallback callback, Context context,
             URI filename, boolean loop) throws DataSourceException {
         super(callback, context);
-        if(filename == null) {
+        if(filename == null && loop) {
+
             throw new DataSourceException(
                     "No filename specified for the trace source");
         }
@@ -174,46 +176,12 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     Log.w(TAG, "Couldn't open the trace file " + mFilename, e);
                     break;
                 }
-
                 String line;
+
                 long startingTime = System.currentTimeMillis();
                 // In the future may want to support binary traces
                 try {
-                    while (mRunning && (line = reader.readLine()) != null) {
-                        //Log.e(TAG, "Line:" + line);
-                        VehicleMessage measurement;
-                        try {
-                            measurement = JsonFormatter.deserialize(line);
-                        } catch (UnrecognizedMessageTypeException e) {
-                            Log.w(TAG, "A trace line was not in the expected " +
-                                    "format: " + line);
-                            continue;
-                        }
-
-                        if (measurement == null) {
-                            continue;
-                        }
-
-                        if (measurement != null && !measurement.isTimestamped()) {
-                            Log.w(TAG, "A trace line was missing a timestamp: " +
-                                    line);
-                            continue;
-                        }
-
-                        try {
-                            waitForNextRecord(startingTime, measurement.getTimestamp());
-                        } catch (NumberFormatException e) {
-                            Log.w(TAG, "A trace line was not in the expected " +
-                                    "format: " + line);
-                            continue;
-                        }
-                        measurement.untimestamp();
-                        if (!mTraceValid) {
-                            connected();
-                            mTraceValid = true;
-                        }
-                        handleMessage(measurement);
-                    }
+                   readerTest(reader);
                 } catch (IOException e) {
                     Log.w(TAG, "An exception occurred when reading the trace " +
                             reader, e);
@@ -237,6 +205,9 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     mRunning = false;
+                    Log.w(TAG, "Interrupted...");
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
             disconnected();
@@ -245,9 +216,48 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
                 mRunning = false;
                 Log.d(TAG, "Playback of trace " + mFilename + " is finished");
             }
-        } // while(mRunning)
+        }
     }
+private  void readerTest(BufferedReader reader) throws  IOException {
+    String line;
+    long startingTime = System.currentTimeMillis();
+    while (mRunning && (line = reader.readLine()) != null) {
 
+            VehicleMessage measurement;
+            try {
+                measurement = JsonFormatter.deserialize(line);
+            } catch (UnrecognizedMessageTypeException e) {
+                Log.w(TAG, "A trace line was not in the expected " +
+                        "format: " + line);
+                continue;
+            }
+
+            if (measurement == null) {
+                continue;
+            }
+
+            if (!measurement.isTimestamped()) {
+                Log.w(TAG, "A trace line was missing a timestamp: " + line);
+                continue;
+            }
+
+            try {
+                waitForNextRecord(startingTime, measurement.getTimestamp());
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "A trace line was not in the expected " +
+                        "format: " + line);
+                continue;
+            }
+            measurement.untimestamp();
+            if (!mTraceValid) {
+                connected();
+                mTraceValid = true;
+            }
+            handleMessage(measurement);
+        }
+
+
+}
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -320,7 +330,11 @@ public class TraceVehicleDataSource extends ContextualVehicleDataSource
         long sleepDuration = Math.max(targetTime - System.currentTimeMillis(), 0);
         try {
             Thread.sleep(sleepDuration);
-        } catch(InterruptedException e) {}
+        } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private BufferedReader openResourceFile(URI filename) {

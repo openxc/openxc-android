@@ -1,10 +1,12 @@
 package com.openxc.measurements;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 public class BrakePedalStatusTest {
@@ -27,6 +29,6 @@ public class BrakePedalStatusTest {
 
     @Test
     public void testGenericName() {
-        assertEquals(measurement.getGenericName(), BrakePedalStatus.ID);
+        assertEquals(BrakePedalStatus.ID, measurement.getGenericName());
     }
 }

@@ -70,8 +70,8 @@ public class CustomCommandResponse extends KeyedMessage {
         return MoreObjects.toStringHelper(this)
                 .add("timestamp", getTimestamp())
                 .add("command", getCommand())
-                .add("status", getStatus())
-                .add("message", getMessage())
+                .add(STATUS_KEY, getStatus())
+                .add(MESSAGE_KEY, getMessage())
                 .add("extras", getExtras())
                 .toString();
     }
@@ -110,5 +110,5 @@ public class CustomCommandResponse extends KeyedMessage {
         readFromParcel(in);
     }
 
-    protected CustomCommandResponse() { }
+
 }

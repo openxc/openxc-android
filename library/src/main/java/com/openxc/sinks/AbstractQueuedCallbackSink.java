@@ -60,6 +60,9 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
                 mNotificationsChanged.await();
             }
         } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
         } finally {
             mNotificationsLock.unlock();
         }
@@ -108,6 +111,8 @@ public abstract class AbstractQueuedCallbackSink implements VehicleDataSink {
                 } catch(InterruptedException e) {
                     Log.d(TAG, "Interrupted while waiting for a new " +
                             "item for notification -- likely shutting down");
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                     break;
                 } finally {
                     mNotificationsChanged.signal();

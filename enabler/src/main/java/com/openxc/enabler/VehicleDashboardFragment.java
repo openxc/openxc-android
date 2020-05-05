@@ -8,31 +8,32 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.openxc.remote.ViConnectionListener;
+import androidx.fragment.app.ListFragment;
+
 import com.openxc.VehicleManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.messages.EventedSimpleVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
+import com.openxc.remote.ViConnectionListener;
 import com.openxcplatform.enabler.R;
 
 public class VehicleDashboardFragment extends ListFragment {
     private static String TAG = "VehicleDashboard";
 
     private VehicleManager mVehicleManager;
-    private SimpleVehicleMessageAdapter mAdapter;
+    private SimpleVehicleMessageAdapter simpleVehicleMessageAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new SimpleVehicleMessageAdapter(getActivity());
+        simpleVehicleMessageAdapter = new SimpleVehicleMessageAdapter(getActivity());
     }
 
     @Override
@@ -63,9 +64,10 @@ public class VehicleDashboardFragment extends ListFragment {
             }
         }
     }
-    private ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
+    public ViConnectionListener mConnectionListener = new ViConnectionListener.Stub() {
         public void onConnected(final VehicleInterfaceDescriptor descriptor) {
             Log.d(TAG, descriptor + " is now connected");
+
         }
 
         public void onDisconnected() {
@@ -87,7 +89,7 @@ public class VehicleDashboardFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setListAdapter(mAdapter);
+        setListAdapter(simpleVehicleMessageAdapter);
     }
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
@@ -102,10 +104,10 @@ public class VehicleDashboardFragment extends ListFragment {
                                     ((EventedSimpleVehicleMessage) message).getName(),
                                     ((EventedSimpleVehicleMessage) message).getValue() +
                                             ": " + ((EventedSimpleVehicleMessage) message).getEvent());
-                            mAdapter.add(convertedMsg.asSimpleMessage());
+                            simpleVehicleMessageAdapter.add(convertedMsg.asSimpleMessage());
                         }
                         else
-                            mAdapter.add(message.asSimpleMessage());
+                            simpleVehicleMessageAdapter.add(message.asSimpleMessage());
                     }
                 });
             }

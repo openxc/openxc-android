@@ -72,7 +72,7 @@ public class EventedSimpleVehicleMessage extends SimpleVehicleMessage {
             .add("timestamp", getTimestamp())
             .add("name", getName())
             .add("value", getValue())
-            .add("event", getEvent())
+            .add(EVENT_KEY, getEvent())
             .add("extras", getExtras())
             .toString();
     }

@@ -1,5 +1,18 @@
 package com.openxc.sources;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.openxc.messages.MultiFrameResponse;
+import com.openxc.messages.SerializationException;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.BinaryStreamer;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,28 +20,12 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.openxc.messages.MultiFrameResponse;
-import com.openxc.messages.SerializationException;
-import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.formatters.MultiFrameStitcher;
-import com.openxc.messages.streamers.BinaryStreamer;
-import com.openxc.messages.streamers.JsonStreamer;
-import com.openxc.messages.streamers.VehicleMessageStreamer;
-import com.openxc.sinks.DataSinkException;
-
 /**
  * Common functionality for data sources that read a stream of newline-separated
  * messages in a separate thread from the main activity.
  */
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
-    private final static String TAG = BytestreamDataSource.class.getSimpleName();
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
@@ -140,6 +137,8 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             } catch(InterruptedException e) {
                 Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
                 stop();
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
                 break;
             }
 
@@ -193,7 +192,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 while((message = mStreamHandler.parseNextMessage()) != null) {
                     if (message instanceof MultiFrameResponse) {
                         if (((MultiFrameResponse)message).addSequentialData()) {
-                            handleMessage(mStreamHandler.parseMessage(((MultiFrameResponse)message).getAssembledMessage()));
+                            String fullMessage = ((MultiFrameResponse)message).getAssembledMessage(mStreamHandler.getRawMessage());
+                            message = mStreamHandler.parseMessage(fullMessage);
+                            if (message != null) {
+                                handleMessage(message);
+                            }
                         }
                     } else {
                         handleMessage(message);

@@ -21,27 +21,30 @@ import com.openxc.messages.formatters.JsonFormatter;
 public class JsonStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";
     private final static String DELIMITER = "\u0000";
+    private String rawMessage;
 
-    private StringBuffer mBuffer = new StringBuffer();
+    private StringBuilder mBuffer = new StringBuilder();
 
     /**
      * Return true if the buffer *most likely* contains JSON (as opposed to a
      * protobuf).
      */
     public static boolean containsJson(String buffer) {
-        return CharMatcher.ASCII
+        return CharMatcher.ascii()
             // We need to allow the \u0000 delimiter for JSON messages, so we
             // can't use the JAVA_ISO_CONTROL character set and must build the
             // range manually (minus \u0000)
             .and(CharMatcher.inRange('\u0001', '\u001f').negate())
             .and(CharMatcher.inRange('\u007f', '\u009f').negate())
-            .and(CharMatcher.ASCII)
+            .and(CharMatcher.ascii())
             .matchesAllOf(buffer);
     }
+
 
     @Override
     public VehicleMessage parseNextMessage() {
         String line = readToDelimiter();
+        rawMessage = line;
         if(line != null) {
             try {
                 Log.e(TAG, line);
@@ -55,15 +58,21 @@ public class JsonStreamer extends VehicleMessageStreamer {
 
     @Override
     public VehicleMessage parseMessage(String line) {
+        rawMessage = line;
         if(line != null) {
             try {
-                Log.e(TAG, line);
+                Log.e(TAG, "Unpackaged:"+line);
                 return JsonFormatter.deserialize(line);
             } catch(UnrecognizedMessageTypeException e) {
                 Log.w(TAG, "Unable to deserialize JSON", e);
             }
         }
         return null;
+    }
+
+    @Override
+    public String getRawMessage() {
+        return rawMessage;
     }
 
     @Override
@@ -74,6 +83,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
         // of converting the byte[] to something the StringBuilder can
         // accept (either char[] or String). See #151.
         mBuffer.append(new String(bytes, 0, length));
+        BinaryStreamer.dumpToLog(bytes, length);
     }
 
     @Override

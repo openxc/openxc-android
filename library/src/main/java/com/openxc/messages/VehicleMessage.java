@@ -1,6 +1,15 @@
 package com.openxc.messages;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,12 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
 
-import com.google.common.base.MoreObjects;
-import com.google.gson.annotations.SerializedName;
+
+
 
 /**
  * The VehicleMessage is the most basic, root form of data going back and forth
@@ -183,8 +189,8 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-            .add("timestamp", getTimestamp())
-            .add("extras", getExtras())
+            .add(TIMESTAMP_KEY, getTimestamp())
+            .add(EXTRAS_KEY, getExtras())
             .toString();
     }
 
@@ -230,34 +236,24 @@ public class VehicleMessage implements Parcelable, Comparable<VehicleMessage> {
 
     public static final Parcelable.Creator<VehicleMessage> CREATOR =
             new Parcelable.Creator<VehicleMessage>() {
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public VehicleMessage createFromParcel(Parcel in) {
             String messageClassName = in.readString();
             Constructor<? extends VehicleMessage> constructor;
             Class<? extends VehicleMessage> messageClass = null;
-            try {
+
                 try {
                     messageClass = Class.forName(messageClassName).asSubclass(
                             VehicleMessage.class);
-                } catch(ClassNotFoundException e) {
-                    throw new UnrecognizedMessageTypeException(
-                            "Unrecognized message class: " + messageClassName);
-                }
-
-                try {
                     // Must use getDeclaredConstructor because it's a protected
                     // constructor. That's OK since we are the parent class and
                     // should have access, we're not breaking abstraction.
                     constructor = messageClass.getDeclaredConstructor(Parcel.class);
-                } catch(NoSuchMethodException e) {
-                    throw new UnrecognizedMessageTypeException(messageClass +
-                            " doesn't have the expected constructor", e);
+                    return constructor.newInstance(in);
                 }
 
-                return constructor.newInstance(in);
-            } catch(InstantiationException|IllegalAccessException
-                    |InvocationTargetException
-                    |UnrecognizedMessageTypeException e) {
+           catch(InstantiationException | IllegalAccessException | InvocationTargetException  | NoSuchMethodException | ClassNotFoundException e) {
                 Log.e(TAG, "Unable to unparcel a " + messageClass, e);
                 return new VehicleMessage();
             }

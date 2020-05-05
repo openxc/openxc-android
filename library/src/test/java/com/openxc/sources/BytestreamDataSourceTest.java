@@ -1,10 +1,20 @@
 package com.openxc.sources;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import com.openxc.TestUtils;
+import com.openxc.messages.SerializationException;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.BinaryStreamer;
+import com.openxc.messages.streamers.JsonStreamer;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,23 +23,13 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
-
-import com.openxc.TestUtils;
-import com.openxc.messages.SerializationException;
-import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.streamers.BinaryStreamer;
-import com.openxc.messages.streamers.JsonStreamer;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 public class BytestreamDataSourceTest {
@@ -105,6 +105,8 @@ public class BytestreamDataSourceTest {
         verify(callback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
+    // Currently this test fails to run since the protobuf API has changes some of the members
+    // from public to private or protected so this test fails.
     @Test
     public void receiveValidBinaryTriggersCallback() throws SerializationException {
         source.start();
@@ -134,6 +136,9 @@ public class BytestreamDataSourceTest {
         received.untimestamp();
         assertEquals(received, message);
     }
+
+    // Currently this test fails to run since the protobuf API has changes some of the members
+    // from public to private or protected so this test fails.
     @Test
     public void receiveValidJsonTriggersInjectJSONModeCallback() throws SerializationException{
         source.start();

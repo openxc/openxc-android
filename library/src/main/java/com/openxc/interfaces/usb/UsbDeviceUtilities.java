@@ -1,9 +1,11 @@
 package com.openxc.interfaces.usb;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import android.util.Log;
 
 import com.openxc.sources.DataSourceResourceException;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Stateless utilities for finding and opening USB devices.
@@ -16,11 +18,18 @@ import com.openxc.sources.DataSourceResourceException;
  * example valid URI is "usb://04d8/0053".
  */
 public class UsbDeviceUtilities {
+    public static final String USB_DEVICE_ERROR = "USB device must be of the format %s -- the given %s has a bad vendor ID";
     public static URI DEFAULT_USB_DEVICE_URI = null;
+    private  UsbDeviceUtilities() {
+
+    }
+
     static {
         try {
             DEFAULT_USB_DEVICE_URI = new URI("usb://1bc4/0001");
-        } catch(URISyntaxException e) { }
+        } catch(URISyntaxException e) {
+            Log.e("USB", "exception: " + e.toString());
+        }
     }
 
     /**
@@ -35,9 +44,8 @@ public class UsbDeviceUtilities {
         try {
             return Integer.parseInt(uri.getAuthority(), 16);
         } catch(NumberFormatException e) {
-            throw new DataSourceResourceException(
-                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
-                " -- the given " + uri + " has a bad vendor ID");
+            String msg=String.format(USB_DEVICE_ERROR,DEFAULT_USB_DEVICE_URI,uri);
+            throw new DataSourceResourceException(msg);
         }
     }
 
@@ -50,16 +58,11 @@ public class UsbDeviceUtilities {
      */
     public static int productFromUri(URI uri)
             throws DataSourceResourceException {
+        String msg=String.format(USB_DEVICE_ERROR,DEFAULT_USB_DEVICE_URI,uri);
         try {
             return Integer.parseInt(uri.getPath().substring(1), 16);
-        } catch(NumberFormatException e) {
-            throw new DataSourceResourceException(
-                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
-                " -- the given " + uri + " has a bad product ID");
-        } catch(StringIndexOutOfBoundsException e) {
-            throw new DataSourceResourceException(
-                "USB device must be of the format " + DEFAULT_USB_DEVICE_URI +
-                " -- the given " + uri + " has a bad product ID");
+        } catch(StringIndexOutOfBoundsException|NumberFormatException e) {
+            throw new DataSourceResourceException(msg);
         }
     }
 }

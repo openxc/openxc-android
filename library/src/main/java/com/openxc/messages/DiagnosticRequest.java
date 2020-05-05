@@ -104,8 +104,8 @@ public class DiagnosticRequest extends DiagnosticMessage {
             .add("mode", getMode())
             .add("pid", getPid())
             .add("payload", Arrays.toString(getPayload()))
-            .add("multiple_responses", getMultipleResponses())
-            .add("frequency", getFrequency())
+            .add(MULTIPLE_RESPONSES_KEY, getMultipleResponses())
+            .add(FREQUENCY_KEY, getFrequency())
             .add("name", getName())
             .add("extras", getExtras())
             .toString();

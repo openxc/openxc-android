@@ -1,5 +1,7 @@
 package com.openxc.sources;
 
+import android.util.Log;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -98,6 +100,9 @@ public abstract class BaseVehicleDataSource implements VehicleDataSource {
                 mCallbackChanged.await();
             }
         } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
         } finally {
             mCallbackLock.unlock();
         }

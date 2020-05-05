@@ -1,5 +1,7 @@
 package com.openxc.sources;
 
+import android.util.Log;
+
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 
@@ -24,7 +26,11 @@ public class TestSource extends BaseVehicleDataSource {
                 // our assertions
                 try {
                     Thread.sleep(1000);
-                } catch(InterruptedException e) {}
+                } catch(InterruptedException e) {
+                    Log.w("BaseVehicleDataSource", "Interrupted...");
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }

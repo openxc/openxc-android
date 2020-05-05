@@ -12,8 +12,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +20,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.openxc.VehicleManager;
+import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
@@ -30,9 +32,8 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxc.sources.SourceCallback;
-import com.openxcplatform.enabler.R;
-import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.sources.trace.TraceVehicleDataSource;
+import com.openxcplatform.enabler.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,7 +41,7 @@ import java.util.TimerTask;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
 
-public class StatusFragment extends Fragment implements Button.OnClickListener{
+public class StatusFragment extends Fragment implements android.view.View.OnClickListener{
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static String TAG = "StatusFragment";
@@ -383,7 +384,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private void splitTraceFile(){
 
         mTracePref.setVehicleManager(mVehicleManager);
-        mTracePref.splitTraceFile(true);
+        mTracePref.splitTraceFile();
 
     }
     private void startStopClick(){
@@ -403,7 +404,6 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
 
     // Restart Tracefile button pressed
     private void restartTraceFile(){
-        SourceCallback remoteCallback = mVehicleManager.getRemoteCallback();
         SourceCallback userCallback = mVehicleManager.getUserCallback();
         TraceVehicleDataSource traceVehicleDataSource  = OpenXCApplication.getTraceSource();
         if (traceVehicleDataSource != null) {
@@ -435,6 +435,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             case R.id.restarttrace_btn:
                 restartTraceFile();
                 break;
+            default: return;
         }
     }
 }
