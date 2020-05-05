@@ -119,6 +119,12 @@ public class BaseMeasurementTest {
         BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
     }
 
+    @Test(expected=UnrecognizedMeasurementTypeException.class)
+    public void testForUnrecognizedMeasurementTypeException() throws UnrecognizedMeasurementTypeException, NoValueException {
+        SimpleVehicleMessage message = new SimpleVehicleMessage(0L, "door_status", "rear_left: false");
+        Measurement measurement = BaseMeasurement.getMeasurementFromMessage(VehicleDoorStatus.class, message);
+    }
+
     @Test
     public void buildEventedFromMessage()
             throws UnrecognizedMeasurementTypeException, NoValueException {

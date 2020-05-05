@@ -105,6 +105,8 @@ public class BytestreamDataSourceTest {
         verify(callback, never()).receive(Matchers.any(VehicleMessage.class));
     }
 
+    // Currently this test fails to run since the protobuf API has changes some of the members
+    // from public to private or protected so this test fails.
     @Test
     public void receiveValidBinaryTriggersCallback() throws SerializationException {
         source.start();
@@ -134,6 +136,9 @@ public class BytestreamDataSourceTest {
         received.untimestamp();
         assertEquals(received, message);
     }
+
+    // Currently this test fails to run since the protobuf API has changes some of the members
+    // from public to private or protected so this test fails.
     @Test
     public void receiveValidJsonTriggersInjectJSONModeCallback() throws SerializationException{
         source.start();

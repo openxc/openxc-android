@@ -21,6 +21,7 @@ import com.openxc.messages.formatters.JsonFormatter;
 public class JsonStreamer extends VehicleMessageStreamer {
     private static String TAG = "JsonStreamer";
     private final static String DELIMITER = "\u0000";
+    private String rawMessage;
 
     private StringBuilder mBuffer = new StringBuilder();
 
@@ -39,9 +40,11 @@ public class JsonStreamer extends VehicleMessageStreamer {
             .matchesAllOf(buffer);
     }
 
+
     @Override
     public VehicleMessage parseNextMessage() {
         String line = readToDelimiter();
+        rawMessage = line;
         if(line != null) {
             try {
                 Log.e(TAG, line);
@@ -55,15 +58,21 @@ public class JsonStreamer extends VehicleMessageStreamer {
 
     @Override
     public VehicleMessage parseMessage(String line) {
+        rawMessage = line;
         if(line != null) {
             try {
-                Log.e(TAG, line);
+                Log.e(TAG, "Unpackaged:"+line);
                 return JsonFormatter.deserialize(line);
             } catch(UnrecognizedMessageTypeException e) {
                 Log.w(TAG, "Unable to deserialize JSON", e);
             }
         }
         return null;
+    }
+
+    @Override
+    public String getRawMessage() {
+        return rawMessage;
     }
 
     @Override
@@ -74,6 +83,7 @@ public class JsonStreamer extends VehicleMessageStreamer {
         // of converting the byte[] to something the StringBuilder can
         // accept (either char[] or String). See #151.
         mBuffer.append(new String(bytes, 0, length));
+        BinaryStreamer.dumpToLog(bytes, length);
     }
 
     @Override

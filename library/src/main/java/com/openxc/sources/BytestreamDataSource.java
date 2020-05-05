@@ -161,7 +161,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         while((message = mStreamHandler.parseNextMessage()) != null) {
             if (message instanceof MultiFrameResponse) {
                 if (((MultiFrameResponse)message).addSequentialData()) {
-                    handleMessage(mStreamHandler.parseMessage(((MultiFrameResponse)message).getAssembledMessage()));
+                    String fullMessage = ((MultiFrameResponse)message).getAssembledMessage(mStreamHandler.getRawMessage());
+                    message = mStreamHandler.parseMessage(fullMessage);
+                    if (message != null) {
+                        handleMessage(message);
+                    }
                 }
             } else {
                 handleMessage(message);
