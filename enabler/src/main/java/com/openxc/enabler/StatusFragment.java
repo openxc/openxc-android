@@ -50,6 +50,9 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
     private TextView mViVersionView;
     private TextView mViPlatformView;
     private TextView mViDeviceIdView;
+    private TextView mViDeviceThroughputBytesView;
+    private TextView mViDeviceThroughputMessagesView;
+    private TextView mViDeviceAverageMessageSizeView;
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -63,6 +66,8 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
     private Button mSplitTraceFile;
     private Button mRestartTraceFile;
     private Button mStartStop;
+    
+    private TimerTask mUpdateDataThroughputTask;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
@@ -180,15 +185,24 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                 }
             }).start();
 
-            mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
-                    getActivity(), mMessageCountView);
-            mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
-                    mVehicleManager, getActivity(),
-                    mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
-                    mNoneConnView);
-            mTimer = new Timer();
-            mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
-            mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
+            if (null == mUpdateDataThroughputTask) {
+                mUpdateDataThroughputTask = new DataThroughputTask(mVehicleManager,
+                        getActivity(), mMessageCountView, mViDeviceThroughputBytesView,
+                        mViDeviceThroughputMessagesView, mViDeviceAverageMessageSizeView);
+            }
+
+            if (null == mUpdatePipelineStatusTask) {
+                mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
+                        mVehicleManager, getActivity(),
+                        mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
+                        mNoneConnView);
+            }
+
+            if (null == mTimer) {
+                mTimer = new Timer();
+                mTimer.schedule(mUpdateDataThroughputTask, 100, 1000);
+                mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
+            }
         }
 
         public synchronized void onServiceDisconnected(ComponentName className) {
@@ -200,6 +214,11 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                         mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
                     }
                 });
+            }
+
+            if (mUpdateDataThroughputTask != null) {
+                mUpdateDataThroughputTask.cancel();
+                mUpdateDataThroughputTask = null;
             }
         }
     };
@@ -300,6 +319,9 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);
+        mViDeviceThroughputBytesView = (TextView) v.findViewById(R.id.throughput_bytes);
+        mViDeviceThroughputMessagesView = (TextView) v.findViewById(R.id.throughput_messages);
+        mViDeviceAverageMessageSizeView = (TextView) v.findViewById(R.id.average_message_size);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
         mFileConnIV = v.findViewById(R.id.connection_file);
