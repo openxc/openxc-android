@@ -92,6 +92,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
     public final static String VEHICLE_LOCATION_PROVIDER =
             VehicleLocationProvider.VEHICLE_LOCATION_PROVIDER;
     private final static String TAG = "VehicleManager";
+    public static final String ADDING_LISTENER_S_TO_S = "Adding listener %s to %s";
+    public static final String UNABLE_TO_SEND_MESSAGE_TO_REMOTE_SERVICE = "Unable to send message to remote service";
     private Lock mRemoteBoundLock = new ReentrantLock();
     private Condition mRemoteBoundCondition = mRemoteBoundLock.newCondition();
     private IBinder mBinder = new VehicleBinder();
@@ -175,18 +177,23 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * measurement back from the system.
      */
     public void waitUntilBound() throws VehicleServiceException {
-        mRemoteBoundLock.lock();
-        Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
-        while(mRemoteService == null) {
-            try {
-                if(!mRemoteBoundCondition.await(3, TimeUnit.SECONDS)) {
+        try {
+            mRemoteBoundLock.lock();
+            Log.i(TAG, "Waiting for the VehicleService to bind to " + this);
+            while(mRemoteService == null) {
+                if (!mRemoteBoundCondition.await(3, TimeUnit.SECONDS)) {
                     throw new VehicleServiceException(
                             "Not bound to remote service after 3 seconds");
                 }
-            } catch(InterruptedException e) {}
+            }
+        } catch(InterruptedException e) {
+            Log.w(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } finally {
+            Log.i(TAG, mRemoteService + " is now bound");
+            mRemoteBoundLock.unlock();
         }
-        Log.i(TAG, mRemoteService + " is now bound");
-        mRemoteBoundLock.unlock();
     }
 
     /**
@@ -343,7 +350,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      */
     public void addListener(Class<? extends Measurement> measurementType,
             Measurement.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " for " + measurementType);
+        String msg = String.format(ADDING_LISTENER_S_TO_S, listener , measurementType);
+
+        Log.i(TAG, msg );
         mNotifier.register(measurementType, listener);
     }
 
@@ -365,7 +374,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      */
     public void addListener(Class<? extends VehicleMessage> messageType,
             VehicleMessage.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " for " + messageType);
+        String msg = String.format(ADDING_LISTENER_S_TO_S, listener , messageType);
+        Log.i(TAG, msg);
         mNotifier.register(messageType, listener);
     }
 
@@ -406,7 +416,8 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
      * @param listener An listener instance to receive the callback.
      */
     public void addListener(KeyMatcher matcher, VehicleMessage.Listener listener) {
-        Log.i(TAG, "Adding listener " + listener + " to " + matcher);
+        String msg = String.format(ADDING_LISTENER_S_TO_S, listener , matcher);
+        Log.i(TAG, msg);
         mNotifier.register(matcher, listener);
     }
 
@@ -773,7 +784,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             try {
                 return mUserOriginPipeline.isActive() || mRemoteService.isViConnected();
             } catch(RemoteException e) {
-                Log.d(TAG, "Unable to send message to remote service", e);
+                Log.d(TAG, UNABLE_TO_SEND_MESSAGE_TO_REMOTE_SERVICE, e);
             }
         }
         return false;
@@ -792,7 +803,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             try {
                 mRemoteService.userPipelineActivated();
             } catch(RemoteException e) {
-                Log.d(TAG, "Unable to send message to remote service", e);
+                Log.d(TAG, UNABLE_TO_SEND_MESSAGE_TO_REMOTE_SERVICE, e);
             }
         }
     }
@@ -803,7 +814,7 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
             try {
                 mRemoteService.userPipelineDeactivated();
             } catch(RemoteException e) {
-                Log.d(TAG, "Unable to send message to remote service", e);
+                Log.d(TAG, UNABLE_TO_SEND_MESSAGE_TO_REMOTE_SERVICE, e);
             }
         }
     }
@@ -839,6 +850,9 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                     mResponseReceived.await(RESPONSE_TIMEOUT_S, TimeUnit.SECONDS);
                 }
             } catch(InterruptedException e) {
+                Log.w(TAG, "Interrupted...");
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             } finally {
                 mLock.unlock();
             }

@@ -1,17 +1,5 @@
 package com.openxc.messages.formatters;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
@@ -20,9 +8,21 @@ import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.DiagnosticResponse.NegativeResponseCode;
-import com.openxc.messages.formatters.ByteAdapter;
-import com.openxc.messages.formatters.JsonFormatter;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import java.util.HashMap;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class JsonFormatterTest extends AbstractFormatterTestBase {
@@ -47,12 +47,12 @@ public class JsonFormatterTest extends AbstractFormatterTestBase {
     public void testDeserializeDiagnosticResponseFromJsonString() throws UnrecognizedMessageTypeException {
         String data = "{\"bus\":1,\"id\":2028,\"mode\":1,\"success\":true,\"pid\":64,\"payload\":\"0x40800020\"}";
         DiagnosticResponse response = (DiagnosticResponse) JsonFormatter.deserialize(data);
-        assertEquals(response.getBusId(), 1);
-        assertEquals(response.getId(), 2028);
-        assertEquals(response.getMode(), 1);
-        assertEquals(response.isSuccessful(), true);
-        assertEquals(response.getPid().intValue(), 64);
-        assertEquals(ByteAdapter.byteArrayToHexString(response.getPayload()), "40800020");
+        assertEquals( 1 , response.getBusId());
+        assertEquals(2028,response.getId());
+        assertEquals(1 ,response.getMode());
+        assertEquals(true, response.isSuccessful() );
+        assertEquals( 64, response.getPid().intValue() );
+        assertEquals( "40800020", ByteAdapter.byteArrayToHexString(response.getPayload()));
     }
 
     @Test
@@ -128,7 +128,8 @@ public class JsonFormatterTest extends AbstractFormatterTestBase {
         HashMap<String, Object> extras = new HashMap<>();
         extras.put("foo", "bar");
         extras.put("baz", 42.0);
-        JsonFormatter.serialize(new VehicleMessage(extras));
+        String actualJson = JsonFormatter.serialize(new VehicleMessage(extras));
+        assertTrue(actualJson.contains("foo") && actualJson.contains("bar")&&actualJson.contains("baz") && actualJson.contains("42.0"));
     }
 
     @Test

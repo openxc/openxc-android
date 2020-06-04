@@ -1,14 +1,7 @@
 package com.openxc.interfaces.network;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.URI;
-import java.util.concurrent.TimeUnit;
-
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.common.base.MoreObjects;
@@ -19,6 +12,14 @@ import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
 import com.openxc.sources.SourceCallback;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.URI;
+import java.util.concurrent.TimeUnit;
+
 /**
  * A vehicle data source reading measurements from an OpenXC network device.
  *
@@ -27,6 +28,7 @@ import com.openxc.sources.SourceCallback;
  */
 public class NetworkVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
+    public static final String BROADCAST_NETWORK_DISCONNECTED = "com.openxc.interfaces.network.NetworkVehicleInterface.disconnected";
     private static final String TAG = "NetworkVehicleInterface";
     private static final int SOCKET_TIMEOUT = 10000;
     private static final String SCHEMA_SPECIFIC_PREFIX = "//";
@@ -83,6 +85,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                     mSocket.close();
                 }
             } catch(IOException e) {
+                Log.e(TAG, "setResource: ",e );
             }
             return true;
         }
@@ -121,7 +124,11 @@ public class NetworkVehicleInterface extends BytestreamDataSource
                 connected = mSocket != null && mSocket.isConnected() && super.isConnected();
                 mConnectionLock.readLock().unlock();
             }
-        } catch(InterruptedException e) {}
+        } catch(InterruptedException e) {
+            Log.d(TAG, "Interrupted...");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
         return connected;
     }
 
@@ -210,6 +217,7 @@ public class NetworkVehicleInterface extends BytestreamDataSource
             mConnectionLock.writeLock().unlock();
         }
         Log.d(TAG, "Disconnected from the socket");
+        sendNetworkDisconnectBroadcast();
     }
 
     /**
@@ -281,5 +289,13 @@ public class NetworkVehicleInterface extends BytestreamDataSource
         }
 
         mUri = uri;
+    }
+
+    // For an example on BroadcastReceivers and Broadcast Intents see
+    // https://www.techotopia.com/index.php/Android_Broadcast_Intents_and_Broadcast_Receivers
+    protected void sendNetworkDisconnectBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(BROADCAST_NETWORK_DISCONNECTED);
+        getContext().sendBroadcast(intent);
     }
 }

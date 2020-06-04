@@ -14,9 +14,9 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
-
+import androidx.core.app.ActivityCompat;
 import com.google.common.base.MoreObjects;
 import com.openxc.messages.SimpleVehicleMessage;
 
@@ -44,11 +44,11 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
 
 
     private static SensorManager sensorService;
-    private Sensor sensor;
-    private float ax,ay,az;
-    private float rx,ry,rz;
-    private float gx,gy,gz;
-    private float mx,my,mz;
+
+     float ax,ay,az;
+     float rx,ry,rz;
+     float gx,gy,gz;
+     float mx,my,mz;
     private float light;
     private float proximity;
     private float humidity;
@@ -67,31 +67,13 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
         devmodel = Build.MODEL;
         devname = Build.PRODUCT;
         osver = Build.VERSION.RELEASE;
-
-        System.out.println("MODEL: "+android.os.Build.MODEL
-                +"\nDEVICE: "+android.os.Build.DEVICE
-                +"\nBRAND: "+android.os.Build.BRAND
-                +"\nDISPLAY: "+android.os.Build.DISPLAY
-                +"\nBOARD: "+android.os.Build.BOARD
-                +"\nHOST: "+android.os.Build.HOST
-                +"\nMANUFACTURER: "+android.os.Build.MANUFACTURER
-                +"\nPRODUCT: "+android.os.Build.PRODUCT);
-
         PackageManager PM= context.getPackageManager();
         boolean gyro = PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE);
-        System.out.println("gyro allowed:"+gyro);
-        sensorService = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-
-
         List<Sensor> listSensor = sensorService.getSensorList(Sensor.TYPE_ALL);
         for(int i=0; i<listSensor.size(); i++)
         {
-            System.out.println("Sensor : " + listSensor.get(i).getName());
+            Log.d(TAG, "PhoneSensorSource: " );
         }
-
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-
     }
 
     public PhoneSensorSource(Context context) {
@@ -136,7 +118,7 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
                         SensorManager.SENSOR_DELAY_NORMAL);
             }
 
-            if (ActivityCompat.checkSelfPermission
+            if (ContextCompat.checkSelfPermission
                     (thecontext, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -155,7 +137,7 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
     @Override
     public void stop() {
         super.stop();
-        System.out.println("Phone Sensor service stopped");
+        Log.d(TAG, "Phone Sensor service stopped: ");
         onPipelineDeactivated();
         sensorService.unregisterListener(this);
         locationManager.removeUpdates(this);
@@ -163,7 +145,7 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        //System.out.println("Sensor update:"+event.sensor.getName());
+
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
             float[] accelValues = event.values;
@@ -204,27 +186,27 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
             handleMessage(new SimpleVehicleMessage("phone_magnetometer", Arrays.toString(magnetoValues)));
         }
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-            //   System.out.println("new light: " + event.values[0]);
+
             light = event.values[0];
             handleMessage(new SimpleVehicleMessage("phone_light_level", light));
         }
         if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-            //   System.out.println("new light: " + event.values[0]);
+
             proximity = event.values[0];
             handleMessage(new SimpleVehicleMessage("phone_proximity", proximity));
         }
         if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
-            //   System.out.println("new light: " + event.values[0]);
+
             pressure = event.values[0];
             handleMessage(new SimpleVehicleMessage("phone_atmospheric_pressure", pressure));
         }
         if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
-            //   System.out.println("new light: " + event.values[0]);
+
             humidity = event.values[0];
             handleMessage(new SimpleVehicleMessage("phone_relative_humidity", humidity));
         }
         if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
-            //   System.out.println("new light: " + event.values[0]);
+
             temperature = event.values[0];
             handleMessage(new SimpleVehicleMessage("phone_ambient_temperature", temperature));
         }
@@ -282,7 +264,7 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-        System.out.println("accuracy changed");
+        Log.d(TAG, "onAccuracyChanged: ");
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ListFragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import androidx.fragment.app.ListFragment;
 import com.openxc.VehicleManager;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
@@ -25,10 +25,10 @@ import com.openxc.messages.VehicleMessage;
 import com.openxcplatform.enabler.R;
 
 public class DiagnosticRequestFragment extends ListFragment {
-    private static String TAG = "DiagnosticRequestFragment";
+    private final static String DiagnosticMessage = "DiagnosticRequestFragment";
 
     private VehicleManager mVehicleManager;
-    private DiagnosticResponseAdapter mAdapter;
+    private DiagnosticResponseAdapter diagnosticResponseAdapter;
     private View mLastRequestView;
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
@@ -38,7 +38,7 @@ public class DiagnosticRequestFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        mAdapter.add(message.asDiagnosticResponse());
+                        diagnosticResponseAdapter.add(message.asDiagnosticResponse());
                     }
                 });
             }
@@ -48,7 +48,7 @@ public class DiagnosticRequestFragment extends ListFragment {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
-            Log.i(TAG, "Bound to VehicleManager");
+            Log.i(DiagnosticMessage, "Bound to VehicleManager");
             mVehicleManager = ((VehicleManager.VehicleBinder)service
                     ).getService();
 
@@ -56,7 +56,7 @@ public class DiagnosticRequestFragment extends ListFragment {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.w(TAG, "VehicleService disconnected unexpectedly");
+            Log.w(DiagnosticMessage, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
         }
     };
@@ -64,7 +64,7 @@ public class DiagnosticRequestFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new DiagnosticResponseAdapter(getActivity());
+        diagnosticResponseAdapter = new DiagnosticResponseAdapter(getActivity());
     }
 
     @Override
@@ -129,14 +129,14 @@ public class DiagnosticRequestFragment extends ListFragment {
             // VehicleManager
             updateLastRequestView(request);
         } else {
-            Log.i(TAG, "Form is invalid, not sending diagnostic request");
+            Log.i(DiagnosticMessage, "Form is invalid, not sending diagnostic request");
         }
     }
 
     private void updateLastRequestView(final DiagnosticRequest request) {
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                // TODO This is duplicated in DiagnosticResponseAdapter - figure
+                // This is duplicated in DiagnosticResponseAdapter - figure
                 // out the best way to share this rendering info
                 TextView timestampView = (TextView)
                         mLastRequestView.findViewById(R.id.timestamp);
@@ -168,22 +168,24 @@ public class DiagnosticRequestFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setListAdapter(mAdapter);
+        setListAdapter(diagnosticResponseAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().bindService(
-                new Intent(getActivity(), VehicleManager.class),
-                mConnection, Context.BIND_AUTO_CREATE);
+        if (getActivity() != null) {
+            getActivity().bindService(
+                    new Intent(getActivity(), VehicleManager.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if(mVehicleManager != null) {
-            Log.i(TAG, "Unbinding from vehicle service");
+            Log.i(DiagnosticMessage, "Unbinding from vehicle service");
             mVehicleManager.removeListener(DiagnosticResponse.class, mListener);
             getActivity().unbindService(mConnection);
             mVehicleManager = null;

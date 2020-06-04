@@ -11,9 +11,13 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
-        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
         classpath 'com.bugsnag:bugsnag-android-gradle-plugin:3.5.0'
+        classpath 'com.github.triplet.gradle:play-publisher:2.0.0-rc1'
     }
+}
+
+plugins {
+    id "org.sonarqube" version "2.7"
 }
 
 allprojects {
@@ -31,8 +35,8 @@ ext {
     targetSdkVersion = 28
 
     versionMajor = 7
-    versionMinor = 0
-    versionPatch = 8
+    versionMinor = 1
+    versionPatch = 0
 
     versionCode = versionMajor * 1000000 + versionMinor * 1000 + versionPatch
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"

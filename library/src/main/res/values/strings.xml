@@ -4,6 +4,9 @@
     <string name="notification_content">Connected to vehicle</string>
 
     <string name="native_gps_checkbox_key">use_native_gps</string>
+    <string name="power_drop_checkbox_key">power_drop</string>
+    <string name="network_drop_checkbox_key">network_drop</string>
+    <string name="usb_drop_checkbox_key">usb_drop</string>
     <string name="gps_overwrite_checkbox_key">overwrite_native_gps</string>
     <string name="recording_checkbox_key">recording_enabled</string>
     <string name="recording_directory_key">recording_output</string>

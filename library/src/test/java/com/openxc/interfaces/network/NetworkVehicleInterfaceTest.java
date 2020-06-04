@@ -1,20 +1,19 @@
 package com.openxc.interfaces.network;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
-
 import android.content.Context;
 
 import com.openxc.sources.DataSourceException;
 import com.openxc.sources.DataSourceResourceException;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class NetworkVehicleInterfaceTest {
@@ -38,6 +37,7 @@ public class NetworkVehicleInterfaceTest {
     @Test
     public void testValidUri() throws DataSourceException {
         source = new NetworkVehicleInterface(getContext(), goodUri);
+        assertTrue(null != source);
     }
 
     @Test
@@ -100,10 +100,5 @@ public class NetworkVehicleInterfaceTest {
             return;
         }
         Assert.fail("Expected a DataSourceResourceException");
-    }
-
-    @Test
-    public void testMissingPrefix() throws DataSourceException {
-        source = new NetworkVehicleInterface(getContext(), missingPrefixUri);
     }
 }

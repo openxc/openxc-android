@@ -39,7 +39,7 @@ import com.openxc.util.Range;
  * Measurement. If you know of a better way, please say so.
  */
 public abstract class BaseMeasurement<TheUnit extends Unit>
-            implements Measurement {
+        implements Measurement {
     private static final String TAG = BaseMeasurement.class.toString();
 
     protected AgingData<TheUnit> mValue;
@@ -179,7 +179,7 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
         } catch(IllegalAccessException e) {
             throw new UnrecognizedMeasurementTypeException(
                     measurementType + " has an inaccessible " +
-                    "ID field", e);
+                            "ID field", e);
         }
     }
 
@@ -194,23 +194,23 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
     }
 
     public static Class<? extends Measurement>
-            getClassForId(String measurementId)
+    getClassForId(String measurementId)
             throws UnrecognizedMeasurementTypeException {
         Class<? extends Measurement> result = sMeasurementIdToClass.get(
                 measurementId);
         if(result == null) {
             throw new UnrecognizedMeasurementTypeException(
                     "Didn't have a measurement with ID " + measurementId +
-                    " cached");
+                            " cached");
         }
         return result;
     }
 
     public static Measurement getMeasurementFromMessage(
             SimpleVehicleMessage message)
-                throws UnrecognizedMeasurementTypeException, NoValueException {
+            throws UnrecognizedMeasurementTypeException, NoValueException {
         Class<? extends Measurement> measurementClass =
-            BaseMeasurement.getClassForId(message.getName());
+                BaseMeasurement.getClassForId(message.getName());
         return BaseMeasurement.getMeasurementFromMessage(measurementClass,
                 message);
     }
@@ -218,7 +218,7 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
     public static Measurement getMeasurementFromMessage(
             Class<? extends Measurement> measurementType,
             SimpleVehicleMessage message)
-                throws UnrecognizedMeasurementTypeException, NoValueException {
+            throws UnrecognizedMeasurementTypeException, NoValueException {
         Constructor<? extends Measurement> constructor;
         if(message == null) {
             throw new NoValueException();
@@ -227,19 +227,13 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
         try {
             Measurement measurement;
             SimpleVehicleMessage simpleMessage = message.asSimpleMessage();
-            Class<?> valueClass = simpleMessage.getValue().getClass();
-            if(valueClass == Double.class || valueClass == Integer.class) {
-                valueClass = Number.class;
-            }
+            Class<?> valueClass = getaClass(simpleMessage.getValue());
 
             if(message instanceof EventedSimpleVehicleMessage) {
                 EventedSimpleVehicleMessage eventedMessage =
                         message.asEventedMessage();
 
-                Class<?> eventClass = eventedMessage.getEvent().getClass();
-                if(eventClass == Double.class || eventClass == Integer.class) {
-                    eventClass = Number.class;
-                }
+                Class<?> eventClass = getaClass(eventedMessage.getEvent());
 
                 try {
                     constructor = measurementType.getConstructor(
@@ -247,9 +241,9 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 } catch(NoSuchMethodException e) {
                     throw new UnrecognizedMeasurementTypeException(
                             measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ", " + eventClass + ")");
+                                    " doesn't have the expected constructor, " +
+                                    measurementType + "(" +
+                                    valueClass + ", " + eventClass + ")");
                 }
 
                 measurement = constructor.newInstance(
@@ -261,9 +255,9 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
                 } catch(NoSuchMethodException e) {
                     throw new UnrecognizedMeasurementTypeException(
                             measurementType +
-                            " doesn't have the expected constructor, " +
-                           measurementType + "(" +
-                           valueClass + ")");
+                                    " doesn't have the expected constructor, " +
+                                    measurementType + "(" +
+                                    valueClass + ")");
                 }
 
                 measurement = constructor.newInstance(
@@ -291,6 +285,14 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
         }
     }
 
+    private static Class<?> getaClass(Object value) {
+        Class<?> valueClass = value.getClass();
+        if (valueClass == Double.class || valueClass == Integer.class) {
+            valueClass = Number.class;
+        }
+        return valueClass;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {
@@ -308,7 +310,7 @@ public abstract class BaseMeasurement<TheUnit extends Unit>
         @SuppressWarnings("unchecked")
         final BaseMeasurement<TheUnit> other = (BaseMeasurement<TheUnit>) obj;
         return Objects.equal(getValue(), other.getValue()) &&
-            Objects.equal(other.getRange(), getRange());
+                Objects.equal(other.getRange(), getRange());
     }
 
     @Override

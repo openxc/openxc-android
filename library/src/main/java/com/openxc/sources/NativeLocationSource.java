@@ -1,5 +1,4 @@
 package com.openxc.sources;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -7,7 +6,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-
 import com.google.common.base.MoreObjects;
 import com.openxc.measurements.Latitude;
 import com.openxc.measurements.Longitude;

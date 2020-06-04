@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/notification_summary">
+        <CheckBoxPreference
+            android:key="@string/power_drop_checkbox_key"
+            android:title="@string/power_drop_checkbox_title"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="@string/network_drop_checkbox_key"
+            android:title="@string/network_drop_checkbox_title"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="@string/usb_drop_checkbox_key"
+            android:title="@string/usb_drop_checkbox_title"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

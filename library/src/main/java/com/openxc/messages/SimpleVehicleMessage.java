@@ -68,7 +68,7 @@ public class SimpleVehicleMessage extends NamedVehicleMessage {
         return MoreObjects.toStringHelper(this)
             .add("timestamp", getTimestamp())
             .add("name", getName())
-            .add("value", getValue())
+            .add(VALUE_KEY, getValue())
             .add("extras", getExtras())
             .toString();
     }

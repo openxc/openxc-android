@@ -92,10 +92,11 @@ public class DeviceManager {
     public BluetoothServerSocket listen() {
         BluetoothServerSocket tmp = null;
         try {
-            // TODO use an OpenXC-specific UUID
+            //  use an OpenXC-specific UUID
             tmp = getDefaultAdapter().listenUsingRfcommWithServiceRecord(
                     "TODO", DeviceManager.RFCOMM_UUID);
         } catch (IOException e) {
+            Log.i(TAG, "Starting Bluetooth discovery",e);
         }
         return tmp;
     }
@@ -141,6 +142,7 @@ public class DeviceManager {
             try {
                 mSocket.close();
             } catch (IOException e) {
+                Log.e(TAG, "Scanning services on ",e);
             }
         }
         if (mSocketConnecting.get() && mBluetoothGatt != null) {
@@ -225,6 +227,7 @@ public class DeviceManager {
             try {
                 socket.close();
             } catch (IOException e2) {
+                Log.e(TAG, "Scanning services on ",e2);
             }
             throw new BluetoothException(error, e);
         } finally {
@@ -295,7 +298,6 @@ public class DeviceManager {
         } finally {
             mSocketConnecting.set(false);
         }
-        //storeLastConnectedDevice(device);
         return mBluetoothGatt;
     }
 
@@ -342,30 +344,7 @@ public class DeviceManager {
             if (openXCService != null) {
                 BluetoothGattCharacteristic characteristic = openXCService.getCharacteristic(UUID.fromString(GattCallback.C5_OPENXC_BLE_CHARACTERISTIC_WRITE_UUID));
                 if (characteristic != null) {
-
-                    while (queueEnd != 0) {
-                        byte[] sendingPacket;
-                        if (queueEnd >= 20) {
-                            sendingPacket = new byte[20];
-                            System.arraycopy(writeArray, 0, sendingPacket, 0, 20);
-                            System.arraycopy(writeArray, 20, writeArray, 0, queueEnd - 20);
-                            queueEnd = queueEnd - 20;
-
-                        } else {
-                            sendingPacket = new byte[queueEnd];
-                            System.arraycopy(writeArray, 0, sendingPacket, 0, queueEnd);
-                            queueEnd = 0;
-                        }
-                        characteristic.setValue(sendingPacket);
-                        try {
-                            Thread.sleep(PACKET_SENDING_WAIT_TIME_MS);
-
-                        } catch (InterruptedException e) {
-                            Log.d(TAG, "Interrupted");
-                            e.printStackTrace();
-                        }
-                        mBluetoothGatt.writeCharacteristic(characteristic);
-                    }
+                    manageCharacteristic(characteristic);
                 } else {
                     Log.d(TAG, "characteristic is null");
                 }
@@ -375,5 +354,37 @@ public class DeviceManager {
         } else {
             Log.d(TAG, "Gatt not found!");
         }
+    }
+
+    private void manageCharacteristic(BluetoothGattCharacteristic characteristic) {
+        while (queueEnd != 0) {
+            byte[] sendingPacket = getSendingPacket();
+            characteristic.setValue(sendingPacket);
+            try {
+                Thread.sleep(PACKET_SENDING_WAIT_TIME_MS);
+
+            } catch (InterruptedException e) {
+                Log.d(TAG, "Interrupted...");
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+            mBluetoothGatt.writeCharacteristic(characteristic);
+        }
+    }
+
+    private byte[] getSendingPacket() {
+        byte[] sendingPacket;
+        if (queueEnd >= 20) {
+            sendingPacket = new byte[20];
+            System.arraycopy(writeArray, 0, sendingPacket, 0, 20);
+            System.arraycopy(writeArray, 20, writeArray, 0, queueEnd - 20);
+            queueEnd = queueEnd - 20;
+
+        } else {
+            sendingPacket = new byte[queueEnd];
+            System.arraycopy(writeArray, 0, sendingPacket, 0, queueEnd);
+            queueEnd = 0;
+        }
+        return sendingPacket;
     }
 }

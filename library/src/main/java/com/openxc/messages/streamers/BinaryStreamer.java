@@ -32,6 +32,8 @@ import com.openxc.messages.formatters.BinaryFormatter;
 public class BinaryStreamer extends VehicleMessageStreamer {
     private static String TAG = "BinaryStreamer";
 
+    private static final boolean DEBUG = false;
+
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
     @Override
@@ -83,6 +85,11 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     }
 
     @Override
+    public String getRawMessage() {
+        return null;
+    }
+
+    @Override
     public byte[] serializeForStream(VehicleMessage message)
             throws SerializationException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -96,9 +103,23 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         return stream.toByteArray();
     }
 
+    private static final int NUMPERROW = 8;
+    public static void dumpToLog(byte[] bytes, int length) {
+        if (DEBUG == false) return;
+        String lineout;
+        for(int row=0; row <= (length-1) / NUMPERROW; row++) {
+            lineout = "";
+            for(int col=0; (col < NUMPERROW) && (((row*NUMPERROW) + col) < length); col++) {
+                lineout += String.format("%1$02X ", bytes[row*NUMPERROW+col]);
+            }
+            Log.e(TAG, lineout);
+        }
+    }
+
     @Override
     public void receive(byte[] bytes, int length) {
         super.receive(bytes, length);
         mBuffer.write(bytes, 0, length);
+        dumpToLog(bytes, length);
     }
 }

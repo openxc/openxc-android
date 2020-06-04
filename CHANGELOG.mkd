@@ -1,7 +1,13 @@
 # OpenXC Android Library Changelog
 
+## v7.1.0
 
-##v7.0.1
+* Android 10 support
+* Updated multi-frame read support
+* Bug fixes
+* SonarQube suggested refactors
+
+## v7.0.8
 
 * Fix: Fixed many system prefs to now read from default application system
 * Improvement: dweet endpoint switched from http to https
@@ -11,7 +17,6 @@
 * Improvement: Updated defaultLanguage to Language code
 * Improvement: Tracefile playing disable while recording is on and vice versa
 * Improvement: Updated the protobuf version
-
 
 ## v7.0.0
 

@@ -1,27 +1,29 @@
 package com.openxc;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import com.openxc.measurements.BaseMeasurement;
+import com.openxc.measurements.EngineSpeed;
+import com.openxc.measurements.Measurement;
+import com.openxc.measurements.UnrecognizedMeasurementTypeException;
+import com.openxc.measurements.VehicleDoorStatus;
+import com.openxc.measurements.VehicleSpeed;
+import com.openxc.messages.NamedVehicleMessage;
+import com.openxc.messages.SimpleVehicleMessage;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.units.Meter;
+import com.openxc.util.Range;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
-import com.openxc.measurements.BaseMeasurement;
-import com.openxc.measurements.Measurement;
-import com.openxc.measurements.UnrecognizedMeasurementTypeException;
-import com.openxc.measurements.VehicleSpeed;
-import com.openxc.measurements.EngineSpeed;
-import com.openxc.measurements.VehicleDoorStatus;
-import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.NamedVehicleMessage;
-import com.openxc.messages.SimpleVehicleMessage;
-import com.openxc.units.Meter;
-import com.openxc.util.Range;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(RobolectricTestRunner.class)
 public class BaseMeasurementTest {
@@ -117,6 +119,12 @@ public class BaseMeasurementTest {
         BaseMeasurement.getMeasurementFromMessage(VehicleSpeed.class, null);
     }
 
+    @Test(expected=UnrecognizedMeasurementTypeException.class)
+    public void testForUnrecognizedMeasurementTypeException() throws UnrecognizedMeasurementTypeException, NoValueException {
+        SimpleVehicleMessage message = new SimpleVehicleMessage(0L, "door_status", "rear_left: false");
+        Measurement measurement = BaseMeasurement.getMeasurementFromMessage(VehicleDoorStatus.class, message);
+    }
+
     @Test
     public void buildEventedFromMessage()
             throws UnrecognizedMeasurementTypeException, NoValueException {
@@ -147,7 +155,7 @@ public class BaseMeasurementTest {
     public void setAndGetBirthtime() {
         VehicleSpeed measurement = new VehicleSpeed(value);
         measurement.setTimestamp(1000);
-        assertEquals(measurement.getBirthtime(), 1000);
+        assertEquals(1000, measurement.getBirthtime());
     }
 
     @Test

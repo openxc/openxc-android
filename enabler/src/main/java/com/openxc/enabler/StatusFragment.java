@@ -1,19 +1,17 @@
 package com.openxc.enabler;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +20,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.openxc.VehicleManager;
+import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.interfaces.VehicleInterfaceDescriptor;
 import com.openxc.interfaces.bluetooth.BluetoothException;
 import com.openxc.interfaces.bluetooth.BluetoothVehicleInterface;
@@ -30,9 +32,8 @@ import com.openxc.interfaces.bluetooth.DeviceManager;
 import com.openxc.remote.VehicleServiceException;
 import com.openxc.remote.ViConnectionListener;
 import com.openxc.sources.SourceCallback;
-import com.openxcplatform.enabler.R;
-import com.openxc.enabler.preferences.FileRecordingPreferenceManager;
 import com.openxc.sources.trace.TraceVehicleDataSource;
+import com.openxcplatform.enabler.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,7 +41,7 @@ import java.util.TimerTask;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
 
-public class StatusFragment extends Fragment implements Button.OnClickListener{
+public class StatusFragment extends Fragment implements android.view.View.OnClickListener{
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static String TAG = "StatusFragment";
@@ -75,7 +76,9 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private  boolean isTraceRecording;
     private  boolean isDisableTraceLooping;
     private boolean isStart = false;
-
+    private boolean  ispowerDrop;
+    private boolean isNetworkDrop;
+    private boolean isUSBDrop;
 
     private synchronized void updateViInfo() {
         if (mVehicleManager != null) {
@@ -112,6 +115,8 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
 
         public void onDisconnected() {
+            disconnectAlertPower();
+
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
@@ -124,6 +129,17 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             }
         }
     };
+
+
+    public  void disconnectAlertPower(){
+        ispowerDrop = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isPowerDrop", false);
+        Log.d(TAG,ispowerDrop + "here value");
+        if(ispowerDrop){
+            Toast.makeText(getActivity(), "VI Power Dropped", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -207,6 +223,53 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
         }
     };
 
+    private NetworkDisconnectBroadcastReceiver networkDisconnectBroadcastReceiver;
+    private USBDisconnectBroadcastReceiver usbDisconnectBroadcastReceiver;
+
+    private void registerDisconnectBroadcastReceiver() {
+
+        // Network Disconnect
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(com.openxc.interfaces.network.NetworkVehicleInterface.BROADCAST_NETWORK_DISCONNECTED);
+
+        networkDisconnectBroadcastReceiver = new NetworkDisconnectBroadcastReceiver();
+        getContext().registerReceiver(networkDisconnectBroadcastReceiver, filter);
+
+
+        // USB Disconnect
+        IntentFilter usbFilter = new IntentFilter();
+        usbFilter.addAction(com.openxc.interfaces.usb.UsbVehicleInterface.BROADCAST_USB_DISCONNECTED);
+
+        usbDisconnectBroadcastReceiver = new USBDisconnectBroadcastReceiver();
+        getContext().registerReceiver(usbDisconnectBroadcastReceiver, usbFilter);
+    }
+
+    private void unregisterDisconnectBroadcastReceiver() {
+        getContext().unregisterReceiver(networkDisconnectBroadcastReceiver);
+        getContext().unregisterReceiver(usbDisconnectBroadcastReceiver);
+    }
+
+    public class NetworkDisconnectBroadcastReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+            // Perform the Action that you need here on a Disconnect
+            isNetworkDrop = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isNetworkDrop", false);
+
+            if(isNetworkDrop){
+                Toast.makeText(getActivity(), "Network Dropped", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public class USBDisconnectBroadcastReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+            // Perform the Action that you need here on a Disconnect
+            isUSBDrop = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isUSBDrop", false);
+
+            if(isUSBDrop){
+                Toast.makeText(getActivity(), "USB Dropped", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -233,7 +296,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             mDisconnect.setVisibility(View.VISIBLE);
             mRestartTraceFile.setVisibility(View.GONE);
         }
-
+        registerDisconnectBroadcastReceiver();
     }
 
     @Override
@@ -243,7 +306,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             getActivity().unbindService(mConnection);
             mVehicleManager = null;
         }
-
+        unregisterDisconnectBroadcastReceiver();
     }
 
     @Override
@@ -343,7 +406,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
     private void splitTraceFile(){
 
         mTracePref.setVehicleManager(mVehicleManager);
-        mTracePref.splitTraceFile(true);
+        mTracePref.splitTraceFile();
 
     }
     private void startStopClick(){
@@ -363,7 +426,6 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
 
     // Restart Tracefile button pressed
     private void restartTraceFile(){
-        SourceCallback remoteCallback = mVehicleManager.getRemoteCallback();
         SourceCallback userCallback = mVehicleManager.getUserCallback();
         TraceVehicleDataSource traceVehicleDataSource  = OpenXCApplication.getTraceSource();
         if (traceVehicleDataSource != null) {
@@ -395,6 +457,7 @@ public class StatusFragment extends Fragment implements Button.OnClickListener{
             case R.id.restarttrace_btn:
                 restartTraceFile();
                 break;
+            default: return;
         }
     }
 }

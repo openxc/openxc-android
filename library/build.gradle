@@ -16,6 +16,7 @@ android {
 
     lintOptions {
         abortOnError false
+        disable 'LongLogTag'
     }
     useLibrary  'org.apache.http.legacy'
 }
@@ -24,10 +25,10 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     api 'com.google.code.gson:gson:2.8.5'
-    api 'com.google.guava:guava:24.1-android'
+    api 'com.google.guava:guava:28.2-android'
     implementation 'com.google.protobuf:protobuf-java:3.9.2'
     implementation 'commons-io:commons-io:2.6'
-    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.hamcrest:hamcrest-all:1.3'

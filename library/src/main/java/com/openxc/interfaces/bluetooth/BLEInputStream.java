@@ -32,7 +32,7 @@ public class BLEInputStream extends InputStream {
         }
         return buf.get() & 0xFF;
     }
-
+    @Override
     public synchronized int read(byte[] bytes, int off, int len)
             throws IOException {
         buf.flip();

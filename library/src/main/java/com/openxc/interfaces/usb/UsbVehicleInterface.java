@@ -43,6 +43,7 @@ import com.openxc.sources.SourceCallback;
 @TargetApi(12)
 public class UsbVehicleInterface extends BytestreamDataSource
         implements VehicleInterface {
+    public static final String BROADCAST_USB_DISCONNECTED = "com.openxc.interfaces.network.NetworkVehicleInterface.disconnected";
     private static final String TAG = "UsbVehicleInterface";
     private static final int ENDPOINT_COUNT = 2;
 
@@ -339,7 +340,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
                 Log.i(TAG, "Connected to USB device with " +
                         mConnection);
             } catch(UsbDeviceException e) {
-                Log.w("Couldn't open USB device", e);
+                Log.w("not open USB device", e);
             } finally {
                 mConnectionLock.writeLock().unlock();
             }
@@ -372,6 +373,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
         } finally {
             mConnectionLock.writeLock().unlock();
         }
+        sendUSBDisconnectBroadcast();
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -403,6 +405,7 @@ public class UsbVehicleInterface extends BytestreamDataSource
                     Log.d(TAG, "Device detached");
                     disconnect();
                     break;
+                default: return;
             }
         }
     };
@@ -438,5 +441,10 @@ public class UsbVehicleInterface extends BytestreamDataSource
 
     private static boolean validateResource(URI uri) {
         return uri.getScheme() != null && uri.getScheme().equals("usb");
+    }
+    protected void sendUSBDisconnectBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(BROADCAST_USB_DISCONNECTED);
+        getContext().sendBroadcast(intent);
     }
 }

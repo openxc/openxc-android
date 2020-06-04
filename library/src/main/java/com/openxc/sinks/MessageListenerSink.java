@@ -33,12 +33,14 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     // The non-persistent listeners will be removed after they receive their
     // first message.
+
     private Map<KeyMatcher, MessageListenerGroup>
             mMessageListeners = new HashMap<>();
     private Multimap<Class<? extends Measurement>, Measurement.Listener>
             mMeasurementTypeListeners = HashMultimap.create();
     private Multimap<Class<? extends VehicleMessage>, VehicleMessage.Listener>
             mMessageTypeListeners = HashMultimap.create();
+
 
     private class MessageListenerGroup {
 
@@ -110,7 +112,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
             // measurement in this function, but we don't really have that when
             // adding a listener.
             BaseMeasurement.getKeyForMeasurement(measurementType);
-        } catch(UnrecognizedMeasurementTypeException e) { }
+        } catch(UnrecognizedMeasurementTypeException e) {
+            Log.e(TAG, "register: ", e);
+        }
 
         mMeasurementTypeListeners.put(measurementType, listener);
     }
@@ -149,10 +153,9 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
 
     private int getNumPersistentListeners() {
         int sum = 0;
-        for (KeyMatcher matcher : mMessageListeners.keySet()) {
-            sum += mMessageListeners.get(matcher).mPersistentListeners.size();
+        for (Map.Entry<KeyMatcher,MessageListenerGroup> entry : mMessageListeners.entrySet()) {
+            sum += entry.getValue().mPersistentListeners.size();
         }
-
         return sum;
     }
 
@@ -166,13 +169,12 @@ public class MessageListenerSink extends AbstractQueuedCallbackSink {
     @Override
     protected synchronized void propagateMessage(VehicleMessage message) {
         if (message instanceof KeyedMessage) {
-
             Set<KeyMatcher> matchedKeys = new HashSet<>();
-            for (KeyMatcher matcher : mMessageListeners.keySet()) {
-                if (matcher.matches(message.asKeyedMessage())) {
-                    MessageListenerGroup group = mMessageListeners.get(matcher);
+            for (Map.Entry<KeyMatcher,MessageListenerGroup> entryValue : mMessageListeners.entrySet()) {
+                if (entryValue.getKey().matches(message.asKeyedMessage())) {
+                    MessageListenerGroup group = mMessageListeners.get(entryValue.getKey());
                     group.receive(message);
-                    matchedKeys.add(matcher);
+                    matchedKeys.add(entryValue.getKey());
                 } else if( message instanceof CustomCommandResponse || message instanceof CommandResponse){
                     /*
                      * This is bit of a hack to read response of custom messages for which keys won't match

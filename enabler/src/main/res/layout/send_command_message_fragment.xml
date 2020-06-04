@@ -27,7 +27,7 @@
                 <Spinner
                     android:id="@+id/command_spinner"
                     style="@style/ItemData"
-                    android:popupBackground="@android:color/white"
+                    android:popupBackground="@android:color/black"
                     android:layout_weight="1" />
 
             </LinearLayout>
@@ -44,7 +44,7 @@
                 <Spinner
                     android:id="@+id/bus_spinner"
                     style="@style/ItemData"
-                    android:popupBackground="@android:color/white"
+                    android:popupBackground="@android:color/black"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -60,7 +60,7 @@
                 <Spinner
                     android:id="@+id/enabled_spinner"
                     style="@style/ItemData"
-                    android:popupBackground="@android:color/white"
+                    android:popupBackground="@android:color/black"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -76,7 +76,7 @@
                 <Spinner
                     android:id="@+id/bypass_spinner"
                     style="@style/ItemData"
-                    android:popupBackground="@android:color/white"
+                    android:popupBackground="@android:color/black"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -92,7 +92,7 @@
                 <Spinner
                     android:id="@+id/format_spinner"
                     style="@style/ItemData"
-                    android:popupBackground="@android:color/white"
+                    android:popupBackground="@android:color/black"
                     android:layout_weight="1" />
             </LinearLayout>
 

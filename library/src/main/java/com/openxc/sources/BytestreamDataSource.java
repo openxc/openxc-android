@@ -1,5 +1,18 @@
 package com.openxc.sources;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.openxc.messages.MultiFrameResponse;
+import com.openxc.messages.SerializationException;
+import com.openxc.messages.VehicleMessage;
+import com.openxc.messages.streamers.BinaryStreamer;
+import com.openxc.messages.streamers.JsonStreamer;
+import com.openxc.messages.streamers.VehicleMessageStreamer;
+import com.openxc.sinks.DataSinkException;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,28 +20,12 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.openxc.messages.MultiFrameResponse;
-import com.openxc.messages.SerializationException;
-import com.openxc.messages.VehicleMessage;
-import com.openxc.messages.formatters.MultiFrameStitcher;
-import com.openxc.messages.streamers.BinaryStreamer;
-import com.openxc.messages.streamers.JsonStreamer;
-import com.openxc.messages.streamers.VehicleMessageStreamer;
-import com.openxc.sinks.DataSinkException;
-
 /**
  * Common functionality for data sources that read a stream of newline-separated
  * messages in a separate thread from the main activity.
  */
 public abstract class BytestreamDataSource extends ContextualVehicleDataSource
         implements Runnable {
-    private final static String TAG = BytestreamDataSource.class.getSimpleName();
     private final static int READ_BATCH_SIZE = 512;
     private static final int MAX_FAST_RECONNECTION_ATTEMPTS = 6;
     protected static final int RECONNECTION_ATTEMPT_WAIT_TIME_S = 10;
@@ -129,19 +126,9 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     @Override
     public void run() {
-        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
-        if (sharedpreferences != null) {
-            mDataFormatValue = sharedpreferences.getString("dataFormat", null);
-            Log.d("BytestreamDataSource", "initializDataformatvalue: " + mDataFormatValue);
-        }
+        getDataFormatValue();
         while(isRunning()) {
-            try {
-                waitForConnection();
-            } catch(InterruptedException e) {
-                Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
-                stop();
-                break;
-            }
+            if (getConnection()) break;
 
             int received;
             byte[] bytes = new byte[READ_BATCH_SIZE];
@@ -149,8 +136,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
                 received = read(bytes);
             } catch(IOException e) {
                 Log.e(getTag(), "Unable to read response", e);
-                disconnect();
-                continue;
+                received = -1;
             }
 
             if(received == -1) {
@@ -160,49 +146,94 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                if ((mDataFormatValue != null) && mDataFormatValue.equals("JSON Mode")){
-                    synchronized(this) {
-                        mStreamHandler = new JsonStreamer();
-                         Log.i(getTag(), "Source is selected JSON ");
-                    }
-                }
-                else if ((mDataFormatValue != null) && mDataFormatValue.equals("Protobuf Mode") ){
-                    synchronized(this) {
-                        mStreamHandler = new BinaryStreamer();
-                        Log.i(getTag(), "Source is selected protocol buffers");
-                    }
-                } else {
-                    synchronized (this) {
-                        Log.i(getTag(), "Source is slected Auto detect");
-                        if (mStreamHandler == null) {
-                            if (JsonStreamer.containsJson(new String(bytes))) {
-                                mStreamHandler = new JsonStreamer();
-                                Log.i(getTag(), "Source is sending JSON");
-
-
-                            } else {
-                                mStreamHandler = new BinaryStreamer();
-                                Log.i(getTag(), "Source is sending protocol buffers");
-                            }
-                        }
-                    }
-                }
+                initHandler(bytes);
 
                 mStreamHandler.receive(bytes, received);
-                VehicleMessage message;
-                while((message = mStreamHandler.parseNextMessage()) != null) {
-                    if (message instanceof MultiFrameResponse) {
-                        if (((MultiFrameResponse)message).addSequentialData()) {
-                            handleMessage(mStreamHandler.parseMessage(((MultiFrameResponse)message).getAssembledMessage()));
-                        }
-                    } else {
-                        handleMessage(message);
-                    }
-                }
+                parseNextMessageFromHandler();
             }
         }
         disconnect();
         Log.d(getTag(), "Stopped " + getTag());
+    }
+
+    private void parseNextMessageFromHandler() {
+        VehicleMessage message;
+        while((message = mStreamHandler.parseNextMessage()) != null) {
+            if (message instanceof MultiFrameResponse) {
+                if (((MultiFrameResponse)message).addSequentialData()) {
+                    String fullMessage = ((MultiFrameResponse)message).getAssembledMessage(mStreamHandler.getRawMessage());
+                    message = mStreamHandler.parseMessage(fullMessage);
+                    if (message != null) {
+                        handleMessage(message);
+                    }
+                }
+            } else {
+                handleMessage(message);
+            }
+        }
+    }
+
+    private void initHandler(byte[] bytes) {
+        if ((mDataFormatValue != null) && mDataFormatValue.equals("JSON Mode")){
+            initJsonStreamer();
+        }
+        else if ((mDataFormatValue != null) && mDataFormatValue.equals("Protobuf Mode") ){
+            initBinaryStreamer();
+        } else {
+            initSteamHandler(bytes);
+        }
+    }
+
+    private void initSteamHandler(byte[] bytes) {
+        synchronized (this) {
+            Log.i(getTag(), "Source is slected Auto detect");
+            if (mStreamHandler == null) {
+                if (JsonStreamer.containsJson(new String(bytes))) {
+                    mStreamHandler = new JsonStreamer();
+                    Log.i(getTag(), "Source is sending JSON");
+
+
+                } else {
+                    mStreamHandler = new BinaryStreamer();
+                    Log.i(getTag(), "Source is sending protocol buffers");
+                }
+            }
+        }
+    }
+
+    private void initBinaryStreamer() {
+        synchronized(this) {
+            mStreamHandler = new BinaryStreamer();
+            Log.i(getTag(), "Source is selected protocol buffers");
+        }
+    }
+
+    private void initJsonStreamer() {
+        synchronized(this) {
+            mStreamHandler = new JsonStreamer();
+             Log.i(getTag(), "Source is selected JSON ");
+        }
+    }
+
+    private void getDataFormatValue() {
+        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        if (sharedpreferences != null) {
+            mDataFormatValue = sharedpreferences.getString("dataFormat", null);
+            Log.d("BytestreamDataSource", "initializDataformatvalue: " + mDataFormatValue);
+        }
+    }
+
+    private boolean getConnection() {
+        try {
+            waitForConnection();
+        } catch(InterruptedException e) {
+            Log.i(getTag(), "Interrupted while waiting for connection - stopping the source");
+            stop();
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            return true;
+        }
+        return false;
     }
 
     public void receive(VehicleMessage command) throws DataSinkException {

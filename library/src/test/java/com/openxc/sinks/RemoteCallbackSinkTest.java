@@ -1,16 +1,18 @@
 package com.openxc.sinks;
 
-import org.junit.Test;
-import org.junit.Before;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
-
-import org.robolectric.annotation.Config;
-import org.robolectric.RobolectricTestRunner;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.remote.VehicleServiceListener;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(RobolectricTestRunner.class)
 public class RemoteCallbackSinkTest {
