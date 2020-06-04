@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import com.openxc.BinaryMessages;
 import com.openxc.messages.CanMessage;
 import com.openxc.messages.Command;
 import com.openxc.messages.CommandResponse;
@@ -38,7 +39,7 @@ public abstract class AbstractFormatterTestBase {
     public void serializeDiagnosticResponse() {
         serializeDeserializeAndCheckEqual(new DiagnosticResponse(
                     1, 2, 3, 4,
-                    new byte[]{1,2,3,4}));
+                    new byte[]{1,2,3,4}, null, 0.0));
     }
 
     @Test
@@ -51,7 +52,7 @@ public abstract class AbstractFormatterTestBase {
     @Test
     public void serializeCommandResponse() {
         serializeDeserializeAndCheckEqual(new CommandResponse(
-                    Command.CommandType.DEVICE_ID, true));
+                    Command.CommandType.DEVICE_ID, true, ""));
     }
 
     @Test
@@ -71,12 +72,18 @@ public abstract class AbstractFormatterTestBase {
     @Test
     public void serializeCommandWithDiagnosticRequest() {
         DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 4);
+        request.setFrequency(0.0);
+        request.setName("");
+        request.setPayload(new byte[0]);
         serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 
     @Test
     public void serializeCommandWithDiagnosticRequestNoPid() {
-        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3);
+        DiagnosticRequest request = new DiagnosticRequest(1, 2, 3, 0);
+        request.setFrequency(0.0);
+        request.setName("");
+        request.setPayload(new byte[0]);
         serializeDeserializeAndCheckEqual(new Command(request, "add"));
     }
 

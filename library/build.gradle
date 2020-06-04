@@ -9,6 +9,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
@@ -24,7 +25,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 dependencies {
     api 'com.google.code.gson:gson:2.8.5'
     api 'com.google.guava:guava:24.1-android'
-    implementation 'com.google.protobuf:protobuf-java:3.5.1'
+    implementation 'com.google.protobuf:protobuf-java:3.9.2'
     implementation 'commons-io:commons-io:2.6'
     implementation 'com.android.support:support-v4:28.0.0'
 

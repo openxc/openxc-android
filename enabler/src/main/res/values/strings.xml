@@ -13,6 +13,9 @@
     <string name="connection_none">None</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
     <string name="disconnect_button">Disconnect</string>
+    <string name="restart_button">Restart Trace</string>
+    <string name="splittrace_button">Split Trace</string>
+    <string name="startstop_button">Stop Trace</string>
 
     <string name="settings">Settings</string>
     <string name="recording_preferences">Recording</string>
@@ -29,6 +32,8 @@
     <string name="uploading_checkbox_summary">Upload the vehicle data stream to a remote web server</string>
     <string name="uploading_path_title">Target URL</string>
     <string name="uploading_path_summary">Send trace data to this URL</string>
+    <string name="uploading_source_name_title">API Source Name</string>
+    <string name="uploading_source_name_summary">Retrieve your uploaded data using this source name in the API</string>
     <string name="native_gps_checkbox_title">Use built-in GPS</string>
     <string name="native_gps_checkbox_summary">For vehicles without a GPS receiver, send the host\'s built-in GPS location instead</string>
     <string name="gps_overwrite_checkbox_title">Overwrite Native GPS</string>
@@ -44,7 +49,9 @@
     <string name="trace_source_settings">Trace file playback</string>
     <string name="trace_source_file_title">Select a trace file for playback</string>
     <string name="phone_source_settings">Built-In Phone Sensors</string>
+    <string name="trace_disable_playing">Trace Disable Playing Loop</string>
     <string name="phone_source_polling_checkbox_title">Include Data from Phone Sensors</string>
+    <string name="trace_disable_playing_checkbox_title">Disable Trace Playing In Loop</string>
     <string name="about_summary">About OpenXC</string>
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>

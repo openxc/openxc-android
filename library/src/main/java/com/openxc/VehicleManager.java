@@ -33,6 +33,7 @@ import com.openxc.sinks.MessageListenerSink;
 import com.openxc.sinks.UserSink;
 import com.openxc.sinks.VehicleDataSink;
 import com.openxc.sources.RemoteListenerSource;
+import com.openxc.sources.SourceCallback;
 import com.openxc.sources.VehicleDataSource;
 
 import java.util.concurrent.TimeUnit;
@@ -805,6 +806,14 @@ public class VehicleManager extends Service implements DataPipeline.Operator {
                 Log.d(TAG, "Unable to send message to remote service", e);
             }
         }
+    }
+
+    public SourceCallback getRemoteCallback() {
+        return mRemoteOriginPipeline;
+    }
+
+    public SourceCallback getUserCallback() {
+        return mUserOriginPipeline;
     }
 
     private class BlockingMessageListener implements VehicleMessage.Listener {

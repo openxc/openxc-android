@@ -78,6 +78,11 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     }
 
     @Override
+    public VehicleMessage parseMessage(String line) {
+        return null;    // Not Implemented
+    }
+
+    @Override
     public byte[] serializeForStream(VehicleMessage message)
             throws SerializationException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

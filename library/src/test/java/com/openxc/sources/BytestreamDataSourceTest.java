@@ -134,6 +134,37 @@ public class BytestreamDataSourceTest {
         received.untimestamp();
         assertEquals(received, message);
     }
+    @Test
+    public void receiveValidJsonTriggersInjectJSONModeCallback() throws SerializationException{
+        source.start();
+        source.connect();
+        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        source.inject("JSON Mode");      // valid Values "JSON Mode" and "Protobuf Mode"
+        source.inject(new BinaryStreamer().serializeForStream(message));
+        TestUtils.pause(100);
+        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                VehicleMessage.class);
+        verify(callback).receive(argument.capture());
+        VehicleMessage received = argument.getValue();
+        received.untimestamp();
+        assertEquals(received, message);
+    }
+
+    @Test
+    public void receiveValidJsonTriggersInjectProtobufModeCallback() {
+        source.start();
+        source.connect();
+        SimpleVehicleMessage message = new SimpleVehicleMessage("foo", "bar");
+        source.inject("Protobuf Mode");      // valid Values "JSON Mode" and "Protobuf Mode"
+        source.inject(new JsonStreamer().serializeForStream(message));
+        TestUtils.pause(100);
+        ArgumentCaptor<VehicleMessage> argument = ArgumentCaptor.forClass(
+                VehicleMessage.class);
+        verify(callback).receive(argument.capture());
+        VehicleMessage received = argument.getValue();
+        received.untimestamp();
+        assertEquals(received, message);
+    }
 
     @Test
     public void readMultipleMessageAtOnceReceivesAll() {
@@ -201,7 +232,9 @@ public class BytestreamDataSourceTest {
                 mPacketLock.unlock();
             }
         }
-
+        public void inject(String dataformat) {
+            mDataFormatValue = dataformat;
+        }
         @Override
         protected int read(byte[] bytes) throws IOException {
             try {
