@@ -56,6 +56,7 @@ public class SendCommandMessageFragment extends Fragment {
     public static final int C5_RTC_CONFIG_POS = 7;
     public static final int C5_SD_CARD_POS = 8;
     public static final int CUSTOM_COMMAND_POS = 9;
+    public static final int GET_VIN = 10;
 
     private TextView commandResponseTextView;
     private TextView commandRequestTextView;
@@ -333,6 +334,9 @@ public class SendCommandMessageFragment extends Fragment {
                         mCustomInput.setError(getResources().getString(R.string.input_json_error));
                     else
                         request = new CustomCommand(inputCommand);
+                    break;
+                case GET_VIN:
+                    request = new Command(Command.CommandType.GET_VIN);
                     break;
                 default:
                     break;
