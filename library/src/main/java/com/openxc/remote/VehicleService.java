@@ -220,6 +220,17 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
+            public int getBitRate() {
+                if(mVehicleInterface != null &&
+                        mVehicleInterface instanceof BluetoothVehicleInterface) {
+                    return ((BluetoothVehicleInterface) mVehicleInterface).getBitRate();
+                }
+                else return 0;
+            }
+
+            // Override and implement methods for message rate and average message size
+
+            @Override
             public void setVehicleInterface(String interfaceName,
                     String resource) {
                 VehicleService.this.setVehicleInterface(

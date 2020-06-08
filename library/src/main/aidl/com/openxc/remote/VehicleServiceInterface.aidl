@@ -65,6 +65,9 @@ interface VehicleServiceInterface {
      */
     int getMessageCount();
 
+    // Add method to this file for get byte count
+    int getBitRate();
+
     void setVehicleInterface(String interfaceName, String resource);
 
     /**

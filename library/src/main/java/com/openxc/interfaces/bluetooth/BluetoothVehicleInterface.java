@@ -56,6 +56,8 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
     private boolean mPerformAutomaticScan = true;
     private boolean mUsePolling = false;
     private boolean mSocketAccepterRunning = true;
+    private int mByteRateCounter = 0;
+    private int[] mByteRateBuffer = new int[20];
 
     private BluetoothGatt mBluetoothGatt;
 
@@ -131,6 +133,19 @@ public class BluetoothVehicleInterface extends BytestreamDataSource
         }
 
         return reconnect;
+    }
+
+    public int getBitRate() {
+        System.arraycopy(mByteRateBuffer, 0, mByteRateBuffer, 1, 19);
+        mByteRateBuffer[0] = mByteRateCounter;
+        mByteRateCounter = 0;
+        int sum = 0;
+
+        for (int a = 0; a < mByteRateBuffer.length; a++) {
+            sum += mByteRateBuffer[a];
+        }
+
+        return sum / mByteRateBuffer.length;
     }
 
     private void reconnect() {
@@ -510,9 +525,11 @@ try{
                     bytesRead = -1;
                 }
             }
+
         } finally {
             mConnectionLock.readLock().unlock();
         }
+        mByteRateCounter += bytesRead;
         return bytesRead;
     }
 
