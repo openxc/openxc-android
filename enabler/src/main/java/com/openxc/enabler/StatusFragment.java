@@ -289,7 +289,7 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
         isTraceRecording = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("IsTraceRecording", false);
 
           mGetVin.setVisibility(View.GONE);
-          mGetVin.setVisibility(View.VISIBLE);
+         mVinTextView.setVisibility(View.VISIBLE);
 
         if(isTraceRecording) {
             mSplitTraceFile.setVisibility(View.VISIBLE);
