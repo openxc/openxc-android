@@ -95,7 +95,7 @@
     <string name="delete">Delete</string>
     <string name="recorded_traces">Recorded Traces</string>
     <string name="vi_device_platform_label">VI Platform</string>
-    <string name="get_vin_label">Vin</string>
+    <string name="get_vin_label">VIN</string>
     <string name="input_json_error">Please enter a valid json</string>
 
     <string name="dweeting_checkbox_title">Send Data to Dweet.io</string>

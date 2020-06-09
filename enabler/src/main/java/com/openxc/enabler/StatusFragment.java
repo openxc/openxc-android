@@ -288,7 +288,7 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
         isDisableTraceLooping = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isDisabledTracePlayingLoop", false);
         isTraceRecording = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("IsTraceRecording", false);
 
-          mGetVin.setVisibility(View.GONE);
+         mGetVin.setVisibility(View.GONE);
          mVinTextView.setVisibility(View.VISIBLE);
 
         if(isTraceRecording) {
