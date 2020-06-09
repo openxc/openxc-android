@@ -137,12 +137,33 @@
 
     </LinearLayout>
 
+    <LinearLayout style="@style/ItemRow" >
+
+        <Button
+            android:id="@+id/get_vin_btn"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/get_vin_button"
+            android:textAllCaps="true" />
+
+        <TextView
+            android:id="@+id/vin_view"
+            style="@style/ItemLabel"
+            android:text="@string/get_vin_label" />
+
+        <TextView
+            android:id="@+id/vin_value"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
     <LinearLayout style="@style/ItemRow">
 
         <Button
             android:id="@+id/start_bluetooth_search_btn"
             android:layout_height="match_parent"
-            android:layout_width="0dp"
+            android:layout_width="10dp"
             android:text="@string/bluetooth_search_button"
             android:layout_weight="1"
             android:textAllCaps="true" />
