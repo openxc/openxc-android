@@ -168,8 +168,8 @@ public class SettingsActivity extends PreferenceActivity {
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             } else if(action.equals(ABOUT_PREFERENCE)) {
-                addPreferencesFromResource(R.xml.about_preferences);
-                initializeAboutPreferences(getPreferenceManager());
+                //addPreferencesFromResource(R.xml.about_preferences);
+                //initializeAboutPreferences(getPreferenceManager());
             } else if(action.equals(NOTIFICATION_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.notification_preferences);
             }
@@ -576,19 +576,27 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeAboutPreferences(PreferenceManager manager) {
+
+        Log.e("initializeAboutPreferences", "----------------------------initializeAboutPreferences error");
+
+        startActivity(new Intent(this, AboutActivity.class));
+
+        /*
         try {
             mAboutVersionPreference = manager.findPreference(
                     getString(R.string.application_version_key));
 
             String versionNumber = getPackageManager().getPackageInfo(
-                getPackageName(), 0).versionName;
+                    getPackageName(), 0).versionName;
 
             updateSummary(mAboutVersionPreference, versionNumber);
 
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Could not get application version.", e);
         }
+        //*/
     }
+
     //Ranjan Added code for Data format
     private OnPreferenceChangeListener mDataFormatUpdatedListener =
             new OnPreferenceChangeListener() {

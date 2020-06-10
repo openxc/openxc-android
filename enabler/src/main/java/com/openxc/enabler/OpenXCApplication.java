@@ -13,7 +13,7 @@ public class OpenXCApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        LocalLogcat.initLogcat();
+        //LocalLogcat.initLogcat();
     }
 
 

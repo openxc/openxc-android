@@ -32,6 +32,8 @@
       </activity>
 
       <activity android:name="com.openxc.enabler.SettingsActivity"/>
+      <activity android:name="com.openxc.enabler.AboutActivity"/>
+
       <activity android:name="com.openxc.enabler.CanMessageDetailActivity"/>
       <activity android:name="com.openxc.enabler.viewTraces"
           android:label="@string/recorded_traces">

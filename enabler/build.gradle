@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.microsoft.appcenter:appcenter-analytics:2.3.0'
     implementation 'com.microsoft.appcenter:appcenter-crashes:2.3.0'
     implementation "commons-io:commons-io:2.6"
-
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
