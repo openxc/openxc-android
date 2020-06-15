@@ -105,36 +105,6 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeLegacyLayout();
-
-        /*
-        // https://stackoverflow.com/questions/5298370/how-to-add-a-button-to-a-preferencescreen
-
-        // https://www.blueappsoftware.in/android/blog/how-to-create-popup-dialog-and-popup-window-in-android-app/
-
-        addPreferencesFromResource(R.xml.about_preferences);
-
-        Preference button = (Preference)getPreferenceManager().findPreference("license_key");
-        button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Log.e(TAG, "open popup window");
-                ShowPopupDialog();
-                return true;
-            }
-        });
-
-        Preference preference = getPreferenceManager().findPreference("license_key");
-        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Log.e(TAG, "open popup window");
-                ShowPopupDialog();
-                return true;
-            }
-        });
-        //*/
-
     }
 
     @Override
@@ -378,28 +348,6 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     public void OnVersionClick(View view) {
-
-        Log.e(TAG, "view = " + view);
-
-        try {
-            LayoutInflater li = LayoutInflater.from(getApplicationContext());
-            final View prompt = li.inflate(R.layout.license, null);
-            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
-            alertDialogBuilder.setView(prompt);
-            alertDialogBuilder.setTitle(getString(R.string.application_license_title));
-            alertDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-
-                }
-            });
-            alertDialogBuilder.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void ShowPopupDialog(){
         try {
             LayoutInflater li = LayoutInflater.from(getApplicationContext());
             final View prompt = li.inflate(R.layout.license, null);
@@ -656,7 +604,7 @@ public class SettingsActivity extends PreferenceActivity {
                     getString(R.string.application_version_key));
 
             String versionNumber = getPackageManager().getPackageInfo(
-                    getPackageName(), 0).versionName;
+                getPackageName(), 0).versionName;
 
             updateSummary(mAboutVersionPreference, versionNumber);
 
