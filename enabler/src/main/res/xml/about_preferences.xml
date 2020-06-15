@@ -7,5 +7,9 @@
             android:key="@string/application_version_key"
             android:title="@string/application_version_title"
             android:summary="@string/application_version_summary"/>
+        <Preference
+            android:layout="@layout/license_button"
+            android:key="@string/application_license_key">
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

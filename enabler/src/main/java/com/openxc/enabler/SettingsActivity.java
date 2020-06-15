@@ -3,10 +3,12 @@ package com.openxc.enabler;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -33,6 +35,8 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -101,6 +105,36 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeLegacyLayout();
+
+        /*
+        // https://stackoverflow.com/questions/5298370/how-to-add-a-button-to-a-preferencescreen
+
+        // https://www.blueappsoftware.in/android/blog/how-to-create-popup-dialog-and-popup-window-in-android-app/
+
+        addPreferencesFromResource(R.xml.about_preferences);
+
+        Preference button = (Preference)getPreferenceManager().findPreference("license_key");
+        button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Log.e(TAG, "open popup window");
+                ShowPopupDialog();
+                return true;
+            }
+        });
+
+        Preference preference = getPreferenceManager().findPreference("license_key");
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Log.e(TAG, "open popup window");
+                ShowPopupDialog();
+                return true;
+            }
+        });
+        //*/
+
     }
 
     @Override
@@ -168,8 +202,8 @@ public class SettingsActivity extends PreferenceActivity {
             } else if(action.equals(OUTPUT_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.output_preferences);
             } else if(action.equals(ABOUT_PREFERENCE)) {
-                //addPreferencesFromResource(R.xml.about_preferences);
-                //initializeAboutPreferences(getPreferenceManager());
+                addPreferencesFromResource(R.xml.about_preferences);
+                initializeAboutPreferences(getPreferenceManager());
             } else if(action.equals(NOTIFICATION_PREFERENCE)) {
                 addPreferencesFromResource(R.xml.notification_preferences);
             }
@@ -340,6 +374,47 @@ public class SettingsActivity extends PreferenceActivity {
 
              ((SettingsActivity)getActivity()).initializeAboutPreferences(
                      getPreferenceManager());
+        }
+    }
+
+    public void OnVersionClick(View view) {
+
+        Log.e(TAG, "view = " + view);
+
+        try {
+            LayoutInflater li = LayoutInflater.from(getApplicationContext());
+            final View prompt = li.inflate(R.layout.license, null);
+            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
+            alertDialogBuilder.setView(prompt);
+            alertDialogBuilder.setTitle(getString(R.string.application_license_title));
+            alertDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+
+                }
+            });
+            alertDialogBuilder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void ShowPopupDialog(){
+        try {
+            LayoutInflater li = LayoutInflater.from(getApplicationContext());
+            final View prompt = li.inflate(R.layout.license, null);
+            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
+            alertDialogBuilder.setView(prompt);
+            alertDialogBuilder.setTitle(getString(R.string.application_license_title));
+            alertDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+
+                }
+            });
+            alertDialogBuilder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -576,12 +651,6 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     protected void initializeAboutPreferences(PreferenceManager manager) {
-
-        Log.e("initializeAboutPreferences", "----------------------------initializeAboutPreferences error");
-
-        startActivity(new Intent(this, AboutActivity.class));
-
-        /*
         try {
             mAboutVersionPreference = manager.findPreference(
                     getString(R.string.application_version_key));
@@ -594,7 +663,6 @@ public class SettingsActivity extends PreferenceActivity {
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Could not get application version.", e);
         }
-        //*/
     }
 
     //Ranjan Added code for Data format
