@@ -1,17 +1,16 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
 
 group = "com.openxcplatform"
-version = rootProject.ext.versionName
+version = "7.1.0" //rootProject.ext.versionName
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 28 //rootProject.ext.compileSdkVersion
+    buildToolsVersion "28.0.3" //rootProject.ext.buildToolsVersion
 
     defaultConfig {
         ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 18 //rootProject.ext.minSdkVersion
+        targetSdkVersion 28 //rootProject.ext.targetSdkVersion
     }
 
     lintOptions {
@@ -20,8 +19,6 @@ android {
     }
     useLibrary  'org.apache.http.legacy'
 }
-
-apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     api 'com.google.code.gson:gson:2.8.5'
