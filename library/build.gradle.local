@@ -34,44 +34,6 @@ dependencies {
     testImplementation 'org.robolectric:shadows-httpclient:3.8'
 }
 
-def siteUrl = 'http://openxcplatform.com'
-def gitUrl = 'https://github.com/openxc/openxc-android.git'
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                name 'OpenXC Android Library'
-                packaging 'aar'
-                description 'OpenXC vehicle data library for Android applications'
-                url siteUrl
-
-                scm {
-                    url 'https://github.com/openxc/openxc-android'
-                    connection gitUrl
-                    developerConnection gitUrl
-                }
-
-                licenses {
-                    license {
-                        name 'BSD License'
-                        url 'http://opensource.org/licenses/BSD-2-Clause'
-                        distribution 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'peplin'
-                        name 'Chris Peplin'
-                        email 'chris.peplin@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-}
-
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -92,19 +54,3 @@ artifacts {
     archives sourcesJar
 }
 
-bintray {
-    user = bintrayUser
-    key = bintrayPassword
-
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "openxc-android"
-        userOrg = "openxc"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        issueTrackerUrl = 'https://github.com/openxc/openxc-android/issues'
-        licenses = ["BSD"]
-        publish = true
-    }
-}
