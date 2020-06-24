@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
 
 group = "com.openxcplatform"
-version = "7.1.0" //rootProject.ext.versionName
+version = "7.1.0"
 
 android {
-    compileSdkVersion 28 //rootProject.ext.compileSdkVersion
-    buildToolsVersion "28.0.3" //rootProject.ext.buildToolsVersion
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
-        minSdkVersion 18 //rootProject.ext.minSdkVersion
-        targetSdkVersion 28 //rootProject.ext.targetSdkVersion
+        minSdkVersion 18
+        targetSdkVersion 28
     }
 
     lintOptions {
