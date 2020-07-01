@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.fragment.app.ListFragment;
 import com.openxc.VehicleManager;
 import com.openxc.messages.DiagnosticRequest;
@@ -123,6 +125,12 @@ public class DiagnosticRequestFragment extends ListFragment {
             String pidString = pidView.getText().toString();
             if(!pidString.isEmpty()) {
                 request.setPid(Integer.valueOf(pidString, 16));
+            }
+            String DTCMode = "19";
+            if(DTCMode.equals(modeView.getText().toString())){
+            byte[] dtcSendPayload = new byte[1];
+            dtcSendPayload[0] = (byte) 0x8f;
+            request.setPayload(dtcSendPayload);
             }
             mVehicleManager.send(request);
             // Make sure to update after sending so the timestamp is set by the
