@@ -145,6 +145,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         // assertNull(receivedMessageId);
     }
 
+    /*
     @MediumTest
     public void testAddListenersTwoMeasurements()
             throws VehicleServiceException,
@@ -157,6 +158,7 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         assertNotNull(steeringAngleReceived);
         assertNotNull(speedReceived);
     }
+    //*/
 
     @MediumTest
     public void testRemoveMessageListener() throws VehicleServiceException,
