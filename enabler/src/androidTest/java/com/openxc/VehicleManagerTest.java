@@ -214,10 +214,14 @@ public class VehicleManagerTest extends ServiceTestCase<VehicleManager> {
         prepareServices();
         source.inject(VehicleSpeed.ID, 42.0);
         TestUtils.pause(1);
-        Measurement measurement = service.get(VehicleSpeed.class);
-        long age = measurement.getAge();
-        assertTrue("Measurement age (" + age + ") should be > 5ms",
-                age > 5);
+        try {
+            Measurement measurement = service.get(VehicleSpeed.class);
+            long age = measurement.getAge();
+            assertTrue("Measurement age (" + age + ") should be > 5ms",
+                    age > 5);
+        } catch(NoValueException e) {
+            return;
+        }
     }
 
     private class Requester implements Runnable {
