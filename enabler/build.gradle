@@ -15,8 +15,9 @@ android {
         versionName rootProject.ext.versionName
         multiDexEnabled true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
+        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
