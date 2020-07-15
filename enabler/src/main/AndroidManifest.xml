@@ -15,6 +15,12 @@
   <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+<!--    <instrumentation-->
+<!--        android:label="Multidex"-->
+<!--        android:name="com.android.test.runner.MultiDexTestRunner"-->
+<!--        android:targetPackage="com.openxcplatform.enabler"-->
+<!--        android:functionalTest="true"/>-->
+
   <application
       android:name="com.openxc.enabler.OpenXCApplication"
       android:allowBackup="true"
