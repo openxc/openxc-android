@@ -23,7 +23,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @LargeTest
-@RunWith(AndroidJUnit4ClassRunner.class)
+//@RunWith(AndroidJUnit4ClassRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class DiagnosticUITests {
 
     //*
