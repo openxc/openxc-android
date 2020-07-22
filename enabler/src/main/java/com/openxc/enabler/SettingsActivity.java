@@ -3,10 +3,12 @@ package com.openxc.enabler;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -33,6 +35,8 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -343,6 +347,25 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
+    public void OnVersionClick(View view) {
+        try {
+            LayoutInflater li = LayoutInflater.from(getApplicationContext());
+            final View prompt = li.inflate(R.layout.license, null);
+            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
+            alertDialogBuilder.setView(prompt);
+            alertDialogBuilder.setTitle(getString(R.string.application_license_title));
+            alertDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+
+                }
+            });
+            alertDialogBuilder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void initializeTracePreferences(PreferenceManager manager) {
         mTraceFilePreference = manager.findPreference(
                 getString(R.string.trace_source_file_key));
@@ -589,6 +612,7 @@ public class SettingsActivity extends PreferenceActivity {
             Log.e(TAG, "Could not get application version.", e);
         }
     }
+
     //Ranjan Added code for Data format
     private OnPreferenceChangeListener mDataFormatUpdatedListener =
             new OnPreferenceChangeListener() {

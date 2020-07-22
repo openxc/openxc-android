@@ -15,6 +15,10 @@
   <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+  <instrumentation
+      android:name="android.test.InstrumentationTestRunner"
+      android:targetPackage="com.openxcplatform.enabler" />
+
   <application
       android:name="com.openxc.enabler.OpenXCApplication"
       android:allowBackup="true"
