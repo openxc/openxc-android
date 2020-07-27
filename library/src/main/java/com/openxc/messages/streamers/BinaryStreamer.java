@@ -12,6 +12,8 @@ import android.util.Log;
 import com.google.common.io.ByteStreams;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.MessageLite;
+import com.openxc.messages.DiagnosticResponse;
+import com.openxc.messages.MultiFrameResponse;
 import com.openxc.messages.SerializationException;
 import com.openxc.messages.UnrecognizedMessageTypeException;
 import com.openxc.messages.VehicleMessage;
@@ -33,6 +35,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     private static String TAG = "BinaryStreamer";
 
     private static final boolean DEBUG = false;
+    private static VehicleMessage lastMessage = null;
 
     private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
 
@@ -70,6 +73,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
 
         if(message != null) {
             mBuffer = new ByteArrayOutputStream();
+            lastMessage = message;
             try {
                 IOUtils.copy(input, mBuffer);
             } catch(IOException e) {
@@ -81,7 +85,49 @@ public class BinaryStreamer extends VehicleMessageStreamer {
 
     @Override
     public VehicleMessage parseMessage(String line) {
-        return null;    // Not Implemented
+
+        if (lastMessage instanceof MultiFrameResponse) {
+            DiagnosticResponse response = new DiagnosticResponse(((MultiFrameResponse) lastMessage).getBus(), ((MultiFrameResponse) lastMessage).getMessageId(), ((MultiFrameResponse) lastMessage).getMode());
+
+            if (line.length()>2) {
+
+                byte[] binaryPayload = new byte[(line.length()-2)/2];
+
+                // Turn string into binary data
+                for(int index=0, cnt=2; cnt<line.length(); index++, cnt+=2) {  // Skip first 2 chars which are "0x"
+                    char first = line.charAt(cnt);
+                    char second = '0';
+
+                    if ((cnt + 1) < line.length()) {
+                        second = line.charAt(cnt + 1);
+                    }
+
+                    int value = 0;
+
+                    if ((first >= 'a') && (first <= 'f')) {
+                        value = (first - 'a' + 10) * 16;
+                    } else if ((first >= 'A') && (first <= 'F')) {
+                        value = (first - 'A' + 10) * 16;
+                    } else if ((first >= '0') && (first <= '9')) {
+                        value = (first - '0') * 16;
+                    }
+
+                    if ((second >= 'a') && (second <= 'f')) {
+                        value += (second - 'a' + 10);
+                    } else if ((second >= 'A') && (second <= 'F')) {
+                        value += (second - 'A' + 10);
+                    } else if ((second >= '0') && (second <= '9')) {
+                        value += (second - '0');
+                    }
+
+                    binaryPayload[index] = (byte)value;
+                }
+
+                response.setPayload(binaryPayload);
+            }
+            return response;
+        }
+        return null;
     }
 
     @Override
