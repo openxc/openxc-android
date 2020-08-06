@@ -6,6 +6,11 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+
+    <permission android:name="com.openxc.permission.TEST"
+        android:protectionLevel="dangerous" android:label="This is my custom permission" />
+
+
     <application>
         <service android:name="com.openxc.VehicleManager"/>
         <service android:name="com.openxc.remote.VehicleService" android:process=":remote" android:exported="true"/>
