@@ -6448,10 +6448,6 @@ public final class BinaryMessages {
        * <code>PROTOBUF = 2;</code>
        */
       PROTOBUF(2),
-      /**
-       * <code>MESSAGEPACK = 3;</code>
-       */
-      MESSAGEPACK(3),
       UNRECOGNIZED(-1),
       ;
 
@@ -6467,10 +6463,6 @@ public final class BinaryMessages {
        * <code>PROTOBUF = 2;</code>
        */
       public static final int PROTOBUF_VALUE = 2;
-      /**
-       * <code>MESSAGEPACK = 3;</code>
-       */
-      public static final int MESSAGEPACK_VALUE = 3;
 
 
       public final int getNumber() {
@@ -6494,7 +6486,6 @@ public final class BinaryMessages {
           case 0: return UNUSED;
           case 1: return JSON;
           case 2: return PROTOBUF;
-          case 3: return MESSAGEPACK;
           default: return null;
         }
       }
