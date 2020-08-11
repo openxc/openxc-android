@@ -27,6 +27,8 @@ public class MultiFrameResponse extends KeyedMessage {
     private static final String TOTAL_SIZE_KEY = "total_size";
     private static final String SIZE_KEY = "size";
     private static final String PAYLOAD_KEY = "payload";
+    private static final String BUS_KEY = "bus";
+    private static final String MODE_KEY = "mode";
 
     private static final String[] sRequiredFieldsValues = new String[] {
             FRAME_KEY, PAYLOAD_KEY };
@@ -43,6 +45,12 @@ public class MultiFrameResponse extends KeyedMessage {
     private int mMessageId;
 
     // Optional Fields
+
+    @SerializedName(BUS_KEY)
+    private int mBus;
+
+    @SerializedName(MODE_KEY)
+    private int mMode;
 
     @SerializedName(SIZE_KEY)
     private int mSize;
@@ -66,8 +74,24 @@ public class MultiFrameResponse extends KeyedMessage {
         return mSize;
     }
 
+    public int getBus() {
+        return mBus;
+    }
+
+    public int getMode() {
+        return mMode;
+    }
+
     public String getPayload() {
         return mPayload;
+    }
+
+    public void setBus(int bus) {
+        mBus = bus;
+    }
+
+    public void setMode(int mode) {
+        mMode = mode;
     }
 
     // addSequentialData
@@ -82,6 +106,8 @@ public class MultiFrameResponse extends KeyedMessage {
     }
 
     // The MultiFrameStitcher accumlates the partials for each of the
+    // An example output:
+    //updated = "{\"timestamp\":0,\"id\":2016,\"bus\":0,\"total_size\":0,\"mode\":34,\"pid\":56832,\"value\":0,\"success\":true,\"payload\":\"0x62de00222a31d1c3daee645435\"}";
 
     public String getAssembledMessage(String rawMessage) {
         // Get the stitched Message from the stitcher
@@ -108,7 +134,9 @@ public class MultiFrameResponse extends KeyedMessage {
         String updated = rawMessage.substring(0, index + SUBSTRING.length()) + fullPayload +
                         rawMessage.substring(indexEnd);
 
-        updated = updated.replace("message_id", "id");
+        updated = updated.replace("message_id", "id");      // Android code is expecting base id name
+        updated = updated.replace("frame", "stitchcomplete");   // A frame field signifies that the in not a full message
+
         return updated;
     }
 

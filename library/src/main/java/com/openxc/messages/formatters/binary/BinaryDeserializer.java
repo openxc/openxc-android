@@ -8,6 +8,7 @@ import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.MultiFrameResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -194,6 +195,32 @@ public   class BinaryDeserializer {
         return response;
     }
 
+    private static MultiFrameResponse deserializeDiagnosticStitchResponse(
+            BinaryMessages.VehicleMessage binaryMessage) {
+        BinaryMessages.DiagnosticStitchResponse serializedResponse =
+                binaryMessage.getDiagnosticStitchResponse();
+
+        com.google.protobuf.ByteString byteString = serializedResponse.getPayload();
+        String payload = "0x";
+        for(int cnt=0; cnt<byteString.size(); cnt++) {
+            int singleByte = byteString.byteAt(cnt);
+            singleByte = (singleByte < 0) ? singleByte + 256 : singleByte;
+            payload += (Integer.toHexString(singleByte / 16) + Integer.toHexString( singleByte % 16));
+        }
+
+        MultiFrameResponse response = new MultiFrameResponse(
+                serializedResponse.getFrame(),
+                serializedResponse.getTotalSize(),
+                serializedResponse.getMessageId(),
+                serializedResponse.getSerializedSize(),
+                payload);
+
+        response.setBus(serializedResponse.getBus());
+        response.setMode(serializedResponse.getMode());
+
+        return response;
+    }
+
     private static CommandResponse deserializeCommandResponse(
             BinaryMessages.VehicleMessage binaryMessage)
             throws UnrecognizedMessageTypeException {
@@ -247,6 +274,8 @@ public   class BinaryDeserializer {
             return deserializeCommand(binaryMessage);
         } else if(binaryMessage.getTypeValue() == 3) {
             return deserializeDiagnosticResponse(binaryMessage);
+        } else if(binaryMessage.getTypeValue() == 6) {
+            return deserializeDiagnosticStitchResponse(binaryMessage);
         } else {
             throw new UnrecognizedMessageTypeException(
                     "Binary message type not recognized");

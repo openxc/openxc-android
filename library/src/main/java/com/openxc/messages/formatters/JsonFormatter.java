@@ -1,5 +1,7 @@
 package com.openxc.messages.formatters;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -98,7 +100,9 @@ public class JsonFormatter {
         }
         VehicleMessage message;
         try {
-            if (CanMessage.containsRequiredFields(fields)) {
+            if (MultiFrameResponse.containsRequiredFields(fields)) {
+                message = sGson.fromJson(root, MultiFrameResponse.class);
+            } else if (CanMessage.containsRequiredFields(fields)) {
                 message = sGson.fromJson(root, CanMessage.class);
             } else if (DiagnosticResponse.containsRequiredFields(fields)) {
                 message = sGson.fromJson(root, DiagnosticResponse.class);
@@ -119,8 +123,6 @@ public class JsonFormatter {
                 message = sGson.fromJson(root, SimpleVehicleMessage.class);
             } else if (NamedVehicleMessage.containsRequiredFields(fields)) {
                 message = sGson.fromJson(root, NamedVehicleMessage.class);
-            } else if (MultiFrameResponse.containsRequiredFields(fields)) {
-                message = sGson.fromJson(root, MultiFrameResponse.class);
             } else if (fields.contains(VehicleMessage.EXTRAS_KEY)) {
                 message = sGson.fromJson(root, VehicleMessage.class);
             } else {
