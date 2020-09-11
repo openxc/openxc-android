@@ -45,17 +45,15 @@ public class StatusFragmentUITests {
         onView(withText("Bluetooth needs to be enabled for search.")).check(doesNotExist());
         onView(withText("No Trace File")).check(doesNotExist());
     }
-/*
+
     @Test
     public void start_bluetooth_search_btn_click(){
-       onView(withId(R.id.start_bluetooth_search_btn)).perform(click());
+        onView(withText("SEARCH FOR BLUETOOTH VI")).perform(click());
     }
 
     @Test
     public void disconnect_btn_click() {
-        onView(withId(R.id.disconnect_btn)).perform(click());
+        onView(withText("DISCONNECT")).perform(click());
     }
-
- */
 
 }
