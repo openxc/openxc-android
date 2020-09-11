@@ -46,14 +46,4 @@ public class StatusFragmentUITests {
         onView(withText("No Trace File")).check(doesNotExist());
     }
 
-    @Test
-    public void start_bluetooth_search_btn_click(){
-        onView(withText("SEARCH FOR BLUETOOTH VI")).perform(click());
-    }
-
-    @Test
-    public void disconnect_btn_click() {
-        onView(withText("DISCONNECT")).perform(click());
-    }
-
 }
