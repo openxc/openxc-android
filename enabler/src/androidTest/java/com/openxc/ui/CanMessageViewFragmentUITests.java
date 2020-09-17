@@ -3,7 +3,6 @@ package com.openxc.ui;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
 
 import com.openxc.enabler.OpenXcEnablerActivity;
 import com.openxcplatform.enabler.R;
@@ -14,11 +13,6 @@ import org.junit.runner.RunWith;
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertNotNull;
 
 @LargeTest

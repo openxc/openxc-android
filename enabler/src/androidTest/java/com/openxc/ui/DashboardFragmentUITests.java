@@ -27,7 +27,7 @@ public class DashboardFragmentUITests {
 
     @Test
     public void check_for_view_layout_data(){
-        View v=LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.vehicle_dashboard,null);
+        View v=LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.can_message_list_fragment,null);
          assertNotNull(v);
     }
 

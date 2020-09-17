@@ -149,10 +149,10 @@
 
         <Button
             android:id="@+id/disconnect_btn"
-            android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:text="@string/disconnect_button"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:text="@string/disconnect_button"
             android:textAllCaps="true" />
 
         <Button
