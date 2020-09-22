@@ -32,13 +32,13 @@ public class CanMessageViewFragmentUITests {
         assertNotNull(vvv);
     }
 
-    @Test
-    public void check_elements_presence() {
-        View v= LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.can_message_details,null);
-        assertNotNull(v.findViewById(R.id.bus));
-        assertNotNull(v.findViewById(R.id.timestamp));
-        assertNotNull(v.findViewById(R.id.id));
-        assertNotNull(v.findViewById(R.id.data));
-    }
+//    @Test
+//    public void check_elements_presence() {
+//        View v= LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.can_message_details,null);
+//        assertNotNull(v.findViewById(R.id.bus));
+//        assertNotNull(v.findViewById(R.id.timestamp));
+//        assertNotNull(v.findViewById(R.id.id));
+//        assertNotNull(v.findViewById(R.id.data));
+//    }
 
 }
