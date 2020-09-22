@@ -37,7 +37,7 @@ public class SendCanMessageFragmentUITests {
     public void check_for_view_layout_data(){
 //        v= LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.send_can_message_fragment,null);
 //        assertNotNull(v);
-        assertTrue(truedd .);
+        assertTrue(true );
     }
     /*
     @Test
