@@ -19,6 +19,11 @@ android {
         disable 'LongLogTag'
     }
     useLibrary  'org.apache.http.legacy'
+
+    buildTypes {
+        applicationVariants {
+        }
+    }
 }
 
 apply plugin: 'com.github.dcendents.android-maven'

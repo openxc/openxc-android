@@ -22,17 +22,18 @@ plugins {
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        mavenCentral()
+        jcenter()
     }
 }
 
 
 ext {
-    compileSdkVersion = 28
-    buildToolsVersion = "28.0.3"
+    compileSdkVersion = 29
+    buildToolsVersion = "29.0.2"
     minSdkVersion = 18
-    targetSdkVersion = 28
+    targetSdkVersion = 29
 
     versionMajor = 7
     versionMinor = 1

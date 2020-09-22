@@ -220,6 +220,17 @@ public class VehicleService extends Service implements DataPipeline.Operator {
             }
 
             @Override
+            public int getBitRate() {
+                if(mVehicleInterface != null &&
+                        mVehicleInterface instanceof BluetoothVehicleInterface) {
+                    return ((BluetoothVehicleInterface) mVehicleInterface).getBitRate();
+                }
+                else return 0;
+            }
+
+            // Override and implement methods for message rate and average message size
+
+            @Override
             public void setVehicleInterface(String interfaceName,
                     String resource) {
                 VehicleService.this.setVehicleInterface(
@@ -311,35 +322,44 @@ public class VehicleService extends Service implements DataPipeline.Operator {
     }
 
     private boolean manageVehicleInterface(String interfaceName, String resource, Class<? extends VehicleInterface> interfaceType) {
+        boolean status=false;
         if(interfaceName != null && interfaceType != null) {
             if(mVehicleInterface == null ||
                     !mVehicleInterface.getClass().isAssignableFrom(
                         interfaceType)) {
-                try {
-                    mVehicleInterface = VehicleInterfaceFactory.build(
-                            interfaceType, VehicleService.this, resource);
-                } catch(VehicleInterfaceException e) {
-                    Log.w(TAG, "Unable to set vehicle interface", e);
-                    return true;
-                }
-
-                mPipeline.addSource(mVehicleInterface);
+                status = addVehicleInterfaceToPipeline(resource, interfaceType, status);
             } else {
-                try {
-                    if(mVehicleInterface.setResource(resource)) {
-                        Log.d(TAG, "Changed resource of already " +
-                                "active interface " + mVehicleInterface);
-                    } else {
-                        Log.d(TAG, "Interface " + mVehicleInterface +
-                                " already had same active resource " + resource +
-                                " -- not restarting");
-                    }
-                } catch(DataSourceException e) {
-                    Log.w(TAG, "Unable to change resource", e);
-                }
+                setResource(resource);
             }
         }
-        return false;
+        return status;
+    }
+
+    private boolean addVehicleInterfaceToPipeline(String resource, Class<? extends VehicleInterface> interfaceType, boolean status) {
+        try {
+            mVehicleInterface = VehicleInterfaceFactory.build(
+                    interfaceType, VehicleService.this, resource);
+            mPipeline.addSource(mVehicleInterface);
+        } catch(VehicleInterfaceException e) {
+            Log.w(TAG, "Unable to set vehicle interface", e);
+            status = true;
+        }
+        return status;
+    }
+
+    private void setResource(String resource) {
+        try {
+            if(mVehicleInterface.setResource(resource)) {
+                Log.d(TAG, "Changed resource of already " +
+                        "active interface " + mVehicleInterface);
+            } else {
+                Log.d(TAG, "Interface " + mVehicleInterface +
+                        " already had same active resource " + resource +
+                        " -- not restarting");
+            }
+        } catch(DataSourceException e) {
+            Log.w(TAG, "Unable to change resource", e);
+        }
     }
 
     private void setNativeGpsStatus(boolean enabled) {
