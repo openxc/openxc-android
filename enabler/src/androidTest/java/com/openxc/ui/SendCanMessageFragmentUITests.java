@@ -25,7 +25,7 @@ public class SendCanMessageFragmentUITests {
     @Rule
     public ActivityTestRule<OpenXcEnablerActivity> mActivityTestRule = new ActivityTestRule<>(OpenXcEnablerActivity.class);
 
-   /* View v;
+    View v;
 
     @Before
     public void setup(){
@@ -36,7 +36,7 @@ public class SendCanMessageFragmentUITests {
     public void check_for_view_layout_data(){
         assertNotNull(v);
     }
-
+    /*
     @Test
     public void check_elements_presence() {
         assertNotNull(v.findViewById(R.id.message_id));
