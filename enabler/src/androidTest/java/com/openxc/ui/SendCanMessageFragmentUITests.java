@@ -28,18 +28,17 @@ public class SendCanMessageFragmentUITests {
 
     View v;
 
-//    @Before
-//    public void setup(){
-//
-//    }
+    @Before
+    public void setup(){
+    v= LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.send_can_message_fragment,null);
+
+   }
 
     @Test
     public void check_for_view_layout_data(){
-        v= LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.send_can_message_fragment,null);
         assertNotNull(v);
         assertTrue(true );
     }
-    /*
     @Test
     public void check_elements_presence() {
         assertNotNull(v.findViewById(R.id.message_id));
@@ -54,5 +53,5 @@ public class SendCanMessageFragmentUITests {
         assertNotNull(v.findViewById(R.id.bus_spinner));
         v.findViewById(R.id.send_request).performClick();
 
-    }*/
+    }
 }
