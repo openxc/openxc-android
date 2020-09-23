@@ -15,11 +15,11 @@
                 style="@style/FormInputLabel"
                 android:text="@string/bus_label" />
 
-            <Spinner
-                android:id="@+id/bus_spinner"
-                style="@style/ItemData"
-                android:popupBackground="@android:color/black"
-                android:layout_weight="1" />
+<!--            <Spinner-->
+<!--                android:id="@+id/bus_spinner"-->
+<!--                style="@style/ItemData"-->
+<!--                android:popupBackground="@android:color/black"-->
+<!--                android:layout_weight="1" />-->
 
         </LinearLayout>
 
