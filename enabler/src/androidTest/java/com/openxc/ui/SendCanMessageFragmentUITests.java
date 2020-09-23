@@ -31,8 +31,8 @@ public class SendCanMessageFragmentUITests {
 
     @Before
     public void setup(){
-    v=  (LinearLayout)  LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.send_can_message_fragment,null);
-
+    //v=  (LinearLayout)  LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.send_can_message_fragment,null);
+        v = View.inflate(mActivityTestRule.getActivity().getApplicationContext(), R.layout.send_can_message_fragment, null);
    }
 
     @Test
