@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/EnablerFragment"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    class="com.openxc.enabler.SendCanMessageFragment">
 
     <LinearLayout
         android:layout_width="wrap_content"
