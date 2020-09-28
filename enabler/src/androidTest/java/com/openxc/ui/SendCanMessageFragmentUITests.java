@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class SendCanMessageFragmentUITests {
 
     @Rule
-    public ActivityTestRule<OpenXcEnablerActivity> mActivityTestRule = new ActivityTestRule<>(OpenXcEnablerActivity.class);
+    public FragmentTestRule<?, Fragment> mActivityTestRule = new FragmentTestRule<>(OpenXcEnablerActivity.class,Fragment.class);
     View v;
 
     @Before
@@ -45,8 +45,9 @@ public class SendCanMessageFragmentUITests {
     @Test
     public void check_for_view_layout_data(){
         assertNotNull(v);
+        assertTrue(true );
     }
-    /*@Test
+    @Test
     public void check_elements_presence() {
         assertNotNull(v.findViewById(R.id.message_id));
         assertNotNull(v.findViewById(R.id.message_payload));
@@ -60,5 +61,5 @@ public class SendCanMessageFragmentUITests {
         assertNotNull(v.findViewById(R.id.bus_spinner));
         v.findViewById(R.id.send_request).performClick();
 
-    }*/
+    }
 }
