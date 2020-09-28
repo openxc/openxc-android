@@ -1,6 +1,7 @@
 package com.openxc.ui;
 
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,7 +33,13 @@ public class SendCanMessageFragmentUITests {
 
     @Before
     public void setup(){
-       v = View.inflate(mActivityTestRule.getActivity().getApplicationContext(), R.layout.send_can_message_fragment, null);
+        try{
+            v = View.inflate(mActivityTestRule.getActivity().getApplicationContext(), R.layout.send_can_message_fragment, null);
+        }
+        catch(Exception e){
+            Log.e("Inflate Exception",Log.getStackTraceString(e));
+        }
+
    }
 
     @Test
