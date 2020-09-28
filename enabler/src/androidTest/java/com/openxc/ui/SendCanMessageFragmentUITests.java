@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class SendCanMessageFragmentUITests {
 
     @Rule
-    public FragmentTestRule<?, Fragment> mActivityTestRule = new FragmentTestRule<>(OpenXcEnablerActivity.class,Fragment.class);
+    public ActivityTestRule<OpenXcEnablerActivity> mActivityTestRule = new ActivityTestRule<>(OpenXcEnablerActivity.class);
     View v;
 
     @Before
