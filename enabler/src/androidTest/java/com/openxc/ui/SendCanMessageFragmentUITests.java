@@ -1,10 +1,10 @@
 package com.openxc.ui;
 
+import android.os.Build;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import com.openxc.enabler.OpenXcEnablerActivity;
@@ -17,11 +17,9 @@ import org.junit.runner.RunWith;
 
 import androidx.fragment.app.Fragment;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import androidx.test.rule.ActivityTestRule;
 
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
@@ -34,7 +32,8 @@ public class SendCanMessageFragmentUITests {
     @Before
     public void setup(){
         try{
-            v = View.inflate(mActivityTestRule.getActivity().getApplicationContext(), R.layout.send_can_message_fragment, null);
+           // v = View.inflate(mActivityTestRule.getActivity().getApplicationContext(), R.layout.send_can_message_fragment,null);
+            v= LayoutInflater.from(mActivityTestRule.getActivity()).inflate(R.layout.send_can_message_fragment,null);
         }
         catch(Exception e){
             Log.e("Inflate Exception",Log.getStackTraceString(e));
@@ -44,8 +43,8 @@ public class SendCanMessageFragmentUITests {
 
     @Test
     public void check_for_view_layout_data(){
+        Log.i("Android version", Build.VERSION.RELEASE);
         assertNotNull(v);
-        assertTrue(true );
     }
     @Test
     public void check_elements_presence() {
