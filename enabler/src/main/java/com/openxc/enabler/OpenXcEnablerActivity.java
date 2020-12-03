@@ -109,7 +109,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
 
     public static class EnablerFragmentAdapter extends FragmentPagerAdapter {
         private static final String[] mTitles = { "Status", "Dashboard",
-                "CAN", "Diagnostic", "Send CAN", "Send Command"};
+                "CAN", "Diagnostic", "DTC", "Send CAN", "Send Command"};
 
         public EnablerFragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -134,8 +134,10 @@ public class OpenXcEnablerActivity extends FragmentActivity {
             } else if(position == 3) {
                 return new DiagnosticRequestFragment();
             } else if(position == 4) {
+                return new DTCRequestFragment();
+            } else if(position == 5) {
                 return new SendCanMessageFragment();
-            } else if (position == 5) {
+            } else if (position == 6) {
                 return new SendCommandMessageFragment();
             }
 
@@ -166,7 +168,7 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         try {
             checkForCrashes();
         }catch (NoClassDefFoundError e){
-            Log.w(TAG, "Failed checkForChrashes call");
+            Log.w(TAG, "Failed checkForCrashes call");
             e.printStackTrace();
         }
     }

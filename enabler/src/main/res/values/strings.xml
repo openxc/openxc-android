@@ -102,11 +102,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
     <string name="format_label">Format</string>
     <string name="custom_input_label">Custom Command Input</string>
 
-
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>
     <string name="send_button">Send</string>
     <string name="last_can_message_sent_label">Sent Messages</string>
+
+    <string name="dtc_button">Request all DTC codes</string>
 
     <string name="no_can_messages_received">No CAN messages received.</string>
     <string name="no_can_messages_sent">No CAN messages sent.</string>
