@@ -17,10 +17,9 @@ before_script:
   - echo y | android update sdk -a --no-ui --filter android-24
   - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-24
   - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-window &
-  - android-wait-for-emulator
   - mksdcard -l testSdCard 1024M testSdCardFile.img
-  - emulator -avd test -sdcard testSdCardFile.img
+  - emulator -avd test -no-skin -sdcard testSdCardFile.img -no-window &
+  - android-wait-for-emulator
   - adb shell input keyevent 82 &
 script:
 - './gradlew build test && ./gradlew testDebug'
