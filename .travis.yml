@@ -12,10 +12,11 @@ android:
   - android-24
   - extra-android-support
   - extra-android-m2repository
-  - sys-img-x86-google_apis-24
+  - sys-img-armeabi-v7a-android-24
 before_script:
-  - android list targets
-  - echo no | android create avd --force -n test -t android-24 -c 100M --abi google_apis/x86
+  - echo y | android update sdk -a --no-ui --filter android-24
+  - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-24
+  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
   - emulator -avd test -no-boot-anim -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
