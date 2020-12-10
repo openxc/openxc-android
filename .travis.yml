@@ -9,14 +9,14 @@ android:
   - platform-tools
   - build-tools-29.0.2
   - android-29
-  - android-24
+  - android-26
   - extra-android-support
   - extra-android-m2repository
-  - sys-img-armeabi-v7a-android-24
+  - sys-img-armeabi-v7a-android-26
 before_script:
-  - echo y | android update sdk -a --no-ui --filter android-24
-  - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-24
-  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
+  - echo y | android update sdk -a --no-ui --filter android-26
+  - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-26
+  - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
   - mksdcard -l testSdCard 1024M testSdCardFile.img
   - emulator -avd test -no-skin -sdcard testSdCardFile.img -no-window &
   - android-wait-for-emulator
