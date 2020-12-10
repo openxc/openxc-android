@@ -37,8 +37,62 @@ public class DTCRequestFragment extends ListFragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.dtc_request_fragment,
                 container, false);
+
         Button btn = (Button) v.findViewById(R.id.dtc_request_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View buttonView) {
+                Thread dtcButtonThread = new Thread() {
+                    @Override
+                    public void run() {
+                        onSendDiagnosticRequest();
+                    }
+                };
+                dtcButtonThread.start();
+            }
+        });
         return v;
+    }
+
+    public class RequestThread extends Thread {
+        private int bus;
+        private int id;
+        private int mode;
+
+        public RequestThread (int bus, int id, int mode) {
+            this.bus = bus;
+            this.id = id;
+            this.mode = mode;
+        }
+
+        @Override
+        public void run() {
+            //DiagnosticRequest(bus, id, mode)
+            DiagnosticRequest request = new DiagnosticRequest(bus, id, mode);
+            mVehicleManager.send(request);
+            // Make sure to update after sending so the timestamp is set by the VehicleManager
+            //updateLastRequestView(request);
+
+            Log.e("DTCRequest", "bus = " + bus + ", id = " + id + ", mode = " + mode);
+        }
+    }
+
+    private void onSendDiagnosticRequest() {
+        //TODO: logic to cycle through all possible DTC hex addresses from 000 - 8FF,
+        // passed as int (0 - 2303), with timeout for each one (5 sec?), ran asynchronously
+
+        //TODO: wrap this in a loop of all possible DTC addresses on both busses
+        for (int a=1; a<=2; a++) {
+            for (int b = 0; b <= 2303; b++) {
+                RequestThread requestThread = new RequestThread(a, b, 3);
+                requestThread.start();
+                try {
+                    Thread.sleep(20);
+                } catch(InterruptedException e) {
+
+                }
+            }
+        }
     }
 
     /*
