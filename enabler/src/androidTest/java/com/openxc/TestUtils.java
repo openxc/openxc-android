@@ -26,7 +26,7 @@ public class TestUtils {
             String filename) {
         URI uri = null;
         try {
-            uri = new URI("file:///sdcard/com.openxc/" + filename);
+            uri = new URI("file:///mnt/sdcard/com.openxc/" + filename);
         } catch(URISyntaxException e) {
             fail("Couldn't construct resource URIs: " + e);
         }
