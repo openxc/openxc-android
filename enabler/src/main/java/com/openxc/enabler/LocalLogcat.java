@@ -1,8 +1,10 @@
 package com.openxc.enabler;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.test.core.app.ApplicationProvider;
 
 public class LocalLogcat {
 
@@ -23,11 +27,20 @@ public class LocalLogcat {
     final static long SINGLE_LOG_FILE_DURATION = 1000 * 60 * 60 * 8;        // 8 Hours
     final static long KEEP_LOG_FILE_TIME = 1000 * 60 * 60 * 24 * 14;        // 14 Days in milliseconds
 
-    public static void initLogcat() {
+    public static void initLogcat(Context context) {
         //uncomment below return statement to bypass log file creation, should allow regular console logging
         //may need to comment the rest of the method
+
+        //TODO: Instead of using the path below, make a path to a folder I can access
+
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        Toast.makeText(context, path, Toast.LENGTH_LONG).show();
+
         //return;
+
         if ( isExternalStorageWritable() ) {
+
+            Toast.makeText(context, "isExternalStorageWritable() works", Toast.LENGTH_LONG).show();
 
             final File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
             File logFile = new File( appDirectory, "logcat" + dateFormat.format(new Date()) + ".txt" );
@@ -40,6 +53,8 @@ public class LocalLogcat {
                     Log.e(TAG, "Could not create logfile directory" + appDirectory.toString());
                 }
             }
+
+            Toast.makeText(context, "appDirectory = " + appDirectory.toString(), Toast.LENGTH_LONG).show();
 
             // clear the previous logcat and then write the new one to the file
             try {

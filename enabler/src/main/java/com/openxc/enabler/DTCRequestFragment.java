@@ -32,6 +32,36 @@ public class DTCRequestFragment extends ListFragment {
     private DiagnosticResponseAdapter diagnosticResponseAdapter;
     private View mLastRequestView;
 
+    private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
+        @Override
+        public void receive(final VehicleMessage message) {
+            Activity activity = getActivity();
+            if(activity != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        diagnosticResponseAdapter.add(message.asDiagnosticResponse());
+                    }
+                });
+            }
+        }
+    };
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            Log.i(DTCMessage, "Bound to VehicleManager");
+            mVehicleManager = ((VehicleManager.VehicleBinder)service
+            ).getService();
+
+            mVehicleManager.addListener(DiagnosticResponse.class, mListener);
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            Log.w(DTCMessage, "VehicleService disconnected unexpectedly");
+            mVehicleManager = null;
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,10 +108,6 @@ public class DTCRequestFragment extends ListFragment {
     }
 
     private void onSendDiagnosticRequest() {
-        //TODO: logic to cycle through all possible DTC hex addresses from 000 - 8FF,
-        // passed as int (0 - 2303), with timeout for each one (5 sec?), ran asynchronously
-
-        //TODO: wrap this in a loop of all possible DTC addresses on both busses
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
                 RequestThread requestThread = new RequestThread(a, b, 3);
