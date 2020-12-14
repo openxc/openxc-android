@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.openxc.VehicleManager;
 import com.openxc.messages.DiagnosticRequest;
@@ -62,6 +63,20 @@ public class DTCRequestFragment extends ListFragment {
         }
     };
 
+    public class ManagerThread extends Thread {
+        public ManagerThread(){
+            Log.e("DTCRequest", "ManagerThread");
+        };
+
+        @Override
+        public void run() {
+            Log.e("DTCRequest", "dtcButtonThread.run");
+            onSendDiagnosticRequest();
+        }
+    };
+
+    ManagerThread dtcButtonThread = new ManagerThread();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,12 +87,7 @@ public class DTCRequestFragment extends ListFragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View buttonView) {
-                Thread dtcButtonThread = new Thread() {
-                    @Override
-                    public void run() {
-                        onSendDiagnosticRequest();
-                    }
-                };
+                Log.e("DTCRequest", "setOnClickListener");
                 dtcButtonThread.start();
             }
         });
@@ -108,6 +118,9 @@ public class DTCRequestFragment extends ListFragment {
     }
 
     private void onSendDiagnosticRequest() {
+
+        Toast.makeText(getContext(), "onSendDiagnosticRequest()", Toast.LENGTH_LONG).show();
+
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
                 RequestThread requestThread = new RequestThread(a, b, 3);
