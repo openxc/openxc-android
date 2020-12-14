@@ -24,6 +24,8 @@ public class TestUtils {
 
     public static URI copyToStorage(Context context, int resource,
             String filename) {
+        File openxcDirectory = new File("/sdcard/com.openxc/");
+        openxcDirectory.mkdirs();
         URI uri = null;
         try {
             uri = new URI("file:///sdcard/com.openxc/" + filename);

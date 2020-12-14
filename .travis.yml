@@ -14,12 +14,15 @@ android:
   - extra-android-m2repository
   - sys-img-armeabi-v7a-android-22
 before_script:
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a -c 100M
-  - emulator -avd test -no-boot-anim -no-window &
+  - echo y | android update sdk -a --no-ui --filter android-22
+  - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-22
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - mksdcard -l testSdCard 1024M testSdCardFile.img
+  - emulator -avd test -no-skin -sdcard testSdCardFile.img -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 script:
-- './gradlew build test && ./gradlew testDebug'
+- './gradlew build test' # && ./gradlew testDebug'
 - './gradlew connectedCheck'
 deploy:
 - provider: releases
