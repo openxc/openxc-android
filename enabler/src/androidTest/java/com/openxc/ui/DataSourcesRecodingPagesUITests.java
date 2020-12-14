@@ -1,5 +1,7 @@
 package com.openxc.ui;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.test.suitebuilder.annotation.LargeTest;
 
@@ -28,27 +30,45 @@ public class DataSourcesRecodingPagesUITests {
 
     @Test
     public void check_for_datasources_preference(){
-        assertNotNull(onView(withId(R.xml.data_source_preferences)));
-       assertTrue(isShown(R.string.vehicle_interface_key));
-        assertTrue(isShown(R.string.data_format_key));
-        assertTrue(isShown(R.string.native_gps_checkbox_key));
-        assertTrue(isShown(R.string.bluetooth_polling_key));
-        assertFalse(isShown(R.string.network_host_key));
-        assertFalse(isShown(R.string.network_port_key));
-        assertFalse(isShown(R.string.trace_source_file_key));
-        assertTrue(isShown(R.string.trace_source_playing_checkbox_key));
-        assertTrue(isShown(R.string.phone_source_polling_checkbox_key));
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mActivityTestRule.getActivity() != null) {
+                        assertNotNull(onView(withId(R.xml.data_source_preferences)));
+                        assertTrue(isShown(R.string.vehicle_interface_key));
+                        assertTrue(isShown(R.string.data_format_key));
+                        assertTrue(isShown(R.string.native_gps_checkbox_key));
+                        assertTrue(isShown(R.string.bluetooth_polling_key));
+                        assertFalse(isShown(R.string.network_host_key));
+                        assertFalse(isShown(R.string.network_port_key));
+                        assertFalse(isShown(R.string.trace_source_file_key));
+                        assertTrue(isShown(R.string.trace_source_playing_checkbox_key));
+                        assertTrue(isShown(R.string.phone_source_polling_checkbox_key));
+                    }
+            }
+                }, 1000 );
+
     }
 
     @Test
     public void check_for_recording_preference(){
-        assertNotNull(onView(withId(R.xml.recording_preferences)));
-        assertTrue(isShown(R.string.recording_directory_key));
-        assertTrue(isShown(R.string.uploading_checkbox_key));
-        assertTrue(isShown(R.string.uploading_path_key));
-        assertTrue(isShown(R.string.uploading_source_name_key));
-        assertTrue(isShown(R.string.dweeting_checkbox_key));
-        assertTrue(isShown(R.string.dweeting_thingname_key));
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mActivityTestRule.getActivity() != null) {
+                    assertNotNull(onView(withId(R.xml.recording_preferences)));
+                    assertTrue(isShown(R.string.recording_directory_key));
+                    assertTrue(isShown(R.string.uploading_checkbox_key));
+                    assertTrue(isShown(R.string.uploading_path_key));
+                    assertTrue(isShown(R.string.uploading_source_name_key));
+                    assertTrue(isShown(R.string.dweeting_checkbox_key));
+                    assertTrue(isShown(R.string.dweeting_thingname_key));
+                }
+            }
+        }, 1000 );
 
     }
 
