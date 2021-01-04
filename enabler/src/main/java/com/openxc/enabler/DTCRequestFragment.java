@@ -119,7 +119,8 @@ public class DTCRequestFragment extends ListFragment {
 
     private void onSendDiagnosticRequest() {
 
-        Toast.makeText(getContext(), "onSendDiagnosticRequest()", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "onSendDiagnosticRequest()", Toast.LENGTH_LONG).show();
+        Log.e(DTCMessage, "-------------------onSendDiagnosticRequest");
 
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
@@ -131,6 +132,27 @@ public class DTCRequestFragment extends ListFragment {
 
                 }
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            getActivity().bindService(
+                    new Intent(getActivity(), VehicleManager.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mVehicleManager != null) {
+            Log.i(DTCMessage, "Unbinding from vehicle service");
+            mVehicleManager.removeListener(DiagnosticResponse.class, mListener);
+            getActivity().unbindService(mConnection);
+            mVehicleManager = null;
         }
     }
 
