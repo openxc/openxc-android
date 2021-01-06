@@ -12,6 +12,9 @@
             style="@style/ItemRow"
             android:orientation="vertical" >
         <TextView
+            style="@style/NoteLabel"
+            android:text="@string/dtc_wait_time_note" />
+        <TextView
             style="@style/ItemLabel"
             android:text="@string/diag_response_label" />
 
@@ -35,6 +38,11 @@
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/no_dtc_responses_received"/>
+
+            <ProgressBar
+                android:id="@+id/p_bar"
+                style="@style/WaitingAnimation"
+                android:indeterminate="true" />
 
         </FrameLayout>
 

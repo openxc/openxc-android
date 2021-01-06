@@ -1,5 +1,6 @@
 package com.openxc.enabler;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +29,15 @@ import com.openxcplatform.enabler.R;
 
 import androidx.fragment.app.ListFragment;
 
+import static com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread;
+
 public class DTCRequestFragment extends ListFragment {
     private final static String DTCMessage = "DTCRequestFragment";
 
     private VehicleManager mVehicleManager;
+    private TextView noResponse;
+    private ProgressBar progressBar;
     private DiagnosticResponseAdapter diagnosticResponseAdapter;
-    private View mLastRequestView;
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
         @Override
@@ -63,6 +69,34 @@ public class DTCRequestFragment extends ListFragment {
         }
     };
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        diagnosticResponseAdapter = new DiagnosticResponseAdapter(getActivity());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.dtc_request_fragment,
+                container, false);
+
+        Button btn = (Button) v.findViewById(R.id.dtc_request_button);
+        progressBar = (ProgressBar) v.findViewById(R.id.p_bar);
+        progressBar.setVisibility(View.INVISIBLE);
+        noResponse = (TextView) v.findViewById(android.R.id.empty);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View buttonView) {
+                Log.e("DTCRequest", "setOnClickListener");
+                ManagerThread dtcButtonThread = new ManagerThread();
+                dtcButtonThread.start();
+            }
+        });
+        return v;
+    }
+
     public class ManagerThread extends Thread {
         public ManagerThread(){
             Log.e("DTCRequest", "ManagerThread");
@@ -75,64 +109,83 @@ public class DTCRequestFragment extends ListFragment {
         }
     };
 
-    ManagerThread dtcButtonThread = new ManagerThread();
+//    public class RequestThread extends Thread {
+//        private int bus;
+//        private int id;
+//        private int mode;
+//
+//        public RequestThread (int bus, int id, int mode) {
+//            this.bus = bus;
+//            this.id = id;
+//            this.mode = mode;
+//        }
+//
+//        @Override
+//        public void run() {
+//            //DiagnosticRequest(bus, id, mode)
+//            DiagnosticRequest request = new DiagnosticRequest(bus, id, mode);
+//            mVehicleManager.send(request);
+//            // Make sure to update after sending so the timestamp is set by the VehicleManager
+//            //updateLastRequestView(request);
+//
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }
+//            });
+//
+//            Log.e("DTCRequest", "------------bus = " + bus + ", id = " + id + ", mode = " + mode);
+//        }
+//    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.dtc_request_fragment,
-                container, false);
-
-        Button btn = (Button) v.findViewById(R.id.dtc_request_button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View buttonView) {
-                Log.e("DTCRequest", "setOnClickListener");
-                dtcButtonThread.start();
-            }
-        });
-        return v;
-    }
-
-    public class RequestThread extends Thread {
-        private int bus;
-        private int id;
-        private int mode;
-
-        public RequestThread (int bus, int id, int mode) {
-            this.bus = bus;
-            this.id = id;
-            this.mode = mode;
-        }
-
-        @Override
-        public void run() {
-            //DiagnosticRequest(bus, id, mode)
-            DiagnosticRequest request = new DiagnosticRequest(bus, id, mode);
-            mVehicleManager.send(request);
-            // Make sure to update after sending so the timestamp is set by the VehicleManager
-            //updateLastRequestView(request);
-
-            Log.e("DTCRequest", "bus = " + bus + ", id = " + id + ", mode = " + mode);
-        }
-    }
+    //TODO:
+    // Figure out how to connect response to request (in method below?)...
+    // could need variation of diagnosticResponseAdapter in commented code
 
     private void onSendDiagnosticRequest() {
 
-        //Toast.makeText(getContext(), "onSendDiagnosticRequest()", Toast.LENGTH_LONG).show();
         Log.e(DTCMessage, "-------------------onSendDiagnosticRequest");
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+                noResponse.setVisibility(View.INVISIBLE);
+            }
+        });
 
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
-                RequestThread requestThread = new RequestThread(a, b, 3);
-                requestThread.start();
+//                RequestThread requestThread = new RequestThread(a, b, 3);
+//                requestThread.start();
+
+                DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
+                mVehicleManager.send(request);
+
+                Log.e("DTCRequest", "------------bus = " + a + ", id = " + b + ", mode = " + 3);
+
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(10);
                 } catch(InterruptedException e) {
 
                 }
             }
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+                noResponse.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setListAdapter(diagnosticResponseAdapter);
     }
 
     @Override

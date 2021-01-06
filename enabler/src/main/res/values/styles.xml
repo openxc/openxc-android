@@ -39,6 +39,15 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="NoteLabel">
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">20sp</item>
+        <item name="android:layout_marginRight">20sp</item>
+        <item name="android:layout_marginBottom">30sp</item>
+    </style>
+
     <style name="ItemData" parent="ItemText">
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_height">wrap_content</item>
@@ -73,7 +82,15 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">20sp</item>
         <item name="android:layout_marginRight">20sp</item>
-        <item name="android:layout_marginBottom">40sp</item>
+        <item name="android:layout_marginBottom">10sp</item>
+    </style>
+
+    <style name="WaitingAnimation">
+        <item name="android:layout_width">fill_parent</item>
+        <!--<item name="android:layout_height">wrap_content</item>-->
+        <item name="android:layout_height">100sp</item>
+        <item name="android:layout_marginLeft">100sp</item>
+        <item name="android:layout_marginRight">100sp</item>
     </style>
 
     <!-- Warning Styles -->

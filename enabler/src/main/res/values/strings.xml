@@ -109,6 +109,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
 
     <string name="dtc_button">Request DTC(s)</string>
     <string name="no_dtc_responses_received">No DTC responses received.</string>
+    <string name="dtc_wait_time_note">Note: Searching for DTCs in your vehicle could take up to 5 minutes.</string>
 
     <string name="no_can_messages_received">No CAN messages received.</string>
     <string name="no_can_messages_sent">No CAN messages sent.</string>
