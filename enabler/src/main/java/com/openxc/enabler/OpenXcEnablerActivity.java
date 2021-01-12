@@ -146,6 +146,15 @@ public class OpenXcEnablerActivity extends FragmentActivity {
         }
     }
 
+    //required to display DTC responses only in DTC screen
+    private boolean dtcScanning = false;
+    public boolean isDTCScanning() {
+        return dtcScanning;
+    }
+    public void setDTCScanning(boolean set) {
+        dtcScanning = set;
+    }
+
     static String getBugsnagToken(Context context) {
         String key = null;
         try {
