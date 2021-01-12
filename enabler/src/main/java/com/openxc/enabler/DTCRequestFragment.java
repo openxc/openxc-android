@@ -133,7 +133,6 @@ public class DTCRequestFragment extends ListFragment {
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
                 DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
-                //DiagnosticRequest request = new DiagnosticRequest(a, b, 01, 0x00);
                 mVehicleManager.send(request);
                 try {
                     Thread.sleep(20);
