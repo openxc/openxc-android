@@ -91,7 +91,7 @@ public class DTCRequestFragment extends ListFragment {
 
         searchBtn = (Button) v.findViewById(R.id.dtc_request_button);
         progressBar = (ProgressBar) v.findViewById(R.id.p_bar);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         noResponse = (TextView) v.findViewById(android.R.id.empty);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +124,7 @@ public class DTCRequestFragment extends ListFragment {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressBar.setVisibility(View.VISIBLE);
+                //progressBar.setVisibility(View.VISIBLE);
                 noResponse.setVisibility(View.INVISIBLE);
             }
         });
@@ -134,6 +134,11 @@ public class DTCRequestFragment extends ListFragment {
             for (int b = 0; b <= 2303; b++) {
                 DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
                 mVehicleManager.send(request);
+                if (a == 1) {
+                    progressBar.setProgress(b);
+                } else {
+                    progressBar.setProgress(2303+b);
+                }
                 try {
                     Thread.sleep(20);
                 } catch(InterruptedException e) {
@@ -146,7 +151,7 @@ public class DTCRequestFragment extends ListFragment {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
+                //progressBar.setVisibility(View.INVISIBLE);
                 if (displayNoResponse) {
                     noResponse.setVisibility(View.VISIBLE);
                 }
