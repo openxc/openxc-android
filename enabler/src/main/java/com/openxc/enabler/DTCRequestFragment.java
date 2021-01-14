@@ -55,7 +55,6 @@ public class DTCRequestFragment extends ListFragment {
                     public void run() {
                         diagnosticResponseAdapter.add(message.asDiagnosticResponse());
                         displayNoResponse = false;
-                        //progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
             }
@@ -125,7 +124,6 @@ public class DTCRequestFragment extends ListFragment {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //progressBar.setVisibility(View.VISIBLE);
                 noResponse.setVisibility(View.INVISIBLE);
             }
         });
@@ -135,16 +133,8 @@ public class DTCRequestFragment extends ListFragment {
             for (int b = 0; b <= 2303; b++) {
                 progressBarValue++;
                 progressBar.setProgress(progressBarValue);
-//                if (a == 1) {
-//                    progressBar.setProgress(b);
-//                } else {
-//                    progressBar.setProgress(2303+b);
-//                }
                 DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
                 mVehicleManager.send(request);
-
-                Log.e("DTCRequest", "----------------------DiagnosticRequest(" + a + ", " + b + ", 3");
-
                 try {
                     Thread.sleep(20);
                 } catch(InterruptedException e) {
@@ -157,7 +147,6 @@ public class DTCRequestFragment extends ListFragment {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //progressBar.setVisibility(View.INVISIBLE);
                 if (displayNoResponse) {
                     noResponse.setVisibility(View.VISIBLE);
                 }
