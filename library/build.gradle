@@ -33,7 +33,7 @@ dependencies {
     api 'com.google.guava:guava:28.2-android'
     implementation 'com.google.protobuf:protobuf-java:3.9.2'
     implementation 'commons-io:commons-io:2.6'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.hamcrest:hamcrest-all:1.3'

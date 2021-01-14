@@ -102,7 +102,7 @@ dependencies {
     implementation 'com.microsoft.appcenter:appcenter-analytics:2.3.0'
     implementation 'com.microsoft.appcenter:appcenter-crashes:2.3.0'
     implementation "commons-io:commons-io:2.6"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
 
     //UI Testing
     implementation 'androidx.multidex:multidex:2.0.1'
