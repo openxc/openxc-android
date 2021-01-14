@@ -39,6 +39,7 @@ public class DTCRequestFragment extends ListFragment {
     private TextView noResponse;
     private boolean displayNoResponse = true;
     private ProgressBar progressBar;
+    private int progressBarValue = 0;
     private DiagnosticResponseAdapter diagnosticResponseAdapter;
 
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
@@ -132,13 +133,18 @@ public class DTCRequestFragment extends ListFragment {
         ((OpenXcEnablerActivity)getActivity()).setDTCScanning(true);
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
+                progressBarValue++;
+                progressBar.setProgress(progressBarValue);
+//                if (a == 1) {
+//                    progressBar.setProgress(b);
+//                } else {
+//                    progressBar.setProgress(2303+b);
+//                }
                 DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
                 mVehicleManager.send(request);
-                if (a == 1) {
-                    progressBar.setProgress(b);
-                } else {
-                    progressBar.setProgress(2303+b);
-                }
+
+                Log.e("DTCRequest", "----------------------DiagnosticRequest(" + a + ", " + b + ", 3");
+
                 try {
                     Thread.sleep(20);
                 } catch(InterruptedException e) {
