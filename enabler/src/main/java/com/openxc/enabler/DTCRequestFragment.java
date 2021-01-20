@@ -53,6 +53,8 @@ public class DTCRequestFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
+                        // responses are collected here
+                        Log.e(DTCMessage, "response received");
                         diagnosticResponseAdapter.add(message.asDiagnosticResponse());
                         displayNoResponse = false;
                     }
@@ -100,7 +102,7 @@ public class DTCRequestFragment extends ListFragment {
                 searchBtn.setEnabled(false);
                 searchBtn.setClickable(false);
 
-                Log.e("DTCRequest", "setOnClickListener");
+                Log.e(DTCMessage, "setOnClickListener");
                 ManagerThread dtcButtonThread = new ManagerThread();
                 dtcButtonThread.start();
             }
@@ -110,12 +112,12 @@ public class DTCRequestFragment extends ListFragment {
 
     public class ManagerThread extends Thread {
         public ManagerThread(){
-            Log.e("DTCRequest", "ManagerThread");
+            Log.e(DTCMessage, "ManagerThread");
         };
 
         @Override
         public void run() {
-            Log.e("DTCRequest", "dtcButtonThread.run");
+            Log.e(DTCMessage, "dtcButtonThread.run");
             onSendDiagnosticRequest();
         }
     };
@@ -129,16 +131,22 @@ public class DTCRequestFragment extends ListFragment {
         });
 
         ((OpenXcEnablerActivity)getActivity()).setDTCScanning(true);
+
+
+
         for (int a=1; a<=2; a++) {
             for (int b = 0; b <= 2303; b++) {
                 progressBarValue++;
                 progressBar.setProgress(progressBarValue);
-                DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
-                mVehicleManager.send(request);
-                try {
-                    Thread.sleep(20);
-                } catch(InterruptedException e) {
 
+                if (mVehicleManager != null) {
+                    DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
+                    mVehicleManager.send(request);
+                    try {
+                        Thread.sleep(20);
+                    } catch(InterruptedException e) {
+                        Log.e(DTCMessage, "onSendDiagnosticRequest error: " + e);
+                    }
                 }
             }
         }
@@ -166,6 +174,7 @@ public class DTCRequestFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         if (getActivity() != null) {
+            Log.i(DTCMessage, "Rebinding to vehicle service");
             getActivity().bindService(
                     new Intent(getActivity(), VehicleManager.class),
                     mConnection, Context.BIND_AUTO_CREATE);

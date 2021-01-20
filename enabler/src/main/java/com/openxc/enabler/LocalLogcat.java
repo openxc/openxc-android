@@ -28,110 +28,110 @@ public class LocalLogcat {
     final static long KEEP_LOG_FILE_TIME = 1000 * 60 * 60 * 24 * 14;        // 14 Days in milliseconds
 
     public static void initLogcat(Context context) {
-        //uncomment below return statement to bypass log file creation, should allow regular console logging
+        //comment below return statement to bypass log file creation, should allow regular console logging
         //may need to comment the rest of the method
 
-        //return;
+        return;
 
-        if ( isExternalStorageWritable() ) {
-
-            Toast.makeText(context, "isExternalStorageWritable() works", Toast.LENGTH_LONG).show();
-
-            //final File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
-            final File appDirectory = new File( "/Documents" + LOGFILE_DIRECTORY );
-            File logFile = new File( appDirectory, "logcat" + dateFormat.format(new Date()) + ".txt" );
-
-            // create app folder
-            if ( !appDirectory.exists() ) {
-                Log.e(TAG, "Creating Directory:" + appDirectory.toString());
-                boolean dirCreated = appDirectory.mkdir();
-                if (!dirCreated) {
-                    Log.e(TAG, "Could not create logfile directory" + appDirectory.toString());
-                }
-            }
-
-            Toast.makeText(context, "appDirectory = " + appDirectory.toString(), Toast.LENGTH_LONG).show();
-
-            // clear the previous logcat and then write the new one to the file
-            try {
-                Runtime.getRuntime().exec("logcat -c");
-                mProcess = Runtime.getRuntime().exec("logcat -f " + logFile);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
-            Log.e(TAG, "Starting Local Logfile:" + logFile);
-
-            deleteOldLogFiles();
-
-            // After 8 hours of running, start another logfile and
-            // remove out of date files
-            Timer timer = new Timer();
-            TimerTask countdown = new TimerTask() {
-                @Override
-                public void run() {
-                    if (mProcess != null) {
-                        mProcess.destroy();
-
-                        File logFile = new File( appDirectory, "logcat_" + dateFormat.format(new Date()) + ".txt" );
-                        try {
-                            mProcess = Runtime.getRuntime().exec("logcat -f " + logFile);
-                            deleteOldLogFiles();
-                        } catch (IOException exception) {
-                            exception.printStackTrace();
-                        }
-
-                    }
-                }
-            };
-            timer.schedule(countdown, 0, SINGLE_LOG_FILE_DURATION);
-
-        } else if ( isExternalStorageReadable() ) {
-            Log.e(TAG, "External Storage is Readable, but not Writable");
-        } else {
-            Log.e(TAG, "External Storage is not accessible");
-        }
-    }
-
-    /* Checks if external storage is available for read and write */
-    public static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ) {
-            return true;
-        }
-        return false;
-    }
-
-    /* Checks if external storage is available to at least read */
-    public static boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if ( Environment.MEDIA_MOUNTED.equals( state ) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals( state ) ) {
-            return true;
-        }
-        return false;
-    }
-
-    private static void deleteOldLogFiles() {
-        File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
-        if (!appDirectory.exists()) {
-            return;
-        }
-
-        long currentTimeMilli = System.currentTimeMillis();
-        File[] files = appDirectory.listFiles();
-        if (files == null) {
-            return;
-        }
-        for (File logFile : files) {
-            long lastmodified = logFile.lastModified();
-            if (currentTimeMilli - lastmodified > KEEP_LOG_FILE_TIME) {
-                // Delete old stale Log files
-                Log.e(TAG, "Deleting stale file:" + logFile.toString());
-                logFile.delete();
-            }
-        }
-
+//        if ( isExternalStorageWritable() ) {
+//
+//            Toast.makeText(context, "isExternalStorageWritable() works", Toast.LENGTH_LONG).show();
+//
+//            //final File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
+//            final File appDirectory = new File( "/Documents" + LOGFILE_DIRECTORY );
+//            File logFile = new File( appDirectory, "logcat" + dateFormat.format(new Date()) + ".txt" );
+//
+//            // create app folder
+//            if ( !appDirectory.exists() ) {
+//                Log.e(TAG, "Creating Directory:" + appDirectory.toString());
+//                boolean dirCreated = appDirectory.mkdir();
+//                if (!dirCreated) {
+//                    Log.e(TAG, "Could not create logfile directory" + appDirectory.toString());
+//                }
+//            }
+//
+//            Toast.makeText(context, "appDirectory = " + appDirectory.toString(), Toast.LENGTH_LONG).show();
+//
+//            // clear the previous logcat and then write the new one to the file
+//            try {
+//                Runtime.getRuntime().exec("logcat -c");
+//                mProcess = Runtime.getRuntime().exec("logcat -f " + logFile);
+//            } catch (IOException exception) {
+//                exception.printStackTrace();
+//            }
+//
+//            Log.e(TAG, "Starting Local Logfile:" + logFile);
+//
+//            deleteOldLogFiles();
+//
+//            // After 8 hours of running, start another logfile and
+//            // remove out of date files
+//            Timer timer = new Timer();
+//            TimerTask countdown = new TimerTask() {
+//                @Override
+//                public void run() {
+//                    if (mProcess != null) {
+//                        mProcess.destroy();
+//
+//                        File logFile = new File( appDirectory, "logcat_" + dateFormat.format(new Date()) + ".txt" );
+//                        try {
+//                            mProcess = Runtime.getRuntime().exec("logcat -f " + logFile);
+//                            deleteOldLogFiles();
+//                        } catch (IOException exception) {
+//                            exception.printStackTrace();
+//                        }
+//
+//                    }
+//                }
+//            };
+//            timer.schedule(countdown, 0, SINGLE_LOG_FILE_DURATION);
+//
+//        } else if ( isExternalStorageReadable() ) {
+//            Log.e(TAG, "External Storage is Readable, but not Writable");
+//        } else {
+//            Log.e(TAG, "External Storage is not accessible");
+//        }
+//    }
+//
+//    /* Checks if external storage is available for read and write */
+//    public static boolean isExternalStorageWritable() {
+//        String state = Environment.getExternalStorageState();
+//        if ( Environment.MEDIA_MOUNTED.equals( state ) ) {
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    /* Checks if external storage is available to at least read */
+//    public static boolean isExternalStorageReadable() {
+//        String state = Environment.getExternalStorageState();
+//        if ( Environment.MEDIA_MOUNTED.equals( state ) ||
+//                Environment.MEDIA_MOUNTED_READ_ONLY.equals( state ) ) {
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    private static void deleteOldLogFiles() {
+//        File appDirectory = new File( Environment.getExternalStorageDirectory() + LOGFILE_DIRECTORY );
+//        if (!appDirectory.exists()) {
+//            return;
+//        }
+//
+//        long currentTimeMilli = System.currentTimeMillis();
+//        File[] files = appDirectory.listFiles();
+//        if (files == null) {
+//            return;
+//        }
+//        for (File logFile : files) {
+//            long lastmodified = logFile.lastModified();
+//            if (currentTimeMilli - lastmodified > KEEP_LOG_FILE_TIME) {
+//                // Delete old stale Log files
+//                Log.e(TAG, "Deleting stale file:" + logFile.toString());
+//                logFile.delete();
+//            }
+//        }
+//
     }
 }
 
