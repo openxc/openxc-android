@@ -35,15 +35,6 @@ import static org.mockito.Mockito.verify;
 public class DTCUITests {
 
     //*
-    private VehicleManager vehicleManager;
-    private DiagnosticRequest request;
-
-    @Before
-    public void init() {
-        this.vehicleManager = mock(VehicleManager.class);
-        this.request = new DiagnosticRequest(1, 2, 3);
-    }
-
     @Rule
     public ActivityTestRule<OpenXcEnablerActivity> mActivityTestRule = new ActivityTestRule<>(OpenXcEnablerActivity.class);
 
