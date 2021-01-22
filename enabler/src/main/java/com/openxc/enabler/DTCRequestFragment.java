@@ -97,7 +97,6 @@ public class DTCRequestFragment extends ListFragment {
 
         searchBtn = (Button) v.findViewById(R.id.dtc_request_button);
         progressBar = (ProgressBar) v.findViewById(R.id.p_bar);
-        //progressBar.setVisibility(View.VISIBLE);
         noResponse = (TextView) v.findViewById(android.R.id.empty);
         noResponse.setVisibility(View.INVISIBLE);
 

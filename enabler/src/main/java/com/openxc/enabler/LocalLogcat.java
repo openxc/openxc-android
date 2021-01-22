@@ -28,7 +28,7 @@ public class LocalLogcat {
     final static long KEEP_LOG_FILE_TIME = 1000 * 60 * 60 * 24 * 14;        // 14 Days in milliseconds
 
     public static void initLogcat(Context context) {
-        //comment below return statement to bypass log file creation, should allow regular console logging
+        //uncomment below return statement to bypass log file creation, should allow regular console logging
         //may need to comment the rest of the method
 
         return;
