@@ -137,8 +137,7 @@ public class DTCRequestFragment extends ListFragment {
 
         ((OpenXcEnablerActivity)getActivity()).setDTCScanning(true);
 
-        //long delay = 420000L;
-        long delay = 5000L;
+        long delay = 420000L;
         final Timer scanTimer = new Timer();
         scanTimer.schedule(new TimerTask() {
             @Override
@@ -170,7 +169,6 @@ public class DTCRequestFragment extends ListFragment {
                 if (!scanComplete) {
                     progressBarValue++;
                     progressBar.setProgress(progressBarValue);
-                    Log.e(DTCMessage, "--------------------------------mVehicleManager = " + mVehicleManager);
                     if (mVehicleManager != null) {
                         DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
                         mVehicleManager.send(request);
