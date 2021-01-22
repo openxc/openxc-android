@@ -137,8 +137,8 @@ public class DTCRequestFragment extends ListFragment {
 
         ((OpenXcEnablerActivity)getActivity()).setDTCScanning(true);
 
-        //long delay = 420000L;
-        long delay = 5000L;
+        long delay = 420000L;
+        //long delay = 5000L;
         final Timer scanTimer = new Timer();
         scanTimer.schedule(new TimerTask() {
             @Override
@@ -158,29 +158,31 @@ public class DTCRequestFragment extends ListFragment {
                             searchBtn.setClickable(true);
                         }
                     });
-                    scanComplete = false;
                 }
             }
         }, delay);
 
-        Log.e(DTCMessage, "--------------------------------mVehicleManager = " + mVehicleManager);
-        if (mVehicleManager != null) {
-            outerLoop:
-            for (int a=1; a<=2; a++) {
-                for (int b = 0; b <= 2303; b++) {
-                    if (!scanComplete) {
-                        progressBarValue++;
-                        progressBar.setProgress(progressBarValue);
+        outerLoop:
+        for (int a = 1; a <= 2; a++) {
+            for (int b = 0; b <= 2303; b++) {
+                if (!scanComplete) {
+                    progressBarValue++;
+                    progressBar.setProgress(progressBarValue);
+                    Log.e(DTCMessage, "--------------------------------mVehicleManager = " + mVehicleManager);
+                    if (mVehicleManager != null) {
                         DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
                         mVehicleManager.send(request);
                         try {
                             Thread.sleep(20);
-                        } catch(InterruptedException e) {
+                        } catch (InterruptedException e) {
                             Log.e(DTCMessage, "onSendDiagnosticRequest error: " + e);
                         }
                     } else {
                         break outerLoop;
                     }
+
+                } else {
+                    break outerLoop;
                 }
             }
         }
