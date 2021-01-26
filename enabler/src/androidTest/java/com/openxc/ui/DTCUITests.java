@@ -2,7 +2,9 @@ package com.openxc.ui;
 
 import android.test.suitebuilder.annotation.LargeTest;
 
+import com.openxc.VehicleManager;
 import com.openxc.enabler.OpenXcEnablerActivity;
+import com.openxc.messages.DiagnosticRequest;
 import com.openxcplatform.enabler.R;
 
 import org.junit.Before;
@@ -25,22 +27,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class DTCUITests {
 
-    /*
-    private String stringToBetyped;
-
+    //*
     @Rule
     public ActivityTestRule<OpenXcEnablerActivity> mActivityTestRule = new ActivityTestRule<>(OpenXcEnablerActivity.class);
-
-    @Before
-    public void initValidString() {
-        // Specify a valid string.
-        stringToBetyped = "BB8";
-    }
 
     @Test
     public void checkButton_sameActivity() {
@@ -54,7 +50,7 @@ public class DTCUITests {
         // Click button
         onView(withId(R.id.dtc_request_button)).perform(ViewActions.click());
 
-        // Verify disabled and verify not clickable
+        // Verify button disabled and verify not clickable
         onView(withId(R.id.dtc_request_button)).check(matches(not(isEnabled())));
         onView(withId(R.id.dtc_request_button)).check(matches(not(isClickable())));
     }

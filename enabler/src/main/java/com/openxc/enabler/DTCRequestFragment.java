@@ -27,6 +27,9 @@ import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.VehicleMessage;
 import com.openxcplatform.enabler.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import androidx.fragment.app.ListFragment;
 
 import static com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread;
@@ -38,6 +41,7 @@ public class DTCRequestFragment extends ListFragment {
     private Button searchBtn;
     private TextView noResponse;
     private boolean displayNoResponse = true;
+    private boolean scanComplete = false;
     private ProgressBar progressBar;
     private int progressBarValue = 0;
     private DiagnosticResponseAdapter diagnosticResponseAdapter;
@@ -53,6 +57,8 @@ public class DTCRequestFragment extends ListFragment {
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
+                        // responses are collected here
+                        Log.e(DTCMessage, "response received");
                         diagnosticResponseAdapter.add(message.asDiagnosticResponse());
                         displayNoResponse = false;
                     }
@@ -64,7 +70,7 @@ public class DTCRequestFragment extends ListFragment {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            Log.i(DTCMessage, "Bound to VehicleManager");
+            Log.e(DTCMessage, "Bound to VehicleManager");
             mVehicleManager = ((VehicleManager.VehicleBinder)service
             ).getService();
 
@@ -72,7 +78,7 @@ public class DTCRequestFragment extends ListFragment {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            Log.w(DTCMessage, "VehicleService disconnected unexpectedly");
+            Log.e(DTCMessage, "VehicleService disconnected unexpectedly");
             mVehicleManager = null;
         }
     };
@@ -91,8 +97,8 @@ public class DTCRequestFragment extends ListFragment {
 
         searchBtn = (Button) v.findViewById(R.id.dtc_request_button);
         progressBar = (ProgressBar) v.findViewById(R.id.p_bar);
-        progressBar.setVisibility(View.VISIBLE);
         noResponse = (TextView) v.findViewById(android.R.id.empty);
+        noResponse.setVisibility(View.INVISIBLE);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +106,7 @@ public class DTCRequestFragment extends ListFragment {
                 searchBtn.setEnabled(false);
                 searchBtn.setClickable(false);
 
-                Log.e("DTCRequest", "setOnClickListener");
+                Log.e(DTCMessage, "setOnClickListener");
                 ManagerThread dtcButtonThread = new ManagerThread();
                 dtcButtonThread.start();
             }
@@ -110,12 +116,12 @@ public class DTCRequestFragment extends ListFragment {
 
     public class ManagerThread extends Thread {
         public ManagerThread(){
-            Log.e("DTCRequest", "ManagerThread");
+            Log.e(DTCMessage, "ManagerThread");
         };
 
         @Override
         public void run() {
-            Log.e("DTCRequest", "dtcButtonThread.run");
+            Log.e(DTCMessage, "dtcButtonThread.run");
             onSendDiagnosticRequest();
         }
     };
@@ -129,19 +135,57 @@ public class DTCRequestFragment extends ListFragment {
         });
 
         ((OpenXcEnablerActivity)getActivity()).setDTCScanning(true);
-        for (int a=1; a<=2; a++) {
-            for (int b = 0; b <= 2303; b++) {
-                progressBarValue++;
-                progressBar.setProgress(progressBarValue);
-                DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
-                mVehicleManager.send(request);
-                try {
-                    Thread.sleep(20);
-                } catch(InterruptedException e) {
 
+        long delay = 420000L;
+        final Timer scanTimer = new Timer();
+        scanTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!scanComplete) {
+                    scanComplete = true;
+                    progressBarValue = 0;
+                    progressBar.setProgress(progressBarValue);
+                    scanTimer.cancel();
+                    ((OpenXcEnablerActivity)getActivity()).setDTCScanning(false);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            noResponse.setText("The scan took too long and was cancelled");
+                            noResponse.setVisibility(View.VISIBLE);
+                            searchBtn.setEnabled(true);
+                            searchBtn.setClickable(true);
+                        }
+                    });
+                }
+            }
+        }, delay);
+
+        scanComplete = false;
+        outerLoop:
+        for (int a = 1; a <= 2; a++) {
+            for (int b = 0; b <= 2303; b++) {
+                if (!scanComplete) {
+                    progressBarValue++;
+                    progressBar.setProgress(progressBarValue);
+                    if (mVehicleManager != null) {
+                        DiagnosticRequest request = new DiagnosticRequest(a, b, 3);
+                        mVehicleManager.send(request);
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            Log.e(DTCMessage, "onSendDiagnosticRequest error: " + e);
+                        }
+                    } else {
+                        break outerLoop;
+                    }
+
+                } else {
+                    break outerLoop;
                 }
             }
         }
+
         ((OpenXcEnablerActivity)getActivity()).setDTCScanning(false);
 
         runOnUiThread(new Runnable() {
@@ -152,6 +196,7 @@ public class DTCRequestFragment extends ListFragment {
                 }
                 searchBtn.setEnabled(true);
                 searchBtn.setClickable(true);
+                scanTimer.cancel();
             }
         });
     }
@@ -166,6 +211,7 @@ public class DTCRequestFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         if (getActivity() != null) {
+            Log.i(DTCMessage, "Rebinding to vehicle service");
             getActivity().bindService(
                     new Intent(getActivity(), VehicleManager.class),
                     mConnection, Context.BIND_AUTO_CREATE);
