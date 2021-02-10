@@ -50,8 +50,6 @@ The release of the Enabler to the Play store and the library to JCenter and the
 Maven Central Repository is managed automatically with Travis CI. The Travis
 build environment must be configured with these encrypted environment variables:
 
-* `BINTRAY_USER` - username at Bintray that is an owner of the openxc-android artifact.
-* `BINTRAY_API_KEY` - API key for the user at Bintray.
 * `KEYSTORE_PASS` - password to the release keystore in this repository.
 * `ALIAS_NAME` - alias of the release key in the keystore.
 * `ALIAS_PASS` - password for the release key.

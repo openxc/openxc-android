@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+
+group = "com.openxcplatform"
+version = "7.1.0"
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
+        minSdkVersion 18
+        targetSdkVersion 28
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'LongLogTag'
+    }
+    useLibrary  'org.apache.http.legacy'
+}
+
+dependencies {
+    api 'com.google.code.gson:gson:2.8.5'
+    api 'com.google.guava:guava:28.2-android'
+    implementation 'com.google.protobuf:protobuf-java:3.9.2'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation 'org.mockito:mockito-core:2.23.0'
+    testImplementation 'org.robolectric:robolectric:3.8'
+    testImplementation 'org.robolectric:shadows-httpclient:3.8'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}

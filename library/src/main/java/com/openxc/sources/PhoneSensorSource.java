@@ -69,11 +69,13 @@ public class PhoneSensorSource extends ContextualVehicleDataSource
         osver = Build.VERSION.RELEASE;
         PackageManager PM= context.getPackageManager();
         boolean gyro = PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE);
+        sensorService = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> listSensor = sensorService.getSensorList(Sensor.TYPE_ALL);
         for(int i=0; i<listSensor.size(); i++)
         {
             Log.d(TAG, "PhoneSensorSource: " );
         }
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
     public PhoneSensorSource(Context context) {

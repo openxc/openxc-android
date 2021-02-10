@@ -69,6 +69,42 @@
 
         <TextView
             style="@style/ItemLabel"
+            android:text="@string/bytes_per_second_label" />
+
+        <TextView
+            android:id="@+id/throughput_bytes"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/messages_per_second_label" />
+
+        <TextView
+            android:id="@+id/throughput_messages"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
+            android:text="@string/average_message_size_label" />
+
+        <TextView
+            android:id="@+id/average_message_size"
+            style="@style/ItemData" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/ItemRow" >
+
+        <TextView
+            style="@style/ItemLabel"
             android:text="@string/vi_version_label" />
 
         <TextView
