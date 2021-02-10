@@ -27,9 +27,9 @@ android {
 
         release {
             storeFile rootProject.file('keys/release.keystore')
-            storePassword rootProject.ext.keystorePassword
-            keyAlias rootProject.ext.keyAlias
-            keyPassword rootProject.ext.keyPassword
+            storePassword System.getenv('keystorePassword')
+            keyAlias System.getenv('keyAlias')
+            keyPassword System.getenv('keyPassword')
         }
     }
 
@@ -46,7 +46,7 @@ android {
             shrinkResources true
             proguardFile file('proguard-rules.txt')
             proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
-            buildConfigField "String", "BUGSNAG_TOKEN", "\"" + rootProject.ext.bugsnagToken + "\""
+            buildConfigField "String", "BUGSNAG_TOKEN", "\"" + System.getenv('bugsnagToken') + "\""
         }
 
         applicationVariants.all { variant ->
