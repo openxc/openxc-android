@@ -27,4 +27,6 @@ jobs:
         android-licence: ${{ secrets.ANDROID_LICENCE }}
         
     - name: Release APK To Releases 
-      run: ls /github/workspace/
+      run: |
+        ls ./
+        pwd
