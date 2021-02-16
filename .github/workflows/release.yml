@@ -14,7 +14,7 @@ jobs:
       with:
         # The gradle command you wish to run (required)
         # Here, `./gradlew test` will be run
-        script: "assembleRelease -PkeystorePassword=${{secrets.keystorePassword}} -PkeyAliasPassword=${{secrets.KEY_ALIAS_PASSWORD}}"
+        script: "assembleRelease"
 
         # In some cases, you may need to provide
         # Android licence agreement id
