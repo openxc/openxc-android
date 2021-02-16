@@ -11,6 +11,10 @@ jobs:
 
     - name: Build Release
       uses: Raul6469/android-gradle-action@2.0.0
+      env:
+        keystorePassword: ${{secrets.keystorePassword}}
+        keyAlias: ${{secrets.KEYNAME}}
+        keyPassword: ${{secrets.KEY_ALIAS_PASSWORD}}
       with:
         # The gradle command you wish to run (required)
         # Here, `./gradlew test` will be run
