@@ -28,5 +28,4 @@ jobs:
         
     - name: Release APK To Releases 
       run: |
-        ls ./
-        pwd
+        ls ./build/outputs/apk/release
