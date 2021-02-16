@@ -26,3 +26,5 @@ jobs:
         # and add the file content as a GitHub secret named `$ANDROID_LICENCE`.
         android-licence: ${{ secrets.ANDROID_LICENCE }}
         
+    - name: Release APK To Releases 
+        run: "ls /github/workspace/app/build/outputs/apk/release"
