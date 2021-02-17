@@ -1,0 +1,44 @@
+name: Release
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Release
+      uses: Raul6469/android-gradle-action@2.0.0
+      env:
+        keystorePassword: ${{secrets.keystorePassword}}
+        keyAlias: ${{secrets.KEYNAME}}
+        keyPassword: ${{secrets.KEY_ALIAS_PASSWORD}}
+      with:
+        # The gradle command you wish to run (required)
+        # Here, `./gradlew test` will be run
+        script: "assembleRelease"
+
+        # In some cases, you may need to provide
+        # Android licence agreement id
+        # You can find it on your own machine under `$ANDROID_HOME/license`,
+        # and add the file content as a GitHub secret named `$ANDROID_LICENCE`.
+        android-licence: ${{ secrets.ANDROID_LICENCE }}
+        
+    - name: Publish Artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: Open XC Enabler
+          path: ./enabler/build/outputs/apk/release/enabler-release.apk
+
+    - name: Publish To Play Store
+      uses: r0adkll/upload-google-play@v1
+      with:
+         serviceAccountJson: ${{ SERVICE_ACCOUNT_JSON }}
+         packageName: com.openxcplatform.enabler
+         releaseFile: ./enabler/build/outputs/apk/release/enabler-release.apk
+         track: prodction
