@@ -28,4 +28,4 @@ jobs:
         
     - name: Release APK To Releases 
       run: |
-        find ./ -type d
+        ls ./enabler/build/outputs/apk/release
