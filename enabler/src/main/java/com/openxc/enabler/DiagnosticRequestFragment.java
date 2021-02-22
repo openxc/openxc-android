@@ -34,6 +34,9 @@ public class DiagnosticRequestFragment extends ListFragment {
     private VehicleMessage.Listener mListener = new VehicleMessage.Listener() {
         @Override
         public void receive(final VehicleMessage message) {
+            if (((OpenXcEnablerActivity)getActivity()).isDTCScanning()) {
+                return;
+            }
             Activity activity = getActivity();
             if(activity != null) {
                 getActivity().runOnUiThread(new Runnable() {
