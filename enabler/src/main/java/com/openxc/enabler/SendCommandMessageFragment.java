@@ -348,8 +348,12 @@ public class SendCommandMessageFragment extends Fragment {
                 commandRequestTextView.setText(JsonFormatter.serialize(request));
 
                 //Update the response TextView
-                commandResponseTextView.setVisibility(View.VISIBLE);
-                commandResponseTextView.setText(JsonFormatter.serialize(response));
+                if(response != null) {
+                    commandResponseTextView.setVisibility(View.VISIBLE);
+                    commandResponseTextView.setText(JsonFormatter.serialize(response));
+                }else{
+                    Toast.makeText(getActivity(), "The VI is not responding to the request", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
