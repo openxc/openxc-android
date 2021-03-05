@@ -39,6 +39,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -211,6 +212,7 @@ public class SettingsActivity extends PreferenceActivity {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static String getDownloadDocumentDetails(Context context, Uri uri) {
         final String id = DocumentsContract.getDocumentId(uri);
         if (!TextUtils.isEmpty(id)) {

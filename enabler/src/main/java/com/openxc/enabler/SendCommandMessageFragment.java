@@ -76,6 +76,7 @@ public class SendCommandMessageFragment extends Fragment {
     private Spinner mFormatSpinner;
     private Button mSendButton;
     private EditText mCustomInput;
+    private String dataFormat;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -328,12 +329,17 @@ public class SendCommandMessageFragment extends Fragment {
                     break;
 
                 case CUSTOM_COMMAND_POS:
-                    String inputString = mCustomInput.getText().toString();
-                    HashMap<String, String> inputCommand = getMapFromJson(inputString);
-                    if (inputCommand == null)
-                        mCustomInput.setError(getResources().getString(R.string.input_json_error));
-                    else
-                        request = new CustomCommand(inputCommand);
+                      dataFormat = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getString("dataFormat","AutoDetect" );
+                    if(dataFormat != "Protobuf Mode") {
+                        String inputString = mCustomInput.getText().toString();
+                        HashMap<String, String> inputCommand = getMapFromJson(inputString);
+                        if (inputCommand == null)
+                            mCustomInput.setError(getResources().getString(R.string.input_json_error));
+                        else
+                            request = new CustomCommand(inputCommand);
+                    }else{
+                        Toast.makeText(getActivity(), "Custom command is not for Protobuf mode ", Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case GET_VIN:
                     request = new Command(Command.CommandType.GET_VIN);
@@ -348,12 +354,10 @@ public class SendCommandMessageFragment extends Fragment {
                 commandRequestTextView.setText(JsonFormatter.serialize(request));
 
                 //Update the response TextView
-                if(response != null) {
+
                     commandResponseTextView.setVisibility(View.VISIBLE);
                     commandResponseTextView.setText(JsonFormatter.serialize(response));
-                }else{
-                    Toast.makeText(getActivity(), "The VI is not responding to the request", Toast.LENGTH_LONG).show();
-                }
+
             }
         }
     }
