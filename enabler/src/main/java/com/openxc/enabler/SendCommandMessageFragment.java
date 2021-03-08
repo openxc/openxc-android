@@ -329,17 +329,14 @@ public class SendCommandMessageFragment extends Fragment {
                     break;
 
                 case CUSTOM_COMMAND_POS:
-                      dataFormat = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getString("dataFormat","AutoDetect" );
-                    if(dataFormat != "Protobuf Mode") {
+
                         String inputString = mCustomInput.getText().toString();
                         HashMap<String, String> inputCommand = getMapFromJson(inputString);
                         if (inputCommand == null)
                             mCustomInput.setError(getResources().getString(R.string.input_json_error));
                         else
                             request = new CustomCommand(inputCommand);
-                    }else{
-                        Toast.makeText(getActivity(), "Custom command is not for Protobuf mode ", Toast.LENGTH_LONG).show();
-                    }
+
                     break;
                 case GET_VIN:
                     request = new Command(Command.CommandType.GET_VIN);
@@ -413,7 +410,15 @@ public class SendCommandMessageFragment extends Fragment {
                 mFormatLayout.setVisibility(View.VISIBLE);
                 break;
             case CUSTOM_COMMAND_POS:
-                mCustomInputLayout.setVisibility(View.VISIBLE);
+                dataFormat = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getString("dataFormat","AutoDetect" );
+                Log.d("ADebugTag", "Value: " + dataFormat );
+                if(dataFormat.equals("Protobuf Mode")) {
+                    Toast.makeText(getActivity(), "Custom command is not available for Protobuf mode ", Toast.LENGTH_LONG).show();
+
+
+                }else{
+                    mCustomInputLayout.setVisibility(View.VISIBLE);
+                }
                 break;
             default: // do nothing
                 break;
