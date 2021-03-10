@@ -11,5 +11,6 @@
         <item>C5 RTC Configuration</item>
         <item>C5 SD Card Status</item>
         <item>Custom Command</item>
+        <item>Get_Vin</item>
     </string-array>
 </resources>
