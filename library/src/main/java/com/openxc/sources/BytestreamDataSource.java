@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.openxc.messages.FilterVehicleMessageWithVariance;
 import com.openxc.messages.MultiFrameResponse;
 import com.openxc.messages.SerializationException;
+import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.streamers.BinaryStreamer;
 import com.openxc.messages.streamers.JsonStreamer;
@@ -41,6 +43,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
     protected String mDataFormatValue = null;
+
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
         super(callback, context);
@@ -158,7 +161,17 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
 
     private void parseNextMessageFromHandler() {
         VehicleMessage message;
+        boolean result;
         while((message = mStreamHandler.parseNextMessage()) != null) {
+            Log.e("ByteStream", message.toString()   );
+            if(message instanceof SimpleVehicleMessage) {
+                result = FilterVehicleMessageWithVariance.checkMessage((SimpleVehicleMessage) message);
+                if (result == false){
+                    return;
+                }
+            }
+          //  FilterVehicleMessageWithVariance.checkMessage(item.getKey(),item.getValue());
+           // FilterVehicleMessageWithVariance.checkMessage(message.toString());
             if (message instanceof MultiFrameResponse) {
                 if (((MultiFrameResponse)message).addSequentialData()) {
                     String fullMessage = ((MultiFrameResponse)message).getAssembledMessage(mStreamHandler.getRawMessage());
