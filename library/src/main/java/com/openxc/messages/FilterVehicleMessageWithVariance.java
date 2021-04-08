@@ -41,13 +41,15 @@ public class FilterVehicleMessageWithVariance {
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue + variance || currentValue <= lastValue - variance) {
+                Log.e(TAG, "currentValue: "  + currentValue);
              lastValue = currentValue;
                 return  true;
             }
             lastValue = currentValue;
-        
+            return false;
+
         }
-        if( name.compareToIgnoreCase("fuel_level") == 0){
+        else if( name.compareToIgnoreCase("fuel_level") == 0){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue1 + variance || currentValue <= lastValue1 - variance) {
@@ -55,9 +57,10 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue1 = currentValue;
+            return false;
 
         }
-        if( name.compareToIgnoreCase("fuel_consumed_since_restart") == 0 ){
+        else if( name.compareToIgnoreCase("fuel_consumed_since_restart") == 0 ){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue2 + variance || currentValue <= lastValue2 - variance) {
@@ -65,9 +68,10 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue2 = currentValue;
+            return false;
 
         }
-        if( name.compareToIgnoreCase("odometer") == 0){
+        else if( name.compareToIgnoreCase("odometer") == 0){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue3 + variance || currentValue <= lastValue3 - variance) {
@@ -75,9 +79,10 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue3 = currentValue;
+            return false;
 
         }
-        if(name.compareToIgnoreCase("steering_wheel_angle") == 0){
+        else if(name.compareToIgnoreCase("steering_wheel_angle") == 0){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue4 + variance || currentValue <= lastValue4 - variance) {
@@ -85,9 +90,10 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue4 = currentValue;
+            return false;
 
         }
-        if( name.compareToIgnoreCase("torque_at_transmission") == 0){
+        else if( name.compareToIgnoreCase("torque_at_transmission") == 0){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue5 + variance || currentValue <= lastValue5 - variance) {
@@ -95,9 +101,10 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue5 = currentValue;
+            return false;
 
         }
-        if( name.compareToIgnoreCase("engine_speed") == 0 ){
+        else if( name.compareToIgnoreCase("engine_speed") == 0 ){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue6 + variance || currentValue <= lastValue6 - variance) {
@@ -105,9 +112,10 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue6 = currentValue;
+            return  false;
 
         }
-        if( name.compareToIgnoreCase("accelerator_pedal_position") == 0){
+        else if( name.compareToIgnoreCase("accelerator_pedal_position") == 0){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue7 + variance || currentValue <= lastValue7 - variance) {
@@ -115,13 +123,16 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue7 = currentValue;
+            return  false;
 
 
+        }else {
+            Log.e(TAG, "Check Name Not Found: " +name );
         }
 
-        return  false;
+        return  true;
+
     }
-//    if (lastspeed >= lastspeed + change value or lastspeed <= lastspeed - change value)
-//    { Return listener}
+
 }
 
