@@ -10,11 +10,6 @@ public class FilterVehicleMessageWithVariance {
     private static double variance = 1.0;
 
 
-    public static boolean checkMessage(String name,Object value) {
-        Log.e(TAG, "checkNameValue: "  + name + value.toString());
-
-        return  false;
-    }
     public static boolean checkMessage( String message) {
         String[] separated = message.split(",");
         String temp1 = separated [1];
@@ -23,9 +18,6 @@ public class FilterVehicleMessageWithVariance {
         String[] separated2 = temp2.split("=");
         mMessage = separated1 [1];
         mValue = separated2 [1];
-        Log.e(TAG, "checkMessage1: " + mMessage);
-        Log.e(TAG, "checkMessage2: " + mValue );
-
 
         return  false;
     }
@@ -35,13 +27,11 @@ public class FilterVehicleMessageWithVariance {
 
        String name = message.getName();
        String value = message.getValue().toString();
-        Log.e(TAG, "checkNameValue: "  + name   + "," + value);
 
         if(name.compareToIgnoreCase("vehicle_speed") ==  0 ){
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValue + variance || currentValue <= lastValue - variance) {
-                Log.e(TAG, "currentValue: "  + currentValue);
              lastValue = currentValue;
                 return  true;
             }
