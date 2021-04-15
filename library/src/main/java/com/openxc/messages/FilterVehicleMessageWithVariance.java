@@ -6,7 +6,7 @@ public class FilterVehicleMessageWithVariance {
     private  static final String TAG = "FilterVehicleMessage";
     private static String mMessage;
     private static String mValue;
-    private static double lastValue,lastValue1,lastValue2,lastValue3,lastValue4,lastValue5,lastValue6,lastValue7 ;
+    private static double lastValue,lastValue1,lastValue2,lastValue3,lastValue4,lastValue5,lastValue6,lastValue7,lastValue8,lastValue9 ;
     private static double variance = 1.0;
 
 
@@ -113,6 +113,29 @@ public class FilterVehicleMessageWithVariance {
                 return  true;
             }
             lastValue7 = currentValue;
+            return  false;
+
+
+        }
+        else if( name.compareToIgnoreCase("longitude") == 0){
+            double currentValue = Double.parseDouble(value);
+
+            if(currentValue > lastValue8 + variance || currentValue <= lastValue8 - variance) {
+                lastValue8 = currentValue;
+                return  true;
+            }
+            lastValue8 = currentValue;
+            return  false;
+
+
+        }else if( name.compareToIgnoreCase("latitude") == 0){
+            double currentValue = Double.parseDouble(value);
+
+            if(currentValue > lastValue9 + variance || currentValue <= lastValue9 - variance) {
+                lastValue9 = currentValue;
+                return  true;
+            }
+            lastValue9 = currentValue;
             return  false;
 
 
