@@ -129,6 +129,9 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                         mViVersionView.setText("");
                         mViDeviceIdView.setText("");
                         mViPlatformView.setText("");
+                        mViDeviceAverageMessageSizeView.setText("0");
+                        mViDeviceThroughputBytesView.setText("0");
+                        mMessageCountView.setText("0");
                     }
                 });
             }
