@@ -7,7 +7,8 @@ public class FilterVehicleMessageWithVariance {
     private static String mMessage;
     private static String mValue;
     private static double lastValue,lastValue1,lastValue2,lastValue3,lastValue4,lastValue5,lastValue6,lastValue7,lastValue8,lastValue9 ;
-    private static double variance = 1.0;
+    private static double varianceSpeed = 12.0,varianceFuel = 3.0,varianceFuleConssumed = 5.0,varianceOdometer = 5.0,varianceStearing = 12.0,varianceTorque = 40.0,varianceEngineSpeed = 200.0,varianceAccelerator = 5.0,varianceLongitude = .3,varianceLattitude = 2.0;
+
 
 
     public static boolean checkMessage( String message) {
@@ -29,9 +30,10 @@ public class FilterVehicleMessageWithVariance {
        String value = message.getValue().toString();
 
         if(name.compareToIgnoreCase("vehicle_speed") ==  0 ){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue + variance || currentValue <= lastValue - variance) {
+            if(currentValue > lastValue + varianceSpeed || currentValue <= lastValue - varianceSpeed) {
              lastValue = currentValue;
                 return  true;
             }
@@ -40,9 +42,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("fuel_level") == 0){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue1 + variance || currentValue <= lastValue1 - variance) {
+            if(currentValue > lastValue1 + varianceFuel || currentValue <= lastValue1 - varianceFuel) {
                 lastValue1 = currentValue;
                 return  true;
             }
@@ -51,9 +54,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("fuel_consumed_since_restart") == 0 ){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue2 + variance || currentValue <= lastValue2 - variance) {
+            if(currentValue > lastValue2 + varianceFuleConssumed || currentValue <= lastValue2 - varianceFuleConssumed) {
                 lastValue2 = currentValue;
                 return  true;
             }
@@ -62,9 +66,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("odometer") == 0){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue3 + variance || currentValue <= lastValue3 - variance) {
+            if(currentValue > lastValue3 + varianceOdometer || currentValue <= lastValue3 - varianceOdometer) {
                 lastValue3 = currentValue;
                 return  true;
             }
@@ -73,9 +78,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if(name.compareToIgnoreCase("steering_wheel_angle") == 0){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue4 + variance || currentValue <= lastValue4 - variance) {
+            if(currentValue > lastValue4 + varianceStearing || currentValue <= lastValue4 - varianceStearing) {
                 lastValue4 = currentValue;
                 return  true;
             }
@@ -84,9 +90,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("torque_at_transmission") == 0){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue5 + variance || currentValue <= lastValue5 - variance) {
+            if(currentValue > lastValue5 + varianceTorque || currentValue <= lastValue5 - varianceTorque) {
                 lastValue5 = currentValue;
                 return  true;
             }
@@ -95,9 +102,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("engine_speed") == 0 ){
+           // int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue6 + variance || currentValue <= lastValue6 - variance) {
+            if(currentValue > lastValue6 + varianceEngineSpeed || currentValue <= lastValue6 - varianceEngineSpeed) {
                 lastValue6 = currentValue;
                 return  true;
             }
@@ -106,9 +114,10 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("accelerator_pedal_position") == 0){
+            //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue7 + variance || currentValue <= lastValue7 - variance) {
+            if(currentValue > lastValue7 + varianceAccelerator || currentValue <= lastValue7 - varianceAccelerator) {
                 lastValue7 = currentValue;
                 return  true;
             }
@@ -120,7 +129,7 @@ public class FilterVehicleMessageWithVariance {
         else if( name.compareToIgnoreCase("longitude") == 0){
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue8 + variance || currentValue <= lastValue8 - variance) {
+            if(currentValue > lastValue8 + varianceLongitude || currentValue <= lastValue8 - varianceLongitude) {
                 lastValue8 = currentValue;
                 return  true;
             }
@@ -131,7 +140,7 @@ public class FilterVehicleMessageWithVariance {
         }else if( name.compareToIgnoreCase("latitude") == 0){
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue9 + variance || currentValue <= lastValue9 - variance) {
+            if(currentValue > lastValue9 + varianceLattitude || currentValue <= lastValue9 - varianceLattitude) {
                 lastValue9 = currentValue;
                 return  true;
             }
