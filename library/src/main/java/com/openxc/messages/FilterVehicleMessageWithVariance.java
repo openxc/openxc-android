@@ -6,7 +6,7 @@ public class FilterVehicleMessageWithVariance {
     private  static final String TAG = "FilterVehicleMessage";
     private static String mMessage;
     private static String mValue;
-    private static double lastValue,lastValue1,lastValue2,lastValue3,lastValue4,lastValue5,lastValue6,lastValue7,lastValue8,lastValue9 ;
+    private static double lastValueSpeed,lastValueFuel,lastValueFuelConsumed,lastValueOdometer,lastValueStearing,lastValueTorque,lastValueEngineSpeed,lastValueAccelerator,lastValueLongitude,lastValueLattitude ;
     private static double varianceSpeed = 12.0,varianceFuel = 3.0,varianceFuleConssumed = 5.0,varianceOdometer = 5.0,varianceStearing = 12.0,varianceTorque = 40.0,varianceEngineSpeed = 200.0,varianceAccelerator = 5.0,varianceLongitude = .3,varianceLattitude = 2.0;
 
 
@@ -33,11 +33,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue + varianceSpeed || currentValue <= lastValue - varianceSpeed) {
-             lastValue = currentValue;
+            if(currentValue > lastValueSpeed + varianceSpeed || currentValue <= lastValueSpeed - varianceSpeed) {
+                lastValueSpeed = currentValue;
                 return  true;
             }
-            lastValue = currentValue;
+            lastValueSpeed = currentValue;
             return false;
 
         }
@@ -45,11 +45,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue1 + varianceFuel || currentValue <= lastValue1 - varianceFuel) {
-                lastValue1 = currentValue;
+            if(currentValue > lastValueFuel + varianceFuel || currentValue <= lastValueFuel - varianceFuel) {
+                lastValueFuel = currentValue;
                 return  true;
             }
-            lastValue1 = currentValue;
+            lastValueFuel = currentValue;
             return false;
 
         }
@@ -57,11 +57,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue2 + varianceFuleConssumed || currentValue <= lastValue2 - varianceFuleConssumed) {
-                lastValue2 = currentValue;
+            if(currentValue > lastValueFuelConsumed + varianceFuleConssumed || currentValue <= lastValueFuelConsumed - varianceFuleConssumed) {
+                lastValueFuelConsumed = currentValue;
                 return  true;
             }
-            lastValue2 = currentValue;
+            lastValueFuelConsumed = currentValue;
             return false;
 
         }
@@ -69,11 +69,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue3 + varianceOdometer || currentValue <= lastValue3 - varianceOdometer) {
-                lastValue3 = currentValue;
+            if(currentValue > lastValueOdometer + varianceOdometer || currentValue <= lastValueOdometer - varianceOdometer) {
+                lastValueOdometer = currentValue;
                 return  true;
             }
-            lastValue3 = currentValue;
+            lastValueOdometer = currentValue;
             return false;
 
         }
@@ -81,11 +81,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue4 + varianceStearing || currentValue <= lastValue4 - varianceStearing) {
-                lastValue4 = currentValue;
+            if(currentValue > lastValueStearing + varianceStearing || currentValue <= lastValueStearing - varianceStearing) {
+                lastValueStearing = currentValue;
                 return  true;
             }
-            lastValue4 = currentValue;
+            lastValueStearing = currentValue;
             return false;
 
         }
@@ -93,11 +93,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue5 + varianceTorque || currentValue <= lastValue5 - varianceTorque) {
-                lastValue5 = currentValue;
+            if(currentValue > lastValueTorque + varianceTorque || currentValue <= lastValueTorque - varianceTorque) {
+                lastValueTorque = currentValue;
                 return  true;
             }
-            lastValue5 = currentValue;
+            lastValueTorque = currentValue;
             return false;
 
         }
@@ -105,11 +105,11 @@ public class FilterVehicleMessageWithVariance {
            // int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue6 + varianceEngineSpeed || currentValue <= lastValue6 - varianceEngineSpeed) {
-                lastValue6 = currentValue;
+            if(currentValue > lastValueEngineSpeed + varianceEngineSpeed || currentValue <= lastValueEngineSpeed - varianceEngineSpeed) {
+                lastValueEngineSpeed = currentValue;
                 return  true;
             }
-            lastValue6 = currentValue;
+            lastValueEngineSpeed = currentValue;
             return  false;
 
         }
@@ -117,11 +117,11 @@ public class FilterVehicleMessageWithVariance {
             //int currentValue = Integer.parseInt(value);
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue7 + varianceAccelerator || currentValue <= lastValue7 - varianceAccelerator) {
-                lastValue7 = currentValue;
+            if(currentValue > lastValueAccelerator + varianceAccelerator || currentValue <= lastValueAccelerator - varianceAccelerator) {
+                lastValueAccelerator = currentValue;
                 return  true;
             }
-            lastValue7 = currentValue;
+            lastValueAccelerator = currentValue;
             return  false;
 
 
@@ -129,22 +129,22 @@ public class FilterVehicleMessageWithVariance {
         else if( name.compareToIgnoreCase("longitude") == 0){
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue8 + varianceLongitude || currentValue <= lastValue8 - varianceLongitude) {
-                lastValue8 = currentValue;
+            if(currentValue > lastValueLongitude + varianceLongitude || currentValue <= lastValueLongitude - varianceLongitude) {
+                lastValueLongitude = currentValue;
                 return  true;
             }
-            lastValue8 = currentValue;
+            lastValueLongitude = currentValue;
             return  false;
 
 
         }else if( name.compareToIgnoreCase("latitude") == 0){
             double currentValue = Double.parseDouble(value);
 
-            if(currentValue > lastValue9 + varianceLattitude || currentValue <= lastValue9 - varianceLattitude) {
-                lastValue9 = currentValue;
+            if(currentValue > lastValueLattitude + varianceLattitude || currentValue <= lastValueLattitude - varianceLattitude) {
+                lastValueLattitude = currentValue;
                 return  true;
             }
-            lastValue9 = currentValue;
+            lastValueLattitude = currentValue;
             return  false;
 
 
