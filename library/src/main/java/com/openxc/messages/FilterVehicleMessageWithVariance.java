@@ -30,7 +30,7 @@ public class FilterVehicleMessageWithVariance {
        String value = message.getValue().toString();
 
         if(name.compareToIgnoreCase("vehicle_speed") ==  0 ){
-            //int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueSpeed + varianceSpeed || currentValue <= lastValueSpeed - varianceSpeed) {
@@ -42,7 +42,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("fuel_level") == 0){
-            //int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueFuel + varianceFuel || currentValue <= lastValueFuel - varianceFuel) {
@@ -54,7 +54,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("fuel_consumed_since_restart") == 0 ){
-            //int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueFuelConsumed + varianceFuleConssumed || currentValue <= lastValueFuelConsumed - varianceFuleConssumed) {
@@ -66,7 +66,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("odometer") == 0){
-            //int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueOdometer + varianceOdometer || currentValue <= lastValueOdometer - varianceOdometer) {
@@ -78,7 +78,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if(name.compareToIgnoreCase("steering_wheel_angle") == 0){
-            //int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueStearing + varianceStearing || currentValue <= lastValueStearing - varianceStearing) {
@@ -90,7 +90,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("torque_at_transmission") == 0){
-            //int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueTorque + varianceTorque || currentValue <= lastValueTorque - varianceTorque) {
@@ -102,7 +102,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("engine_speed") == 0 ){
-           // int currentValue = Integer.parseInt(value);
+
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueEngineSpeed + varianceEngineSpeed || currentValue <= lastValueEngineSpeed - varianceEngineSpeed) {
@@ -114,7 +114,7 @@ public class FilterVehicleMessageWithVariance {
 
         }
         else if( name.compareToIgnoreCase("accelerator_pedal_position") == 0){
-            //int currentValue = Integer.parseInt(value);
+           
             double currentValue = Double.parseDouble(value);
 
             if(currentValue > lastValueAccelerator + varianceAccelerator || currentValue <= lastValueAccelerator - varianceAccelerator) {
