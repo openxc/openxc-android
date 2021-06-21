@@ -8,6 +8,7 @@ import com.openxc.messages.CommandResponse;
 import com.openxc.messages.DiagnosticRequest;
 import com.openxc.messages.DiagnosticResponse;
 import com.openxc.messages.EventedSimpleVehicleMessage;
+import com.openxc.messages.MultiFrameResponse;
 import com.openxc.messages.NamedVehicleMessage;
 import com.openxc.messages.SimpleVehicleMessage;
 import com.openxc.messages.UnrecognizedMessageTypeException;
@@ -172,10 +173,32 @@ public   class BinaryDeserializer {
         return deserializedCommand;
     }
 
-    private static DiagnosticResponse deserializeDiagnosticResponse(
+    private static VehicleMessage deserializeDiagnosticResponse(
             BinaryMessages.VehicleMessage binaryMessage) {
         BinaryMessages.DiagnosticResponse serializedResponse =
                 binaryMessage.getDiagnosticResponse();
+
+        int totalSize = serializedResponse.getTotalSize(); // totalSize field only exists for Multiframe response
+        if (totalSize > 0) {
+            com.google.protobuf.ByteString byteString = serializedResponse.getPayload();
+            String payload = "0x";
+            for(int cnt=0; cnt<byteString.size(); cnt++) {
+                int singleByte = byteString.byteAt(cnt);
+                singleByte = (singleByte < 0) ? singleByte + 256 : singleByte;
+                payload += (Integer.toHexString(singleByte / 16) + Integer.toHexString( singleByte % 16));
+            }
+            MultiFrameResponse response = new MultiFrameResponse(
+                    serializedResponse.getFrame(),
+                    serializedResponse.getTotalSize(),
+                    serializedResponse.getMessageId(),
+                    serializedResponse.getSerializedSize(),
+                    payload);
+
+            response.setBus(serializedResponse.getBus());
+            response.setMode(serializedResponse.getMode());
+
+            return response;
+        }
 
         DiagnosticResponse response = new DiagnosticResponse(
                 serializedResponse.getBus(),

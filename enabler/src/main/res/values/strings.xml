@@ -63,6 +63,33 @@
     <string name="application_version_title">Version</string>
     <string name="application_version_summary">Version Number</string>
     <string name="application_version_key">application_version</string>
+    <string name="application_license_link">Tap here to view license info</string>
+    <string name="application_license_key">license_key</string>
+    <string name="application_license_title">License</string>
+    <string name="application_license_summary">Copyright (c) 2012 Ford Motor Company
+All rights reserved.\n\n
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:\n\n
+        \t* Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.\n
+        \t* Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.\n
+        \t* Neither the name of the \'organization\' nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.\n\n
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL \'COPYRIGHT HOLDER\' BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
     <string name="service_not_running">VehicleService not running.</string>
 
     <string name="bus_label">Bus</string>
@@ -76,11 +103,14 @@
     <string name="format_label">Format</string>
     <string name="custom_input_label">Custom Command Input</string>
 
-
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>
     <string name="send_button">Send</string>
     <string name="last_can_message_sent_label">Sent Messages</string>
+
+    <string name="dtc_button">Request DTC(s)</string>
+    <string name="no_dtc_responses_received">No DTC responses received.</string>
+    <string name="dtc_wait_time_note">Note: Searching for DTCs in your vehicle could take up to 5 minutes. You must remain on this screen during the scan.</string>
 
     <string name="no_can_messages_received">No CAN messages received.</string>
     <string name="no_can_messages_sent">No CAN messages sent.</string>

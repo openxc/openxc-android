@@ -76,6 +76,7 @@ public class SendCommandMessageFragment extends Fragment {
     private Spinner mFormatSpinner;
     private Button mSendButton;
     private EditText mCustomInput;
+    private String dataFormat;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className,
@@ -328,12 +329,14 @@ public class SendCommandMessageFragment extends Fragment {
                     break;
 
                 case CUSTOM_COMMAND_POS:
-                    String inputString = mCustomInput.getText().toString();
-                    HashMap<String, String> inputCommand = getMapFromJson(inputString);
-                    if (inputCommand == null)
-                        mCustomInput.setError(getResources().getString(R.string.input_json_error));
-                    else
-                        request = new CustomCommand(inputCommand);
+
+                        String inputString = mCustomInput.getText().toString();
+                        HashMap<String, String> inputCommand = getMapFromJson(inputString);
+                        if (inputCommand == null)
+                            mCustomInput.setError(getResources().getString(R.string.input_json_error));
+                        else
+                            request = new CustomCommand(inputCommand);
+
                     break;
                 case GET_VIN:
                     request = new Command(Command.CommandType.GET_VIN);
@@ -348,8 +351,10 @@ public class SendCommandMessageFragment extends Fragment {
                 commandRequestTextView.setText(JsonFormatter.serialize(request));
 
                 //Update the response TextView
-                commandResponseTextView.setVisibility(View.VISIBLE);
-                commandResponseTextView.setText(JsonFormatter.serialize(response));
+
+                    commandResponseTextView.setVisibility(View.VISIBLE);
+                    commandResponseTextView.setText(JsonFormatter.serialize(response));
+
             }
         }
     }
@@ -405,7 +410,15 @@ public class SendCommandMessageFragment extends Fragment {
                 mFormatLayout.setVisibility(View.VISIBLE);
                 break;
             case CUSTOM_COMMAND_POS:
-                mCustomInputLayout.setVisibility(View.VISIBLE);
+                dataFormat = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getString("dataFormat","AutoDetect" );
+                Log.d("ADebugTag", "Value: " + dataFormat );
+                if(dataFormat.equals("Protobuf Mode")) {
+                    Toast.makeText(getActivity(), "Custom command is not available for Protobuf mode ", Toast.LENGTH_LONG).show();
+
+
+                }else{
+                    mCustomInputLayout.setVisibility(View.VISIBLE);
+                }
                 break;
             default: // do nothing
                 break;
