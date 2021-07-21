@@ -16,7 +16,7 @@ public class DataThroughputTask extends TimerTask {
     private TextView mBytesPerSecondView;
     private TextView mMessagesPerSecondView;
     private TextView mAverageMessageSizeView;
-    private long totalSeconds = 0L;
+    private long connectionStart = (System.currentTimeMillis() / 1000) - 1;
 
     public DataThroughputTask(VehicleManager vehicleService, Activity activity,
                               TextView messageCountView, TextView bytesPerSecondView, TextView messagesPerSecondView, TextView averageMessageSizeView) {
@@ -42,8 +42,7 @@ public class DataThroughputTask extends TimerTask {
         } catch(VehicleServiceException e) {
             bitrate = 0;
         }
-
-        int messageRate = (int)(messageCount / ++totalSeconds);
+        int messageRate = (int)(messageCount / ((System.currentTimeMillis() / 1000) - connectionStart ));
 
         int averageMessageSize = 0;
         if (messageRate > 0)
@@ -54,7 +53,7 @@ public class DataThroughputTask extends TimerTask {
         final String messagesPerSecondText = Integer.toString(messageRate);
         final String averageMessageSizeText = String.format("%d bytes", averageMessageSize);
 
-        Log.d("ThroughputTask", String.format("Thread %d: totalSeconds: %d", Thread.currentThread().getId(), totalSeconds));
+        Log.d("ThroughputTask", String.format("Thread %d: totalSeconds: %d", Thread.currentThread().getId(), (messageCount / ((System.currentTimeMillis() / 1000) - connectionStart))));
 
         if (mActivity != null) {
             mActivity.runOnUiThread(new Runnable() {
