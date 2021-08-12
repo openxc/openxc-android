@@ -50,6 +50,12 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
     private TextView mViVersionView;
     private TextView mViPlatformView;
     private TextView mViDeviceIdView;
+    private TextView mViDeviceThroughputBytesView;
+    private TextView mViDeviceThroughputMessagesView;
+    private TextView mViDeviceAverageMessageSizeView;
+    private TextView mVinTextView;
+    private TextView mVinDataView;
+
     private View mBluetoothConnIV;
     private View mUsbConnIV;
     private View mNetworkConnIV;
@@ -63,6 +69,10 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
     private Button mSplitTraceFile;
     private Button mRestartTraceFile;
     private Button mStartStop;
+    private Button mGetVin;
+
+    
+    private TimerTask mUpdateDataThroughputTask;
     private TimerTask mUpdateMessageCountTask;
     private TimerTask mUpdatePipelineStatusTask;
     private Timer mTimer;
@@ -115,10 +125,13 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        Log.d(TAG, "VI disconnected");
+                        Log.e(TAG, "------------------------VI disconnected");
                         mViVersionView.setText("");
                         mViDeviceIdView.setText("");
                         mViPlatformView.setText("");
+                        mViDeviceAverageMessageSizeView.setText("0");
+                        mViDeviceThroughputBytesView.setText("0");
+                        mMessageCountView.setText("0");
                     }
                 });
             }
@@ -180,15 +193,24 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                 }
             }).start();
 
-            mUpdateMessageCountTask = new MessageCountTask(mVehicleManager,
-                    getActivity(), mMessageCountView);
-            mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
-                    mVehicleManager, getActivity(),
-                    mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
-                    mNoneConnView);
-            mTimer = new Timer();
-            mTimer.schedule(mUpdateMessageCountTask, 100, 1000);
-            mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
+            if (null == mUpdateDataThroughputTask) {
+                mUpdateDataThroughputTask = new DataThroughputTask(mVehicleManager,
+                        getActivity(), mMessageCountView, mViDeviceThroughputBytesView,
+                        mViDeviceThroughputMessagesView, mViDeviceAverageMessageSizeView);
+            }
+
+            if (null == mUpdatePipelineStatusTask) {
+                mUpdatePipelineStatusTask = new PipelineStatusUpdateTask(
+                        mVehicleManager, getActivity(),
+                        mFileConnIV, mNetworkConnIV, mBluetoothConnIV, mUsbConnIV,
+                        mNoneConnView);
+            }
+
+            if (null == mTimer) {
+                mTimer = new Timer();
+                mTimer.schedule(mUpdateDataThroughputTask, 100, 1000);
+                mTimer.schedule(mUpdatePipelineStatusTask, 100, 1000);
+            }
         }
 
         public synchronized void onServiceDisconnected(ComponentName className) {
@@ -200,6 +222,11 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                         mServiceNotRunningWarningView.setVisibility(View.VISIBLE);
                     }
                 });
+            }
+
+            if (mUpdateDataThroughputTask != null) {
+                mUpdateDataThroughputTask.cancel();
+                mUpdateDataThroughputTask = null;
             }
         }
     };
@@ -260,8 +287,12 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                     mConnection, Context.BIND_AUTO_CREATE);
         }
 
+
         isDisableTraceLooping = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isDisabledTracePlayingLoop", false);
         isTraceRecording = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("IsTraceRecording", false);
+
+         mGetVin.setVisibility(View.GONE);
+         mVinTextView.setVisibility(View.VISIBLE);
 
         if(isTraceRecording) {
             mSplitTraceFile.setVisibility(View.VISIBLE);
@@ -300,6 +331,11 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
         mViVersionView = (TextView) v.findViewById(R.id.vi_version);
         mViPlatformView = (TextView) v.findViewById(R.id.vi_device_platform);
         mViDeviceIdView = (TextView) v.findViewById(R.id.vi_device_id);
+        mVinTextView = (TextView) v.findViewById(R.id.vin_view);
+        mVinDataView = (TextView) v.findViewById(R.id.vin_value);
+        mViDeviceThroughputBytesView = (TextView) v.findViewById(R.id.throughput_bytes);
+        mViDeviceThroughputMessagesView = (TextView) v.findViewById(R.id.throughput_messages);
+        mViDeviceAverageMessageSizeView = (TextView) v.findViewById(R.id.average_message_size);
         mBluetoothConnIV = v.findViewById(R.id.connection_bluetooth);
         mUsbConnIV = v.findViewById(R.id.connection_usb);
         mFileConnIV = v.findViewById(R.id.connection_file);
@@ -308,6 +344,8 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
         mBluetoothSearch = v.findViewById(R.id.start_bluetooth_search_btn);
         mBluetoothSearch.setOnClickListener(this);
         mDisconnect = v.findViewById(R.id.disconnect_btn);
+        mGetVin  = v.findViewById(R.id.get_vin_btn);
+        mGetVin.setOnClickListener(this);
         mDisconnect.setOnClickListener(this);
         mSplitTraceFile = v.findViewById(R.id.splittrace_btn);
         mSplitTraceFile.setOnClickListener(this);
@@ -412,6 +450,10 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
             Toast.makeText(mContext, "No Trace File", Toast.LENGTH_LONG).show();
         }
     }
+    private void getVinClick(){
+        mGetVin.setVisibility(View.GONE);
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -434,6 +476,9 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                 break;
             case R.id.restarttrace_btn:
                 restartTraceFile();
+                break;
+            case R.id.get_vin_btn:
+                getVinClick();
                 break;
             default: return;
         }

@@ -10,5 +10,6 @@
     <header android:fragment="com.openxc.enabler.SettingsActivity$NotificationPreferences"
         android:title="@string/notification_preferences"/>
     <header android:fragment="com.openxc.enabler.SettingsActivity$AboutPreferences"
-        	android:title="@string/about_preferences"/>
+            android:title="@string/about_preferences"/>
 </preference-headers>
+
