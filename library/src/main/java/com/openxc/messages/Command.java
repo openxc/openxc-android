@@ -28,7 +28,7 @@ public class Command extends KeyedMessage {
     protected static final String UNIX_TIME_KEY = "unix_time";
     public enum CommandType {
         VERSION, DEVICE_ID, DIAGNOSTIC_REQUEST, PLATFORM, PASSTHROUGH, AF_BYPASS, PAYLOAD_FORMAT
-        , SD_MOUNT_STATUS, RTC_CONFIGURATION
+        , SD_MOUNT_STATUS, RTC_CONFIGURATION,GET_VIN
     }
 
     private static final String[] sRequiredFieldsValues = new String[]{

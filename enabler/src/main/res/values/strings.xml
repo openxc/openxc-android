@@ -12,6 +12,7 @@
     <string name="connection_network">Network</string>
     <string name="connection_none">None</string>
     <string name="bluetooth_search_button">Search for Bluetooth VI</string>
+    <string name="get_vin_button">Get Vin</string>
     <string name="disconnect_button">Disconnect</string>
     <string name="restart_button">Restart Trace</string>
     <string name="splittrace_button">Split Trace</string>
@@ -102,11 +103,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
     <string name="format_label">Format</string>
     <string name="custom_input_label">Custom Command Input</string>
 
-
     <string name="last_diag_request_label">Last Request</string>
     <string name="diag_response_label">Responses</string>
     <string name="send_button">Send</string>
     <string name="last_can_message_sent_label">Sent Messages</string>
+
+    <string name="dtc_button">Request DTC(s)</string>
+    <string name="no_dtc_responses_received">No DTC responses received.</string>
+    <string name="dtc_wait_time_note">Note: Searching for DTCs in your vehicle could take up to 5 minutes. You must remain on this screen during the scan.</string>
 
     <string name="no_can_messages_received">No CAN messages received.</string>
     <string name="no_can_messages_sent">No CAN messages sent.</string>
@@ -121,6 +125,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
     <string name="delete">Delete</string>
     <string name="recorded_traces">Recorded Traces</string>
     <string name="vi_device_platform_label">VI Platform</string>
+    <string name="get_vin_label">VIN</string>
     <string name="input_json_error">Please enter a valid json</string>
 
     <string name="dweeting_checkbox_title">Send Data to Dweet.io</string>
