@@ -14,6 +14,10 @@ jobs:
         java-version: '8' # The JDK version to make available on the path.
         java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
         architecture: x64 # (x64 or x86) - defaults to x64
+        
+    - name: PRINT JAVA
+      run: ls /opt/hostedtoolcache/jdk/8.0.312/x64
+
 
     - name: Build Test
       uses: Raul6469/android-gradle-action@2.0.0
