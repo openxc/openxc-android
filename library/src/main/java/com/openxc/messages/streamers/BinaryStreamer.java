@@ -37,10 +37,22 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     private static final boolean DEBUG = false;
     private static VehicleMessage lastMessage = null;
 
-    private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();
+    private ByteArrayOutputStream mBuffer = new ByteArrayOutputStream();;       // filled by receive(...) and empties previous contents
+                                                                                // mBuffer (Persists) is next bytes to be translated
+    private int inSyncCount = 0;   // Number of messages that have been insync
+    private int syncErrors = 0;     // Number of errors encountered
 
     @Override
     public VehicleMessage parseNextMessage() {
+
+        // This block of code is debug output.  Is this DUPLICATE Functionality to dumpToLog?
+//        byte[] gBuf = mBuffer.toByteArray();
+//        String gRes = "";
+//        for(int cnt = 0; cnt<gBuf.length; cnt++) {
+//            gRes += Integer.toHexString(gBuf[cnt]) + " ";
+//        }
+//        Log.e("=== BinaryStreamer", gRes);
+
         // TODO we could move this to a separate thread and use a
         // piped input stream, where it would block on the
         // bytestream until more data was available - but that might
@@ -48,38 +60,60 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         // inefficient
         InputStream input = new ByteArrayInputStream(mBuffer.toByteArray());
         VehicleMessage message = null;
-        int bytesRemaining = mBuffer.size();
-        while(message == null) {
+        int bytesRemaining = mBuffer.size();        // Number of bytes in the buffer, we are going to see if we have enough for our next Protobuf message
+
+        boolean finished = false;
+        while(!finished) {
             try {
-                int firstByte = input.read();
+                int firstByte = input.read();   // Read a single byte off of the buffer and increment position in stream
                 bytesRemaining -= 1;
                 if (firstByte == -1) {
                     return null;
                 }
 
-                int size = CodedInputStream.readRawVarint32(firstByte, input);
+                int size = CodedInputStream.readRawVarint32(firstByte, input);  // Decodes length byte and determines if it is a special message (>127 bytes)
                 if(size > 0 && bytesRemaining >= size) {
-                    message = BinaryFormatter.deserialize(
-                            ByteStreams.limit(input, size));
+                    message = BinaryFormatter.deserialize(ByteStreams.limit(input, size));  // We have enough bytes to get our next message so get it!
+                    // If message is invalid an exception will be triggered below
+                    inSyncCount++;
                 } else {
-                    break;
+                    // Not deserialized "size" is length of the current Protobuf message that is being looked and is
+                    // probably still incomplete by this point. "bytesRemaining" is the number of unparsed bytes
+                    // left in the BLE buffer
+                    if ((size > 0) && (bytesRemaining < size)) {
+                        // Buffer does not hold enough data to finish off a complete message, we need to wait for
+                        // another section of data to come through.  No need to backup/reverse a byte so that firstByte
+                        // will be read correctly next time in since a fresh input will be composed from the mBuffer next time through
+                        finished = true;
+                    } else {
+                        inSyncCount = 0;
+                        syncErrors++;
+                    }
                 }
             } catch(IOException e) {
-                Log.e(TAG, "Unexpected errror copying buffers");
+                Log.e(TAG, "Unexpected error copying buffers");
             } catch(UnrecognizedMessageTypeException e) {
-                Log.w(TAG, "Deserialized protobuf had was unrecognized message type", e);
+                Log.e(TAG, "Deserialized protobuf had was unrecognized message type", e);
             }
-        }
+
+            if (message != null) finished = true;
+        } // end while(message == null)
 
         if(message != null) {
             mBuffer = new ByteArrayOutputStream();
             lastMessage = message;
             try {
-                IOUtils.copy(input, mBuffer);
-            } catch(IOException e) {
+                if (input.available() != 0) {
+                    IOUtils.copy(input, mBuffer);   // Prepare mBuffer for next message by coping unused/remaining bytes to be read for next time
+                }
+            } catch (IOException e) {
                 Log.e(TAG, "Unexpected error copying buffers");
             }
         }
+
+        // mBuffer.size() is the number of left over bytes - next buffer fill we will see if the message still has
+        // enough to form a vehicle message
+
         return message;
     }
 
@@ -162,10 +196,20 @@ public class BinaryStreamer extends VehicleMessageStreamer {
         }
     }
 
+
+
+
+    //
+    // receive()
+    // mBuffer.size() -> accumulated contents of the BLE buffer mBuffer.write() will increase the amount of data
+    //                            in this buffer usually by up to 20 bytes
+    // bytes -> raw data that was just read from BLE to be buffered
+    // length -> number of bytes to be added
+    //
     @Override
     public void receive(byte[] bytes, int length) {
         super.receive(bytes, length);
-        mBuffer.write(bytes, 0, length);
+        mBuffer.write(bytes, 0, length);  // Write incoming bytes starting at bytes[0] with length "length" to end of mBuffer
         dumpToLog(bytes, length);
     }
 }

@@ -43,6 +43,7 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
     private VehicleMessageStreamer mStreamHandler = null;
     private boolean mFastPolling = true;
     protected String mDataFormatValue = null;
+    private boolean streamInitialized = false;
 
 
     public BytestreamDataSource(SourceCallback callback, Context context) {
@@ -149,7 +150,11 @@ public abstract class BytestreamDataSource extends ContextualVehicleDataSource
             }
 
             if(received > 0) {
-                initHandler(bytes);
+
+                if ((!streamInitialized) || (mStreamHandler == null)) {
+                    initHandler(bytes);
+                    streamInitialized = true;
+                }
 
                 mStreamHandler.receive(bytes, received);
                 parseNextMessageFromHandler();

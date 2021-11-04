@@ -2714,6 +2714,10 @@ public final class BinaryMessages {
        * <code>PLATFORM = 11;</code>
        */
       PLATFORM(11),
+      /**
+       * <code>GET_VIN = 12;</code>
+       */
+      GET_VIN(12),
       UNRECOGNIZED(-1),
       ;
 
@@ -2765,6 +2769,10 @@ public final class BinaryMessages {
        * <code>PLATFORM = 11;</code>
        */
       public static final int PLATFORM_VALUE = 11;
+      /**
+       * <code>GET_VIN = 12;</code>
+       */
+      public static final int GET_VIN_VALUE = 12;
 
 
       public final int getNumber() {
@@ -2797,6 +2805,7 @@ public final class BinaryMessages {
           case 9: return RTC_CONFIGURATION;
           case 10: return SD_MOUNT_STATUS;
           case 11: return PLATFORM;
+          case 12: return GET_VIN;
           default: return null;
         }
       }
@@ -15838,7 +15847,7 @@ public final class BinaryMessages {
       "id\030\002 \001(\r\022\014\n\004data\030\003 \001(\014\0224\n\014frame_format\030\004" +
       " \001(\0162\036.openxc.CanMessage.FrameFormat\"5\n\013" +
       "FrameFormat\022\n\n\006UNUSED\020\000\022\014\n\010STANDARD\020\001\022\014\n" +
-      "\010EXTENDED\020\002\"\243\006\n\016ControlCommand\022)\n\004type\030\001" +
+      "\010EXTENDED\020\002\"\260\006\n\016ControlCommand\022)\n\004type\030\001" +
       " \001(\0162\033.openxc.ControlCommand.Type\022<\n\022dia" +
       "gnostic_request\030\002 \001(\0132 .openxc.Diagnosti" +
       "cControlCommand\022G\n\030passthrough_mode_requ" +
@@ -15852,69 +15861,68 @@ public final class BinaryMessages {
       "m_configuration_command\030\007 \001(\0132!.openxc.M" +
       "odemConfigurationCommand\022B\n\031rtc_configur" +
       "ation_command\030\010 \001(\0132\037.openxc.RTCConfigur" +
-      "ationCommand\"\362\001\n\004Type\022\n\n\006UNUSED\020\000\022\013\n\007VER",
+      "ationCommand\"\377\001\n\004Type\022\n\n\006UNUSED\020\000\022\013\n\007VER",
       "SION\020\001\022\r\n\tDEVICE_ID\020\002\022\016\n\nDIAGNOSTIC\020\003\022\017\n" +
       "\013PASSTHROUGH\020\004\022\034\n\030ACCEPTANCE_FILTER_BYPA" +
       "SS\020\005\022\022\n\016PAYLOAD_FORMAT\020\006\022\034\n\030PREDEFINED_O" +
       "BD2_REQUESTS\020\007\022\027\n\023MODEM_CONFIGURATION\020\010\022" +
       "\025\n\021RTC_CONFIGURATION\020\t\022\023\n\017SD_MOUNT_STATU" +
-      "S\020\n\022\014\n\010PLATFORM\020\013\"\252\001\n\030DiagnosticControlC" +
-      "ommand\022*\n\007request\030\001 \001(\0132\031.openxc.Diagnos" +
-      "ticRequest\0227\n\006action\030\002 \001(\0162\'.openxc.Diag" +
-      "nosticControlCommand.Action\")\n\006Action\022\n\n" +
-      "\006UNUSED\020\000\022\007\n\003ADD\020\001\022\n\n\006CANCEL\020\002\"=\n\035Passth",
-      "roughModeControlCommand\022\013\n\003bus\030\001 \001(\005\022\017\n\007" +
-      "enabled\030\002 \001(\010\"<\n\035AcceptanceFilterBypassC" +
-      "ommand\022\013\n\003bus\030\001 \001(\005\022\016\n\006bypass\030\002 \001(\010\"\230\001\n\024" +
-      "PayloadFormatCommand\022:\n\006format\030\001 \001(\0162*.o" +
-      "penxc.PayloadFormatCommand.PayloadFormat" +
-      "\"D\n\rPayloadFormat\022\n\n\006UNUSED\020\000\022\010\n\004JSON\020\001\022" +
-      "\014\n\010PROTOBUF\020\002\022\017\n\013MESSAGEPACK\020\003\"0\n\035Predef" +
-      "inedObd2RequestsCommand\022\017\n\007enabled\030\001 \001(\010" +
-      "\"\321\003\n\027NetworkOperatorSettings\022\030\n\020allowDat" +
-      "aRoaming\030\001 \001(\010\022N\n\022operatorSelectMode\030\002 \001",
-      "(\01622.openxc.NetworkOperatorSettings.Oper" +
-      "atorSelectMode\022L\n\021networkDescriptor\030\003 \001(" +
-      "\01321.openxc.NetworkOperatorSettings.Netwo" +
-      "rkDescriptor\032\230\001\n\021NetworkDescriptor\022\014\n\004PL" +
-      "MN\030\001 \001(\r\022R\n\013networkType\030\002 \001(\0162=.openxc.N" +
-      "etworkOperatorSettings.NetworkDescriptor" +
-      ".NetworkType\"!\n\013NetworkType\022\007\n\003GSM\020\000\022\t\n\005" +
-      "UTRAN\020\002\"c\n\022OperatorSelectMode\022\r\n\tAUTOMAT" +
-      "IC\020\000\022\n\n\006MANUAL\020\001\022\016\n\nDEREGISTER\020\002\022\014\n\010SET_" +
-      "ONLY\020\003\022\024\n\020MANUAL_AUTOMATIC\020\004\"\"\n\023NetworkD",
-      "ataSettings\022\013\n\003apn\030\001 \001(\t\"3\n\025ServerConnec" +
-      "tSettings\022\014\n\004host\030\001 \001(\t\022\014\n\004port\030\002 \001(\r\"\325\001" +
-      "\n\031ModemConfigurationCommand\022@\n\027networkOp" +
-      "eratorSettings\030\001 \001(\0132\037.openxc.NetworkOpe" +
-      "ratorSettings\0228\n\023networkDataSettings\030\002 \001" +
-      "(\0132\033.openxc.NetworkDataSettings\022<\n\025serve" +
-      "rConnectSettings\030\003 \001(\0132\035.openxc.ServerCo" +
-      "nnectSettings\",\n\027RTCConfigurationCommand" +
-      "\022\021\n\tunix_time\030\001 \001(\r\"]\n\017CommandResponse\022)" +
-      "\n\004type\030\001 \001(\0162\033.openxc.ControlCommand.Typ",
-      "e\022\017\n\007message\030\002 \001(\t\022\016\n\006status\030\003 \001(\010\"\211\002\n\021D" +
-      "iagnosticRequest\022\013\n\003bus\030\001 \001(\005\022\022\n\nmessage" +
-      "_id\030\002 \001(\r\022\014\n\004mode\030\003 \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007" +
-      "payload\030\005 \001(\014\022\032\n\022multiple_responses\030\006 \001(" +
-      "\010\022\021\n\tfrequency\030\007 \001(\001\022\014\n\004name\030\010 \001(\t\022;\n\014de" +
-      "coded_type\030\t \001(\0162%.openxc.DiagnosticRequ" +
-      "est.DecodedType\"-\n\013DecodedType\022\n\n\006UNUSED" +
-      "\020\000\022\010\n\004NONE\020\001\022\010\n\004OBD2\020\002\"\332\001\n\022DiagnosticRes" +
-      "ponse\022\013\n\003bus\030\001 \001(\005\022\022\n\nmessage_id\030\002 \001(\r\022\014" +
-      "\n\004mode\030\003 \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007success\030\005 \001",
-      "(\010\022\036\n\026negative_response_code\030\006 \001(\r\022\017\n\007pa" +
-      "yload\030\007 \001(\014\022#\n\005value\030\010 \001(\0132\024.openxc.Dyna" +
-      "micField\022\r\n\005frame\030\t \001(\005\022\022\n\ntotal_size\030\n " +
-      "\001(\r\"\256\001\n\014DynamicField\022\'\n\004type\030\001 \001(\0162\031.ope" +
-      "nxc.DynamicField.Type\022\024\n\014string_value\030\002 " +
-      "\001(\t\022\025\n\rnumeric_value\030\003 \001(\001\022\025\n\rboolean_va" +
-      "lue\030\004 \001(\010\"1\n\004Type\022\n\n\006UNUSED\020\000\022\n\n\006STRING\020" +
-      "\001\022\007\n\003NUM\020\002\022\010\n\004BOOL\020\003\"g\n\rSimpleMessage\022\014\n" +
-      "\004name\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.openxc.Dyna" +
-      "micField\022#\n\005event\030\003 \001(\0132\024.openxc.Dynamic",
-      "FieldB\034\n\ncom.openxcB\016BinaryMessagesb\006pro" +
-      "to3"
+      "S\020\n\022\014\n\010PLATFORM\020\013\022\013\n\007GET_VIN\020\014\"\252\001\n\030Diagn" +
+      "osticControlCommand\022*\n\007request\030\001 \001(\0132\031.o" +
+      "penxc.DiagnosticRequest\0227\n\006action\030\002 \001(\0162" +
+      "\'.openxc.DiagnosticControlCommand.Action" +
+      "\")\n\006Action\022\n\n\006UNUSED\020\000\022\007\n\003ADD\020\001\022\n\n\006CANCE",
+      "L\020\002\"=\n\035PassthroughModeControlCommand\022\013\n\003" +
+      "bus\030\001 \001(\005\022\017\n\007enabled\030\002 \001(\010\"<\n\035Acceptance" +
+      "FilterBypassCommand\022\013\n\003bus\030\001 \001(\005\022\016\n\006bypa" +
+      "ss\030\002 \001(\010\"\207\001\n\024PayloadFormatCommand\022:\n\006for" +
+      "mat\030\001 \001(\0162*.openxc.PayloadFormatCommand." +
+      "PayloadFormat\"3\n\rPayloadFormat\022\n\n\006UNUSED" +
+      "\020\000\022\010\n\004JSON\020\001\022\014\n\010PROTOBUF\020\002\"0\n\035Predefined" +
+      "Obd2RequestsCommand\022\017\n\007enabled\030\001 \001(\010\"\321\003\n" +
+      "\027NetworkOperatorSettings\022\030\n\020allowDataRoa" +
+      "ming\030\001 \001(\010\022N\n\022operatorSelectMode\030\002 \001(\01622",
+      ".openxc.NetworkOperatorSettings.Operator" +
+      "SelectMode\022L\n\021networkDescriptor\030\003 \001(\01321." +
+      "openxc.NetworkOperatorSettings.NetworkDe" +
+      "scriptor\032\230\001\n\021NetworkDescriptor\022\014\n\004PLMN\030\001" +
+      " \001(\r\022R\n\013networkType\030\002 \001(\0162=.openxc.Netwo" +
+      "rkOperatorSettings.NetworkDescriptor.Net" +
+      "workType\"!\n\013NetworkType\022\007\n\003GSM\020\000\022\t\n\005UTRA" +
+      "N\020\002\"c\n\022OperatorSelectMode\022\r\n\tAUTOMATIC\020\000" +
+      "\022\n\n\006MANUAL\020\001\022\016\n\nDEREGISTER\020\002\022\014\n\010SET_ONLY" +
+      "\020\003\022\024\n\020MANUAL_AUTOMATIC\020\004\"\"\n\023NetworkDataS",
+      "ettings\022\013\n\003apn\030\001 \001(\t\"3\n\025ServerConnectSet" +
+      "tings\022\014\n\004host\030\001 \001(\t\022\014\n\004port\030\002 \001(\r\"\325\001\n\031Mo" +
+      "demConfigurationCommand\022@\n\027networkOperat" +
+      "orSettings\030\001 \001(\0132\037.openxc.NetworkOperato" +
+      "rSettings\0228\n\023networkDataSettings\030\002 \001(\0132\033" +
+      ".openxc.NetworkDataSettings\022<\n\025serverCon" +
+      "nectSettings\030\003 \001(\0132\035.openxc.ServerConnec" +
+      "tSettings\",\n\027RTCConfigurationCommand\022\021\n\t" +
+      "unix_time\030\001 \001(\r\"]\n\017CommandResponse\022)\n\004ty" +
+      "pe\030\001 \001(\0162\033.openxc.ControlCommand.Type\022\017\n",
+      "\007message\030\002 \001(\t\022\016\n\006status\030\003 \001(\010\"\211\002\n\021Diagn" +
+      "osticRequest\022\013\n\003bus\030\001 \001(\005\022\022\n\nmessage_id\030" +
+      "\002 \001(\r\022\014\n\004mode\030\003 \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007payl" +
+      "oad\030\005 \001(\014\022\032\n\022multiple_responses\030\006 \001(\010\022\021\n" +
+      "\tfrequency\030\007 \001(\001\022\014\n\004name\030\010 \001(\t\022;\n\014decode" +
+      "d_type\030\t \001(\0162%.openxc.DiagnosticRequest." +
+      "DecodedType\"-\n\013DecodedType\022\n\n\006UNUSED\020\000\022\010" +
+      "\n\004NONE\020\001\022\010\n\004OBD2\020\002\"\332\001\n\022DiagnosticRespons" +
+      "e\022\013\n\003bus\030\001 \001(\005\022\022\n\nmessage_id\030\002 \001(\r\022\014\n\004mo" +
+      "de\030\003 \001(\r\022\013\n\003pid\030\004 \001(\r\022\017\n\007success\030\005 \001(\010\022\036",
+      "\n\026negative_response_code\030\006 \001(\r\022\017\n\007payloa" +
+      "d\030\007 \001(\014\022#\n\005value\030\010 \001(\0132\024.openxc.DynamicF" +
+      "ield\022\r\n\005frame\030\t \001(\005\022\022\n\ntotal_size\030\n \001(\r\"" +
+      "\256\001\n\014DynamicField\022\'\n\004type\030\001 \001(\0162\031.openxc." +
+      "DynamicField.Type\022\024\n\014string_value\030\002 \001(\t\022" +
+      "\025\n\rnumeric_value\030\003 \001(\001\022\025\n\rboolean_value\030" +
+      "\004 \001(\010\"1\n\004Type\022\n\n\006UNUSED\020\000\022\n\n\006STRING\020\001\022\007\n" +
+      "\003NUM\020\002\022\010\n\004BOOL\020\003\"g\n\rSimpleMessage\022\014\n\004nam" +
+      "e\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.openxc.DynamicF" +
+      "ield\022#\n\005event\030\003 \001(\0132\024.openxc.DynamicFiel",
+      "dB\034\n\ncom.openxcB\016BinaryMessagesb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
