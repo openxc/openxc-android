@@ -197,7 +197,9 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     }
 
 
-
+    public int getBufferSize() {
+        return mBuffer.size();
+    }
 
     //
     // receive()
