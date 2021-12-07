@@ -166,4 +166,83 @@ public class BinaryStreamerTest {
             assertEquals(message, deserialized);
         }
     }
+
+    @Test
+    public void bufferHoldsBytes() {
+        byte inputBytes[] = {1,2,3,4,5,6,7,8};
+        final int inputSize = 8;
+
+        streamer.receive(inputBytes, inputSize);
+        assertEquals(inputSize, streamer.getBufferSize());
+    }
+
+    @Test
+    public void bufferReturnsMessageAndEmptiesBuffer() {
+        byte inputBytes[] = {
+                (byte) 0x1d, (byte) 0x08, (byte) 0x04, (byte) 0x2a, (byte) 0x19, (byte) 0x08, (byte) 0x03, (byte) 0x12,
+                (byte) 0x15, (byte) 0x0a, (byte) 0x11, (byte) 0x08, (byte) 0x01, (byte) 0x10, (byte) 0xe0, (byte) 0x0f,
+                (byte) 0x18, (byte) 0x01, (byte) 0x20, (byte) 0x80, (byte) 0xbc, (byte) 0x03, (byte) 0x42, (byte) 0x04,
+                (byte) 0x74, (byte) 0x65, (byte) 0x73, (byte) 0x74, (byte) 0x10, (byte) 0x01 };
+
+        final int inputSize = 30;
+
+        assertEquals(inputSize - 1, inputBytes[0]);
+        streamer.receive(inputBytes, inputSize);
+        assertEquals(inputSize, streamer.getBufferSize());
+        VehicleMessage deserialized = streamer.parseNextMessage();
+
+        assertThat(deserialized, notNullValue());
+        assertEquals(0, streamer.getBufferSize());      // Full parsed and empty buffer
+    }
+
+    @Test
+    public void bufferReturnsMessageWithLeftOverBytes() {
+        byte inputBytes[] = {
+                (byte) 0x1d, (byte) 0x08, (byte) 0x04, (byte) 0x2a, (byte) 0x19, (byte) 0x08, (byte) 0x03, (byte) 0x12,
+                (byte) 0x15, (byte) 0x0a, (byte) 0x11, (byte) 0x08, (byte) 0x01, (byte) 0x10, (byte) 0xe0, (byte) 0x0f,
+                (byte) 0x18, (byte) 0x01, (byte) 0x20, (byte) 0x80, (byte) 0xbc, (byte) 0x03, (byte) 0x42, (byte) 0x04,
+                (byte) 0x74, (byte) 0x65, (byte) 0x73, (byte) 0x74, (byte) 0x10, (byte) 0x01, (byte) 0x01, (byte) 0xaa};
+
+        final int inputSize = 32;
+
+        assertEquals(inputSize - 1, inputBytes[0] + 2);
+        streamer.receive(inputBytes, inputSize);
+        assertEquals(inputSize, streamer.getBufferSize());
+        VehicleMessage deserialized = streamer.parseNextMessage();
+
+        assertThat(deserialized, notNullValue());
+        assertEquals(2, streamer.getBufferSize());
+    }
+
+    @Test
+    public void bufferAccumulatesMessageOverTwoReceives() {
+
+        // 1st input set
+
+        byte inputBytes[] = {
+                (byte) 0x1d, (byte) 0x08, (byte) 0x04, (byte) 0x2a, (byte) 0x19, (byte) 0x08, (byte) 0x03, (byte) 0x12,
+                (byte) 0x15, (byte) 0x0a, (byte) 0x11, (byte) 0x08, (byte) 0x01, (byte) 0x10, (byte) 0xe0, (byte) 0x0f};
+
+        final int inputSize = 16;
+
+        streamer.receive(inputBytes, inputSize);
+        assertEquals(inputSize, streamer.getBufferSize());
+        VehicleMessage deserialized = streamer.parseNextMessage();
+        assertThat(deserialized, nullValue());  // Since it is incomplete
+
+        // 2nd input set
+
+        byte inputBytes2[] = {
+                (byte) 0x18, (byte) 0x01, (byte) 0x20, (byte) 0x80, (byte) 0xbc, (byte) 0x03, (byte) 0x42, (byte) 0x04,
+                (byte) 0x74, (byte) 0x65, (byte) 0x73, (byte) 0x74, (byte) 0x10, (byte) 0x01, (byte) 0x01, (byte) 0xaa};
+
+        final int inputSize2 = 16;
+
+        streamer.receive(inputBytes2, inputSize2);
+        assertEquals(inputSize + inputSize2, streamer.getBufferSize());
+        VehicleMessage deserialized2 = streamer.parseNextMessage();
+
+        assertThat(deserialized2, notNullValue());
+        assertEquals(2, streamer.getBufferSize());
+    }
 }
