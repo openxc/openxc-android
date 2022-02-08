@@ -1,9 +1,11 @@
 package com.openxc.enabler;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -287,7 +289,6 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
                     mConnection, Context.BIND_AUTO_CREATE);
         }
 
-
         isDisableTraceLooping = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("isDisabledTracePlayingLoop", false);
         isTraceRecording = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext()).getBoolean("IsTraceRecording", false);
 
@@ -365,6 +366,26 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
         return v;
     }
 
+    private void RequestLocationWithDisclosure()
+    {
+        DialogInterface.OnClickListener locationDialog = new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        };
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+        alert.setTitle("GPS Disclosure");
+        alert.setMessage("OpenXC collects location data that is logged with vehicle data.\n" +
+                "Location data is only collected while the application is in use. Data is stored locally only on your device unless you enable data upload or utilize dweet.\n" +
+                "The data is not used in any other way.");
+        alert.setPositiveButton("OK",  locationDialog);
+
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
     private void startBluetoothSearch() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -395,7 +416,7 @@ public class StatusFragment extends Fragment implements android.view.View.OnClic
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else if (!isLocationPermissionGranted()) {
-            requestPermissions(new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            RequestLocationWithDisclosure();
         }
     }
 
