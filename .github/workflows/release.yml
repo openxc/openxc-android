@@ -29,11 +29,15 @@ jobs:
         # and add the file content as a GitHub secret named `$ANDROID_LICENCE`.
         android-licence: ${{ secrets.ANDROID_LICENCE }}
         
+    - name: Copy Finished APK
+      run: |
+        cp ./enabler/build/outputs/apk/release/enabler-release.apk ./enabler-release.apk
+            
     - name: Publish Artifact
       uses: actions/upload-artifact@v2
       with:
           name: Open XC Enabler
-          path: ./enabler/build/outputs/apk/release/enabler-release.apk
+          path: ./enabler-release.apk
 
     - name: Publish To Play Store
       uses: r0adkll/upload-google-play@v1
