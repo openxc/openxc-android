@@ -44,5 +44,5 @@ jobs:
       with:
          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
          packageName: com.openxcplatform.enabler
-         releaseFile: ./enabler/build/outputs/apk/release/enabler-release.apk
+         releaseFile: .enabler-release.apk
          track: prodction
