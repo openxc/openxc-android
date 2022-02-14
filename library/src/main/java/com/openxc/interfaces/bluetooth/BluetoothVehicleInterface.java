@@ -530,6 +530,18 @@ try{
             mConnectionLock.readLock().unlock();
         }
         mByteRateCounter += bytesRead;
+
+        // Debug Code.  The following if block will print to logcat the contents of
+        // the BLE buffer that was just read in
+//        if (bytesRead > 0) {
+//            Log.e("=== BlueVehInter", "read:" + Integer.toString(bytesRead));
+//            String output = "";
+//            for(int cnt=0; cnt<bytesRead; cnt++) {
+//                output += Integer.toHexString(bytes[cnt]) + " ";
+//            }
+//            Log.e("=== BLE read", output);
+//        }
+
         return bytesRead;
     }
 
