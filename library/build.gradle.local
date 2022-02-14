@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 group = "com.openxcplatform"
-version = "7.1.0"
+version = "7.1.1"
 
 android {
     compileSdkVersion 28
