@@ -1,5 +1,11 @@
 # OpenXC Android Library Changelog
 
+
+## v7.1.0
+
+* Added disclosure screen for location permission as per google play requirements.
+* Fix: Fixed BTLE protobuf issues
+
 ## v7.1.0
 
 * Android 10 support
