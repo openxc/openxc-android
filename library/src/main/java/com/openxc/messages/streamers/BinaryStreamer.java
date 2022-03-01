@@ -42,6 +42,28 @@ public class BinaryStreamer extends VehicleMessageStreamer {
     private int inSyncCount = 0;   // Number of messages that have been insync
     private int syncErrors = 0;     // Number of errors encountered
 
+    // returns the number of bytes read off of the InputStream
+    private int swallowSyncMessage(InputStream input, int size, int bytesRemaining) throws IOException {
+        int bytesRead = 0;
+
+        final int SYNC_MSG_LEN = 7;
+        if ((size == SYNC_MSG_LEN) && (bytesRemaining >= size)) {
+            input.mark(SYNC_MSG_LEN + 1);
+            byte[] buffer = new byte[SYNC_MSG_LEN];
+            int numRead = input.read(buffer, 0, SYNC_MSG_LEN);
+            bytesRead += SYNC_MSG_LEN;
+            if (numRead == SYNC_MSG_LEN) {
+                if ((buffer[0] == 'S') && (buffer[1] == 'Y') && (buffer[2] == 'N') && (buffer[3] == 'C') &&
+                        (buffer[4] == 'M') && (buffer[5] == 'S') && (buffer[6] == 'G')) {  // Sync Found
+                } else {  // Not a sync message
+                    input.reset();      // Reset the stream back
+                    bytesRead = 0;
+                }
+            }
+        }
+        return bytesRead;
+    }
+
     @Override
     public VehicleMessage parseNextMessage() {
 
@@ -72,8 +94,28 @@ public class BinaryStreamer extends VehicleMessageStreamer {
                 }
 
                 int size = CodedInputStream.readRawVarint32(firstByte, input);  // Decodes length byte and determines if it is a special message (>127 bytes)
+
+                //
+                // Look for a SYNC Message! 1/11/2022 gja
+                //
+                int syncMessageSize = swallowSyncMessage(input, size, bytesRemaining);
+                bytesRemaining -= syncMessageSize;
+                if (bytesRemaining <= 0) {
+                    return null;
+                } else if (syncMessageSize > 0) {
+                    // So read start of next message if any
+                    firstByte = input.read();   // Read a single byte off of the buffer and increment position in stream
+                    bytesRemaining -= 1;
+                    if (firstByte == -1) {
+                        return null;
+                    }
+                    size = CodedInputStream.readRawVarint32(firstByte, input);  // Decodes length byte and determines if it is a special message (>127 bytes)
+                }
+
+
                 if(size > 0 && bytesRemaining >= size) {
                     message = BinaryFormatter.deserialize(ByteStreams.limit(input, size));  // We have enough bytes to get our next message so get it!
+                    bytesRemaining -= size;
                     // If message is invalid an exception will be triggered below
                     inSyncCount++;
                 } else {
