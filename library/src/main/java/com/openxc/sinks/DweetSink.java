@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.buglabs.dweetlib.DweetLib;
 import com.openxc.messages.VehicleMessage;
 import com.openxc.messages.formatters.JsonFormatter;
 
@@ -118,6 +119,15 @@ public class DweetSink extends ContextualVehicleDataSink {
             @Override
             public void run() {
                 if(mRunning) {
+
+                    // Removed on 4/1/2020 and added back on 2/8/2022 gja
+                    DweetLib.DweetCallback cb = new DweetLib.DweetCallback() {
+                        @Override
+                        public void callback(ArrayList<Object> ar) {
+                            Integer result = (Integer) ar.get(0);
+                        }
+                    };
+
                     JSONObject jsonObj = null;
                     try {
                         if(records!=null) {
@@ -127,6 +137,7 @@ public class DweetSink extends ContextualVehicleDataSink {
                             for (int i = 0; i < array.length(); i++) {
                                 jsonObj.put((String) array.getJSONObject(i).get("name"), array.getJSONObject(i).get("value"));
                             }
+                            String str = DweetLib.getInstance(mContext).sendDweet(jsonObj, mThingName, "", this, cb, true);  //  Added back 2/8/2022
                         }
                     } catch (JSONException e) {
                         Log.e(TAG,"cfg dweet error" + e);

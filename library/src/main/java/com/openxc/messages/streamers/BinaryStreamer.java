@@ -54,13 +54,8 @@ public class BinaryStreamer extends VehicleMessageStreamer {
             bytesRead += SYNC_MSG_LEN;
             if (numRead == SYNC_MSG_LEN) {
                 if ((buffer[0] == 'S') && (buffer[1] == 'Y') && (buffer[2] == 'N') && (buffer[3] == 'C') &&
-                        (buffer[4] == 'M') && (buffer[5] == 'S') && (buffer[6] == 'G')) {
-                    // This is a sync message
-                    //Log.e("===== DEBUG", "========= SYNC FOUND =========");
-                } else {
-                    //Log.e("===== DEBUG", "========= FALL THROUGH =========");
-
-                    // This is not a sync message so backup on read and fall through and do regular protobuf decoding
+                        (buffer[4] == 'M') && (buffer[5] == 'S') && (buffer[6] == 'G')) {  // Sync Found
+                } else {  // Not a sync message
                     input.reset();      // Reset the stream back
                     bytesRead = 0;
                 }
@@ -101,8 +96,7 @@ public class BinaryStreamer extends VehicleMessageStreamer {
                 int size = CodedInputStream.readRawVarint32(firstByte, input);  // Decodes length byte and determines if it is a special message (>127 bytes)
 
                 //
-                // Look for a SYNC Message!
-                // Added 1/11/2022 gja
+                // Look for a SYNC Message! 1/11/2022 gja
                 //
                 int syncMessageSize = swallowSyncMessage(input, size, bytesRemaining);
                 bytesRemaining -= syncMessageSize;
