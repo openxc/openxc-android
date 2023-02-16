@@ -201,7 +201,7 @@ public class VehicleLocationProvider implements Measurement.Listener {
             if(mLocationManager.getProvider(
                         VEHICLE_LOCATION_PROVIDER) == null) {
                 mLocationManager.addTestProvider(VEHICLE_LOCATION_PROVIDER,
-                        false, false, false, false, false, true, false, 0, 5);
+                        false, false, false, false, false, true, false, 1, 2);
             }
             mLocationManager.setTestProviderEnabled(
                     VEHICLE_LOCATION_PROVIDER, true);
